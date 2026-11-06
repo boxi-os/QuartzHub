@@ -48,6 +48,9 @@ struct NodeFileError: Error, CustomStringConvertible {
     case EACCES: ("EACCES", "permission denied")
     case EISDIR: ("EISDIR", "illegal operation on a directory")
     case ENOTDIR: ("ENOTDIR", "not a directory")
+    case EEXIST: ("EEXIST", "file already exists")
+    case EPERM: ("EPERM", "operation not permitted")
+    case ENOTEMPTY: ("ENOTEMPTY", "directory not empty")
     default: ("E\(code)", String(cString: strerror(code)).lowercased())
     }
     return "Error: \(name): \(text), \(syscall)" + (path.map { " '\($0)'" } ?? "")

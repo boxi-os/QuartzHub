@@ -23,6 +23,12 @@ enum TreeCopy {
     try copyEntry(source.path, target.path, relative: "", verbatimSymlinks: verbatimSymlinks, filter: filter)
   }
 
+  /// Paths as strings, for a copy whose root names must not pass through `URL` (see `Posix`).
+  static func copy(from source: String, to target: String, verbatimSymlinks: Bool,
+                   filter: (String) -> Bool = { _ in true }) throws {
+    try copyEntry(source, target, relative: "", verbatimSymlinks: verbatimSymlinks, filter: filter)
+  }
+
   private static func copyEntry(_ from: String, _ to: String, relative: String, verbatimSymlinks: Bool,
                                 filter: (String) -> Bool) throws {
     guard filter(relative) else { return }
@@ -42,11 +48,13 @@ enum TreeCopy {
       }
       if create, chmod(to, info.st_mode & 0o7777) != 0 { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
     case S_IFLNK:
-      var target = try FileManager.default.destinationOfSymbolicLink(atPath: from)
+      // readlink and symlink, not FileManager: that decomposes the link's name ("Über" as
+      // U+0055 U+0308), which Node then reads as another name.
+      var target = try Posix.readlink(from)
       if !verbatimSymlinks && !target.hasPrefix("/") {
         target = FramePaths.resolve((from as NSString).deletingLastPathComponent + "/" + target)
       }
-      try FileManager.default.createSymbolicLink(atPath: to, withDestinationPath: target)
+      try Posix.symlink(target, to)
     case S_IFREG:
       guard copyfile(from, to, nil, copyfile_flags_t(COPYFILE_CLONE)) == 0 else {
         throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO)

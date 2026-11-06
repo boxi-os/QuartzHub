@@ -1350,3 +1350,29 @@ In drei Teilen in einem Zug (Nutzer, 2026-11-06): 7a der Snapshot-Speicher und w
   erreicht kein Golden-Fall (argv reißt erst bei rund 10000), sie fragt ein eigener Test.
 - **Preis:** Die Fixtures sind 520 KB groß (Zustand nach jedem Schritt, Bäume einmal), der
   Golden-Test läuft 22 s (rund 900 git-Aufrufe); `qc-snapshots.cjs` 21 KB.
+
+### Content-Sicherungen und Quelle wechseln (`backupService.ts`, `changeContentSource` aus `contentService.ts` → `ContentBackups`, `ContentFolder.changeSource`)
+
+- **Gemessen gegen QuartzControls Code:** `scripts/content-golden.mjs` wechselt den Content-Ordner
+  eines Projekts zur Kopie und zum Link, legt jedes Mal den alten beiseite, listet, spielt zurück
+  und löscht, und wird dreimal abgewiesen. 23 Schritte; nach jedem Antwort, Fortschritt der Kopie
+  (als Menge: Nodes `cp` geht einen Ordner in der Reihenfolge des Dateisystems durch), die
+  verlangten Snapshots und jede Datei des Arbeitsordners. Gleich in allen.
+- **Wie in QuartzControl, auch wo es seltsam ist:** Ein relativer Link in der Kopie zeigt danach
+  absolut in die Quelle (Nodes `cp` ohne `verbatimSymlinks`); der Fortschritt zählt jeden Eintrag,
+  versteckte und Ordner mit, die Summe nur, was Quartz liest (10 von 4); ein hängender Link als
+  Content-Ordner wird nicht beiseitegelegt (`existsSync` folgt ihm), und der neue Link scheitert
+  dann mit EEXIST; eine Quelle mit Schrägstrich am Ende steht so im Link.
+- **Pfade als Zeichenketten, Namen über POSIX** (`Posix`, siehe Nebenbefund beim Snapshot-Speicher):
+  Ein beiseitegelegter und zurückkopierter Ordner behält die Bytes seiner Namen. `TreeCopy` legt
+  Links jetzt mit `symlink(2)` an statt mit `createSymbolicLink`, das den Namen zerlegt hatte (auch
+  für das Duplizieren). Die Golden-Listen werden nach UTF-8-Bytes verglichen: Swifts `==` hält
+  „Ü“ und „U\u{308}“ für eine Zeichenkette, die Platte nicht. Erst damit fiel die Gegenprobe zum
+  zerlegten Link-Namen auf; die Golden-Tests der früheren Punkte vergleichen noch mit `==`.
+- **Gemessen mit maskiertem Ordner:** `symlink.json` nennt den absoluten Pfad, also wird der Inhalt
+  mit „@W@“ gehasht; die Größe eines Links ist die Länge seines Ziels, also rechnet der Test je
+  absolutem Link den Unterschied der Ordnerlängen heraus (`workLength`).
+- **Gegenproben:** 26, gefangen bis auf eine gleichwertige (`join(quelle, "")` ist die Quelle, auch
+  in Node). Vier bekamen erst ihren Fall: eine Datei mit dem Namen einer Sicherung, ein
+  Nachbarordner `contentalt`, ein relativer Link im ersten beiseitegelegten Ordner (zurückgespielt
+  wird er absolut) und ein Link mit Umlaut im Namen.

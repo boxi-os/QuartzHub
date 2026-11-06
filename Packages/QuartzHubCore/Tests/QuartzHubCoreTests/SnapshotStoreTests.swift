@@ -290,7 +290,8 @@ import Testing
       for folder in state.keys {
         let expected = state[folder]!
         let files = h.listing(folder)
-        #expect(files == expected["files"], "\(name): files of \(folder)\n\(JSJSON.compact(files))\n\(JSJSON.compact(expected["files"]!))")
+        // By bytes: Swift's == takes "Ü" and "U\u{308}" for one string, and the disk does not.
+        #expect(Array(JSJSON.compact(files).utf8) == Array(JSJSON.compact(expected["files"]!).utf8), "\(name): files of \(folder)\n\(JSJSON.compact(files))\n\(JSJSON.compact(expected["files"]!))")
         let store = try await h.storeState(folder)
         if differs == "projectHead", case .object(let got) = store, case .object(let want)? = expected["store"] {
           // Only the subject of the new commit differs.
