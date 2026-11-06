@@ -97,8 +97,13 @@ public actor BuildService {
   ///    stand (`LayoutFrames.writeAllFrames`): its module carries copies of both, and the build is
   ///    the one place that copy is read. What went wrong goes into the console as a warning.
   ///
-  /// Repairing the managed style blocks and refreshing the Google fonts come with the rest of
-  /// point 5 of phase 3 (styleService, fontService), here.
+  /// 3. A moved project gets its `@use "./quartzcontrol";` line or its `_quartzcontrol.scss` back
+  ///    when one half is missing, and the font URLs of the `fonts` block become relative
+  ///    (`StyleSheets.repairManagedUse`, `migrateFontUrls`): the repair first, because the URL
+  ///    migration reads the blocks through the line it restores. Each takes the styles lock, so a
+  ///    save still writing custom.scss is waited for. What they did goes into the console.
+  ///
+  /// Refreshing the Google fonts comes with fontService, here.
   public static let preparation: [PreparationStep] = [
     { project, report in
       do {
@@ -109,6 +114,18 @@ public actor BuildService {
     },
     { project, report in
       for problem in await LayoutFrames().writeAllFrames(project: project) { report(.warn, problem + "\n") }
+    },
+    { project, report in
+      do {
+        switch try await StyleSheets.repairManagedUse(project: project) {
+        case .lineRestored?: report(.stdout, L10n.t("main.managedUseRestored") + "\n")
+        case .fileCreated?: report(.stdout, L10n.t("main.managedFileCreated") + "\n")
+        case nil: break
+        }
+        if try await StyleSheets.migrateFontUrls(project: project) { report(.stdout, L10n.t("main.fontUrlsMigrated") + "\n") }
+      } catch {
+        report(.warn, error.localizedDescription + "\n")
+      }
     }
   ]
 

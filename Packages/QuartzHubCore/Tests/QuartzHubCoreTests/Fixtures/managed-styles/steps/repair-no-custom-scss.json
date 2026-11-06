@@ -1,0 +1,20 @@
+{
+  "name": "repair: no custom.scss",
+  "tree": {
+    "_quartzcontrol.scss": "// only\n"
+  },
+  "steps": [
+    {
+      "call": "repairManagedUse",
+      "args": [],
+      "result": null,
+      "changed": {}
+    },
+    {
+      "call": "getVariableOverrides",
+      "args": [],
+      "result": [],
+      "changed": {}
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "repair: line deleted",
+  "tree": {
+    "custom.scss": "@use \"./variables.scss\" as *;\n\n.x {}\n",
+    "_quartzcontrol.scss": "// Maintained by QuartzControl and loaded by custom.scss with `@use \"./quartzcontrol\";`.\n// The blocks between QuartzControl markers are rewritten by the app (Styles page: load order,\n// fonts, variables). Text outside them is kept.\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/foundation\";\n@use \"./custom/layout\";\n@use \"./custom/components-header\";\n@use \"./custom/plugin-multilanguage\";\n@use \"./custom/components-navigation\";\n@use \"./custom/plugin-navigations\";\n@use \"./custom/components-note\";\n@use \"./custom/content\";\n@use \"./custom/callouts\";\n@use \"./custom/pages\";\n@use \"./custom/plugin-layout-box\";\n@use \"./custom/plugin-forms\";\n@use \"./custom/a11y\";\n/* --- QuartzControl:managed:imports:end --- */\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-italic-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: italic;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans Mono\";\n  src: url(\"static/fonts/noto-sans-mono-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:css-vars:start --- */\n:root {\n  --tpl-space-3xs: 0.125rem;\n  --tpl-space-2xs: 0.25rem;\n  --tpl-space-xs: 0.5rem;\n  --tpl-space-sm: 0.75rem;\n  --tpl-space-md: 1rem;\n  --tpl-space-lg: 1.5rem;\n  --tpl-space-xl: 2.5rem;\n  --tpl-space-2xl: 4rem;\n  --tpl-radius-sm: 4px;\n  --tpl-radius-md: 8px;\n  --tpl-radius-lg: 14px;\n  --tpl-rule: var(--lightgray);\n  --tpl-rule-strong: var(--gray);\n  --tpl-rule-width: 1px;\n  --tpl-rule-control: color-mix(in srgb, var(--gray) 70%, var(--light));\n  --tpl-surface: var(--lightgray);\n  --tpl-surface-code: color-mix(in srgb, var(--lightgray) 40%, var(--light));\n  --tpl-surface-tint: var(--highlight);\n  --tpl-text-xs: 0.78rem;\n  --tpl-text-sm: 0.875rem;\n  --tpl-text-base: 1rem;\n  --tpl-text-lg: 1.15rem;\n  --tpl-text-xl: 1.4rem;\n  --tpl-text-2xl: 1.75rem;\n  --tpl-text-3xl: 2.25rem;\n  --tpl-leading-tight: 1.25;\n  --tpl-leading-normal: 1.6;\n  --tpl-leading-snug: 1.4rem;\n  --tpl-tracking-label: 0.08em;\n  --tpl-tracking-caps: 0.06em;\n  --tpl-underline-offset: 0.18em;\n  --tpl-focus-color: var(--secondary);\n  --tpl-focus-width: 2px;\n  --tpl-focus-offset: 2px;\n  --tpl-shadow: 0 6px 24px rgba(23, 23, 26, 0.10);\n  --tpl-motion: 150ms ease;\n  --tpl-target: 44px;\n  --tpl-icon: 1.1rem;\n  --tpl-accent-bar: 3px;\n  --tpl-positive: #136B34;\n  --tpl-indent: 0.85rem;\n  --tpl-icon-sm: 0.95rem;\n  --tpl-fade: 14px;\n  --tpl-page-fade: 24px;\n  --tpl-drawer-width: min(86vw, 340px);\n  --tpl-callout-note: #1D4ED8;\n  --tpl-callout-abstract: #0369A1;\n  --tpl-callout-info: #0E7490;\n  --tpl-callout-todo: #0E7490;\n  --tpl-callout-tip: #0F766E;\n  --tpl-callout-success: #136B34;\n  --tpl-callout-question: #8A5A00;\n  --tpl-callout-warning: #9A4B06;\n  --tpl-callout-failure: #B02020;\n  --tpl-callout-danger: #B02020;\n  --tpl-callout-bug: #A21D62;\n  --tpl-callout-example: #6D28D9;\n  --tpl-callout-quote: var(--secondary);\n  --tpl-backdrop: rgba(0, 0, 0, 0.3);\n  --tpl-backdrop-blur: 4px;\n  --tpl-col-left-position: sticky;\n  --tpl-col-left-height: calc(100dvh - var(--tpl-header-h) - 2 * var(--tpl-space-lg));\n  --tpl-col-left-mask: var(--tpl-fade-mask);\n  --tpl-col-right-position: sticky;\n  --tpl-col-right-height: calc(100dvh - var(--tpl-header-h) - 2 * var(--tpl-space-lg));\n  --tpl-col-right-mask: var(--tpl-fade-mask-end);\n  --tpl-col-left-bg: var(--light);\n  --tpl-col-right-bg: var(--light);\n  --tpl-header-bg: var(--light);\n  --tpl-footer-bg: var(--light);\n}\n\n:root[saved-theme=\"dark\"] {\n  --tpl-surface-code: var(--lightgray);\n  --tpl-shadow: 0 6px 24px rgba(0, 0, 0, 0.55);\n  --tpl-positive: #6DD68F;\n  --tpl-callout-note: #93B8FF;\n  --tpl-callout-abstract: #67C7EF;\n  --tpl-callout-info: #5AC8DE;\n  --tpl-callout-todo: #5AC8DE;\n  --tpl-callout-tip: #5AD3BC;\n  --tpl-callout-success: #6DD68F;\n  --tpl-callout-question: #E8C25E;\n  --tpl-callout-warning: #F0A868;\n  --tpl-callout-failure: #FF9C93;\n  --tpl-callout-danger: #FF9C93;\n  --tpl-callout-bug: #FF9BC8;\n  --tpl-callout-example: #C3A6F7;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n",
+    "custom/a11y.scss": "// a11y.scss\n",
+    "custom/callouts.scss": "// callouts.scss\n",
+    "custom/components-header.scss": "// components-header.scss\n",
+    "custom/components-navigation.scss": "// components-navigation.scss\n",
+    "custom/components-note.scss": "// components-note.scss\n",
+    "custom/content.scss": "// content.scss\n",
+    "custom/foundation.scss": "// foundation.scss\n",
+    "custom/layout.scss": "// layout.scss\n",
+    "custom/pages.scss": "// pages.scss\n",
+    "custom/plugin-forms.scss": "// plugin-forms.scss\n",
+    "custom/plugin-layout-box.scss": "// plugin-layout-box.scss\n",
+    "custom/plugin-multilanguage.scss": "// plugin-multilanguage.scss\n",
+    "custom/plugin-navigations.scss": "// plugin-navigations.scss\n"
+  },
+  "steps": [
+    {
+      "call": "repairManagedUse",
+      "args": [],
+      "result": "lineRestored",
+      "changed": {
+        "custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n\n.x {}\n"
+      }
+    },
+    {
+      "call": "repairManagedUse",
+      "args": [],
+      "result": null,
+      "changed": {}
+    }
+  ]
+}

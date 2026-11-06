@@ -1,0 +1,24 @@
+{
+  "name": "font urls in both files",
+  "tree": {
+    "custom.scss": "@use \"./quartzcontrol\";\n.mine { background: url(\"/static/fonts/keep.woff2\"); }\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"A\";\n  src: url(\"/static/fonts/a.woff2\") format(\"woff2\");\n}\n@font-face {\n  src: url( '/static/fonts/b.woff2'), url(/static/fonts/c.ttf);\n}\n/* --- QuartzControl:managed:fonts:end --- */\n",
+    "_quartzcontrol.scss": "// head\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"A\";\n  src: url(\"/static/fonts/m.woff2\") format(\"woff2\");\n}\n@font-face {\n  src: url( '/static/fonts/b.woff2'), url(/static/fonts/c.ttf);\n}\n/* --- QuartzControl:managed:fonts:end --- */\n/* --- QuartzControl:managed:google-fonts:start --- */\n@font-face { src: url( \"/static/fonts/g.woff2\"); }\n/* --- QuartzControl:managed:google-fonts:end --- */\n"
+  },
+  "steps": [
+    {
+      "call": "migrateFontUrls",
+      "args": [],
+      "result": true,
+      "changed": {
+        "_quartzcontrol.scss": "// head\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"A\";\n  src: url(\"static/fonts/m.woff2\") format(\"woff2\");\n}\n@font-face {\n  src: url('static/fonts/b.woff2'), url(static/fonts/c.ttf);\n}\n/* --- QuartzControl:managed:fonts:end --- */\n/* --- QuartzControl:managed:google-fonts:start --- */\n@font-face { src: url( \"/static/fonts/g.woff2\"); }\n/* --- QuartzControl:managed:google-fonts:end --- */\n",
+        "custom.scss": "@use \"./quartzcontrol\";\n.mine { background: url(\"/static/fonts/keep.woff2\"); }\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"A\";\n  src: url(\"static/fonts/a.woff2\") format(\"woff2\");\n}\n@font-face {\n  src: url('static/fonts/b.woff2'), url(static/fonts/c.ttf);\n}\n/* --- QuartzControl:managed:fonts:end --- */\n"
+      }
+    },
+    {
+      "call": "migrateFontUrls",
+      "args": [],
+      "result": false,
+      "changed": {}
+    }
+  ]
+}

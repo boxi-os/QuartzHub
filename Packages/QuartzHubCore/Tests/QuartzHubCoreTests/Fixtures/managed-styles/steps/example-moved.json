@@ -1,0 +1,370 @@
+{
+  "name": "example moved",
+  "tree": {
+    "custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n\n// ─────────────────────────────────────────────────────────────────────────────\n// Example\n//\n// The template's styles live in quartz/styles/custom/ (layout, content,\n// callouts, one file per kind of component and per plugin), loaded in the\n// order QuartzControl keeps under \"Stile → Eigenes CSS\". Add your own rules\n// below.\n//\n// Colours and sizes come from CSS variables, editable under \"Stile →\n// Variablen\". All text/background pairs meet WCAG AA in light and dark mode.\n// ─────────────────────────────────────────────────────────────────────────────\n",
+    "_quartzcontrol.scss": "// Maintained by QuartzControl and loaded by custom.scss with `@use \"./quartzcontrol\";`.\n// The blocks between QuartzControl markers are rewritten by the app (Styles page: load order,\n// fonts, variables). Text outside them is kept.\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/foundation\";\n@use \"./custom/layout\";\n@use \"./custom/components-header\";\n@use \"./custom/plugin-multilanguage\";\n@use \"./custom/components-navigation\";\n@use \"./custom/plugin-navigations\";\n@use \"./custom/components-note\";\n@use \"./custom/content\";\n@use \"./custom/callouts\";\n@use \"./custom/pages\";\n@use \"./custom/plugin-layout-box\";\n@use \"./custom/plugin-forms\";\n@use \"./custom/a11y\";\n/* --- QuartzControl:managed:imports:end --- */\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-italic-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: italic;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans Mono\";\n  src: url(\"static/fonts/noto-sans-mono-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:css-vars:start --- */\n:root {\n  --tpl-space-3xs: 0.125rem;\n  --tpl-space-2xs: 0.25rem;\n  --tpl-space-xs: 0.5rem;\n  --tpl-space-sm: 0.75rem;\n  --tpl-space-md: 1rem;\n  --tpl-space-lg: 1.5rem;\n  --tpl-space-xl: 2.5rem;\n  --tpl-space-2xl: 4rem;\n  --tpl-radius-sm: 4px;\n  --tpl-radius-md: 8px;\n  --tpl-radius-lg: 14px;\n  --tpl-rule: var(--lightgray);\n  --tpl-rule-strong: var(--gray);\n  --tpl-rule-width: 1px;\n  --tpl-rule-control: color-mix(in srgb, var(--gray) 70%, var(--light));\n  --tpl-surface: var(--lightgray);\n  --tpl-surface-code: color-mix(in srgb, var(--lightgray) 40%, var(--light));\n  --tpl-surface-tint: var(--highlight);\n  --tpl-text-xs: 0.78rem;\n  --tpl-text-sm: 0.875rem;\n  --tpl-text-base: 1rem;\n  --tpl-text-lg: 1.15rem;\n  --tpl-text-xl: 1.4rem;\n  --tpl-text-2xl: 1.75rem;\n  --tpl-text-3xl: 2.25rem;\n  --tpl-leading-tight: 1.25;\n  --tpl-leading-normal: 1.6;\n  --tpl-leading-snug: 1.4rem;\n  --tpl-tracking-label: 0.08em;\n  --tpl-tracking-caps: 0.06em;\n  --tpl-underline-offset: 0.18em;\n  --tpl-focus-color: var(--secondary);\n  --tpl-focus-width: 2px;\n  --tpl-focus-offset: 2px;\n  --tpl-shadow: 0 6px 24px rgba(23, 23, 26, 0.10);\n  --tpl-motion: 150ms ease;\n  --tpl-target: 44px;\n  --tpl-icon: 1.1rem;\n  --tpl-accent-bar: 3px;\n  --tpl-positive: #136B34;\n  --tpl-indent: 0.85rem;\n  --tpl-icon-sm: 0.95rem;\n  --tpl-fade: 14px;\n  --tpl-page-fade: 24px;\n  --tpl-drawer-width: min(86vw, 340px);\n  --tpl-callout-note: #1D4ED8;\n  --tpl-callout-abstract: #0369A1;\n  --tpl-callout-info: #0E7490;\n  --tpl-callout-todo: #0E7490;\n  --tpl-callout-tip: #0F766E;\n  --tpl-callout-success: #136B34;\n  --tpl-callout-question: #8A5A00;\n  --tpl-callout-warning: #9A4B06;\n  --tpl-callout-failure: #B02020;\n  --tpl-callout-danger: #B02020;\n  --tpl-callout-bug: #A21D62;\n  --tpl-callout-example: #6D28D9;\n  --tpl-callout-quote: var(--secondary);\n  --tpl-backdrop: rgba(0, 0, 0, 0.3);\n  --tpl-backdrop-blur: 4px;\n  --tpl-col-left-position: sticky;\n  --tpl-col-left-height: calc(100dvh - var(--tpl-header-h) - 2 * var(--tpl-space-lg));\n  --tpl-col-left-mask: var(--tpl-fade-mask);\n  --tpl-col-right-position: sticky;\n  --tpl-col-right-height: calc(100dvh - var(--tpl-header-h) - 2 * var(--tpl-space-lg));\n  --tpl-col-right-mask: var(--tpl-fade-mask-end);\n  --tpl-col-left-bg: var(--light);\n  --tpl-col-right-bg: var(--light);\n  --tpl-header-bg: var(--light);\n  --tpl-footer-bg: var(--light);\n}\n\n:root[saved-theme=\"dark\"] {\n  --tpl-surface-code: var(--lightgray);\n  --tpl-shadow: 0 6px 24px rgba(0, 0, 0, 0.55);\n  --tpl-positive: #6DD68F;\n  --tpl-callout-note: #93B8FF;\n  --tpl-callout-abstract: #67C7EF;\n  --tpl-callout-info: #5AC8DE;\n  --tpl-callout-todo: #5AC8DE;\n  --tpl-callout-tip: #5AD3BC;\n  --tpl-callout-success: #6DD68F;\n  --tpl-callout-question: #E8C25E;\n  --tpl-callout-warning: #F0A868;\n  --tpl-callout-failure: #FF9C93;\n  --tpl-callout-danger: #FF9C93;\n  --tpl-callout-bug: #FF9BC8;\n  --tpl-callout-example: #C3A6F7;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n",
+    "custom/a11y.scss": "// a11y.scss\n",
+    "custom/callouts.scss": "// callouts.scss\n",
+    "custom/components-header.scss": "// components-header.scss\n",
+    "custom/components-navigation.scss": "// components-navigation.scss\n",
+    "custom/components-note.scss": "// components-note.scss\n",
+    "custom/content.scss": "// content.scss\n",
+    "custom/foundation.scss": "// foundation.scss\n",
+    "custom/layout.scss": "// layout.scss\n",
+    "custom/pages.scss": "// pages.scss\n",
+    "custom/plugin-forms.scss": "// plugin-forms.scss\n",
+    "custom/plugin-layout-box.scss": "// plugin-layout-box.scss\n",
+    "custom/plugin-multilanguage.scss": "// plugin-multilanguage.scss\n",
+    "custom/plugin-navigations.scss": "// plugin-navigations.scss\n"
+  },
+  "steps": [
+    {
+      "call": "getVariableOverrides",
+      "args": [],
+      "result": [
+        {
+          "key": "tpl-space-3xs",
+          "light": "0.125rem"
+        },
+        {
+          "key": "tpl-space-2xs",
+          "light": "0.25rem"
+        },
+        {
+          "key": "tpl-space-xs",
+          "light": "0.5rem"
+        },
+        {
+          "key": "tpl-space-sm",
+          "light": "0.75rem"
+        },
+        {
+          "key": "tpl-space-md",
+          "light": "1rem"
+        },
+        {
+          "key": "tpl-space-lg",
+          "light": "1.5rem"
+        },
+        {
+          "key": "tpl-space-xl",
+          "light": "2.5rem"
+        },
+        {
+          "key": "tpl-space-2xl",
+          "light": "4rem"
+        },
+        {
+          "key": "tpl-radius-sm",
+          "light": "4px"
+        },
+        {
+          "key": "tpl-radius-md",
+          "light": "8px"
+        },
+        {
+          "key": "tpl-radius-lg",
+          "light": "14px"
+        },
+        {
+          "key": "tpl-rule",
+          "light": "var(--lightgray)"
+        },
+        {
+          "key": "tpl-rule-strong",
+          "light": "var(--gray)"
+        },
+        {
+          "key": "tpl-rule-width",
+          "light": "1px"
+        },
+        {
+          "key": "tpl-rule-control",
+          "light": "color-mix(in srgb, var(--gray) 70%, var(--light))"
+        },
+        {
+          "key": "tpl-surface",
+          "light": "var(--lightgray)"
+        },
+        {
+          "key": "tpl-surface-code",
+          "light": "color-mix(in srgb, var(--lightgray) 40%, var(--light))",
+          "dark": "var(--lightgray)"
+        },
+        {
+          "key": "tpl-surface-tint",
+          "light": "var(--highlight)"
+        },
+        {
+          "key": "tpl-text-xs",
+          "light": "0.78rem"
+        },
+        {
+          "key": "tpl-text-sm",
+          "light": "0.875rem"
+        },
+        {
+          "key": "tpl-text-base",
+          "light": "1rem"
+        },
+        {
+          "key": "tpl-text-lg",
+          "light": "1.15rem"
+        },
+        {
+          "key": "tpl-text-xl",
+          "light": "1.4rem"
+        },
+        {
+          "key": "tpl-text-2xl",
+          "light": "1.75rem"
+        },
+        {
+          "key": "tpl-text-3xl",
+          "light": "2.25rem"
+        },
+        {
+          "key": "tpl-leading-tight",
+          "light": "1.25"
+        },
+        {
+          "key": "tpl-leading-normal",
+          "light": "1.6"
+        },
+        {
+          "key": "tpl-leading-snug",
+          "light": "1.4rem"
+        },
+        {
+          "key": "tpl-tracking-label",
+          "light": "0.08em"
+        },
+        {
+          "key": "tpl-tracking-caps",
+          "light": "0.06em"
+        },
+        {
+          "key": "tpl-underline-offset",
+          "light": "0.18em"
+        },
+        {
+          "key": "tpl-focus-color",
+          "light": "var(--secondary)"
+        },
+        {
+          "key": "tpl-focus-width",
+          "light": "2px"
+        },
+        {
+          "key": "tpl-focus-offset",
+          "light": "2px"
+        },
+        {
+          "key": "tpl-shadow",
+          "light": "0 6px 24px rgba(23, 23, 26, 0.10)",
+          "dark": "0 6px 24px rgba(0, 0, 0, 0.55)"
+        },
+        {
+          "key": "tpl-motion",
+          "light": "150ms ease"
+        },
+        {
+          "key": "tpl-target",
+          "light": "44px"
+        },
+        {
+          "key": "tpl-icon",
+          "light": "1.1rem"
+        },
+        {
+          "key": "tpl-accent-bar",
+          "light": "3px"
+        },
+        {
+          "key": "tpl-positive",
+          "light": "#136B34",
+          "dark": "#6DD68F"
+        },
+        {
+          "key": "tpl-indent",
+          "light": "0.85rem"
+        },
+        {
+          "key": "tpl-icon-sm",
+          "light": "0.95rem"
+        },
+        {
+          "key": "tpl-fade",
+          "light": "14px"
+        },
+        {
+          "key": "tpl-page-fade",
+          "light": "24px"
+        },
+        {
+          "key": "tpl-drawer-width",
+          "light": "min(86vw, 340px)"
+        },
+        {
+          "key": "tpl-callout-note",
+          "light": "#1D4ED8",
+          "dark": "#93B8FF"
+        },
+        {
+          "key": "tpl-callout-abstract",
+          "light": "#0369A1",
+          "dark": "#67C7EF"
+        },
+        {
+          "key": "tpl-callout-info",
+          "light": "#0E7490",
+          "dark": "#5AC8DE"
+        },
+        {
+          "key": "tpl-callout-todo",
+          "light": "#0E7490",
+          "dark": "#5AC8DE"
+        },
+        {
+          "key": "tpl-callout-tip",
+          "light": "#0F766E",
+          "dark": "#5AD3BC"
+        },
+        {
+          "key": "tpl-callout-success",
+          "light": "#136B34",
+          "dark": "#6DD68F"
+        },
+        {
+          "key": "tpl-callout-question",
+          "light": "#8A5A00",
+          "dark": "#E8C25E"
+        },
+        {
+          "key": "tpl-callout-warning",
+          "light": "#9A4B06",
+          "dark": "#F0A868"
+        },
+        {
+          "key": "tpl-callout-failure",
+          "light": "#B02020",
+          "dark": "#FF9C93"
+        },
+        {
+          "key": "tpl-callout-danger",
+          "light": "#B02020",
+          "dark": "#FF9C93"
+        },
+        {
+          "key": "tpl-callout-bug",
+          "light": "#A21D62",
+          "dark": "#FF9BC8"
+        },
+        {
+          "key": "tpl-callout-example",
+          "light": "#6D28D9",
+          "dark": "#C3A6F7"
+        },
+        {
+          "key": "tpl-callout-quote",
+          "light": "var(--secondary)"
+        },
+        {
+          "key": "tpl-backdrop",
+          "light": "rgba(0, 0, 0, 0.3)"
+        },
+        {
+          "key": "tpl-backdrop-blur",
+          "light": "4px"
+        },
+        {
+          "key": "tpl-col-left-position",
+          "light": "sticky"
+        },
+        {
+          "key": "tpl-col-left-height",
+          "light": "calc(100dvh - var(--tpl-header-h) - 2 * var(--tpl-space-lg))"
+        },
+        {
+          "key": "tpl-col-left-mask",
+          "light": "var(--tpl-fade-mask)"
+        },
+        {
+          "key": "tpl-col-right-position",
+          "light": "sticky"
+        },
+        {
+          "key": "tpl-col-right-height",
+          "light": "calc(100dvh - var(--tpl-header-h) - 2 * var(--tpl-space-lg))"
+        },
+        {
+          "key": "tpl-col-right-mask",
+          "light": "var(--tpl-fade-mask-end)"
+        },
+        {
+          "key": "tpl-col-left-bg",
+          "light": "var(--light)"
+        },
+        {
+          "key": "tpl-col-right-bg",
+          "light": "var(--light)"
+        },
+        {
+          "key": "tpl-header-bg",
+          "light": "var(--light)"
+        },
+        {
+          "key": "tpl-footer-bg",
+          "light": "var(--light)"
+        }
+      ],
+      "changed": {}
+    },
+    {
+      "call": "currentOrder",
+      "args": [],
+      "result": [
+        "custom/foundation.scss",
+        "custom/layout.scss",
+        "custom/components-header.scss",
+        "custom/plugin-multilanguage.scss",
+        "custom/components-navigation.scss",
+        "custom/plugin-navigations.scss",
+        "custom/components-note.scss",
+        "custom/content.scss",
+        "custom/callouts.scss",
+        "custom/pages.scss",
+        "custom/plugin-layout-box.scss",
+        "custom/plugin-forms.scss",
+        "custom/a11y.scss"
+      ],
+      "changed": {}
+    },
+    {
+      "call": "saveVariableOverrides",
+      "args": [
+        []
+      ],
+      "result": null,
+      "changed": {
+        "_quartzcontrol.scss": "// Maintained by QuartzControl and loaded by custom.scss with `@use \"./quartzcontrol\";`.\n// The blocks between QuartzControl markers are rewritten by the app (Styles page: load order,\n// fonts, variables). Text outside them is kept.\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/foundation\";\n@use \"./custom/layout\";\n@use \"./custom/components-header\";\n@use \"./custom/plugin-multilanguage\";\n@use \"./custom/components-navigation\";\n@use \"./custom/plugin-navigations\";\n@use \"./custom/components-note\";\n@use \"./custom/content\";\n@use \"./custom/callouts\";\n@use \"./custom/pages\";\n@use \"./custom/plugin-layout-box\";\n@use \"./custom/plugin-forms\";\n@use \"./custom/a11y\";\n/* --- QuartzControl:managed:imports:end --- */\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-italic-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: italic;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans Mono\";\n  src: url(\"static/fonts/noto-sans-mono-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n"
+      }
+    },
+    {
+      "call": "getVariableOverrides",
+      "args": [],
+      "result": [],
+      "changed": {}
+    },
+    {
+      "call": "setImportOrder",
+      "args": [
+        []
+      ],
+      "result": null,
+      "changed": {
+        "_quartzcontrol.scss": "// Maintained by QuartzControl and loaded by custom.scss with `@use \"./quartzcontrol\";`.\n// The blocks between QuartzControl markers are rewritten by the app (Styles page: load order,\n// fonts, variables). Text outside them is kept.\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/noto-sans-latin-italic-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: italic;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans Mono\";\n  src: url(\"static/fonts/noto-sans-mono-latin-400-700.woff2\") format(\"woff2\");\n  font-weight: 400 700;\n  font-style: normal;\n  font-display: swap;\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n"
+      }
+    }
+  ]
+}

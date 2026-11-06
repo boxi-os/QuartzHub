@@ -1,0 +1,26 @@
+{
+  "name": "save restores the use line only when moved",
+  "tree": {
+    "custom.scss": ".x {}\n"
+  },
+  "steps": [
+    {
+      "call": "saveCustomScss",
+      "args": [
+        ".y {}\n"
+      ],
+      "result": {
+        "managedUseRestored": false
+      },
+      "changed": {
+        "custom.scss": ".y {}\n"
+      }
+    },
+    {
+      "call": "repairManagedUse",
+      "args": [],
+      "result": null,
+      "changed": {}
+    }
+  ]
+}

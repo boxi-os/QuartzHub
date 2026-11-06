@@ -1,0 +1,57 @@
+{
+  "name": "nothing at all",
+  "tree": {},
+  "steps": [
+    {
+      "call": "getVariableOverrides",
+      "args": [],
+      "result": [],
+      "changed": {}
+    },
+    {
+      "call": "currentOrder",
+      "args": [],
+      "result": [],
+      "changed": {}
+    },
+    {
+      "call": "migrateFontUrls",
+      "args": [],
+      "result": false,
+      "changed": {}
+    },
+    {
+      "call": "loadedStylesheetsLastFirst",
+      "args": [],
+      "result": [],
+      "changed": {}
+    },
+    {
+      "call": "saveVariableOverrides",
+      "args": [
+        [
+          {
+            "key": "a",
+            "light": "1"
+          }
+        ]
+      ],
+      "result": null,
+      "changed": {
+        "custom.scss": "/* --- QuartzControl:managed:css-vars:start --- */\n:root {\n  --a: 1;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n"
+      }
+    },
+    {
+      "call": "setImportOrder",
+      "args": [
+        [
+          "custom/x.scss"
+        ]
+      ],
+      "result": null,
+      "changed": {
+        "custom.scss": "/* --- QuartzControl:managed:css-vars:start --- */\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/x\";\n/* --- QuartzControl:managed:imports:end --- */\n:root {\n  --a: 1;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n"
+      }
+    }
+  ]
+}

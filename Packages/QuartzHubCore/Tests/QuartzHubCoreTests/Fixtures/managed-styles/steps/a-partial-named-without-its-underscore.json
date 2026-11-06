@@ -1,0 +1,34 @@
+{
+  "name": "a partial named without its underscore",
+  "tree": {
+    "custom.scss": "/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/part\";\n@use \"./custom/plain\";\n@use \"./custom/both\";\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n",
+    "custom/_part.scss": "",
+    "custom/plain.css": "",
+    "custom/both.scss": "",
+    "custom/_both.scss": ""
+  },
+  "steps": [
+    {
+      "call": "currentOrder",
+      "args": [],
+      "result": [
+        "custom/_part.scss",
+        "custom/plain.css",
+        "custom/both.scss"
+      ],
+      "changed": {}
+    },
+    {
+      "call": "writeManagedBlocks",
+      "args": [
+        {
+          "css-vars": ":root { --q: 1; }"
+        }
+      ],
+      "result": null,
+      "changed": {
+        "custom.scss": "/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/part\";\n@use \"./custom/plain\";\n@use \"./custom/both\";\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n\n/* --- QuartzControl:managed:css-vars:start --- */\n:root { --q: 1; }\n/* --- QuartzControl:managed:css-vars:end --- */\n"
+      }
+    }
+  ]
+}

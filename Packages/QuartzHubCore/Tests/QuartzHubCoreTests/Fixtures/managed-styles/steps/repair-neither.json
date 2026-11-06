@@ -1,0 +1,14 @@
+{
+  "name": "repair: neither",
+  "tree": {
+    "custom.scss": ".x {}\n"
+  },
+  "steps": [
+    {
+      "call": "repairManagedUse",
+      "args": [],
+      "result": null,
+      "changed": {}
+    }
+  ]
+}

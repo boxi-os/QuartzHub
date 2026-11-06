@@ -890,3 +890,40 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
   behalten, Schreiben vor dem Erzeugen, Breiten ohne Prüfung, `AREAS` eingerückt, jeder Frame neu
   angemeldet, Löschen ohne CLI, unlesbare Config verschwiegen, keine Prüfung doppelter Gruppen,
   geleerte Positionen behalten, kein Frame-Schritt an der Bau-Tür, dessen Sätze als stdout.
+
+### Verwaltete Blöcke und Ladereihenfolge (`styleService.ts`, erster Teil → `ManagedBlocks`, `VariableOverrides`, `StyleSheets`)
+
+- **Was dazugehört:** die Blöcke zwischen den Markern (beide Namen, `QuartzControl` und
+  `Quartz-GUI`), der Ladereihenfolge-Block mit den Sass-Namensräumen, die Variablen (drei Regeln:
+  beide Modi, dunkel, nur hell), der Umzug nach `_quartzcontrol.scss` samt `@use`-Zeile, die
+  Reparatur an der Bau-Tür und die Umstellung der Schrift-Adressen. Die Stylesheet-Dateien selbst
+  (anlegen, umbenennen, „Zusammenlegen“), die SCSS-Prüfung und die Schriften folgen.
+- **Text wie in JavaScript (`JSText`).** Die Blöcke werden an UTF-16-Stellen geschnitten, gesucht
+  wird wörtlich: Swifts `String` sucht nach Zeichen, und „\r\n“ ist eines, eine Suche nach „\n“
+  fände in einer Datei mit Windows-Zeilenenden nichts. Die Muster sind für ICU so geschrieben,
+  dass sie treffen, was V8 trifft (`\s` ausgeschrieben, `\w` als ASCII, `$` als `\z`, `^` unter
+  `m` ohne U+0085). Gegenprobe: das Teilen der Zeilen nach Zeichen statt nach UTF-16 lässt den
+  CRLF-Fall scheitern.
+- **Gemessen gegen QuartzControls Code:** `scripts/managed-styles-golden.mjs` lädt
+  `styleService.ts` und zeichnet auf: die Textfunktionen auf 30 Texten (custom.scss und
+  `_quartzcontrol.scss` von gui-test und Example, gui-test in die Form von 1.0 zurückgebaut, mit
+  altem Namen, mit CRLF; zwei Kopien unter einem und unter zwei Namen, verschachtelt, beta.2s
+  Block im eigenen, ohne Ende, Ende vor Anfang, Umlaute, CJK und Emoji vor den Markern, absolute
+  Schrift-Adressen, die Formen der `@use`-Zeile, Regeln mit Klammern), je Text fünf Blöcke und
+  15 Funktionen; acht Variablen-Listen gerendert; 16 Abläufe auf Projekten (gui-test und Example
+  umgezogen, gui-test in der Form von 1.0 und mit altem Namen, alle Reparaturfälle, Schrift-Adressen
+  in beiden Dateien, Kopien in beiden Dateien, eine Zeile für eine gelöschte Datei,
+  Namensraum-Kollisionen, Variablen-Kollisionen mit Kommentaren, ein Partial ohne Unterstrich
+  genannt), je Schritt die Antwort und jede geänderte Datei. Alles gleich. Die 470 Zeilen
+  `google-fonts` von gui-test sind dabei auf ihre ersten fünf Regeln gekürzt, die Stylesheets
+  unter custom/ auf eine Zeile: Für diese Funktionen zählt nur, dass sie da sind.
+- **Abweichung:** Der Umzug mit Snapshot (`migrate(snapshot: true)`, der Weg der Stile-Seite)
+  wird abgelehnt, bis der Snapshot-Speicher da ist (Punkt 7); ohne Snapshot (für ein eben
+  angelegtes Projekt) geht er.
+- **An der Bau-Tür:** dritter Schritt von `BuildService.preparation`, erst die Reparatur, dann die
+  Schrift-Adressen (die zweite liest die Blöcke durch die Zeile, die die erste zurückbringt); beide
+  unter der Sperre der Stylesheets. Gemessen: ein umgezogenes Projekt ohne `@use`-Zeile und mit
+  `/static/fonts/` bekommt beides und beide Sätze in der Konsole; der zweite Lauf sagt nichts.
+- Gegenproben (24, jede lässt einen Test scheitern; vier waren erst ungefangen und bekamen einen
+  Fall: der Partial-Kandidat `_name.scss`, das Entfernen von Blockkommentaren bei den Kollisionen,
+  die Klammertiefe bei einer schließenden Klammer vorweg, die Anführungszeichen der `@use`-Zeile).

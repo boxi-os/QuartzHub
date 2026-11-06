@@ -1,0 +1,57 @@
+{
+  "name": "copies in both files",
+  "tree": {
+    "custom.scss": "@use \"./quartzcontrol\";\n.u {}\n/* --- QuartzControl:managed:css-vars:start --- */\n:root {\n  --a: custom;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/one\";\n@use \"./custom/two\";\n/* --- QuartzControl:managed:imports:end --- */\n",
+    "_quartzcontrol.scss": "/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/one\";\n@use \"./custom/two\";\n/* --- QuartzControl:managed:imports:end --- */\n\n/* --- QuartzControl:managed:css-vars:start --- */\n:root {\n  --a: managed;\n  --b: 1;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n",
+    "custom/one.scss": ".one {}\n",
+    "custom/two.scss": ".two {}\n"
+  },
+  "steps": [
+    {
+      "call": "getVariableOverrides",
+      "args": [],
+      "result": [
+        {
+          "key": "a",
+          "light": "custom"
+        },
+        {
+          "key": "b",
+          "light": "1"
+        }
+      ],
+      "changed": {}
+    },
+    {
+      "call": "currentOrder",
+      "args": [],
+      "result": [
+        "custom/one.scss",
+        "custom/two.scss"
+      ],
+      "changed": {}
+    },
+    {
+      "call": "variableCollisions",
+      "args": [],
+      "result": [],
+      "changed": {}
+    },
+    {
+      "call": "saveVariableOverrides",
+      "args": [
+        [
+          {
+            "key": "b",
+            "light": "2"
+          }
+        ]
+      ],
+      "result": null,
+      "changed": {
+        "_quartzcontrol.scss": "\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/one\";\n@use \"./custom/two\";\n/* --- QuartzControl:managed:imports:end --- */\n\n/* --- QuartzControl:managed:css-vars:start --- */\n:root {\n  --b: 2;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n",
+        "custom.scss": "@use \"./quartzcontrol\";\n.u {}\n"
+      }
+    }
+  ]
+}

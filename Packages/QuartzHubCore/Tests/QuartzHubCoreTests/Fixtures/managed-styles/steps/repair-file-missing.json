@@ -1,0 +1,22 @@
+{
+  "name": "repair: file missing",
+  "tree": {
+    "custom.scss": "@use \"./variables.scss\" as *;\n@use \"./quartzcontrol\";\n"
+  },
+  "steps": [
+    {
+      "call": "repairManagedUse",
+      "args": [],
+      "result": "fileCreated",
+      "changed": {
+        "_quartzcontrol.scss": "// Maintained by QuartzControl and loaded by custom.scss with `@use \"./quartzcontrol\";`.\n// The blocks between QuartzControl markers are rewritten by the app (Styles page: load order,\n// fonts, variables). Text outside them is kept.\n"
+      }
+    },
+    {
+      "call": "repairManagedUse",
+      "args": [],
+      "result": null,
+      "changed": {}
+    }
+  ]
+}

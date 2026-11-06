@@ -1,0 +1,22 @@
+{
+  "name": "one copy, a line for a gone file",
+  "tree": {
+    "custom.scss": "@use \"./quartzcontrol\";\n",
+    "_quartzcontrol.scss": "/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/one\";\n@use \"./custom/gone\";\n/* --- QuartzControl:managed:imports:end --- */\n",
+    "custom/one.scss": ".one {}\n"
+  },
+  "steps": [
+    {
+      "call": "writeManagedBlocks",
+      "args": [
+        {
+          "css-vars": ":root { --x: 1; }"
+        }
+      ],
+      "result": null,
+      "changed": {
+        "_quartzcontrol.scss": "\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/one\";\n/* --- QuartzControl:managed:imports:end --- */\n\n/* --- QuartzControl:managed:css-vars:start --- */\n:root { --x: 1; }\n/* --- QuartzControl:managed:css-vars:end --- */\n"
+      }
+    }
+  ]
+}

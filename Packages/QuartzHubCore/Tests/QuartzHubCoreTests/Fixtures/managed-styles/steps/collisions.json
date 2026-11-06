@@ -1,0 +1,48 @@
+{
+  "name": "collisions",
+  "tree": {
+    "custom.scss": "@use \"./quartzcontrol\";\n/* :root { --a: 1; } */\n/* :root {\n  --z: 1;\n} */\n// :root { --b: 1; }\n:root { --a: 2; }\n:root[saved-theme='dark'] { --c: 3; }\n:root:not([saved-theme=dark]) { --l: 1; }\nhtml :root { --a: 9; }\na:root{--x:1}\n",
+    "_quartzcontrol.scss": "/* --- QuartzControl:managed:css-vars:start --- */\n:root {\n  --a: 1;\n  --b: 1;\n  --z: 1;\n}\n\n:root[saved-theme=\"dark\"] {\n  --c: 1;\n}\n\n:root:not([saved-theme=\"dark\"]) {\n  --l: 1;\n}\n/* --- QuartzControl:managed:css-vars:end --- */\n"
+  },
+  "steps": [
+    {
+      "call": "variableCollisions",
+      "args": [],
+      "result": [
+        "a",
+        "c",
+        "l"
+      ],
+      "changed": {}
+    },
+    {
+      "call": "getVariableOverrides",
+      "args": [],
+      "result": [
+        {
+          "key": "a",
+          "light": "1"
+        },
+        {
+          "key": "b",
+          "light": "1"
+        },
+        {
+          "key": "z",
+          "light": "1"
+        },
+        {
+          "key": "c",
+          "light": "",
+          "dark": "1"
+        },
+        {
+          "key": "l",
+          "light": "1",
+          "lightOnly": true
+        }
+      ],
+      "changed": {}
+    }
+  ]
+}

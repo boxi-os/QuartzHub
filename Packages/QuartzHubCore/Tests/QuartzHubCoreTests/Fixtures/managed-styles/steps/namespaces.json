@@ -1,0 +1,65 @@
+{
+  "name": "namespaces",
+  "tree": {
+    "custom.scss": "@use \"./variables.scss\" as *;\n.x {}\n",
+    "custom/01-typo.scss": "",
+    "custom/typo.grafie.scss": "",
+    "custom/typo.scss": "",
+    "imported/_partial.scss": "",
+    "custom/a.css": "",
+    "custom/sub/deep.scss": "",
+    "custom/typo-2.scss": "",
+    "custom/ns-01-typo.scss": ""
+  },
+  "steps": [
+    {
+      "call": "setImportOrder",
+      "args": [
+        [
+          "custom/01-typo.scss",
+          "custom/typo.grafie.scss",
+          "custom/typo.scss",
+          "imported/_partial.scss",
+          "custom/a.css",
+          "custom/typo-2.scss",
+          "custom/ns-01-typo.scss",
+          "custom/sub/deep.scss",
+          "other/x.scss"
+        ]
+      ],
+      "result": null,
+      "changed": {
+        "custom.scss": "@use \"./variables.scss\" as *;\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/01-typo\" as ns-01-typo;\n@use \"./custom/typo.grafie\";\n@use \"./custom/typo\" as typo-2;\n@use \"./imported/_partial\";\n@use \"./custom/a\";\n@use \"./custom/typo-2\" as typo-2-2;\n@use \"./custom/ns-01-typo\" as ns-01-typo-2;\n@use \"./custom/sub/deep\";\n@use \"./other/x\";\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n"
+      }
+    },
+    {
+      "call": "currentOrder",
+      "args": [],
+      "result": [
+        "custom/01-typo.scss",
+        "custom/typo.grafie.scss",
+        "custom/typo.scss",
+        "imported/_partial.scss",
+        "custom/a.css",
+        "custom/typo-2.scss",
+        "custom/ns-01-typo.scss"
+      ],
+      "changed": {}
+    },
+    {
+      "call": "loadedStylesheetsLastFirst",
+      "args": [],
+      "result": [
+        "@P@/namespaces/quartz/styles/custom.scss",
+        "@P@/namespaces/quartz/styles/custom/ns-01-typo.scss",
+        "@P@/namespaces/quartz/styles/custom/typo-2.scss",
+        "@P@/namespaces/quartz/styles/custom/a.css",
+        "@P@/namespaces/quartz/styles/imported/_partial.scss",
+        "@P@/namespaces/quartz/styles/custom/typo.scss",
+        "@P@/namespaces/quartz/styles/custom/typo.grafie.scss",
+        "@P@/namespaces/quartz/styles/custom/01-typo.scss"
+      ],
+      "changed": {}
+    }
+  ]
+}
