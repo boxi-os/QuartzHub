@@ -89,10 +89,16 @@ public actor BuildService {
   public typealias PreparationStep = @Sendable (_ project: URL, _ report: @Sendable (LogLine.Stream, String) -> Void) async -> Void
 
   /// What QuartzControl does before every build and start (`refreshAuthoredFrames`,
-  /// `refreshGoogleFonts`), as far as QuartzHub has it: the paths to the project's own frames are
-  /// pointed back into this project (a copy made outside the app names the original's). Writing
-  /// the frames, repairing the managed style blocks and refreshing the Google fonts come with
-  /// point 5 of phase 3 (layoutFrameService, styleService, fontService), here.
+  /// `refreshGoogleFonts`), as far as QuartzHub has it:
+  ///
+  /// 1. The paths to the project's own frames are pointed back into this project (a copy made
+  ///    outside the app names the original's).
+  /// 2. Every authored frame is rewritten against the config and the breakpoint widths as they
+  ///    stand (`LayoutFrames.writeAllFrames`): its module carries copies of both, and the build is
+  ///    the one place that copy is read. What went wrong goes into the console as a warning.
+  ///
+  /// Repairing the managed style blocks and refreshing the Google fonts come with the rest of
+  /// point 5 of phase 3 (styleService, fontService), here.
   public static let preparation: [PreparationStep] = [
     { project, report in
       do {
@@ -100,6 +106,9 @@ public actor BuildService {
       } catch {
         report(.warn, L10n.t("main.frameRefreshFailed", ["error": String(describing: error)]) + "\n")
       }
+    },
+    { project, report in
+      for problem in await LayoutFrames().writeAllFrames(project: project) { report(.warn, problem + "\n") }
     }
   ]
 

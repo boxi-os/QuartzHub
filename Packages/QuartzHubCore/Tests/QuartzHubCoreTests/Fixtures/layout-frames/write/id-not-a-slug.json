@@ -1,0 +1,90 @@
+{
+  "frames": {
+    "frame-made": "{\n  \"id\": \"../escape\",\n  \"frameName\": \"made\",\n  \"areas\": [\n    {\n      \"id\": \"a1\",\n      \"name\": \"top\",\n      \"slot\": \"header\"\n    },\n    {\n      \"id\": \"a2\",\n      \"name\": \"body\",\n      \"slot\": \"pageBody\"\n    },\n    {\n      \"id\": \"a3\",\n      \"name\": \"side\",\n      \"slot\": \"left\",\n      \"group\": \"nav\"\n    }\n  ],\n  \"breakpoints\": {\n    \"desktop\": {\n      \"rows\": 2,\n      \"cols\": 2,\n      \"rowGap\": \"1rem\",\n      \"columnGap\": \"1rem\",\n      \"placements\": {\n        \"a1\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 2\n        },\n        \"a2\": {\n          \"row\": 2,\n          \"col\": 2,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a3\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        }\n      }\n    },\n    \"tablet\": {\n      \"rows\": 2,\n      \"cols\": 1,\n      \"rowGap\": \"1rem\",\n      \"columnGap\": \"1rem\",\n      \"placements\": {\n        \"a1\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a2\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a3\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1,\n          \"hidden\": true\n        }\n      }\n    },\n    \"mobile\": {\n      \"rows\": 3,\n      \"cols\": 1,\n      \"rowGap\": \"1rem\",\n      \"columnGap\": \"1rem\",\n      \"placements\": {\n        \"a1\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a2\": {\n          \"row\": 3,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        }\n      }\n    }\n  }\n}"
+  },
+  "breakpoints": null,
+  "extraFiles": {},
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": [
+      {
+        "source": "github:quartz-community/explorer",
+        "enabled": true,
+        "layout": {
+          "position": "left",
+          "priority": 20,
+          "group": "nav"
+        },
+        "name": "explorer"
+      },
+      {
+        "source": "github:quartz-community/search",
+        "enabled": true,
+        "layout": {
+          "position": "left",
+          "priority": 10,
+          "group": "tools"
+        },
+        "name": "search"
+      },
+      {
+        "source": "@quartz-community/darkmode",
+        "enabled": true,
+        "layout": {
+          "position": "left",
+          "priority": 15,
+          "group": "tools"
+        },
+        "name": "darkmode"
+      },
+      {
+        "source": "github:quartz-community/toc",
+        "enabled": true,
+        "layout": {
+          "position": "right",
+          "priority": 5
+        },
+        "name": "toc"
+      },
+      {
+        "source": "github:quartz-community/off",
+        "enabled": false,
+        "layout": {
+          "position": "left",
+          "priority": 1,
+          "group": "nav"
+        },
+        "name": "off"
+      }
+    ],
+    "layout": {
+      "groups": {
+        "nav": {
+          "priority": 1
+        }
+      },
+      "byPageType": {
+        "404": {
+          "positions": {
+            "left": []
+          }
+        },
+        "tag": {
+          "exclude": [
+            "explorer"
+          ]
+        },
+        "folder": {
+          "template": "other"
+        }
+      }
+    }
+  },
+  "problems": [
+    "{\"key\":\"frameRefreshFailed\",\"args\":{\"error\":\"Error: {\\\"key\\\":\\\"frameIdInvalid\\\",\\\"args\\\":{\\\"id\\\":\\\"../escape\\\"}}\"}}"
+  ],
+  "files": {
+    "authored-frames/frame-made/frame.json": "{\n  \"id\": \"../escape\",\n  \"frameName\": \"made\",\n  \"areas\": [\n    {\n      \"id\": \"a1\",\n      \"name\": \"top\",\n      \"slot\": \"header\"\n    },\n    {\n      \"id\": \"a2\",\n      \"name\": \"body\",\n      \"slot\": \"pageBody\"\n    },\n    {\n      \"id\": \"a3\",\n      \"name\": \"side\",\n      \"slot\": \"left\",\n      \"group\": \"nav\"\n    }\n  ],\n  \"breakpoints\": {\n    \"desktop\": {\n      \"rows\": 2,\n      \"cols\": 2,\n      \"rowGap\": \"1rem\",\n      \"columnGap\": \"1rem\",\n      \"placements\": {\n        \"a1\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 2\n        },\n        \"a2\": {\n          \"row\": 2,\n          \"col\": 2,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a3\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        }\n      }\n    },\n    \"tablet\": {\n      \"rows\": 2,\n      \"cols\": 1,\n      \"rowGap\": \"1rem\",\n      \"columnGap\": \"1rem\",\n      \"placements\": {\n        \"a1\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a2\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a3\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1,\n          \"hidden\": true\n        }\n      }\n    },\n    \"mobile\": {\n      \"rows\": 3,\n      \"cols\": 1,\n      \"rowGap\": \"1rem\",\n      \"columnGap\": \"1rem\",\n      \"placements\": {\n        \"a1\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        },\n        \"a2\": {\n          \"row\": 3,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 1\n        }\n      }\n    }\n  }\n}"
+  }
+}

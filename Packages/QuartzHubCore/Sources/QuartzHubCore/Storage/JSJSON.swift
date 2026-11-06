@@ -201,6 +201,38 @@ public enum JSJSON {
     return out
   }
 
+  /// `JSON.stringify(value)` without indentation: `{"a":1,"b":[true,null]}`.
+  public static func compact(_ value: JSONValue) -> String {
+    var out = ""
+    writeCompact(value, into: &out)
+    return out
+  }
+
+  private static func writeCompact(_ value: JSONValue, into out: inout String) {
+    switch value {
+    case .null: out += "null"
+    case .bool(let bool): out += bool ? "true" : "false"
+    case .number(let number): out += numberToString(number)
+    case .string(let string): quote(string, into: &out)
+    case .array(let items):
+      out += "["
+      for (index, item) in items.enumerated() {
+        if index > 0 { out += "," }
+        writeCompact(item, into: &out)
+      }
+      out += "]"
+    case .object(let object):
+      out += "{"
+      for (index, key) in object.keys.enumerated() {
+        if index > 0 { out += "," }
+        quote(key, into: &out)
+        out += ":"
+        writeCompact(object[key]!, into: &out)
+      }
+      out += "}"
+    }
+  }
+
   private static func write(_ value: JSONValue, indent: String, into out: inout String) {
     switch value {
     case .null: out += "null"
@@ -235,7 +267,7 @@ public enum JSJSON {
 
   // JSON.stringify escapes only '"', '\\' and the C0 controls (short forms where JSON has one);
   // not '/', not U+2028/U+2029, not non-ASCII.
-  private static func quote(_ string: String, into out: inout String) {
+  static func quote(_ string: String, into out: inout String) {
     out += "\""
     for scalar in string.unicodeScalars {
       switch scalar {

@@ -16,8 +16,8 @@ import Synchronization
 ///   writer in line (QuartzControl measured exactly this with a timer). `Task.detached` does not
 ///   inherit it, and is not a holder either: it waits in the queue like anyone else.
 ///
-/// Two exist, and no holder of one takes the other: `styles` and `config`. The third queue per
-/// project, the snapshot store's, comes with `snapshotService`.
+/// Three exist, and no holder of one takes another: `styles`, `config` and `frames`. The next queue
+/// per project, the snapshot store's, comes with `snapshotService`.
 public final class ProjectLock: Sendable {
   /// One writer at a time for a project's stylesheets and its font folder (`styleLock.ts`: the
   /// font writers, the variables, the import order, a template import). Not covered: a snapshot
@@ -25,6 +25,10 @@ public final class ProjectLock: Sendable {
   public static let styles = ProjectLock(name: "styles")
   /// One writer at a time for `quartz.config.yaml` (`configService.whileHoldingConfig`).
   public static let config = ProjectLock(name: "config")
+  /// One writer at a time for a project's authored frames (`serialised` in
+  /// `layoutFrameService.ts`: saving a frame, the breakpoint widths, the refresh before a build).
+  /// QuartzControl keyed that queue by the path as given; here by `realpath`, like the others.
+  public static let frames = ProjectLock(name: "frames")
 
   public let name: String
   private let queues = Mutex<[String: Task<Void, Never>]>([:])

@@ -1,0 +1,557 @@
+{
+  "frames": {
+    "frame-editorial": "{\n  \"id\": \"frame-editorial\",\n  \"frameName\": \"editorial\",\n  \"areas\": [\n    {\n      \"id\": \"area-header\",\n      \"name\": \"header\",\n      \"slot\": \"header\"\n    },\n    {\n      \"id\": \"area-left\",\n      \"name\": \"left\",\n      \"slot\": \"left\"\n    },\n    {\n      \"id\": \"area-right\",\n      \"name\": \"right\",\n      \"slot\": \"right\"\n    },\n    {\n      \"id\": \"area-beforeBody\",\n      \"name\": \"before-body\",\n      \"slot\": \"beforeBody\"\n    },\n    {\n      \"id\": \"area-pageBody\",\n      \"name\": \"page-body\",\n      \"slot\": \"pageBody\"\n    },\n    {\n      \"id\": \"area-afterBody\",\n      \"name\": \"after-body\",\n      \"slot\": \"afterBody\"\n    },\n    {\n      \"id\": \"area-footer\",\n      \"name\": \"footer\",\n      \"slot\": \"footer\"\n    },\n    {\n      \"id\": \"area-custom-8\",\n      \"name\": \"custom-8\",\n      \"slot\": \"afterBody\",\n      \"group\": \"custom-8\"\n    }\n  ],\n  \"breakpoints\": {\n    \"desktop\": {\n      \"rows\": 6,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"4rem\",\n      \"maxWidth\": \"1440px\",\n      \"align\": \"center\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-afterBody\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-right\": {\n          \"row\": 2,\n          \"col\": 10,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-footer\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"tablet\": {\n      \"rows\": 7,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"3rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 5,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-right\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-afterBody\": {\n          \"row\": 6,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-footer\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"mobile\": {\n      \"rows\": 8,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"0\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\",\n        \"auto\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"1rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-beforeBody\": {\n          \"row\": 3,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-right\": {\n          \"row\": 4,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-pageBody\": {\n          \"row\": 5,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-custom-8\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-afterBody\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-footer\": {\n          \"row\": 8,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    }\n  }\n}",
+    "frame-index": "{\n  \"id\": \"frame-index\",\n  \"frameName\": \"index\",\n  \"areas\": [\n    {\n      \"id\": \"area-header\",\n      \"name\": \"header\",\n      \"slot\": \"header\"\n    },\n    {\n      \"id\": \"area-left\",\n      \"name\": \"left\",\n      \"slot\": \"left\"\n    },\n    {\n      \"id\": \"area-right\",\n      \"name\": \"right\",\n      \"slot\": \"right\"\n    },\n    {\n      \"id\": \"area-beforeBody\",\n      \"name\": \"before-body\",\n      \"slot\": \"beforeBody\"\n    },\n    {\n      \"id\": \"area-pageBody\",\n      \"name\": \"page-body\",\n      \"slot\": \"pageBody\"\n    },\n    {\n      \"id\": \"area-afterBody\",\n      \"name\": \"after-body\",\n      \"slot\": \"afterBody\"\n    },\n    {\n      \"id\": \"area-footer\",\n      \"name\": \"footer\",\n      \"slot\": \"footer\"\n    },\n    {\n      \"id\": \"area-custom-8\",\n      \"name\": \"custom-8\",\n      \"slot\": \"afterBody\",\n      \"group\": \"custom-8\"\n    }\n  ],\n  \"breakpoints\": {\n    \"desktop\": {\n      \"rows\": 6,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"4rem\",\n      \"maxWidth\": \"1440px\",\n      \"align\": \"center\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-afterBody\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-right\": {\n          \"row\": 2,\n          \"col\": 10,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-footer\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"tablet\": {\n      \"rows\": 7,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"3rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 5,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-right\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-afterBody\": {\n          \"row\": 6,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-footer\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"mobile\": {\n      \"rows\": 8,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"0\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\",\n        \"auto\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"1rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-beforeBody\": {\n          \"row\": 3,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-right\": {\n          \"row\": 4,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-pageBody\": {\n          \"row\": 5,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-custom-8\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-afterBody\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-footer\": {\n          \"row\": 8,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    }\n  }\n}"
+  },
+  "breakpoints": "{\n  \"tablet\": 1200,\n  \"mobile\": 900\n}",
+  "extraFiles": {},
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": [
+      {
+        "source": "@quartz-community/created-modified-date",
+        "enabled": true,
+        "order": 10,
+        "name": "created-modified-date"
+      },
+      {
+        "source": "@quartz-community/syntax-highlighting",
+        "enabled": true,
+        "order": 20,
+        "name": "syntax-highlighting"
+      },
+      {
+        "source": "@quartz-community/obsidian-flavored-markdown",
+        "enabled": true,
+        "order": 30,
+        "name": "obsidian-flavored-markdown"
+      },
+      {
+        "source": "@quartz-community/github-flavored-markdown",
+        "enabled": true,
+        "order": 40,
+        "name": "github-flavored-markdown"
+      },
+      {
+        "source": "@quartz-community/table-of-contents",
+        "enabled": true,
+        "order": 50,
+        "layout": {
+          "position": "right",
+          "priority": 10,
+          "display": "all"
+        },
+        "name": "table-of-contents"
+      },
+      {
+        "source": "@quartz-community/crawl-links",
+        "enabled": true,
+        "order": 60,
+        "name": "crawl-links"
+      },
+      {
+        "source": "@quartz-community/description",
+        "enabled": true,
+        "order": 70,
+        "name": "description"
+      },
+      {
+        "source": "@quartz-community/latex",
+        "enabled": true,
+        "order": 80,
+        "name": "latex"
+      },
+      {
+        "source": "@quartz-community/citations",
+        "enabled": false,
+        "order": 85,
+        "name": "citations"
+      },
+      {
+        "source": "@quartz-community/hard-line-breaks",
+        "enabled": false,
+        "order": 90,
+        "name": "hard-line-breaks"
+      },
+      {
+        "source": "@quartz-community/ox-hugo",
+        "enabled": false,
+        "order": 91,
+        "name": "ox-hugo"
+      },
+      {
+        "source": "@quartz-community/roam",
+        "enabled": false,
+        "order": 92,
+        "name": "roam"
+      },
+      {
+        "source": "@quartz-community/quartz-fonts",
+        "enabled": false,
+        "name": "quartz-fonts"
+      },
+      {
+        "source": "@quartz-themes/core",
+        "enabled": false,
+        "name": "core"
+      },
+      {
+        "source": "@quartz-community/remove-draft",
+        "enabled": true,
+        "name": "remove-draft"
+      },
+      {
+        "source": "@quartz-community/explicit-publish",
+        "enabled": false,
+        "name": "explicit-publish"
+      },
+      {
+        "source": "@quartz-community/unlisted-pages",
+        "enabled": true,
+        "order": 45,
+        "name": "unlisted-pages"
+      },
+      {
+        "source": "@quartz-community/encrypted-pages",
+        "enabled": false,
+        "name": "encrypted-pages"
+      },
+      {
+        "source": "@quartz-community/stacked-pages",
+        "enabled": false,
+        "layout": {
+          "position": "afterBody",
+          "priority": 20,
+          "display": "all"
+        },
+        "name": "stacked-pages"
+      },
+      {
+        "source": "@quartz-community/alias-redirects",
+        "enabled": true,
+        "name": "alias-redirects"
+      },
+      {
+        "source": "@quartz-community/content-index",
+        "enabled": true,
+        "name": "content-index"
+      },
+      {
+        "source": "@quartz-community/favicon",
+        "enabled": true,
+        "name": "favicon"
+      },
+      {
+        "source": "@quartz-community/og-image",
+        "enabled": true,
+        "name": "og-image"
+      },
+      {
+        "source": "@quartz-community/cname",
+        "enabled": false,
+        "name": "cname"
+      },
+      {
+        "source": "@quartz-community/canvas-page",
+        "enabled": true,
+        "name": "canvas-page"
+      },
+      {
+        "source": "@quartz-community/content-page",
+        "enabled": true,
+        "name": "content-page"
+      },
+      {
+        "source": "@quartz-community/folder-page",
+        "enabled": true,
+        "name": "folder-page"
+      },
+      {
+        "source": "@quartz-community/tag-page",
+        "enabled": true,
+        "name": "tag-page"
+      },
+      {
+        "source": "@quartz-community/explorer",
+        "enabled": false,
+        "layout": {
+          "position": "left",
+          "priority": 30
+        },
+        "name": "explorer"
+      },
+      {
+        "source": "@quartz-community/graph",
+        "enabled": true,
+        "layout": {
+          "position": "right",
+          "priority": 20,
+          "display": "desktop-only"
+        },
+        "name": "graph"
+      },
+      {
+        "source": "@quartz-community/search",
+        "enabled": true,
+        "layout": {
+          "position": "header",
+          "priority": 30,
+          "group": "toolbar",
+          "groupOptions": {
+            "shrink": false
+          }
+        },
+        "name": "search"
+      },
+      {
+        "source": "@quartz-community/backlinks",
+        "enabled": true,
+        "layout": {
+          "position": "afterBody",
+          "priority": 60,
+          "group": "custom-8",
+          "groupOptions": {
+            "grow": true,
+            "shrink": true,
+            "basis": "18rem",
+            "align": "stretch"
+          }
+        },
+        "name": "backlinks"
+      },
+      {
+        "source": "@quartz-community/article-title",
+        "enabled": true,
+        "layout": {
+          "position": "beforeBody",
+          "priority": 30
+        },
+        "name": "article-title"
+      },
+      {
+        "source": "@quartz-community/content-meta",
+        "enabled": true,
+        "layout": {
+          "position": "beforeBody",
+          "priority": 40
+        },
+        "name": "content-meta"
+      },
+      {
+        "source": "@quartz-community/tag-list",
+        "enabled": true,
+        "layout": {
+          "position": "beforeBody",
+          "priority": 20
+        },
+        "name": "tag-list"
+      },
+      {
+        "source": "@quartz-community/page-title",
+        "enabled": true,
+        "layout": {
+          "position": "header",
+          "priority": 20,
+          "group": "brand"
+        },
+        "name": "page-title"
+      },
+      {
+        "source": "@quartz-community/darkmode",
+        "enabled": true,
+        "layout": {
+          "position": "header",
+          "priority": 40,
+          "group": "toolbar"
+        },
+        "name": "darkmode"
+      },
+      {
+        "source": "@quartz-community/reader-mode",
+        "enabled": true,
+        "layout": {
+          "position": "header",
+          "priority": 50,
+          "group": "toolbar"
+        },
+        "name": "reader-mode"
+      },
+      {
+        "source": "@quartz-community/breadcrumbs",
+        "enabled": true,
+        "layout": {
+          "position": "beforeBody",
+          "priority": 10,
+          "condition": "not-index"
+        },
+        "name": "breadcrumbs"
+      },
+      {
+        "source": "@quartz-community/comments",
+        "enabled": false,
+        "layout": {
+          "position": "afterBody",
+          "priority": 10
+        },
+        "name": "comments"
+      },
+      {
+        "source": "@quartz-community/footer",
+        "enabled": true,
+        "layout": {
+          "position": "footer",
+          "priority": 20
+        },
+        "name": "footer"
+      },
+      {
+        "source": "@quartz-community/spacer",
+        "enabled": false,
+        "order": 25,
+        "layout": {
+          "position": "left",
+          "priority": 10,
+          "display": "mobile-only"
+        },
+        "name": "spacer"
+      },
+      {
+        "source": "@quartz-community/bases-page",
+        "enabled": true,
+        "order": 50,
+        "name": "bases-page"
+      },
+      {
+        "source": "@quartz-community/note-properties",
+        "enabled": true,
+        "order": 5,
+        "layout": {
+          "position": "afterBody",
+          "priority": 40
+        },
+        "name": "note-properties"
+      },
+      {
+        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-editorial",
+        "enabled": true,
+        "order": 50,
+        "name": "frame-editorial"
+      },
+      {
+        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-index",
+        "enabled": true,
+        "order": 50,
+        "name": "frame-index"
+      },
+      {
+        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-focus",
+        "enabled": true,
+        "order": 50,
+        "name": "frame-focus"
+      },
+      {
+        "source": "github:quartz-community/obsidian-plugin-excalidraw",
+        "enabled": true,
+        "order": 470,
+        "name": "obsidian-plugin-excalidraw"
+      },
+      {
+        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-drawing",
+        "enabled": true,
+        "order": 50,
+        "name": "frame-drawing"
+      },
+      {
+        "source": "@quartz-community/recent-notes",
+        "enabled": true,
+        "layout": {
+          "position": "afterBody",
+          "priority": 50,
+          "group": "custom-8",
+          "groupOptions": {
+            "grow": true,
+            "shrink": true,
+            "basis": "18rem",
+            "align": "stretch"
+          }
+        },
+        "name": "recent-notes"
+      },
+      {
+        "source": "github:boxi-os/quartz-layout-box",
+        "enabled": true,
+        "order": 500,
+        "layout": {
+          "position": "header",
+          "priority": 10,
+          "group": "brand"
+        },
+        "name": "quartz-layout-box"
+      },
+      {
+        "source": "github:boxi-os/quartz-layout-box",
+        "enabled": true,
+        "order": 505,
+        "layout": {
+          "position": "header",
+          "priority": 30,
+          "group": "brand"
+        },
+        "name": "quartz-layout-box"
+      },
+      {
+        "source": "github:boxi-os/quartz-layout-box",
+        "enabled": true,
+        "order": 510,
+        "layout": {
+          "position": "left",
+          "priority": 40,
+          "display": "desktop-only"
+        },
+        "name": "quartz-layout-box"
+      },
+      {
+        "source": "github:boxi-os/quartz-layout-box",
+        "enabled": true,
+        "order": 520,
+        "layout": {
+          "position": "afterBody",
+          "priority": 70,
+          "display": "mobile-only"
+        },
+        "name": "quartz-layout-box"
+      },
+      {
+        "source": "github:boxi-os/quartz-layout-box",
+        "enabled": true,
+        "order": 530,
+        "layout": {
+          "position": "afterBody",
+          "priority": 30
+        },
+        "name": "quartz-layout-box"
+      },
+      {
+        "source": "github:boxi-os/quartz-layout-box",
+        "enabled": true,
+        "order": 540,
+        "layout": {
+          "position": "footer",
+          "priority": 10
+        },
+        "name": "quartz-layout-box"
+      },
+      {
+        "source": "github:boxi-os/quartz-layout-box",
+        "enabled": true,
+        "order": 550,
+        "layout": {
+          "position": "footer",
+          "priority": 20
+        },
+        "name": "quartz-layout-box"
+      },
+      {
+        "source": "github:boxi-os/quartz-multilanguage",
+        "enabled": true,
+        "order": 65,
+        "layout": {
+          "position": "header",
+          "group": "toolbar",
+          "priority": 60
+        },
+        "name": "quartz-multilanguage"
+      },
+      {
+        "source": "github:boxi-os/quartz-navigations",
+        "enabled": true,
+        "order": 600,
+        "layout": {
+          "position": "left",
+          "priority": 30
+        },
+        "name": "quartz-navigations"
+      },
+      {
+        "source": "github:boxi-os/quartz-navigations",
+        "enabled": true,
+        "order": 601,
+        "layout": {
+          "position": "afterBody",
+          "priority": 80
+        },
+        "name": "quartz-navigations"
+      }
+    ],
+    "layout": {
+      "groups": {
+        "brand": {
+          "priority": 10,
+          "direction": "row",
+          "wrap": "nowrap",
+          "gap": "0.75rem"
+        },
+        "toolbar": {
+          "priority": 35,
+          "direction": "row",
+          "wrap": "nowrap",
+          "gap": "0.5rem"
+        },
+        "custom-8": {
+          "priority": 40,
+          "direction": "row",
+          "wrap": "wrap",
+          "gap": "1.5rem"
+        }
+      },
+      "byPageType": {
+        "404": {
+          "template": "focus",
+          "positions": {
+            "left": [],
+            "right": [],
+            "beforeBody": [],
+            "afterBody": []
+          }
+        },
+        "content": {
+          "template": "editorial"
+        },
+        "folder": {
+          "template": "index"
+        },
+        "tag": {
+          "template": "index"
+        },
+        "bases": {
+          "template": "index"
+        },
+        "canvas": {
+          "template": "drawing",
+          "positions": {
+            "left": [],
+            "right": []
+          }
+        },
+        "excalidraw": {
+          "template": "drawing",
+          "positions": {
+            "left": [],
+            "right": []
+          }
+        }
+      }
+    }
+  },
+  "problems": [],
+  "files": {
+    "authored-frames/frame-editorial/dist/frames.js": "import { h, Fragment } from \"preact\"\n\nconst FRAME_NAME = \"editorial\"\nconst AREAS = [{\"id\":\"area-header\",\"name\":\"header\",\"slot\":\"header\"},{\"id\":\"area-left\",\"name\":\"left\",\"slot\":\"left\"},{\"id\":\"area-right\",\"name\":\"right\",\"slot\":\"right\"},{\"id\":\"area-beforeBody\",\"name\":\"before-body\",\"slot\":\"beforeBody\"},{\"id\":\"area-pageBody\",\"name\":\"page-body\",\"slot\":\"pageBody\"},{\"id\":\"area-afterBody\",\"name\":\"after-body\",\"slot\":\"afterBody\"},{\"id\":\"area-footer\",\"name\":\"footer\",\"slot\":\"footer\"},{\"id\":\"area-custom-8\",\"name\":\"custom-8\",\"slot\":\"afterBody\",\"group\":\"custom-8\"}]\nconst GROUP_LAYOUTS = [{\"pageType\":null,\"order\":{\"header\":[\"brand\",\"toolbar\"],\"afterBody\":[\"custom-8\"]}}]\n\n// What each area shows. Six positions is all quartz sorts components into\n// (config-loader.ts's buildLayoutForEntries), so a frame with more component areas than that needs\n// a second key, and quartz has one: `layout.group` collapses a position's grouped entries into a\n// single Flex component (resolveGroups) and leaves the ungrouped ones as themselves. Measured on a\n// real build, a position holding one group arrived as [MobileOnly, Flex, ExplorerComponent] - the\n// group is a function literally named \"Flex\" (quartz builds itself with esbuild's keepNames), and\n// `displayName` was undefined on every entry, so that name is the whole identity available here.\n//\n// So the k-th Flex in a position is the k-th group of the ordering, an area with a group takes its\n// own, and the area without one takes everything else - including any group this frame gave no\n// area, which would otherwise vanish from the page.\n//\n// Which ordering, though, is not a property of the config: quartz builds a layout per page type\n// (loadQuartzLayout drops what `byPageType.<t>.exclude` names, runs buildLayoutForEntries on the\n// rest, then empties the positions `positions` cleared), and it hands the frame the finished\n// lists without ever saying which page type they belong to - PageFrameProps carries no name, and\n// neither does componentData. Hence GROUP_LAYOUTS: every ordering that can reach this frame, and\n// pickGroupOrder to work out which one arrived. A page type whose `template` names another frame\n// is not in this list - see groupLayoutCandidates for why leaving it in was not harmless.\nconst POSITIONS = [\"header\", \"beforeBody\", \"afterBody\", \"left\", \"right\", \"footer\"]\n// The positions this frame divides. Only these are ever taken apart, and only these decide when\n// the counts of all six cannot (see pickGroupOrder). A position without a group area still speaks\n// as evidence, but never about its own contents - it has none to get wrong, and a page type that\n// merely cleared it was enough to spend the position's one warning before a real break could\n// have it.\nconst SPLIT_POSITIONS = POSITIONS.filter((p) => AREAS.some((a) => a.slot === p && a.group))\nconst warned = new Set()\n\nfunction orderOf(order, position) {\n  return order[position] || []\n}\n\nfunction countsLike(order, counts, positions) {\n  return positions.every((p) => orderOf(order, p).length === counts[p])\n}\n\n// The relaxed key of the second pass: every divided position exactly, every other one only as an\n// upper bound. See pickGroupOrder for why the direction is the whole point.\nfunction countsFit(order, counts) {\n  return POSITIONS.every((p) =>\n    SPLIT_POSITIONS.indexOf(p) === -1 ? orderOf(order, p).length >= counts[p] : orderOf(order, p).length === counts[p]\n  )\n}\n\nfunction splitsAlike(a, b) {\n  return SPLIT_POSITIONS.every((p) => orderOf(a, p).join(\"\\u0000\") === orderOf(b, p).join(\"\\u0000\"))\n}\n\n// Same groups on every divided position, whatever their order. The difference decides which of the\n// two ambiguity messages is true: telling the groups apart by an ordering rule only works when\n// there is an ordering to fix.\nfunction namesAlike(a, b) {\n  return SPLIT_POSITIONS.every(\n    (p) => orderOf(a, p).slice().sort().join(\"\\u0000\") === orderOf(b, p).slice().sort().join(\"\\u0000\")\n  )\n}\n\nfunction nameOf(candidate) {\n  return candidate.pageType === null ? \"the config as a whole\" : 'page type \"' + candidate.pageType + '\"'\n}\n\nfunction countsOf(order) {\n  return SPLIT_POSITIONS.map((p) => p + \" \" + orderOf(order, p).length).join(\", \")\n}\n\nfunction renderedOf(counts, positions) {\n  return positions.map((p) => p + \" \" + counts[p]).join(\", \")\n}\n\nfunction groupsOf(order) {\n  return SPLIT_POSITIONS.map((p) => p + \": \" + (orderOf(order, p).join(\", \") || \"no group\")).join(\"; \")\n}\n\n// The only thing a frame can measure about the layout it was handed is how many Flexes each\n// position holds, so that is the whole key: the candidate whose group counts match is the one this\n// page was built with. Exactly one match is the answer; several that name the same groups in the\n// same order are the same answer said twice. Anything else means guessing, and a guess here is the\n// one failure that cannot be seen on the built page - two areas quietly showing each other's\n// contents - so it falls back to not splitting at all and says why.\n//\n// Matched in two passes, and the second pass is what keeps the first one honest. All six positions\n// are the sharper key: one this frame does not divide can still be the only thing telling two page\n// types apart, so it is asked first. But a count that disagrees *there* need not say the candidate\n// is wrong - matching everywhere and nowhere else meant a group on `footer` that quartz renders no\n// flex for emptied both group areas of `header` on every page of the site (measured: 201 of 201).\n//\n// So the second pass relaxes the positions this frame does not divide - but only in the one\n// direction they can be wrong about *and still be this page*. A position that renders **fewer**\n// flexes than the candidate describes has the ordinary explanation: a group whose members all got\n// disabled, an entry whose `layout.group` quartz makes no flex for. A position that renders\n// **more** has none - nothing about this page can add a group the ordering has never heard of, so\n// that is the candidate contradicting itself, and it stays out. Measured, at the generated module\n// and at a real build: dropping the outside positions entirely instead threw away the very\n// evidence that kept a wrong candidate out. A break *inside* a divided position leaves a count\n// there that some other page type happens to hit (one that excludes a whole group), and with the\n// outside no longer looking, that candidate won - 203 of 211 editorial pages showed group\n// `custom-8`'s components in the area of `custom-9`, under a warning that said the position had\n// been \"divided as usual\". Asking for \"described >= rendered\" keeps the seventh review's case and\n// puts that one back on the fallback, where it says the counts fit nothing.\n//\n// Only ever a widening of a match set that was empty - a candidate that fits all six exactly is\n// still preferred over one that merely fits within the relaxed key.\nfunction pickGroupOrder(bySlot) {\n  if (SPLIT_POSITIONS.length === 0) return null\n  const counts = {}\n  for (const p of POSITIONS) counts[p] = (bySlot[p] || []).filter((C) => C.name === \"Flex\").length\n  let matches = GROUP_LAYOUTS.filter((c) => countsLike(c.order, counts, POSITIONS))\n  const relaxed = matches.length === 0\n  if (relaxed) matches = GROUP_LAYOUTS.filter((c) => countsFit(c.order, counts))\n  const order =\n    matches.length === 1 || (matches.length > 1 && matches.every((c) => splitsAlike(c.order, matches[0].order)))\n      ? matches[0].order\n      : null\n  // Once per distinct shape, not once per page: the same mismatch is true for every one of the\n  // 100-odd pages built with this layout, and a warning repeated 300 times reads like noise.\n  if (order && !relaxed) return order\n  if (order) {\n    // Divided as usual - but the config describes flexes somewhere this frame does not divide that\n    // the page did not render. Nothing here changes what the areas show; it is said because \"no\n    // groups\" and \"a group whose members never render\" look the same on the built page, and this\n    // is the one place that can still tell them apart. Always fewer than described, never more -\n    // countsFit does not let the other direction through.\n    const off = POSITIONS.filter((p) => SPLIT_POSITIONS.indexOf(p) === -1 && orderOf(order, p).length !== counts[p])\n    const key = \"undivided@\" + renderedOf(counts, off)\n    if (!warned.has(key)) {\n      warned.add(key)\n      // The counts named here are the chosen ordering's. Several candidates can divide alike and\n      // still describe these positions differently, and then this one is an arbitrary pick among\n      // equals - so it says so rather than naming one as if it were the only fit.\n      const alsoFit = matches.filter((c) => POSITIONS.some((p) => orderOf(c.order, p).length !== orderOf(order, p).length))\n      console.warn(\n        \"[\" + FRAME_NAME + \"] \" +\n          off.map((p) => p + \" renders \" + counts[p] + \" group flex(es), not the \" + orderOf(order, p).length + \" \" +\n            nameOf(matches[0]) + \" describes\").join(\"; \") + \". \" +\n          (alsoFit.length > 0\n            ? \"(\" + alsoFit.map(nameOf).join(\" and \") + \" divide\" + (alsoFit.length === 1 ? \"s\" : \"\") +\n              \" these positions the same way and would fit too.) \"\n            : \"\") +\n          \"This frame divides none of those positions, so \" + SPLIT_POSITIONS.join(\" and \") + \" was divided as usual. \" +\n          \"Usually a group whose members all got disabled, or an entry whose layout.group quartz renders no flex for.\"\n      )\n    }\n    return order\n  }\n  const key = matches.length + \"@\" + renderedOf(counts, SPLIT_POSITIONS)\n  if (!warned.has(key)) {\n    warned.add(key)\n    const rendered = renderedOf(counts, SPLIT_POSITIONS)\n    if (matches.length === 0) {\n      // A candidate can hit every divided position and still be out, ruled out by a position\n      // outside them where this page rendered a group flex it has no group for (countsFit). The\n      // list below only shows the divided positions, so without this clause the message would say\n      // \"no layout produces header 1\" while printing a layout that says header 1 - and the one\n      // thing that actually ruled it out would be the one thing left unsaid.\n      const contradicted = GROUP_LAYOUTS.filter((c) => countsLike(c.order, counts, SPLIT_POSITIONS)).map(\n        (c) =>\n          nameOf(c) + \" fits that, but \" +\n          POSITIONS.filter((p) => SPLIT_POSITIONS.indexOf(p) === -1 && counts[p] > orderOf(c.order, p).length)\n            .map((p) => p + \" renders \" + counts[p] + \" group flex(es) it has no group for\")\n            .join(\" and \")\n      )\n      console.warn(\n        \"[\" + FRAME_NAME + \"] this page renders \" + rendered + \" group flex(es), which no layout in \" +\n          \"quartz.config.yaml accounts for (\" + GROUP_LAYOUTS.map((c) => nameOf(c) + \": \" + countsOf(c.order)).join(\"; \") + \"). \" +\n          (contradicted.length > 0 ? contradicted.join(\"; \") + \". \" : \"\") +\n          \"Not splitting: every position's area without a group takes the lot, the group areas stay empty. \" +\n          \"Usually a group whose members all got disabled, or a quartz.config.yaml edited by hand since this frame was written.\"\n      )\n    } else if (matches.every((c) => namesAlike(c.order, matches[0].order))) {\n      console.warn(\n        \"[\" + FRAME_NAME + \"] this page renders \" + rendered + \" group flex(es), which fits \" +\n          matches.map(nameOf).join(\" and \") + \" - and they order the groups differently (\" +\n          matches.map((c) => nameOf(c) + \" -> \" + groupsOf(c.order)).join(\"; \") + \"). \" +\n          \"Not splitting, because guessing would swap what the areas show. Give those groups an explicit \" +\n          \"priority under layout.groups so their order is the same for every page type.\"\n      )\n    } else {\n      // Not a question of order at all: these name *different* groups, so there is nothing an\n      // ordering rule could line up - measured, with and without layout.groups priorities, the same\n      // message and the same fallback word for word. Two page types that each drop a whole group\n      // are indistinguishable from in here, because the flex count is the only thing this can\n      // measure and both produce the same one. Both ways out are measured too: keeping one member\n      // of each group leaves both groups standing, which collapses the candidates into one; and\n      // clearing the position for one page type makes its count differ, which tells them apart.\n      console.warn(\n        \"[\" + FRAME_NAME + \"] this page renders \" + rendered + \" group flex(es), which fits \" +\n          matches.map(nameOf).join(\" and \") + \" - and they name different groups there (\" +\n          matches.map((c) => nameOf(c) + \" -> \" + groupsOf(c.order)).join(\"; \") + \"). \" +\n          \"Not splitting, because guessing would put one group's components in the other's area - and no \" +\n          \"priority under layout.groups can line up groups that are not the same ones. All this can \" +\n          \"measure is how many flexes arrived, and excluding a whole group per page type leaves both of \" +\n          \"these with the same number. Leave one member of each group in place to keep both groups and \" +\n          \"both counts, or clear the position for one of the page types so the counts differ.\"\n      )\n    }\n  }\n  return null\n}\n\nfunction contentsFor(area, list, order) {\n  if (!area.slot || area.slot === \"pageBody\") return list\n  // No area of this frame divides this position, so there is nothing to take apart - and nothing\n  // to warn about either, whatever the config says about groups here.\n  if (!AREAS.some((a) => a.slot === area.slot && a.group)) return list\n  const groups = order ? orderOf(order, area.slot) : []\n  if (groups.length === 0) return area.group ? [] : list\n  // Guaranteed equal in length: pickGroupOrder only returns an ordering whose group count matches\n  // the Flexes of every position it divides, and this line is only reached for one it divides (the\n  // early return above). It returns null when no candidate does. The relaxed second pass loosens\n  // the *other* positions, never these.\n  const flexes = list.filter((C) => C.name === \"Flex\")\n  if (area.group) {\n    // Nothing else in this position has an area to go to, so the components that are in no group\n    // are about to be dropped from every page. Measured on a real build: two group areas on\n    // `left` and no plain one took the spacer and both toggles off all 20 pages, and neither the\n    // editor nor the build said a word. The editor warns about the shape now; this says what it\n    // actually cost.\n    const plain = AREAS.filter((a) => a.slot === area.slot && !a.group)\n    if (plain.length === 0 && !warned.has(\"homeless:\" + area.slot)) {\n      warned.add(\"homeless:\" + area.slot)\n      const claimed = AREAS.filter((a) => a.slot === area.slot && a.group).map((a) => groups.indexOf(a.group))\n      const lost = list.filter((C, i) => C.name !== \"Flex\" || claimed.indexOf(flexes.indexOf(C)) === -1).length\n      if (lost > 0) {\n        // \"entries\", not \"components\": one of them may be another group's Flex, which is one\n        // entry and any number of components, and this cannot see inside it. An understated\n        // number would be worse than a vague noun.\n        console.warn(\n          \"[\" + FRAME_NAME + \"] \" + area.slot + \": every area here has a group, so \" + lost + \" entr\" +\n            (lost === 1 ? \"y\" : \"ies\") + \" outside those groups render on no page. \" +\n            \"Give the position an area without a group to hold them.\"\n        )\n      }\n    }\n    const rank = groups.indexOf(area.group)\n    return rank === -1 ? [] : [flexes[rank]]\n  }\n  // The plain area keeps every group no area of this frame claimed, in place among the others.\n  const claimed = AREAS.filter((a) => a.slot === area.slot && a.group).map((a) => groups.indexOf(a.group))\n  return list.filter((C) => C.name !== \"Flex\" || claimed.indexOf(flexes.indexOf(C)) === -1)\n}\n\nexport const Frame = {\n  name: FRAME_NAME,\n  css: \".page[data-frame=\\\"editorial\\\"] {\\n  max-width: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body {\\n  grid-template-columns: auto;\\n  grid-template-rows: auto;\\n  grid-template-areas: \\\"qgframe-root\\\";\\n}\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body > .qgframe-grid {\\n  grid-area: qgframe-root;\\n}\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body .qgframe-area {\\n  min-width: 0;\\n  min-height: 0;\\n}\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body .qgframe-area.center {\\n  width: 100%;\\n  max-width: none;\\n  margin-inline: 0;\\n}\\n\\n@layer quartz-base {\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body {\\n  padding: 0;\\n}\\n@media (max-width: 1200px) {\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body {\\n  padding: 0 1rem;\\n}\\n}\\n.page[data-frame=\\\"editorial\\\"] .desktop-only {\\n  display: contents;\\n}\\n.page[data-frame=\\\"editorial\\\"] .desktop-only.flex-component {\\n  display: flex;\\n}\\n.page[data-frame=\\\"editorial\\\"] .mobile-only, .page[data-frame=\\\"editorial\\\"] .mobile-only.flex-component {\\n  display: none;\\n}\\n@media (max-width: 900px) {\\n.page[data-frame=\\\"editorial\\\"] .desktop-only, .page[data-frame=\\\"editorial\\\"] .desktop-only.flex-component {\\n  display: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] .mobile-only {\\n  display: contents;\\n}\\n.page[data-frame=\\\"editorial\\\"] .mobile-only.flex-component {\\n  display: flex;\\n}\\n}\\n}\\n\\n@layer quartz-base {\\n.page[data-frame=\\\"editorial\\\"] .explorer {\\n  order: 0;\\n  height: auto;\\n  overflow-x: visible;\\n  overflow-y: hidden;\\n  flex: 0 1 auto;\\n  align-self: auto;\\n  margin-block: 0;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer.collapsed {\\n  flex: 0 1 1.2rem;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer .explorer-content {\\n  box-sizing: content-box;\\n  position: static;\\n  z-index: auto;\\n  width: auto;\\n  max-width: none;\\n  height: auto;\\n  max-height: none;\\n  padding: 0;\\n  margin-block-start: 0.5rem;\\n  background-color: transparent;\\n  transform: none;\\n  visibility: visible;\\n  overflow: hidden;\\n  overflow-y: auto;\\n}\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body .hide-until-loaded ~ .explorer-content {\\n  display: block;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer button.mobile-explorer {\\n  display: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer button.desktop-explorer {\\n  display: flex;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search {\\n  flex-grow: 0;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space {\\n  width: 65%;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout {\\n  flex-direction: row;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout > .preview-container {\\n  display: block;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout[data-preview] > .results-container {\\n  width: auto;\\n  height: 63vh;\\n  max-height: none;\\n  flex: 0 0 min(30%, 450px);\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout[data-preview] .result-card > p.card-description {\\n  display: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] .graph > .global-graph-outer > .global-graph-container {\\n  width: 80vw;\\n}\\n@media (max-width: 1200px) {\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space {\\n  width: 90%;\\n}\\n}\\n@media (max-width: 900px) {\\n.page[data-frame=\\\"editorial\\\"] .explorer {\\n  order: -1;\\n  height: initial;\\n  overflow: hidden;\\n  flex-shrink: 0;\\n  align-self: flex-start;\\n  margin-block: auto;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer.collapsed, .page[data-frame=\\\"editorial\\\"] .explorer:not(.collapsed) {\\n  flex: 0 0 34px;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer.collapsed > .explorer-content {\\n  transform: translateX(-100vw);\\n  visibility: hidden;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer:not(.collapsed) > .explorer-content {\\n  transform: translateX(0);\\n  visibility: visible;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer .explorer-content {\\n  box-sizing: border-box;\\n  position: absolute;\\n  top: 0;\\n  left: 0;\\n  z-index: 100;\\n  width: 100vw;\\n  max-width: 100vw;\\n  height: 100dvh;\\n  max-height: 100dvh;\\n  padding: 4rem 0 2rem 0;\\n  margin-block-start: 0;\\n  background-color: var(--light);\\n  overflow: hidden;\\n}\\n.page[data-frame=\\\"editorial\\\"] > #quartz-body .hide-until-loaded ~ .explorer-content {\\n  display: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer button.mobile-explorer {\\n  display: flex;\\n  margin: 0;\\n  padding: 5px;\\n  z-index: 101;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer button.mobile-explorer .lucide-menu {\\n  stroke: var(--darkgray);\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer button.mobile-explorer.hide-until-loaded {\\n  display: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] .explorer button.desktop-explorer {\\n  display: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search {\\n  flex-grow: 0.3;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout {\\n  flex-direction: column;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout > .preview-container {\\n  display: none;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout[data-preview] > .results-container {\\n  width: 100%;\\n  height: auto;\\n  max-height: 60vh;\\n  flex: 0 0 100%;\\n}\\n.page[data-frame=\\\"editorial\\\"] .search > .search-container > .search-space > .search-layout[data-preview] .result-card > p.card-description {\\n  display: block;\\n}\\n.page[data-frame=\\\"editorial\\\"] .graph > .global-graph-outer > .global-graph-container {\\n  width: 90%;\\n}\\n}\\n}\\n\\n.qgframe-grid {\\n  display: grid;\\n  grid-template-columns: calc((300px - 8rem) / 3) calc((300px - 8rem) / 3) calc((300px - 8rem) / 3) 1fr 1fr 1fr 1fr 1fr 1fr calc((300px - 8rem) / 3) calc((300px - 8rem) / 3) calc((300px - 8rem) / 3);\\n  grid-template-rows: auto auto auto auto 1fr auto;\\n  row-gap: 2rem;\\n  column-gap: 4rem;\\n  box-sizing: border-box;\\n  width: 100%;\\n  max-width: 1440px;\\n  margin-inline: auto;\\n  padding-block: 20px;\\n  padding-inline: 20px;\\n  grid-template-areas:\\n      \\\"header header header header header header header header header header header header\\\"\\n      \\\"left left left before-body before-body before-body before-body before-body before-body right right right\\\"\\n      \\\"left left left page-body page-body page-body page-body page-body page-body right right right\\\"\\n      \\\"left left left custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 right right right\\\"\\n      \\\"left left left after-body after-body after-body after-body after-body after-body right right right\\\"\\n      \\\"footer footer footer footer footer footer footer footer footer footer footer footer\\\";\\n}\\n.qgframe-area-header { grid-area: header; }\\n.qgframe-area-left { grid-area: left; }\\n.qgframe-area-right { grid-area: right; }\\n.qgframe-area-before-body { grid-area: before-body; }\\n.qgframe-area-page-body { grid-area: page-body; }\\n.qgframe-area-after-body { grid-area: after-body; }\\n.qgframe-area-footer { grid-area: footer; }\\n.qgframe-area-custom-8 { grid-area: custom-8; }\\n\\n@media (max-width: 1200px) {\\n.qgframe-grid {\\n  display: grid;\\n  grid-template-columns: calc((300px - 6rem) / 3) calc((300px - 6rem) / 3) calc((300px - 6rem) / 3) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\\n  grid-template-rows: auto auto auto auto auto 1fr auto;\\n  row-gap: 2rem;\\n  column-gap: 3rem;\\n  box-sizing: border-box;\\n  width: 100%;\\n  max-width: 100%;\\n  margin-inline: 0;\\n  padding-block: 20px;\\n  padding-inline: 20px;\\n  grid-template-areas:\\n      \\\"header header header header header header header header header header header header\\\"\\n      \\\"left left left before-body before-body before-body before-body before-body before-body before-body before-body before-body\\\"\\n      \\\"left left left page-body page-body page-body page-body page-body page-body page-body page-body page-body\\\"\\n      \\\"left left left custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8\\\"\\n      \\\"left left left right right right right right right right right right\\\"\\n      \\\"left left left after-body after-body after-body after-body after-body after-body after-body after-body after-body\\\"\\n      \\\"footer footer footer footer footer footer footer footer footer footer footer footer\\\";\\n}\\n.qgframe-area-header { grid-area: header; }\\n.qgframe-area-left { grid-area: left; }\\n.qgframe-area-right { grid-area: right; }\\n.qgframe-area-before-body { grid-area: before-body; }\\n.qgframe-area-page-body { grid-area: page-body; }\\n.qgframe-area-after-body { grid-area: after-body; }\\n.qgframe-area-footer { grid-area: footer; }\\n.qgframe-area-custom-8 { grid-area: custom-8; }\\n}\\n\\n@media (max-width: 900px) {\\n.qgframe-grid {\\n  display: grid;\\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\\n  grid-template-rows: auto 0 auto auto 1fr auto auto auto;\\n  row-gap: 2rem;\\n  column-gap: 1rem;\\n  box-sizing: border-box;\\n  width: 100%;\\n  max-width: 100%;\\n  margin-inline: 0;\\n  padding-block: 20px;\\n  padding-inline: 20px;\\n  grid-template-areas:\\n      \\\"header header header header header header header header header header header header\\\"\\n      \\\"left left left left left left left left left left left left\\\"\\n      \\\"before-body before-body before-body before-body before-body before-body before-body before-body before-body before-body before-body before-body\\\"\\n      \\\"right right right right right right right right right right right right\\\"\\n      \\\"page-body page-body page-body page-body page-body page-body page-body page-body page-body page-body page-body page-body\\\"\\n      \\\"custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8\\\"\\n      \\\"after-body after-body after-body after-body after-body after-body after-body after-body after-body after-body after-body after-body\\\"\\n      \\\"footer footer footer footer footer footer footer footer footer footer footer footer\\\";\\n}\\n.qgframe-area-header { grid-area: header; }\\n.qgframe-area-left { grid-area: left; }\\n.qgframe-area-right { grid-area: right; }\\n.qgframe-area-before-body { grid-area: before-body; }\\n.qgframe-area-page-body { grid-area: page-body; }\\n.qgframe-area-after-body { grid-area: after-body; }\\n.qgframe-area-footer { grid-area: footer; }\\n.qgframe-area-custom-8 { grid-area: custom-8; }\\n}\",\n  render(props) {\n    const { componentData, header, beforeBody, pageBody, afterBody, left, right, footer } = props\n    const bySlot = { header, beforeBody, afterBody, left, right, footer, pageBody: [pageBody] }\n    // Once per page, not once per area: the decision is about the whole layout that arrived.\n    const order = pickGroupOrder(bySlot)\n    return h(\n      Fragment,\n      null,\n      h(\n        \"div\",\n        { class: \"qgframe-grid\" },\n        AREAS.map((area) => {\n          // An area without a slot is an empty cell by design (a spacer) - see GridFrameArea.\n          const components = area.slot ? contentsFor(area, bySlot[area.slot] ?? [], order) : []\n          // The area holding pageBody also carries `center`, because quartz's own three frames\n          // do (DefaultFrame/FullWidthFrame/MinimalFrame all render <div class=\"center …\">) and\n          // client scripts rely on it: the mermaid initialiser runs\n          // `document.querySelector(\".center\").querySelectorAll(\"code.mermaid\")` unconditionally\n          // on every page. Without the class that threw a TypeError inside the nav handler, which\n          // aborted every component script registered after it - measured on a real build, where\n          // the explorer rendered its container but never its tree or its title. The class alone\n          // is inert for layout here: base.scss only uses it for `.center > article { grid-area }`\n          // (no effect on a flex child) and for its .full-width/.minimal variants.\n          const isPageBody = area.slot === \"pageBody\"\n          return h(\n            \"div\",\n            {\n              key: area.id,\n              class: \"qgframe-area qgframe-area-\" + area.name + (isPageBody ? \" center\" : \"\")\n            },\n            components.map((Component) => h(Component, componentData))\n          )\n        })\n      )\n    )\n  }\n}\n",
+    "authored-frames/frame-editorial/frame.json": "{\n  \"id\": \"frame-editorial\",\n  \"frameName\": \"editorial\",\n  \"areas\": [\n    {\n      \"id\": \"area-header\",\n      \"name\": \"header\",\n      \"slot\": \"header\"\n    },\n    {\n      \"id\": \"area-left\",\n      \"name\": \"left\",\n      \"slot\": \"left\"\n    },\n    {\n      \"id\": \"area-right\",\n      \"name\": \"right\",\n      \"slot\": \"right\"\n    },\n    {\n      \"id\": \"area-beforeBody\",\n      \"name\": \"before-body\",\n      \"slot\": \"beforeBody\"\n    },\n    {\n      \"id\": \"area-pageBody\",\n      \"name\": \"page-body\",\n      \"slot\": \"pageBody\"\n    },\n    {\n      \"id\": \"area-afterBody\",\n      \"name\": \"after-body\",\n      \"slot\": \"afterBody\"\n    },\n    {\n      \"id\": \"area-footer\",\n      \"name\": \"footer\",\n      \"slot\": \"footer\"\n    },\n    {\n      \"id\": \"area-custom-8\",\n      \"name\": \"custom-8\",\n      \"slot\": \"afterBody\",\n      \"group\": \"custom-8\"\n    }\n  ],\n  \"breakpoints\": {\n    \"desktop\": {\n      \"rows\": 6,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"4rem\",\n      \"maxWidth\": \"1440px\",\n      \"align\": \"center\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-afterBody\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-right\": {\n          \"row\": 2,\n          \"col\": 10,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-footer\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"tablet\": {\n      \"rows\": 7,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"3rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 5,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-right\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-afterBody\": {\n          \"row\": 6,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-footer\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"mobile\": {\n      \"rows\": 8,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"0\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\",\n        \"auto\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"1rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-beforeBody\": {\n          \"row\": 3,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-right\": {\n          \"row\": 4,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-pageBody\": {\n          \"row\": 5,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-custom-8\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-afterBody\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-footer\": {\n          \"row\": 8,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    }\n  }\n}",
+    "authored-frames/frame-editorial/package.json": "{\n  \"name\": \"frame-editorial\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"quartz\": {\n    \"frames\": {\n      \"Frame\": {\n        \"exportName\": \"Frame\"\n      }\n    }\n  }\n}",
+    "authored-frames/frame-index/dist/frames.js": "import { h, Fragment } from \"preact\"\n\nconst FRAME_NAME = \"index\"\nconst AREAS = [{\"id\":\"area-header\",\"name\":\"header\",\"slot\":\"header\"},{\"id\":\"area-left\",\"name\":\"left\",\"slot\":\"left\"},{\"id\":\"area-right\",\"name\":\"right\",\"slot\":\"right\"},{\"id\":\"area-beforeBody\",\"name\":\"before-body\",\"slot\":\"beforeBody\"},{\"id\":\"area-pageBody\",\"name\":\"page-body\",\"slot\":\"pageBody\"},{\"id\":\"area-afterBody\",\"name\":\"after-body\",\"slot\":\"afterBody\"},{\"id\":\"area-footer\",\"name\":\"footer\",\"slot\":\"footer\"},{\"id\":\"area-custom-8\",\"name\":\"custom-8\",\"slot\":\"afterBody\",\"group\":\"custom-8\"}]\nconst GROUP_LAYOUTS = [{\"pageType\":null,\"order\":{\"header\":[\"brand\",\"toolbar\"],\"afterBody\":[\"custom-8\"]}}]\n\n// What each area shows. Six positions is all quartz sorts components into\n// (config-loader.ts's buildLayoutForEntries), so a frame with more component areas than that needs\n// a second key, and quartz has one: `layout.group` collapses a position's grouped entries into a\n// single Flex component (resolveGroups) and leaves the ungrouped ones as themselves. Measured on a\n// real build, a position holding one group arrived as [MobileOnly, Flex, ExplorerComponent] - the\n// group is a function literally named \"Flex\" (quartz builds itself with esbuild's keepNames), and\n// `displayName` was undefined on every entry, so that name is the whole identity available here.\n//\n// So the k-th Flex in a position is the k-th group of the ordering, an area with a group takes its\n// own, and the area without one takes everything else - including any group this frame gave no\n// area, which would otherwise vanish from the page.\n//\n// Which ordering, though, is not a property of the config: quartz builds a layout per page type\n// (loadQuartzLayout drops what `byPageType.<t>.exclude` names, runs buildLayoutForEntries on the\n// rest, then empties the positions `positions` cleared), and it hands the frame the finished\n// lists without ever saying which page type they belong to - PageFrameProps carries no name, and\n// neither does componentData. Hence GROUP_LAYOUTS: every ordering that can reach this frame, and\n// pickGroupOrder to work out which one arrived. A page type whose `template` names another frame\n// is not in this list - see groupLayoutCandidates for why leaving it in was not harmless.\nconst POSITIONS = [\"header\", \"beforeBody\", \"afterBody\", \"left\", \"right\", \"footer\"]\n// The positions this frame divides. Only these are ever taken apart, and only these decide when\n// the counts of all six cannot (see pickGroupOrder). A position without a group area still speaks\n// as evidence, but never about its own contents - it has none to get wrong, and a page type that\n// merely cleared it was enough to spend the position's one warning before a real break could\n// have it.\nconst SPLIT_POSITIONS = POSITIONS.filter((p) => AREAS.some((a) => a.slot === p && a.group))\nconst warned = new Set()\n\nfunction orderOf(order, position) {\n  return order[position] || []\n}\n\nfunction countsLike(order, counts, positions) {\n  return positions.every((p) => orderOf(order, p).length === counts[p])\n}\n\n// The relaxed key of the second pass: every divided position exactly, every other one only as an\n// upper bound. See pickGroupOrder for why the direction is the whole point.\nfunction countsFit(order, counts) {\n  return POSITIONS.every((p) =>\n    SPLIT_POSITIONS.indexOf(p) === -1 ? orderOf(order, p).length >= counts[p] : orderOf(order, p).length === counts[p]\n  )\n}\n\nfunction splitsAlike(a, b) {\n  return SPLIT_POSITIONS.every((p) => orderOf(a, p).join(\"\\u0000\") === orderOf(b, p).join(\"\\u0000\"))\n}\n\n// Same groups on every divided position, whatever their order. The difference decides which of the\n// two ambiguity messages is true: telling the groups apart by an ordering rule only works when\n// there is an ordering to fix.\nfunction namesAlike(a, b) {\n  return SPLIT_POSITIONS.every(\n    (p) => orderOf(a, p).slice().sort().join(\"\\u0000\") === orderOf(b, p).slice().sort().join(\"\\u0000\")\n  )\n}\n\nfunction nameOf(candidate) {\n  return candidate.pageType === null ? \"the config as a whole\" : 'page type \"' + candidate.pageType + '\"'\n}\n\nfunction countsOf(order) {\n  return SPLIT_POSITIONS.map((p) => p + \" \" + orderOf(order, p).length).join(\", \")\n}\n\nfunction renderedOf(counts, positions) {\n  return positions.map((p) => p + \" \" + counts[p]).join(\", \")\n}\n\nfunction groupsOf(order) {\n  return SPLIT_POSITIONS.map((p) => p + \": \" + (orderOf(order, p).join(\", \") || \"no group\")).join(\"; \")\n}\n\n// The only thing a frame can measure about the layout it was handed is how many Flexes each\n// position holds, so that is the whole key: the candidate whose group counts match is the one this\n// page was built with. Exactly one match is the answer; several that name the same groups in the\n// same order are the same answer said twice. Anything else means guessing, and a guess here is the\n// one failure that cannot be seen on the built page - two areas quietly showing each other's\n// contents - so it falls back to not splitting at all and says why.\n//\n// Matched in two passes, and the second pass is what keeps the first one honest. All six positions\n// are the sharper key: one this frame does not divide can still be the only thing telling two page\n// types apart, so it is asked first. But a count that disagrees *there* need not say the candidate\n// is wrong - matching everywhere and nowhere else meant a group on `footer` that quartz renders no\n// flex for emptied both group areas of `header` on every page of the site (measured: 201 of 201).\n//\n// So the second pass relaxes the positions this frame does not divide - but only in the one\n// direction they can be wrong about *and still be this page*. A position that renders **fewer**\n// flexes than the candidate describes has the ordinary explanation: a group whose members all got\n// disabled, an entry whose `layout.group` quartz makes no flex for. A position that renders\n// **more** has none - nothing about this page can add a group the ordering has never heard of, so\n// that is the candidate contradicting itself, and it stays out. Measured, at the generated module\n// and at a real build: dropping the outside positions entirely instead threw away the very\n// evidence that kept a wrong candidate out. A break *inside* a divided position leaves a count\n// there that some other page type happens to hit (one that excludes a whole group), and with the\n// outside no longer looking, that candidate won - 203 of 211 editorial pages showed group\n// `custom-8`'s components in the area of `custom-9`, under a warning that said the position had\n// been \"divided as usual\". Asking for \"described >= rendered\" keeps the seventh review's case and\n// puts that one back on the fallback, where it says the counts fit nothing.\n//\n// Only ever a widening of a match set that was empty - a candidate that fits all six exactly is\n// still preferred over one that merely fits within the relaxed key.\nfunction pickGroupOrder(bySlot) {\n  if (SPLIT_POSITIONS.length === 0) return null\n  const counts = {}\n  for (const p of POSITIONS) counts[p] = (bySlot[p] || []).filter((C) => C.name === \"Flex\").length\n  let matches = GROUP_LAYOUTS.filter((c) => countsLike(c.order, counts, POSITIONS))\n  const relaxed = matches.length === 0\n  if (relaxed) matches = GROUP_LAYOUTS.filter((c) => countsFit(c.order, counts))\n  const order =\n    matches.length === 1 || (matches.length > 1 && matches.every((c) => splitsAlike(c.order, matches[0].order)))\n      ? matches[0].order\n      : null\n  // Once per distinct shape, not once per page: the same mismatch is true for every one of the\n  // 100-odd pages built with this layout, and a warning repeated 300 times reads like noise.\n  if (order && !relaxed) return order\n  if (order) {\n    // Divided as usual - but the config describes flexes somewhere this frame does not divide that\n    // the page did not render. Nothing here changes what the areas show; it is said because \"no\n    // groups\" and \"a group whose members never render\" look the same on the built page, and this\n    // is the one place that can still tell them apart. Always fewer than described, never more -\n    // countsFit does not let the other direction through.\n    const off = POSITIONS.filter((p) => SPLIT_POSITIONS.indexOf(p) === -1 && orderOf(order, p).length !== counts[p])\n    const key = \"undivided@\" + renderedOf(counts, off)\n    if (!warned.has(key)) {\n      warned.add(key)\n      // The counts named here are the chosen ordering's. Several candidates can divide alike and\n      // still describe these positions differently, and then this one is an arbitrary pick among\n      // equals - so it says so rather than naming one as if it were the only fit.\n      const alsoFit = matches.filter((c) => POSITIONS.some((p) => orderOf(c.order, p).length !== orderOf(order, p).length))\n      console.warn(\n        \"[\" + FRAME_NAME + \"] \" +\n          off.map((p) => p + \" renders \" + counts[p] + \" group flex(es), not the \" + orderOf(order, p).length + \" \" +\n            nameOf(matches[0]) + \" describes\").join(\"; \") + \". \" +\n          (alsoFit.length > 0\n            ? \"(\" + alsoFit.map(nameOf).join(\" and \") + \" divide\" + (alsoFit.length === 1 ? \"s\" : \"\") +\n              \" these positions the same way and would fit too.) \"\n            : \"\") +\n          \"This frame divides none of those positions, so \" + SPLIT_POSITIONS.join(\" and \") + \" was divided as usual. \" +\n          \"Usually a group whose members all got disabled, or an entry whose layout.group quartz renders no flex for.\"\n      )\n    }\n    return order\n  }\n  const key = matches.length + \"@\" + renderedOf(counts, SPLIT_POSITIONS)\n  if (!warned.has(key)) {\n    warned.add(key)\n    const rendered = renderedOf(counts, SPLIT_POSITIONS)\n    if (matches.length === 0) {\n      // A candidate can hit every divided position and still be out, ruled out by a position\n      // outside them where this page rendered a group flex it has no group for (countsFit). The\n      // list below only shows the divided positions, so without this clause the message would say\n      // \"no layout produces header 1\" while printing a layout that says header 1 - and the one\n      // thing that actually ruled it out would be the one thing left unsaid.\n      const contradicted = GROUP_LAYOUTS.filter((c) => countsLike(c.order, counts, SPLIT_POSITIONS)).map(\n        (c) =>\n          nameOf(c) + \" fits that, but \" +\n          POSITIONS.filter((p) => SPLIT_POSITIONS.indexOf(p) === -1 && counts[p] > orderOf(c.order, p).length)\n            .map((p) => p + \" renders \" + counts[p] + \" group flex(es) it has no group for\")\n            .join(\" and \")\n      )\n      console.warn(\n        \"[\" + FRAME_NAME + \"] this page renders \" + rendered + \" group flex(es), which no layout in \" +\n          \"quartz.config.yaml accounts for (\" + GROUP_LAYOUTS.map((c) => nameOf(c) + \": \" + countsOf(c.order)).join(\"; \") + \"). \" +\n          (contradicted.length > 0 ? contradicted.join(\"; \") + \". \" : \"\") +\n          \"Not splitting: every position's area without a group takes the lot, the group areas stay empty. \" +\n          \"Usually a group whose members all got disabled, or a quartz.config.yaml edited by hand since this frame was written.\"\n      )\n    } else if (matches.every((c) => namesAlike(c.order, matches[0].order))) {\n      console.warn(\n        \"[\" + FRAME_NAME + \"] this page renders \" + rendered + \" group flex(es), which fits \" +\n          matches.map(nameOf).join(\" and \") + \" - and they order the groups differently (\" +\n          matches.map((c) => nameOf(c) + \" -> \" + groupsOf(c.order)).join(\"; \") + \"). \" +\n          \"Not splitting, because guessing would swap what the areas show. Give those groups an explicit \" +\n          \"priority under layout.groups so their order is the same for every page type.\"\n      )\n    } else {\n      // Not a question of order at all: these name *different* groups, so there is nothing an\n      // ordering rule could line up - measured, with and without layout.groups priorities, the same\n      // message and the same fallback word for word. Two page types that each drop a whole group\n      // are indistinguishable from in here, because the flex count is the only thing this can\n      // measure and both produce the same one. Both ways out are measured too: keeping one member\n      // of each group leaves both groups standing, which collapses the candidates into one; and\n      // clearing the position for one page type makes its count differ, which tells them apart.\n      console.warn(\n        \"[\" + FRAME_NAME + \"] this page renders \" + rendered + \" group flex(es), which fits \" +\n          matches.map(nameOf).join(\" and \") + \" - and they name different groups there (\" +\n          matches.map((c) => nameOf(c) + \" -> \" + groupsOf(c.order)).join(\"; \") + \"). \" +\n          \"Not splitting, because guessing would put one group's components in the other's area - and no \" +\n          \"priority under layout.groups can line up groups that are not the same ones. All this can \" +\n          \"measure is how many flexes arrived, and excluding a whole group per page type leaves both of \" +\n          \"these with the same number. Leave one member of each group in place to keep both groups and \" +\n          \"both counts, or clear the position for one of the page types so the counts differ.\"\n      )\n    }\n  }\n  return null\n}\n\nfunction contentsFor(area, list, order) {\n  if (!area.slot || area.slot === \"pageBody\") return list\n  // No area of this frame divides this position, so there is nothing to take apart - and nothing\n  // to warn about either, whatever the config says about groups here.\n  if (!AREAS.some((a) => a.slot === area.slot && a.group)) return list\n  const groups = order ? orderOf(order, area.slot) : []\n  if (groups.length === 0) return area.group ? [] : list\n  // Guaranteed equal in length: pickGroupOrder only returns an ordering whose group count matches\n  // the Flexes of every position it divides, and this line is only reached for one it divides (the\n  // early return above). It returns null when no candidate does. The relaxed second pass loosens\n  // the *other* positions, never these.\n  const flexes = list.filter((C) => C.name === \"Flex\")\n  if (area.group) {\n    // Nothing else in this position has an area to go to, so the components that are in no group\n    // are about to be dropped from every page. Measured on a real build: two group areas on\n    // `left` and no plain one took the spacer and both toggles off all 20 pages, and neither the\n    // editor nor the build said a word. The editor warns about the shape now; this says what it\n    // actually cost.\n    const plain = AREAS.filter((a) => a.slot === area.slot && !a.group)\n    if (plain.length === 0 && !warned.has(\"homeless:\" + area.slot)) {\n      warned.add(\"homeless:\" + area.slot)\n      const claimed = AREAS.filter((a) => a.slot === area.slot && a.group).map((a) => groups.indexOf(a.group))\n      const lost = list.filter((C, i) => C.name !== \"Flex\" || claimed.indexOf(flexes.indexOf(C)) === -1).length\n      if (lost > 0) {\n        // \"entries\", not \"components\": one of them may be another group's Flex, which is one\n        // entry and any number of components, and this cannot see inside it. An understated\n        // number would be worse than a vague noun.\n        console.warn(\n          \"[\" + FRAME_NAME + \"] \" + area.slot + \": every area here has a group, so \" + lost + \" entr\" +\n            (lost === 1 ? \"y\" : \"ies\") + \" outside those groups render on no page. \" +\n            \"Give the position an area without a group to hold them.\"\n        )\n      }\n    }\n    const rank = groups.indexOf(area.group)\n    return rank === -1 ? [] : [flexes[rank]]\n  }\n  // The plain area keeps every group no area of this frame claimed, in place among the others.\n  const claimed = AREAS.filter((a) => a.slot === area.slot && a.group).map((a) => groups.indexOf(a.group))\n  return list.filter((C) => C.name !== \"Flex\" || claimed.indexOf(flexes.indexOf(C)) === -1)\n}\n\nexport const Frame = {\n  name: FRAME_NAME,\n  css: \".page[data-frame=\\\"index\\\"] {\\n  max-width: none;\\n}\\n.page[data-frame=\\\"index\\\"] > #quartz-body {\\n  grid-template-columns: auto;\\n  grid-template-rows: auto;\\n  grid-template-areas: \\\"qgframe-root\\\";\\n}\\n.page[data-frame=\\\"index\\\"] > #quartz-body > .qgframe-grid {\\n  grid-area: qgframe-root;\\n}\\n.page[data-frame=\\\"index\\\"] > #quartz-body .qgframe-area {\\n  min-width: 0;\\n  min-height: 0;\\n}\\n.page[data-frame=\\\"index\\\"] > #quartz-body .qgframe-area.center {\\n  width: 100%;\\n  max-width: none;\\n  margin-inline: 0;\\n}\\n\\n@layer quartz-base {\\n.page[data-frame=\\\"index\\\"] > #quartz-body {\\n  padding: 0;\\n}\\n@media (max-width: 1200px) {\\n.page[data-frame=\\\"index\\\"] > #quartz-body {\\n  padding: 0 1rem;\\n}\\n}\\n.page[data-frame=\\\"index\\\"] .desktop-only {\\n  display: contents;\\n}\\n.page[data-frame=\\\"index\\\"] .desktop-only.flex-component {\\n  display: flex;\\n}\\n.page[data-frame=\\\"index\\\"] .mobile-only, .page[data-frame=\\\"index\\\"] .mobile-only.flex-component {\\n  display: none;\\n}\\n@media (max-width: 900px) {\\n.page[data-frame=\\\"index\\\"] .desktop-only, .page[data-frame=\\\"index\\\"] .desktop-only.flex-component {\\n  display: none;\\n}\\n.page[data-frame=\\\"index\\\"] .mobile-only {\\n  display: contents;\\n}\\n.page[data-frame=\\\"index\\\"] .mobile-only.flex-component {\\n  display: flex;\\n}\\n}\\n}\\n\\n@layer quartz-base {\\n.page[data-frame=\\\"index\\\"] .explorer {\\n  order: 0;\\n  height: auto;\\n  overflow-x: visible;\\n  overflow-y: hidden;\\n  flex: 0 1 auto;\\n  align-self: auto;\\n  margin-block: 0;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer.collapsed {\\n  flex: 0 1 1.2rem;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer .explorer-content {\\n  box-sizing: content-box;\\n  position: static;\\n  z-index: auto;\\n  width: auto;\\n  max-width: none;\\n  height: auto;\\n  max-height: none;\\n  padding: 0;\\n  margin-block-start: 0.5rem;\\n  background-color: transparent;\\n  transform: none;\\n  visibility: visible;\\n  overflow: hidden;\\n  overflow-y: auto;\\n}\\n.page[data-frame=\\\"index\\\"] > #quartz-body .hide-until-loaded ~ .explorer-content {\\n  display: block;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer button.mobile-explorer {\\n  display: none;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer button.desktop-explorer {\\n  display: flex;\\n}\\n.page[data-frame=\\\"index\\\"] .search {\\n  flex-grow: 0;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space {\\n  width: 65%;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout {\\n  flex-direction: row;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout > .preview-container {\\n  display: block;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout[data-preview] > .results-container {\\n  width: auto;\\n  height: 63vh;\\n  max-height: none;\\n  flex: 0 0 min(30%, 450px);\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout[data-preview] .result-card > p.card-description {\\n  display: none;\\n}\\n.page[data-frame=\\\"index\\\"] .graph > .global-graph-outer > .global-graph-container {\\n  width: 80vw;\\n}\\n@media (max-width: 1200px) {\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space {\\n  width: 90%;\\n}\\n}\\n@media (max-width: 900px) {\\n.page[data-frame=\\\"index\\\"] .explorer {\\n  order: -1;\\n  height: initial;\\n  overflow: hidden;\\n  flex-shrink: 0;\\n  align-self: flex-start;\\n  margin-block: auto;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer.collapsed, .page[data-frame=\\\"index\\\"] .explorer:not(.collapsed) {\\n  flex: 0 0 34px;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer.collapsed > .explorer-content {\\n  transform: translateX(-100vw);\\n  visibility: hidden;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer:not(.collapsed) > .explorer-content {\\n  transform: translateX(0);\\n  visibility: visible;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer .explorer-content {\\n  box-sizing: border-box;\\n  position: absolute;\\n  top: 0;\\n  left: 0;\\n  z-index: 100;\\n  width: 100vw;\\n  max-width: 100vw;\\n  height: 100dvh;\\n  max-height: 100dvh;\\n  padding: 4rem 0 2rem 0;\\n  margin-block-start: 0;\\n  background-color: var(--light);\\n  overflow: hidden;\\n}\\n.page[data-frame=\\\"index\\\"] > #quartz-body .hide-until-loaded ~ .explorer-content {\\n  display: none;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer button.mobile-explorer {\\n  display: flex;\\n  margin: 0;\\n  padding: 5px;\\n  z-index: 101;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer button.mobile-explorer .lucide-menu {\\n  stroke: var(--darkgray);\\n}\\n.page[data-frame=\\\"index\\\"] .explorer button.mobile-explorer.hide-until-loaded {\\n  display: none;\\n}\\n.page[data-frame=\\\"index\\\"] .explorer button.desktop-explorer {\\n  display: none;\\n}\\n.page[data-frame=\\\"index\\\"] .search {\\n  flex-grow: 0.3;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout {\\n  flex-direction: column;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout > .preview-container {\\n  display: none;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout[data-preview] > .results-container {\\n  width: 100%;\\n  height: auto;\\n  max-height: 60vh;\\n  flex: 0 0 100%;\\n}\\n.page[data-frame=\\\"index\\\"] .search > .search-container > .search-space > .search-layout[data-preview] .result-card > p.card-description {\\n  display: block;\\n}\\n.page[data-frame=\\\"index\\\"] .graph > .global-graph-outer > .global-graph-container {\\n  width: 90%;\\n}\\n}\\n}\\n\\n.qgframe-grid {\\n  display: grid;\\n  grid-template-columns: calc((300px - 8rem) / 3) calc((300px - 8rem) / 3) calc((300px - 8rem) / 3) 1fr 1fr 1fr 1fr 1fr 1fr calc((300px - 8rem) / 3) calc((300px - 8rem) / 3) calc((300px - 8rem) / 3);\\n  grid-template-rows: auto auto auto auto 1fr auto;\\n  row-gap: 2rem;\\n  column-gap: 4rem;\\n  box-sizing: border-box;\\n  width: 100%;\\n  max-width: 1440px;\\n  margin-inline: auto;\\n  padding-block: 20px;\\n  padding-inline: 20px;\\n  grid-template-areas:\\n      \\\"header header header header header header header header header header header header\\\"\\n      \\\"left left left before-body before-body before-body before-body before-body before-body right right right\\\"\\n      \\\"left left left page-body page-body page-body page-body page-body page-body right right right\\\"\\n      \\\"left left left custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 right right right\\\"\\n      \\\"left left left after-body after-body after-body after-body after-body after-body right right right\\\"\\n      \\\"footer footer footer footer footer footer footer footer footer footer footer footer\\\";\\n}\\n.qgframe-area-header { grid-area: header; }\\n.qgframe-area-left { grid-area: left; }\\n.qgframe-area-right { grid-area: right; }\\n.qgframe-area-before-body { grid-area: before-body; }\\n.qgframe-area-page-body { grid-area: page-body; }\\n.qgframe-area-after-body { grid-area: after-body; }\\n.qgframe-area-footer { grid-area: footer; }\\n.qgframe-area-custom-8 { grid-area: custom-8; }\\n\\n@media (max-width: 1200px) {\\n.qgframe-grid {\\n  display: grid;\\n  grid-template-columns: calc((300px - 6rem) / 3) calc((300px - 6rem) / 3) calc((300px - 6rem) / 3) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\\n  grid-template-rows: auto auto auto auto auto 1fr auto;\\n  row-gap: 2rem;\\n  column-gap: 3rem;\\n  box-sizing: border-box;\\n  width: 100%;\\n  max-width: 100%;\\n  margin-inline: 0;\\n  padding-block: 20px;\\n  padding-inline: 20px;\\n  grid-template-areas:\\n      \\\"header header header header header header header header header header header header\\\"\\n      \\\"left left left before-body before-body before-body before-body before-body before-body before-body before-body before-body\\\"\\n      \\\"left left left page-body page-body page-body page-body page-body page-body page-body page-body page-body\\\"\\n      \\\"left left left custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8\\\"\\n      \\\"left left left right right right right right right right right right\\\"\\n      \\\"left left left after-body after-body after-body after-body after-body after-body after-body after-body after-body\\\"\\n      \\\"footer footer footer footer footer footer footer footer footer footer footer footer\\\";\\n}\\n.qgframe-area-header { grid-area: header; }\\n.qgframe-area-left { grid-area: left; }\\n.qgframe-area-right { grid-area: right; }\\n.qgframe-area-before-body { grid-area: before-body; }\\n.qgframe-area-page-body { grid-area: page-body; }\\n.qgframe-area-after-body { grid-area: after-body; }\\n.qgframe-area-footer { grid-area: footer; }\\n.qgframe-area-custom-8 { grid-area: custom-8; }\\n}\\n\\n@media (max-width: 900px) {\\n.qgframe-grid {\\n  display: grid;\\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\\n  grid-template-rows: auto 0 auto auto 1fr auto auto auto;\\n  row-gap: 2rem;\\n  column-gap: 1rem;\\n  box-sizing: border-box;\\n  width: 100%;\\n  max-width: 100%;\\n  margin-inline: 0;\\n  padding-block: 20px;\\n  padding-inline: 20px;\\n  grid-template-areas:\\n      \\\"header header header header header header header header header header header header\\\"\\n      \\\"left left left left left left left left left left left left\\\"\\n      \\\"before-body before-body before-body before-body before-body before-body before-body before-body before-body before-body before-body before-body\\\"\\n      \\\"right right right right right right right right right right right right\\\"\\n      \\\"page-body page-body page-body page-body page-body page-body page-body page-body page-body page-body page-body page-body\\\"\\n      \\\"custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8 custom-8\\\"\\n      \\\"after-body after-body after-body after-body after-body after-body after-body after-body after-body after-body after-body after-body\\\"\\n      \\\"footer footer footer footer footer footer footer footer footer footer footer footer\\\";\\n}\\n.qgframe-area-header { grid-area: header; }\\n.qgframe-area-left { grid-area: left; }\\n.qgframe-area-right { grid-area: right; }\\n.qgframe-area-before-body { grid-area: before-body; }\\n.qgframe-area-page-body { grid-area: page-body; }\\n.qgframe-area-after-body { grid-area: after-body; }\\n.qgframe-area-footer { grid-area: footer; }\\n.qgframe-area-custom-8 { grid-area: custom-8; }\\n}\",\n  render(props) {\n    const { componentData, header, beforeBody, pageBody, afterBody, left, right, footer } = props\n    const bySlot = { header, beforeBody, afterBody, left, right, footer, pageBody: [pageBody] }\n    // Once per page, not once per area: the decision is about the whole layout that arrived.\n    const order = pickGroupOrder(bySlot)\n    return h(\n      Fragment,\n      null,\n      h(\n        \"div\",\n        { class: \"qgframe-grid\" },\n        AREAS.map((area) => {\n          // An area without a slot is an empty cell by design (a spacer) - see GridFrameArea.\n          const components = area.slot ? contentsFor(area, bySlot[area.slot] ?? [], order) : []\n          // The area holding pageBody also carries `center`, because quartz's own three frames\n          // do (DefaultFrame/FullWidthFrame/MinimalFrame all render <div class=\"center …\">) and\n          // client scripts rely on it: the mermaid initialiser runs\n          // `document.querySelector(\".center\").querySelectorAll(\"code.mermaid\")` unconditionally\n          // on every page. Without the class that threw a TypeError inside the nav handler, which\n          // aborted every component script registered after it - measured on a real build, where\n          // the explorer rendered its container but never its tree or its title. The class alone\n          // is inert for layout here: base.scss only uses it for `.center > article { grid-area }`\n          // (no effect on a flex child) and for its .full-width/.minimal variants.\n          const isPageBody = area.slot === \"pageBody\"\n          return h(\n            \"div\",\n            {\n              key: area.id,\n              class: \"qgframe-area qgframe-area-\" + area.name + (isPageBody ? \" center\" : \"\")\n            },\n            components.map((Component) => h(Component, componentData))\n          )\n        })\n      )\n    )\n  }\n}\n",
+    "authored-frames/frame-index/frame.json": "{\n  \"id\": \"frame-index\",\n  \"frameName\": \"index\",\n  \"areas\": [\n    {\n      \"id\": \"area-header\",\n      \"name\": \"header\",\n      \"slot\": \"header\"\n    },\n    {\n      \"id\": \"area-left\",\n      \"name\": \"left\",\n      \"slot\": \"left\"\n    },\n    {\n      \"id\": \"area-right\",\n      \"name\": \"right\",\n      \"slot\": \"right\"\n    },\n    {\n      \"id\": \"area-beforeBody\",\n      \"name\": \"before-body\",\n      \"slot\": \"beforeBody\"\n    },\n    {\n      \"id\": \"area-pageBody\",\n      \"name\": \"page-body\",\n      \"slot\": \"pageBody\"\n    },\n    {\n      \"id\": \"area-afterBody\",\n      \"name\": \"after-body\",\n      \"slot\": \"afterBody\"\n    },\n    {\n      \"id\": \"area-footer\",\n      \"name\": \"footer\",\n      \"slot\": \"footer\"\n    },\n    {\n      \"id\": \"area-custom-8\",\n      \"name\": \"custom-8\",\n      \"slot\": \"afterBody\",\n      \"group\": \"custom-8\"\n    }\n  ],\n  \"breakpoints\": {\n    \"desktop\": {\n      \"rows\": 6,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\",\n        \"calc((300px - 8rem) / 3)\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"4rem\",\n      \"maxWidth\": \"1440px\",\n      \"align\": \"center\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-afterBody\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 6\n        },\n        \"area-right\": {\n          \"row\": 2,\n          \"col\": 10,\n          \"rowSpan\": 4,\n          \"colSpan\": 3\n        },\n        \"area-footer\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"tablet\": {\n      \"rows\": 7,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"calc((300px - 6rem) / 3)\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"3rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 5,\n          \"colSpan\": 3\n        },\n        \"area-beforeBody\": {\n          \"row\": 2,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-pageBody\": {\n          \"row\": 3,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-custom-8\": {\n          \"row\": 4,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-right\": {\n          \"row\": 5,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-afterBody\": {\n          \"row\": 6,\n          \"col\": 4,\n          \"rowSpan\": 1,\n          \"colSpan\": 9\n        },\n        \"area-footer\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    },\n    \"mobile\": {\n      \"rows\": 8,\n      \"cols\": 12,\n      \"columnSizes\": [\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\",\n        \"1fr\"\n      ],\n      \"rowSizes\": [\n        \"auto\",\n        \"0\",\n        \"auto\",\n        \"auto\",\n        \"1fr\",\n        \"auto\",\n        \"auto\",\n        \"auto\"\n      ],\n      \"rowGap\": \"2rem\",\n      \"columnGap\": \"1rem\",\n      \"maxWidth\": \"100%\",\n      \"align\": \"left\",\n      \"paddingBlock\": \"20px\",\n      \"paddingInline\": \"20px\",\n      \"placements\": {\n        \"area-header\": {\n          \"row\": 1,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-left\": {\n          \"row\": 2,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-beforeBody\": {\n          \"row\": 3,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-right\": {\n          \"row\": 4,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-pageBody\": {\n          \"row\": 5,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-custom-8\": {\n          \"row\": 6,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-afterBody\": {\n          \"row\": 7,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        },\n        \"area-footer\": {\n          \"row\": 8,\n          \"col\": 1,\n          \"rowSpan\": 1,\n          \"colSpan\": 12\n        }\n      }\n    }\n  }\n}",
+    "authored-frames/frame-index/package.json": "{\n  \"name\": \"frame-index\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"quartz\": {\n    \"frames\": {\n      \"Frame\": {\n        \"exportName\": \"Frame\"\n      }\n    }\n  }\n}",
+    "layout-breakpoints.json": "{\n  \"tablet\": 1200,\n  \"mobile\": 900\n}"
+  }
+}

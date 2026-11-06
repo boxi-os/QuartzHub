@@ -1,0 +1,6156 @@
+[
+  {
+    "label": "good",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": null
+  },
+  {
+    "label": "null",
+    "input": null,
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"frame\\\"}}\"}}"
+  },
+  {
+    "label": "string",
+    "input": "frame",
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"frame\\\"}}\"}}"
+  },
+  {
+    "label": "array",
+    "input": [],
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"frame\\\"}}\"}}"
+  },
+  {
+    "label": "id missing",
+    "input": {
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"id\\\"}}\"}}"
+  },
+  {
+    "label": "id bad",
+    "input": {
+      "id": "Frame..x",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"id\\\"}}\"}}"
+  },
+  {
+    "label": "id number",
+    "input": {
+      "id": 5,
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"id\\\"}}\"}}"
+  },
+  {
+    "label": "id too long",
+    "input": {
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"id\\\"}}\"}}"
+  },
+  {
+    "label": "frameName empty",
+    "input": {
+      "id": "frame-made",
+      "frameName": "",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooSmall\\\",\\\"args\\\":{\\\"where\\\":\\\"frameName\\\",\\\"limit\\\":\\\"1\\\"}}\"}}"
+  },
+  {
+    "label": "frameName long",
+    "input": {
+      "id": "frame-made",
+      "frameName": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"frameName\\\",\\\"limit\\\":\\\"120\\\"}}\"}}"
+  },
+  {
+    "label": "areas missing",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"areas\\\"}}\"}}"
+  },
+  {
+    "label": "areas object",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": {},
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"areas\\\"}}\"}}"
+  },
+  {
+    "label": "areas too many",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a0",
+          "name": "n0"
+        },
+        {
+          "id": "a1",
+          "name": "n1"
+        },
+        {
+          "id": "a2",
+          "name": "n2"
+        },
+        {
+          "id": "a3",
+          "name": "n3"
+        },
+        {
+          "id": "a4",
+          "name": "n4"
+        },
+        {
+          "id": "a5",
+          "name": "n5"
+        },
+        {
+          "id": "a6",
+          "name": "n6"
+        },
+        {
+          "id": "a7",
+          "name": "n7"
+        },
+        {
+          "id": "a8",
+          "name": "n8"
+        },
+        {
+          "id": "a9",
+          "name": "n9"
+        },
+        {
+          "id": "a10",
+          "name": "n10"
+        },
+        {
+          "id": "a11",
+          "name": "n11"
+        },
+        {
+          "id": "a12",
+          "name": "n12"
+        },
+        {
+          "id": "a13",
+          "name": "n13"
+        },
+        {
+          "id": "a14",
+          "name": "n14"
+        },
+        {
+          "id": "a15",
+          "name": "n15"
+        },
+        {
+          "id": "a16",
+          "name": "n16"
+        },
+        {
+          "id": "a17",
+          "name": "n17"
+        },
+        {
+          "id": "a18",
+          "name": "n18"
+        },
+        {
+          "id": "a19",
+          "name": "n19"
+        },
+        {
+          "id": "a20",
+          "name": "n20"
+        },
+        {
+          "id": "a21",
+          "name": "n21"
+        },
+        {
+          "id": "a22",
+          "name": "n22"
+        },
+        {
+          "id": "a23",
+          "name": "n23"
+        },
+        {
+          "id": "a24",
+          "name": "n24"
+        },
+        {
+          "id": "a25",
+          "name": "n25"
+        },
+        {
+          "id": "a26",
+          "name": "n26"
+        },
+        {
+          "id": "a27",
+          "name": "n27"
+        },
+        {
+          "id": "a28",
+          "name": "n28"
+        },
+        {
+          "id": "a29",
+          "name": "n29"
+        },
+        {
+          "id": "a30",
+          "name": "n30"
+        },
+        {
+          "id": "a31",
+          "name": "n31"
+        },
+        {
+          "id": "a32",
+          "name": "n32"
+        },
+        {
+          "id": "a33",
+          "name": "n33"
+        },
+        {
+          "id": "a34",
+          "name": "n34"
+        },
+        {
+          "id": "a35",
+          "name": "n35"
+        },
+        {
+          "id": "a36",
+          "name": "n36"
+        },
+        {
+          "id": "a37",
+          "name": "n37"
+        },
+        {
+          "id": "a38",
+          "name": "n38"
+        },
+        {
+          "id": "a39",
+          "name": "n39"
+        },
+        {
+          "id": "a40",
+          "name": "n40"
+        },
+        {
+          "id": "a41",
+          "name": "n41"
+        },
+        {
+          "id": "a42",
+          "name": "n42"
+        },
+        {
+          "id": "a43",
+          "name": "n43"
+        },
+        {
+          "id": "a44",
+          "name": "n44"
+        },
+        {
+          "id": "a45",
+          "name": "n45"
+        },
+        {
+          "id": "a46",
+          "name": "n46"
+        },
+        {
+          "id": "a47",
+          "name": "n47"
+        },
+        {
+          "id": "a48",
+          "name": "n48"
+        },
+        {
+          "id": "a49",
+          "name": "n49"
+        },
+        {
+          "id": "a50",
+          "name": "n50"
+        },
+        {
+          "id": "a51",
+          "name": "n51"
+        },
+        {
+          "id": "a52",
+          "name": "n52"
+        },
+        {
+          "id": "a53",
+          "name": "n53"
+        },
+        {
+          "id": "a54",
+          "name": "n54"
+        },
+        {
+          "id": "a55",
+          "name": "n55"
+        },
+        {
+          "id": "a56",
+          "name": "n56"
+        },
+        {
+          "id": "a57",
+          "name": "n57"
+        },
+        {
+          "id": "a58",
+          "name": "n58"
+        },
+        {
+          "id": "a59",
+          "name": "n59"
+        },
+        {
+          "id": "a60",
+          "name": "n60"
+        },
+        {
+          "id": "a61",
+          "name": "n61"
+        },
+        {
+          "id": "a62",
+          "name": "n62"
+        },
+        {
+          "id": "a63",
+          "name": "n63"
+        },
+        {
+          "id": "a64",
+          "name": "n64"
+        },
+        {
+          "id": "a65",
+          "name": "n65"
+        },
+        {
+          "id": "a66",
+          "name": "n66"
+        },
+        {
+          "id": "a67",
+          "name": "n67"
+        },
+        {
+          "id": "a68",
+          "name": "n68"
+        },
+        {
+          "id": "a69",
+          "name": "n69"
+        },
+        {
+          "id": "a70",
+          "name": "n70"
+        },
+        {
+          "id": "a71",
+          "name": "n71"
+        },
+        {
+          "id": "a72",
+          "name": "n72"
+        },
+        {
+          "id": "a73",
+          "name": "n73"
+        },
+        {
+          "id": "a74",
+          "name": "n74"
+        },
+        {
+          "id": "a75",
+          "name": "n75"
+        },
+        {
+          "id": "a76",
+          "name": "n76"
+        },
+        {
+          "id": "a77",
+          "name": "n77"
+        },
+        {
+          "id": "a78",
+          "name": "n78"
+        },
+        {
+          "id": "a79",
+          "name": "n79"
+        },
+        {
+          "id": "a80",
+          "name": "n80"
+        },
+        {
+          "id": "a81",
+          "name": "n81"
+        },
+        {
+          "id": "a82",
+          "name": "n82"
+        },
+        {
+          "id": "a83",
+          "name": "n83"
+        },
+        {
+          "id": "a84",
+          "name": "n84"
+        },
+        {
+          "id": "a85",
+          "name": "n85"
+        },
+        {
+          "id": "a86",
+          "name": "n86"
+        },
+        {
+          "id": "a87",
+          "name": "n87"
+        },
+        {
+          "id": "a88",
+          "name": "n88"
+        },
+        {
+          "id": "a89",
+          "name": "n89"
+        },
+        {
+          "id": "a90",
+          "name": "n90"
+        },
+        {
+          "id": "a91",
+          "name": "n91"
+        },
+        {
+          "id": "a92",
+          "name": "n92"
+        },
+        {
+          "id": "a93",
+          "name": "n93"
+        },
+        {
+          "id": "a94",
+          "name": "n94"
+        },
+        {
+          "id": "a95",
+          "name": "n95"
+        },
+        {
+          "id": "a96",
+          "name": "n96"
+        },
+        {
+          "id": "a97",
+          "name": "n97"
+        },
+        {
+          "id": "a98",
+          "name": "n98"
+        },
+        {
+          "id": "a99",
+          "name": "n99"
+        },
+        {
+          "id": "a100",
+          "name": "n100"
+        },
+        {
+          "id": "a101",
+          "name": "n101"
+        },
+        {
+          "id": "a102",
+          "name": "n102"
+        },
+        {
+          "id": "a103",
+          "name": "n103"
+        },
+        {
+          "id": "a104",
+          "name": "n104"
+        },
+        {
+          "id": "a105",
+          "name": "n105"
+        },
+        {
+          "id": "a106",
+          "name": "n106"
+        },
+        {
+          "id": "a107",
+          "name": "n107"
+        },
+        {
+          "id": "a108",
+          "name": "n108"
+        },
+        {
+          "id": "a109",
+          "name": "n109"
+        },
+        {
+          "id": "a110",
+          "name": "n110"
+        },
+        {
+          "id": "a111",
+          "name": "n111"
+        },
+        {
+          "id": "a112",
+          "name": "n112"
+        },
+        {
+          "id": "a113",
+          "name": "n113"
+        },
+        {
+          "id": "a114",
+          "name": "n114"
+        },
+        {
+          "id": "a115",
+          "name": "n115"
+        },
+        {
+          "id": "a116",
+          "name": "n116"
+        },
+        {
+          "id": "a117",
+          "name": "n117"
+        },
+        {
+          "id": "a118",
+          "name": "n118"
+        },
+        {
+          "id": "a119",
+          "name": "n119"
+        },
+        {
+          "id": "a120",
+          "name": "n120"
+        },
+        {
+          "id": "a121",
+          "name": "n121"
+        },
+        {
+          "id": "a122",
+          "name": "n122"
+        },
+        {
+          "id": "a123",
+          "name": "n123"
+        },
+        {
+          "id": "a124",
+          "name": "n124"
+        },
+        {
+          "id": "a125",
+          "name": "n125"
+        },
+        {
+          "id": "a126",
+          "name": "n126"
+        },
+        {
+          "id": "a127",
+          "name": "n127"
+        },
+        {
+          "id": "a128",
+          "name": "n128"
+        },
+        {
+          "id": "a129",
+          "name": "n129"
+        },
+        {
+          "id": "a130",
+          "name": "n130"
+        },
+        {
+          "id": "a131",
+          "name": "n131"
+        },
+        {
+          "id": "a132",
+          "name": "n132"
+        },
+        {
+          "id": "a133",
+          "name": "n133"
+        },
+        {
+          "id": "a134",
+          "name": "n134"
+        },
+        {
+          "id": "a135",
+          "name": "n135"
+        },
+        {
+          "id": "a136",
+          "name": "n136"
+        },
+        {
+          "id": "a137",
+          "name": "n137"
+        },
+        {
+          "id": "a138",
+          "name": "n138"
+        },
+        {
+          "id": "a139",
+          "name": "n139"
+        },
+        {
+          "id": "a140",
+          "name": "n140"
+        },
+        {
+          "id": "a141",
+          "name": "n141"
+        },
+        {
+          "id": "a142",
+          "name": "n142"
+        },
+        {
+          "id": "a143",
+          "name": "n143"
+        },
+        {
+          "id": "a144",
+          "name": "n144"
+        },
+        {
+          "id": "a145",
+          "name": "n145"
+        },
+        {
+          "id": "a146",
+          "name": "n146"
+        },
+        {
+          "id": "a147",
+          "name": "n147"
+        },
+        {
+          "id": "a148",
+          "name": "n148"
+        },
+        {
+          "id": "a149",
+          "name": "n149"
+        },
+        {
+          "id": "a150",
+          "name": "n150"
+        },
+        {
+          "id": "a151",
+          "name": "n151"
+        },
+        {
+          "id": "a152",
+          "name": "n152"
+        },
+        {
+          "id": "a153",
+          "name": "n153"
+        },
+        {
+          "id": "a154",
+          "name": "n154"
+        },
+        {
+          "id": "a155",
+          "name": "n155"
+        },
+        {
+          "id": "a156",
+          "name": "n156"
+        },
+        {
+          "id": "a157",
+          "name": "n157"
+        },
+        {
+          "id": "a158",
+          "name": "n158"
+        },
+        {
+          "id": "a159",
+          "name": "n159"
+        },
+        {
+          "id": "a160",
+          "name": "n160"
+        },
+        {
+          "id": "a161",
+          "name": "n161"
+        },
+        {
+          "id": "a162",
+          "name": "n162"
+        },
+        {
+          "id": "a163",
+          "name": "n163"
+        },
+        {
+          "id": "a164",
+          "name": "n164"
+        },
+        {
+          "id": "a165",
+          "name": "n165"
+        },
+        {
+          "id": "a166",
+          "name": "n166"
+        },
+        {
+          "id": "a167",
+          "name": "n167"
+        },
+        {
+          "id": "a168",
+          "name": "n168"
+        },
+        {
+          "id": "a169",
+          "name": "n169"
+        },
+        {
+          "id": "a170",
+          "name": "n170"
+        },
+        {
+          "id": "a171",
+          "name": "n171"
+        },
+        {
+          "id": "a172",
+          "name": "n172"
+        },
+        {
+          "id": "a173",
+          "name": "n173"
+        },
+        {
+          "id": "a174",
+          "name": "n174"
+        },
+        {
+          "id": "a175",
+          "name": "n175"
+        },
+        {
+          "id": "a176",
+          "name": "n176"
+        },
+        {
+          "id": "a177",
+          "name": "n177"
+        },
+        {
+          "id": "a178",
+          "name": "n178"
+        },
+        {
+          "id": "a179",
+          "name": "n179"
+        },
+        {
+          "id": "a180",
+          "name": "n180"
+        },
+        {
+          "id": "a181",
+          "name": "n181"
+        },
+        {
+          "id": "a182",
+          "name": "n182"
+        },
+        {
+          "id": "a183",
+          "name": "n183"
+        },
+        {
+          "id": "a184",
+          "name": "n184"
+        },
+        {
+          "id": "a185",
+          "name": "n185"
+        },
+        {
+          "id": "a186",
+          "name": "n186"
+        },
+        {
+          "id": "a187",
+          "name": "n187"
+        },
+        {
+          "id": "a188",
+          "name": "n188"
+        },
+        {
+          "id": "a189",
+          "name": "n189"
+        },
+        {
+          "id": "a190",
+          "name": "n190"
+        },
+        {
+          "id": "a191",
+          "name": "n191"
+        },
+        {
+          "id": "a192",
+          "name": "n192"
+        },
+        {
+          "id": "a193",
+          "name": "n193"
+        },
+        {
+          "id": "a194",
+          "name": "n194"
+        },
+        {
+          "id": "a195",
+          "name": "n195"
+        },
+        {
+          "id": "a196",
+          "name": "n196"
+        },
+        {
+          "id": "a197",
+          "name": "n197"
+        },
+        {
+          "id": "a198",
+          "name": "n198"
+        },
+        {
+          "id": "a199",
+          "name": "n199"
+        },
+        {
+          "id": "a200",
+          "name": "n200"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"areas\\\",\\\"limit\\\":\\\"200\\\"}}\"}}"
+  },
+  {
+    "label": "area null",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        null
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0\\\"}}\"}}"
+  },
+  {
+    "label": "area name bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "1abc"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0.name\\\"}}\"}}"
+  },
+  {
+    "label": "area name long",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0.name\\\"}}\"}}"
+  },
+  {
+    "label": "area id long",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+          "name": "x"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0.id\\\",\\\"limit\\\":\\\"128\\\"}}\"}}"
+  },
+  {
+    "label": "area slot bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "x",
+          "slot": "sidebar"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueValue\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0.slot\\\",\\\"values\\\":\\\"header, left, right, beforeBody, afterBody, footer, pageBody\\\"}}\"}}"
+  },
+  {
+    "label": "area slot null",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "x",
+          "slot": null
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueValue\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0.slot\\\",\\\"values\\\":\\\"header, left, right, beforeBody, afterBody, footer, pageBody\\\"}}\"}}"
+  },
+  {
+    "label": "area group bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "x",
+          "slot": "left",
+          "group": "has space"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0.group\\\"}}\"}}"
+  },
+  {
+    "label": "breakpoints missing",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ]
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints\\\"}}\"}}"
+  },
+  {
+    "label": "tablet missing",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.tablet\\\"}}\"}}"
+  },
+  {
+    "label": "rows zero",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 0,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooSmall\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\",\\\"limit\\\":\\\"1\\\"}}\"}}"
+  },
+  {
+    "label": "rows 51",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 51,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\",\\\"limit\\\":\\\"50\\\"}}\"}}"
+  },
+  {
+    "label": "rows fraction",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 1.5,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\"}}\"}}"
+  },
+  {
+    "label": "rows string",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": "2",
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\"}}\"}}"
+  },
+  {
+    "label": "rows NaN-ish",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": null,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\"}}\"}}"
+  },
+  {
+    "label": "rows huge fraction",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 60.5,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\"}}\"}}"
+  },
+  {
+    "label": "cols negative fraction",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": -0.5,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.cols\\\"}}\"}}"
+  },
+  {
+    "label": "columnSizes bad char",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnSizes": [
+            "1fr;"
+          ]
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnSizes.0\\\"}}\"}}"
+  },
+  {
+    "label": "columnSizes long",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnSizes": [
+            "11111111111111111111111111111111111111111"
+          ]
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnSizes.0\\\",\\\"limit\\\":\\\"40\\\"}}\"}}"
+  },
+  {
+    "label": "columnSizes long and bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnSizes": [
+            ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
+          ]
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnSizes.0\\\",\\\"limit\\\":\\\"40\\\"}}\"}}"
+  },
+  {
+    "label": "columnSizes too many",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnSizes": [
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr"
+          ]
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnSizes\\\",\\\"limit\\\":\\\"50\\\"}}\"}}"
+  },
+  {
+    "label": "columnSizes too many and bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnSizes": [
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "1fr",
+            "{"
+          ]
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnSizes.50\\\"}}\"}}"
+  },
+  {
+    "label": "rowGap missing",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rowGap\\\"}}\"}}"
+  },
+  {
+    "label": "rowGap brackets",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "[a]",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rowGap\\\"}}\"}}"
+  },
+  {
+    "label": "maxWidth bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "maxWidth": "url(x)\""
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.maxWidth\\\"}}\"}}"
+  },
+  {
+    "label": "align bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "align": "justify"
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueValue\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.align\\\",\\\"values\\\":\\\"left, center, right\\\"}}\"}}"
+  },
+  {
+    "label": "paddingBlock number",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "paddingBlock": 4
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.paddingBlock\\\"}}\"}}"
+  },
+  {
+    "label": "line names key bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnLineNames": {
+            "abc": [
+              "x"
+            ]
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueKey\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnLineNames.abc\\\"}}\"}}"
+  },
+  {
+    "label": "line names key long",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnLineNames": {
+            "<script>alert(1)</script>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx": [
+              "x"
+            ]
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueKey\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnLineNames.<script>alert(1)</script>xxxxxxxxxxxxxxx…\\\"}}\"}}"
+  },
+  {
+    "label": "line names value bad",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnLineNames": {
+            "0": [
+              "has space"
+            ]
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnLineNames.0.0\\\"}}\"}}"
+  },
+  {
+    "label": "line names too many",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "columnLineNames": {
+            "0": [
+              "a",
+              "a",
+              "a",
+              "a",
+              "a",
+              "a",
+              "a",
+              "a",
+              "a"
+            ]
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooBig\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.columnLineNames.0\\\",\\\"limit\\\":\\\"8\\\"}}\"}}"
+  },
+  {
+    "label": "line names empty name",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "rowLineNames": {
+            "0": [
+              ""
+            ]
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rowLineNames.0.0\\\"}}\"}}"
+  },
+  {
+    "label": "line names not array",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          },
+          "rowLineNames": {
+            "0": "a"
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rowLineNames.0\\\"}}\"}}"
+  },
+  {
+    "label": "placements missing",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem"
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.placements\\\"}}\"}}"
+  },
+  {
+    "label": "placement key long",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueKey\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.placements.pppppppppppppppppppppppppppppppppppppppp…\\\"}}\"}}"
+  },
+  {
+    "label": "placement row zero",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 0,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooSmall\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.placements.a1.row\\\",\\\"limit\\\":\\\"1\\\"}}\"}}"
+  },
+  {
+    "label": "placement hidden string",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": "no"
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.placements.a1.hidden\\\"}}\"}}"
+  },
+  {
+    "label": "placement missing span",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.placements.a1.colSpan\\\"}}\"}}"
+  },
+  {
+    "label": "placement null",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": null
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueType\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.placements.a1\\\"}}\"}}"
+  },
+  {
+    "label": "two issues: id and areas",
+    "input": {
+      "id": "",
+      "frameName": "made",
+      "areas": 3,
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"id\\\"}}\"}}"
+  },
+  {
+    "label": "two issues in one layout",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a1",
+          "name": "top",
+          "slot": "header"
+        },
+        {
+          "id": "a2",
+          "name": "body",
+          "slot": "pageBody"
+        },
+        {
+          "id": "a3",
+          "name": "side",
+          "slot": "left",
+          "group": "nav"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 0,
+          "cols": "x",
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooSmall\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\",\\\"limit\\\":\\\"1\\\"}}\"}}"
+  },
+  {
+    "label": "area issue before breakpoint issue",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "-"
+        }
+      ],
+      "breakpoints": {
+        "desktop": null
+      }
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"areas.0.name\\\"}}\"}}"
+  },
+  {
+    "label": "duplicate name",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "same"
+        },
+        {
+          "id": "b",
+          "name": "same"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameAreaNameDuplicate\",\"args\":{\"name\":\"same\"}}"
+  },
+  {
+    "label": "duplicate group on a slot",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "one",
+          "slot": "left",
+          "group": "g"
+        },
+        {
+          "id": "b",
+          "name": "two",
+          "slot": "left",
+          "group": "g"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": "{\"key\":\"frameAreaGroupDuplicate\",\"args\":{\"name\":\"g\"}}"
+  },
+  {
+    "label": "same group on two slots",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "one",
+          "slot": "left",
+          "group": "g"
+        },
+        {
+          "id": "b",
+          "name": "two",
+          "slot": "right",
+          "group": "g"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": null
+  },
+  {
+    "label": "group without slot twice",
+    "input": {
+      "id": "frame-made",
+      "frameName": "made",
+      "areas": [
+        {
+          "id": "a",
+          "name": "one",
+          "group": "g"
+        },
+        {
+          "id": "b",
+          "name": "two",
+          "group": "g"
+        }
+      ],
+      "breakpoints": {
+        "desktop": {
+          "rows": 2,
+          "cols": 2,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 2
+            },
+            "a2": {
+              "row": 2,
+              "col": 2,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        },
+        "tablet": {
+          "rows": 2,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 2,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a3": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1,
+              "hidden": true
+            }
+          }
+        },
+        "mobile": {
+          "rows": 3,
+          "cols": 1,
+          "rowGap": "1rem",
+          "columnGap": "1rem",
+          "placements": {
+            "a1": {
+              "row": 1,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            },
+            "a2": {
+              "row": 3,
+              "col": 1,
+              "rowSpan": 1,
+              "colSpan": 1
+            }
+          }
+        }
+      }
+    },
+    "problem": null
+  },
+  {
+    "label": "legacy good",
+    "input": {
+      "id": "frame-old",
+      "frameName": "old",
+      "rows": 1,
+      "cols": 1,
+      "gap": "0",
+      "areas": [
+        {
+          "id": "x",
+          "name": "only",
+          "slot": "pageBody",
+          "row": 1,
+          "col": 1,
+          "rowSpan": 1,
+          "colSpan": 1
+        }
+      ]
+    },
+    "problem": null
+  },
+  {
+    "label": "legacy areas not a list",
+    "input": {
+      "id": "frame-old",
+      "frameName": "old",
+      "rows": 1,
+      "cols": 1,
+      "gap": "0",
+      "areas": "x"
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"TypeError: def.areas.map is not a function\"}}"
+  },
+  {
+    "label": "legacy area null",
+    "input": {
+      "id": "frame-old",
+      "frameName": "old",
+      "rows": 1,
+      "cols": 1,
+      "gap": "0",
+      "areas": [
+        null
+      ]
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"TypeError: Cannot read properties of null (reading 'id')\"}}"
+  },
+  {
+    "label": "legacy gap bad",
+    "input": {
+      "id": "frame-old",
+      "frameName": "old",
+      "rows": 1,
+      "cols": 1,
+      "gap": "{",
+      "areas": []
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueFormat\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rowGap\\\"}}\"}}"
+  },
+  {
+    "label": "legacy rows zero",
+    "input": {
+      "id": "frame-old",
+      "frameName": "old",
+      "rows": 0,
+      "cols": 1,
+      "gap": "0",
+      "areas": []
+    },
+    "problem": "{\"key\":\"frameShapeInvalid\",\"args\":{\"detail\":\"{\\\"key\\\":\\\"frameIssueTooSmall\\\",\\\"args\\\":{\\\"where\\\":\\\"breakpoints.desktop.rows\\\",\\\"limit\\\":\\\"1\\\"}}\"}}"
+  }
+]

@@ -401,16 +401,7 @@ public enum OptionSchema {
   }
 
   /// JavaScript's `String(value)` for a JSON value.
-  static func jsString(_ value: JSONValue) -> String {
-    switch value {
-    case .null: "null"
-    case .bool(let b): b ? "true" : "false"
-    case .number(let n): JSJSON.numberToString(n)
-    case .string(let s): s
-    case .array(let list): list.map { $0 == .null ? "" : jsString($0) }.joined(separator: ",")
-    case .object: "[object Object]"
-    }
-  }
+  static func jsString(_ value: JSONValue) -> String { JS.string(value) }
 }
 
 // MARK: - values → OptionNode

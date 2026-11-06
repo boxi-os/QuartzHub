@@ -66,22 +66,26 @@ enum JS {
     return "\(whole.dropLast()).\(String(format: "%03d", fraction))Z"
   }
 
-  /// ECMAScript ToNumber for the values JSON can hold, as `Number(raw.x)` applies it. Arrays and
-  /// objects give NaN here; JavaScript would turn `[]` into 0 and `[5]` into 5.
+  /// ECMAScript ToNumber for the values JSON can hold, as `Number(raw.x)` applies it. An array goes
+  /// through its string, as in JavaScript (`[]` is 0, `[5]` is 5, `[1, 2]` NaN); an object is NaN.
   static func toNumber(_ value: JSONValue?) -> Double {
     switch value {
     case .number(let number): return number
     case .bool(let bool): return bool ? 1 : 0
     case .null: return 0
     case .string(let string):
-      let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
+      let trimmed = trim(string)
       if trimmed.isEmpty { return 0 }
-      if trimmed.lowercased().hasPrefix("0x"), let hex = UInt64(trimmed.dropFirst(2), radix: 16) { return Double(hex) }
+      for (prefix, radix) in [("0x", 16), ("0o", 8), ("0b", 2)] where trimmed.lowercased().hasPrefix(prefix) {
+        guard let value = UInt64(trimmed.dropFirst(2), radix: radix) else { return .nan }
+        return Double(value)
+      }
       if trimmed == "Infinity" || trimmed == "+Infinity" { return .infinity }
       if trimmed == "-Infinity" { return -.infinity }
       // Swift accepts "inf", "nan" and hex floats, JavaScript does not.
       guard trimmed.allSatisfy({ "0123456789+-.eE".contains($0) }), let number = Double(trimmed) else { return .nan }
       return number
+    case .array: return toNumber(.string(string(value)))
     default: return .nan
     }
   }

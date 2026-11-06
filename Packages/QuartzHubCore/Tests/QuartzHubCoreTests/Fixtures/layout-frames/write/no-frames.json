@@ -1,0 +1,84 @@
+{
+  "frames": {},
+  "breakpoints": null,
+  "extraFiles": {},
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": [
+      {
+        "source": "github:quartz-community/explorer",
+        "enabled": true,
+        "layout": {
+          "position": "left",
+          "priority": 20,
+          "group": "nav"
+        },
+        "name": "explorer"
+      },
+      {
+        "source": "github:quartz-community/search",
+        "enabled": true,
+        "layout": {
+          "position": "left",
+          "priority": 10,
+          "group": "tools"
+        },
+        "name": "search"
+      },
+      {
+        "source": "@quartz-community/darkmode",
+        "enabled": true,
+        "layout": {
+          "position": "left",
+          "priority": 15,
+          "group": "tools"
+        },
+        "name": "darkmode"
+      },
+      {
+        "source": "github:quartz-community/toc",
+        "enabled": true,
+        "layout": {
+          "position": "right",
+          "priority": 5
+        },
+        "name": "toc"
+      },
+      {
+        "source": "github:quartz-community/off",
+        "enabled": false,
+        "layout": {
+          "position": "left",
+          "priority": 1,
+          "group": "nav"
+        },
+        "name": "off"
+      }
+    ],
+    "layout": {
+      "groups": {
+        "nav": {
+          "priority": 1
+        }
+      },
+      "byPageType": {
+        "404": {
+          "positions": {
+            "left": []
+          }
+        },
+        "tag": {
+          "exclude": [
+            "explorer"
+          ]
+        },
+        "folder": {
+          "template": "other"
+        }
+      }
+    }
+  },
+  "problems": [],
+  "files": {}
+}

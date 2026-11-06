@@ -823,3 +823,70 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
   nie). Die Tests warten dort bis zu 1 s bzw. prüfen nur, dass der WebSocket-Port weiter oben
   liegt. Übrig: etwa ein Fehlschlag in 20 bis 30 Läufen der Server-Suiten. Im Betrieb hieße es,
   dass ein Server einmal einen Port weiter rückt (und das sagt).
+
+## Punkt 5: Stile und Layout
+
+Entschieden am 2026-11-06 (Nutzer): drei Teile in einem Zug. 5a, was der Build braucht (Frames,
+verwaltete Stil-Blöcke, Google-Schriften als Schritte der Vorbereitung), 5b die Stile-Seite
+(Stylesheets, Import-Reihenfolge, Zusammenlegen, SCSS-Prüfung, Variablen-Graph), 5c der Rest
+(Snippets, SVG-Bereiniger, Style Settings, Presets, Theme-Marktplatz). Sass läuft über einen
+eigenen JS-Helfer `sass-check` mit dem Sass des Projekts; die Gegenprobe des SVG-Bereinigers in
+WebKits HTML-Parser als `qh-check inline-svg`; echte Netzläufe (Google, GitHub) werden einzeln
+gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
+(`ProjectLock.styles`).
+
+### Frames (`layoutFrameService.ts`, `shared/gridFrameCss.ts` → `LayoutFrames`, `GridFrameCss`, `GroupLayouts`, `FrameDefinitionCheck`, `FrameModule`)
+
+- **Byte-gleich mit QuartzControl, weil beide Apps dieselben Dateien vor jedem Build neu
+  schreiben.** Wer ein Projekt abwechselnd in beiden öffnet, sähe sonst bei jedem Wechsel eine
+  Änderung an `frame.json`, `package.json` und `dist/frames.js`. Deshalb arbeitet der Port auf der
+  Definition als JSON (Reihenfolge der Schlüssel, unbekannte Schlüssel), und das Modul ist eine
+  wörtliche Abschrift aus QuartzControls Ausgabe mit vier Platzhaltern (`FrameModule`, in einem
+  Durchgang eingesetzt, damit ein Frame-Name „@@AREAS@@“ ein Name bleibt).
+- **Gemessen gegen QuartzControls Code:** `scripts/layout-frames-golden.mjs` lädt
+  `layoutFrameService.ts` (Config und CLI nachgestellt) und `gridFrameCss.ts` und zeichnet auf:
+  17 Projekte durch `writeAllFrames` (die fünf Frames von gui-test und zwei von Example, nur
+  gelesen, mit ihrer echten Config; dazu eigene Breiten, kaputte Breiten-Datei, unlesbare Config,
+  ein Name mit Anführungszeichen und `</script>`, Spuren und Linien-Namen, schiefe Werte, das alte
+  Format, unlesbare frame.json, unbekannte Schlüssel, eine fehlende Breakpoint-Ebene, eine ID mit
+  `..`), neun Schritte Speichern und Löschen mit den CLI-Aufrufen, 63 kaputte Definitionen durch
+  `frameDefinitionProblem`, 13 Configs durch `groupLayoutCandidates`, 13 Breiten-Dateien. Alles
+  gleich, die Dateien byte-gleich.
+- **Die Prüfung ist das zod-Schema, ausgeschrieben** (`FrameDefinitionCheck`), mit zods
+  Reihenfolge, wie das Golden-Skript sie zeigte: Schlüssel in der Reihenfolge des Schemas; bei
+  Text erst der Typ, dann die Prüfungen wie deklariert (`max` vor `regex`); bei Zahlen Typ, dann
+  „ganzzahlig“ (als Typfehler gemeldet), dann `min`, `max`; bei Listen erst die Elemente, dann die
+  Länge; bei Records die Schlüssel in JavaScripts Reihenfolge, ein falscher Schlüssel als
+  `invalid_key` ohne Blick auf seinen Wert. Die Muster sind in ASCII geschrieben, weil ICU anders
+  liest als JavaScript: `\d` sind dort die Ziffern jeder Schrift, `[a-z]` mit Groß/Klein-Faltung
+  nimmt das Kelvin-Zeichen, `$` passt auch vor einem letzten Zeilenumbruch, und `\s` kennt U+000B
+  und U+FEFF nicht.
+- **Was nicht geprüft wurde, liest der Port wie JavaScript.** Eine frame.json, die nie durch die
+  Prüfung ging (von Hand, aus einer alten Fassung), geht trotzdem in den Build: Eine fehlende
+  Lücke heißt dort „undefined“, ein fehlender Name „“ in `grid-template-areas` und „undefined“ in
+  der Klasse, ein Zeilenanfang 1,5 wirft. Für die Formen, die eine frame.json plausibel hat, wirft
+  der Port denselben Satz wie V8 („Cannot read properties of undefined (reading 'columnSizes')“);
+  bei seltsameren kann der Wortlaut abweichen. Die Gruppen-Reihenfolge sortiert wie V8 (ein Lauf,
+  dann binäres Einfügen, `JS.sort`): Eine fehlende Priorität lässt den Vergleich NaN antworten,
+  und dann ordnet eine gewöhnliche stabile Sortierung anders (Fall „missing priority, V8 order“).
+- **Abweichungen:**
+  - Ein Frame, dessen Modul sich nicht erzeugen lässt, bekommt keine seiner drei Dateien. Dort
+    liefen zwei atomare Schreibvorgänge schon, als der dritte warf, und ließen ihre Temp-Dateien
+    liegen (gemessen: `frame.json.tmp-…` und `package.json.tmp-…` nach einem Frame ohne
+    `tablet`).
+  - Eine Spanne über eine Million Zeilen besucht nur die Zellen, die landen können; QuartzControl
+    lief die Schleifen ganz durch und hätte die Bau-Tür aufgehalten.
+  - Die Warteschlange der Frames ist `ProjectLock.frames`, je `realpath` statt je geschriebenem
+    Pfad.
+  - Der Snapshot vor `quartz plugin add` kommt mit Punkt 7; bis dahin gehen „mit“ und „ohne“
+    Snapshot denselben Weg (`Plugins.add` bekommt die Angabe schon).
+- **An der Bau-Tür:** zweiter Schritt von `BuildService.preparation`; was schiefging, steht als
+  Warnung in der Konsole (gemessen: ohne quartz.config.yaml „Die Gruppen des Layouts konnten nicht
+  gelesen werden …“, und das Modul wird trotzdem geschrieben).
+- Gegenproben (21, jede lässt einen Test scheitern): Kompat-Blöcke immer bzw. ohne Schicht,
+  `hidden` übergangen, Spuren nicht getrimmt, `template` übergangen, `exclude` nach roher Quelle,
+  gewöhnliche Sortierung (erst ungefangen; der Fall mit fehlender Priorität kam dazu), Länge der
+  Liste vor den Elementen, Pfad-Stücke bei 50 gekürzt, unbekannte Schlüssel im alten Format
+  behalten, Schreiben vor dem Erzeugen, Breiten ohne Prüfung, `AREAS` eingerückt, jeder Frame neu
+  angemeldet, Löschen ohne CLI, unlesbare Config verschwiegen, keine Prüfung doppelter Gruppen,
+  geleerte Positionen behalten, kein Frame-Schritt an der Bau-Tür, dessen Sätze als stdout.

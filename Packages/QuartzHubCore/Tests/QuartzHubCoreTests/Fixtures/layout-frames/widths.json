@@ -1,0 +1,93 @@
+[
+  {
+    "file": null,
+    "widths": {
+      "tablet": 1200,
+      "mobile": 800
+    }
+  },
+  {
+    "file": "{\"tablet\": 1100, \"mobile\": 700}",
+    "widths": {
+      "tablet": 1100,
+      "mobile": 700
+    }
+  },
+  {
+    "file": "{\"tablet\": \"1100\", \"mobile\": \"700\"}",
+    "widths": {
+      "tablet": 1100,
+      "mobile": 700
+    }
+  },
+  {
+    "file": "{\"tablet\": 700, \"mobile\": 700}",
+    "widths": {
+      "tablet": 1200,
+      "mobile": 800
+    }
+  },
+  {
+    "file": "{\"tablet\": 1100}",
+    "widths": {
+      "tablet": 1200,
+      "mobile": 800
+    }
+  },
+  {
+    "file": "{\"tablet\": null, \"mobile\": null}",
+    "widths": {
+      "tablet": 1200,
+      "mobile": 800
+    }
+  },
+  {
+    "file": "[1, 2]",
+    "widths": {
+      "tablet": 1200,
+      "mobile": 800
+    }
+  },
+  {
+    "file": "{\"tablet\": 1e3, \"mobile\": 1.5, \"extra\": 1}",
+    "widths": {
+      "tablet": 1000,
+      "mobile": 1.5
+    }
+  },
+  {
+    "file": "{\"tablet\": \" 900 \", \"mobile\": \"\"}",
+    "widths": {
+      "tablet": 900,
+      "mobile": 0
+    }
+  },
+  {
+    "file": "{\"tablet\": true, \"mobile\": false}",
+    "widths": {
+      "tablet": 1,
+      "mobile": 0
+    }
+  },
+  {
+    "file": "{\"tablet\": [1100], \"mobile\": [[700]]}",
+    "widths": {
+      "tablet": 1100,
+      "mobile": 700
+    }
+  },
+  {
+    "file": "nope",
+    "widths": {
+      "tablet": 1200,
+      "mobile": 800
+    }
+  },
+  {
+    "file": "{\"tablet\": \"0x50\", \"mobile\": \"1e1\"}",
+    "widths": {
+      "tablet": 80,
+      "mobile": 10
+    }
+  }
+]
