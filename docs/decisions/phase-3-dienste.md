@@ -207,3 +207,28 @@ wenn der Körper scheitert.
   `../vault` dreimal scheitern.
 - Noch nicht hier: Quelle wechseln (braucht Snapshot und Sicherung), Startseite anlegen und
   Formular-Verwendungen (brauchen Config und das globby des Projekts). Sie kommen mit Punkt 3 und 7.
+
+### Projektbild (`projectIconService.ts` → `ProjectIcon`)
+
+`quartz/static/icon.png` bleibt das Projektbild und das Favicon, `icon-dark.png` das zweite Bild,
+der Marker `project-icon.json` sagt, was gewählt wurde, `icon-original.png` hält, was „Entfernen“
+zurückbringt. ImageIO statt `nativeImage`:
+
+- PNG und JPEG (nach Endung), höchstens 512 px an der längeren Kante, immer PNG. Ein PNG, das
+  passt, wird byteweise kopiert. **Ob es ein PNG ist, sagen die Bytes, nicht der Name:**
+  QuartzControl kopierte jede `.png`, die passte, auch ein JPEG unter diesem Namen.
+- `kCGImageSourceThumbnailMaxPixelSize` skaliert von sich aus nicht hoch, gemessen (40 × 30 bleibt
+  40 × 30). Ein eigenes `min()` dafür ließ die Gegenprobe grün und ist wieder raus.
+- Die EXIF-Ausrichtung eines Fotos wird angewandt (100 × 50 mit Ausrichtung 6 wird ein 50 × 100
+  großes PNG; ohne `WithTransform` scheitert der Test). Was `nativeImage` damit tat, ist nicht
+  gemessen.
+- Ein SVG unter `.png` und eine Textdatei unter `.jpg` sind „nicht lesbar“, ein `.gif` und ein
+  `.svg` „nicht unterstützt“; `icon.png`, Marker und Original bleiben dabei unberührt.
+- Geschrieben wird atomar (ein laufender Dev-Server beobachtet `quartz/static`), der Marker ganz und
+  in QuartzControls Reihenfolge; nichts mehr zu merken löscht ihn. Ein Marker von vor `customDark`
+  gilt wie dort.
+- Das Thumbnail hat 128 px, als PNG-Daten, im Speicher bis sich mtime oder Größe ändern.
+  `hasUnrecordedIcon` vergleicht die git-Blob-ID mit der von Quartz; der Test nimmt Quartz' Bild
+  aus der Geschichte von `gui-test` (nur lesend) und die Blob-ID gegen `git hash-object`.
+- Gegenproben: Name statt Bytes, ohne Cache, das Original bei jeder Wahl neu verdrängt, ohne
+  Ausrichtung: jede lässt einen Test scheitern.
