@@ -483,10 +483,10 @@ import Testing
     let h = try Harness()
     h.box.now.withLock { $0 = Date() }
     let p = try await Self.project(h)
-    let id = try await h.store.take(p, "pluginChange", "github:a/b")
+    let id = try await h.store.take(p.path, "pluginChange", "github:a/b")
     let newest = await h.store.list(project: p).first
     #expect(id != nil && newest?.id == id && newest?.kind == "pluginChange" && newest?.label == "github:a/b")
-    #expect(try await h.store.take(p, "pluginChange", "noch einmal") == nil, "nothing changed")
+    #expect(try await h.store.take(p.path, "pluginChange", "noch einmal") == nil, "nothing changed")
   }
 }
 

@@ -217,7 +217,7 @@ public enum StyleFiles {
   public typealias Snapshot = @Sendable (_ project: URL, _ kind: String) async throws -> String?
 
   /// `SnapshotStore.take` in this shape.
-  public static func snapshot(_ take: @escaping SnapshotStore.Take) -> Snapshot { { project, kind in try await take(project, kind, "") } }
+  public static func snapshot(_ take: @escaping SnapshotStore.Take) -> Snapshot { { project, kind in try await take(project.path, kind, "") } }
 
   /// Puts the 31 together, asked for on the Styles page, never by a writer: it renames and removes
   /// files the user may have open. A snapshot first, as the way back. The order is read before

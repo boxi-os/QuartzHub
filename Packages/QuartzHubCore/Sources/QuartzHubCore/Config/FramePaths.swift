@@ -15,12 +15,15 @@ public enum FramePaths {
   /// purpose (QuartzControl's forty-second review, finding 6).
   ///
   /// Paths are compared as Node's `resolve` does, by their text: no `realpath`.
-  public static func ownFramePath(project: URL, _ path: String) -> String? {
+  ///
+  /// By bytes, as `===`: a project path that differs only in its Unicode form is another text to
+  /// QuartzControl, which repoints it; Swift's `==` would leave it.
+  public static func ownFramePath(project: String, _ path: String) -> String? {
     guard path.hasPrefix("/") else { return nil }
     let absolute = resolve(path)
     guard let at = absolute.range(of: marker) else { return nil }
-    let projectPath = resolve(project.path)
-    if resolve(String(absolute[..<at.lowerBound])) == projectPath { return nil }
+    let projectPath = resolve(project)
+    if Array(resolve(String(absolute[..<at.lowerBound])).utf8) == Array(projectPath.utf8) { return nil }
     let next = resolve(projectPath + "/" + absolute[absolute.index(after: at.lowerBound)...])
     return FileManager.default.fileExists(atPath: next) ? next : nil
   }

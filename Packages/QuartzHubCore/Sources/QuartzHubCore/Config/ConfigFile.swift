@@ -38,17 +38,15 @@ public enum ConfigFile {
     }
   }
 
-  public static func path(project: URL) -> URL {
-    project.appendingPathComponent(fileName)
-  }
+  public static func path(project: String) -> String { "\(project)/\(fileName)" }
 
   // MARK: read
 
-  public static func read(project: URL, runtime: RuntimeLocation = .current) async throws -> QuartzConfig {
+  public static func read(project: String, runtime: RuntimeLocation = .current) async throws -> QuartzConfig {
     let text: String
     do {
-      text = String(decoding: try Data(contentsOf: path(project: project)), as: UTF8.self)
-    } catch CocoaError.fileReadNoSuchFile {
+      text = String(decoding: try Posix.read(path(project: project)), as: UTF8.self)
+    } catch let error as NodeFileError where error.code == ENOENT {
       throw Failure.missing
     }
     let answer = try await Helper.call("yaml-edit", JSONObject([("op", .string("read")), ("text", .string(text))]),
@@ -111,21 +109,20 @@ public enum ConfigFile {
 
   /// `writeConfig`, under the config lock: a repair of the frame paths at the build door reads and
   /// writes in one go, and a save waits for it instead of landing in between.
-  public static func write(_ config: QuartzConfig, project: URL, runtime: RuntimeLocation = .current,
+  public static func write(_ config: QuartzConfig, project: String, runtime: RuntimeLocation = .current,
                            snapshot: SnapshotStore.Take? = nil) async throws {
     var info = stat()
-    if let snapshot, stat(path(project: project).path, &info) == 0, info.st_size > 0 {
+    if let snapshot, stat(path(project: project), &info) == 0, info.st_size > 0 {
       _ = try await snapshot(project, "configChange", "")
     }
-    try await ProjectLock.config.run(project.path) {
+    try await ProjectLock.config.run(project) {
       try await writeNow(config, project: project, runtime: runtime)
     }
   }
 
-  static func writeNow(_ config: QuartzConfig, project: URL, runtime: RuntimeLocation) async throws {
+  static func writeNow(_ config: QuartzConfig, project: String, runtime: RuntimeLocation) async throws {
     let url = path(project: project)
-    let existing = FileManager.default.fileExists(atPath: url.path)
-      ? String(decoding: try Data(contentsOf: url), as: UTF8.self) : ""
+    let existing = Posix.exists(url) ? String(decoding: try Posix.read(url), as: UTF8.self) : ""
 
     // A page holds the config it read when it opened, and the build door may have pointed a frame
     // path at this project since; whatever a writer hands over names this project's frames

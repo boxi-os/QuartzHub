@@ -8,7 +8,7 @@ final class SnapshotCalls: Sendable {
   private let calls = Mutex<[[String]]>([])
   var all: [[String]] { calls.withLock { $0 } }
 
-  func take(_ look: @escaping @Sendable (URL) throws -> Void = { _ in }) -> SnapshotStore.Take {
+  func take(_ look: @escaping @Sendable (String) throws -> Void = { _ in }) -> SnapshotStore.Take {
     { [self] project, kind, label in
       try look(project)
       self.calls.withLock { $0.append([kind, label]) }

@@ -52,3 +52,31 @@ extension ContentFolder {
     try await withSymlinkParked(project: project.path, body)
   }
 }
+
+extension ConfigFile {
+  public static func path(project: URL) -> URL { URL(fileURLWithPath: path(project: project.path)) }
+  public static func read(project: URL, runtime: RuntimeLocation = .current) async throws -> QuartzConfig {
+    try await read(project: project.path, runtime: runtime)
+  }
+  public static func write(_ config: QuartzConfig, project: URL, runtime: RuntimeLocation = .current,
+                           snapshot: SnapshotStore.Take? = nil) async throws {
+    try await write(config, project: project.path, runtime: runtime, snapshot: snapshot)
+  }
+}
+
+extension FramePaths {
+  public static func ownFramePath(project: URL, _ path: String) -> String? { ownFramePath(project: project.path, path) }
+}
+
+extension PluginCommands {
+  public static func readLockfile(project: URL) throws -> JSONValue? { try readLockfile(project: project.path) }
+}
+
+extension ProjectPaths {
+  public static func repointProjectPaths(from: URL, to: URL, runtime: RuntimeLocation = .current) async throws {
+    try await repointProjectPaths(from: from.path, to: to.path, runtime: runtime)
+  }
+  public static func repointAuthoredFrames(project: URL, runtime: RuntimeLocation = .current) async throws {
+    try await repointAuthoredFrames(project: project.path, runtime: runtime)
+  }
+}

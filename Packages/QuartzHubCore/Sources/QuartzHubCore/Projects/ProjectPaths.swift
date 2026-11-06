@@ -13,22 +13,26 @@ import Foundation
 /// frames; a plugin installed from elsewhere on disk means the same in both places.
 public enum ProjectPaths {
   /// After a duplicate or a relocate: every recorded path inside `from` moves to `to`.
-  public static func repointProjectPaths(from: URL, to: URL, runtime: RuntimeLocation = .current) async throws {
-    let base = FramePaths.resolve(from.path)
+  ///
+  /// Inside means by bytes, as Node's `relative` compares: a path in the other Unicode form is
+  /// another folder to QuartzControl.
+  public static func repointProjectPaths(from: String, to: String, runtime: RuntimeLocation = .current) async throws {
+    let base = FramePaths.resolve(from)
+    let prefix = Array((base == "/" ? "/" : base + "/").utf8)
     try await rewriteRecordedPaths(project: to, runtime: runtime) { path in
       guard path.hasPrefix("/") else { return nil }
       let absolute = FramePaths.resolve(path)
       let relative: String
-      if absolute == base {
+      if Array(absolute.utf8) == Array(base.utf8) {
         relative = ""
-      } else if absolute.hasPrefix(base == "/" ? "/" : base + "/") {
-        relative = String(absolute.dropFirst(base == "/" ? 1 : base.count + 1))
+      } else if absolute.utf8.starts(with: prefix) {
+        relative = String(decoding: absolute.utf8.dropFirst(prefix.count), as: UTF8.self)
         // Node's `relative(...).startsWith('..')`, which also takes a child named `..x` as outside.
         if relative.hasPrefix("..") { return nil }
       } else {
         return nil
       }
-      return FramePaths.resolve(to.path + "/" + relative)
+      return FramePaths.resolve(to + "/" + relative)
     }
   }
 
@@ -36,19 +40,19 @@ public enum ProjectPaths {
   /// `from`: a restored snapshot (its config and lockfile hold the path of the moment they were
   /// recorded; QuartzControl found it in 8 of 8 and 6 of 7 snapshots of two projects), a folder
   /// copied outside the app, the build door. The rule and its limit are `FramePaths.ownFramePath`.
-  public static func repointAuthoredFrames(project: URL, runtime: RuntimeLocation = .current) async throws {
+  public static func repointAuthoredFrames(project: String, runtime: RuntimeLocation = .current) async throws {
     try await rewriteRecordedPaths(project: project, runtime: runtime) { FramePaths.ownFramePath(project: project, $0) }
   }
 
-  static func rewriteRecordedPaths(project: URL, runtime: RuntimeLocation,
+  static func rewriteRecordedPaths(project: String, runtime: RuntimeLocation,
                                    _ rewrite: (String) -> String?) async throws {
     // A folder with no config is not a Quartz project (yet): nothing here to repair.
-    guard FileManager.default.fileExists(atPath: ConfigFile.path(project: project).path) else { return }
+    guard Posix.exists(ConfigFile.path(project: project)) else { return }
 
     // Read and write under the config's lock, or a save in between is undone by this write. The
     // CLI's own writes are not under it; they rewrite the file themselves. No snapshot: this is a
     // repair, and a duplicate has no store to write into yet.
-    try await ProjectLock.config.run(project.path) {
+    try await ProjectLock.config.run(project) {
       var config = try await ConfigFile.read(project: project, runtime: runtime)
       var changed = false
       for index in config.plugins.indices {
@@ -66,8 +70,8 @@ public enum ProjectPaths {
   /// `source` and `resolved` per entry. A lockfile that cannot be read is not this operation's
   /// problem: the project is no worse off, and `quartz plugin install` is what reports it. Not a
   /// JSONStore file either; it is Quartz's, and nothing here moves it aside.
-  static func rewriteLockfile(project: URL, _ rewrite: (String) -> String?) throws {
-    let url = project.appendingPathComponent("quartz.lock.json")
+  static func rewriteLockfile(project: String, _ rewrite: (String) -> String?) throws {
+    let url = "\(project)/quartz.lock.json"
     guard case .object(var lock)?? = try? PluginCommands.readLockfile(project: project) else { return }
     var changed = false
     func fix(_ entry: JSONValue) -> JSONValue {
@@ -97,18 +101,19 @@ public enum ProjectPaths {
 
   /// The links under `.quartz/plugins/`, resolved against their own folder (a link may be
   /// relative, and a dangling one still has a target, which is exactly the case repaired here).
-  static func relinkInstalledPlugins(project: URL, _ rewrite: (String) -> String?) throws {
-    let plugins = project.appendingPathComponent(".quartz/plugins")
-    guard let names = try? FileManager.default.contentsOfDirectory(atPath: plugins.path) else { return }
+  static func relinkInstalledPlugins(project: String, _ rewrite: (String) -> String?) throws {
+    let plugins = "\(project)/.quartz/plugins"
+    guard let names = try? FileManager.default.contentsOfDirectory(atPath: plugins) else { return }
     for name in names.sorted() {
-      let link = plugins.appendingPathComponent(name)
+      let link = "\(plugins)/\(name)"
       var info = stat()
-      guard lstat(link.path, &info) == 0, (info.st_mode & S_IFMT) == S_IFLNK,
-            let target = try? FileManager.default.destinationOfSymbolicLink(atPath: link.path) else { continue }
-      let absolute = target.hasPrefix("/") ? FramePaths.resolve(target) : FramePaths.resolve(plugins.path + "/" + target)
+      guard lstat(link, &info) == 0, (info.st_mode & S_IFMT) == S_IFLNK,
+            let target = try? Posix.readlink(link) else { continue }
+      let absolute = target.hasPrefix("/") ? FramePaths.resolve(target) : FramePaths.resolve(plugins + "/" + target)
       guard let next = rewrite(absolute) else { continue }
-      try FileManager.default.removeItem(at: link)
-      try FileManager.default.createSymbolicLink(atPath: link.path, withDestinationPath: next)
+      try Posix.unlink(link)
+      // symlink(2): createSymbolicLink decomposed the new target.
+      try Posix.symlink(next, link)
     }
   }
 }

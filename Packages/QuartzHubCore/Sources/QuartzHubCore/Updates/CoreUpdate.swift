@@ -190,7 +190,7 @@ public final class CoreUpdate: Sendable {
     if await mergeInProgress(project) {
       return Result(success: false, output: L10n.t("main.updateMergeUnfinished"), conflicts: await conflictedFiles(project))
     }
-    let snapshotId = try await snapshot(project, "coreUpdate", "")
+    let snapshotId = try await snapshot(project.path, "coreUpdate", "")
 
     if !(await git(project, ["remote", "get-url", "quartz-upstream"])).success {
       let added = await git(project, ["remote", "add", "quartz-upstream", templateRepository])

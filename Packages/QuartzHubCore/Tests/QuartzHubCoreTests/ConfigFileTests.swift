@@ -20,25 +20,25 @@ struct ConfigFileTests {
   }
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
-  func project(_ text: String?, name: String = "projekt") throws -> URL {
-    let project = scratch.url.appendingPathComponent(name)
-    try FileManager.default.createDirectory(at: project, withIntermediateDirectories: true)
-    if let text { try Data(text.utf8).write(to: ConfigFile.path(project: project)) }
+  func project(_ text: String?, name: String = "Projekt-\u{DC}ber") throws -> String {
+    let project = "\(scratch.path)/\(name)"
+    try Posix.mkdirs(project)
+    if let text { try Posix.write(ConfigFile.path(project: project), Data(text.utf8)) }
     return project
   }
 
-  func read(_ project: URL) async throws -> QuartzConfig {
+  func read(_ project: String) async throws -> QuartzConfig {
     try await ConfigFile.read(project: project, runtime: Self.runtime)
   }
 
-  func write(_ config: QuartzConfig, _ project: URL) async throws {
+  func write(_ config: QuartzConfig, _ project: String) async throws {
     try await ConfigFile.write(config, project: project, runtime: Self.runtime)
   }
 
-  func fileText(_ project: URL) throws -> String {
-    try String(contentsOf: ConfigFile.path(project: project), encoding: .utf8)
+  func fileText(_ project: String) throws -> String {
+    String(decoding: try Posix.read(ConfigFile.path(project: project)), as: UTF8.self)
   }
 
   // MARK: golden
@@ -70,12 +70,12 @@ struct ConfigFileTests {
     for edit in spec["edits"]?.arrayValue ?? [] { Self.apply(edit, to: &edited) }
     let changed = try #require(QuartzConfig(jsonValue: edited))
     if case .string(let replacement)? = spec["replaceBeforeWrite"] {
-      try Data(replacement.utf8).write(to: ConfigFile.path(project: project))
+      try Posix.write(ConfigFile.path(project: project), Data(replacement.utf8))
     }
     do {
       try await write(changed, project)
       #expect(error == nil, "QuartzControl refused to write \(name)")
-      let written = try Data(contentsOf: ConfigFile.path(project: project))
+      let written = try Posix.read(ConfigFile.path(project: project))
       #expect(written == fixture("expected.yaml"), "\(name)")
     } catch let failure as ConfigFile.Failure {
       #expect(error?["during"] == .string("write"), "\(failure)")
@@ -188,19 +188,19 @@ struct ConfigFileTests {
   @Test func aSaveNamesThisProjectsFrames() async throws {
     let project = try project("plugins:\n  - source: /Users/else/Original/.quartz-gui/authored-frames/frame-a\n    enabled: true\n" +
                               "  - source: /Users/else/Original/.quartz-gui/authored-frames/frame-b\n    enabled: true\n")
-    try FileManager.default.createDirectory(at: project.appendingPathComponent(".quartz-gui/authored-frames/frame-a"),
-                                            withIntermediateDirectories: true)
+    try Posix.mkdirs("\(project)/.quartz-gui/authored-frames/frame-a")
     let config = try await read(project)
     try await write(config, project)
     let text = try fileText(project)
-    #expect(text.contains("- source: \(project.path)/.quartz-gui/authored-frames/frame-a\n"))
+    // With the project's bytes: QuartzControl compares the text and would repoint a decomposed one.
+    #expect(Array(text.utf8).firstRange(of: Array("- source: \(project)/.quartz-gui/authored-frames/frame-a\n".utf8)) != nil, "\(text)")
     #expect(text.contains("- source: /Users/else/Original/.quartz-gui/authored-frames/frame-b\n"), "no frame-b here")
   }
 
   @Test func aHolderOfTheConfigLockCanSave() async throws {
     // projectPaths reads and writes under the lock and saves through write(): reentrant.
     let project = try project("configuration:\n  pageTitle: a\nplugins: []\n")
-    try await ProjectLock.config.run(project.path) {
+    try await ProjectLock.config.run(project) {
       var config = try await read(project)
       config.configuration["pageTitle"] = .string("b")
       try await write(config, project)
@@ -246,15 +246,17 @@ struct ConfigFileTests {
 
   @Test func ownFramePathIsFramePathsTs() throws {
     let project = try project(nil, name: "Kopie")
-    try FileManager.default.createDirectory(at: project.appendingPathComponent(".quartz-gui/authored-frames/frame-x"),
-                                            withIntermediateDirectories: true)
-    let own = "\(project.path)/.quartz-gui/authored-frames/frame-x"
+    try Posix.mkdirs("\(project)/.quartz-gui/authored-frames/frame-x")
+    let own = "\(project)/.quartz-gui/authored-frames/frame-x"
     #expect(FramePaths.ownFramePath(project: project, "/Users/a/Original/.quartz-gui/authored-frames/frame-x") == own)
     #expect(FramePaths.ownFramePath(project: project, "/Users/a/Original/.quartz-gui/authored-frames/frame-x/") == own)
     #expect(FramePaths.ownFramePath(project: project, "/Users/a/b/../Original/.quartz-gui/authored-frames/frame-x") == own)
     #expect(FramePaths.ownFramePath(project: project, "/Users/a/Original/.quartz-gui/authored-frames/frame-y") == nil, "not here")
     #expect(FramePaths.ownFramePath(project: project, own) == nil, "already ours")
-    #expect(FramePaths.ownFramePath(project: project, "\(project.path)/./.quartz-gui/authored-frames/frame-x") == nil)
+    #expect(FramePaths.ownFramePath(project: project, "\(project)/./.quartz-gui/authored-frames/frame-x") == nil)
+    // The same project in the other Unicode form is another text, as for `===`; the answer has this one's bytes.
+    let decomposed = own.decomposedStringWithCanonicalMapping
+    #expect(FramePaths.ownFramePath(project: project, decomposed).map { Array($0.utf8) } == Array(own.utf8))
     #expect(FramePaths.ownFramePath(project: project, ".quartz-gui/authored-frames/frame-x") == nil, "relative")
     #expect(FramePaths.ownFramePath(project: project, "/Users/a/Original/frames/frame-x") == nil)
   }
@@ -266,9 +268,9 @@ struct ConfigFileTests {
     let project = try project("configuration:\n  pageTitle: Alt\n")
     var config = try await read(project)
     config.configuration["pageTitle"] = .string("Neu")
-    try await ConfigFile.write(config, project: project, runtime: Self.runtime, snapshot: calls.take { (project: URL) throws in
+    try await ConfigFile.write(config, project: project, runtime: Self.runtime, snapshot: calls.take { (project: String) throws in
       // Before the write: the snapshot sees the old file.
-      #expect(try String(contentsOf: ConfigFile.path(project: project), encoding: .utf8).contains("Alt"))
+      #expect(String(decoding: try Posix.read(ConfigFile.path(project: project)), as: UTF8.self).contains("Alt"))
     })
     #expect(calls.all == [["configChange", ""]])
     #expect(try fileText(project).contains("Neu"))

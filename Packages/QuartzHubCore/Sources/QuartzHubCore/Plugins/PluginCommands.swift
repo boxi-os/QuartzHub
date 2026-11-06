@@ -50,7 +50,7 @@ public final class PluginCommands: Sendable {
   static func snapshotFirst(_ snapshot: SnapshotStore.Take?, _ project: URL, _ label: String) async -> Result? {
     guard let snapshot else { return nil }
     do {
-      _ = try await snapshot(project, "pluginChange", label)
+      _ = try await snapshot(project.path, "pluginChange", label)
       return nil
     } catch {
       return Result(success: false, output: "\(error)")
@@ -133,9 +133,9 @@ public final class PluginCommands: Sendable {
 
   /// `quartz.lock.json`, nil when it is not there. Quartz's file, read as JSON.parse reads it;
   /// nothing here moves it aside.
-  public static func readLockfile(project: URL) throws -> JSONValue? {
-    let url = project.appendingPathComponent("quartz.lock.json")
-    guard FileManager.default.fileExists(atPath: url.path) else { return nil }
-    return try JSJSON.parse(Data(contentsOf: url))
+  public static func readLockfile(project: String) throws -> JSONValue? {
+    let path = "\(project)/quartz.lock.json"
+    guard Posix.exists(path) else { return nil }
+    return try JSJSON.parse(Posix.read(path))
   }
 }
