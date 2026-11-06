@@ -29748,6 +29748,456 @@
         }
       }
     },
+    "migration.confirm" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Button, startet die Übernahme",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übernehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take over"
+          }
+        }
+      }
+    },
+    "migration.connections" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Zeile Zugänge",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Zugang"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Zugänge"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} connection"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} connections"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "migration.done" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Button, schließt den Dialog nach der Übernahme",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "migration.doneTitle" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Titel nach der Übernahme",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übernommen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taken over"
+          }
+        }
+      }
+    },
+    "migration.failed" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Fehler beim Schreiben",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Übernahme konnte nicht abgeschlossen werden: {{file}} konnte nicht geschrieben werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The takeover could not be completed: {{file}} could not be written."
+          }
+        }
+      }
+    },
+    "migration.intro" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Einleitung",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub kann die Projektliste, die Einstellungen und die Zugänge von QuartzControl übernehmen. QuartzControl bleibt dabei unverändert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub can take over the project list, the settings and the connections from QuartzControl. QuartzControl stays as it is."
+          }
+        }
+      }
+    },
+    "migration.later" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Button, Dialog schließen, beim nächsten Start wieder anbieten",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Später"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
+          }
+        }
+      }
+    },
+    "migration.legacy" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Altbestand",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht übernommen, weil aus einer Vorabversion: {{names}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not taken over because it is from a pre-release: {{names}}"
+          }
+        }
+      }
+    },
+    "migration.projects" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Zeile Projekte",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Projekt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Projekte"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} project"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} projects"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "migration.projectsMissing" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Unterzeile, Projektordner fehlen",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} davon wurde nicht mehr gefunden"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} davon wurden nicht mehr gefunden"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} of them was not found"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} of them were not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "migration.running" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Fortschritt",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird übernommen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taking over …"
+          }
+        }
+      }
+    },
+    "migration.secrets" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Zeile Geheimnisse",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} gespeichertes Passwort oder Token"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} gespeicherte Passwörter und Tokens"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} stored password or token"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} stored passwords and tokens"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "migration.secretsHint" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Hinweis unter den Geheimnissen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS fragt einmal, ob QuartzHub den Schlüsselbund-Eintrag „QuartzControl Safe Storage“ lesen darf."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS asks once whether QuartzHub may read the keychain item “QuartzControl Safe Storage”."
+          }
+        }
+      }
+    },
+    "migration.secretsLost" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Ergebnis, Geheimnisse fehlen",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwort oder Token konnte nicht übernommen werden und muss in QuartzHub neu eingegeben werden."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwörter und Tokens konnten nicht übernommen werden und müssen in QuartzHub neu eingegeben werden."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} password or token could not be taken over and has to be entered again in QuartzHub."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} passwords and tokens could not be taken over and have to be entered again in QuartzHub."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "migration.secretsMoved" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Ergebnis",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwort oder Token liegt jetzt im Schlüsselbund von QuartzHub."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwörter und Tokens liegen jetzt im Schlüsselbund von QuartzHub."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} password or token is now in QuartzHub’s keychain."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} passwords and tokens are now in QuartzHub’s keychain."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "migration.settings" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Zeile Einstellungen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "migration.title" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Titel",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von QuartzControl übernehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take over from QuartzControl"
+          }
+        }
+      }
+    },
+    "migration.unreadable" : {
+      "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): unlesbare Dateien",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht lesbar und deshalb nicht übernommen: {{names}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not readable and therefore not taken over: {{names}}"
+          }
+        }
+      }
+    },
     "multilanguageEditor.add" : {
       "localizations" : {
         "de" : {

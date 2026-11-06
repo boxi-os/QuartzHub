@@ -70,7 +70,8 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
 - **Jedes Bedienelement hat einen Namen**, auch ohne sichtbaren Text (`Label` statt bloßem
   `Image`); der Spike las SwiftUI-Buttons über System Events namenlos. Test-Kennungen
   (`accessibilityIdentifier`) sitzen an einem konkreten Element, nicht an einem `Form`: dessen
-  Kennung kommt im Bedienungshilfe-Baum nicht an.
+  Kennung kommt im Bedienungshilfe-Baum nicht an. Eine Kennung an einem Stack braucht
+  `accessibilityElement(children: .contain)`, sonst bekommt jedes Kind sie.
 - **Was ohne Zutun erscheint, wird angesagt (QC)**, hier über `AccessibilityNotification`.
 - **Ein deaktiviertes Control muss noch lesbar sein; was nicht wirkt, sagt das mit einem Wort,
   nicht nur mit Grau. (QC)**

@@ -4,10 +4,17 @@ import SwiftUI
 @main
 struct QuartzHubApp: App {
   init() {
-    // Until settings are read (Phase 2): the system language. A UI test pins it with
-    // -QHLanguage de|en, so screenshots and checks do not depend on the Mac they run on.
+    // The language from QuartzHub's settings.json (QuartzControl's form, taken over on first
+    // start). A UI test pins it with -QHLanguage de|en, so screenshots and checks do not depend on
+    // the Mac they run on.
     let pinned = UserDefaults.standard.string(forKey: "QHLanguage").flatMap(LanguagePreference.init(rawValue:))
-    L10n.apply(pinned ?? .system)
+    let stored = JSONStore.peek(AppProfile.own.settings)
+    let settings: LanguagePreference? = if case .ok(.object(let object)) = stored {
+      LanguagePreference(rawValue: SettingsFile(object: object).language.rawValue)
+    } else {
+      nil
+    }
+    L10n.apply(pinned ?? settings ?? .system)
     // A saved window frame ("NSWindow Frame …" in this app's defaults) wins over defaultSize; a
     // test that asks for a size gets it only without one.
     if UserDefaults.standard.string(forKey: "QHWindowSize") != nil {

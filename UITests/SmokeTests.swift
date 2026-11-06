@@ -13,10 +13,21 @@ final class SmokeTests: XCTestCase {
     continueAfterFailure = false
   }
 
-  private func launch(size: CGSize? = nil) -> XCUIApplication {
+  /// A throwaway profile directory per run, so no test reads or writes a real profile.
+  private func scratchDirectory(_ name: String) throws -> URL {
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("qh-ui-\(name)-\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+    addTeardownBlock { try? FileManager.default.removeItem(at: url) }
+    return url
+  }
+
+  private func launch(size: CGSize? = nil, profile: URL? = nil, migrationSource: String = "") -> XCUIApplication {
     let app = XCUIApplication()
-    // A fresh window state every run: no restored page, inspector at its default.
-    app.launchArguments += ["-QHLanguage", "de", "-ApplePersistenceIgnoreState", "YES"]
+    // A fresh window state every run: no restored page, inspector at its default. The takeover
+    // from QuartzControl is off unless a test hands it a source profile.
+    app.launchArguments += ["-QHLanguage", "de", "-ApplePersistenceIgnoreState", "YES",
+                            "-QHMigrationSource", migrationSource]
+    if let profile { app.launchArguments += ["-QHProfileDir", profile.path] }
     if let size { app.launchArguments += ["-QHWindowSize", "\(Int(size.width))x\(Int(size.height))"] }
     app.launch()
     return app
@@ -71,5 +82,48 @@ final class SmokeTests: XCTestCase {
     XCTAssertTrue(app.menuItems["Inspektor einblenden"].exists, "menu item did not change its title")
     app.typeKey("i", modifierFlags: [.control, .command])
     XCTAssertTrue(context.waitForExistence(timeout: 5), "⌃⌘I did not show the inspector")
+  }
+
+  /// The takeover against a QuartzControl profile made here (two projects, no secrets, so no
+  /// Keychain prompt): offered, carried out, and not offered again once QuartzHub has a list.
+  func testMigrationIsOfferedOnceAndWritesTheProjectList() throws {
+    let source = try scratchDirectory("qc")
+    let own = try scratchDirectory("qh")
+    let projects = """
+      [
+        {
+          "id": "6b0a7c9e-0000-4000-8000-000000000001",
+          "name": "eins",
+          "path": "/nowhere/eins",
+          "addedAt": "2026-11-01T00:00:00.000Z"
+        },
+        {
+          "id": "6b0a7c9e-0000-4000-8000-000000000002",
+          "name": "zwei",
+          "path": "\(source.path)",
+          "addedAt": "2026-11-02T00:00:00.000Z"
+        }
+      ]
+      """
+    try Data(projects.utf8).write(to: source.appendingPathComponent("projects.json"))
+
+    let app = launch(profile: own, migrationSource: source.path)
+    let sheet = app.descendants(matching: .any)["migration"].firstMatch
+    XCTAssertTrue(sheet.waitForExistence(timeout: 10), "takeover not offered")
+    XCTAssertTrue(app.staticTexts["2 Projekte"].exists, "project count missing")
+    XCTAssertTrue(app.staticTexts["1 davon wurde nicht mehr gefunden"].exists, "missing folder not named")
+    app.buttons["migration.confirm"].click()
+    XCTAssertTrue(app.buttons["migration.done"].waitForExistence(timeout: 10), "takeover did not finish")
+    app.buttons["migration.done"].click()
+    XCTAssertTrue(sheet.waitForNonExistence(timeout: 5))
+    app.terminate()
+
+    let written = try String(contentsOf: own.appendingPathComponent("projects.json"), encoding: .utf8)
+    XCTAssertEqual(written, projects, "project list not taken over byte for byte")
+
+    let again = launch(profile: own, migrationSource: source.path)
+    XCTAssertTrue(again.windows.firstMatch.waitForExistence(timeout: 10))
+    XCTAssertFalse(again.descendants(matching: .any)["migration"].firstMatch.waitForExistence(timeout: 3),
+                   "takeover offered a second time")
   }
 }

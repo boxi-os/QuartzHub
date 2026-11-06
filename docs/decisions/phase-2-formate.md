@@ -69,7 +69,8 @@ nichts beiseitelegt: die Dateien gehören einer anderen App), `run` schreibt Qua
   deshalb ohne Padding, und `ChromiumSafeStorage` prüft das Padding selbst. Auch eine volle Prüfung
   lässt etwa jeden 256. falschen Schlüssel durch; dahinter steht die UTF-8-Prüfung.
 - **`Process` übergibt Argumente zerlegt (NFD).** Der Test gegen Node bekam mit „pass wört“ in argv
-  einen anderen Schlüssel als Swift; über stdin stimmen beide. Gilt für jeden Kindprozess, dem
+  einen anderen Schlüssel als Swift; über stdin stimmen beide. Gegengemessen mit `printf %s wört`:
+  aus `Process` kommt `6f cc 88` (o + Trema), aus der Shell `c3 b6`. Gilt für jeden Kindprozess, dem
   QuartzHub Nicht-ASCII mitgibt (Prozessstarter, Phase 3).
 - Gemessen ist die Formel bisher gegen Nodes `crypto`, eine unabhängige Umsetzung derselben
   Bausteine, **nicht gegen Electron**.
@@ -79,3 +80,18 @@ nichts beiseitelegt: die Dateien gehören einer anderen App), `run` schreibt Qua
 `Coexistence.foreignServers` liest QuartzControls `running-servers.json` und zählt einen Eintrag nur,
 wenn die PID lebt (`kill(pid, 0) == 0`, wie QuartzControl: EPERM zählt nicht) und `ps -p … -o
 command=` noch `quartz` und `--serve` enthält. QuartzHub meldet solche Server, beendet sie nie.
+
+### Der Dialog beim ersten Start
+
+`MigrationSheet` zeigt, was übernommen wird (Projekte mit fehlenden Ordnern, Einstellungen, Zugänge,
+Geheimnisse mit dem Hinweis auf die Abfrage des Schlüsselbunds, Unlesbares, Altbestand), dann
+„Später“ und „Übernehmen“. Den Schlüsselbund von QuartzControl liest erst „Übernehmen“, und nur, wenn
+es Geheimnisse gibt. Lehnt der Nutzer die Abfrage ab, wird alles außer den Geheimnissen übernommen.
+
+- Startargumente `-QHProfileDir` und `-QHMigrationSource` (leer = aus) legen beide Profile woandershin;
+  der Rauchtest schaltet die Übernahme aus, `testMigrationIsOfferedOnceAndWritesTheProjectList`
+  übernimmt ein Wegwerf-Profil, prüft die Projektliste byte-gleich und dass der zweite Start nicht
+  mehr fragt. Gegenprobe: `shouldOffer` ohne Blick auf QuartzHubs Liste lässt den Test scheitern.
+- **Eine Kennung an einem einfachen Stack geht an jedes Kind** und verdeckt deren eigene: XCUITest
+  fand `migration.confirm` nicht, bis der Stack `accessibilityElement(children: .contain)` bekam.
+- Die App liest die Sprache jetzt aus QuartzHubs `settings.json` (Form von QuartzControl).
