@@ -1,0 +1,245 @@
+[
+  {
+    "name": "record-remove-take",
+    "file": null,
+    "steps": [
+      {
+        "op": "record",
+        "id": "a",
+        "server": {
+          "pid": 101,
+          "port": 8080,
+          "startedAt": "2026-11-06T10:00:01.000Z"
+        },
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 101,\n    \"port\": 8080,\n    \"startedAt\": \"2026-11-06T10:00:01.000Z\"\n  }\n}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "record",
+        "id": "b",
+        "server": {
+          "pid": 202,
+          "port": 8081,
+          "startedAt": "2026-11-06T10:00:02.000Z"
+        },
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 101,\n    \"port\": 8080,\n    \"startedAt\": \"2026-11-06T10:00:01.000Z\"\n  },\n  \"b\": {\n    \"pid\": 202,\n    \"port\": 8081,\n    \"startedAt\": \"2026-11-06T10:00:02.000Z\"\n  }\n}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "record",
+        "id": "a",
+        "server": {
+          "pid": 103,
+          "port": 8082,
+          "startedAt": "2026-11-06T10:00:03.000Z"
+        },
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 103,\n    \"port\": 8082,\n    \"startedAt\": \"2026-11-06T10:00:03.000Z\"\n  },\n  \"b\": {\n    \"pid\": 202,\n    \"port\": 8081,\n    \"startedAt\": \"2026-11-06T10:00:02.000Z\"\n  }\n}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "remove",
+        "id": "b",
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 103,\n    \"port\": 8082,\n    \"startedAt\": \"2026-11-06T10:00:03.000Z\"\n  }\n}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "remove",
+        "id": "unknown",
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 103,\n    \"port\": 8082,\n    \"startedAt\": \"2026-11-06T10:00:03.000Z\"\n  }\n}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "takeAll",
+        "expected": {
+          "answer": {
+            "a": {
+              "pid": 103,
+              "port": 8082,
+              "startedAt": "2026-11-06T10:00:03.000Z"
+            }
+          },
+          "file": "{}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "takeAll",
+        "expected": {
+          "answer": {},
+          "file": "{}",
+          "quarantined": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "no-file",
+    "file": null,
+    "steps": [
+      {
+        "op": "remove",
+        "id": "a",
+        "expected": {
+          "answer": null,
+          "file": null,
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "takeAll",
+        "expected": {
+          "answer": {},
+          "file": "{}",
+          "quarantined": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "others-kept-as-they-are",
+    "file": "{\"z\":{\"pid\":1,\"port\":2,\"startedAt\":\"x\",\"extra\":[true]},\"y\":\"not an object\"}",
+    "steps": [
+      {
+        "op": "record",
+        "id": "a",
+        "server": {
+          "pid": 101,
+          "port": 8080,
+          "startedAt": "2026-11-06T10:00:01.000Z"
+        },
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"z\": {\n    \"pid\": 1,\n    \"port\": 2,\n    \"startedAt\": \"x\",\n    \"extra\": [\n      true\n    ]\n  },\n  \"y\": \"not an object\",\n  \"a\": {\n    \"pid\": 101,\n    \"port\": 8080,\n    \"startedAt\": \"2026-11-06T10:00:01.000Z\"\n  }\n}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "remove",
+        "id": "z",
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"y\": \"not an object\",\n  \"a\": {\n    \"pid\": 101,\n    \"port\": 8080,\n    \"startedAt\": \"2026-11-06T10:00:01.000Z\"\n  }\n}",
+          "quarantined": 0
+        }
+      },
+      {
+        "op": "takeAll",
+        "expected": {
+          "answer": {
+            "y": "not an object",
+            "a": {
+              "pid": 101,
+              "port": 8080,
+              "startedAt": "2026-11-06T10:00:01.000Z"
+            }
+          },
+          "file": "{}",
+          "quarantined": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "not-json",
+    "file": "{\"a\":",
+    "steps": [
+      {
+        "op": "record",
+        "id": "a",
+        "server": {
+          "pid": 101,
+          "port": 8080,
+          "startedAt": "2026-11-06T10:00:01.000Z"
+        },
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 101,\n    \"port\": 8080,\n    \"startedAt\": \"2026-11-06T10:00:01.000Z\"\n  }\n}",
+          "quarantined": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "empty-file",
+    "file": "",
+    "steps": [
+      {
+        "op": "takeAll",
+        "expected": {
+          "answer": {},
+          "file": "{}",
+          "quarantined": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "null",
+    "file": "null",
+    "steps": [
+      {
+        "op": "record",
+        "id": "a",
+        "server": {
+          "pid": 101,
+          "port": 8080,
+          "startedAt": "2026-11-06T10:00:01.000Z"
+        },
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 101,\n    \"port\": 8080,\n    \"startedAt\": \"2026-11-06T10:00:01.000Z\"\n  }\n}",
+          "quarantined": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "a-list",
+    "file": "[{\"pid\":1}]",
+    "steps": [
+      {
+        "op": "record",
+        "id": "a",
+        "server": {
+          "pid": 101,
+          "port": 8080,
+          "startedAt": "2026-11-06T10:00:01.000Z"
+        },
+        "expected": {
+          "answer": null,
+          "file": "{\n  \"a\": {\n    \"pid\": 101,\n    \"port\": 8080,\n    \"startedAt\": \"2026-11-06T10:00:01.000Z\"\n  }\n}",
+          "quarantined": 1
+        }
+      },
+      {
+        "op": "takeAll",
+        "expected": {
+          "answer": {
+            "a": {
+              "pid": 101,
+              "port": 8080,
+              "startedAt": "2026-11-06T10:00:01.000Z"
+            }
+          },
+          "file": "{}",
+          "quarantined": 1
+        }
+      }
+    ]
+  }
+]

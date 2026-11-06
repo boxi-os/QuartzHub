@@ -102,10 +102,16 @@ public struct StoredRelaySecrets: JSONView {
   public var fingerprint: String? { string("fingerprint") }
 }
 
-/// One value of `running-servers.json`, keyed by project id: a dev server QuartzControl started.
+/// One value of `running-servers.json`, keyed by project id: a dev server QuartzControl started
+/// (in its profile) or QuartzHub did (in QuartzHub's, `RunningServersStore`).
 public struct TrackedServer: JSONView {
   public var object: JSONObject
   public init(object: JSONObject) { self.object = object }
+
+  /// In QuartzControl's key order.
+  public init(pid: Int32, port: Int, startedAt: String) {
+    object = JSONObject([("pid", .number(Double(pid))), ("port", .number(Double(port))), ("startedAt", .string(startedAt))])
+  }
 
   /// The pid of the `npx` process, not of the listening child.
   public var pid: Int32? { number("pid").flatMap { Int32(exactly: $0) } }

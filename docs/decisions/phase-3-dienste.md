@@ -583,3 +583,21 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
   ohne Prüfung des zweiten Bytes, kein Rest am Ende des Stroms, ohne eigene Prozessgruppe
   (8 Tests; die Schleife, die SIGTERM ignoriert, lief dann ohne Ende, bis sie von Hand beendet
   wurde), `stop` wartet nur auf den Prozess.
+
+### Laufende Server merken (`runningServersStore.ts` → `RunningServersStore`)
+
+- QuartzHubs eigene `running-servers.json` im eigenen Profil, in QuartzControls Form
+  (`{pid, port, startedAt}` je Projekt-ID). QuartzControls Datei liest weiter nur `Coexistence`.
+- **Gemessen gegen QuartzControls Code:** `scripts/running-servers-golden.mjs` lädt
+  `runningServersStore.ts` mit nachgestelltem `app.getPath` und zeichnet sieben Szenarien auf, je
+  Schritt die Antwort, den Text der Datei und wie viele Dateien beiseitegelegt wurden: eintragen,
+  überschreiben (die Reihenfolge der Schlüssel bleibt), entfernen, Unbekanntes entfernen (schreibt
+  nichts), `takeAll` zweimal; keine Datei (`takeAll` schreibt `{}`, wie dort); fremde Einträge
+  und Nicht-Objekte bleiben, wie sie sind; kaputtes JSON, leere Datei, `null` und eine Liste werden
+  beiseitegelegt. Gleich in jedem Schritt, byte-gleich.
+- **Abweichungen:** Jede Änderung liest, ändert und schreibt unter einer Sperre (dort liefen die
+  Schreibvorgänge mit `void` durcheinander; gemessen mit 64 gleichzeitigen Einträgen, alle in der
+  Datei). `remove` nimmt auf Wunsch eine PID und lässt dann den Eintrag eines neueren Starts
+  desselben Projekts stehen; dort hielt nur die Map in `forgetServer` diese Regel.
+- Gegenproben (4, jede lässt einen Test scheitern): `takeAll` schreibt nur, wenn etwas da war;
+  `remove` übergeht die PID; ohne Sperre; Unlesbares wird nicht beiseitegelegt.
