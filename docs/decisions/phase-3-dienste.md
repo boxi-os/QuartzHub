@@ -1216,3 +1216,49 @@ QuartzControl 1.3.0 ins Repo, abgerufen wird dieselbe Adresse (Nutzer, 2026-11-0
   ist ohnehin kein Sprachcode). Zwei waren erst ungefangen und bekamen ihren Fall: ICU- gegen
   Byte-Sortierung (`Ef`), eine `.gitattributes`, die schon mit Zeilenumbruch endet; dazu der leere
   Merge-Treiber.
+
+### Vorlagen-Paket (`templatePackage/index.ts`, `parts.ts`, `shared.ts` → `TemplatePackage`)
+
+- **Gemessen gegen QuartzControls Code, mit den echten Diensten darunter:**
+  `scripts/templates-golden.mjs` baut zwölf Projekte (ein Quellprojekt mit allen zwölf Bausteinen:
+  Theme mit Style Settings, npm- und git-Plugins, zwei Instanzen von quartz-layout-box,
+  quartz-forms mit zwei Formularen, ein Frame mit eigenem Eintrag, eigene Breiten, verwaltete Blöcke
+  in `_quartzcontrol.scss` mit einer Variable nur für Hell, Schriften, `quartz/static` mit einer
+  versteckten Datei, geänderte Übersetzungen mit Baseline, Presets, Inhalt mit Formular-Blöcken,
+  einem versteckten Ordner, einem Link auf einen Ordner und einer Link-Schleife; dazu ein frisches
+  Ziel, eines mit eigenem von allem, eines mit Symlink-Inhalt, eines mit Links in `quartz/static` und
+  `quartz/styles`, die hinausführen). Die Bäume stehen in
+  `initial.json`, Binärdateien einmal in `blobs.json`. 31 Schritte: ansehen, exportieren (drei
+  Pakete, deren Einträge entpackt verglichen werden), Dry-Run und Import mit beiden Strategien von
+  vier Paketen (der eigene Export, `qc-basic.qtpl`, ein Ordner im Format vor 1, ein böswilliges mit
+  `..`-Namen, ungültigen Frames, unbekanntem und unlesbarem Teil) und vier kaputte Pakete. Je
+  Schritt Antwort, geänderte Dateien, Befehle (`npm install`, `quartz plugin add`) und Snapshots.
+- **Importiert wird im Swift-Test QuartzHubs eigener Export**, nicht QuartzControls: Der Hin- und
+  Rückweg zählt mit. Die Pakete selbst werden entpackt verglichen, nicht als Bytes (Deflate, siehe
+  Zip); Datum und App im Manifest sind maskiert.
+- **Die Bausteine nutzen, was Punkt 3 bis 5 schon gemessen haben:** `ConfigFile`, `StyleSheets`
+  (`replaceCustomBodyNow`, `writeManagedBlocksNow`, `setImportOrderNow`), `FontService`
+  (`fontFilesReplacedRulesWouldRemove`, `deleteFontFilesOfReplacedRules`), `LayoutFrames`,
+  `ThemePresets`, `ProjectIcon`, `ContentFolder`, `VariableGraph`, `CssVariables`, `LocaleFiles`.
+  Die drei Teile, die custom.scss teilen, laufen unter `ProjectLock.styles`.
+- **Abweichungen:** Das Manifest sagt `createdBy.app: "QuartzHub"` (ein alter Ordner bleibt
+  „QuartzControl“). Bis Punkt 7 lehnt der Import ab, bevor er etwas schreibt (`noSnapshotYet`,
+  eigener Test); Export und Dry-Run gehen. Wo QuartzControl einen Payload ohne Liste mit einem
+  TypeError abbrach, bricht hier der Teil mit einem gleichlautenden Satz ab.
+- **Gespielt:** `npm install` schreibt `node_modules/<name>/package.json`, `quartz plugin add`
+  hängt für ein Plugin einen eigenen Eintrag an die Config (wie die echte CLI, damit das Wieder-Lesen
+  danach zählt) und für einen Frame keinen (damit dessen Rückfall zählt). git ist echt.
+- **Ein Fehler im ersten Golden, gefunden über eine Gegenprobe:** Mein Gerüst hatte `theme:` auf
+  oberster Ebene, Quartz 5 erwartet es unter `configuration:`. Der Baustein „appearance“ trug damit
+  leere Werte, und jede Prüfung darauf war leer; erst die ungefangene Gegenprobe zur
+  Schriftauslieferung zeigte es.
+- **Preis:** Die Fixtures sind 600 KB groß (Bäume, Blobs, Schritte), der Test läuft 12 s
+  (Helfer-Aufrufe für Config und Sprachdateien).
+- Gegenproben: 63, alle gefangen bis auf eine unerreichbare (der Dry-Run mit `projectWins`: kein
+  `plan` liest die Strategie). 15 waren im ersten Golden ungefangen und bekamen ihren Fall: ein
+  Ordner ohne alles (`inspect` mit lauter Nullen), die Rohform der Teil-JSONs, `cdnCaching` allein
+  anders, eine Variable mit gleichem Hell und anderem Dunkel, ein Theme-Eintrag mit `order`,
+  `@use`-Zeilen zum Hochziehen, ein Link-Ordner unter `quartz/styles`, eine Schrift, die beim
+  Ersetzen wegfällt (Plan und Löschen), ein eigener Google-Block unter `projectWins`, ein fremdes
+  Projektbild ohne Markierung, Kilobytes mit einem Rest ab ,5, ein npm-Paket zweimal, die CLI, die
+  einen eigenen Eintrag anhängt, eine Link-Schleife im Inhalt.

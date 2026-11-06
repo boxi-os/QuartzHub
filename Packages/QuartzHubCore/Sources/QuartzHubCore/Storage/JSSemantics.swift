@@ -47,6 +47,37 @@ extension JS {
     return String(scalars[start...end])
   }
 
+  /// JavaScript's truthiness of a JSON value; `undefined` is falsy.
+  static func truthy(_ value: JSONValue?) -> Bool {
+    switch value {
+    case nil, .null?, .bool(false)?: return false
+    case .number(let number)?: return number != 0 && !number.isNaN
+    case .string(let string)?: return !string.isEmpty
+    default: return true
+    }
+  }
+
+  /// `typeof value === 'object' && value !== null`: objects and arrays.
+  static func isObject(_ value: JSONValue?) -> Bool {
+    switch value {
+    case .object?, .array?: return true
+    default: return false
+    }
+  }
+
+  /// `Object.keys(value).length`.
+  static func keyCount(_ value: JSONValue) -> Int {
+    switch value {
+    case .object(let object): return object.count
+    case .array(let items): return items.count
+    case .string(let string): return string.utf16.count
+    default: return 0
+    }
+  }
+
+  /// `Math.round`: halves go up.
+  static func round(_ value: Double) -> Double { (value + 0.5).rounded(.down) }
+
   /// A TypeError as `String(error)` prints it.
   struct TypeError: Error, CustomStringConvertible, Equatable {
     let message: String

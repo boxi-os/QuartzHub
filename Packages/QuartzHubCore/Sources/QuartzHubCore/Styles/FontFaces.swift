@@ -113,6 +113,18 @@ enum NodePath {
     return JSText.split(trimmed, "/").last ?? trimmed
   }
 
+  /// `path.dirname` for POSIX: everything before the last segment, "/" for the root, "." for none.
+  static func dirname(_ path: String) -> String {
+    guard !path.isEmpty else { return "." }
+    var trimmed = path
+    while JSText.length(trimmed) > 1 && JSText.endsWith(trimmed, "/") { trimmed = JSText.slice(trimmed, 0, JSText.length(trimmed) - 1) }
+    guard let slash = (trimmed as NSString).range(of: "/", options: [.literal, .backwards]).location as Int?, slash != NSNotFound else { return "." }
+    if slash == 0 { return "/" }
+    var head = JSText.slice(trimmed, 0, slash)
+    while JSText.length(head) > 1 && JSText.endsWith(head, "/") { head = JSText.slice(head, 0, JSText.length(head) - 1) }
+    return head
+  }
+
   /// `path.extname`: from the last dot of the basename, unless that dot leads it.
   static func extname(_ path: String) -> String {
     let base = basename(path)
