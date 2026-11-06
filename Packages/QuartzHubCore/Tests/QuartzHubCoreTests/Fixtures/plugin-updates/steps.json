@@ -126,6 +126,18 @@
      ]
     },
     {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "tag",
+      "-a",
+      "rel/v2",
+      "-m",
+      "v2",
+      "dev"
+     ]
+    },
+    {
      "do": "mkdir",
      "path": "p"
     }
@@ -246,7 +258,7 @@
     {
      "do": "write",
      "path": "p/quartz.lock.json",
-     "text": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"local\": {\n      \"source\": \"./x\",\n      \"commit\": \"local\",\n      \"resolved\": \"@W@/plugin\"\n    },\n    \"unresolved\": {\n      \"source\": \"github:a/b\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"emptyResolved\": {\n      \"resolved\": \"\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"current\": {\n      \"resolved\": \"@W@/plugin\",\n      \"commit\": \"cc3cbf776e14c0a0b687607ce49a96929457f5c1\"\n    },\n    \"behind\": {\n      \"resolved\": \"@W@/plugin\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"noCommit\": {\n      \"resolved\": \"@W@/plugin\"\n    },\n    \"branch\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"dev\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"branchBehind\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"main\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"lightTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"light\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"annotatedTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"v1\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"branchAndTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"both\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"tailMatch\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"x\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"missingRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"nope\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"emptyRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"\",\n      \"commit\": \"cc3cbf776e14c0a0b687607ce49a96929457f5c1\"\n    },\n    \"unreachable\": {\n      \"resolved\": \"@W@/nothing-here\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"dashed\": {\n      \"resolved\": \"--upload-pack=touch @W@/pwned\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"dashedRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"--upload-pack=touch @W@/pwned\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"string\": \"just a string\",\n    \"number\": 3\n  }\n}\n"
+     "text": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"local\": {\n      \"source\": \"./x\",\n      \"commit\": \"local\",\n      \"resolved\": \"@W@/plugin\"\n    },\n    \"unresolved\": {\n      \"source\": \"github:a/b\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"emptyResolved\": {\n      \"resolved\": \"\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"current\": {\n      \"resolved\": \"@W@/plugin\",\n      \"commit\": \"cc3cbf776e14c0a0b687607ce49a96929457f5c1\"\n    },\n    \"behind\": {\n      \"resolved\": \"@W@/plugin\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"noCommit\": {\n      \"resolved\": \"@W@/plugin\"\n    },\n    \"branch\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"dev\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"branchBehind\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"main\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"lightTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"light\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"annotatedTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"v1\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"annotatedTagBehind\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"v1\",\n      \"commit\": \"cc3cbf776e14c0a0b687607ce49a96929457f5c1\"\n    },\n    \"annotatedTailMatch\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"v2\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"branchAndTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"both\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"tailMatch\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"x\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"missingRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"nope\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"emptyRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"\",\n      \"commit\": \"cc3cbf776e14c0a0b687607ce49a96929457f5c1\"\n    },\n    \"unreachable\": {\n      \"resolved\": \"@W@/nothing-here\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"dashed\": {\n      \"resolved\": \"--upload-pack=touch @W@/pwned\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"dashedRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"--upload-pack=touch @W@/pwned\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"string\": \"just a string\",\n    \"number\": 3\n  }\n}\n"
     }
    ],
    "op": "status",
@@ -303,6 +315,18 @@
      "name": "annotatedTag",
      "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
      "latestCommit": "35c987504a00cca4a607771b4e85a2a8655994cf",
+     "state": "behind"
+    },
+    {
+     "name": "annotatedTagBehind",
+     "installedCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "latestCommit": "35c987504a00cca4a607771b4e85a2a8655994cf",
+     "state": "behind"
+    },
+    {
+     "name": "annotatedTailMatch",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "a6a63bc9cd2be16b6301879225a6338e84bd637e",
      "state": "behind"
     },
     {

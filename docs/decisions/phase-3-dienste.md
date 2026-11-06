@@ -1504,13 +1504,22 @@ wie QuartzControl:
 - **Abweichungen:** Ein Eintrag `null` war ein TypeError, der die ganze Liste scheitern ließ; hier
   ist er lokal. Ein gescheiterter Snapshot antwortet wie bei `PluginCommands`. Die Installation
   bekommt deren Frist fürs Netz.
-- **Befund, übernommen wie gemessen:** Ein annotiertes Tag antwortet mit seinem Tag-Objekt, nicht
-  mit dem Commit. `ls-remote` mit einem Muster liefert `refs/tags/v1^{}` nie (das Muster vergleicht
-  das Ende), also greift QuartzControls Zweig dafür nicht, und ein Plugin auf einem annotierten Tag
-  heißt für immer „veraltet“. Zu entscheiden: hier beheben (Abweichung) oder so lassen.
-- **Gegenproben:** 16, davon 15 gefangen; die übrige ist dieser tote Zweig.
+- **Abweichung (Befund, behoben am 2026-11-06 auf Wunsch des Nutzers):** Ein annotiertes Tag
+  antwortete in QuartzControl mit seinem Tag-Objekt, nicht mit dem Commit, den Quartz ins Lockfile
+  schreibt (`git rev-parse HEAD` nach dem Auschecken, `plugin-git-handlers.js`). `ls-remote` mit
+  einem Muster liefert `refs/tags/v1^{}` nicht (das Muster vergleicht das Ende des Namens), also
+  griff QuartzControls Zweig dafür nie, und ein Plugin auf einem annotierten Tag hieß für immer
+  „veraltet“. QuartzHub fragt `v1^{}` als zweites Muster mit; gemessen mit git 2.54 über
+  Protokoll 0, 1 und 2 (`file://`), nicht gegen GitHub. Die aufgelöste Zeile eines Namens steht für
+  ihn, beim Zweig, beim Tag und beim ersten Treffer. Quartz' eigenes `plugin check` fragt nur
+  `refs/heads/<ref>` und kennt Tags gar nicht. Das Golden hat jetzt drei Fälle (aktuell, älter,
+  Treffer nur übers Ende); der Test setzt dort den Commit des Tags ein.
+- **Gegenproben:** 16, davon 15 gefangen; die übrige ist der tote Zweig von QuartzControl. Für den
+  Fix 5, davon 4 gefangen; die übrige (die erste Zeile ausdrücklich als nicht aufgelöst wählen) ist
+  gleichwertig, weil git eine aufgelöste Zeile direkt nach ihrem Namen listet.
 
 ### Punkt 7 fertig
 
-Offen bleiben, je einzeln zu fragen: der Push zu GitHub mit Token, ein echtes Core-Update gegen
-jackyzha0/quartz mit echtem npm. Danach der Durchgang zu NFD (siehe Snapshot-Speicher).
+Offen bleiben, je einzeln zu fragen (vom Nutzer auf später gelegt): der Push zu GitHub mit Token,
+ein echtes Core-Update gegen jackyzha0/quartz mit echtem npm. Stash-Name und Merge-Betreff bleiben
+QuartzControls Wortlaut (Nutzer, 2026-11-06). Danach der Durchgang zu NFD (siehe Snapshot-Speicher).

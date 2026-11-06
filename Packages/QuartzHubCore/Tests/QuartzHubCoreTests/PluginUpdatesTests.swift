@@ -48,6 +48,10 @@ import Testing
         if name == "nothing ran from a dashed source" { result = .bool(Posix.exists("\(work)/pwned")) }
       }
       var expected = step["result"] ?? .null
+      if step["op"] == .string("status"), let entries = expected.arrayValue {
+        let commits = try await Self.tagCommits(golden.path("plugin"), golden.environment)
+        expected = .array(entries.map { Self.peeled($0, commits) })
+      }
       if step["error"] != nil {
         // QuartzControl failed the whole list over a null entry; here it is local.
         #expect(name == "an entry that is null", "\(name): \(String(describing: step["error"]))")
@@ -62,6 +66,28 @@ import Testing
       #expect(npx.replacingOccurrences(of: work, with: "@W@") == step["npx"]!.stringValue!, "\(name): npx")
       #expect(JSONValue.array(calls.snapshots.withLock { $0 }.map { .array($0.map(JSONValue.string)) }) == step["snapshots"], "\(name): snapshots")
     }
+  }
+
+  /// The one deviation in the answers: QuartzControl named an annotated tag's own object, which
+  /// no lockfile holds; here it is the tag's commit, and the state follows from it.
+  static func tagCommits(_ plugin: String, _ environment: ToolEnvironment) async throws -> [String: String] {
+    let command = environment.command("git", ["for-each-ref", "--format=%(objectname) %(*objectname)", "refs/tags"],
+                                      in: URL(fileURLWithPath: plugin))
+    let result = await ProcessRunner.run(command)
+    try #require(result.success)
+    var commits: [String: String] = [:]
+    for line in result.stdout.split(separator: "\n") {
+      let fields = line.split(separator: " ").map(String.init)
+      if fields.count == 2 { commits[fields[0]] = fields[1] }
+    }
+    try #require(commits.count == 2, "the two annotated tags")
+    return commits
+  }
+
+  static func peeled(_ entry: JSONValue, _ commits: [String: String]) -> JSONValue {
+    guard let latest = entry["latestCommit"]?.stringValue, let commit = commits[latest] else { return entry }
+    return entry.setting("latestCommit", .string(commit))
+      .setting("state", .string(entry["installedCommit"] == .string(commit) ? "upToDate" : "behind"))
   }
 
   /// Four at a time, in the lockfile's order.

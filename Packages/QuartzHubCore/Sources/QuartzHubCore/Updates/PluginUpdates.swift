@@ -7,8 +7,13 @@ import Foundation
 /// - **`git ls-remote -- <source> <ref>`**, with "--": the source comes from the lockfile, and a
 ///   leading dash is an option to git (`--upload-pack=<cmd>` runs the command). 20 s each, four at
 ///   a time, because the Updates tab asks on opening, unprompted; a timeout is "unknown".
-/// - **A pinned ref may be a branch or a tag**: a branch wins, then the tag (as ls-remote lists
-///   it: an annotated tag's own object comes before its `^{}`), then whatever matched first.
+/// - **A pinned ref may be a branch or a tag**: a branch wins, then the tag, then whatever matched
+///   first.
+/// - **Deviation: an annotated tag answers with its commit**, the one Quartz writes into the
+///   lockfile (`git rev-parse HEAD` after the checkout). QuartzControl compared the tag object, so
+///   such a plugin read as behind forever: a pattern matches the end of a name, and the peeled line
+///   is named `refs/tags/v1^{}`, so `v1` alone never lists it. Asked for as a second pattern
+///   (`v1^{}`), it is there over protocols 0, 1 and 2; it wins over the tag object of its name.
 /// - **Deviation:** an entry that is no object (null) or whose source or ref is no text failed the
 ///   whole list in QuartzControl (a TypeError, a spawn error); here that entry is local or unknown
 ///   and the others answer. A lockfile that is `null` reads as no plugins.
@@ -79,10 +84,11 @@ public enum PluginUpdates {
   }
 
   static func lsRemoteRef(_ core: CoreUpdate, _ url: String, _ ref: String) async -> String? {
-    let rows = await core.lsRemote(url, ref)
-    let branch = rows.first { $0.ref == "refs/heads/\(ref)" }
-    let tag = rows.first { $0.ref == "refs/tags/\(ref)" || $0.ref == "refs/tags/\(ref)^{}" }
-    return (branch ?? tag ?? rows.first)?.commit
+    let rows = await core.lsRemote(url, ref, "\(ref)^{}")
+    // A name's peeled line, when it has one, stands for it. git lists a peeled line right after its
+    // own name, so the first line is never one.
+    func commit(_ name: String) -> String? { (rows.first { $0.ref == "\(name)^{}" } ?? rows.first { $0.ref == name })?.commit }
+    return commit("refs/heads/\(ref)") ?? commit("refs/tags/\(ref)") ?? rows.first.flatMap { commit($0.ref) }
   }
 
   /// `quartz plugin install --latest [name]`, after a `pluginChange` snapshot; a failed snapshot

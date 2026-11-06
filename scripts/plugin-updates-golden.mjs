@@ -82,6 +82,7 @@ const repo = [
   g('plugin', ['tag', 'both']), g('plugin', ['branch', 'both']),
   write('plugin/index.js', '2\n'), g('plugin', ['commit', '-q', '-am', 'two']), g('plugin', ['branch', '-f', 'both']),
   g('plugin', ['branch', 'feature/x']), g('plugin', ['branch', 'other/x', 'dev']),
+  g('plugin', ['tag', '-a', 'rel/v2', '-m', 'v2', 'dev']),
   { do: 'mkdir', path: 'p' }
 ]
 await step('the plugin repository', repo, 'none')
@@ -107,6 +108,8 @@ await step('every kind of entry', [lock({
   branchBehind: { resolved: R, ref: 'main', commit: one },
   lightTag: { resolved: R, ref: 'light', commit: one },
   annotatedTag: { resolved: R, ref: 'v1', commit: one },
+  annotatedTagBehind: { resolved: R, ref: 'v1', commit: two },
+  annotatedTailMatch: { resolved: R, ref: 'v2', commit: one },
   branchAndTag: { resolved: R, ref: 'both', commit: one },
   tailMatch: { resolved: R, ref: 'x', commit: one },
   missingRef: { resolved: R, ref: 'nope', commit: one },

@@ -119,10 +119,10 @@ public final class CoreUpdate: Sendable {
     return pending(Status(currentCommit: installed.commit, latestCommit: latest, state: .behind, missingCommits: installed.missing))
   }
 
-  /// `git ls-remote -- <url> <ref>`: the "--" keeps a source from a lockfile from being read as an
-  /// option (`--upload-pack=<cmd>` runs the command).
-  func lsRemote(_ url: String, _ ref: String) async -> [(commit: String, ref: String)] {
-    let result = await git(nil, ["ls-remote", "--", url, ref], timeout: deadlines.lsRemote)
+  /// `git ls-remote -- <url> <pattern>…`: the "--" keeps a source from a lockfile from being read
+  /// as an option (`--upload-pack=<cmd>` runs the command).
+  func lsRemote(_ url: String, _ patterns: String...) async -> [(commit: String, ref: String)] {
+    let result = await git(nil, ["ls-remote", "--", url] + patterns, timeout: deadlines.lsRemote)
     guard result.success else { return [] }
     return JSText.split(result.stdout, "\n").map(JS.trim).filter { JSText.includes($0, "\t") }.map { line in
       let parts = JSText.split(line, "\t")
