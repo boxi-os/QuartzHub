@@ -52,8 +52,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
-- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins}-golden.mjs` — dasselbe für
-  `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies` und `PluginCommands`
+- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace}-golden.mjs` — dasselbe für
+  `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies`, `PluginCommands` und `Marketplace`
 - `Runtime/node/bin/node scripts/option-schema-golden.mjs [QuartzControl] [gui-test]` — Plugin-Namen,
   Normalisierer und Leser des Options-Schemas aus QuartzControls Code; liest gui-tests Plugins (nur lesend)
   und kopiert ihre package.json und `.d.ts` nach `Fixtures/option-schema/real`
@@ -99,7 +99,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   (`ConfigFile` über `yaml-edit`), dazu aus Punkt 2 `ProjectPaths` und Duplizieren, alle drei gegen
   QuartzControls eigenen Code gemessen (`scripts/*-golden.mjs`), dazu `ProjectDependencies` und
   `PluginCommands`, dann das Options-Schema (`PluginSource`, `OptionSchema`, `PluginSchemaReader`,
-  `qh-check option-schema`). Als Nächstes `marketplaceService`.
+  `qh-check option-schema`). Zuletzt der Marktplatz (`Marketplace`). Punkt 3 ist fertig; als Nächstes Punkt 4,
+  Build und Server.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

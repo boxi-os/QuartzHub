@@ -1,0 +1,1514 @@
+[
+  {
+    "name": "list-ok-then-cached",
+    "token": "ghp_token",
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "[{\"name\":\"explorer\",\"full_name\":\"quartz-community/explorer\",\"description\":\"The explorer plugin.\",\"stargazers_count\":41,\"html_url\":\"https://github.com/quartz-community/explorer\",\"topics\":[\"quartz-plugin\"],\"archived\":false},{\"name\":\"v5\",\"full_name\":\"quartz-community/v5\",\"description\":null,\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/v5\",\"topics\":[],\"archived\":true},{\"name\":\"types\",\"full_name\":\"quartz-community/types\",\"description\":\"The types plugin.\",\"stargazers_count\":0,\"html_url\":\"https://github.com/quartz-community/types\"},{\"name\":\"bare\",\"full_name\":\"quartz-community/bare\",\"html_url\":\"https://github.com/quartz-community/bare\"},{\"name\":\"ümlaut\",\"full_name\":\"quartz-community/ümlaut\",\"description\":\"Mit „Anführungszeichen“ und 🎉\",\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/ümlaut\",\"topics\":[\"quartz-plugin\"],\"archived\":false}]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": "Bearer ghp_token",
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "list",
+        "at": 840000,
+        "expected": {
+          "requests": [],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "list",
+        "at": 900000,
+        "expected": {
+          "requests": [],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "list",
+        "at": 900001,
+        "answers": [
+          {
+            "status": 200,
+            "body": "[{\"name\":\"explorer\",\"full_name\":\"quartz-community/explorer\",\"description\":\"The explorer plugin.\",\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/explorer\",\"topics\":[\"quartz-plugin\"],\"archived\":false}]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": "Bearer ghp_token",
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-empty",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "[]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-rate-limited-not-cached",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 403,
+            "body": "{\"message\":\"API rate limit exceeded\"}"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      },
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "[{\"name\":\"explorer\",\"full_name\":\"quartz-community/explorer\",\"description\":\"The explorer plugin.\",\"stargazers_count\":41,\"html_url\":\"https://github.com/quartz-community/explorer\",\"topics\":[\"quartz-plugin\"],\"archived\":false},{\"name\":\"v5\",\"full_name\":\"quartz-community/v5\",\"description\":null,\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/v5\",\"topics\":[],\"archived\":true},{\"name\":\"types\",\"full_name\":\"quartz-community/types\",\"description\":\"The types plugin.\",\"stargazers_count\":0,\"html_url\":\"https://github.com/quartz-community/types\"},{\"name\":\"bare\",\"full_name\":\"quartz-community/bare\",\"html_url\":\"https://github.com/quartz-community/bare\"},{\"name\":\"ümlaut\",\"full_name\":\"quartz-community/ümlaut\",\"description\":\"Mit „Anführungszeichen“ und 🎉\",\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/ümlaut\",\"topics\":[\"quartz-plugin\"],\"archived\":false}]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "list",
+        "expected": {
+          "requests": [],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-server-error",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 502,
+            "body": "Bad Gateway"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-no-network",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "fails": true
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-not-json",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "<html>"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-not-an-array",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "{\"message\":\"Moved\"}"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-no-content",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 204
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-token-unreadable",
+    "token": "throws",
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "[{\"name\":\"explorer\",\"full_name\":\"quartz-community/explorer\",\"description\":\"The explorer plugin.\",\"stargazers_count\":41,\"html_url\":\"https://github.com/quartz-community/explorer\",\"topics\":[\"quartz-plugin\"],\"archived\":false},{\"name\":\"v5\",\"full_name\":\"quartz-community/v5\",\"description\":null,\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/v5\",\"topics\":[],\"archived\":true},{\"name\":\"types\",\"full_name\":\"quartz-community/types\",\"description\":\"The types plugin.\",\"stargazers_count\":0,\"html_url\":\"https://github.com/quartz-community/types\"},{\"name\":\"bare\",\"full_name\":\"quartz-community/bare\",\"html_url\":\"https://github.com/quartz-community/bare\"},{\"name\":\"ümlaut\",\"full_name\":\"quartz-community/ümlaut\",\"description\":\"Mit „Anführungszeichen“ und 🎉\",\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/ümlaut\",\"topics\":[\"quartz-plugin\"],\"archived\":false}]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "list-coalesced",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "parallel": 2,
+        "answers": [
+          {
+            "status": 200,
+            "body": "[{\"name\":\"explorer\",\"full_name\":\"quartz-community/explorer\",\"description\":\"The explorer plugin.\",\"stargazers_count\":41,\"html_url\":\"https://github.com/quartz-community/explorer\",\"topics\":[\"quartz-plugin\"],\"archived\":false},{\"name\":\"v5\",\"full_name\":\"quartz-community/v5\",\"description\":null,\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/v5\",\"topics\":[],\"archived\":true},{\"name\":\"types\",\"full_name\":\"quartz-community/types\",\"description\":\"The types plugin.\",\"stargazers_count\":0,\"html_url\":\"https://github.com/quartz-community/types\"},{\"name\":\"bare\",\"full_name\":\"quartz-community/bare\",\"html_url\":\"https://github.com/quartz-community/bare\"},{\"name\":\"ümlaut\",\"full_name\":\"quartz-community/ümlaut\",\"description\":\"Mit „Anführungszeichen“ und 🎉\",\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/ümlaut\",\"topics\":[\"quartz-plugin\"],\"archived\":false}]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            },
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "refresh-refetches-both",
+    "token": null,
+    "steps": [
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "[{\"name\":\"explorer\",\"full_name\":\"quartz-community/explorer\",\"description\":\"The explorer plugin.\",\"stargazers_count\":41,\"html_url\":\"https://github.com/quartz-community/explorer\",\"topics\":[\"quartz-plugin\"],\"archived\":false},{\"name\":\"v5\",\"full_name\":\"quartz-community/v5\",\"description\":null,\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/v5\",\"topics\":[],\"archived\":true},{\"name\":\"types\",\"full_name\":\"quartz-community/types\",\"description\":\"The types plugin.\",\"stargazers_count\":0,\"html_url\":\"https://github.com/quartz-community/types\"},{\"name\":\"bare\",\"full_name\":\"quartz-community/bare\",\"html_url\":\"https://github.com/quartz-community/bare\"},{\"name\":\"ümlaut\",\"full_name\":\"quartz-community/ümlaut\",\"description\":\"Mit „Anführungszeichen“ und 🎉\",\"stargazers_count\":3,\"html_url\":\"https://github.com/quartz-community/ümlaut\",\"topics\":[\"quartz-plugin\"],\"archived\":false}]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "The explorer plugin.",
+                  "stars": 41,
+                  "url": "https://github.com/quartz-community/explorer",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                },
+                {
+                  "name": "v5",
+                  "fullName": "quartz-community/v5",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/v5",
+                  "topics": [],
+                  "archived": true
+                },
+                {
+                  "name": "types",
+                  "fullName": "quartz-community/types",
+                  "description": "The types plugin.",
+                  "stars": 0,
+                  "url": "https://github.com/quartz-community/types"
+                },
+                {
+                  "name": "bare",
+                  "fullName": "quartz-community/bare",
+                  "url": "https://github.com/quartz-community/bare"
+                },
+                {
+                  "name": "ümlaut",
+                  "fullName": "quartz-community/ümlaut",
+                  "description": "Mit „Anführungszeichen“ und 🎉",
+                  "stars": 3,
+                  "url": "https://github.com/quartz-community/ümlaut",
+                  "topics": [
+                    "quartz-plugin"
+                  ],
+                  "archived": false
+                }
+              ],
+              "unavailable": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/explorer",
+        "answers": [
+          {
+            "status": 200,
+            "body": "# Explorer\n"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/explorer/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": "# Explorer\n",
+              "truncated": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "refresh",
+        "expected": {
+          "requests": [],
+          "results": [
+            null
+          ]
+        }
+      },
+      {
+        "op": "list",
+        "answers": [
+          {
+            "status": 200,
+            "body": "[]"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/orgs/quartz-community/repos?per_page=100",
+              "accept": "application/vnd.github+json",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "plugins": [
+                {
+                  "name": "explorer",
+                  "fullName": "quartz-community/explorer",
+                  "description": "Enhanced file explorer for Quartz.",
+                  "url": "https://github.com/quartz-community/explorer"
+                }
+              ],
+              "unavailable": true
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/explorer",
+        "answers": [
+          {
+            "status": 404,
+            "body": "{}"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/explorer/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "missing"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-ok-cached",
+    "token": "ghp_token",
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "quartz-community/explorer",
+        "answers": [
+          {
+            "status": 200,
+            "body": "# Explorer\n\nÄpfel 🎉\n"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/explorer/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": "Bearer ghp_token",
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": "# Explorer\n\nÄpfel 🎉\n",
+              "truncated": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/explorer",
+        "at": 900000,
+        "expected": {
+          "requests": [],
+          "results": [
+            {
+              "status": "ok",
+              "text": "# Explorer\n\nÄpfel 🎉\n",
+              "truncated": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/explorer",
+        "at": 900001,
+        "answers": [
+          {
+            "status": 200,
+            "body": "neu"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/explorer/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": "Bearer ghp_token",
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": "neu",
+              "truncated": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/other",
+        "at": 900001,
+        "answers": [
+          {
+            "status": 200,
+            "body": "other"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/other/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": "Bearer ghp_token",
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": "other",
+              "truncated": false
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-missing-cached",
+    "token": null,
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "quartz-community/none",
+        "answers": [
+          {
+            "status": 404,
+            "body": "{\"message\":\"Not Found\"}"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/none/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "missing"
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/none",
+        "expected": {
+          "requests": [],
+          "results": [
+            {
+              "status": "missing"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-unavailable-not-cached",
+    "token": null,
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "quartz-community/x",
+        "answers": [
+          {
+            "status": 403,
+            "body": "rate"
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/x/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "unavailable"
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/x",
+        "answers": [
+          {
+            "fails": true
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/x/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "unavailable"
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/x",
+        "answers": [
+          {
+            "status": 500,
+            "body": ""
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/x/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "unavailable"
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/x",
+        "answers": [
+          {
+            "status": 204
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/x/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "unavailable"
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/x",
+        "answers": [
+          {
+            "status": 200,
+            "body": ""
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/quartz-community/x/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": "",
+              "truncated": false
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "quartz-community/x",
+        "expected": {
+          "requests": [],
+          "results": [
+            {
+              "status": "ok",
+              "text": "",
+              "truncated": false
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-exactly-the-cap",
+    "token": null,
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "a/b",
+        "answers": [
+          {
+            "status": 200,
+            "body": {
+              "fill": 262144
+            }
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/a/b/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": {
+                "length": 262144,
+                "sha256": "d509bff642a353f88582e8a846ecae041c333b79c57a7a24ff310fbdb7e914e9",
+                "head": "xxxxxxxxxxxxxxxxxxxx",
+                "tail": "xxxxxxxxxxxxxxxxxxxx"
+              },
+              "truncated": false
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-one-over-the-cap",
+    "token": null,
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "a/b",
+        "answers": [
+          {
+            "status": 200,
+            "body": {
+              "fill": 262145
+            }
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/a/b/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": {
+                "length": 262144,
+                "sha256": "d509bff642a353f88582e8a846ecae041c333b79c57a7a24ff310fbdb7e914e9",
+                "head": "xxxxxxxxxxxxxxxxxxxx",
+                "tail": "xxxxxxxxxxxxxxxxxxxx"
+              },
+              "truncated": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-far-over-the-cap",
+    "token": null,
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "a/b",
+        "answers": [
+          {
+            "status": 200,
+            "body": {
+              "fill": 786432
+            }
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/a/b/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": {
+                "length": 262144,
+                "sha256": "d509bff642a353f88582e8a846ecae041c333b79c57a7a24ff310fbdb7e914e9",
+                "head": "xxxxxxxxxxxxxxxxxxxx",
+                "tail": "xxxxxxxxxxxxxxxxxxxx"
+              },
+              "truncated": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-cap-splits-a-character",
+    "token": null,
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "a/b",
+        "answers": [
+          {
+            "status": 200,
+            "body": {
+              "fill": 262143,
+              "after": "äää"
+            }
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/a/b/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": {
+                "length": 262144,
+                "sha256": "e25601224a38ca708b6cf7a7b1776312388a8d0cb8ad79a7c05d563ad0b246d9",
+                "head": "xxxxxxxxxxxxxxxxxxxx",
+                "tail": "xxxxxxxxxxxxxxxxxxx�"
+              },
+              "truncated": true
+            }
+          ]
+        }
+      },
+      {
+        "op": "readme",
+        "fullName": "a/c",
+        "answers": [
+          {
+            "status": 200,
+            "body": {
+              "fill": 262142,
+              "after": "🎉🎉"
+            }
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/a/c/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": {
+                "length": 262143,
+                "sha256": "dc53caaa7a42e8e476cd2a6053dc603df00d551c61b54f2856f1a332b61cc5fc",
+                "head": "xxxxxxxxxxxxxxxxxxxx",
+                "tail": "xxxxxxxxxxxxxxxxxxx�"
+              },
+              "truncated": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "readme-invalid-utf8",
+    "token": null,
+    "steps": [
+      {
+        "op": "readme",
+        "fullName": "a/b",
+        "answers": [
+          {
+            "status": 200,
+            "body": {
+              "fill": 3,
+              "bytes": [
+                255,
+                65,
+                240,
+                159,
+                65,
+                228,
+                184,
+                192,
+                128,
+                237,
+                160,
+                128
+              ],
+              "after": "z"
+            }
+          }
+        ],
+        "expected": {
+          "requests": [
+            {
+              "url": "https://api.github.com/repos/a/b/readme",
+              "accept": "application/vnd.github.raw",
+              "authorization": null,
+              "deadline": true
+            }
+          ],
+          "results": [
+            {
+              "status": "ok",
+              "text": "xxx�A�A������z",
+              "truncated": false
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

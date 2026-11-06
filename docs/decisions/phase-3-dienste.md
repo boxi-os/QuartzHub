@@ -507,3 +507,41 @@ geladen, nicht nachgebaut, die Config wie im Skript als ganzer YAML-Wert gelesen
 - Gegenproben: `enabled` als „wahr“ statt „nicht falsch“, ohne Falsches-Interface-Satz, ohne
   Zählung kaputter package.json, Spaltenbreite, kein Unterschied Text/Feld: jede lässt den Test
   scheitern.
+
+### Marktplatz (`marketplaceService.ts` → `Marketplace`)
+
+Die Repositories der Organisation quartz-community und ihre READMEs, über die GitHub-API. Ein
+Actor: Katalog 15 Minuten gehalten, ein fehlgeschlagener Abruf nie; wer während eines Abrufs
+fragt, bekommt dessen Antwort; README als Rohtext mit Obergrenze 256 KiB, „hat keine“ (404) und
+„GitHub antwortet nicht“ getrennt. Der Token kommt über eine Funktion, die vor jeder Anfrage
+gefragt wird (bis `connectionsService` portiert ist, ohne Token: anonym).
+
+- **Gemessen gegen QuartzControls Code:** `scripts/marketplace-golden.mjs` lädt
+  `marketplaceService.ts` mit nachgestelltem `fetch`, `Date.now` und `getGithubToken` und
+  zeichnet 19 Szenarien auf (Anfragen samt `Accept`/`Authorization`, Antworten): Katalog gut,
+  leer, 403, 502, kein Netz, kein JSON, kein Array, 204, Token unlesbar, zwei Aufrufe zugleich,
+  Grenze der 15 Minuten (900 000 ms noch gehalten, 900 001 nicht), „neu laden“ leert beide
+  Caches; README gut, 404 gehalten, 403/kein Netz/500/204 nicht gehalten, leerer Text gehalten,
+  genau an der Grenze (nicht abgeschnitten), ein Byte darüber, weit darüber, Grenze mitten in „ä“
+  und „🎉“, ungültiges UTF-8. `MarketplaceTests` liefert dieselben Antworten über ein
+  `URLProtocol` aus, in Stücken zu 1000 Bytes wie das Skript. Gleich in jedem Schritt, auch die
+  U+FFFD an den Schnittstellen (Swifts `String(decoding:)` ersetzt wie `Buffer.toString`). Dazu
+  32 Namen gegen QuartzControls zod-Regel für `owner/repo` (`marketplaceReadmeArgs`).
+- **Gegen die echte API** (`QH_NETWORK_TESTS=1 swift test --filter theRealCatalog`, drei anonyme
+  GET): 63 Repositories, 47 mit `quartz-plugin`, eines archiviert, wie QuartzControls Messung;
+  README von explorer 2396 Bytes; ein Repository, das es nicht gibt, ist „hat keine“.
+- **Frist:** `timeoutIntervalForResource` ist die ganze Anfrage samt Body, wie
+  `AbortSignal.timeout` in QuartzControl. Ein eigenes Rennen mit `Task.sleep` war daneben
+  überflüssig: Ohne es endete ein Kopf, der nie kam, und ein Body, der mittendrin stehen blieb,
+  trotzdem an der Frist (gemessen mit 0,3 s, je etwa 0,4 bis 0,8 s), also ist es raus.
+- **Abweichungen:** Der Katalog folgt `Link: rel="next"`, höchstens zehn Seiten zu hundert und
+  nur auf derselben Origin (der Token reist mit). QuartzControl las nur die ersten hundert und
+  hätte den Rest stumm verloren; ein Fehler auf einer weiteren Seite ist ein fehlgeschlagener
+  Katalog. Ein Eintrag ohne Name, vollen Namen oder Adresse wird weggelassen, statt mit Lücken
+  gelistet; bleibt keiner, ist der Katalog „nicht verfügbar“. Ein unzulässiger Name fragt nie an
+  und ist „nicht verfügbar“ (in QuartzControl wies zod den Kanal ab).
+- Gegenproben (14, jede lässt einen Test scheitern): Grenze der 15 Minuten mit `<`, README-Grenze
+  um eins verschoben, 404 nicht gehalten, „nicht verfügbar“ gehalten, kein Zusammenlegen
+  gleichzeitiger Abrufe, ohne Token-Kopf, `_` im Besitzer erlaubt, „neu laden“ ohne READMEs,
+  strenges UTF-8, keine Folgeseiten, Folgeseite auf fremdem Host, falscher `Accept`, 204 mit Body,
+  404 als „nicht verfügbar“; dazu die Frist: ohne die Grenzen der Sitzung scheitert der Test.

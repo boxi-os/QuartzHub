@@ -1,0 +1,130 @@
+[
+  {
+    "name": "quartz-community/explorer",
+    "accepted": true
+  },
+  {
+    "name": "a/b",
+    "accepted": true
+  },
+  {
+    "name": "A-1/b.c_d-e",
+    "accepted": true
+  },
+  {
+    "name": "-a/b",
+    "accepted": true
+  },
+  {
+    "name": "a-/b",
+    "accepted": true
+  },
+  {
+    "name": "a/b.",
+    "accepted": true
+  },
+  {
+    "name": "a/.git",
+    "accepted": true
+  },
+  {
+    "name": "a/.",
+    "accepted": false
+  },
+  {
+    "name": "a/..",
+    "accepted": false
+  },
+  {
+    "name": "a/..b",
+    "accepted": false
+  },
+  {
+    "name": "a/b..",
+    "accepted": false
+  },
+  {
+    "name": "../b",
+    "accepted": false
+  },
+  {
+    "name": "a/b/c",
+    "accepted": false
+  },
+  {
+    "name": "a",
+    "accepted": false
+  },
+  {
+    "name": "a/",
+    "accepted": false
+  },
+  {
+    "name": "/b",
+    "accepted": false
+  },
+  {
+    "name": "",
+    "accepted": false
+  },
+  {
+    "name": "a b/c",
+    "accepted": false
+  },
+  {
+    "name": "a/b c",
+    "accepted": false
+  },
+  {
+    "name": "a_b/c",
+    "accepted": false
+  },
+  {
+    "name": "a.b/c",
+    "accepted": false
+  },
+  {
+    "name": "ä/b",
+    "accepted": false
+  },
+  {
+    "name": "a/ä",
+    "accepted": false
+  },
+  {
+    "name": "a/b\n",
+    "accepted": false
+  },
+  {
+    "name": "\na/b",
+    "accepted": false
+  },
+  {
+    "name": "a/b\u0000",
+    "accepted": false
+  },
+  {
+    "name": "a/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "accepted": true
+  },
+  {
+    "name": "a/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "accepted": false
+  },
+  {
+    "name": "a/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "accepted": false
+  },
+  {
+    "name": "a//b",
+    "accepted": false
+  },
+  {
+    "name": "a/b%2F..",
+    "accepted": false
+  },
+  {
+    "name": "a/.b",
+    "accepted": true
+  }
+]
