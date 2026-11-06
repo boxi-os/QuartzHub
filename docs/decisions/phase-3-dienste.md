@@ -302,3 +302,24 @@ ein `layout` trägt, `lineWidth` 120. Swift macht, was darum liegt: Datei, Sperr
   Sonderfälle; ohne `ownFramePath` der Frame-Test.
 - **Noch nicht:** der Snapshot vor dem Speichern (`configChange`) kommt mit dem Snapshot-Store
   (Punkt 7). Bis dahin schreibt nichts in der App die Config.
+
+### Pfade umbiegen (`projectPaths.ts` → `ProjectPaths`)
+
+`repointProjectPaths(from:to:)` nach Duplizieren und Verschieben, `repointAuthoredFrames` nach einem
+Restore, beim Hinzufügen und an der Bau-Tür. Dieselben drei Orte wie in QuartzControl: `source` der
+Plugin-Einträge (über `ConfigFile`, Lesen und Schreiben unter der Config-Sperre), `source`/`resolved`
+in `quartz.lock.json` (im Format der CLI mit Zeilenende am Schluss) und die Links unter
+`.quartz/plugins/`, gegen ihren eigenen Ordner aufgelöst.
+
+- **Gemessen gegen QuartzControls Code.** `scripts/paths-golden.mjs` lädt `projectPaths.ts` über
+  dasselbe Bündel wie `config-golden.mjs` (`scripts/lib/qc-bundle.mjs`, `readLockfile` als dritte
+  Attrappe) und lässt es fünf Bäume bearbeiten: eine Kopie mit Frame, lokalem Plugin, Pfaden
+  außerhalb, `..x`, einem Link relativ zurück ins Original und einem toten Link; Frames nur
+  teilweise vorhanden; ohne Config; kaputtes Lockfile; Lockfile mit Liste statt Objekt.
+  `ProjectPathsTests` kommt in allen fünf auf dieselben Bytes und Link-Ziele.
+- Übernommen, wie es ist: Ein Kind namens `..x` gilt als außerhalb (Nodes
+  `relative(...).startsWith('..')`); ein Pfad wird mit `/./` und `../` normalisiert und ohne
+  Schrägstrich am Ende geschrieben; eine kaputte Config beendet den Lauf, bevor Lockfile und Links
+  drankommen.
+- Gegenproben: `..x` als innen, Links gegen den Projektordner statt ihren eigenen, das Lockfile
+  ohne Zeilenende, die Liste im Lockfile übergangen: jede lässt einen Fall scheitern.

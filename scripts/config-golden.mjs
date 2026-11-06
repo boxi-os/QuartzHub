@@ -13,12 +13,11 @@
 //
 // Inputs: the configs of gui-test and Example with the home folder masked, and small files for
 // the edges. Only these two projects are read (never the real profile, never hinterland-history).
-import { build } from '../Helpers/node_modules/esbuild/lib/main.js'
+import { loadQuartzControl } from './lib/qc-bundle.mjs'
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createRequire } from 'node:module'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const control = resolve(process.argv[2] ?? join(here, '..', '..', 'QuartzControl'))
@@ -26,26 +25,7 @@ const projects = resolve(process.argv[3] ?? join(homedir(), 'Documents', 'Quartz
 const out = join(here, '..', 'Packages', 'QuartzHubCore', 'Tests', 'QuartzHubCoreTests', 'Fixtures', 'config')
 
 const work = mkdtempSync(join(tmpdir(), 'qh-config-golden-'))
-const bundle = join(work, 'configService.cjs')
-await build({
-  entryPoints: [join(control, 'electron/main/services/configService.ts')],
-  bundle: true, platform: 'node', format: 'cjs', outfile: bundle, logLevel: 'warning',
-  absWorkingDir: control,
-  plugins: [{
-    name: 'stand-ins',
-    setup(b) {
-      b.onResolve({ filter: /^\.\/snapshotService$/ }, () => ({ path: 'snapshot', namespace: 'stub' }))
-      b.onResolve({ filter: /^\.\.\/i18n$/ }, () => ({ path: 'i18n', namespace: 'stub' }))
-      b.onLoad({ filter: /^snapshot$/, namespace: 'stub' }, () => ({
-        contents: 'export async function createSnapshot() { throw new Error("no snapshots here") }', loader: 'js'
-      }))
-      b.onLoad({ filter: /^i18n$/, namespace: 'stub' }, () => ({
-        contents: 'export function mainT(key, args) { return JSON.stringify({ key, args: args ?? {} }) }', loader: 'js'
-      }))
-    }
-  }]
-})
-const { readConfig, writeConfig } = createRequire(import.meta.url)(bundle)
+const { readConfig, writeConfig } = await loadQuartzControl(control, 'electron/main/services/configService.ts')
 
 const masked = (name) =>
   readFileSync(join(projects, name, 'quartz.config.yaml'), 'utf-8').replaceAll(homedir(), '/Users/example')

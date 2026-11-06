@@ -49,6 +49,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
+- `Runtime/node/bin/node scripts/paths-golden.mjs` — dasselbe für `ProjectPaths` aus `projectPaths.ts`
 - `node scripts/import-strings.mjs <QuartzControl> [--check]` — der einmalige Textimport
   (2026-11-06). Seitdem ist der Katalog die Quelle; `--check` weicht ab, sobald ein neuer Text dazukam
 

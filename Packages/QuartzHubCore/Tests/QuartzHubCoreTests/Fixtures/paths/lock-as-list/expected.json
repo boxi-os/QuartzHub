@@ -1,0 +1,5 @@
+{
+  "config": "configuration:\n  pageTitle: Pfade\nplugins:\n",
+  "lock": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": [\n    {\n      \"source\": \"@B@/p\"\n    },\n    7\n  ]\n}\n",
+  "links": {}
+}

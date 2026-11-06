@@ -1,0 +1,19 @@
+{
+  "run": "repointProjectPaths",
+  "dirs": [
+    ".quartz-gui/authored-frames/frame-a",
+    "plugins-local/p",
+    "content"
+  ],
+  "files": {
+    "quartz.config.yaml": "configuration:\n  pageTitle: Pfade\nplugins:\n  - source: @A@/.quartz-gui/authored-frames/frame-a\n    enabled: true\n  - source: @A@/plugins-local/p\n    enabled: true\n  - source: @A@\n    enabled: true\n  - source: @A@/./plugins-local/../plugins-local/p/\n    enabled: true\n  - source: /Users/else/plugin\n    enabled: true\n  - source: @A@x/sibling\n    enabled: true\n  - source: @A@/..x/odd\n    enabled: true\n  - source: ./relative\n    enabled: true\n  - source: github:quartz-community/explorer\n    enabled: true\n  - source:\n      repo: \"@A@/as-object\"\n    enabled: true\n",
+    "quartz.lock.json": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"frame-a\": {\n      \"source\": \"@A@/.quartz-gui/authored-frames/frame-a\",\n      \"resolved\": \"@A@/.quartz-gui/authored-frames/frame-a\",\n      \"commit\": \"local\"\n    },\n    \"p\": {\n      \"source\": \"@A@/plugins-local/p\",\n      \"resolved\": \"/Users/else/resolved\",\n      \"commit\": \"x\"\n    },\n    \"remote\": {\n      \"source\": \"github:quartz-community/explorer\",\n      \"resolved\": \"https://github.com/quartz-community/explorer.git\"\n    },\n    \"broken\": \"not an object\"\n  }\n}\n"
+  },
+  "links": {
+    ".quartz/plugins/frame-a": "@A@/.quartz-gui/authored-frames/frame-a",
+    ".quartz/plugins/p": "../../plugins-local/p",
+    ".quartz/plugins/up": "../../../Original/plugins-local/p",
+    ".quartz/plugins/gone": "@A@/plugins-local/gone",
+    ".quartz/plugins/outside": "/usr/lib"
+  }
+}

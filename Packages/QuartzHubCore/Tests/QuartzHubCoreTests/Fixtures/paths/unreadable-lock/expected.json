@@ -1,0 +1,5 @@
+{
+  "config": "configuration:\n  pageTitle: Pfade\nplugins:\n  - source: @B@/p\n    enabled: true\n",
+  "lock": "{ \"plugins\": ",
+  "links": {}
+}

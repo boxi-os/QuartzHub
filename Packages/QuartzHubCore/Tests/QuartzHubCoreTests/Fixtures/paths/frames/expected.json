@@ -1,0 +1,8 @@
+{
+  "config": "configuration:\n  pageTitle: Pfade\nplugins:\n  - source: @B@/.quartz-gui/authored-frames/frame-a\n    enabled: true\n  - source: @A@/.quartz-gui/authored-frames/frame-b\n    enabled: true\n  - source: @A@/plugins-local/p\n    enabled: true\n",
+  "lock": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"frame-a\": {\n      \"source\": \"@B@/.quartz-gui/authored-frames/frame-a\",\n      \"resolved\": \"@B@/.quartz-gui/authored-frames/frame-a\"\n    }\n  }\n}\n",
+  "links": {
+    "frame-a": "@B@/.quartz-gui/authored-frames/frame-a",
+    "frame-b": "@A@/.quartz-gui/authored-frames/frame-b"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "config": null,
+  "lock": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"p\": {\n      \"source\": \"@A@/p\"\n    }\n  }\n}\n",
+  "links": {
+    "p": "@A@/p"
+  }
+}

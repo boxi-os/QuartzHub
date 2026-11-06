@@ -1,0 +1,14 @@
+{
+  "run": "repointAuthoredFrames",
+  "dirs": [
+    ".quartz-gui/authored-frames/frame-a"
+  ],
+  "files": {
+    "quartz.config.yaml": "configuration:\n  pageTitle: Pfade\nplugins:\n  - source: @A@/.quartz-gui/authored-frames/frame-a\n    enabled: true\n  - source: @A@/.quartz-gui/authored-frames/frame-b\n    enabled: true\n  - source: @A@/plugins-local/p\n    enabled: true\n",
+    "quartz.lock.json": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"frame-a\": {\n      \"source\": \"@A@/.quartz-gui/authored-frames/frame-a\",\n      \"resolved\": \"@A@/.quartz-gui/authored-frames/frame-a\"\n    }\n  }\n}\n"
+  },
+  "links": {
+    ".quartz/plugins/frame-a": "@A@/.quartz-gui/authored-frames/frame-a",
+    ".quartz/plugins/frame-b": "@A@/.quartz-gui/authored-frames/frame-b"
+  }
+}

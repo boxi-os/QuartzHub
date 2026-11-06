@@ -1,0 +1,9 @@
+{
+  "run": "repointProjectPaths",
+  "dirs": [],
+  "files": {
+    "quartz.config.yaml": "configuration:\n  pageTitle: Pfade\nplugins:\n",
+    "quartz.lock.json": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": [\n    {\n      \"source\": \"@A@/p\"\n    },\n    7\n  ]\n}\n"
+  },
+  "links": {}
+}
