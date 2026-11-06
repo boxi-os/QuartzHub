@@ -171,6 +171,32 @@ public enum ProcessRunner {
     return .success(LaunchedProcess(pid: pid))
   }
 
+  /// Starts a process the caller talks to while it runs (`ssh -s sftp`, `SFTPChannel`): its
+  /// stdin, stdout and stderr are pipes, and the caller gets their other ends (stdin's to write,
+  /// the other two to read; all close-on-exec) and closes them. Its own process group, as with
+  /// `run`; `input` and `timeout` of the command are not used.
+  public static func launchPiped(_ command: Command)
+    -> Result<(process: LaunchedProcess, stdin: Int32, stdout: Int32, stderr: Int32), CommandResult.StartFailure> {
+    let path: String
+    switch preflight(command) {
+    case .success(let found): path = found
+    case .failure(let failure): return .failure(failure)
+    }
+    let input = Pipe(), output = Pipe(), errors = Pipe()
+    var pid: pid_t = 0
+    let status = spawnChild(command, path: path, stdin: input.read, stdout: output.write, stderr: errors.write, pid: &pid)
+    input.closeRead()
+    output.closeWrite()
+    errors.closeWrite()
+    guard status == 0 else {
+      input.closeBoth()
+      output.closeBoth()
+      errors.closeBoth()
+      return .failure(startFailure(status))
+    }
+    return .success((LaunchedProcess(pid: pid), input.write, output.read, errors.read))
+  }
+
   /// "Not there" before anything is spawned: the executable in the child's PATH, the directory.
   static func preflight(_ command: Command) -> Result<String, CommandResult.StartFailure> {
     guard let path = resolve(command.executable, path: command.environment["PATH"]) else { return .failure(.notFound) }

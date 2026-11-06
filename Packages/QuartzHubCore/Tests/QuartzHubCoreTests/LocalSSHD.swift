@@ -77,7 +77,14 @@ final class LocalSSHD: @unchecked Sendable {
 
       """
     try Posix.write("\(root)/sshd_config", Data(settings.utf8))
-    switch ProcessRunner.launch(Command("/usr/sbin/sshd", ["-D", "-f", "\(root)/sshd_config", "-E", "\(root)/sshd.log"], environment: ["PATH": "/usr/bin:/bin"])) {
+    // A shell beside it ends the server when the test process is gone: a test that crashed before
+    // `deinit` left sshd running (seen after counter-checks that abort).
+    let watch = """
+      /usr/sbin/sshd -D -f '\(root)/sshd_config' -E '\(root)/sshd.log' & s=$!
+      while kill -0 \(getpid()) 2>/dev/null && kill -0 $s 2>/dev/null; do sleep 1; done
+      kill $s 2>/dev/null
+      """
+    switch ProcessRunner.launch(Command("/bin/sh", ["-c", watch], environment: ["PATH": "/usr/bin:/bin"])) {
     case .success(let launched): process = launched
     case .failure(let failure): throw PublishFailure("sshd: \(failure)")
     }
