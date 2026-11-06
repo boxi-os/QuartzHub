@@ -131,3 +131,33 @@ QuartzControls schluckende `catch` nicht.
   Test hing beim fehlenden Wiedereintritt, statt zu scheitern: Eine Task-Gruppe wartet am Ende auf
   jedes Kind, auch auf das hängende; die Frist lässt es jetzt zurück.
 - Die dritte Schlange je Projekt (Snapshot-Store, `snapshotService.serialize`) kommt mit dem Dienst.
+
+### Zeitstempel wie `toISOString()` (`JS.isoString`)
+
+Was QuartzControl als Zeit in eine Datei schreibt (`addedAt`, `lastOpenedAt`, der Name einer
+beiseitegelegten Datei), ist `new Date().toISOString()`: UTC, immer drei Stellen Millisekunden.
+`Date.ISO8601FormatStyle(includingFractionalSeconds: true)` sieht gleich aus und ist es nicht,
+gemessen gegen Node 24: Es schneidet die Gleitkommazahl ab, statt zu runden, aus
+`1793000000.123` wurde `.122`, aus `-0.001` `.998` (Node: `.123`, `.999`). Ein JavaScript-Datum ist
+eine ganze Zahl Millisekunden, also rundet `JS.isoString` zuerst darauf und setzt die Stellen selbst
+an. Der Test hält fünf Werte gegen Nodes Ausgabe; mit der alten Fassung scheitern zwei.
+
+### Projektliste (`projectStore.ts` → `ProjectStore`)
+
+`projects.json` im Profil von QuartzHub, in QuartzControls Form (`ProjectEntry`: `id`, `name`,
+`path`, `addedAt`, später `lastOpenedAt`), Schlüssel, die es nicht kennt, bleiben stehen, auch ein
+Eintrag, der kein Objekt ist. Die Kennung bleibt beim Umziehen (`relocate`), denn Server, Reiter
+und Relay-Geheimnisse hängen an ihr.
+
+- **Ein Schreiber nach dem anderen.** Jede Änderung liest, ändert und schreibt die ganze Datei. In
+  QuartzControl konnten sich zwei davon zwischen ihren `await` verschränken, hier laufen sie unter
+  einem `Mutex` nacheinander. Gegenprobe: ohne ihn kamen von 64 gleichzeitig hinzugefügten Ordnern
+  in drei von drei Läufen nicht alle in der Datei an.
+- **Ein Ordner, eine Zeile, auch in der anderen Unicode-Form.** Swifts `==` vergleicht nach
+  kanonischer Äquivalenz, also sind „Gärten“ mit vorkomponiertem und mit zerlegtem „ä“ ein Pfad,
+  so wie APFS sie als einen Namen nimmt. QuartzControls `===` verglich Code-Einheiten. Groß- und
+  Kleinschreibung zählt weiter, wie dort.
+- Geschrieben wird nur, was sich ändert: ein `touch` oder `remove` mit unbekannter Kennung lässt die
+  Datei, wie sie ist (QuartzControls `removeProject` schrieb dieselben Bytes neu).
+- Was beim Hinzufügen und Umziehen sonst passiert (Frames umbiegen, Server stoppen,
+  Relay-Geheimnisse löschen), gehört den Diensten, die es tun, und kommt mit ihnen.
