@@ -2,9 +2,10 @@
 # call in $QH_FAKE_DIR/calls.log, prints what Quartz prints, and with --serve answers HTTP on P and
 # holds W. $QH_FAKE_DIR/mode may say: "die" (exit 2 after the banner), "noline" (no "Started a
 # Quartz server" line), "noline-nows" (neither the line nor the websocket port), "slow" (first build
-# takes a second). With $QH_FAKE_DIR/hold present it waits
+# takes a second), "stubborn" (ignores SIGTERM). With $QH_FAKE_DIR/hold present it waits
 # before building.
 import os
+import signal
 import socket
 import sys
 import threading
@@ -22,6 +23,8 @@ def say(text, stream=sys.stdout):
     stream.flush()
 
 
+if mode == "stubborn":
+    signal.signal(signal.SIGTERM, signal.SIG_IGN)
 say("Quartz v5.0.0")
 while os.path.exists(os.path.join(here, "hold")):
     time.sleep(0.02)

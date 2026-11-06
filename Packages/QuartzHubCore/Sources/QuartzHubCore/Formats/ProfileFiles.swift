@@ -51,7 +51,10 @@ public struct SettingsFile: JSONView {
     }
   }
   public var nodeRuntime: NodeRuntime { string("nodeRuntime").flatMap(NodeRuntime.init) ?? .embedded }
-  public var serversOnQuit: ServersOnQuit { string("serversOnQuit").flatMap(ServersOnQuit.init) ?? .ask }
+  public var serversOnQuit: ServersOnQuit {
+    get { string("serversOnQuit").flatMap(ServersOnQuit.init) ?? .ask }
+    set { set("serversOnQuit", newValue.rawValue) }
+  }
   /// Fields from before the first release (2026-08-27) that QuartzControl migrates into
   /// connections.json; QuartzHub does not take them over and says so.
   public var hasLegacyGithubToken: Bool { object["githubToken"] != nil || object["githubTokenEncrypted"] != nil }

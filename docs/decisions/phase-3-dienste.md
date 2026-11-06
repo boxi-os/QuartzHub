@@ -759,3 +759,21 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
   Seitenport fallen. Zwei davon (Abbruch-Check, WebSocket-Port) fing anfangs kein Test; der Test
   der Absage zählt jetzt die Vorbereitung, ein neuer Test lässt die Seite auf den erbetenen
   WebSocket-Port rücken.
+
+### Beenden und verwaiste Server (`killAllServers`, `detectOrphanedServers` → `BuildService.stopAllServers`, `OrphanedServers`)
+
+- **Beim Beenden** (wenn die Antwort „Server beenden“ ist): jeder wartende Start wird abgesagt,
+  jeder Server gestoppt (SIGTERM an die Gruppe, SIGKILL nach 2 s), insgesamt höchstens 3 s. Ein
+  Stopp, der nicht antwortet, hält die App nicht fest; was überlebt, bleibt in
+  `running-servers.json` und ist die Frage beim nächsten Start. Gemessen mit einem Server, der
+  SIGTERM ignoriert: zurück nach rund 0,5 s (Frist im Test), der Server lebt, sein Eintrag bleibt.
+- **Beim Start:** verwaiste Server sind die eingetragenen, deren PID lebt und noch ein
+  Quartz-Server ist; die Datei wird dabei geleert, gleich was geantwortet wird (wer „Weiterlaufen
+  lassen“ sagt, wird nicht noch einmal gefragt). „Beenden“ fragt die PID unmittelbar vor dem Signal
+  noch einmal und schickt SIGTERM an die Prozessgruppe (QuartzHub startet jeden Server als deren
+  Kopf; QuartzControl lief `tree-kill`). Gemessen: ein nachgestellter Server wird gefunden, ein
+  `sleep` unter einer eingetragenen PID und eine PID, die es nicht gibt, nicht; nach dem Leeren ist
+  die zweite Abfrage leer; mit „PID hat inzwischen gewechselt“ geht kein Signal hinaus.
+- `SettingsFile.serversOnQuit` ist jetzt auch schreibbar (für „Nicht mehr fragen“).
+- Gegenproben (5, jede lässt einen Test scheitern): Datei nicht geleert, jede eingetragene PID
+  zählt, kein zweiter Blick vor dem Signal, keine Frist beim Beenden, wartende Starts laufen weiter.

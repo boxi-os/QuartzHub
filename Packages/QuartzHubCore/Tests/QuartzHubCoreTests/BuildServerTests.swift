@@ -8,6 +8,7 @@ import Testing
 /// a Python process that answers HTTP and holds the websocket port), and once against the real
 /// Quartz on a copy of gui-test (`QH_QUARTZ_TESTS=1`).
 @Suite struct BuildServerTests {
+  // Also the base of QuitAndOrphansTests.
   static let fake = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/fake-quartz-server.py")
   let scratch: HostPathTests.Scratch
   var project: URL { scratch.url.appendingPathComponent("Projekt") }

@@ -1,4 +1,5 @@
 import Foundation
+import Synchronization
 
 /// Builds and dev servers of all projects (QuartzControl's `buildService.ts`). One per app: it
 /// holds what runs, so every page asks it instead of keeping its own idea of "building".
@@ -365,9 +366,40 @@ public actor BuildService {
     }
   }
 
+  /// At quit: every waiting start called off, every server stopped, at most `deadline` in all (a
+  /// stop that never answers must not keep the app from quitting). What survives stays in
+  /// `running-servers.json` and is the next start's orphan question. `grace` is shorter than the
+  /// deadline, so SIGKILL lands before it.
+  public func stopAllServers(grace: Duration = .seconds(2), deadline: Duration = .seconds(3)) async {
+    for (projectId, pending) in pendingStarts {
+      pending.aborted = true
+      pendingStarts[projectId] = nil
+      emitStatus(projectId)
+    }
+    let ids = Array(servers.keys)
+    guard !ids.isEmpty else { return }
+    let work = Task {
+      await withTaskGroup(of: Void.self) { group in
+        for id in ids { group.addTask { await self.stopServer(id, grace: grace) } }
+      }
+    }
+    await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+      let once = Mutex(false)
+      let finish: @Sendable () -> Void = {
+        if once.withLock({ done in defer { done = true }; return !done }) { continuation.resume() }
+      }
+      Task { await work.value; finish() }
+      Task { try? await Task.sleep(for: deadline); finish() }
+    }
+  }
+
   /// Stops the server: the wait of a start that has no process yet, or the process group (SIGTERM,
   /// SIGKILL to what is left after `stopGrace`). Answers when its end has been noted.
   public func stopServer(_ projectId: String) async {
+    await stopServer(projectId, grace: stopGrace)
+  }
+
+  private func stopServer(_ projectId: String, grace: Duration) async {
     if let pending = pendingStarts[projectId] {
       pending.aborted = true
       pendingStarts[projectId] = nil
@@ -377,7 +409,7 @@ public actor BuildService {
     guard let server = servers[projectId] else { return }
     server.status.state = .stopping
     emitStatus(projectId)
-    _ = await server.process.stop(grace: stopGrace)
+    _ = await server.process.stop(grace: grace)
     await server.watcher?.value
   }
 
