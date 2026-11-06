@@ -2,10 +2,12 @@
 //
 //   node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]
 //   node scripts/strings.mjs add <schlüssel> --de-one "…" --de-other "…" --en-one "…" --en-other "…"
+//   node scripts/strings.mjs set <schlüssel> --de "…" --en "…"   (ändert einen vorhandenen Text,
+//     der Kommentar bleibt, wenn keiner angegeben ist; Muster beim Umstellen auf „QuartzHub“)
 //   node scripts/strings.mjs show <schlüssel>
 //
-// Ein Schlüssel, den es schon gibt, wird nicht überschrieben (Abbruch); geändert wird in Xcode
-// oder von Hand. Regeln für den Wortlaut: docs/conventions.md, „Ein Wort, ein Name“.
+// `add` überschreibt keinen Schlüssel, den es schon gibt (Abbruch), `set` ändert nur einen
+// vorhandenen; sonst wird in Xcode oder von Hand geändert. Regeln für den Wortlaut: docs/conventions.md, „Ein Wort, ein Name“.
 import { readFileSync, writeFileSync } from 'fs'
 import { dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
@@ -21,15 +23,16 @@ const fail = (message) => {
   console.error(message)
   process.exit(2)
 }
-if (!command || !key) fail('Aufruf: node scripts/strings.mjs add|show <schlüssel> …')
+if (!command || !key) fail('Aufruf: node scripts/strings.mjs add|set|show <schlüssel> …')
 
 const catalog = JSON.parse(readFileSync(file, 'utf-8'))
 if (command === 'show') {
   console.log(JSON.stringify(catalog.strings[key] ?? null, null, 2))
   process.exit(0)
 }
-if (command !== 'add') fail(`unbekannter Befehl ${command}`)
-if (catalog.strings[key]) fail(`${key} gibt es schon`)
+if (command !== 'add' && command !== 'set') fail(`unbekannter Befehl ${command}`)
+if (command === 'add' && catalog.strings[key]) fail(`${key} gibt es schon`)
+if (command === 'set' && !catalog.strings[key]) fail(`${key} gibt es nicht`)
 
 const unit = (value) => ({ stringUnit: { state: 'translated', value } })
 const localizations = {}
@@ -41,8 +44,8 @@ for (const lang of ['de', 'en']) {
   else if (one !== undefined && other !== undefined) localizations[lang] = { variations: { plural: { one: unit(one), other: unit(other) } } }
   else fail(`${lang}: --${lang} oder --${lang}-one und --${lang}-other angeben`)
 }
-const comment = opt('comment')
+const comment = opt('comment') ?? (command === 'set' ? catalog.strings[key].comment : undefined)
 catalog.strings[key] = { ...(comment ? { comment } : {}), localizations }
 catalog.strings = Object.fromEntries(Object.keys(catalog.strings).sort().map((k) => [k, catalog.strings[k]]))
 writeFileSync(file, JSON.stringify(catalog, null, 2).replace(/^(\s*"(?:[^"\\]|\\.)*"):/gm, '$1 :') + '\n')
-console.log(`${key} eingetragen`)
+console.log(`${key} ${command === 'set' ? 'geändert' : 'eingetragen'}`)

@@ -26264,13 +26264,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Arbeitsverzeichnis von QuartzControl (Backups, Presets, Deploy-Manifest)"
+            "value" : "Arbeitsverzeichnis von QuartzHub (Backups, Presets, Deploy-Manifest)"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl working directory (backups, presets, deploy manifest)"
+            "value" : "QuartzHub working directory (backups, presets, deploy manifest)"
           }
         }
       }

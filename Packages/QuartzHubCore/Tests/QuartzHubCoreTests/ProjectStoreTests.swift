@@ -3,10 +3,13 @@ import Testing
 @testable import QuartzHubCore
 
 @Suite struct ProjectStoreTests {
-  static func store() throws -> (ProjectStore, HostPathTests.Scratch) {
-    let scratch = try HostPathTests.Scratch()
-    // A profile folder that does not exist yet: the first write creates it.
-    return (ProjectStore(profile: ProfileDirectory(scratch.url.appendingPathComponent("Profile"))), scratch)
+  /// One per test, held by the suite instance Swift Testing makes for it.
+  let scratch: HostPathTests.Scratch
+  init() throws { scratch = try HostPathTests.Scratch() }
+
+  /// A profile folder that does not exist yet: the first write creates it.
+  func store() -> ProjectStore {
+    ProjectStore(profile: ProfileDirectory(scratch.url.appendingPathComponent("Profile")))
   }
 
   static func file(_ store: ProjectStore) throws -> [JSONValue] {
@@ -14,7 +17,7 @@ import Testing
   }
 
   @Test func addWritesQuartzControlsFormAndOnlyOnce() throws {
-    let (store, _) = try Self.store()
+    let store = store()
     #expect(store.list().isEmpty)
     #expect(!FileManager.default.fileExists(atPath: store.profile.url.path), "reading created the profile")
 
@@ -31,7 +34,7 @@ import Testing
   }
 
   @Test func onePathInEitherUnicodeFormButCaseCounts() throws {
-    let (store, _) = try Self.store()
+    let store = store()
     let composed = try store.add(path: "/Users/x/G\u{e4}rten")
     // As NSOpenPanel or a drag from Finder may hand it over: a + combining diaeresis.
     let decomposed = try store.add(path: "/Users/x/Ga\u{308}rten")
@@ -45,7 +48,7 @@ import Testing
   }
 
   @Test func relocateKeepsTheIdAndWhatItDoesNotKnow() throws {
-    let (store, _) = try Self.store()
+    let store = store()
     // A file as QuartzControl leaves it, with a key a later version might add and a stray entry.
     try FileManager.default.createDirectory(at: store.profile.url, withIntermediateDirectories: true)
     try Data("""
@@ -86,7 +89,7 @@ import Testing
   }
 
   @Test func touchAndRemove() throws {
-    let (store, _) = try Self.store()
+    let store = store()
     try store.touch(id: "nobody")
     #expect(!FileManager.default.fileExists(atPath: store.profile.projects.path), "an unknown id wrote the file")
 
@@ -100,7 +103,7 @@ import Testing
   }
 
   @Test func concurrentChangesAllLand() async throws {
-    let (store, _) = try Self.store()
+    let store = store()
     await withTaskGroup(of: Void.self) { group in
       for index in 0..<64 {
         group.addTask { _ = try? store.add(path: "/p/\(index)") }
@@ -110,7 +113,7 @@ import Testing
   }
 
   @Test func anUnreadableFileIsMovedAsideNotOverwritten() throws {
-    let (store, _) = try Self.store()
+    let store = store()
     try FileManager.default.createDirectory(at: store.profile.url, withIntermediateDirectories: true)
     try Data("[{\"id\": ".utf8).write(to: store.profile.projects)
     #expect(store.list().isEmpty)
