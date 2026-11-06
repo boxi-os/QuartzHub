@@ -67,6 +67,23 @@ public enum JSONStore {
     }
   }
 
+  /// Reads without moving anything aside: for a file that belongs to someone else, such as
+  /// QuartzControl's profile during the takeover. Unreadable is reported, never fixed.
+  public static func peek(_ url: URL) -> ReadResult {
+    let data: Data
+    do {
+      data = try Data(contentsOf: url)
+    } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
+      return .missing
+    } catch {
+      return .unreadable(quarantinedAs: nil)
+    }
+    guard let value = try? JSJSON.parse(data), value.objectValue != nil || value.arrayValue != nil else {
+      return .unreadable(quarantinedAs: nil)
+    }
+    return .ok(value)
+  }
+
   /// The common case, `readJsonFileOr`: one shape, one empty default. A file of the other shape
   /// (a list where an object belongs) is as broken as unparseable JSON and is moved aside too.
   public static func read(_ url: URL, orEmpty shape: Shape) -> JSONValue {

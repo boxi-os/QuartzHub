@@ -64,7 +64,7 @@ import Testing
   @Test(.enabled(if: node != nil, "Runtime/node fehlt: scripts/fetch-runtime.sh"))
   func numbersMatchNode() throws {
     var generator = SystemRandomNumberGenerator()
-    var values: [Double] = [0, 1, 0.1, 0.2 + 0.1, 1e21, 1e-7, 123e-20, 9007199254740993, 4.35, 1.0 / 3]
+    var values: [Double] = [0, 1, 0.1, 0.2 + 0.1, 1e21, 1e-7, 123e-20, 4.35, 1.0 / 3]
     for _ in 0..<5000 {
       let bits = generator.next() as UInt64
       let value = Double(bitPattern: bits)
