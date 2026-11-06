@@ -69,6 +69,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Laufzeit, Paket, UI-Test, mit allem, was beim ersten Bau anders war als gedacht
 - [`phase-2-formate.md`](docs/decisions/phase-2-formate.md) — JSON wie Node, Sichten statt
   Codable, Golden Files, Übernahme samt Messung gegen Electron und am echten Profil
+- [`phase-3-dienste.md`](docs/decisions/phase-3-dienste.md) — die Kern-Dienste, ein Abschnitt je
+  Dienst (Prozessstarter, …)
 
 ## Stand
 
