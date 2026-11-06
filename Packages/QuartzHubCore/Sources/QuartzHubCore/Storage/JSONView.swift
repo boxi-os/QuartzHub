@@ -54,6 +54,18 @@ public struct JSONList<Item: JSONView>: Equatable, Sendable {
 }
 
 enum JS {
+  /// `new Date().toISOString()`: "2026-11-06T12:34:56.789Z", always UTC, always milliseconds.
+  /// A JavaScript date is a whole number of milliseconds, so the date is rounded to one first.
+  /// `ISO8601FormatStyle` with fractional seconds truncates the double instead: 1793000000.123
+  /// came out as ".122", and -0.001 as ".998" (measured against Node 24).
+  static func isoString(_ date: Date) -> String {
+    let milliseconds = (date.timeIntervalSince1970 * 1000).rounded()
+    let seconds = (milliseconds / 1000).rounded(.down)
+    let fraction = Int(milliseconds - seconds * 1000)
+    let whole = Date(timeIntervalSince1970: seconds).formatted(Date.ISO8601FormatStyle(timeZone: .gmt))
+    return "\(whole.dropLast()).\(String(format: "%03d", fraction))Z"
+  }
+
   /// ECMAScript ToNumber for the values JSON can hold, as `Number(raw.x)` applies it. Arrays and
   /// objects give NaN here; JavaScript would turn `[]` into 0 and `[5]` into 5.
   static func toNumber(_ value: JSONValue?) -> Double {

@@ -146,7 +146,6 @@ public enum JSONStore {
 
   /// `new Date().toISOString().replace(/[:.]/g, '-')`: "2026-11-06T12-34-56-789Z".
   static func quarantineStamp(_ date: Date) -> String {
-    let style = Date.ISO8601FormatStyle(includingFractionalSeconds: true, timeZone: .gmt)
-    return date.formatted(style).replacingOccurrences(of: ":", with: "-").replacingOccurrences(of: ".", with: "-")
+    JS.isoString(date).replacingOccurrences(of: ":", with: "-").replacingOccurrences(of: ".", with: "-")
   }
 }

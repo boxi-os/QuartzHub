@@ -53,6 +53,18 @@ import Testing
     #expect(JSONStore.quarantineStamp(date) == "2026-11-06T12-34-56-789Z")
   }
 
+  /// What Node 24 prints for `new Date(ms).toISOString()` with these milliseconds.
+  @Test(arguments: [
+    (1_793_000_000_123.0, "2026-10-26T07:33:20.123Z"),
+    (1_793_000_000_999.0, "2026-10-26T07:33:20.999Z"),
+    (1_793_000_000_000.4, "2026-10-26T07:33:20.000Z"),
+    (500.0, "1970-01-01T00:00:00.500Z"),
+    (-1.0, "1969-12-31T23:59:59.999Z")
+  ])
+  func isoStringIsToISOString(milliseconds: Double, node: String) {
+    #expect(JS.isoString(Date(timeIntervalSince1970: milliseconds / 1000)) == node)
+  }
+
   @Test func unchangedValueRoundTripsByteForByte() throws {
     let url = dir.appendingPathComponent("project-prefs.json")
     let text = "{\n  \"z\": [\n    1,\n    {}\n  ],\n  \"10\": \"x\"\n}"
