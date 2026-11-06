@@ -1,0 +1,206 @@
+import Foundation
+
+/// Publishing by pushing the build to a branch of the project's own "origin" (`deploy/gitBranch.ts`):
+/// GitHub Pages (gh-pages), Codeberg Pages (pages) and GitLab (a CI job ships the files) differ in
+/// the branch's name and what the provider does with it, not in the push.
+///
+/// Every deploy publishes one root commit and replaces what the branch held: the branch carries
+/// only generated output, so a history of it costs size for nothing recoverable. Consequence by
+/// design: nothing may live on that branch that the build does not make (a CNAME has to come
+/// from the build or from GitHub's Pages settings). Built with plumbing (`write-tree`,
+/// `commit-tree` without a parent) in a detached worktree per target, pushed as a sha, so no local
+/// branch is left behind.
+///
+/// Machine answers (FETCH_HEAD, the tree, the commit) are read from stdout, the output shown is
+/// git's own as it came (the rule of points 7a and 7b; QuartzControl read both from one stream).
+public struct GitBranchAdapter: DeployAdapter {
+  let environment: ToolEnvironment
+  let token: GitAuth.Token
+  let now: @Sendable () -> Date
+
+  public init(environment: ToolEnvironment, token: @escaping GitAuth.Token, now: @escaping @Sendable () -> Date = { Date() }) {
+    self.environment = environment
+    self.token = token
+    self.now = now
+  }
+
+  struct GitError: Error, CustomStringConvertible {
+    let description: String
+  }
+
+  func git(_ arguments: [String], in directory: String, _ extra: [String: String] = [:]) async -> (CommandResult, String) {
+    let command = environment.command("git", arguments, in: directory).adding(extra)
+    let result = await ProcessRunner.run(command)
+    return (result, result.report(for: command))
+  }
+
+  /// Per target: two branch targets (live and staging) would fight over one registration. Inside
+  /// .quartz-gui/, which is made with its ignore line first, as QuartzControl's quartzGuiDir did.
+  static func worktree(_ context: DeployContext) throws -> String {
+    let dir = QuartzGuiDirectory(project: context.project)
+    try dir.create()
+    return dir.file("branch-worktree-\(context.target.id)")
+  }
+
+  struct Staged {
+    var tree: String
+    var remoteTip: String
+    var output: String
+  }
+
+  /// The branch fetched, the build staged, a tree written: what preview and run share.
+  func stage(_ context: DeployContext, branch: String, worktree: String, auth: GitAuth) async throws -> Staged {
+    var output = ""
+    // A worktree from an interrupted deploy is cleared first: `worktree add` refuses a path that
+    // is still registered.
+    _ = await git(["worktree", "prune"], in: context.project)
+    _ = await git(["worktree", "remove", "--force", worktree], in: context.project)
+    try? FileManager.default.removeItem(atPath: worktree)
+
+    // With the credential: a private repo would otherwise say "no such branch", and the deploy
+    // would push a first root commit over an existing branch without the lease.
+    let (fetch, _) = await git(["fetch", "origin", branch], in: context.project, auth.variables)
+    var remoteTip = ""
+    if fetch.success {
+      remoteTip = JS.trim((await git(["rev-parse", "FETCH_HEAD"], in: context.project)).0.stdout)
+    }
+
+    let (add, addText) = await git(["worktree", "add", "--detach", worktree], in: context.project)
+    output += addText
+    if !add.success { throw GitError(description: output) }
+
+    for entry in Posix.entries(worktree) ?? [] where entry.name != ".git" {
+      try? FileManager.default.removeItem(atPath: "\(worktree)/\(entry.name)")
+    }
+    try Posix.mkdirs(worktree)
+    for entry in Posix.entries(context.buildDir) ?? [] {
+      try TreeCopy.copy(from: "\(context.buildDir)/\(entry.name)", to: "\(worktree)/\(entry.name)", verbatimSymlinks: false)
+    }
+
+    // --force: whatever ignore rules there are (the worktree shares .git/info/exclude, and
+    // core.excludesFile is global) must not drop a file from the live site.
+    let (staged, stagedText) = await git(["add", "-A", "--force"], in: worktree)
+    output += stagedText
+    if !staged.success { throw GitError(description: output) }
+    let (tree, treeText) = await git(["write-tree"], in: worktree)
+    output += treeText
+    if !tree.success { throw GitError(description: output) }
+    return Staged(tree: JS.trim(tree.stdout), remoteTip: remoteTip, output: output)
+  }
+
+  func assertOrigin(_ project: String) async throws {
+    if !(await git(["remote", "get-url", "origin"], in: project)).0.success {
+      throw PublishFailure(L10n.t("main.branchNoOrigin"))
+    }
+  }
+
+  /// The branch is typed by hand and every deploy force-pushes over it: the checked-out branch and
+  /// origin's default are refused, a pages branch is never either.
+  func assertBranchSafe(_ project: String, _ branch: String) async throws {
+    let current = await git(["rev-parse", "--abbrev-ref", "HEAD"], in: project).0
+    let originHead = await git(["symbolic-ref", "--short", "refs/remotes/origin/HEAD"], in: project).0
+    var protected: [String] = []
+    if current.success { protected.append(JS.trim(current.stdout)) }
+    if originHead.success { protected.append(JSText.replaceAll(JS.trim(originHead.stdout), #"\Aorigin/"#, with: "")) }
+    if protected.contains(where: { Array($0.utf8) == Array(branch.utf8) }) {
+      throw PublishFailure(L10n.t("main.branchProtected", ["branch": branch]))
+    }
+  }
+
+  /// `-z` and `--no-renames`: without -z git quotes "ä.html", and a rename would be one line with
+  /// two paths.
+  static func parseNameStatus(_ raw: String) -> [DeployDiffEntry] {
+    var entries: [DeployDiffEntry] = []
+    let fields = JSText.split(raw, "\0")
+    var i = 0
+    while i + 1 < fields.count {
+      let code = fields[i], path = fields[i + 1]
+      i += 2
+      if code.isEmpty || path.isEmpty { continue }
+      if JSText.startsWith(code, "A") { entries.append(.init(path: path, status: .added)) }
+      else if JSText.startsWith(code, "D") { entries.append(.init(path: path, status: .removed)) }
+      else if JSText.startsWith(code, "M") || JSText.startsWith(code, "T") { entries.append(.init(path: path, status: .changed)) }
+    }
+    return entries
+  }
+
+  func branch(_ context: DeployContext) throws -> String {
+    guard context.destination["type"] == .string("git-branch") else { throw PublishFailure(L10n.t("main.deployWrongType", ["adapter": "Branch"])) }
+    return JS.string(context.destination["branch"])
+  }
+
+  /// A real diff against what is published: the branch fetched, the written tree compared with the
+  /// remote one. Costs a fetch, so it runs when asked.
+  public func preview(_ context: DeployContext) async throws -> [DeployDiffEntry] {
+    let branch = try branch(context)
+    try await assertOrigin(context.project)
+    try await assertBranchSafe(context.project, branch)
+    let worktree = try Self.worktree(context)
+    let auth = try await GitAuth.forOrigin(project: context.project, environment: environment, token: token)
+    defer { auth.cleanup() }
+    do {
+      let staged = try await stage(context, branch: branch, worktree: worktree, auth: auth)
+      if staged.remoteTip.isEmpty {
+        let (listing, text) = await git(["ls-tree", "-r", "--name-only", "-z", staged.tree], in: context.project)
+        if !listing.success { throw GitError(description: text) }
+        _ = await git(["worktree", "remove", "--force", worktree], in: context.project)
+        return JSText.split(listing.stdout, "\0").filter { !$0.isEmpty }.map { .init(path: $0, status: .added) }
+      }
+      let (diff, text) = await git(["diff", "--name-status", "-z", "--no-renames", "\(staged.remoteTip)^{tree}", staged.tree], in: context.project)
+      if !diff.success { throw GitError(description: text) }
+      var entries = Self.parseNameStatus(diff.stdout)
+      JS.sort(&entries) { JS.localeCompare($0.path, $1.path) }
+      _ = await git(["worktree", "remove", "--force", worktree], in: context.project)
+      return entries
+    } catch {
+      _ = await git(["worktree", "remove", "--force", worktree], in: context.project)
+      throw error
+    }
+  }
+
+  /// The exclusions are ignored on purpose: the branch is replaced by one root commit, so leaving
+  /// a file out would delete it from the live site.
+  public func run(_ context: DeployContext, excluding excludePaths: [String]) async throws -> DeployResult {
+    let branch = try branch(context)
+    try await assertOrigin(context.project)
+    try await assertBranchSafe(context.project, branch)
+    let worktree = try Self.worktree(context)
+    let auth = try await GitAuth.forOrigin(project: context.project, environment: environment, token: token)
+    defer { auth.cleanup() }
+    var output = ""
+    let result: DeployResult
+    do {
+      let staged = try await stage(context, branch: branch, worktree: worktree, auth: auth)
+      output += staged.output
+      // Equal trees are an exact "already published"; a new root commit would always be new.
+      if !staged.remoteTip.isEmpty {
+        let remoteTree = await git(["rev-parse", "\(staged.remoteTip)^{tree}"], in: context.project).0
+        if remoteTree.success && JS.trim(remoteTree.stdout) == staged.tree {
+          _ = await git(["worktree", "remove", "--force", worktree], in: context.project)
+          return DeployResult(success: true, output: "\(output)\n\(L10n.t("main.branchUnchanged"))")
+        }
+      }
+      context.progress(0, 1, branch)
+      let (commit, commitText) = await git(["commit-tree", staged.tree, "-m", "Deploy \(JS.isoString(now()))"], in: worktree)
+      output += commitText
+      if !commit.success {
+        result = DeployResult(success: false, output: output)
+      } else {
+        let sha = JS.trim(commit.stdout)
+        // A root commit never descends from the previous tip, so an existing branch needs force,
+        // leased to the tip fetched above.
+        let push = staged.remoteTip.isEmpty
+          ? ["push", "origin", "\(sha):refs/heads/\(branch)"]
+          : ["push", "--force-with-lease=refs/heads/\(branch):\(staged.remoteTip)", "origin", "\(sha):refs/heads/\(branch)"]
+        let (pushed, pushText) = await git(push, in: worktree, auth.variables)
+        output += pushText
+        context.progress(1, 1, branch)
+        result = DeployResult(success: pushed.success, output: output)
+      }
+    } catch {
+      result = DeployResult(success: false, output: "\(output)\n\(PublishFailure.message(of: error))")
+    }
+    _ = await git(["worktree", "remove", "--force", worktree], in: context.project)
+    return result
+  }
+}

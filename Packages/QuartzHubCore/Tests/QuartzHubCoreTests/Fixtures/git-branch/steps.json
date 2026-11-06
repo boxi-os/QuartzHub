@@ -1,0 +1,1103 @@
+{
+ "identity": {
+  "GIT_AUTHOR_NAME": "Jörg Prüfer",
+  "GIT_AUTHOR_EMAIL": "test@example.com",
+  "GIT_COMMITTER_NAME": "Jörg Prüfer",
+  "GIT_COMMITTER_EMAIL": "test@example.com",
+  "GIT_AUTHOR_DATE": "2026-11-06T10:00:00+01:00",
+  "GIT_COMMITTER_DATE": "2026-11-06T10:00:00+01:00"
+ },
+ "steps": [
+  {
+   "name": "preview of a new branch",
+   "op": "preview",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "git": [
+      "@W@",
+      [
+       "init",
+       "-q",
+       "--bare",
+       "-b",
+       "main",
+       "@W@/origin.git"
+      ]
+     ]
+    },
+    {
+     "write": [
+      "@W@/Gärten-Ü/README.md",
+      "Projekt\n"
+     ]
+    },
+    {
+     "git": [
+      "@W@",
+      [
+       "init",
+       "-q",
+       "-b",
+       "main",
+       "@W@/Gärten-Ü"
+      ]
+     ]
+    },
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "add",
+       "-A"
+      ]
+     ]
+    },
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "commit",
+       "-q",
+       "-m",
+       "Start"
+      ]
+     ]
+    },
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "remote",
+       "add",
+       "origin",
+       "@W@/origin.git"
+      ]
+     ]
+    },
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "push",
+       "-q",
+       "origin",
+       "main"
+      ]
+     ]
+    },
+    {
+     "write": [
+      "@W@/Gärten-Ü/.git/info/exclude",
+      "*.css\n"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/index.html",
+      "<h1>Start</h1>"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/ä.html",
+      "ä"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/sub/x.css",
+      "x{}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": [
+     {
+      "path": "index.html",
+      "status": "added"
+     },
+     {
+      "path": "sub/x.css",
+      "status": "added"
+     },
+     {
+      "path": "ä.html",
+      "status": "added"
+     }
+    ]
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\n",
+    "branches": {},
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "first deploy",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\n54a7c241caa8d795aa9f914884fdd3fe1c7f3757\ne35cda58c3590a4b630cf367578d5d183944a3fa\nTo @W@/origin.git\n * [new branch]      e35cda58c3590a4b630cf367578d5d183944a3fa -> gh-pages\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "gh-pages"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "gh-pages"
+    }
+   ],
+   "state": {
+    "refs": "refs/heads/gh-pages e35cda58c3590a4b630cf367578d5d183944a3fa\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "e35cda58c3590a4b630cf367578d5d183944a3fa",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tindex.html",
+       "100644 blob 1d223c981a257d7a14c7d2f8ebf06c5c24c0bc72\tsub/x.css",
+       "100644 blob 9d3f0460de61d6fec8d9ff9a0f06dcc9926e3b7e\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "unchanged",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\n54a7c241caa8d795aa9f914884fdd3fe1c7f3757\n\n{\"key\":\"branchUnchanged\",\"args\":{}}"
+    }
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/gh-pages e35cda58c3590a4b630cf367578d5d183944a3fa\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "e35cda58c3590a4b630cf367578d5d183944a3fa",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tindex.html",
+       "100644 blob 1d223c981a257d7a14c7d2f8ebf06c5c24c0bc72\tsub/x.css",
+       "100644 blob 9d3f0460de61d6fec8d9ff9a0f06dcc9926e3b7e\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "preview after a change and a move",
+   "op": "preview",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/ä.html",
+      "ä neu"
+     ]
+    },
+    {
+     "rm": "@W@/build/sub"
+    },
+    {
+     "write": [
+      "@W@/build/neu ö.html",
+      "n"
+     ]
+    },
+    {
+     "rm": "@W@/build/index.html"
+    },
+    {
+     "write": [
+      "@W@/build/start.html",
+      "<h1>Start</h1>"
+     ]
+    }
+   ],
+   "result": {
+    "ok": [
+     {
+      "path": "ä.html",
+      "status": "changed"
+     },
+     {
+      "path": "index.html",
+      "status": "removed"
+     },
+     {
+      "path": "neu ö.html",
+      "status": "added"
+     },
+     {
+      "path": "start.html",
+      "status": "added"
+     },
+     {
+      "path": "sub/x.css",
+      "status": "removed"
+     }
+    ]
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/gh-pages e35cda58c3590a4b630cf367578d5d183944a3fa\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "e35cda58c3590a4b630cf367578d5d183944a3fa",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tindex.html",
+       "100644 blob 1d223c981a257d7a14c7d2f8ebf06c5c24c0bc72\tsub/x.css",
+       "100644 blob 9d3f0460de61d6fec8d9ff9a0f06dcc9926e3b7e\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "deploy replaces the branch",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\n7577e7174fc7281623012a2da672ff26b79db718\nbe629ecf11a6d09f94668cc8feb2b808a063c548\nTo @W@/origin.git\n + e35cda5...be629ec be629ecf11a6d09f94668cc8feb2b808a063c548 -> gh-pages (forced update)\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "gh-pages"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "gh-pages"
+    }
+   ],
+   "state": {
+    "refs": "refs/heads/gh-pages be629ecf11a6d09f94668cc8feb2b808a063c548\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "be629ecf11a6d09f94668cc8feb2b808a063c548",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "a leftover worktree is cleared",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/more.html",
+      "m"
+     ]
+    },
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "worktree",
+       "add",
+       "--detach",
+       "@W@/Gärten-Ü/.quartz-gui/branch-worktree-branch-1"
+      ]
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\n63a6134555752af7ca23018ee0efb949b6e288f9\ndf438c05d2dae5e6dc7c55e83e418e313651d797\nTo @W@/origin.git\n + be629ec...df438c0 df438c05d2dae5e6dc7c55e83e418e313651d797 -> gh-pages (forced update)\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "gh-pages"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "gh-pages"
+    }
+   ],
+   "state": {
+    "refs": "refs/heads/gh-pages df438c05d2dae5e6dc7c55e83e418e313651d797\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "second target on its own branch",
+   "op": "run",
+   "target": {
+    "id": "branch-2",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\n63a6134555752af7ca23018ee0efb949b6e288f9\ndf438c05d2dae5e6dc7c55e83e418e313651d797\nTo @W@/origin.git\n * [new branch]      df438c05d2dae5e6dc7c55e83e418e313651d797 -> pages\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "pages"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "pages"
+    }
+   ],
+   "state": {
+    "refs": "refs/heads/gh-pages df438c05d2dae5e6dc7c55e83e418e313651d797\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "a stale registration of the old shared path is pruned",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/prune.html",
+      "p"
+     ]
+    },
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "worktree",
+       "add",
+       "--detach",
+       "@W@/Gärten-Ü/.quartz-gui/branch-worktree"
+      ]
+     ]
+    },
+    {
+     "rm": "@W@/Gärten-Ü/.quartz-gui/branch-worktree"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\nb6d2c0180850671f5db7ca3348e170b7ab1030ee\n3a7ae47689ae2fe87004add9278bf1d90e5d7693\nTo @W@/origin.git\n + df438c0...3a7ae47 3a7ae47689ae2fe87004add9278bf1d90e5d7693 -> gh-pages (forced update)\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "gh-pages"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "gh-pages"
+    }
+   ],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "the lease refuses a branch that moved since the fetch",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/lease.html",
+      "l"
+     ]
+    },
+    {
+     "git": [
+      "@W@",
+      [
+       "clone",
+       "-q",
+       "--bare",
+       "@W@/origin.git",
+       "@W@/other.git"
+      ]
+     ]
+    },
+    {
+     "git": [
+      "@W@/other.git",
+      [
+       "update-ref",
+       "refs/heads/gh-pages",
+       "refs/heads/main"
+      ]
+     ]
+    },
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "config",
+       "remote.origin.pushurl",
+       "@W@/other.git"
+      ]
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\n5186ed7babade9b82d9ec2f846510bbd1514c874\n1040873667542f9db15d06de348f3dbdcf87bbe5\nTo @W@/other.git\n ! [rejected]        1040873667542f9db15d06de348f3dbdcf87bbe5 -> gh-pages (stale info)\nerror: failed to push some refs to '@W@/other.git'\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "gh-pages"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "gh-pages"
+    }
+   ],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "the checked-out branch is refused",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "main",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "config",
+       "--unset",
+       "remote.origin.pushurl"
+      ]
+     ]
+    }
+   ],
+   "result": {
+    "error": "{\"key\":\"branchProtected\",\"args\":{\"branch\":\"main\"}}"
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "origin's default is refused",
+   "op": "preview",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "live",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "symbolic-ref",
+       "refs/remotes/origin/HEAD",
+       "refs/remotes/origin/live"
+      ]
+     ]
+    }
+   ],
+   "result": {
+    "error": "{\"key\":\"branchProtected\",\"args\":{\"branch\":\"live\"}}"
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "without origin",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "remote",
+       "remove",
+       "origin"
+      ]
+     ]
+    }
+   ],
+   "result": {
+    "error": "{\"key\":\"branchNoOrigin\",\"args\":{}}"
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "preview without origin",
+   "op": "preview",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"branchNoOrigin\",\"args\":{}}"
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "wrong type",
+   "op": "run",
+   "target": {
+    "id": "x",
+    "name": "x",
+    "destination": {
+     "type": "folder",
+     "path": "/x",
+     "deleteRemoved": false
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "git": [
+      "@W@/Gärten-Ü",
+      [
+       "remote",
+       "add",
+       "origin",
+       "@W@/origin.git"
+      ]
+     ]
+    }
+   ],
+   "result": {
+    "error": "{\"key\":\"deployWrongType\",\"args\":{\"adapter\":\"Branch\"}}"
+   },
+   "events": [],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "a push that is refused",
+   "op": "run",
+   "target": {
+    "id": "branch-1",
+    "name": "Pages",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    },
+    "excludes": []
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/again.html",
+      "a"
+     ]
+    },
+    {
+     "write": [
+      "@W@/origin.git/hooks/pre-receive",
+      "#!/bin/sh\necho \"nope from the hook\" >&2\nexit 1\n"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/origin.git/hooks/pre-receive",
+      "755"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "Preparing worktree (detached HEAD a1946d5)\nHEAD is now at a1946d5 Start\nf66ee74611c23ad63b0a7d14216ef73463223ad7\n78cfc6edbfb8701c0d7384bc6f2ecb1de86247b8\nremote: nope from the hook        \nTo @W@/origin.git\n ! [remote rejected] 78cfc6edbfb8701c0d7384bc6f2ecb1de86247b8 -> gh-pages (pre-receive hook declined)\nerror: failed to push some refs to '@W@/origin.git'\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "gh-pages"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "gh-pages"
+    }
+   ],
+   "state": {
+    "refs": "refs/heads/gh-pages 3a7ae47689ae2fe87004add9278bf1d90e5d7693\nrefs/heads/main a1946d586ea1a1768b54d5a62c6993a0688d5160\nrefs/heads/pages df438c05d2dae5e6dc7c55e83e418e313651d797\n",
+    "branches": {
+     "refs/heads/gh-pages": {
+      "sha": "3a7ae47689ae2fe87004add9278bf1d90e5d7693",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 4f6c4ee9d928270b4304e3abcd8d81df3e740d12\tprune.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     },
+     "refs/heads/pages": {
+      "sha": "df438c05d2dae5e6dc7c55e83e418e313651d797",
+      "subject": "Deploy 2026-11-06T10:00:00.000Z\n",
+      "parents": "",
+      "tree": [
+       "100644 blob 08b9811c98f0d90dbacc006ddcd80c5945b9ea55\tmore.html",
+       "100644 blob ef073cc45ccc66c921adc7ccc6221e38aa54ae17\tneu ö.html",
+       "100644 blob 64948101251322e554feeec4473ea843d802cc47\tstart.html",
+       "100644 blob 11a6014a8f92c6ac84bb5385c92498af65afdf31\tä.html"
+      ]
+     }
+    },
+    "worktrees": [
+     "worktree @W@/Gärten-Ü"
+    ],
+    "gui": [],
+    "gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  }
+ ]
+}
