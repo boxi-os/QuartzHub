@@ -44,6 +44,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]` —
   wie viele Optionen je Plugin QuartzHub darstellen kann; dieselbe Tabelle wie QuartzControls
   `check:option-schema` (nur lesend; Exit 3, wenn etwas nicht lesbar war)
+- `swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]` — der SVG-Bereiniger gegen
+  WebKit, mit einem Projekt mit quartz-layout-box auch durch dessen Markdown-Kette (Exit 3 ohne)
 - `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)
@@ -52,8 +54,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
-- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets}-golden.mjs` — dasselbe für
-  `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies`, `PluginCommands`, `Marketplace`, die Build- und Server-Dienste, `LayoutFrames`, `StyleSheets`, `StyleFiles`, `ScssCheck`, `VariableGraph`, `SiteFonts`, `Snippets`, `FontFile` und `FontService`
+- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets,inline-svg}-golden.mjs` — dasselbe für
+  `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies`, `PluginCommands`, `Marketplace`, die Build- und Server-Dienste, `LayoutFrames`, `StyleSheets`, `StyleFiles`, `ScssCheck`, `VariableGraph`, `SiteFonts`, `Snippets`, `InlineSvg` (dessen Skript in Chrome, über QuartzControls playwright-core), `FontFile` und `FontService`
   (`layout-frames` und `managed-styles` lesen Frames und Stylesheets von gui-test und Example, nur lesend)
 - `Runtime/node/bin/node scripts/option-schema-golden.mjs [QuartzControl] [gui-test]` — Plugin-Namen,
   Normalisierer und Leser des Options-Schemas aus QuartzControls Code; liest gui-tests Plugins (nur lesend)

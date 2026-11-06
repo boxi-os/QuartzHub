@@ -3,6 +3,7 @@
 //
 //   swift run --package-path Packages/QuartzHubCore qh-check i18n [--root <repo>] [--unused]
 //   swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]
+//   swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]
 //
 // Exit codes: 0 all good, 1 findings, 2 wrong call, 3 could not check everything.
 import Foundation
@@ -17,6 +18,9 @@ func usage() -> Never {
     option-schema <projekt> [--plugin <name>] [--dump]
                                       wie viele Optionen je Plugin QuartzHub darstellen kann
                                       (Feld, nur Text, unsichtbar); --dump das Schema als JSON
+    inline-svg [projekt]              der SVG-Bereiniger gegen WebKit: jedes Ergebnis als HTML
+                                      und, mit einem Projekt mit quartz-layout-box, durch dessen
+                                      Markdown-Kette; Exit 3, wenn Lagen ausgelassen wurden
   """)
   exit(2)
 }
@@ -40,6 +44,16 @@ func repositoryRoot() -> URL {
   }
   FileHandle.standardError.write(Data("project.yml nicht gefunden; --root <repo> angeben\n".utf8))
   exit(2)
+}
+
+/// The top level stays synchronous, so the main run loop can turn while an async command runs:
+/// WebKit needs it (`inline-svg`), and an async top level neither turns it nor lets it be turned
+/// (measured 2026-11-06: with `await` at the top, the first page never finished loading, and with a
+/// loop turned inside, the main actor's work never ran).
+func runAndExit(_ body: @escaping @MainActor () async -> Int32) -> Never {
+  Task { @MainActor in exit(await body()) }
+  RunLoop.main.run()
+  exit(0)
 }
 
 switch command {
@@ -92,14 +106,22 @@ case "option-schema":
   // table, not an exit code. What could not be read is (3).
   let project = arguments.first { !$0.hasPrefix("--") && $0 != option("--plugin") }
   guard let project else { usage() }
-  do {
-    let report = try await OptionSchemaCheck.run(project: project, only: option("--plugin"), dump: arguments.contains("--dump"))
-    print(report.text, terminator: "")
-    if report.unreadable > 0 { exit(3) }
-  } catch {
-    print(error.description)
-    exit(2)
+  runAndExit {
+    do {
+      let report = try await OptionSchemaCheck.run(project: project, only: option("--plugin"), dump: arguments.contains("--dump"))
+      print(report.text, terminator: "")
+      return report.unreadable > 0 ? 3 : 0
+    } catch {
+      print(String(describing: error))
+      return 2
+    }
   }
+case "inline-svg":
+  // WebKit wants the main run loop turning (see runAndExit).
+  setvbuf(stdout, nil, _IOLBF, 0)
+  let project = arguments.first { !$0.hasPrefix("--") && $0 != option("--root") }
+  let root = repositoryRoot()
+  runAndExit { await runInlineSvgCheck(project: project, root: root) }
 default:
   usage()
 }

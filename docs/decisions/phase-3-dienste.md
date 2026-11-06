@@ -1091,3 +1091,40 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
   Alles gleich, samt geänderter Dateien und Papierkorb.
 - Zwei übernommene Texte sagen jetzt „QuartzHub“ (`snippetDirLink`, `snippetDirOutside`).
 - Gegenproben (15, jede lässt den Test scheitern).
+
+### SVG-Bereiniger und `qh-check inline-svg` (`src/utils/inlineSvg.ts`, `scripts/check-inline-svg.mjs` → `InlineSvg`, `SvgTree`, `InlineSvgCheck`)
+
+- **Der Parser ist libxml2** (`SvgTree`), die Bibliothek, auf der Chromes XML-Parser steht.
+  QuartzControl lief im Renderer auf Chromes DOMParser. Foundations `XMLDocument` verwirft Textknoten, die nur
+  Leerraum enthalten, in jeder Einstellung (gemessen: zwischen zwei Elementen fehlte das „\n“; ein
+  Leerzeichen zwischen zwei `<tspan>` wäre so verloren), `XMLParser` verliert die Reihenfolge der
+  Attribute. libxml2 direkt (`import libxml2`, `-lxml2` aus dem SDK) hat beides. Ohne
+  `XML_PARSE_NOENT`: Damit läse libxml2 eine externe Entity von der Platte (XXE). Interne Entities
+  setzt `SvgTree` selbst ein, wie Chrome, mit einer Obergrenze von 200.000 Knoten, sodass „Billion
+  Laughs“ (10¹⁰ Texte) in Millisekunden bei „nicht lesbar“ endet.
+- **Gemessen gegen QuartzControls Code in Chrome:** `scripts/inline-svg-golden.mjs` lässt
+  `inlineSvg.ts` über QuartzControls playwright-core in Chrome laufen, auf dem Korpus von
+  `check:inline-svg` und den Rändern der XML-Seite (DOCTYPE mit interner und externer Entity,
+  Inkscape- und Figma-Dateien, `svg:`-Präfix, falscher oder fehlender Namensraum, `parsererror` als
+  Element, Attributnamen in jeder Schreibweise, `href` und `xlink:href` zugleich, CSS-Escapes, Ids
+  mit Sonderzeichen, Leerzeilen, Kommentare und PIs überall, Unicode). 74 Fälle, Markup, Zahl und
+  `styled` gleich.
+- **`qh-check inline-svg [projekt]`** ist QuartzControls `check:inline-svg` mit WebKit statt Chrome
+  (Nutzer, 2026-11-06, Variante A): jedes Ergebnis als HTML in einer Box, mit einem Projekt auch
+  durch die Markdown-Kette seines quartz-layout-box (`scripts/lib/layout-box-markdown.mjs` lädt
+  dessen `dist/index.js`, wie dort) in drei Lagen; gefragt wird die Seite nach Elementen außerhalb
+  des SVG, Ereignis-Attributen, Verweisen, `url()`, Animationen auf Verweise, Skript beim Laden und
+  nach einem Klick auf jedes Element, Navigation und Laden von außen. Gemessen mit gui-test
+  (quartz-layout-box 0.4.2): 53 Prüfungen bestanden, Exit 0; ohne Projekt Exit 3 (114 Lagen
+  ausgelassen).
+- **Was WebKit ohne App anders macht:** Ein WKWebView läuft in einem Kommandozeilenwerkzeug, wenn
+  sich die Haupt-RunLoop dreht; das async-Hauptprogramm dreht sie nicht und lässt sie nicht drehen
+  (gemessen: die erste Seite lud nie fertig), also ist die oberste Ebene von `qh-check` jetzt
+  synchron (`runAndExit`). Ohne Fenster malt er keine Frames: `requestAnimationFrame` kam nie, die
+  Prüfung wartet dort mit einem Timer. Laden von außen fragt sie über die Resource Timing der Seite,
+  nicht über Netzereignisse wie Playwright. Links nach http(s), `mailto:`, `tel:` und `ftp:` gelten
+  wie dort als erlaubt (remark-gfm macht sie aus Text); jede Navigation wird abgebrochen, damit
+  nichts ein Mail-Programm öffnet.
+- Gegenproben: am Golden 10 (eine erst ungefangen, `href` neben `xlink:href`, bekam ihren Fall);
+  an der WebKit-Prüfung fünf Lücken im Bereiniger (Ereignis-Attribute, `javascript:`-Links,
+  ungeschützter Text, Animationen auf `href`, fremde `url()`), jede gemeldet.

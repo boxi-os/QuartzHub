@@ -1,0 +1,795 @@
+[
+  {
+    "name": "<script>",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><script>window.__ran=(window.__ran||0)+1</script><path d=\"M0 0\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><path d=\"M0 0\"></path></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "XHTML-<img onerror>",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><img xmlns=\"http://www.w3.org/1999/xhtml\" src=\"x\" onerror=\"window.__ran=(window.__ran||0)+1\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "Processing Instruction mit <img onerror>",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><?x ><img src=x onerror=\"window.__ran=(window.__ran||0)+1\">?><path d=\"M0 0\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><path d=\"M0 0\"></path></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "Tab im Schema",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a href=\"java&#9;script:window.__ran=(window.__ran||0)+1\"><path d=\"M0 0h24v24H0z\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a><path d=\"M0 0h24v24H0z\"></path></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "Zeilenumbrüche im Schema",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a href=\"&#10;java&#13;script:window.__ran=(window.__ran||0)+1\"><path d=\"M0 0h24v24H0z\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a><path d=\"M0 0h24v24H0z\"></path></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "xlink:href mit javascript:",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a xlink:href=\"javascript:window.__ran=(window.__ran||0)+1\"><path d=\"M0 0h24v24H0z\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a><path d=\"M0 0h24v24H0z\"></path></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<set> auf href",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a href=\"#\"><set attributeName=\"href\" to=\"javascript:window.__ran=(window.__ran||0)+1\"/><path d=\"M0 0h24v24H0z\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a href=\"#\"><path d=\"M0 0h24v24H0z\"></path></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<animate> auf HREF",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a href=\"#\"><animate attributeName=\"HREF\" values=\"javascript:window.__ran=(window.__ran||0)+1\"/><path d=\"M0 0h24v24H0z\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a href=\"#\"><path d=\"M0 0h24v24H0z\"></path></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<set> auf xlink:href",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a href=\"#\"><set attributeName=\"xlink:href\" to=\"javascript:window.__ran=(window.__ran||0)+1\"/><path d=\"M0 0h24v24H0z\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a href=\"#\"><path d=\"M0 0h24v24H0z\"></path></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "XHTML-<meta refresh>",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><meta xmlns=\"http://www.w3.org/1999/xhtml\" http-equiv=\"refresh\" content=\"0;url=about:blank\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<style> für die ganze Seite",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><style>body{display:none}</style><path d=\"M0 0\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><path d=\"M0 0\"></path></svg>",
+      "removed": 1,
+      "styled": true
+    }
+  },
+  {
+    "name": "XHTML-<iframe>",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><iframe xmlns=\"http://www.w3.org/1999/xhtml\" src=\"javascript:window.__ran=(window.__ran||0)+1\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<foreignObject>",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><foreignObject><div xmlns=\"http://www.w3.org/1999/xhtml\" onclick=\"window.__ran=(window.__ran||0)+1\">x</div></foreignObject></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "CDATA mit Markup",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text><![CDATA[</text><img src=x onerror=\"window.__ran=(window.__ran||0)+1\">]]></text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>&#60;/text&#62;&#60;img src&#61;x onerror&#61;\"window&#46;&#95;&#95;ran&#61;&#40;window&#46;&#95;&#95;ran&#124;&#124;0&#41;&#43;1\"&#62;</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Kommentar, den HTML früher beendet",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><!--><img src=x onerror=\"window.__ran=(window.__ran||0)+1\">--><path d=\"M0 0\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><path d=\"M0 0\"></path></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "SVG-<img>, das aus dem SVG ausbricht",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><img src=\"x\" onerror=\"window.__ran=(window.__ran||0)+1\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "onload an der Wurzel",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\" onload=\"window.__ran=(window.__ran||0)+1\"><path d=\"M0 0\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><path d=\"M0 0\"></path></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "data:text/html im Verweis",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a href=\"data:text/html,&lt;script>parent.window.__ran=(window.__ran||0)+1&lt;/script>\"><path d=\"M0 0h24v24H0z\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a><path d=\"M0 0h24v24H0z\"></path></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<use> auf eine fremde Datei",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><use href=\"https://example.com/sprite.svg#a\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><use></use></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<image> mit SVG-Daten",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><image href=\"data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' onload='window.__ran=(window.__ran||0)+1'/>\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><image></image></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "style-Attribut mit fremder url()",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><path style=\"fill:url(https://example.com/x)\" d=\"M0 0\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><path d=\"M0 0\"></path></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "Element eines fremden Namensraums",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><x:script xmlns:x=\"http://www.w3.org/2000/svg\">window.__ran=(window.__ran||0)+1</x:script></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "Markdown-Link mit javascript: im Text",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text>[KLICK](javascript:window.__ran=(window.__ran||0)+1)</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>&#91;KLICK&#93;&#40;javascript&#58;window&#46;&#95;&#95;ran&#61;&#40;window&#46;&#95;&#95;ran&#124;&#124;0&#41;&#43;1&#41;</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Markdown-Link in CDATA",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text><![CDATA[[KLICK](javascript:window.__ran=(window.__ran||0)+1)]]></text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>&#91;KLICK&#93;&#40;javascript&#58;window&#46;&#95;&#95;ran&#61;&#40;window&#46;&#95;&#95;ran&#124;&#124;0&#41;&#43;1&#41;</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Markdown-Bild mit fremder Adresse im Text",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text>![x](https://example.com/p.png)</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>&#33;&#91;x&#93;&#40;https&#58;//example&#46;com/p&#46;png&#41;</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Autolink im Text",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text>&lt;javascript:window.__ran=(window.__ran||0)+1&gt; www.example.com a@example.com</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>&#60;javascript&#58;window&#46;&#95;&#95;ran&#61;&#40;window&#46;&#95;&#95;ran&#124;&#124;0&#41;&#43;1&#62; www&#46;example&#46;com a&#64;example&#46;com</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "<use HREF> auf eine fremde Datei",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><use HREF=\"https://example.com/sprite.svg#a\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><use></use></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<feImage HREF> auf eine fremde Datei",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><filter id=\"f\"><feImage HREF=\"https://example.com/f.png\"/></filter><rect width=\"9\" height=\"9\" filter=\"url(#f)\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><filter id=\"test-icon-zffup-f\"><feImage></feImage></filter><rect width=\"9\" height=\"9\" filter=\"url(#test-icon-zffup-f)\"></rect></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<image HREF> über http",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><image HREF=\"http://example.com/i.png\" width=\"9\" height=\"9\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><image width=\"9\" height=\"9\"></image></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<set ATTRIBUTENAME=\"href\"> nach außen",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><a href=\"#\"><set ATTRIBUTENAME=\"href\" to=\"https://example.com/phish\"/><rect width=\"24\" height=\"24\"/></a></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><a href=\"#\"><rect width=\"24\" height=\"24\"></rect></a></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "<use HREF> mit SVG-Daten",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><use HREF=\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIGlkPSd4Jz48aW1hZ2UgaHJlZj0neCcgb25lcnJvcj0nd2luZG93Ll9fcmFuPSh3aW5kb3cuX19yYW58fDApKzEnLz48L3N2Zz4=#x\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><use></use></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "CSS-Escape in url() im style",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect width=\"9\" height=\"9\" style=\"background-image:u\\72 l(https://example.com/b.png)\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><rect width=\"9\" height=\"9\"></rect></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "image-set() im style",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect width=\"9\" height=\"9\" style=\"mask-image:image-set(&quot;https://example.com/m.png&quot; 1x)\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><rect width=\"9\" height=\"9\"></rect></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "CSS-Escape in url() in fill",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect width=\"9\" height=\"9\" fill=\"u\\72 l(https://example.com/p.svg#p)\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><rect width=\"9\" height=\"9\"></rect></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "href und HREF zugleich",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><use href=\"#s\" HREF=\"https://example.com/s.svg#a\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><use href=\"#s\"></use></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "Zeilenanfang mit Markdown in einem Attribut",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><path aria-label=\"x&#10;# Titel&#10;- Punkt\" d=\"M0 0&#10;- 1 2\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><path aria-label=\"x&#10;# Titel&#10;- Punkt\" d=\"M0 0&#10;- 1 2\"></path></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Zeilenanfang mit Markdown im Text",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text>x\n# Titel\n- Punkt\n1. Eins</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>x\n&#35; Titel\n&#45; Punkt\n1&#46; Eins</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Markdown-Link über Escapes im Text",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text>\\[KLICK\\](javascript:window.__ran=(window.__ran||0)+1)</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>&#92;&#91;KLICK&#92;&#93;&#40;javascript&#58;window&#46;&#95;&#95;ran&#61;&#40;window&#46;&#95;&#95;ran&#124;&#124;0&#41;&#43;1&#41;</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "ein gewöhnliches Icon",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\" class=\"eigen\" width=\"24\" height=\"24\"><defs><linearGradient id=\"g\"><stop offset=\"0\" stop-color=\"red\"/></linearGradient><symbol id=\"s\"><circle cx=\"5\" cy=\"5\" r=\"4\"/></symbol></defs><title>Logo &amp; Name</title><g class=\"a\" fill=\"url(#g)\" style=\"fill:url(#g);stroke:currentColor\"><path d=\"M0 0h24\"/><use href=\"#s\"/><use xlink:href=\"#s\"/></g><animate attributeName=\"opacity\" values=\"0;1\" dur=\"1s\"/><a href=\"https://example.com/\"><rect width=\"1\" height=\"1\"/></a></svg>",
+    "file": "Mein Logo.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"eigen svg-mein-logo\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\"><defs><linearGradient id=\"mein-logo-1amte-g\"><stop offset=\"0\" stop-color=\"red\"></stop></linearGradient><symbol id=\"mein-logo-1amte-s\"><circle cx=\"5\" cy=\"5\" r=\"4\"></circle></symbol></defs><title>Logo &#38; Name</title><g class=\"a\" fill=\"url(#mein-logo-1amte-g)\" style=\"fill:url(#mein-logo-1amte-g);stroke:currentColor\"><path d=\"M0 0h24\"></path><use href=\"#mein-logo-1amte-s\"></use><use href=\"#mein-logo-1amte-s\"></use></g><animate attributeName=\"opacity\" values=\"0;1\" dur=\"1s\"></animate><a href=\"https://example.com/\"><rect width=\"1\" height=\"1\"></rect></a></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Illustrator mit internem CSS",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"Ebene_1\" viewBox=\"0 0 24 24\"><defs><style>.st0{fill:#E30613}.st1{fill:none;stroke:#1D1D1B;stroke-width:2}</style></defs><circle class=\"st0\" cx=\"12\" cy=\"12\" r=\"8\"/><line class=\"st1\" x1=\"0\" y1=\"0\" x2=\"24\" y2=\"24\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" id=\"test-icon-iykl0-Ebene_1\" viewBox=\"0 0 24 24\"><defs></defs><circle class=\"st0\" cx=\"12\" cy=\"12\" r=\"8\"></circle><line class=\"st1\" x1=\"0\" y1=\"0\" x2=\"24\" y2=\"24\"></line></svg>",
+      "removed": 1,
+      "styled": true
+    }
+  },
+  {
+    "name": "zwei Dateien mit denselben Ids",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"Ebene_1\" viewBox=\"0 0 24 24\" aria-labelledby=\"t\"><title id=\"t\">red</title><defs><linearGradient id=\"g\"><stop stop-color=\"red\"/></linearGradient><clipPath id=\"clip0_1_2\"><rect width=\"24\" height=\"24\"/></clipPath><path id=\"p\" d=\"M0 0h9\"/></defs><g clip-path=\"url(#clip0_1_2)\" style=\"fill:url(#g)\"><rect width=\"24\" height=\"24\" fill=\"url(&quot;#g&quot;)\"/><use href=\"#p\"/><animate attributeName=\"opacity\" begin=\"p.click\" values=\"0;1\"/></g></svg>",
+    "file": "rot.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-rot\" id=\"rot-4k7un-Ebene_1\" viewBox=\"0 0 24 24\" aria-labelledby=\"rot-4k7un-t\"><title id=\"rot-4k7un-t\">red</title><defs><linearGradient id=\"rot-4k7un-g\"><stop stop-color=\"red\"></stop></linearGradient><clipPath id=\"rot-4k7un-clip0_1_2\"><rect width=\"24\" height=\"24\"></rect></clipPath><path id=\"rot-4k7un-p\" d=\"M0 0h9\"></path></defs><g clip-path=\"url(#rot-4k7un-clip0_1_2)\" style=\"fill:url(#rot-4k7un-g)\"><rect width=\"24\" height=\"24\" fill=\"url(&#34;#rot-4k7un-g&#34;)\"></rect><use href=\"#rot-4k7un-p\"></use><animate attributeName=\"opacity\" begin=\"rot-4k7un-p.click\" values=\"0;1\"></animate></g></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "vier Schreibweisen eines Verweises",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><defs><linearGradient id=\"g1\"><stop stop-color=\"red\"/></linearGradient><path id=\"s\" d=\"M0 0h9\"/></defs><g id=\"liste\" aria-activedescendant=\"eins\" aria-errormessage=\"fehler\"><title id=\"eins\">a</title><desc id=\"fehler\">b</desc></g><rect id=\"r\" width=\"9\" height=\"9\" style=\"fill:url(#g\\31)\"/><use id=\"u\" href=\" #s\"/><animate id=\"anim.1\" attributeName=\"opacity\" values=\"0;1\" dur=\"1s\"/><animate id=\"b\" attributeName=\"opacity\" begin=\"anim.1.end\" values=\"1;0\"/></svg>",
+    "file": "formen.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-formen\" viewBox=\"0 0 24 24\"><defs><linearGradient id=\"formen-uncok-g1\"><stop stop-color=\"red\"></stop></linearGradient><path id=\"formen-uncok-s\" d=\"M0 0h9\"></path></defs><g id=\"formen-uncok-liste\" aria-activedescendant=\"formen-uncok-eins\" aria-errormessage=\"formen-uncok-fehler\"><title id=\"formen-uncok-eins\">a</title><desc id=\"formen-uncok-fehler\">b</desc></g><rect id=\"formen-uncok-r\" width=\"9\" height=\"9\" style=\"fill:url(#formen-uncok-g1)\"></rect><use id=\"formen-uncok-u\" href=\"#formen-uncok-s\"></use><animate id=\"formen-uncok-anim.1\" attributeName=\"opacity\" values=\"0;1\" dur=\"1s\"></animate><animate id=\"formen-uncok-b\" attributeName=\"opacity\" begin=\"formen-uncok-anim.1.end\" values=\"1;0\"></animate></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "kein SVG: html",
+    "text": "<html/>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "kein SVG: Text",
+    "text": "kein xml",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "DOCTYPE mit Entity",
+    "text": "<?xml version=\"1.0\"?><!DOCTYPE svg [<!ENTITY farbe \"red\">]><svg xmlns=\"http://www.w3.org/2000/svg\"><rect fill=\"&farbe;\" width=\"1\" height=\"1\"/><text>&farbe;</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\"><rect fill=\"red\" width=\"1\" height=\"1\"></rect><text>red</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "DOCTYPE mit externer Entity",
+    "text": "<?xml version=\"1.0\"?><!DOCTYPE svg [<!ENTITY ext SYSTEM \"file:///etc/hosts\">]><svg xmlns=\"http://www.w3.org/2000/svg\"><text>&ext;</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\"><text></text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Inkscape",
+    "text": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!-- Created with Inkscape -->\n\n<svg\n   width=\"24\"\n   height=\"24\"\n   viewBox=\"0 0 24 24\"\n   version=\"1.1\"\n   id=\"svg5\"\n   inkscape:version=\"1.2\"\n   sodipodi:docname=\"icon.svg\"\n   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n   xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:svg=\"http://www.w3.org/2000/svg\"\n   xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n   xmlns:cc=\"http://creativecommons.org/ns#\"\n   xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n  <sodipodi:namedview\n     id=\"namedview7\"\n     pagecolor=\"#ffffff\" />\n  <defs\n     id=\"defs2\" />\n  <metadata><rdf:RDF><cc:Work rdf:about=\"\"><dc:title>x</dc:title></cc:Work></rdf:RDF></metadata>\n\n\n  <g\n     inkscape:label=\"Ebene 1\"\n     inkscape:groupmode=\"layer\"\n     id=\"layer1\">\n    <path\n       style=\"fill:#000000;stroke-width:0.5\"\n       d=\"M 2,2 H 22 V 22 H 2 Z\"\n       id=\"rect1\" />\n  </g>\n</svg>\n",
+    "file": "icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" version=\"1.1\" id=\"icon-1yswm-svg5\">\n  <defs id=\"icon-1yswm-defs2\"></defs>\n  <g id=\"icon-1yswm-layer1\">\n    <path style=\"fill:#000000;stroke-width:0.5\" d=\"M 2,2 H 22 V 22 H 2 Z\" id=\"icon-1yswm-rect1\"></path>\n  </g>\n</svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Figma",
+    "text": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g clip-path=\"url(#clip0_1_2)\">\n<path d=\"M12 2L2 22H22L12 2Z\" fill=\"#1E1E1E\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_1_2\">\n<rect width=\"24\" height=\"24\" fill=\"white\"/>\n</clipPath>\n</defs>\n</svg>\n",
+    "file": "Frame 1.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-frame-1\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\n<g clip-path=\"url(#frame-1-qej60-clip0_1_2)\">\n<path d=\"M12 2L2 22H22L12 2Z\" fill=\"#1E1E1E\"></path>\n</g>\n<defs>\n<clipPath id=\"frame-1-qej60-clip0_1_2\">\n<rect width=\"24\" height=\"24\" fill=\"white\"></rect>\n</clipPath>\n</defs>\n</svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "svg:-Präfix",
+    "text": "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1 1\"><svg:rect width=\"1\" height=\"1\"/></svg:svg>",
+    "file": "praefix.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-praefix\" viewBox=\"0 0 1 1\"><rect width=\"1\" height=\"1\"></rect></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Wurzel ohne Namensraum",
+    "text": "<svg viewBox=\"0 0 1 1\"><rect/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "Wurzel im falschen Namensraum",
+    "text": "<svg xmlns=\"http://www.w3.org/1999/xhtml\"><rect/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "parsererror als Element",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><parsererror/><rect/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "nicht wohlgeformt",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect></g></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "doppeltes Attribut",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect width=\"1\" width=\"2\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "Attributnamen in jeder Schreibweise",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><linearGradient GRADIENTUNITS=\"userSpaceOnUse\" gradientUnits=\"x\" id=\"L\"/><rect VIEWBOX=\"0 0 1 1\" ViewBox=\"9\" data-x=\"1\" Data-X=\"2\" aria-hidden=\"true\" ONCLICK=\"x\" onClick=\"y\" _bad=\"1\" a.b=\"ok\" a-b=\"ok\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><linearGradient gradientUnits=\"userSpaceOnUse\" id=\"test-icon-ktzg1-L\"></linearGradient><rect viewBox=\"0 0 1 1\" data-x=\"1\" aria-hidden=\"true\" a.b=\"ok\" a-b=\"ok\"></rect></svg>",
+      "removed": 6,
+      "styled": false
+    }
+  },
+  {
+    "name": "xml:space und xml:lang",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text xml:space=\"preserve\" xml:lang=\"de\">  a  </text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>  a  </text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "fremder Attribut-Namensraum",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect xmlns:f=\"https://example.com/f\" f:x=\"1\" width=\"1\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><rect width=\"1\"></rect></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "Verweise auf Ids, die es nicht gibt",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><use href=\"#nope\"/><rect fill=\"url(#nope)\" aria-labelledby=\"nope a\"/><animate begin=\"nope.click;  x.end ; 5s\" attributeName=\"opacity\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><use href=\"#nope\"></use><rect fill=\"url(#nope)\" aria-labelledby=\"nope a\"></rect><animate begin=\"nope.click;  x.end ; 5s\" attributeName=\"opacity\"></animate></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Ids mit Sonderzeichen",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><linearGradient id=\"a b\"/><linearGradient id=\"c\\d\"/><rect fill=\"url(#a\\ b)\" style=\"fill:url(&quot;#c\\\\d&quot;)\"/><rect id=\"dot.ted\" fill=\"url(#dot.ted)\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><linearGradient id=\"test-icon-1db35-a b\"></linearGradient><linearGradient id=\"test-icon-1db35-c\\d\"></linearGradient><rect fill=\"url(#a\\ b)\" style=\"fill:url(&#34;#c\\\\d&#34;)\"></rect><rect id=\"test-icon-1db35-dot.ted\" fill=\"url(#test-icon-1db35-dot.ted)\"></rect></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "leeres id",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect id=\"\" width=\"1\"/><use href=\"#\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><rect id=\"\" width=\"1\"></rect><use href=\"#\"></use></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Bilder",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><image href=\"data:image/png;base64,AAAA\"/><image href=\"data:image/jpg,x\"/><image href=\"data:image/svg+xml,x\"/><image href=\"HTTPS://x/y.png\"/><image href=\"ftp://x\"/><image href=\"#local\"/><a href=\"MAILTO:a@b\"/><a href=\" https://x\"/><a href=\"http://x\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><image href=\"data:image/png;base64,AAAA\"></image><image href=\"data:image/jpg,x\"></image><image></image><image href=\"HTTPS://x/y.png\"></image><image></image><image href=\"#local\"></image><a href=\"MAILTO:a@b\"></a><a href=\" https://x\"></a><a></a></svg>",
+      "removed": 3,
+      "styled": false
+    }
+  },
+  {
+    "name": "CSS-Escapes",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect fill=\"\\75 rl(https://x)\"/><rect fill=\"\\000075rl(https://x)\"/><rect fill=\"u\\rl(https://x)\"/><rect fill=\"\\0 rl(x)\"/><rect fill=\"url(  &quot;#ok&quot;)\"/><rect style=\"background:URL(#ok)\"/><rect style=\"x:\\40 import\"/><rect style=\"width:expression (1)\"/><rect fill=\"src(x)\"/><rect fill=\"image(x)\"/><rect fill=\"cross-fade(x)\"/><rect title=\"JaVaScRiPt:x\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><rect></rect><rect></rect><rect></rect><rect fill=\"\\0 rl(x)\"></rect><rect></rect><rect style=\"background:URL(#ok)\"></rect><rect></rect><rect></rect><rect></rect><rect></rect><rect></rect><rect></rect></svg>",
+      "removed": 10,
+      "styled": false
+    }
+  },
+  {
+    "name": "Animationen",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><animate attributeName=\"xlink:HREF\"/><animate attributeName=\" onclick\"/><animateMotion attributeName=\"ON\"/><animateTransform attributeName=\"transform\" type=\"rotate\"/><set attributeName=\"fill\" to=\"red\"/><animate attributeName=\"x:on\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><animateTransform attributeName=\"transform\" type=\"rotate\"></animateTransform><set attributeName=\"fill\" to=\"red\"></set></svg>",
+      "removed": 4,
+      "styled": false
+    }
+  },
+  {
+    "name": "Text mit allen Markdown-Zeichen",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text>a&amp;b&lt;c&gt;[d](e)!f*g_h`i~j\\k|l:m#n+o=p.q@r-s \"t' u</text></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><text>a&#38;b&#60;c&#62;&#91;d&#93;&#40;e&#41;&#33;f&#42;g&#95;h&#96;i&#126;j&#92;k&#124;l&#58;m&#35;n&#43;o&#61;p&#46;q&#64;r&#45;s \"t' u</text></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Leerzeilen",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\">\n\n<g>\n\n\n<rect/>\n  \n</g>\n\n</svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\">\n<g>\n<rect></rect>\n</g>\n</svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Klassen an der Wurzel",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\" class=\"  icon svg-logo  \"><rect/></svg>",
+    "file": "logo.SVG",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon svg-logo\" viewBox=\"0 0 24 24\"><rect></rect></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Dateiname ohne Buchstaben",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect/></svg>",
+    "file": ".svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><rect></rect></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Dateiname mit Zeichen",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect/></svg>",
+    "file": "--Ünïcödé & Co. 2.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-n-c-d-co-2\" viewBox=\"0 0 24 24\"><rect></rect></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Attributwerte mit Zeichen",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><rect aria-label=\"a&amp;b&lt;c&gt;&quot;d&apos;e&#10;f&#13;g&#9;h\" width=\"1\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><rect aria-label=\"a&#38;b&#60;c&#62;&#34;d'e&#10;f&#13;g\th\" width=\"1\"></rect></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "tiefe Verschachtelung",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><rect/></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><g><rect></rect></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "nur die Wurzel",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\"/>",
+    "file": "leer.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-leer\"></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Kommentare und PIs überall",
+    "text": "<?xml version=\"1.0\"?><!--a--><?pi x?><svg xmlns=\"http://www.w3.org/2000/svg\"><!--b--><?pi y?><g><!--c--></g></svg><!--d--><?pi z?>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\"><g></g></svg>",
+      "removed": 1,
+      "styled": false
+    }
+  },
+  {
+    "name": "href und xlink:href zugleich",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><symbol id=\"a\"/><symbol id=\"b\"/><use xlink:href=\"#b\" href=\"#a\"/><use href=\"#a\" xlink:href=\"#b\"/></svg>",
+    "file": "test-icon.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-test-icon\" viewBox=\"0 0 24 24\"><symbol id=\"test-icon-gm1f7-a\"></symbol><symbol id=\"test-icon-gm1f7-b\"></symbol><use href=\"#test-icon-gm1f7-a\"></use><use href=\"#test-icon-gm1f7-a\"></use></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  },
+  {
+    "name": "Unicode",
+    "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 24 24\"><text>日本語 🎨 Ä</text><rect aria-label=\"Grüße 🎨\"/></svg>",
+    "file": "Grüße.svg",
+    "result": {
+      "ok": true,
+      "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"svg-gr-e\" viewBox=\"0 0 24 24\"><text>日本語 🎨 Ä</text><rect aria-label=\"Grüße 🎨\"></rect></svg>",
+      "removed": 0,
+      "styled": false
+    }
+  }
+]
