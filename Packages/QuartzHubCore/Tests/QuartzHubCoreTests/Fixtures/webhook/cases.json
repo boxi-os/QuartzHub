@@ -1,0 +1,430 @@
+{
+ "cases": [
+  {
+   "name": "no URL",
+   "secret": null,
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookNoUrl\",\"args\":{}}"
+   },
+   "requests": [],
+   "events": []
+  },
+  {
+   "name": "empty URL",
+   "secret": "",
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookNoUrl\",\"args\":{}}"
+   },
+   "requests": [],
+   "events": []
+  },
+  {
+   "name": "not a URL",
+   "secret": "hooks/abc",
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookInvalidUrl\",\"args\":{}}"
+   },
+   "requests": [],
+   "events": []
+  },
+  {
+   "name": "http",
+   "secret": "http://example.com/hook/abcdefghij",
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookHttpsOnly\",\"args\":{}}"
+   },
+   "requests": [],
+   "events": []
+  },
+  {
+   "name": "mailto",
+   "secret": "mailto:hook@example.com",
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookHttpsOnly\",\"args\":{}}"
+   },
+   "requests": [],
+   "events": []
+  },
+  {
+   "name": "created, the token echoed in another shape",
+   "secret": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+   "answer": {
+    "status": 201,
+    "statusText": "Created",
+    "body": "Change response in <a href=\"https://webhook.site/#!/edit/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b\">"
+   },
+   "result": {
+    "success": true,
+    "output": "POST https://webhook.site → 201 Created\n\nChange response in <a href=\"https://webhook.site/#!/edit/[Token entfernt]\">"
+   },
+   "requests": [
+    {
+     "url": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "webhook.site"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "webhook.site"
+    }
+   ]
+  },
+  {
+   "name": "not found",
+   "secret": "https://api.netlify.com/build_hooks/5f1a2b3c4d5e6f7a8b9c0d1e",
+   "answer": {
+    "status": 404,
+    "statusText": "Not Found",
+    "body": "{\"message\":\"Not Found\"}"
+   },
+   "result": {
+    "success": false,
+    "output": "POST https://api.netlify.com → 404 Not Found\n\n{\"message\":\"Not Found\"}"
+   },
+   "requests": [
+    {
+     "url": "https://api.netlify.com/build_hooks/5f1a2b3c4d5e6f7a8b9c0d1e",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "api.netlify.com"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "api.netlify.com"
+    }
+   ]
+  },
+  {
+   "name": "ok without a body",
+   "secret": "https://API.Example.com:443/hooks/build/AbCdEfGhIjKl",
+   "answer": {
+    "status": 200,
+    "statusText": "OK",
+    "body": ""
+   },
+   "result": {
+    "success": true,
+    "output": "POST https://api.example.com → 200 OK\n"
+   },
+   "requests": [
+    {
+     "url": "https://api.example.com/hooks/build/AbCdEfGhIjKl",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "api.example.com"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "api.example.com"
+    }
+   ]
+  },
+  {
+   "name": "a long body is cut after the blanking",
+   "secret": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+   "answer": {
+    "status": 500,
+    "statusText": "Internal Server Error",
+    "body": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2byyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+   },
+   "result": {
+    "success": false,
+    "output": "POST https://webhook.site → 500 Internal Server Error\n\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx[Token ent"
+   },
+   "requests": [
+    {
+     "url": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "webhook.site"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "webhook.site"
+    }
+   ]
+  },
+  {
+   "name": "secrets in the query and the fragment",
+   "secret": "https://example.com:8443/h?token=abcdefgh12&x=1&name=zwei+w%C3%B6rter#frag-secret-123",
+   "answer": {
+    "status": 202,
+    "statusText": "Accepted",
+    "body": "abcdefgh12 x=1 frag-secret-123 zwei wörter hooks"
+   },
+   "result": {
+    "success": true,
+    "output": "POST https://example.com:8443 → 202 Accepted\n\n[Token entfernt] x=1 [Token entfernt] [Token entfernt] hooks"
+   },
+   "requests": [
+    {
+     "url": "https://example.com:8443/h?token=abcdefgh12&x=1&name=zwei+w%C3%B6rter#frag-secret-123",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "example.com:8443"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "example.com:8443"
+    }
+   ]
+  },
+  {
+   "name": "a body in UTF-8",
+   "secret": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+   "answer": {
+    "status": 200,
+    "statusText": "OK",
+    "body": "Grüße aus Köln ✓"
+   },
+   "result": {
+    "success": true,
+    "output": "POST https://webhook.site → 200 OK\n\nGrüße aus Köln ✓"
+   },
+   "requests": [
+    {
+     "url": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "webhook.site"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "webhook.site"
+    }
+   ]
+  },
+  {
+   "name": "a timeout",
+   "secret": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+   "answer": {
+    "timeout": true
+   },
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookFailed\",\"args\":{\"origin\":\"https://webhook.site\"}}\n{\"key\":\"webhookTimeout\",\"args\":{\"seconds\":\"30\"}}"
+   },
+   "requests": [
+    {
+     "url": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "webhook.site"
+    }
+   ]
+  },
+  {
+   "name": "the network fails",
+   "secret": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+   "answer": {
+    "network": true
+   },
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookFailed\",\"args\":{\"origin\":\"https://webhook.site\"}}\nTypeError: fetch failed"
+   },
+   "requests": [
+    {
+     "url": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "webhook.site"
+    }
+   ]
+  },
+  {
+   "name": "credentials in the URL",
+   "secret": "https://user:passwort-12345@example.com/hook/abcdefghij",
+   "answer": {
+    "real": true
+   },
+   "result": {
+    "success": false,
+    "output": "{\"key\":\"webhookFailed\",\"args\":{\"origin\":\"https://example.com\"}}\nTypeError: Request cannot be constructed from a URL that includes credentials: https://user:[Token entfernt]@example.com/hook/[Token entfernt]"
+   },
+   "requests": [
+    {
+     "url": "https://user:passwort-12345@example.com/hook/abcdefghij",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "example.com"
+    }
+   ]
+  },
+  {
+   "name": "a part of exactly eight characters is blanked",
+   "secret": "https://example.com/abcdefgh/1234567",
+   "answer": {
+    "status": 200,
+    "statusText": "OK",
+    "body": "abcdefgh 1234567"
+   },
+   "result": {
+    "success": true,
+    "output": "POST https://example.com → 200 OK\n\n[Token entfernt] 1234567"
+   },
+   "requests": [
+    {
+     "url": "https://example.com/abcdefgh/1234567",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "example.com"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "example.com"
+    }
+   ]
+  },
+  {
+   "name": "a redirect that was not followed is no success",
+   "secret": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+   "answer": {
+    "status": 302,
+    "statusText": "Found",
+    "body": "moved"
+   },
+   "result": {
+    "success": false,
+    "output": "POST https://webhook.site → 302 Found\n\nmoved"
+   },
+   "requests": [
+    {
+     "url": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "webhook.site"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "webhook.site"
+    }
+   ]
+  },
+  {
+   "name": "a status with a phrase of its own",
+   "secret": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+   "answer": {
+    "status": 403,
+    "statusText": "Forbidden",
+    "body": "no"
+   },
+   "result": {
+    "success": false,
+    "output": "POST https://webhook.site → 403 Forbidden\n\nno"
+   },
+   "requests": [
+    {
+     "url": "https://webhook.site/0b7e6c1a-2f9d-4c3e-9a8b-7d6c5e4f3a2b",
+     "method": "POST",
+     "contentType": "application/json",
+     "body": "{}"
+    }
+   ],
+   "events": [
+    {
+     "processed": 0,
+     "total": 1,
+     "currentFile": "webhook.site"
+    },
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "webhook.site"
+    }
+   ]
+  }
+ ],
+ "preview": []
+}
