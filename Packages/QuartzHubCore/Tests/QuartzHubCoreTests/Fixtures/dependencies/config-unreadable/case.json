@@ -1,0 +1,14 @@
+{
+  "tree": {
+    "package.json": "{\"name\":\"x\",\"dependencies\":{}}",
+    "quartz.config.yaml": "- a\n"
+  },
+  "ask": [
+    [
+      "missingAuthoredFrames"
+    ]
+  ],
+  "answers": [
+    null
+  ]
+}

@@ -353,3 +353,23 @@ Form von `markInstallPending`).
   Projektordner, obwohl der Satz vom Content-Ordner spricht. Beides notiert, nicht behoben.
 - Gegenproben: `project-prefs.json` mitkopiert, Projekt-Links nicht wörtlich, Inhalts-Links
   wörtlich, ohne Rechte, ohne `repointProjectPaths`, ohne Vermerk: jede lässt einen Test scheitern.
+
+### Was einem Klon fehlt (`projectDependencies.ts` → `ProjectDependencies`)
+
+`missingDependencies` (Pakete aus `dependencies`, die `node_modules` nicht hat; nil, wenn
+package.json unlesbar ist), `halfUnpackedModule` (der erste Ordner im Abhängigkeitsbaum ohne lesbare
+package.json, Suche wie Node: eigener `node_modules`, dann aufwärts bis zum Projekt) und
+`missingAuthoredFrames` (Frames der Config, deren Ordner fehlt und die `ownFramePath` nicht hierher
+holt).
+
+- **Gemessen gegen QuartzControls Code**, `scripts/deps-golden.mjs`, sieben Projekte mit 14 Fragen:
+  verschachtelte und kaputte Pakete, ein Zyklus, ein Paket nur über dem Projekt, Frames hier, weg,
+  hierher kopiert, anderswo. `ProjectDependenciesTests` gibt dieselben 14 Antworten.
+- Übernommen, wie es ist: `dependencies` als Liste meldet `0`, `1` … als fehlend (`Object.keys`).
+  Ein `@` am Anfang eines YAML-Werts (`source: @scope/a` ohne Anführungszeichen) macht die Config
+  unlesbar und `missingAuthoredFrames` nil; das ist YAML, kein Fehler hier.
+- `halfUnpackedModule` schützte in QuartzControl ein `require` im eigenen Prozess (Node merkt sich
+  eine fehlende package.json bis zum Neustart). QuartzHub lädt kein Projektpaket in den eigenen
+  Prozess; die Frage bleibt, weil sie „packt noch aus“ von „kaputt“ trennt.
+- Gegenproben: ohne Suche nach oben, Suche über das Projekt hinaus, ohne `ownFramePath`, Listen ohne
+  Schlüssel: jede lässt einen Fall scheitern.

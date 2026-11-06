@@ -1,0 +1,22 @@
+{
+  "tree": {
+    "package.json": "{\"name\":\"x\",\"dependencies\":{\"a\":\"1\"}}",
+    "node_modules/a/package.json": "{\"dependencies\":{\"b\":\"1\"}}",
+    "node_modules/b/package.json": "{\"dependencies\":{\"a\":\"1\",\"c\":\"1\"}}",
+    "../node_modules/c/package.json": "{ broken",
+    "quartz.config.yaml": "plugins:\n"
+  },
+  "ask": [
+    [
+      "halfUnpackedModule",
+      "a"
+    ],
+    [
+      "missingDependencies"
+    ]
+  ],
+  "answers": [
+    null,
+    []
+  ]
+}

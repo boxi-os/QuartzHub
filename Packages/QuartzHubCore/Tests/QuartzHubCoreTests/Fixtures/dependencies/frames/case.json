@@ -1,0 +1,19 @@
+{
+  "tree": {
+    "package.json": "{\"name\":\"x\",\"dependencies\":{}}",
+    ".quartz-gui/authored-frames/here/index.ts": "",
+    ".quartz-gui/authored-frames/copied/index.ts": "",
+    "quartz.config.yaml": "plugins:\n  - source: @W@/P/.quartz-gui/authored-frames/here\n    enabled: true\n  - source: @W@/P/.quartz-gui/authored-frames/gone\n    enabled: true\n  - source: @W@/Other/.quartz-gui/authored-frames/copied\n    enabled: true\n  - source: @W@/Other/.quartz-gui/authored-frames/elsewhere\n    enabled: true\n  - source: @W@/Other/plugins/not-a-frame\n    enabled: true\n  - source:\n      repo: x\n    enabled: true\n"
+  },
+  "ask": [
+    [
+      "missingAuthoredFrames"
+    ]
+  ],
+  "answers": [
+    [
+      "gone",
+      "elsewhere"
+    ]
+  ]
+}

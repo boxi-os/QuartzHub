@@ -1,0 +1,57 @@
+{
+  "tree": {
+    "package.json": "{\"name\":\"x\",\"optionalDependencies\":{\"opt\":\"1\"},\"dependencies\":{\"sass\":\"^1\",\"@scope/a\":\"1\",\"globby\":\"1\",\"missing\":\"1\"}}",
+    "node_modules/sass/package.json": "{\"dependencies\":{\"chokidar\":\"1\"},\"optionalDependencies\":{\"@parcel/watcher\":\"1\"}}",
+    "node_modules/chokidar/package.json": "{\"dependencies\":{\"readdirp\":\"1\"}}",
+    "node_modules/readdirp": {
+      "dir": 493
+    },
+    "node_modules/@scope/a/package.json": "{}",
+    "node_modules/globby/package.json": "{\"dependencies\":{\"fast-glob\":\"1\"}}",
+    "node_modules/globby/node_modules/fast-glob/package.json": "{}",
+    "node_modules/fast-glob/package.json": "{ broken",
+    "node_modules/missing": {
+      "dir": 493
+    },
+    "quartz.config.yaml": "plugins:\n  - source: @scope/a\n    enabled: true\n"
+  },
+  "ask": [
+    [
+      "missingDependencies"
+    ],
+    [
+      "halfUnpackedModule",
+      "sass"
+    ],
+    [
+      "halfUnpackedModule",
+      "globby"
+    ],
+    [
+      "halfUnpackedModule",
+      "@scope/a"
+    ],
+    [
+      "halfUnpackedModule",
+      "not-there"
+    ],
+    [
+      "halfUnpackedModule",
+      "missing"
+    ],
+    [
+      "missingAuthoredFrames"
+    ]
+  ],
+  "answers": [
+    [
+      "missing"
+    ],
+    "readdirp",
+    null,
+    null,
+    null,
+    "missing",
+    null
+  ]
+}

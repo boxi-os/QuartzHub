@@ -1,0 +1,17 @@
+{
+  "tree": {
+    "package.json": "{ nope"
+  },
+  "ask": [
+    [
+      "missingDependencies"
+    ],
+    [
+      "missingAuthoredFrames"
+    ]
+  ],
+  "answers": [
+    null,
+    null
+  ]
+}

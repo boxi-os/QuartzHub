@@ -1,0 +1,16 @@
+{
+  "tree": {
+    "package.json": "{ \"dependencies\": [\"a\", \"b\"] }"
+  },
+  "ask": [
+    [
+      "missingDependencies"
+    ]
+  ],
+  "answers": [
+    [
+      "0",
+      "1"
+    ]
+  ]
+}

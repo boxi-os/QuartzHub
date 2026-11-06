@@ -12,7 +12,8 @@
 // and noteInstallSucceeded (a no-op: updateService is too large to load, and the Swift side tests
 // the note on its own). Paths are written as @W@, the folder holding Original, Kopie and Vault.
 import { loadQuartzControl, commonStubs } from './lib/qc-bundle.mjs'
-import { chmodSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import { layOut } from './lib/tree.mjs'
+import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -97,21 +98,6 @@ const cases = [
   { name: 'content-missing', content: { contentStrategy: 'copy', contentSource: '@W@/Nirgends' } },
   { name: 'content-holds-target', content: { contentStrategy: 'symlink', contentSource: '@W@' } }
 ]
-
-function layOut(root, tree, w) {
-  const fill = (text) => text.replaceAll('@W@', w)
-  mkdirSync(root, { recursive: true })
-  const modes = []
-  for (const [path, spec] of Object.entries(tree)) {
-    const full = join(root, path)
-    mkdirSync(dirname(full), { recursive: true })
-    if (typeof spec === 'string') writeFileSync(full, fill(spec))
-    else if (spec.link !== undefined) symlinkSync(fill(spec.link), full)
-    else if (spec.dir !== undefined) { mkdirSync(full, { recursive: true }); modes.push([full, spec.dir]) }
-    else { writeFileSync(full, fill(spec.text)); chmodSync(full, spec.mode) }
-  }
-  for (const [full, mode] of modes) chmodSync(full, mode)
-}
 
 function record(root, w) {
   const mask = (text) => text.replaceAll(w, '@W@')
