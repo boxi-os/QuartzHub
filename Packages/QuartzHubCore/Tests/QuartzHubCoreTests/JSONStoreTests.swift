@@ -3,49 +3,62 @@ import Testing
 @testable import QuartzHubCore
 
 @Suite struct JSONStoreTests {
-  let dir: URL = {
-    let url = FileManager.default.temporaryDirectory.appendingPathComponent("qh-store-\(UUID().uuidString)")
-    try! FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-    return url
-  }()
+  let dir = TestFolder.make("qh-store")
 
-  func names() -> [String] {
-    (try? FileManager.default.contentsOfDirectory(atPath: dir.path).sorted()) ?? []
-  }
+  /// As `readdir` gives them; compared by bytes.
+  func names() -> [[UInt8]] { (Posix.entries(dir) ?? []).map { Array($0.name.utf8) } }
+
+  func clean() { try? FileManager.default.removeItem(atPath: dir) }
 
   @Test func missingIsNotUnreadable() {
-    #expect(JSONStore.read(dir.appendingPathComponent("projects.json")) == .missing)
-    #expect(JSONStore.read(dir.appendingPathComponent("projects.json"), orEmpty: .array) == .array([]))
+    defer { clean() }
+    #expect(JSONStore.read("\(dir)/projects.json") == .missing)
+    #expect(JSONStore.read("\(dir)/projects.json", orEmpty: .array) == .array([]))
     #expect(names().isEmpty)
   }
 
   @Test func writeLeavesNoTempFileAndNoFinalNewline() throws {
-    let url = dir.appendingPathComponent("settings.json")
-    try JSONStore.write(.object(JSONObject([("language", .string("de")), ("n", .number(2))])), to: url)
-    #expect(names() == ["settings.json"])
-    #expect(try String(contentsOf: url, encoding: .utf8) == "{\n  \"language\": \"de\",\n  \"n\": 2\n}")
+    defer { clean() }
+    let path = "\(dir)/Einstellungen f\u{FC}r \u{DC}ber.json"
+    try JSONStore.write(.object(JSONObject([("language", .string("de")), ("n", .number(2))])), to: path)
+    #expect(names() == [Array("Einstellungen f\u{FC}r \u{DC}ber.json".utf8)], "the name as given, composed")
+    #expect(String(decoding: try Posix.read(path), as: UTF8.self) == "{\n  \"language\": \"de\",\n  \"n\": 2\n}")
   }
 
   // The incident from jsonStore.ts: a damaged file must survive, not be replaced by the default.
   @Test(arguments: ["{\"a\":", "null", "42", "\"text\"", ""])
   func unreadableIsMovedAside(_ content: String) throws {
-    let url = dir.appendingPathComponent("connections.json")
-    try Data(content.utf8).write(to: url)
-    guard case .unreadable(let aside?) = JSONStore.read(url) else {
+    defer { clean() }
+    let path = "\(dir)/Verbindungen-\u{C4}.json"
+    try Posix.write(path, Data(content.utf8))
+    guard case .unreadable(let aside?) = JSONStore.read(path) else {
       Issue.record("expected unreadable")
       return
     }
-    #expect(!FileManager.default.fileExists(atPath: url.path))
-    #expect(try String(contentsOf: aside, encoding: .utf8) == content)
-    #expect(aside.lastPathComponent.hasPrefix("connections.json.corrupt-"))
-    #expect(JSONStore.quarantinedFiles().contains { $0.quarantinedAs == aside })
+    #expect(!Posix.exists(path))
+    #expect(String(decoding: try Posix.read(aside), as: UTF8.self) == content)
+    #expect(names().count == 1 && names()[0].starts(with: Array("Verbindungen-\u{C4}.json.corrupt-".utf8)))
+    #expect(Array(aside.utf8).starts(with: Array("\(dir)/Verbindungen-\u{C4}.json.corrupt-".utf8)))
+    #expect(JSONStore.quarantinedFiles().contains { $0.quarantinedAs.map { Array($0.utf8) } == Array(aside.utf8) })
+  }
+
+  /// Only "no such file" is missing; a read that fails otherwise (a folder in its place) is moved aside.
+  @Test func aFolderInPlaceIsUnreadable() throws {
+    defer { clean() }
+    try Posix.mkdirs("\(dir)/settings.json")
+    guard case .unreadable(let aside?) = JSONStore.read("\(dir)/settings.json") else {
+      Issue.record("expected unreadable")
+      return
+    }
+    #expect(Posix.kind(aside) == .directory && !Posix.exists("\(dir)/settings.json"))
   }
 
   @Test func wrongShapeIsMovedAside() throws {
-    let url = dir.appendingPathComponent("projects.json")
-    try Data("{\"a\":1}".utf8).write(to: url)
-    #expect(JSONStore.read(url, orEmpty: .array) == .array([]))
-    #expect(names().count == 1 && names()[0].hasPrefix("projects.json.corrupt-"))
+    defer { clean() }
+    let path = "\(dir)/projects.json"
+    try Posix.write(path, Data("{\"a\":1}".utf8))
+    #expect(JSONStore.read(path, orEmpty: .array) == .array([]))
+    #expect(names().count == 1 && names()[0].starts(with: Array("projects.json.corrupt-".utf8)))
   }
 
   @Test func quarantineStampIsToISOStringWithDashes() {
@@ -66,12 +79,13 @@ import Testing
   }
 
   @Test func unchangedValueRoundTripsByteForByte() throws {
-    let url = dir.appendingPathComponent("project-prefs.json")
+    defer { clean() }
+    let path = "\(dir)/project-prefs.json"
     let text = "{\n  \"z\": [\n    1,\n    {}\n  ],\n  \"10\": \"x\"\n}"
-    try Data(text.utf8).write(to: url)
-    guard case .ok(let value) = JSONStore.read(url) else { Issue.record("not ok"); return }
-    try JSONStore.write(value, to: url)
+    try Posix.write(path, Data(text.utf8))
+    guard case .ok(let value) = JSONStore.read(path) else { Issue.record("not ok"); return }
+    try JSONStore.write(value, to: path)
     // JavaScript moves the index key "10" first; QuartzControl's own write would do the same.
-    #expect(try String(contentsOf: url, encoding: .utf8) == "{\n  \"10\": \"x\",\n  \"z\": [\n    1,\n    {}\n  ]\n}")
+    #expect(String(decoding: try Posix.read(path), as: UTF8.self) == "{\n  \"10\": \"x\",\n  \"z\": [\n    1,\n    {}\n  ]\n}")
   }
 }

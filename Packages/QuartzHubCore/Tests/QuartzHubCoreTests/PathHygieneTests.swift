@@ -67,7 +67,7 @@ enum TestFolder {
     "QuartzHubCore/Projects/QuartzGuiWriter.swift",
     "QuartzHubCore/Snapshots/SnapshotStore+Restore.swift",
     "QuartzHubCore/Snapshots/SnapshotStore.swift",
-    "QuartzHubCore/Storage/JSONStore.swift",
+    "QuartzHubCore/Storage/URLBridges.swift",
     "QuartzHubCore/Storage/TreeCopy.swift",
     "QuartzHubCore/Styles/FontFaces.swift",
     "QuartzHubCore/Styles/FontService.swift",

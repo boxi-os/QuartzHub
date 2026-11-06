@@ -12,6 +12,7 @@ import Synchronization
 /// Names and bytes are QuartzControl's, because both apps meet in the same folders: the temp file
 /// is `<name>.tmp-<pid>-<8 hex>`, the quarantine timestamp is `toISOString()` with ':' and '.'
 /// replaced by '-', and the text is `JSON.stringify(value, null, 2)` without a final newline.
+/// Paths are strings with the bytes of the disk (`NodePath`).
 public enum JSONStore {
   public enum ReadResult: Equatable, Sendable {
     case ok(JSONValue)
@@ -19,7 +20,7 @@ public enum JSONStore {
     case missing
     /// A file that exists but could not be read or parsed, or holds neither an object nor a list.
     /// `quarantinedAs` is nil when even moving it aside failed.
-    case unreadable(quarantinedAs: URL?)
+    case unreadable(quarantinedAs: String?)
   }
 
   public enum Shape: Sendable {
@@ -37,8 +38,8 @@ public enum JSONStore {
   }
 
   public struct QuarantinedFile: Equatable, Sendable {
-    public let path: URL
-    public let quarantinedAs: URL?
+    public let path: String
+    public let quarantinedAs: String?
     public let at: Date
   }
 
@@ -49,31 +50,31 @@ public enum JSONStore {
     quarantined.withLock { $0 }
   }
 
-  public static func read(_ url: URL) -> ReadResult {
+  public static func read(_ path: String) -> ReadResult {
     let data: Data
     do {
-      data = try Data(contentsOf: url)
-    } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
+      data = try Posix.read(path)
+    } catch let error as NodeFileError where error.code == ENOENT {
       return .missing
     } catch {
-      return .unreadable(quarantinedAs: quarantine(url))
+      return .unreadable(quarantinedAs: quarantine(path))
     }
     guard let value = try? JSJSON.parse(data) else {
-      return .unreadable(quarantinedAs: quarantine(url))
+      return .unreadable(quarantinedAs: quarantine(path))
     }
     switch value {
     case .object, .array: return .ok(value)
-    default: return .unreadable(quarantinedAs: quarantine(url))
+    default: return .unreadable(quarantinedAs: quarantine(path))
     }
   }
 
   /// Reads without moving anything aside: for a file that belongs to someone else, such as
   /// QuartzControl's profile during the takeover. Unreadable is reported, never fixed.
-  public static func peek(_ url: URL) -> ReadResult {
+  public static func peek(_ path: String) -> ReadResult {
     let data: Data
     do {
-      data = try Data(contentsOf: url)
-    } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
+      data = try Posix.read(path)
+    } catch let error as NodeFileError where error.code == ENOENT {
       return .missing
     } catch {
       return .unreadable(quarantinedAs: nil)
@@ -86,29 +87,28 @@ public enum JSONStore {
 
   /// The common case, `readJsonFileOr`: one shape, one empty default. A file of the other shape
   /// (a list where an object belongs) is as broken as unparseable JSON and is moved aside too.
-  public static func read(_ url: URL, orEmpty shape: Shape) -> JSONValue {
-    guard case .ok(let value) = read(url) else { return shape.empty }
+  public static func read(_ path: String, orEmpty shape: Shape) -> JSONValue {
+    guard case .ok(let value) = read(path) else { return shape.empty }
     guard shape.matches(value) else {
-      _ = quarantine(url)
+      _ = quarantine(path)
       return shape.empty
     }
     return value
   }
 
-  public static func write(_ value: JSONValue, to url: URL) throws {
-    try writeAtomic(Data(JSJSON.stringify(value).utf8), to: url)
+  public static func write(_ value: JSONValue, to path: String) throws {
+    try writeAtomic(Data(JSJSON.stringify(value).utf8), to: path)
   }
 
   /// The write half for a file that is not JSON (a generated frame module, say, that Quartz imports
   /// in a process already running).
-  public static func writeAtomic(_ data: Data, to url: URL) throws {
+  public static func writeAtomic(_ data: Data, to path: String) throws {
     let suffix = UUID().uuidString.lowercased().prefix(8)
-    let tmp = url.deletingLastPathComponent()
-      .appendingPathComponent("\(url.lastPathComponent).tmp-\(getpid())-\(suffix)")
+    let tmp = "\(path).tmp-\(getpid())-\(suffix)"
     do {
       // 0o666 before the umask, as Node's open(path, 'w') does; the rename then gives the target
       // these permissions, exactly as QuartzControl's write does.
-      let fd = open(tmp.path, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o666)
+      let fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o666)
       guard fd >= 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
       var failure: Error?
       data.withUnsafeBytes { buffer in
@@ -128,18 +128,17 @@ public enum JSONStore {
       if failure == nil && fsync(fd) != 0 { failure = POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
       close(fd)
       if let failure { throw failure }
-      guard rename(tmp.path, url.path) == 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
+      guard rename(tmp, path) == 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
     } catch {
-      unlink(tmp.path)
+      unlink(tmp)
       throw error
     }
   }
 
-  static func quarantine(_ url: URL, now: Date = Date()) -> URL? {
-    let target = url.deletingLastPathComponent()
-      .appendingPathComponent("\(url.lastPathComponent).corrupt-\(quarantineStamp(now))")
-    let moved = rename(url.path, target.path) == 0
-    let entry = QuarantinedFile(path: url, quarantinedAs: moved ? target : nil, at: now)
+  static func quarantine(_ path: String, now: Date = Date()) -> String? {
+    let target = "\(path).corrupt-\(quarantineStamp(now))"
+    let moved = rename(path, target) == 0
+    let entry = QuarantinedFile(path: path, quarantinedAs: moved ? target : nil, at: now)
     quarantined.withLock { $0.append(entry) }
     return moved ? target : nil
   }
