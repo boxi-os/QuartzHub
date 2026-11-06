@@ -1,0 +1,470 @@
+{
+  "faces": [
+    {
+      "text": "",
+      "faces": []
+    },
+    {
+      "text": "@font-face { font-family: \"Inter\"; src: url(\"static/fonts/inter.woff2\") format(\"woff2\"); font-weight: 400 700; }",
+      "faces": [
+        {
+          "family": "Inter",
+          "weight": "400 700",
+          "style": "normal",
+          "url": "static/fonts/inter.woff2",
+          "urls": [
+            "static/fonts/inter.woff2"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "@font-face{font-family:'A B';src:local('x'),url( 'static/fonts/a.woff2' ) format('woff2'),url(static/fonts/a.ttf);font-style:italic;unicode-range:U+0000-00FF, U+0131}",
+      "faces": [
+        {
+          "family": "A B",
+          "weight": "400",
+          "style": "italic",
+          "unicodeRange": "U+0000-00FF, U+0131",
+          "url": "static/fonts/a.woff2",
+          "urls": [
+            "static/fonts/a.woff2",
+            "static/fonts/a.ttf"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "@font-face { src: url(static/fonts/x.woff2); }",
+      "faces": []
+    },
+    {
+      "text": "@font-face {\n  FONT-FAMILY : Upper ;\n  Font-Weight: bold;\n}",
+      "faces": [
+        {
+          "family": "Upper",
+          "weight": "bold",
+          "style": "normal",
+          "urls": []
+        }
+      ]
+    },
+    {
+      "text": "@font-face { font-family: \"Sass\"; src: url(\"#{$base}/static/fonts/s.woff2\"); font-weight: #{$w}; }",
+      "faces": [
+        {
+          "family": "Sass",
+          "weight": "#{$w}",
+          "style": "normal",
+          "url": "#{$base}/static/fonts/s.woff2",
+          "urls": [
+            "#{$base}/static/fonts/s.woff2"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "@font-face { font-family: Old; src: url(old.eot); src: url(old.eot?#iefix) format(\"embedded-opentype\"), url(static/fonts/old.woff) format(\"woff\"); }",
+      "faces": [
+        {
+          "family": "Old",
+          "weight": "400",
+          "style": "normal",
+          "url": "old.eot",
+          "urls": [
+            "old.eot",
+            "old.eot?#iefix",
+            "static/fonts/old.woff"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "/* @font-face { font-family: Commented; } */ @font-face { font-family: \"Two\"; } @font-face { font-family: \"Three\"; font-weight: 300 }",
+      "faces": [
+        {
+          "family": "Commented",
+          "weight": "400",
+          "style": "normal",
+          "urls": []
+        },
+        {
+          "family": "Two",
+          "weight": "400",
+          "style": "normal",
+          "urls": []
+        },
+        {
+          "family": "Three",
+          "weight": "300",
+          "style": "normal",
+          "urls": []
+        }
+      ]
+    },
+    {
+      "text": "@font-face { font-family: \"Broken\"; src: url(\"static/fonts/b.woff2\")",
+      "faces": []
+    },
+    {
+      "text": "@font-face { font-family: \"Hash # in it\"; src: url(static/fonts/h#x.woff2) }",
+      "faces": [
+        {
+          "family": "Hash # in it",
+          "weight": "400",
+          "style": "normal",
+          "url": "static/fonts/h#x.woff2",
+          "urls": [
+            "static/fonts/h#x.woff2"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "@font-face { font-family: \"\"; } @font-face { font-family: '' ; }",
+      "faces": []
+    },
+    {
+      "text": "@font-face { font-family: \"Ünïcödé 日本\"; src: url(\"static/fonts/%E6%97%A5.woff2\"); }",
+      "faces": [
+        {
+          "family": "Ünïcödé 日本",
+          "weight": "400",
+          "style": "normal",
+          "url": "static/fonts/%E6%97%A5.woff2",
+          "urls": [
+            "static/fonts/%E6%97%A5.woff2"
+          ]
+        }
+      ]
+    }
+  ],
+  "fileIn": [
+    {
+      "url": null,
+      "file": null
+    },
+    {
+      "url": "",
+      "file": null
+    },
+    {
+      "url": "static/fonts/a.woff2",
+      "file": "/D/a.woff2"
+    },
+    {
+      "url": "/static/fonts/a.woff2",
+      "file": "/D/a.woff2"
+    },
+    {
+      "url": "https://x.example/static/fonts/a.woff2?v=1#f",
+      "file": "/D/a.woff2"
+    },
+    {
+      "url": "static/fonts/a%20b.woff2",
+      "file": "/D/a b.woff2"
+    },
+    {
+      "url": "static/fonts/%E0%A4%A",
+      "file": null
+    },
+    {
+      "url": "static/fonts/.hidden.woff2",
+      "file": null
+    },
+    {
+      "url": "static/fonts/a%5Cb.woff2",
+      "file": null
+    },
+    {
+      "url": "static/fonts/sub/a.woff2",
+      "file": null
+    },
+    {
+      "url": "fonts/a.woff2",
+      "file": null
+    },
+    {
+      "url": "xstatic/fonts/a.woff2",
+      "file": null
+    },
+    {
+      "url": "static/fonts/%2E%2E",
+      "file": null
+    },
+    {
+      "url": "static/fonts/..",
+      "file": null
+    },
+    {
+      "url": "static/fonts/a.woff2/",
+      "file": null
+    },
+    {
+      "url": "data:font/woff2;base64,AAA",
+      "file": null
+    },
+    {
+      "url": "static/fonts/%2Fetc",
+      "file": null
+    }
+  ],
+  "css2": [
+    {
+      "typography": {},
+      "url": null,
+      "requests": [
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "typography": {
+        "header": "Inter"
+      },
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap",
+      "requests": [
+        {
+          "slot": "header",
+          "family": "Inter",
+          "weights": [
+            400,
+            700
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        },
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "typography": {
+        "header": "Inter",
+        "body": "Source Sans Pro",
+        "code": "IBM Plex Mono"
+      },
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;600&display=swap",
+      "requests": [
+        {
+          "slot": "header",
+          "family": "Inter",
+          "weights": [
+            400,
+            700
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        },
+        {
+          "slot": "body",
+          "family": "Source Sans Pro",
+          "weights": [
+            400,
+            600
+          ],
+          "italic": true,
+          "singleWeightDropped": false
+        },
+        {
+          "slot": "code",
+          "family": "IBM Plex Mono",
+          "weights": [
+            400,
+            600
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        },
+        null
+      ]
+    },
+    {
+      "typography": {
+        "header": {
+          "name": "Inter",
+          "weights": [
+            400,
+            700,
+            900
+          ]
+        },
+        "body": {
+          "name": "Noto Sans",
+          "includeItalic": false
+        },
+        "code": {
+          "name": "Mono",
+          "weights": [
+            500
+          ]
+        }
+      },
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans:wght@400;600&family=Mono&display=swap",
+      "requests": [
+        {
+          "slot": "header",
+          "family": "Inter",
+          "weights": [
+            400,
+            700,
+            900
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        },
+        {
+          "slot": "body",
+          "family": "Noto Sans",
+          "weights": [
+            400,
+            600
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        },
+        {
+          "slot": "code",
+          "family": "Mono",
+          "weights": [
+            500
+          ],
+          "italic": false,
+          "singleWeightDropped": true
+        },
+        null
+      ]
+    },
+    {
+      "typography": {
+        "body": {
+          "name": "Body",
+          "weights": [
+            700,
+            400
+          ],
+          "includeItalic": true
+        },
+        "title": "Title Font"
+      },
+      "url": "https://fonts.googleapis.com/css2?family=Body:ital,wght@0,400;0,700;1,400;1,700&family=Title+Font:wght@400;600&display=swap",
+      "requests": [
+        null,
+        {
+          "slot": "body",
+          "family": "Body",
+          "weights": [
+            700,
+            400
+          ],
+          "italic": true,
+          "singleWeightDropped": false
+        },
+        null,
+        {
+          "slot": "title",
+          "family": "Title Font",
+          "weights": [
+            400,
+            600
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        }
+      ]
+    },
+    {
+      "typography": {
+        "header": "",
+        "body": {
+          "name": ""
+        },
+        "code": {
+          "weights": [
+            1
+          ]
+        },
+        "title": 42
+      },
+      "url": null,
+      "requests": [
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "typography": {
+        "header": "  Spaced  Name "
+      },
+      "url": "https://fonts.googleapis.com/css2?family=Spaced++Name:wght@400;700&display=swap",
+      "requests": [
+        {
+          "slot": "header",
+          "family": "  Spaced  Name ",
+          "weights": [
+            400,
+            700
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        },
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "typography": {
+        "header": "Ä & ö/ß+x"
+      },
+      "url": "https://fonts.googleapis.com/css2?family=%C3%84+%26+%C3%B6%2F%C3%9F%2Bx:wght@400;700&display=swap",
+      "requests": [
+        {
+          "slot": "header",
+          "family": "Ä & ö/ß+x",
+          "weights": [
+            400,
+            700
+          ],
+          "italic": false,
+          "singleWeightDropped": false
+        },
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "typography": {
+        "header": {
+          "name": "W",
+          "weights": [
+            "400",
+            500,
+            null
+          ]
+        }
+      },
+      "url": "https://fonts.googleapis.com/css2?family=W&display=swap",
+      "requests": [
+        {
+          "slot": "header",
+          "family": "W",
+          "weights": [
+            500
+          ],
+          "italic": false,
+          "singleWeightDropped": true
+        },
+        null,
+        null,
+        null
+      ]
+    }
+  ]
+}

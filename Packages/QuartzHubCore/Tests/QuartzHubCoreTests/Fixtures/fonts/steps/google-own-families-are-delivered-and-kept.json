@@ -1,0 +1,133 @@
+{
+  "name": "google: own families are delivered and kept",
+  "tree": {
+    "quartz/styles/custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n",
+    "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Mine\"; src: url(static/fonts/mine.woff2); unicode-range: U+0041-005A; }\n/* --- QuartzControl:managed:fonts:end --- */\n",
+    "quartz/static/fonts/mine.woff2": "m"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Inter",
+          "body": "Mine"
+        }
+      ],
+      "result": {
+        "changed": true,
+        "files": [
+          "inter-latin.woff2"
+        ],
+        "removedFiles": [],
+        "removedFamilies": [],
+        "missingFamilies": [],
+        "ownFamilies": [],
+        "coveredFamilies": []
+      },
+      "changed": {
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Mine\"; src: url(static/fonts/mine.woff2); unicode-range: U+0041-005A; }\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Mine:ital,wght@0,400;0,600;1,400;1,600&display=swap */\n/* QuartzControl: left out what the project's own rules cover 10a750932c37 */\n@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: 400 700;\n  font-display: swap;\n  src: url(static/fonts/inter-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:google-fonts:end --- */\n",
+        "quartz/static/fonts/inter-latin.woff2": {
+          "size": 1200,
+          "sha1": "466e70ea3de658486d4a3139074ac2ee6937c396"
+        }
+      },
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Mine:ital,wght@0,400;0,600;1,400;1,600&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/inter-latin.woff2",
+          "userAgent": null
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Inter",
+          "body": "Noto Sans"
+        }
+      ],
+      "result": {
+        "changed": true,
+        "files": [
+          "inter-latin.woff2",
+          "noto-latin.woff2"
+        ],
+        "removedFiles": [],
+        "removedFamilies": [],
+        "missingFamilies": [],
+        "ownFamilies": [],
+        "coveredFamilies": []
+      },
+      "changed": {
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Mine\"; src: url(static/fonts/mine.woff2); unicode-range: U+0041-005A; }\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap */\n@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: 400 700;\n  font-display: swap;\n  src: url(static/fonts/inter-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n@font-face {\n  font-family: 'Noto Sans';\n  font-style: normal;\n  font-weight: 100 900;\n  font-display: swap;\n  src: url(static/fonts/noto-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:google-fonts:end --- */\n",
+        "quartz/static/fonts/noto-latin.woff2": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+      },
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/noto-latin.woff2",
+          "userAgent": null
+        }
+      ]
+    },
+    {
+      "call": "write",
+      "args": [
+        "quartz/styles/custom.scss",
+        "@use \"./quartzcontrol\";\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n"
+      ],
+      "result": null,
+      "changed": {
+        "quartz/styles/custom.scss": "@use \"./quartzcontrol\";\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n"
+      },
+      "requests": []
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Inter",
+          "body": "Noto Sans"
+        }
+      ],
+      "result": {
+        "changed": true,
+        "files": [
+          "noto-latin.woff2"
+        ],
+        "removedFiles": [
+          "inter-latin.woff2"
+        ],
+        "removedFamilies": [],
+        "missingFamilies": [],
+        "ownFamilies": [
+          "Inter"
+        ],
+        "coveredFamilies": []
+      },
+      "changed": {
+        "quartz/static/fonts/inter-latin.woff2": null,
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Mine\"; src: url(static/fonts/mine.woff2); unicode-range: U+0041-005A; }\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap */\n@font-face {\n  font-family: 'Noto Sans';\n  font-style: normal;\n  font-weight: 100 900;\n  font-display: swap;\n  src: url(static/fonts/noto-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:google-fonts:end --- */\n"
+      },
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    }
+  ]
+}

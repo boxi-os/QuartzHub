@@ -946,3 +946,37 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
   Fall: zlib-Kopf, Rundung bei ,5, abgeschnittener Strom, Base128-Länge). Der Zweig „Decoder
   meldet OK ohne Fortschritt“ ist nur ein Schutz vor einer Endlosschleife: Ein abgeschnittener
   Strom endet bei Apples Decoder im Fehlerstatus (gemessen über die Gegenprobe dieses Zweigs).
+
+### Schriften im Projekt (`fontService.ts`, die Schrift-Teile von `styleService.ts`, `shared/googleFontRequest.ts` → `FontService`, `FontFaces`, `GoogleFontRequest`)
+
+- **Was dazugehört:** eine Schriftdatei importieren (Regel nach dem, was die Datei sagt),
+  ungenutzte importierte Schriften finden und entfernen, die Dateien ersetzter Regeln, die
+  Google-Schriften holen und entfernen, und die Auffrischung an der Bau-Tür.
+- **Gemessen gegen QuartzControls Code:** `scripts/fonts-golden.mjs` lädt `fontService.ts` mit einem
+  nachgestellten Google (`google.json`: CSS-Antworten und Schriftdateien je URL, auch die Antworten
+  400, 404, „nicht erreichbar“, eine zu große Datei, 801 Dateien, ein unbrauchbarer Name) und
+  zeichnet auf: `parseFontFaces` auf zwölf Texten, `fontFileIn` auf 17 Adressen, die CSS2-Anfrage
+  für neun Typografien, und zwölf Abläufe (Import echter Schriften aus `Fixtures/font-file`,
+  ungenutzte Familien mit Kommentaren, Strings, tiefen Stylesheets und Bindestrich-Namen, ersetzte
+  Regeln mit Sass-Pfad, Google holen, unverändert lassen, wechseln, entfernen, ein Torso, eigene
+  Regeln, die Latin abdecken, eine eigene Regel ohne Bereich, alle Fehlerfälle, die Bau-Tür mit
+  `fontOrigin` lokal und cdn, mit kaputter Config). Je Schritt Antwort, geänderte Dateien (eine
+  Schriftdatei als Größe und SHA-1) und die Anfragen samt User-Agent. Alles gleich.
+- **JavaScript-Regeln, wo sie zählen:** `decodeURIComponent` und `encodeURIComponent` selbst
+  geschrieben (`JSURI`, wirft wie URIError), der Vergleich „nennt die Familie“ mit JavaScripts
+  Groß/Klein-Regel des `i`-Flags (Canonicalize je UTF-16-Einheit, nicht ICUs Faltung), Nodes
+  `path.join`/`basename`/`extname` (`NodePath`).
+- **Die Sätze im Block bleiben QuartzControls** („QuartzControl: every family is declared by the
+  project itself …“, „QuartzControl: left out what the project's own rules cover <Abdruck>“):
+  Beide Apps lesen sie zurück, also sind sie Format. Der Satz in der Konsole
+  (`googleFontsRefreshOwn`) sagt jetzt „QuartzHub“.
+- **Netz:** URLSession mit den Proxy- und Zertifikat-Einstellungen des Systems, wie dort Electrons
+  `net.fetch`; 20 s je Anfrage über Kopf und Körper. Gemessen nur gegen das nachgestellte Google;
+  ein echter Lauf gegen Google wird einzeln gefragt (Nutzer, 2026-11-06).
+- **An der Bau-Tür:** vierter Schritt von `BuildService.preparation`. Gemessen mit dem echten
+  Config-Leser und ohne Netz: Ein Projekt, das jede Familie selbst einbindet, bekommt den Block
+  „nichts von Google“, die Google-Datei geht, beide Sätze stehen in der Konsole; der zweite Lauf
+  sagt nichts.
+- Gegenproben (23, jede lässt einen Test scheitern; vier waren erst ungefangen und bekamen einen
+  Fall: der Abdruck der eigenen Regeln bei gleicher Anfrage, eigene Familien in „nicht geliefert“
+  und in „entfernt“, `fontOrigin: cdn` mit anderer Typografie).

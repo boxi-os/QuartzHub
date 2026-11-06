@@ -1,0 +1,275 @@
+{
+  "name": "refresh at the build door",
+  "tree": {
+    "quartz/styles/custom.scss": ".x {}\n"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {
+      "fontOrigin": "local",
+      "typography": {
+        "header": "Inter",
+        "body": "Source Sans Pro",
+        "code": "IBM Plex Mono"
+      }
+    },
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Inter"
+        }
+      ],
+      "result": {
+        "changed": true,
+        "files": [
+          "inter-latin.woff2"
+        ],
+        "removedFiles": [],
+        "removedFamilies": [],
+        "missingFamilies": [],
+        "ownFamilies": [],
+        "coveredFamilies": []
+      },
+      "changed": {
+        "quartz/styles/custom.scss": ".x {}\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap */\n@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: 400 700;\n  font-display: swap;\n  src: url(static/fonts/inter-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:google-fonts:end --- */\n",
+        "quartz/static/fonts/inter-latin.woff2": {
+          "size": 1200,
+          "sha1": "466e70ea3de658486d4a3139074ac2ee6937c396"
+        }
+      },
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/inter-latin.woff2",
+          "userAgent": null
+        }
+      ]
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": {
+        "failed": false,
+        "text": "{\"key\":\"googleFontsRefreshed\",\"args\":{\"count\":5}}"
+      },
+      "changed": {
+        "quartz/styles/custom.scss": ".x {}\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;600&display=swap */\n/* latin */\n@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: 400 700;\n  font-display: swap;\n  src: url(static/fonts/inter-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* cyrillic */\n@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: 400 700;\n  font-display: swap;\n  src: url(static/fonts/inter-cyr.woff2) format('woff2');\n  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;\n}\n@font-face {\n  font-family: 'Source Sans Pro';\n  font-style: italic;\n  font-weight: 400;\n  font-display: swap;\n  src: url(static/fonts/ssp-i.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n@font-face {\n  font-family: 'Source Sans Pro';\n  font-style: normal;\n  font-weight: 400;\n  font-display: swap;\n  src: url(static/fonts/ssp.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n@font-face {\n  font-family: 'IBM Plex Mono';\n  font-style: normal;\n  font-weight: 400;\n  font-display: swap;\n  src: url(static/fonts/plex.0.woff2) format('woff2');\n}\n/* --- QuartzControl:managed:google-fonts:end --- */\n",
+        "quartz/static/fonts/inter-cyr.woff2": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////",
+        "quartz/static/fonts/plex.0.woff2": {
+          "size": 700,
+          "sha1": "34f7eacec54f425ac3fb0862412ea3e728357343"
+        },
+        "quartz/static/fonts/ssp-i.woff2": {
+          "size": 900,
+          "sha1": "c2943c27944383c888c423bfaed26f9f36dfe38c"
+        },
+        "quartz/static/fonts/ssp.woff2": {
+          "size": 901,
+          "sha1": "eb0417e1222a1e571a5032a25cdf5f29063c5986"
+        }
+      },
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;600&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/inter-cyr.woff2",
+          "userAgent": null
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/ssp-i.woff2",
+          "userAgent": null
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/ssp.woff2",
+          "userAgent": null
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/plex.0.woff2",
+          "userAgent": null
+        }
+      ]
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "setConfig",
+      "args": [
+        {
+          "configuration": {},
+          "theme": {
+            "fontOrigin": "local",
+            "typography": {
+              "header": "Down"
+            }
+          },
+          "plugins": []
+        }
+      ],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": {
+        "failed": true,
+        "text": "{\"key\":\"googleFontsRefreshFailed\",\"args\":{\"message\":\"{\\\"key\\\":\\\"googleFontsUnreachable\\\",\\\"args\\\":{}}\"}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Down:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    },
+    {
+      "call": "setConfig",
+      "args": [
+        {
+          "configuration": {},
+          "theme": {
+            "fontOrigin": "cdn",
+            "typography": {
+              "header": "Inter",
+              "body": "Source Sans Pro",
+              "code": "IBM Plex Mono"
+            }
+          },
+          "plugins": []
+        }
+      ],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "setConfig",
+      "args": [
+        {
+          "configuration": {},
+          "theme": {
+            "fontOrigin": "cdn",
+            "typography": {
+              "header": "Inter"
+            }
+          },
+          "plugins": []
+        }
+      ],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "setConfig",
+      "args": [
+        {
+          "error": "config broke"
+        }
+      ],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": {
+        "failed": true,
+        "text": "{\"key\":\"googleFontsRefreshFailed\",\"args\":{\"message\":\"config broke\"}}"
+      },
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "setConfig",
+      "args": [
+        {
+          "configuration": {},
+          "theme": {
+            "fontOrigin": "local",
+            "typography": {
+              "header": "Noto Sans",
+              "body": "Inter"
+            }
+          },
+          "plugins": []
+        }
+      ],
+      "result": null,
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": {
+        "failed": false,
+        "text": "{\"key\":\"googleFontsRefreshed\",\"args\":{\"count\":3}} {\"key\":\"googleFontsRefreshRemoved\",\"args\":{\"count\":4}}"
+      },
+      "changed": {
+        "quartz/static/fonts/inter-cyr.woff2": null,
+        "quartz/static/fonts/plex.0.woff2": null,
+        "quartz/static/fonts/ssp-i.woff2": null,
+        "quartz/static/fonts/ssp.woff2": null,
+        "quartz/styles/custom.scss": ".x {}\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Inter:ital,wght@0,400;0,600;1,400;1,600&display=swap */\n/* cyrillic */\n@font-face {\n  font-family: 'Noto Sans';\n  font-style: normal;\n  font-weight: 100 900;\n  font-display: swap;\n  src: url(static/fonts/noto-cyr.woff2) format('woff2');\n  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;\n}\n/* latin */\n@font-face {\n  font-family: 'Noto Sans';\n  font-style: normal;\n  font-weight: 100 900;\n  font-display: swap;\n  src: url(static/fonts/noto-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: 400 700;\n  font-display: swap;\n  src: url(static/fonts/inter-latin.woff2) format('woff2');\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n/* --- QuartzControl:managed:google-fonts:end --- */\n",
+        "quartz/static/fonts/noto-cyr.woff2": {
+          "size": 1500,
+          "sha1": "94bea50dd22540b74d28e5284862c69fab849d35"
+        },
+        "quartz/static/fonts/noto-latin.woff2": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+      },
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Inter:ital,wght@0,400;0,600;1,400;1,600&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/noto-cyr.woff2",
+          "userAgent": null
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/noto-latin.woff2",
+          "userAgent": null
+        }
+      ]
+    }
+  ]
+}

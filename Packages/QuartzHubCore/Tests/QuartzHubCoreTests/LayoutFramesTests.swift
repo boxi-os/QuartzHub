@@ -254,13 +254,33 @@ func firstDifference(_ a: String, _ b: String) -> String {
 /// sentence inside a sentence comes out as the app would write it.
 enum QC {
   static func render(_ text: String, mask project: String) -> String {
-    guard let start = text.range(of: "{\"key\":") else { return text }
-    let prefix = String(text[..<start.lowerBound])
-    guard let stub = try? JSJSON.parse(String(text[start.lowerBound...])), let key = stub["key"]?.stringValue else { return text }
-    var args: [String: String] = [:]
-    let given = stub["args"]?.objectValue ?? JSONObject()
-    for name in given.keys { args[name] = render(JS.string(given[name]!), mask: project) }
-    return prefix + L10n.t("main.\(key)", args)
+    let units = Array(text.utf16)
+    var out = "", index = 0
+    while let start = JSText.indexOf(text, "{\"key\":", from: index) {
+      out += JSText.slice(text, index, start)
+      // The end of this object: braces outside strings, counted.
+      var depth = 0, inString = false, escaped = false, end = start
+      for i in start..<units.count {
+        let unit = units[i]
+        if inString {
+          if escaped { escaped = false } else if unit == 0x5C { escaped = true } else if unit == 0x22 { inString = false }
+          continue
+        }
+        if unit == 0x22 { inString = true } else if unit == 0x7B { depth += 1 } else if unit == 0x7D {
+          depth -= 1
+          if depth == 0 { end = i + 1; break }
+        }
+      }
+      guard end > start, let stub = try? JSJSON.parse(JSText.slice(text, start, end)), let key = stub["key"]?.stringValue else {
+        return out + JSText.slice(text, start)
+      }
+      var args: [String: String] = [:]
+      let given = stub["args"]?.objectValue ?? JSONObject()
+      for name in given.keys { args[name] = render(JS.string(given[name]!), mask: project) }
+      out += L10n.t("main.\(key)", args)
+      index = end
+    }
+    return out + JSText.slice(text, index)
   }
 
   static func mask(_ text: String, _ path: String) -> String {

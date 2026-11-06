@@ -1,0 +1,43 @@
+{
+  "name": "replaced rules",
+  "tree": {
+    "quartz/styles/custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n",
+    "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Old\"; src: url(\"static/fonts/old.woff2\"); }\n/* --- QuartzControl:managed:fonts:end --- */\n",
+    "quartz/styles/custom/keep.scss": "@font-face { font-family: \"Keep\"; src: url(\"#{$dir}/kept.woff2\"); }",
+    "quartz/static/fonts/old.woff2": "o",
+    "quartz/static/fonts/kept.woff2": "k",
+    "quartz/static/fonts/both.woff2": "b"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "fontFilesReplacedRulesWouldRemove",
+      "args": [
+        "@font-face { font-family: X; src: url(static/fonts/old.woff2), url(static/fonts/kept.woff2), url(static/fonts/both.woff2), url(static/fonts/absent.woff2); }",
+        "@font-face { src: url(static/fonts/both.woff2); }"
+      ],
+      "result": [
+        "both.woff2"
+      ],
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "deleteFontFilesOfReplacedRules",
+      "args": [
+        "@font-face { font-family: X; src: url(static/fonts/both.woff2), url(static/fonts/kept.woff2); }"
+      ],
+      "result": [
+        "both.woff2"
+      ],
+      "changed": {
+        "quartz/static/fonts/both.woff2": null
+      },
+      "requests": []
+    }
+  ]
+}

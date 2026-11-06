@@ -1,0 +1,78 @@
+{
+  "name": "google: own rule without range",
+  "tree": {
+    "quartz/styles/custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n",
+    "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n",
+    "quartz/static/fonts/own-inter.woff2": "x"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Inter"
+        }
+      ],
+      "result": {
+        "changed": true,
+        "files": [],
+        "removedFiles": [],
+        "removedFamilies": [],
+        "missingFamilies": [],
+        "ownFamilies": [
+          "Inter"
+        ],
+        "coveredFamilies": []
+      },
+      "changed": {
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* QuartzControl: every family is declared by the project itself, nothing is fetched from Google */\n/* --- QuartzControl:managed:google-fonts:end --- */\n"
+      },
+      "requests": []
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Inter"
+        }
+      ],
+      "result": {
+        "changed": false,
+        "files": [],
+        "removedFiles": [],
+        "removedFamilies": [],
+        "missingFamilies": [],
+        "ownFamilies": [
+          "Inter"
+        ],
+        "coveredFamilies": []
+      },
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Inter",
+          "body": "Mixed"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsUnreachable\",\"args\":{}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Mixed:ital,wght@0,400;0,600;1,400;1,600&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "name": "unused: who names what",
+  "tree": {
+    "quartz/styles/custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n",
+    "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Alpha\"; src: url(\"static/fonts/alpha.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Beta\"; src: url(\"static/fonts/beta.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Gamma\"; src: url(\"static/fonts/gamma.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Delta\"; src: url(\"static/fonts/delta.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Epsilon\"; src: url(\"static/fonts/epsilon.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Zeta\"; src: url(\"static/fonts/zeta.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Eta\"; src: url(\"static/fonts/eta.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Theta\"; src: url(\"static/fonts/theta.woff2\"), url(static/fonts/shared.woff2); }\n@font-face { font-family: \"Iota\"; src: url(\"static/fonts/iota.woff2\"), url(static/fonts/shared.woff2); }\n/* --- QuartzControl:managed:fonts:end --- */\n",
+    "quartz/styles/custom/a.scss": "body { font-family: \"Gamma\", sans-serif; }\n/* Delta in a comment */\n// Epsilon in a line comment\n.q::after { content: \"Zeta\"; }\n",
+    "quartz/styles/deep/x/y.scss": ".y { font-family: Eta; }",
+    "quartz/components/styles/c.scss": ".c { font: 12px Iotaish; }",
+    "quartz/static/giscus.css": ".g { font-family: Theta-Bold; }",
+    "quartz/static/fonts/alpha.woff2": "a",
+    "quartz/static/fonts/iota.woff2": "i",
+    "quartz/static/fonts/shared.woff2": "s"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {
+      "typography": {
+        "header": "Alpha",
+        "body": {
+          "name": "Beta"
+        },
+        "code": 7
+      }
+    },
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "unusedImportedFonts",
+      "args": [
+        []
+      ],
+      "result": [
+        {
+          "family": "Delta",
+          "files": [
+            "delta.woff2"
+          ]
+        },
+        {
+          "family": "Epsilon",
+          "files": [
+            "epsilon.woff2"
+          ]
+        },
+        {
+          "family": "Theta",
+          "files": [
+            "theta.woff2"
+          ]
+        },
+        {
+          "family": "Iota",
+          "files": [
+            "iota.woff2"
+          ]
+        }
+      ],
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "removeImportedFont",
+      "args": [
+        "Iota"
+      ],
+      "result": {
+        "removedFiles": [
+          "iota.woff2"
+        ]
+      },
+      "changed": {
+        "quartz/static/fonts/iota.woff2": null,
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Alpha\"; src: url(\"static/fonts/alpha.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Beta\"; src: url(\"static/fonts/beta.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Gamma\"; src: url(\"static/fonts/gamma.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Delta\"; src: url(\"static/fonts/delta.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Epsilon\"; src: url(\"static/fonts/epsilon.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Zeta\"; src: url(\"static/fonts/zeta.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Eta\"; src: url(\"static/fonts/eta.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Theta\"; src: url(\"static/fonts/theta.woff2\"), url(static/fonts/shared.woff2); }\n/* --- QuartzControl:managed:fonts:end --- */\n"
+      },
+      "requests": []
+    },
+    {
+      "call": "removeImportedFont",
+      "args": [
+        "Theta"
+      ],
+      "result": {
+        "removedFiles": [
+          "theta.woff2"
+        ]
+      },
+      "changed": {
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Alpha\"; src: url(\"static/fonts/alpha.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Beta\"; src: url(\"static/fonts/beta.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Gamma\"; src: url(\"static/fonts/gamma.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Delta\"; src: url(\"static/fonts/delta.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Epsilon\"; src: url(\"static/fonts/epsilon.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Zeta\"; src: url(\"static/fonts/zeta.woff2\"), url(static/fonts/shared.woff2); }\n\n@font-face { font-family: \"Eta\"; src: url(\"static/fonts/eta.woff2\"), url(static/fonts/shared.woff2); }\n/* --- QuartzControl:managed:fonts:end --- */\n"
+      },
+      "requests": []
+    },
+    {
+      "call": "unusedImportedFonts",
+      "args": [
+        []
+      ],
+      "result": [
+        {
+          "family": "Delta",
+          "files": [
+            "delta.woff2"
+          ]
+        },
+        {
+          "family": "Epsilon",
+          "files": [
+            "epsilon.woff2"
+          ]
+        }
+      ],
+      "changed": {},
+      "requests": []
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "import into a moved project",
+  "tree": {
+    "quartz/styles/custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n",
+    "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n",
+    "quartz/static/fonts/own-inter.woff2": "x",
+    "in/x.otf": "otf bytes"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "importFontFile",
+      "args": [
+        "@IN@/x.otf",
+        "Other"
+      ],
+      "result": {
+        "fileName": "x.otf"
+      },
+      "changed": {
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n\n@font-face {\n  font-family: \"Other\";\n  src: url(\"static/fonts/x.otf\") format(\"opentype\");\n  font-display: swap;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n",
+        "quartz/static/fonts/x.otf": "otf bytes"
+      },
+      "requests": []
+    },
+    {
+      "call": "unusedImportedFonts",
+      "args": [
+        [
+          "Inter"
+        ]
+      ],
+      "result": [
+        {
+          "family": "Other",
+          "files": [
+            "x.otf"
+          ]
+        }
+      ],
+      "changed": {},
+      "requests": []
+    }
+  ]
+}

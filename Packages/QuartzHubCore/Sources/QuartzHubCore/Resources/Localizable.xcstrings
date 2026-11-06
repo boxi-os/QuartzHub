@@ -26426,7 +26426,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Projekt bindet {{families}} selbst ein; was die eigenen Regeln abdecken, holt QuartzControl nicht bei Google."
+            "value" : "Das Projekt bindet {{families}} selbst ein; was die eigenen Regeln abdecken, holt QuartzHub nicht bei Google."
           }
         },
         "en" : {

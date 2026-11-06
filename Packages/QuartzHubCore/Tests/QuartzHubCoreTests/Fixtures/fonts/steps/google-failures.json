@@ -1,0 +1,184 @@
+{
+  "name": "google: failures",
+  "tree": {
+    "quartz/styles/custom.scss": ".x {}\n"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {}
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsNoFamily\",\"args\":{}}"
+      },
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Nope"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsRequestFailed\",\"args\":{\"status\":400}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Nope:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Empty"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsNothingFound\",\"args\":{}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Empty:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "BadName"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsBadFileName\",\"args\":{\"name\":\"bad name.woff2\"}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=BadName:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Missing"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsFileFailed\",\"args\":{\"file\":\"gone.woff2\",\"status\":404}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Missing:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/here.woff2",
+          "userAgent": null
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/gone.woff2",
+          "userAgent": null
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Huge"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsFileTooLarge\",\"args\":{\"file\":\"huge.woff2\"}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Huge:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/huge.woff2",
+          "userAgent": null
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Many"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsTooManyFiles\",\"args\":{\"count\":801,\"max\":800}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Many:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Down"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsUnreachable\",\"args\":{}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Down:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      ]
+    },
+    {
+      "call": "fetchGoogleFonts",
+      "args": [
+        {
+          "header": "Unreachable file"
+        }
+      ],
+      "result": {
+        "threw": "{\"key\":\"googleFontsFileUnreachable\",\"args\":{\"file\":\"nofile.woff2\"}}"
+      },
+      "changed": {},
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Unreachable+file:wght@400;700&display=swap",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/x/v1/nofile.woff2",
+          "userAgent": null
+        }
+      ]
+    }
+  ]
+}

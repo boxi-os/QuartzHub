@@ -135,15 +135,29 @@ public struct LayoutFrames: Sendable {
   /// `readdir(dir, { withFileTypes: true })`: the order the file system gives, and a symlink is not
   /// a directory.
   static func directoryEntries(_ dir: URL) -> [(name: String, isDirectory: Bool)] {
+    directoryEntriesWithKind(dir).map { ($0.name, $0.kind == .directory) }
+  }
+
+  enum EntryKind { case directory, file, link, other }
+
+  /// The same with the Dirent's kind: a link is a link, not what it points at.
+  static func directoryEntriesWithKind(_ dir: URL) -> [(name: String, kind: EntryKind)] {
     guard let stream = opendir(dir.path) else { return [] }
     defer { closedir(stream) }
-    var result: [(String, Bool)] = []
+    var result: [(String, EntryKind)] = []
     while let entry = readdir(stream) {
       let name = withUnsafeBytes(of: entry.pointee.d_name) { raw in
         String(decoding: raw.prefix(Int(entry.pointee.d_namlen)), as: UTF8.self)
       }
       if name == "." || name == ".." { continue }
-      result.append((name, entry.pointee.d_type == DT_DIR))
+      let kind: EntryKind
+      switch Int32(entry.pointee.d_type) {
+      case DT_DIR: kind = .directory
+      case DT_REG: kind = .file
+      case DT_LNK: kind = .link
+      default: kind = .other
+      }
+      result.append((name, kind))
     }
     return result
   }

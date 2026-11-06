@@ -1,0 +1,160 @@
+{
+  "name": "import fonts",
+  "tree": {
+    "quartz/styles/custom.scss": ".x {}\n",
+    "in/Noto Sans.woff2": {
+      "fixture": "font-file/files/noto-sans-latin-400-700.woff2"
+    },
+    "in/plain.TTF": "not a font",
+    "in/italic.woff2": {
+      "fixture": "font-file/files/noto-sans-latin-italic-400-700.woff2"
+    }
+  },
+  "config": {
+    "configuration": {},
+    "theme": {},
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "importFontFile",
+      "args": [
+        "@IN@/Noto Sans.woff2",
+        "Noto Sans"
+      ],
+      "result": {
+        "fileName": "Noto Sans.woff2",
+        "weight": "100 900",
+        "italic": false
+      },
+      "changed": {
+        "quartz/styles/custom.scss": ".x {}\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/Noto Sans.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n  font-display: swap;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n",
+        "quartz/static/fonts/Noto Sans.woff2": {
+          "size": 35856,
+          "sha1": "2579378342fde68f67ae952e3853ab60e1857237"
+        }
+      },
+      "requests": []
+    },
+    {
+      "call": "importFontFile",
+      "args": [
+        "@IN@/Noto Sans.woff2",
+        "Noto Sans"
+      ],
+      "result": {
+        "fileName": "Noto Sans.woff2",
+        "weight": "100 900",
+        "italic": false
+      },
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "importFontFile",
+      "args": [
+        "@IN@/plain.TTF",
+        "Plain"
+      ],
+      "result": {
+        "fileName": "plain.TTF"
+      },
+      "changed": {
+        "quartz/styles/custom.scss": ".x {}\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/Noto Sans.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n  font-display: swap;\n}\n\n@font-face {\n  font-family: \"Plain\";\n  src: url(\"static/fonts/plain.TTF\") format(\"truetype\");\n  font-display: swap;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n",
+        "quartz/static/fonts/plain.TTF": "not a font"
+      },
+      "requests": []
+    },
+    {
+      "call": "importFontFile",
+      "args": [
+        "@IN@/italic.woff2",
+        "Noto Sans"
+      ],
+      "result": {
+        "fileName": "italic.woff2",
+        "weight": "100 900",
+        "italic": true
+      },
+      "changed": {
+        "quartz/styles/custom.scss": ".x {}\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/Noto Sans.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n  font-display: swap;\n}\n\n@font-face {\n  font-family: \"Plain\";\n  src: url(\"static/fonts/plain.TTF\") format(\"truetype\");\n  font-display: swap;\n}\n\n@font-face {\n  font-family: \"Noto Sans\";\n  src: url(\"static/fonts/italic.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n  font-style: italic;\n  font-display: swap;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n",
+        "quartz/static/fonts/italic.woff2": {
+          "size": 39604,
+          "sha1": "da8cbc24eb28439d2277c62fc91acf403d1407fa"
+        }
+      },
+      "requests": []
+    },
+    {
+      "call": "unusedImportedFonts",
+      "args": [
+        []
+      ],
+      "result": [
+        {
+          "family": "Noto Sans",
+          "files": [
+            "Noto Sans.woff2",
+            "italic.woff2"
+          ]
+        },
+        {
+          "family": "Plain",
+          "files": [
+            "plain.TTF"
+          ]
+        }
+      ],
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "unusedImportedFonts",
+      "args": [
+        [
+          "Plain"
+        ]
+      ],
+      "result": [
+        {
+          "family": "Noto Sans",
+          "files": [
+            "Noto Sans.woff2",
+            "italic.woff2"
+          ]
+        }
+      ],
+      "changed": {},
+      "requests": []
+    },
+    {
+      "call": "removeImportedFont",
+      "args": [
+        "noto sans"
+      ],
+      "result": {
+        "removedFiles": [
+          "Noto Sans.woff2",
+          "italic.woff2"
+        ]
+      },
+      "changed": {
+        "quartz/static/fonts/Noto Sans.woff2": null,
+        "quartz/static/fonts/italic.woff2": null,
+        "quartz/styles/custom.scss": ".x {}\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Plain\";\n  src: url(\"static/fonts/plain.TTF\") format(\"truetype\");\n  font-display: swap;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n"
+      },
+      "requests": []
+    },
+    {
+      "call": "removeImportedFont",
+      "args": [
+        "Nobody"
+      ],
+      "result": {
+        "removedFiles": []
+      },
+      "changed": {},
+      "requests": []
+    }
+  ]
+}

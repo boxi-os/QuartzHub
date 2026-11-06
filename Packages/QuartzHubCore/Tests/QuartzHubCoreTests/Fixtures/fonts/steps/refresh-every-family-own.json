@@ -1,0 +1,41 @@
+{
+  "name": "refresh: every family own",
+  "tree": {
+    "quartz/styles/custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n",
+    "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap */\n@font-face { font-family: 'Inter'; src: url(static/fonts/g-inter.woff2); }\n/* --- QuartzControl:managed:google-fonts:end --- */\n",
+    "quartz/static/fonts/own-inter.woff2": "x",
+    "quartz/static/fonts/g-inter.woff2": "g"
+  },
+  "config": {
+    "configuration": {},
+    "theme": {
+      "fontOrigin": "local",
+      "typography": {
+        "header": "Inter"
+      }
+    },
+    "plugins": []
+  },
+  "steps": [
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": {
+        "failed": false,
+        "text": "{\"key\":\"googleFontsRefreshOwn\",\"args\":{\"families\":\"Inter\"}} {\"key\":\"googleFontsRefreshRemoved\",\"args\":{\"count\":1}}"
+      },
+      "changed": {
+        "quartz/static/fonts/g-inter.woff2": null,
+        "quartz/styles/_quartzcontrol.scss": "// head\n\n/* --- QuartzControl:managed:fonts:start --- */\n@font-face {\n  font-family: \"Inter\";\n  src: url(\"static/fonts/own-inter.woff2\") format(\"woff2\");\n  font-weight: 100 900;\n}\n/* --- QuartzControl:managed:fonts:end --- */\n\n/* --- QuartzControl:managed:google-fonts:start --- */\n/* QuartzControl: every family is declared by the project itself, nothing is fetched from Google */\n/* --- QuartzControl:managed:google-fonts:end --- */\n"
+      },
+      "requests": []
+    },
+    {
+      "call": "refreshGoogleFonts",
+      "args": [],
+      "result": null,
+      "changed": {},
+      "requests": []
+    }
+  ]
+}

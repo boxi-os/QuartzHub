@@ -103,7 +103,10 @@ public actor BuildService {
   ///    migration reads the blocks through the line it restores. Each takes the styles lock, so a
   ///    save still writing custom.scss is waited for. What they did goes into the console.
   ///
-  /// Refreshing the Google fonts comes with fontService, here.
+  /// 4. A project that holds its Google fonts (`fontOrigin: local` and a `google-fonts` block) gets
+  ///    them in line with the typography of the config (`FontService.refreshGoogleFonts`): the
+  ///    config reaches the typography through more doors than the Basis tab. A failed fetch is a
+  ///    warning; the build goes on with the files that are there.
   public static let preparation: [PreparationStep] = [
     { project, report in
       do {
@@ -126,6 +129,9 @@ public actor BuildService {
       } catch {
         report(.warn, error.localizedDescription + "\n")
       }
+    },
+    { project, report in
+      if let result = await FontService().refreshGoogleFonts(project: project) { report(result.failed ? .warn : .stdout, result.text + "\n") }
     }
   ]
 
