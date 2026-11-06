@@ -1262,3 +1262,18 @@ QuartzControl 1.3.0 ins Repo, abgerufen wird dieselbe Adresse (Nutzer, 2026-11-0
   Ersetzen wegfällt (Plan und Löschen), ein eigener Google-Block unter `projectWins`, ein fremdes
   Projektbild ohne Markierung, Kilobytes mit einem Rest ab ,5, ein npm-Paket zweimal, die CLI, die
   einen eigenen Eintrag anhängt, eine Link-Schleife im Inhalt.
+
+### Eingebaute Vorlage (`builtinTemplateService.ts` → `BuiltinTemplate`)
+
+- `qc-basic.qtpl` aus QuartzControl 1.3.0 liegt in `Resources/templates/` und kommt mit
+  `scripts/package.sh` ins Bundle. Abgerufen wird dieselbe Adresse wie in QuartzControl
+  (`boxi-os/quartzcontrol-templates`), gecacht im Profil unter `templates/`, einen Tag lang.
+- **Gemessen gegen QuartzControls Code:** `scripts/builtin-template-golden.mjs`, 25 Lagen mit
+  gespieltem Netz und gealterten Cache-Dateien (siehe dort). Gleich in allen.
+- **Abweichung:** `createdAt` liest `Date.parse` dort in vielen Formen; hier nur ISO 8601 (mit und
+  ohne Millisekunden), was jede App schreibt. Ein anderes Datum zählt als 0 und gewinnt nie.
+- Gegenproben: 14, gefangen bis auf eine unerreichbare (eine leere Antwort zulassen: sie ist ohnehin
+  kein ZIP). Zwei bekamen erst ihren Fall: Pakete von genau 25 MiB und einem Byte mehr (echte
+  Pakete mit gespeichertem Füller, im Golden und im Test gebaut, nicht als Fixture), und ein Paket
+  ohne Manifest als einzige Kopie und als Cache.
+- Nicht gemessen: der echte Abruf von GitHub (Netzlauf, fragt der Nutzer einzeln frei).

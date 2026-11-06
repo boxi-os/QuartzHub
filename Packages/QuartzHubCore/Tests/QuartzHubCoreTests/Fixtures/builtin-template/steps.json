@@ -1,0 +1,499 @@
+[
+ {
+  "name": "first run offline",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "fail": true
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "first run 404",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 404,
+    "base64": "UEsDBBQAAAgIAAAAZl1ZjUJxRwAAAEkAAAANAAAAbWFuaWZlc3QuanNvbqtWSssvyk0sCUstKs7Mz1OyMtRRykvMTVWyUvJLLU0tUtJRSi5KTSxJTXEsUbJSMjIwMtM1NNI1MAwxMLACIz0DA4MopVoAUEsDBBQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAcGFydHMvY29udGVudC5qc29uq1ZKy8xJLVayilZK1MtNUdJRStJ30vN1ATEyc1L0CvLSlXTMdZSSQZKxtQBQSwECFAAUAAAICAAAAGZdWY1CcUcAAABJAAAADQAAAAAAAAAAAAAApIEAAAAAbWFuaWZlc3QuanNvblBLAQIUABQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAAAAAAAAAAACkgXIAAABwYXJ0cy9jb250ZW50Lmpzb25QSwUGAAAAAAIAAgB7AAAAzgAAAAAA"
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "first run, newer online",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 200,
+    "base64": "UEsDBBQAAAgIAAAAZl1ZjUJxRwAAAEkAAAANAAAAbWFuaWZlc3QuanNvbqtWSssvyk0sCUstKs7Mz1OyMtRRykvMTVWyUvJLLU0tUtJRSi5KTSxJTXEsUbJSMjIwMtM1NNI1MAwxMLACIz0DA4MopVoAUEsDBBQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAcGFydHMvY29udGVudC5qc29uq1ZKy8xJLVayilZK1MtNUdJRStJ30vN1ATEyc1L0CvLSlXTMdZSSQZKxtQBQSwECFAAUAAAICAAAAGZdWY1CcUcAAABJAAAADQAAAAAAAAAAAAAApIEAAAAAbWFuaWZlc3QuanNvblBLAQIUABQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAAAAAAAAAAACkgXIAAABwYXJ0cy9jb250ZW50Lmpzb25QSwUGAAAAAAIAAgB7AAAAzgAAAAAA"
+   }
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 3
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": "newer",
+  "leftovers": []
+ },
+ {
+  "name": "fresh cache is not asked again",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "newer",
+   "ageHours": 2,
+   "answer": {
+    "status": 200,
+    "base64": "UEsDBBQAAAgIAAAAZl0Uqf1xSAAAAEoAAAANAAAAbWFuaWZlc3QuanNvbqtWSssvyk0sCUstKs7Mz1OyMtRRykvMTVWyUjrcklOSWqSko5RclJpYkpriWKJkpWRkYGSma2Coa2AYYmBgBUZ6BgYGUUq1AFBLAwQUAAAIAAAAAGZdJxNd1hIAAAASAAAAEgAAAHBhcnRzL2NvbnRlbnQuanNvbnsiZmlsZXMiOlsieC5tZCJdfVBLAQIUABQAAAgIAAAAZl0Uqf1xSAAAAEoAAAANAAAAAAAAAAAAAACkgQAAAABtYW5pZmVzdC5qc29uUEsBAhQAFAAACAAAAABmXScTXdYSAAAAEgAAABIAAAAAAAAAAAAAAKSBcwAAAHBhcnRzL2NvbnRlbnQuanNvblBLBQYAAAAAAgACAHsAAAC1AAAAAAA="
+   }
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 3
+  },
+  "requests": [],
+  "cacheAfter": "newer",
+  "leftovers": []
+ },
+ {
+  "name": "day-old cache, older online, the copy wins",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "newer",
+   "ageHours": 24.016666666666666,
+   "answer": {
+    "status": 200,
+    "base64": "UEsDBBQAAAgIAAAAZl0Uqf1xSAAAAEoAAAANAAAAbWFuaWZlc3QuanNvbqtWSssvyk0sCUstKs7Mz1OyMtRRykvMTVWyUjrcklOSWqSko5RclJpYkpriWKJkpWRkYGSma2Coa2AYYmBgBUZ6BgYGUUq1AFBLAwQUAAAIAAAAAGZdJxNd1hIAAAASAAAAEgAAAHBhcnRzL2NvbnRlbnQuanNvbnsiZmlsZXMiOlsieC5tZCJdfVBLAQIUABQAAAgIAAAAZl0Uqf1xSAAAAEoAAAANAAAAAAAAAAAAAACkgQAAAABtYW5pZmVzdC5qc29uUEsBAhQAFAAACAAAAABmXScTXdYSAAAAEgAAABIAAAAAAAAAAAAAAKSBcwAAAHBhcnRzL2NvbnRlbnQuanNvblBLBQYAAAAAAgACAHsAAAC1AAAAAAA="
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": "older",
+  "leftovers": []
+ },
+ {
+  "name": "day-old cache, offline, it stays",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "newer",
+   "ageHours": 24.016666666666666,
+   "answer": {
+    "fail": true
+   }
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 3
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": "newer",
+  "leftovers": []
+ },
+ {
+  "name": "just under a day",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "older",
+   "ageHours": 23.983333333333334,
+   "answer": {
+    "status": 200,
+    "base64": "UEsDBBQAAAgIAAAAZl1ZjUJxRwAAAEkAAAANAAAAbWFuaWZlc3QuanNvbqtWSssvyk0sCUstKs7Mz1OyMtRRykvMTVWyUvJLLU0tUtJRSi5KTSxJTXEsUbJSMjIwMtM1NNI1MAwxMLACIz0DA4MopVoAUEsDBBQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAcGFydHMvY29udGVudC5qc29uq1ZKy8xJLVayilZK1MtNUdJRStJ30vN1ATEyc1L0CvLSlXTMdZSSQZKxtQBQSwECFAAUAAAICAAAAGZdWY1CcUcAAABJAAAADQAAAAAAAAAAAAAApIEAAAAAbWFuaWZlc3QuanNvblBLAQIUABQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAAAAAAAAAAACkgXIAAABwYXJ0cy9jb250ZW50Lmpzb25QSwUGAAAAAAIAAgB7AAAAzgAAAAAA"
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [],
+  "cacheAfter": "older",
+  "leftovers": []
+ },
+ {
+  "name": "torn cache is deleted and fetched again",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "truncated",
+   "ageHours": 0.016666666666666666,
+   "answer": {
+    "status": 200,
+    "base64": "UEsDBBQAAAgIAAAAZl1ZjUJxRwAAAEkAAAANAAAAbWFuaWZlc3QuanNvbqtWSssvyk0sCUstKs7Mz1OyMtRRykvMTVWyUvJLLU0tUtJRSi5KTSxJTXEsUbJSMjIwMtM1NNI1MAwxMLACIz0DA4MopVoAUEsDBBQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAcGFydHMvY29udGVudC5qc29uq1ZKy8xJLVayilZK1MtNUdJRStJ30vN1ATEyc1L0CvLSlXTMdZSSQZKxtQBQSwECFAAUAAAICAAAAGZdWY1CcUcAAABJAAAADQAAAAAAAAAAAAAApIEAAAAAbWFuaWZlc3QuanNvblBLAQIUABQAAAgIAAAAZl1FtBVyLAAAAC8AAAASAAAAAAAAAAAAAACkgXIAAABwYXJ0cy9jb250ZW50Lmpzb25QSwUGAAAAAAIAAgB7AAAAzgAAAAAA"
+   }
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 3
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": "newer",
+  "leftovers": []
+ },
+ {
+  "name": "torn cache, offline",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "truncated",
+   "ageHours": 0.016666666666666666,
+   "answer": {
+    "fail": true
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "a captive portal",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 200,
+    "base64": "PGh0bWw+PGJvZHk+Qml0dGUgYW5tZWxkZW48L2JvZHk+PC9odG1sPg=="
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "a zip without a manifest",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 200,
+    "base64": "UEsDBBQAAAgAAOKEZl1Dv6ajAgAAAAIAAAAQAAAAcGFydHMvdGhlbWUuanNvbnt9UEsBAhQAFAAACAAA4oRmXUO/pqMCAAAAAgAAABAAAAAAAAAAAAAAAKSBAAAAAHBhcnRzL3RoZW1lLmpzb25QSwUGAAAAAAEAAQA+AAAAMAAAAAAA"
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "an unreadable manifest is still a package",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 200,
+    "base64": "UEsDBBQAAAgAAAAAZl2nyfq4CAAAAAgAAAANAAAAbWFuaWZlc3QuanNvbnsga2FwdXR0UEsBAhQAFAAACAAAAABmXafJ+rgIAAAACAAAAA0AAAAAAAAAAAAAAKSBAAAAAG1hbmlmZXN0Lmpzb25QSwUGAAAAAAEAAQA7AAAAMwAAAAAA"
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": "badManifest",
+  "leftovers": []
+ },
+ {
+  "name": "an empty answer",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 200,
+    "base64": ""
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "larger than 25 MB",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 200,
+    "package": "overCeiling"
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "exactly 25 MB",
+  "setup": {
+   "bundled": "bundled",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "status": 200,
+    "package": "atCeiling"
+   }
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 0
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": "atCeiling",
+  "leftovers": []
+ },
+ {
+  "name": "same date: the copy",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "same",
+   "ageHours": 0.016666666666666666,
+   "answer": null
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [],
+  "cacheAfter": "same",
+  "leftovers": []
+ },
+ {
+  "name": "undated cache against the copy",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "undated",
+   "ageHours": 0.016666666666666666,
+   "answer": null
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [],
+  "cacheAfter": "undated",
+  "leftovers": []
+ },
+ {
+  "name": "bad date against the copy",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "badDate",
+   "ageHours": 0.016666666666666666,
+   "answer": null
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [],
+  "cacheAfter": "badDate",
+  "leftovers": []
+ },
+ {
+  "name": "undated cache, no copy",
+  "setup": {
+   "bundled": null,
+   "cached": "undated",
+   "ageHours": 0.016666666666666666,
+   "answer": null
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 0
+  },
+  "requests": [],
+  "cacheAfter": "undated",
+  "leftovers": []
+ },
+ {
+  "name": "no copy, offline",
+  "setup": {
+   "bundled": null,
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "fail": true
+   }
+  },
+  "result": null,
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "damaged copy, newer cache",
+  "setup": {
+   "bundled": "truncated",
+   "cached": "newer",
+   "ageHours": 0.016666666666666666,
+   "answer": null
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 3
+  },
+  "requests": [],
+  "cacheAfter": "newer",
+  "leftovers": []
+ },
+ {
+  "name": "damaged copy, nothing else",
+  "setup": {
+   "bundled": "truncated",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "fail": true
+   }
+  },
+  "result": null,
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "copy without manifest, older cache",
+  "setup": {
+   "bundled": "noManifest",
+   "cached": "older",
+   "ageHours": 0.016666666666666666,
+   "answer": null
+  },
+  "result": {
+   "path": "@W@/userData/templates/qc-basic.qtpl",
+   "source": "downloaded",
+   "pages": 1
+  },
+  "requests": [],
+  "cacheAfter": "older",
+  "leftovers": []
+ },
+ {
+  "name": "copy without manifest, nothing else",
+  "setup": {
+   "bundled": "noManifest",
+   "cached": null,
+   "ageHours": 0,
+   "answer": {
+    "fail": true
+   }
+  },
+  "result": null,
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ },
+ {
+  "name": "cache without manifest, offline",
+  "setup": {
+   "bundled": "bundled",
+   "cached": "noManifest",
+   "ageHours": 0.016666666666666666,
+   "answer": {
+    "fail": true
+   }
+  },
+  "result": {
+   "path": "@W@/resources/templates/qc-basic.qtpl",
+   "source": "bundled",
+   "pages": 22
+  },
+  "requests": [
+   "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
+  ],
+  "cacheAfter": null,
+  "leftovers": []
+ }
+]
