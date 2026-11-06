@@ -596,7 +596,7 @@ public struct TemplatePackage: Sendable {
   }
 
   func collectVariables(_ project: URL) throws -> Collected? {
-    let overrides = try StyleSheets.variableOverrides(project: project)
+    let overrides = try StyleSheets.variableOverrides(project: project.path)
     guard !overrides.isEmpty else { return nil }
     return Collected(payload: .object(JSONObject([("overrides", .array(overrides.map(Self.json)))])),
                      stats: JSONObject([("variables", .number(Double(overrides.count)))]))
@@ -604,7 +604,7 @@ public struct TemplatePackage: Sendable {
 
   func planVariables(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
     var existing: [String: VariableOverride] = [:]
-    for override in try StyleSheets.variableOverrides(project: run.project) { existing[override.key] = override }
+    for override in try StyleSheets.variableOverrides(project: run.project.path) { existing[override.key] = override }
     var plan = PartPlan(id: "cssVariables")
     for override in try Self.list(payload["overrides"], "overrides") {
       let key = override["key"].map(JS.string) ?? "undefined"
@@ -624,12 +624,12 @@ public struct TemplatePackage: Sendable {
     func set(_ override: VariableOverride) {
       if merged.updateValue(override, forKey: override.key) == nil { order.append(override.key) }
     }
-    for override in try StyleSheets.variableOverrides(project: run.project) { set(override) }
+    for override in try StyleSheets.variableOverrides(project: run.project.path) { set(override) }
     for override in try await inFormOfTarget(run.project, try Self.list(payload["overrides"], "overrides").map(Self.override)) {
       if run.strategy == .projectWins && merged[override.key] != nil { continue }
       set(override)
     }
-    try await StyleSheets.saveVariableOverrides(order.map { merged[$0]! }, project: run.project)
+    try await StyleSheets.saveVariableOverrides(order.map { merged[$0]! }, project: run.project.path)
   }
 
   /// A light-only value goes into a project not moved to `_quartzcontrol.scss` with its dark half
@@ -637,11 +637,11 @@ public struct TemplatePackage: Sendable {
   /// tab shows as the base, from the variable graph, then from Quartz's own catalog.
   func inFormOfTarget(_ project: URL, _ overrides: [VariableOverride]) async throws -> [VariableOverride] {
     let lightOnly = { (o: VariableOverride) in o.lightOnly && JS.trim(o.dark ?? "").isEmpty }
-    guard overrides.contains(where: lightOnly), !StyleSheets.isMoved(try StyleSheets.readSources(project: project)) else { return overrides }
+    guard overrides.contains(where: lightOnly), !StyleSheets.isMoved(try StyleSheets.readSources(project: project.path)) else { return overrides }
     let config = try await readConfig(project)
     let theme = Self.themeEntryIndex(config.plugins).map { config.plugins[$0] }
     let themeId = theme.flatMap { $0.enabled ? $0.object["options"]?["theme"]?.stringValue : nil }
-    let graph = try VariableGraph.graph(project: project, themeId: themeId)
+    let graph = try VariableGraph.graph(project: project.path, themeId: themeId)
     let colors = config.theme["colors"]?.objectValue
     return overrides.map { o in
       guard lightOnly(o) else { return o }
@@ -756,7 +756,7 @@ public struct TemplatePackage: Sendable {
   /// The stylesheets of the other template form (the 31 before 1.1 against the twelve), as far as
   /// this project loads them; `older` when the package brings the twelve.
   static func otherFormStylesheets(_ order: [String], _ project: URL) throws -> (older: Bool, paths: [String]) {
-    let set = try StyleFiles.list(project: project)
+    let set = try StyleFiles.list(project: project.path)
     let loaded = set.files.filter(\.imported).map(\.relativePath)
     if StylesheetConsolidation.isConsolidatedOrder(order) { return (true, loaded.filter(StylesheetConsolidation.isLegacyOnly)) }
     if order.contains(where: StylesheetConsolidation.isLegacyOnly) && set.consolidated { return (false, loaded.filter(StylesheetConsolidation.isConsolidatedOnly)) }
@@ -794,14 +794,14 @@ public struct TemplatePackage: Sendable {
   }
 
   func collectStyles(_ project: URL) throws -> Collected? {
-    let set = try StyleFiles.list(project: project)
+    let set = try StyleFiles.list(project: project.path)
     let body = Self.stripAllManaged(set.main.content)
     let files = set.files.map(\.relativePath)
     if body.isEmpty && files.isEmpty { return nil }
     var entries: [ZipArchive.Entry] = []
     for relativePath in files {
-      let path = StyleSheets.styleFile(project, relativePath)
-      if Self.exists(path.path) { entries.append(ZipArchive.Entry(name: "files/styles/\(relativePath)", data: try Data(contentsOf: path))) }
+      let path = StyleSheets.styleFile(project.path, relativePath)
+      if Self.exists(URL(fileURLWithPath: path).path) { entries.append(ZipArchive.Entry(name: "files/styles/\(relativePath)", data: try Posix.read(path))) }
     }
     let payload = JSONObject([("customScss", .string(body)), ("order", .array(set.files.filter(\.imported).map { .string($0.relativePath) })),
                               ("files", .array(files.map(JSONValue.string)))])
@@ -820,7 +820,7 @@ public struct TemplatePackage: Sendable {
       if Self.exists(target) { plan.conflicts.append(.string(relativePath)) } else { plan.additions.append(.string(relativePath)) }
     }
     let customScss = payload["customScss"].map(JS.string) ?? "undefined"
-    let current = Self.stripAllManaged(try StyleSheets.readCustom(project: run.project).content)
+    let current = Self.stripAllManaged(try StyleSheets.readCustom(project: run.project.path).content)
     if current != customScss { plan.conflicts.append(.string("custom.scss")) }
     if current != customScss && Self.projectWinsCustomScss(current, customScss) != current { plan.notes.append("customScssMerged") }
     let other = try Self.otherFormStylesheets(try Self.names(payload["order"], "order"), run.project)
@@ -846,22 +846,22 @@ public struct TemplatePackage: Sendable {
     }
     let order = try Self.names(payload["order"], "order")
     let old = try Self.otherFormStylesheets(order, project).paths
-    let before = try StyleSheets.readCustom(project: project)
-    var existingOrder = try StyleFiles.list(project: project).files.filter(\.imported).map(\.relativePath)
+    let before = try StyleSheets.readCustom(project: project.path)
+    var existingOrder = try StyleFiles.list(project: project.path).files.filter(\.imported).map(\.relativePath)
       .filter { !(run.strategy == .packageWins && old.contains($0)) }
     let customScss = payload["customScss"].map(JS.string) ?? "undefined"
     let body = run.strategy == .packageWins ? customScss : Self.projectWinsCustomScss(Self.stripAllManaged(before.content), customScss)
-    try StyleSheets.replaceCustomBodyNow(body, project: project)
+    try StyleSheets.replaceCustomBodyNow(body, project: project.path)
     // The package's order, restricted to files that exist here; under projectWins with the other
     // form loaded, the package's stylesheets are written but not loaded.
     var packageOrder = order.filter { Self.exists(NodePath.join(Self.stylesDir(project), $0)) }
       .filter { !(run.strategy == .projectWins && !old.isEmpty && !existingOrder.contains($0)) }
     if run.strategy == .packageWins {
       for path in existingOrder where !packageOrder.contains(path) { packageOrder.append(path) }
-      try StyleSheets.setImportOrderNow(packageOrder, project: project)
+      try StyleSheets.setImportOrderNow(packageOrder, project: project.path)
     } else {
       for path in packageOrder where !existingOrder.contains(path) { existingOrder.append(path) }
-      try StyleSheets.setImportOrderNow(existingOrder, project: project)
+      try StyleSheets.setImportOrderNow(existingOrder, project: project.path)
     }
   }
 
@@ -881,7 +881,7 @@ public struct TemplatePackage: Sendable {
 
   func collectFonts(_ project: URL) throws -> Collected? {
     let names = Self.listFilesFlat(URL(fileURLWithPath: Self.fontsDir(project)))
-    let sources = try StyleSheets.readSources(project: project)
+    let sources = try StyleSheets.readSources(project: project.path)
     let fontFaceCss = StyleSheets.managedBody(sources, "fonts")
     let googleFontsCss = StyleSheets.managedBody(sources, "google-fonts")
     if names.isEmpty && (fontFaceCss ?? "").isEmpty && (googleFontsCss ?? "").isEmpty { return nil }
@@ -914,20 +914,20 @@ public struct TemplatePackage: Sendable {
     func remove(_ names: [String]) { for name in names where !removed.contains(name) { removed.append(name) } }
     if let faceCss, JS.truthy(faceCss) {
       let face = JS.string(faceCss)
-      let current = Self.currentFontFaceCss(try StyleSheets.readSources(project: project))
+      let current = Self.currentFontFaceCss(try StyleSheets.readSources(project: project.path))
       if let current, !current.isEmpty, current != face {
         plan.conflicts.append(.string("@font-face"))
-        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project))
+        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project.path))
       } else if (current ?? "").isEmpty {
         plan.additions.append(.string("@font-face"))
       }
     }
     if let google, JS.truthy(google) {
       let css = JS.string(google)
-      let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project), "google-fonts")
+      let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project.path), "google-fonts")
       if let current, !current.isEmpty, current != css {
         plan.conflicts.append(.string("@font-face (Google)"))
-        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project))
+        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project.path))
       } else if (current ?? "").isEmpty {
         plan.additions.append(.string("@font-face (Google)"))
       }
@@ -960,11 +960,11 @@ public struct TemplatePackage: Sendable {
     if let previous = try applyGoogleFontsCss(project, payload["googleFontsCss"].flatMap { JS.truthy($0) ? JS.string($0) : nil }, run.strategy),
        !previous.isEmpty { replaced.append(previous) }
     if let faceCss, JS.truthy(faceCss),
-       let previous = try writeFontFaceBlock(project, try StyleSheets.readSources(project: project), JS.string(faceCss), run.strategy), !previous.isEmpty {
+       let previous = try writeFontFaceBlock(project, try StyleSheets.readSources(project: project.path), JS.string(faceCss), run.strategy), !previous.isEmpty {
       replaced.append(previous)
     }
     for css in replaced {
-      for name in try await fonts.deleteFontFilesOfReplacedRules(css, project: project) { run.warn("fontRemoved:\(name)") }
+      for name in try await fonts.deleteFontFilesOfReplacedRules(css, project: project.path) { run.warn("fontRemoved:\(name)") }
     }
   }
 
@@ -972,9 +972,9 @@ public struct TemplatePackage: Sendable {
   /// Answers the block it replaced.
   func applyGoogleFontsCss(_ project: URL, _ css: String?, _ strategy: Strategy) throws -> String? {
     guard let css else { return nil }
-    let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project), "google-fonts")
+    let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project.path), "google-fonts")
     if current == css || (!(current ?? "").isEmpty && strategy == .projectWins) { return nil }
-    try StyleSheets.writeManagedBlocksNow(["google-fonts": css], project: project)
+    try StyleSheets.writeManagedBlocksNow(["google-fonts": css], project: project.path)
     return current
   }
 
@@ -984,7 +984,7 @@ public struct TemplatePackage: Sendable {
     let current = Self.currentFontFaceCss(sources)
     let hasCurrent = !(current ?? "").isEmpty
     let body = hasCurrent && strategy == .projectWins ? ManagedBlocks.joinUniqueRules([current!, faceCss]) : current == faceCss ? current! : faceCss
-    try StyleSheets.writeManagedBlocksNow(["fonts": body], project: project)
+    try StyleSheets.writeManagedBlocksNow(["fonts": body], project: project.path)
     return strategy == .packageWins && hasCurrent && current != body ? StyleSheets.managedBody(sources, "fonts") : nil
   }
 

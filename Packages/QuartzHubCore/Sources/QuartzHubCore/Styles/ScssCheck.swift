@@ -46,11 +46,11 @@ public enum ScssCheck {
   }
 
   /// The helper's answer per call, or why there is no Sass to ask.
-  static func compile(_ project: URL, _ calls: [Call], runtime: RuntimeLocation) async -> Swift.Result<[Compiled], Unanswered> {
-    if let unpacking = ProjectDependencies.halfUnpackedModule(project: project.path, "sass") {
+  static func compile(_ project: String, _ calls: [Call], runtime: RuntimeLocation) async -> Swift.Result<[Compiled], Unanswered> {
+    if let unpacking = ProjectDependencies.halfUnpackedModule(project: project, "sass") {
       return .failure(Unanswered(reason: L10n.t("main.styleSassUnpacking", ["name": unpacking])))
     }
-    let request = JSONObject([("project", .string(project.path)), ("calls", .array(calls.map(\.json)))])
+    let request = JSONObject([("project", .string(project)), ("calls", .array(calls.map(\.json)))])
     do {
       let answer = try await Helper.call("sass-check", request, runtime: runtime, timeout: .seconds(120))
       guard answer["loaded"] == .bool(true) else { return .failure(Unanswered(reason: L10n.t("main.styleSassMissing"))) }
@@ -67,12 +67,12 @@ public enum ScssCheck {
 
   /// Sass's error mapped back: the file as a path relative to quartz/styles when it is one of the
   /// project's own, 1-based line and column.
-  static func diagnostic(_ project: URL, _ error: JSONValue) -> Diagnostic {
+  static func diagnostic(_ project: String, _ error: JSONValue) -> Diagnostic {
     let message = error["sassMessage"]?.stringValue ?? error["message"]?.stringValue ?? "?"
     var relativePath: String?
     if let url = error["url"]?.stringValue {
       let file = JSText.startsWith(url, "file:") ? (URL(string: url)?.path ?? url) : url
-      let relative = NodePath.relative(NodePath.normalize(StyleSheets.stylesDirectory(project).path), file)
+      let relative = NodePath.relative(NodePath.normalize(StyleSheets.stylesDirectory(project)), file)
       if !relative.isEmpty && !JSText.startsWith(relative, "..") { relativePath = relative }
     }
     return Diagnostic(message: message, relativePath: relativePath,
@@ -88,28 +88,28 @@ public enum ScssCheck {
   }
 
   /// custom.scss with everything it loads, as the build compiles it.
-  public static func check(project: URL, runtime: RuntimeLocation = .current) async -> Result {
+  public static func check(project: String, runtime: RuntimeLocation = .current) async -> Result {
     let entry = StyleSheets.customScss(project)
-    guard FileManager.default.fileExists(atPath: entry.path) else { return .unavailable(L10n.t("main.styleCustomScssMissing")) }
-    let styles = NodePath.normalize(StyleSheets.stylesDirectory(project).path)
-    switch await compile(project, [.compile(entry.path, loadPaths: [styles])], runtime: runtime) {
+    guard FileManager.default.fileExists(atPath: entry) else { return .unavailable(L10n.t("main.styleCustomScssMissing")) }
+    let styles = NodePath.normalize(StyleSheets.stylesDirectory(project))
+    switch await compile(project, [.compile(entry, loadPaths: [styles])], runtime: runtime) {
     case .failure(let unanswered): return .unavailable(unanswered.reason)
     case .success(let results):
       guard case .failed(let error)? = results.first else { return .ok }
       var found = diagnostic(project, error)
       let content = (try? StyleSheets.readText(entry)) ?? ""
       found.nestedImportBlock = hasNestedCopy(content, "imports")
-      found.managedFileMissing = ManagedBlocks.hasManagedUse(content) && !FileManager.default.fileExists(atPath: StyleSheets.managedScss(project).path)
+      found.managedFileMissing = ManagedBlocks.hasManagedUse(content) && !FileManager.default.fileExists(atPath: StyleSheets.managedScss(project))
       return .error(found)
     }
   }
 
   /// One file's *unsaved* content, standing alone: with Sass modules a partial sees nothing of what
   /// included it, so this is no approximation. The url gives a relative `@use` its directory.
-  public static func checkSource(_ relativePath: String, _ content: String, project: URL, runtime: RuntimeLocation = .current) async throws -> Result {
+  public static func checkSource(_ relativePath: String, _ content: String, project: String, runtime: RuntimeLocation = .current) async throws -> Result {
     if relativePath != "custom.scss" { try StyleFiles.checkEditable(relativePath) }
-    let file = relativePath == "custom.scss" ? StyleSheets.customScss(project).path : StyleSheets.styleFile(project, relativePath).path
-    let styles = NodePath.normalize(StyleSheets.stylesDirectory(project).path)
+    let file = relativePath == "custom.scss" ? StyleSheets.customScss(project) : StyleSheets.styleFile(project, relativePath)
+    let styles = NodePath.normalize(StyleSheets.stylesDirectory(project))
     let call = Call.compileString(content, url: file, syntax: JSText.endsWith(file, ".css") ? "css" : "scss", loadPaths: [styles])
     switch await compile(project, [call], runtime: runtime) {
     case .failure(let unanswered): return .unavailable(unanswered.reason)
@@ -149,8 +149,8 @@ public enum ScssCheck {
   /// `$breakpoints` and `.page`'s cap, evaluated by Sass: the values are Sass (`#{$sidePanelWidth}`
   /// in a map, a `calc()` over a map lookup), and a regex would be a second Sass, wrong at the first
   /// expression.
-  public static func frameMeasures(project: URL, runtime: RuntimeLocation = .current) async -> MeasuresResult {
-    let dir = NodePath.normalize(StyleSheets.stylesDirectory(project).path)
+  public static func frameMeasures(project: String, runtime: RuntimeLocation = .current) async -> MeasuresResult {
+    let dir = NodePath.normalize(StyleSheets.stylesDirectory(project))
     guard FileManager.default.fileExists(atPath: NodePath.join(dir, "variables.scss")) else {
       return .unavailable(L10n.t("main.quartzMeasuresNoVariables"))
     }
@@ -158,7 +158,7 @@ public enum ScssCheck {
     // part of the declaration. Wrapped in `#{…}`, because Sass passes a custom property's value
     // through as text.
     var pageExpression: String?
-    if let base = try? StyleSheets.readText(URL(fileURLWithPath: NodePath.join(dir, "base.scss"))),
+    if let base = try? StyleSheets.readText(NodePath.join(dir, "base.scss")),
        let block = JSText.firstMatch(base, #"(?:\A|\n)\.page["# + JSText.space + #"]*\{((?:#\{[^{}]*\}|[^{}])*)"#)?.groups[1],
        let value = JSText.firstMatch(block, #"(?:\A|[;"# + JSText.space + #"])max-width["# + JSText.space + #"]*:["# + JSText.space + #"]*([^;]+);"#)?.groups[1] {
       pageExpression = JS.trim(value)

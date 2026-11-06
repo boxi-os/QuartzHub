@@ -47,7 +47,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // the server page will start it.
     if let path = UserDefaults.standard.string(forKey: "QHStartServerFor"),
        let entry = try? ProjectStore(profile: AppProfile.own).add(path: path) {
-      Task { _ = await AppServices.shared.builds.startServer(projectId: entry.id, project: URL(fileURLWithPath: path)) }
+      Task { _ = await AppServices.shared.builds.startServer(projectId: entry.id, project: path) }
     }
     #endif
     // After the window: the question runs code that signals processes, and nothing of that is

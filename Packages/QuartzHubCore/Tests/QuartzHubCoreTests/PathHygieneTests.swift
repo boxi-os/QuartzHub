@@ -13,6 +13,17 @@ enum TestFolder {
     precondition(mkdir(path, 0o755) == 0, "mkdir \(path): \(errno)")
     return path
   }
+
+  /// A fixture (a folder or a file) copied to a string path, names kept as they are.
+  static func copy(_ fixture: URL, to target: String) throws {
+    if Posix.kind(fixture.path) == .directory {
+      try Posix.mkdirs(target)
+      try TreeCopy.copy(from: fixture.path, to: target, verbatimSymlinks: true)
+    } else {
+      try Posix.mkdirs(NodePath.dirname(target))
+      try Posix.copyFile(fixture.path, target)
+    }
+  }
 }
 
 /// Paths are strings with the bytes of the disk (see `NodePath`, `Posix`). Foundation decomposes a
@@ -30,7 +41,6 @@ enum TestFolder {
 
   /// Not yet moved to string paths; each service takes itself off when it is. Shrinks to nothing.
   static let pending: Set<String> = [
-    "QuartzHubCore/Build/BuildService.swift",
     "QuartzHubCore/Checks/I18nCheck.swift",
     "QuartzHubCore/Checks/OptionSchemaCheck.swift",
     "QuartzHubCore/Git/GitAuth.swift",
@@ -41,14 +51,6 @@ enum TestFolder {
     "QuartzHubCore/Snapshots/SnapshotStore+Restore.swift",
     "QuartzHubCore/Snapshots/SnapshotStore.swift",
     "QuartzHubCore/Storage/URLBridges.swift",
-    "QuartzHubCore/Styles/FontFaces.swift",
-    "QuartzHubCore/Styles/FontService.swift",
-    "QuartzHubCore/Styles/ScssCheck.swift",
-    "QuartzHubCore/Styles/SiteFonts.swift",
-    "QuartzHubCore/Styles/Snippets.swift",
-    "QuartzHubCore/Styles/StyleFiles.swift",
-    "QuartzHubCore/Styles/StyleSheets.swift",
-    "QuartzHubCore/Styles/VariableGraph.swift",
     "QuartzHubCore/Templates/BuiltinTemplate.swift",
     "QuartzHubCore/Templates/LocaleFiles.swift",
     "QuartzHubCore/Templates/TemplatePackage.swift",

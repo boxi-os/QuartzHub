@@ -154,4 +154,20 @@ public enum Posix {
   static func rename(_ from: String, _ to: String) throws {
     guard Darwin.rename(from, to) == 0 else { throw error("rename", from) }
   }
+
+  /// `copyItem` for one file without the decomposed name: data and metadata (`COPYFILE_ALL`), and
+  /// a target that is there is refused (`COPYFILE_EXCL`), as FileManager does.
+  static func copyFile(_ from: String, _ to: String) throws {
+    guard copyfile(from, to, nil, copyfile_flags_t(COPYFILE_ALL | COPYFILE_EXCL)) == 0 else { throw error("copyfile", to) }
+  }
+
+  /// `moveItem` without the decomposed name: refuses a target that is there (EEXIST), as
+  /// FileManager does, instead of replacing it as rename(2) would.
+  static func move(_ from: String, _ to: String) throws {
+    if kind(to) != nil {
+      errno = EEXIST
+      throw error("rename", to)
+    }
+    try rename(from, to)
+  }
 }

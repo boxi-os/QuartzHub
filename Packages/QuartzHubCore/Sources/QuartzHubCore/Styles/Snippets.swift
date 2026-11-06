@@ -8,11 +8,12 @@ import Foundation
 /// `.quartz-gui`, the build output). Reading through a link is allowed, as layout-box and the build
 /// read through one.
 public struct Snippets: Sendable {
-  public typealias Trash = @Sendable (URL) throws -> Void
+  public typealias Trash = @Sendable (String) throws -> Void
 
   /// The system's trash, not a delete: a file in quartz/static is in no snapshot unless one was made
   /// before, and the trash is the way back that needs no foresight.
-  public static let systemTrash: Trash = { url in try FileManager.default.trashItem(at: url, resultingItemURL: nil) }
+  /// The one URL: the trash API takes nothing else, and it only looks the file up (path boundary).
+  public static let systemTrash: Trash = { path in try FileManager.default.trashItem(at: URL(fileURLWithPath: path), resultingItemURL: nil) } // path boundary
 
   let trash: Trash
   public init(trash: @escaping Trash = Snippets.systemTrash) { self.trash = trash }
@@ -39,8 +40,8 @@ public struct Snippets: Sendable {
   }
 
   /// Where `dir` (relative to the project, as layout-box reads it) leads, or why it may not be used.
-  static func check(_ project: URL, _ dir: String) -> DirectoryCheck {
-    let root = NodePath.normalize(project.path)
+  static func check(_ project: String, _ dir: String) -> DirectoryCheck {
+    let root = NodePath.normalize(project)
     if JSText.startsWith(dir, "/") { return .refused(.outside) }
     // `.` is the project itself, an odd place for snippets, but inside.
     let abs: String
@@ -51,7 +52,7 @@ public struct Snippets: Sendable {
     // Without regard to case: APFS takes `.GIT` for `.git`.
     if JSText.split(NodePath.relative(root, abs), "/").contains(where: { reserved.contains($0.lowercased()) }) { return .refused(.reserved) }
     // The build output is emptied by every build; a snippet there is gone with the next one.
-    let output = ProjectPrefsStore.read(project: project).buildDirectory(project: project).path
+    let output = ProjectPrefsStore.read(project: project).buildDirectory(project: project)
     let relative = NodePath.relative(NodePath.normalize(output), abs)
     if relative.isEmpty || !JSText.startsWith(relative, "..") { return .refused(.reserved) }
     let viaLink = abs != root && PackagePaths.writable(root, NodePath.relative(root, abs)) == nil
@@ -91,7 +92,7 @@ public struct Snippets: Sendable {
     a.compare(b, options: [.numeric], range: nil, locale: Locale(identifier: "de")) == .orderedAscending
   }
 
-  func list(_ project: URL, _ dir: String, _ allowed: [String]) throws -> Listing {
+  func list(_ project: String, _ dir: String, _ allowed: [String]) throws -> Listing {
     guard case .ok(let abs, let viaLink) = Self.check(project, dir) else {
       if case .refused(let state) = Self.check(project, dir) { return Listing(state: state, files: []) }
       return Listing(state: .outside, files: [])
@@ -102,7 +103,7 @@ public struct Snippets: Sendable {
     }
     closedir(stream)
     var files: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: abs).path) {
+    for entry in LayoutFrames.directoryEntriesWithKind(abs) {
       guard allowed.contains(NodePath.extname(entry.name).lowercased()), !JSText.startsWith(entry.name, ".") else { continue }
       // A link to a file counts as a file.
       if entry.kind == .file { files.append(entry.name); continue }
@@ -112,12 +113,12 @@ public struct Snippets: Sendable {
     return Listing(state: viaLink ? .link : .ok, files: files)
   }
 
-  public func listSnippets(project: URL, dir: String) throws -> Listing { try list(project, dir, Self.snippetExtensions) }
+  public func listSnippets(project: String, dir: String) throws -> Listing { try list(project, dir, Self.snippetExtensions) }
 
   /// The pictures in quartz/static/images, the folder "Bild einfügen…" copies into.
-  public func listImages(project: URL) throws -> Listing { try list(project, Self.imagesDirectory, Self.imageExtensions) }
+  public func listImages(project: String) throws -> Listing { try list(project, Self.imagesDirectory, Self.imageExtensions) }
 
-  public func readSnippet(project: URL, dir: String, file: String) throws -> String {
+  public func readSnippet(project: String, dir: String, file: String) throws -> String {
     let abs: String
     switch Self.check(project, dir) {
     case .refused(let state): throw Self.refusal(state, dir)
@@ -135,7 +136,7 @@ public struct Snippets: Sendable {
     if Int(try NodeFileError.statFollowing(path).st_size) > Self.snippetMaxBytes {
       throw Failure(message: L10n.t("main.snippetTooLarge", ["name": file, "limit": "2"]))
     }
-    return try StyleSheets.readText(URL(fileURLWithPath: path))
+    return try StyleSheets.readText(path)
   }
 
   static func realPath(_ path: String) throws -> String {
@@ -145,8 +146,8 @@ public struct Snippets: Sendable {
   }
 
   /// Where a new file may go in a checked folder, or the sentence why not.
-  func writablePath(_ project: URL, _ dir: String, _ name: String, _ allowed: [String]) throws -> (abs: String, name: String) {
-    let root = NodePath.normalize(project.path)
+  func writablePath(_ project: String, _ dir: String, _ name: String, _ allowed: [String]) throws -> (abs: String, name: String) {
+    let root = NodePath.normalize(project)
     let abs: String
     switch Self.check(project, dir) {
     case .refused(let state): throw Self.refusal(state, dir)
@@ -165,12 +166,12 @@ public struct Snippets: Sendable {
     case exists(String)
   }
 
-  public func writeSnippet(project: URL, dir: String, file: String, content: String, overwrite: Bool) throws -> Written {
+  public func writeSnippet(project: String, dir: String, file: String, content: String, overwrite: Bool) throws -> Written {
     if content.utf8.count > Self.snippetMaxBytes { throw Failure(message: L10n.t("main.snippetTooLarge", ["name": file, "limit": "2"])) }
     let (abs, name) = try writablePath(project, dir, file, Self.snippetExtensions)
     if !overwrite && Self.lstatInfo(abs) != nil { return .exists(name) }
-    try FileManager.default.createDirectory(atPath: (abs as NSString).deletingLastPathComponent, withIntermediateDirectories: true)
-    try JSONStore.writeAtomic(Data(content.utf8), to: URL(fileURLWithPath: abs))
+    try Posix.mkdirs(NodePath.dirname(abs))
+    try JSONStore.writeAtomic(Data(content.utf8), to: abs)
     return .written(name)
   }
 
@@ -178,7 +179,7 @@ public struct Snippets: Sendable {
   static func copyAtomic(_ source: String, _ target: String) throws {
     let temp = "\(target).tmp-\(getpid())-\(UUID().uuidString.lowercased().prefix(8))"
     do {
-      try FileManager.default.copyItem(atPath: source, toPath: temp)
+      try Posix.copyFile(source, temp)
       let fd = open(temp, O_RDWR)
       if fd >= 0 { fsync(fd); close(fd) }
       if Darwin.rename(temp, target) != 0 { throw NodeFileError(code: errno, syscall: "rename", path: temp) }
@@ -190,7 +191,7 @@ public struct Snippets: Sendable {
 
   /// The source too, not only the name it gets: with a name from the form, any file could come in
   /// under an allowed name (`~/.ssh/id_ed25519` as `key.md`) and travel on with the next sync.
-  func importFile(_ project: URL, _ dir: String, _ source: String, _ name: String?, _ overwrite: Bool, _ allowed: [String], _ maxBytes: Int) throws -> Written {
+  func importFile(_ project: String, _ dir: String, _ source: String, _ name: String?, _ overwrite: Bool, _ allowed: [String], _ maxBytes: Int) throws -> Written {
     let (abs, clean) = try writablePath(project, dir, name ?? NodePath.basename(source), allowed)
     guard allowed.contains(NodePath.extname(source).lowercased()) else {
       throw Failure(message: L10n.t("main.snippetExtensionInvalid", ["name": NodePath.basename(source), "allowed": allowed.joined(separator: ", ")]))
@@ -201,19 +202,19 @@ public struct Snippets: Sendable {
       throw Failure(message: L10n.t("main.snippetTooLarge", ["name": clean, "limit": JSJSON.numberToString(FontFile.jsRound(Double(maxBytes) / 1024 / 1024))]))
     }
     if !overwrite && Self.lstatInfo(abs) != nil { return .exists(clean) }
-    try FileManager.default.createDirectory(atPath: (abs as NSString).deletingLastPathComponent, withIntermediateDirectories: true)
+    try Posix.mkdirs(NodePath.dirname(abs))
     try Self.copyAtomic(source, abs)
     return .written(clean)
   }
 
-  public func importSnippet(project: URL, dir: String, source: String, name: String?, overwrite: Bool) throws -> Written {
+  public func importSnippet(project: String, dir: String, source: String, name: String?, overwrite: Bool) throws -> Written {
     try importFile(project, dir, source, name, overwrite, Self.snippetExtensions, Self.snippetMaxBytes)
   }
 
   /// A picture into quartz/static/images, which Quartz publishes as static/images/: a snippet
   /// reaches it as `{{root}}/static/images/<name>` on every page depth. The answer is
   /// `images/<name>`.
-  public func importImage(project: URL, source: String, name: String?, overwrite: Bool) throws -> Written {
+  public func importImage(project: String, source: String, name: String?, overwrite: Bool) throws -> Written {
     switch try importFile(project, Self.imagesDirectory, source, name, overwrite, Self.imageExtensions, Self.imageMaxBytes) {
     case .written(let name): .written("images/\(name)")
     case .exists(let name): .exists("images/\(name)")
@@ -227,7 +228,7 @@ public struct Snippets: Sendable {
     let info = try NodeFileError.statFollowing(source)
     guard isFile(info) else { throw Failure(message: L10n.t("main.snippetNameInvalid", ["name": name])) }
     if Int(info.st_size) > snippetMaxBytes { throw Failure(message: L10n.t("main.snippetTooLarge", ["name": name, "limit": "2"])) }
-    return try StyleSheets.readText(URL(fileURLWithPath: source))
+    return try StyleSheets.readText(source)
   }
 
   public enum Kind: String, Sendable { case snippet, image }
@@ -240,7 +241,7 @@ public struct Snippets: Sendable {
   }
 
   /// A file that is there, as a file of this kind, and not reached through a link.
-  func existing(_ project: URL, _ dir: String, _ name: String, _ allowed: [String]) throws -> (abs: String, name: String) {
+  func existing(_ project: String, _ dir: String, _ name: String, _ allowed: [String]) throws -> (abs: String, name: String) {
     let target = try writablePath(project, dir, name, allowed)
     guard let info = Self.lstatInfo(target.abs), Self.isFile(info) else { throw Failure(message: L10n.t("main.staticFileMissing", ["name": target.name])) }
     return target
@@ -248,7 +249,7 @@ public struct Snippets: Sendable {
 
   /// Renames within its folder. A taken name is not overwritten: renaming over another file is a
   /// delete in disguise. A rename that only changes case finds itself on APFS, which is not "taken".
-  public func rename(project: URL, kind: Kind, dir: String?, from: String, to: String) throws -> Written {
+  public func rename(project: String, kind: Kind, dir: String?, from: String, to: String) throws -> Written {
     let place = try Self.place(kind, dir)
     let source = try existing(project, place.dir, from, place.allowed)
     let target = try writablePath(project, place.dir, to, place.allowed)
@@ -259,11 +260,11 @@ public struct Snippets: Sendable {
   }
 
   /// To the trash. The system's reason comes after a sentence that says the file is untouched.
-  public func moveToTrash(project: URL, kind: Kind, dir: String?, file: String) throws {
+  public func moveToTrash(project: String, kind: Kind, dir: String?, file: String) throws {
     let place = try Self.place(kind, dir)
     let (abs, _) = try existing(project, place.dir, file, place.allowed)
     do {
-      try trash(URL(fileURLWithPath: abs))
+      try trash(abs)
     } catch {
       throw Failure(message: L10n.t("main.staticFileTrashFailed", ["name": file, "reason": error.localizedDescription]))
     }

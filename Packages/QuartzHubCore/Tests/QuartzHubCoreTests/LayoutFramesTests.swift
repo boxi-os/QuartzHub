@@ -71,7 +71,7 @@ import Testing
     try Self.layOut(golden, at: project)
     let said = Mutex<[String]>([])
     for step in BuildService.preparation {
-      await step(project) { stream, text in said.withLock { $0.append("\(stream) \(text)") } }
+      await step(project.path) { stream, text in said.withLock { $0.append("\(stream) \(text)") } }
     }
     let module = project.appendingPathComponent(".quartz-gui/authored-frames/frame-made/dist/frames.js")
     #expect(FileManager.default.fileExists(atPath: module.path))
@@ -143,7 +143,7 @@ import Testing
       let project = URL(fileURLWithPath: path)
       try FileManager.default.createDirectory(at: project.appendingPathComponent(".quartz-gui"), withIntermediateDirectories: true)
       if let text = entry["file"]?.stringValue {
-        try Data(text.utf8).write(to: project.appendingPathComponent(".quartz-gui/layout-breakpoints.json"))
+        try Posix.write(project.appendingPathComponent(".quartz-gui/layout-breakpoints.json").path, Data(text.utf8))
       }
       let widths = LayoutFrames.widths(project: path)
       #expect(.number(widths.tablet) == entry["widths"]?["tablet"] && .number(widths.mobile) == entry["widths"]?["mobile"], "\(entry["file"] ?? .null)")
@@ -196,17 +196,17 @@ import Testing
     for id in frames.keys {
       let dir = project.appendingPathComponent(".quartz-gui/authored-frames/\(id)")
       try manager.createDirectory(at: dir, withIntermediateDirectories: true)
-      try Data(frames[id]!.stringValue!.utf8).write(to: dir.appendingPathComponent("frame.json"))
+      try Posix.write(dir.appendingPathComponent("frame.json").path, Data(frames[id]!.stringValue!.utf8))
     }
     let extra = golden["extraFiles"]?.objectValue ?? JSONObject()
     for path in extra.keys {
       let url = project.appendingPathComponent(path)
       try manager.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(extra[path]!.stringValue!.utf8).write(to: url)
+      try Posix.write(url.path, Data(extra[path]!.stringValue!.utf8))
     }
     if let text = golden["breakpoints"]?.stringValue {
       try manager.createDirectory(at: project.appendingPathComponent(".quartz-gui"), withIntermediateDirectories: true)
-      try Data(text.utf8).write(to: project.appendingPathComponent(".quartz-gui/layout-breakpoints.json"))
+      try Posix.write(project.appendingPathComponent(".quartz-gui/layout-breakpoints.json").path, Data(text.utf8))
     }
   }
 

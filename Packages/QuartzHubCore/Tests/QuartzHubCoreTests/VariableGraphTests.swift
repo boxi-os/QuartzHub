@@ -10,19 +10,19 @@ import Testing
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/variable-graph")
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
-  static func copy(_ from: URL, _ to: URL) throws {
-    try FileManager.default.createDirectory(at: to.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try FileManager.default.copyItem(at: from, to: to)
+  static func copy(_ from: String, _ to: String) throws {
+    try Posix.mkdirs(NodePath.dirname(to))
+    try TestFolder.copy(URL(fileURLWithPath: from), to: to)
   }
 
-  static func layOut(_ files: JSONValue?, at root: URL) throws {
+  static func layOut(_ files: JSONValue?, at root: String) throws {
     let object = files?.objectValue ?? JSONObject()
     for path in object.keys {
-      let url = root.appendingPathComponent(path)
-      try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(object[path]!.stringValue!.utf8).write(to: url)
+      let url = "\(root)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(url))
+      try Posix.write(url, Data(object[path]!.stringValue!.utf8))
     }
   }
 
@@ -31,23 +31,23 @@ import Testing
     #expect(cases.count >= 11)
     for entry in cases {
       let name = entry["name"]!.stringValue!
-      let project = scratch.url.appendingPathComponent(UUID().uuidString)
+      let project = "\(scratch.path)/\(UUID().uuidString)"
       let styles = StyleSheets.stylesDirectory(project)
-      try FileManager.default.createDirectory(at: styles.deletingLastPathComponent(), withIntermediateDirectories: true)
-      if entry["styles"] == .string("real") { try Self.copy(Self.fixtures.appendingPathComponent("real/styles"), styles) }
-      else { try FileManager.default.createDirectory(at: styles, withIntermediateDirectories: true); try Self.layOut(entry["styles"], at: styles) }
-      let build = project.appendingPathComponent(entry["outputDir"]?.stringValue ?? "public")
-      if entry["build"] == .string("real") { try Self.copy(Self.fixtures.appendingPathComponent("real/public"), build) }
+      try Posix.mkdirs(NodePath.dirname(styles))
+      if entry["styles"] == .string("real") { try Self.copy(Self.fixtures.appendingPathComponent("real/styles").path, styles) }
+      else { try Posix.mkdirs(styles); try Self.layOut(entry["styles"], at: styles) }
+      let build = "\(project)/\(entry["outputDir"]?.stringValue ?? "public")"
+      if entry["build"] == .string("real") { try Self.copy(Self.fixtures.appendingPathComponent("real/public").path, build) }
       else if entry["build"] != nil { try Self.layOut(entry["build"], at: build) }
-      let themes = project.appendingPathComponent("node_modules/@quartz-themes")
+      let themes = "\(project)/node_modules/@quartz-themes"
       if entry["theme"] == .string("minimal") {
-        try Self.copy(Self.fixtures.appendingPathComponent("real/themes/minimal/theme.json"), themes.appendingPathComponent("minimal/theme.json"))
+        try Self.copy(Self.fixtures.appendingPathComponent("real/themes/minimal/theme.json").path, "\(themes)/minimal/theme.json")
       } else if let given = entry["theme"]?.objectValue {
         for id in given.keys {
-          let url = themes.appendingPathComponent("\(id)/theme.json")
-          try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+          let url = "\(themes)/\(id)/theme.json"
+          try Posix.mkdirs(NodePath.dirname(url))
           let text = given[id]!.stringValue ?? JSJSON.compact(given[id]!)
-          try Data(text.utf8).write(to: url)
+          try Posix.write(url, Data(text.utf8))
         }
       }
       let graph = try VariableGraph.graph(project: project, themeId: entry["themeId"]?.stringValue, outputDir: entry["outputDir"]?.stringValue)

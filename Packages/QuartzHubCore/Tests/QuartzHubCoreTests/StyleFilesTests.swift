@@ -15,7 +15,7 @@ import Testing
   }
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   static func legacy(_ name: String) throws -> String {
     try String(contentsOf: fixtures.appendingPathComponent("legacy/\(name).scss"), encoding: .utf8)
@@ -73,15 +73,15 @@ import Testing
   @Test(arguments: stepCases)
   func stepsAsQuartzControl(_ file: String) async throws {
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps/\(file).json")))
-    let project = scratch.url.appendingPathComponent(file)
+    let project = "\(scratch.path)/\(file)"
     let styles = StyleSheets.stylesDirectory(project)
-    try FileManager.default.createDirectory(at: styles, withIntermediateDirectories: true)
+    try Posix.mkdirs(styles)
     let tree = golden["tree"]?.objectValue ?? JSONObject()
     for path in tree.keys {
-      let full = path.hasPrefix("../") ? project.appendingPathComponent(String(path.dropFirst(3)))
-        : path.hasPrefix("in/") ? project.appendingPathComponent(path) : styles.appendingPathComponent(path)
-      try FileManager.default.createDirectory(at: full.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(try Self.text(tree[path]!).utf8).write(to: full)
+      let full = path.hasPrefix("../") ? "\(project)/\(String(path.dropFirst(3)))"
+        : path.hasPrefix("in/") ? "\(project)/\(path)" : "\(styles)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(full))
+      try Posix.write(full, Data(try Self.text(tree[path]!).utf8))
     }
     let snapshots = Mutex<[String]>([])
     let snapshot: StyleFiles.Snapshot = { _, kind in snapshots.withLock { $0.append(kind) }; return "snap-1" }
@@ -89,7 +89,7 @@ import Testing
     for step in golden["steps"]?.arrayValue ?? [] {
       let call = step["call"]!.stringValue!
       var args = (step["args"]?.arrayValue ?? []).map { arg -> JSONValue in
-        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: project.appendingPathComponent("in").path, options: .literal)) }
+        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: "\(project)/in", options: .literal)) }
         return arg
       }
       if args.first == .string("@ORDER+nav-darkmode") {
@@ -104,7 +104,7 @@ import Testing
         result = .object(JSONObject([("threw", .string(String(describing: error)))]))
       }
       let expected = ManagedStylesTests.mask(Self.rendered(step["result"] ?? .null), "")
-      #expect(Self.masked(result, project.path) == expected, "\(file): \(call)")
+      #expect(Self.masked(result, project) == expected, "\(file): \(call)")
       #expect(Self.strings(snapshots.withLock { $0 }) == step["snapshots"], "\(file): \(call) snapshots")
       let after = ManagedStylesTests.files(styles)
       var changed: [String: String?] = [:]
@@ -133,15 +133,15 @@ import Testing
   }
 
   static func fileJSON(_ file: StyleFiles.File) -> JSONValue {
-    .object(JSONObject([("relativePath", .string(file.relativePath)), ("path", .string(file.path.path)), ("name", .string(file.name)), ("imported", .bool(file.imported))]))
+    .object(JSONObject([("relativePath", .string(file.relativePath)), ("path", .string(file.path)), ("name", .string(file.name)), ("imported", .bool(file.imported))]))
   }
 
-  static func run(_ call: String, _ args: [JSONValue], _ project: URL, _ snapshot: @escaping StyleFiles.Snapshot) async throws -> JSONValue {
+  static func run(_ call: String, _ args: [JSONValue], _ project: String, _ snapshot: @escaping StyleFiles.Snapshot) async throws -> JSONValue {
     switch call {
     case "listStyleFiles":
       let set = try StyleFiles.list(project: project)
-      let managed: JSONValue = set.main.managed.map { .object(JSONObject([("path", .string($0.path.path)), ("content", .string($0.content))])) } ?? .null
-      let main = JSONValue.object(JSONObject([("path", .string(set.main.path.path)), ("content", .string(set.main.content)), ("managed", managed), ("moved", .bool(set.main.moved))]))
+      let managed: JSONValue = set.main.managed.map { .object(JSONObject([("path", .string($0.path)), ("content", .string($0.content))])) } ?? .null
+      let main = JSONValue.object(JSONObject([("path", .string(set.main.path)), ("content", .string(set.main.content)), ("managed", managed), ("moved", .bool(set.main.moved))]))
       return .object(JSONObject([("main", main), ("files", .array(set.files.map(fileJSON))), ("consolidated", .bool(set.consolidated))]))
     case "consolidateStylesheets":
       let r = try await StyleFiles.consolidate(project: project, snapshot: snapshot)
@@ -161,7 +161,7 @@ import Testing
       try await StyleFiles.delete(args[0].stringValue!, project: project)
       return .null
     case "importStyleFile":
-      let r = try await StyleFiles.importFile(URL(fileURLWithPath: args[0].stringValue!), project: project)
+      let r = try await StyleFiles.importFile(args[0].stringValue!, project: project)
       return .object(JSONObject([("importLine", .string(r.importLine)), ("relativePath", .string(r.relativePath))]))
     case "getStyleReferences":
       return .array(try StyleFiles.references(plugin: args[0].stringValue!, project: project).map {
@@ -176,8 +176,8 @@ import Testing
   /// What QuartzControl's IPC schemas refused, the service refuses: a path out of the two
   /// directories, a dot file, a name with a separator.
   @Test func theDoorChecksTheNames() async throws {
-    let project = scratch.url.appendingPathComponent("door")
-    try FileManager.default.createDirectory(at: StyleSheets.stylesDirectory(project), withIntermediateDirectories: true)
+    let project = "\(scratch.path)/door"
+    try Posix.mkdirs(StyleSheets.stylesDirectory(project))
     for path in ["../custom.scss", "custom/../../x.scss", "base.scss", "custom/.hidden.scss", "custom/a.txt", "other/a.scss", "custom/sub/a.scss"] {
       await #expect(throws: StyleFiles.InvalidName.self, "\(path)") { try await StyleFiles.write(path, "x", project: project) }
       await #expect(throws: StyleFiles.InvalidName.self, "\(path)") { try await StyleFiles.delete(path, project: project) }
@@ -192,13 +192,13 @@ import Testing
   /// A snapshot that fails leaves no way back, and the run stops before anything moves.
   @Test func noConsolidationWithoutASnapshot() async throws {
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps/consolidate-the-31.json")))
-    let project = scratch.url.appendingPathComponent("nosnap")
+    let project = "\(scratch.path)/nosnap"
     let styles = StyleSheets.stylesDirectory(project)
     let tree = golden["tree"]?.objectValue ?? JSONObject()
     for path in tree.keys {
-      let full = styles.appendingPathComponent(path)
-      try FileManager.default.createDirectory(at: full.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(try Self.text(tree[path]!).utf8).write(to: full)
+      let full = "\(styles)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(full))
+      try Posix.write(full, Data(try Self.text(tree[path]!).utf8))
     }
     let before = ManagedStylesTests.files(styles)
     struct NoWayBack: Error {}

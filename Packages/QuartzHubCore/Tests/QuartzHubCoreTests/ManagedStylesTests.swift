@@ -14,7 +14,7 @@ import Testing
   }
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   static func pure() throws -> JSONValue {
     try JSJSON.parse(Data(contentsOf: fixtures.appendingPathComponent("pure.json")))
@@ -76,20 +76,20 @@ import Testing
   /// The build door: a moved project without its `@use` line gets it back, and the font URLs of
   /// its fonts block become relative; both are said in the console. A second run says nothing.
   @Test func theBuildDoorRepairsTheStyles() async throws {
-    let project = scratch.url.appendingPathComponent("door")
+    let project = "\(scratch.path)/door"
     let styles = StyleSheets.stylesDirectory(project)
-    try FileManager.default.createDirectory(at: styles, withIntermediateDirectories: true)
+    try Posix.mkdirs(styles)
     let (start, end) = ManagedBlocks.markers("fonts")
-    try Data("// head\n\(start)\n@font-face { src: url(\"/static/fonts/a.woff2\"); }\n\(end)\n".utf8).write(to: StyleSheets.managedScss(project))
-    try Data("@use \"./variables.scss\" as *;\n.x {}\n".utf8).write(to: StyleSheets.customScss(project))
+    try Posix.write(StyleSheets.managedScss(project), Data("// head\n\(start)\n@font-face { src: url(\"/static/fonts/a.woff2\"); }\n\(end)\n".utf8))
+    try Posix.write(StyleSheets.customScss(project), Data("@use \"./variables.scss\" as *;\n.x {}\n".utf8))
     func run() async -> [String] {
       let said = Mutex<[String]>([])
       for step in BuildService.preparation { await step(project) { stream, text in said.withLock { $0.append("\(stream) \(text)") } } }
       return said.withLock { $0 }
     }
     #expect(await run() == ["stdout \(L10n.t("main.managedUseRestored"))\n", "stdout \(L10n.t("main.fontUrlsMigrated"))\n"])
-    #expect(ManagedBlocks.hasManagedUse(try String(contentsOf: StyleSheets.customScss(project), encoding: .utf8)))
-    #expect(try String(contentsOf: StyleSheets.managedScss(project), encoding: .utf8).contains("url(\"static/fonts/a.woff2\")"))
+    #expect(ManagedBlocks.hasManagedUse(String(decoding: try Posix.read(StyleSheets.customScss(project)), as: UTF8.self)))
+    #expect(String(decoding: try Posix.read(StyleSheets.managedScss(project)), as: UTF8.self).contains("url(\"static/fonts/a.woff2\")"))
     #expect(await run() == [])
   }
 
@@ -98,14 +98,14 @@ import Testing
   @Test(arguments: stepCases)
   func stepsAsQuartzControl(_ file: String) async throws {
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps/\(file).json")))
-    let project = scratch.url.appendingPathComponent(file)
+    let project = "\(scratch.path)/\(file)"
     let styles = StyleSheets.stylesDirectory(project)
-    try FileManager.default.createDirectory(at: styles, withIntermediateDirectories: true)
+    try Posix.mkdirs(styles)
     let tree = golden["tree"]?.objectValue ?? JSONObject()
     for path in tree.keys {
-      let url = styles.appendingPathComponent(path)
-      try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(tree[path]!.stringValue!.utf8).write(to: url)
+      let url = "\(styles)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(url))
+      try Posix.write(url, Data(tree[path]!.stringValue!.utf8))
     }
     var before = Self.files(styles)
     for step in golden["steps"]?.arrayValue ?? [] {
@@ -117,7 +117,7 @@ import Testing
       } catch {
         result = .object(JSONObject([("threw", .string(String(describing: error)))]))
       }
-      #expect(Self.mask(result, scratch.url.path) == step["result"], "\(file): \(call)")
+      #expect(Self.mask(result, scratch.path) == step["result"], "\(file): \(call)")
       let after = Self.files(styles)
       var changed: [String: String?] = [:]
       for path in Set(before.keys).union(after.keys) where before[path] != after[path] { changed[path] = .some(after[path]) }
@@ -130,12 +130,12 @@ import Testing
     }
   }
 
-  static func run(_ call: String, _ args: [JSONValue], _ project: URL) async throws -> JSONValue {
+  static func run(_ call: String, _ args: [JSONValue], _ project: String) async throws -> JSONValue {
     switch call {
     case "getVariableOverrides": return .array(try StyleSheets.variableOverrides(project: project).map(\.json))
     case "variableCollisions": return .array(try StyleSheets.variableCollisions(project: project).map { .string($0) })
     case "currentOrder": return .array(try StyleSheets.currentOrder(project: project).map { .string($0) })
-    case "loadedStylesheetsLastFirst": return .array(try StyleSheets.loadedStylesheetsLastFirst(project: project).map { .string($0.path) })
+    case "loadedStylesheetsLastFirst": return .array(try StyleSheets.loadedStylesheetsLastFirst(project: project).map { .string($0) })
     case "saveVariableOverrides":
       try await StyleSheets.saveVariableOverrides((args[0].arrayValue ?? []).map(override), project: project)
       return .null
@@ -175,14 +175,14 @@ import Testing
     }
   }
 
-  static func files(_ root: URL) -> [String: String] {
+  static func files(_ root: String) -> [String: String] {
     var result: [String: String] = [:]
-    guard let walker = FileManager.default.enumerator(atPath: root.path) else { return [:] }
+    guard let walker = FileManager.default.enumerator(atPath: root) else { return [:] }
     while let relative = walker.nextObject() as? String {
       var isDirectory: ObjCBool = false
-      let full = root.appendingPathComponent(relative)
-      guard FileManager.default.fileExists(atPath: full.path, isDirectory: &isDirectory), !isDirectory.boolValue else { continue }
-      result[relative] = (try? Data(contentsOf: full)).map { String(decoding: $0, as: UTF8.self) }
+      let full = "\(root)/\(relative)"
+      guard FileManager.default.fileExists(atPath: full, isDirectory: &isDirectory), !isDirectory.boolValue else { continue }
+      result[relative] = (try? Posix.read(full)).map { String(decoding: $0, as: UTF8.self) }
     }
     return result
   }
@@ -190,22 +190,22 @@ import Testing
   /// From the Styles page the move takes a snapshot first, before the file is written, and answers
   /// its id; one that fails leaves the project as it was. A moved project takes none.
   @Test func theMoveWithASnapshot() async throws {
-    let scratch = try HostPathTests.Scratch()
-    let project = scratch.url.appendingPathComponent("p")
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let project = "\(scratch.path)/p"
     let custom = StyleSheets.customScss(project)
-    try FileManager.default.createDirectory(at: custom.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try Data("@use \"./base.scss\";\n".utf8).write(to: custom)
+    try Posix.mkdirs(NodePath.dirname(custom))
+    try Posix.write(custom, Data("@use \"./base.scss\";\n".utf8))
     let managed = StyleSheets.managedScss(project)
 
     struct NoWayBack: Error {}
     await #expect(throws: NoWayBack.self) { _ = try await StyleSheets.migrate(project: project, snapshot: { _, _ in throw NoWayBack() }) }
-    #expect(!FileManager.default.fileExists(atPath: managed.path))
+    #expect(!FileManager.default.fileExists(atPath: managed))
 
     let calls = SnapshotCalls()
-    let take = calls.take { _ in #expect(!FileManager.default.fileExists(atPath: managed.path), "the snapshot comes first") }
+    let take = calls.take { _ in #expect(!FileManager.default.fileExists(atPath: managed), "the snapshot comes first") }
     let first = try await StyleSheets.migrate(project: project, snapshot: StyleFiles.snapshot(take))
     #expect(first == StyleSheets.Migration(moved: true, snapshotId: "snap-styleMigration"))
-    #expect(FileManager.default.fileExists(atPath: managed.path))
+    #expect(FileManager.default.fileExists(atPath: managed))
     let second = try await StyleSheets.migrate(project: project, snapshot: StyleFiles.snapshot(take))
     #expect(second == StyleSheets.Migration(moved: false, snapshotId: nil))
     #expect(calls.all == [["styleMigration", ""]])

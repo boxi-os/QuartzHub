@@ -91,7 +91,7 @@ import Testing
     let servers = service(try environment(), events, logs: logs)
     let (port, wsPort) = Self.freePorts()
     let options = BuildService.ServerOptions(port: port, wsPort: wsPort)
-    let started = await servers.startServer(projectId: "p", project: project, options: options)
+    let started = await servers.startServer(projectId: "p", project: project.path, options: options)
     #expect(started.state == .starting && started.pid != nil)
     try await Self.until { await servers.serverStatus("p").state == .running }
     let status = await servers.serverStatus("p")
@@ -125,7 +125,7 @@ import Testing
     let holder = Self.occupy(port)
     defer { Self.release(holder) }
     #expect(await ServerPorts.state(port) == .taken, "a listener on 127.0.0.1 alone is taken although the wildcard bind works")
-    _ = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
     let moved = try #require(await servers.serverStatus("p").options)
     #expect(moved.port != port && moved.port > port && moved.port != wsPort)
     #expect(logs.history("p").server.map(\.text).contains(L10n.t("main.serverPortTaken", ["from": String(port), "to": String(moved.port)]) + "\n"))
@@ -135,7 +135,7 @@ import Testing
     // A second project asking for the same ports does not land on the first one's.
     let other = scratch.url.appendingPathComponent("Zweites")
     try FileManager.default.createDirectory(at: other, withIntermediateDirectories: true)
-    _ = await servers.startServer(projectId: "q", project: other, options: moved)
+    _ = await servers.startServer(projectId: "q", project: other.path, options: moved)
     let second = try #require(await servers.serverStatus("q").options)
     #expect(Set([second.port, second.wsPort]).isDisjoint(with: [moved.port, moved.wsPort]))
     await servers.stopServer("p")
@@ -147,7 +147,7 @@ import Testing
     let (port, wsPort) = Self.freePorts()
     let holder = Self.occupy(wsPort)
     defer { Self.release(holder) }
-    let status = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort, host: "tunnel.example"))
+    let status = await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort, host: "tunnel.example"))
     #expect(status.state == .error)
     #expect(status.error == L10n.t("main.serverPortTakenBehindTunnel", ["ports": String(wsPort), "host": "tunnel.example"]))
     #expect(calls.isEmpty)
@@ -156,10 +156,10 @@ import Testing
   @Test func missingPackagesAreAnErrorUntilTheyAreInstalled() async throws {
     try #"{"dependencies":{"left-pad":"1"}}"#.write(to: project.appendingPathComponent("package.json"), atomically: true, encoding: .utf8)
     let servers = service(try environment())
-    let status = await servers.startServer(projectId: "p", project: project)
+    let status = await servers.startServer(projectId: "p", project: project.path)
     #expect(status.state == .error && status.error == L10n.t("main.dependenciesMissing", ["names": "left-pad"]))
     #expect(calls.isEmpty)
-    await servers.forgetDependencyErrors(project: project)
+    await servers.forgetDependencyErrors(project: project.path)
     #expect(await servers.serverStatus("p").state == .stopped)
   }
 
@@ -172,7 +172,7 @@ import Testing
     defer { stranger.signal(SIGKILL) }
     try await Self.until { await ServerPorts.state(port) == .taken }
     let (mine, myWs) = Self.freePorts()
-    let status = await service(try environment()).startServer(projectId: "p", project: project, options: .init(port: mine, wsPort: myWs))
+    let status = await service(try environment()).startServer(projectId: "p", project: project.path, options: .init(port: mine, wsPort: myWs))
     #expect(status.state == .error)
     #expect(status.error == L10n.t("main.serverAlreadyRunningOutside", ["port": String(port), "pid": String(stranger.pid)]))
   }
@@ -184,15 +184,15 @@ import Testing
     let project = self.project
     // A build into public/ is running; the start waits for it and says so.
     try "".write(to: scratch.url.appendingPathComponent("hold"), atomically: true, encoding: .utf8)
-    let build = Task { try await servers.build(projectId: "p", project: project, outputDir: nil) }
+    let build = Task { try await servers.build(projectId: "p", project: project.path, outputDir: nil) }
     try await Self.until { !calls.isEmpty }
-    let start = Task { await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort)) }
+    let start = Task { await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort)) }
     try await Self.until { logs.history("p").server.contains { $0.stream == .warn } }
     #expect(logs.history("p").server.first?.text == L10n.t("main.serverWaitsForBuild", ["dir": project.path + "/public"]) + "\n")
     #expect(await servers.serverStatus("p").state == .starting)
     // While it waits, a build into public/ is the server's folder.
     await #expect(throws: BuildService.Refusal.serverWriting(directory: project.path + "/public")) {
-      try await servers.assertOutputFree(projectId: "p", project: project, outputDir: "public")
+      try await servers.assertOutputFree(projectId: "p", project: project.path, outputDir: "public")
     }
     try FileManager.default.removeItem(at: scratch.url.appendingPathComponent("hold"))
     #expect(try await build.value.success)
@@ -200,9 +200,9 @@ import Testing
     try await Self.until { await servers.serverStatus("p").state == .running }
     // Running: public/ is refused, another folder is not.
     await #expect(throws: BuildService.Refusal.serverWriting(directory: project.path + "/public")) {
-      try await servers.build(projectId: "p", project: project, outputDir: nil)
+      try await servers.build(projectId: "p", project: project.path, outputDir: nil)
     }
-    #expect(try await servers.build(projectId: "p", project: project, outputDir: "dist").success)
+    #expect(try await servers.build(projectId: "p", project: project.path, outputDir: "dist").success)
     await servers.stopServer("p")
   }
 
@@ -212,10 +212,10 @@ import Testing
     let servers = service(try environment(), preparation: [step])
     let project = self.project
     try "".write(to: scratch.url.appendingPathComponent("hold"), atomically: true, encoding: .utf8)
-    let build = Task { try await servers.build(projectId: "p", project: project, outputDir: nil) }
+    let build = Task { try await servers.build(projectId: "p", project: project.path, outputDir: nil) }
     try await Self.until { !calls.isEmpty }
     let (port, wsPort) = Self.freePorts()
-    let start = Task { await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort)) }
+    let start = Task { await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort)) }
     try await Self.until { await servers.serverStatus("p").state == .starting }
     await servers.stopServer("p")
     #expect(await servers.serverStatus("p").state == .stopped)
@@ -236,7 +236,7 @@ import Testing
     defer { Self.release(holder) }
     let logs = LogBuffer()
     let servers = service(try environment(), logs: logs)
-    _ = await servers.startServer(projectId: "p", project: project, options: .init(port: start, wsPort: start + 1))
+    _ = await servers.startServer(projectId: "p", project: project.path, options: .init(port: start, wsPort: start + 1))
     let chosen = try #require(await servers.serverStatus("p").options)
     // The websocket moves past the page; usually to start + 2, now and then one further (a port
     // probed a moment ago can read as taken under the load of the parallel tests, see
@@ -251,7 +251,7 @@ import Testing
     try mode("die")
     let servers = service(try environment())
     let (port, wsPort) = Self.freePorts()
-    _ = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
     try await Self.until { await servers.serverStatus("p").state == .error }
     #expect(await servers.serverStatus("p") == BuildService.ServerStatus(state: .error, ended: .exited(2)))
     #expect(RunningServersStore(profile: profile).peek().keys.isEmpty)
@@ -259,7 +259,7 @@ import Testing
 
   @Test func withoutNpxTheStartFailsWithTheSystemsWord() async throws {
     let servers = service(try environment(npx: false))
-    let status = await servers.startServer(projectId: "p", project: project)
+    let status = await servers.startServer(projectId: "p", project: project.path)
     #expect(status == BuildService.ServerStatus(state: .error, error: "spawn npx ENOENT"))
   }
 
@@ -269,7 +269,7 @@ import Testing
     let logs = LogBuffer()
     let servers = service(try environment(), logs: logs)
     let (port, wsPort) = Self.freePorts()
-    _ = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
     // No line to hear: running once the websocket port is open too.
     try await Self.until { await servers.serverStatus("p").state == .running }
     #expect(await servers.serverStatus("p").state == .running)
@@ -282,7 +282,7 @@ import Testing
     try mode("noline")
     let servers = service(try environment())
     let (port, wsPort) = Self.freePorts()
-    _ = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
     try await Self.until { await servers.serverStatus("p").state == .running }
     #expect(await servers.serverStatus("p").state == .running)
     await servers.stopServer("p")
@@ -295,7 +295,7 @@ import Testing
     let logs = LogBuffer()
     let servers = service(try environment(), logs: logs)
     let (port, wsPort) = Self.freePorts()
-    _ = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
     try await Self.until { await ServerPorts.state(port) == .taken }
     try await Self.until(8) { logs.history("p").server.contains { $0.stream == .warn } }
     #expect(await servers.serverStatus("p").state == .starting)
@@ -309,8 +309,8 @@ import Testing
     let (port, wsPort) = Self.freePorts()
     let first = project, second = scratch.url.appendingPathComponent("Zweites")
     try FileManager.default.createDirectory(at: second, withIntermediateDirectories: true)
-    async let a = servers.startServer(projectId: "p", project: first, options: .init(port: port, wsPort: wsPort))
-    async let b = servers.startServer(projectId: "q", project: second, options: .init(port: port, wsPort: wsPort))
+    async let a = servers.startServer(projectId: "p", project: first.path, options: .init(port: port, wsPort: wsPort))
+    async let b = servers.startServer(projectId: "q", project: second.path, options: .init(port: port, wsPort: wsPort))
     let (p, q) = await (a, b)
     let ports = [p.options?.port, p.options?.wsPort, q.options?.port, q.options?.wsPort].compactMap { $0 }
     #expect(Set(ports).count == 4, "\(ports)")
@@ -325,7 +325,7 @@ import Testing
     }
     let servers = service(try environment())
     let (port, wsPort) = Self.freePorts()
-    _ = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
     let pid = try #require(await servers.serverStatus("p").pid)
     let left = Set(try FileManager.default.contentsOfDirectory(atPath: logs))
     #expect(left == ["notes.txt", "build.log", "dev-server-\(pid).out.log", "dev-server-\(pid).err.log"])
@@ -339,13 +339,13 @@ import Testing
     let servers = service(try environment())
     let (port, wsPort) = Self.freePorts()
     let project = self.project
-    async let a = servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
-    async let b = servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
+    async let a = servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
+    async let b = servers.startServer(projectId: "p", project: project.path, options: .init(port: port, wsPort: wsPort))
     _ = await (a, b)
     try await Self.until { await servers.serverStatus("p").state == .running }
     #expect(calls.count == 1, "\(calls)")
     let first = try #require(await servers.serverStatus("p").pid)
-    let restarted = await servers.restartServer(projectId: "p", project: project)
+    let restarted = await servers.restartServer(projectId: "p", project: project.path)
     #expect(restarted.pid != first && restarted.options?.port == port, "\(restarted)")
     try await Self.until { await servers.serverStatus("p").state == .running }
     #expect(await servers.serverStatus("p").state == .running)
@@ -364,7 +364,7 @@ import Testing
     let (port, wsPort) = Self.freePorts()
     let clock = ContinuousClock()
     let start = clock.now
-    _ = await servers.startServer(projectId: "g", project: copy, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "g", project: copy.path, options: .init(port: port, wsPort: wsPort))
     try await Self.until(120) { await servers.serverStatus("g").state != .starting }
     let took = clock.now - start
     #expect(await servers.serverStatus("g").state == .running, "\(logs.history("g").server.map(\.text).joined())")

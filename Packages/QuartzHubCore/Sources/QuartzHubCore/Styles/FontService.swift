@@ -92,18 +92,20 @@ public struct FontService: Sendable {
   /// file says about its weight and slant: without a weight the browser takes 400 and synthesises
   /// every bold cut, and two cuts of one family claim the same identity. A file past the size limit
   /// or one this cannot read gets the rule QuartzControl always wrote.
-  public func importFontFile(_ source: URL, family: String, project: URL) async throws -> Imported {
-    try await ProjectLock.styles.run(project.path) {
-      let ext = String(NodePath.extname(source.path).dropFirst()).lowercased()
+  public func importFontFile(_ source: String, family: String, project: String) async throws -> Imported {
+    try await ProjectLock.styles.run(project) {
+      let ext = String(NodePath.extname(source).dropFirst()).lowercased()
       let format = Self.formats[ext] ?? ext
       let dir = FontFaces.projectFontsDirectory(project)
-      try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-      let fileName = NodePath.basename(source.path)
-      let target = dir.appendingPathComponent(fileName)
-      if FileManager.default.fileExists(atPath: target.path) { try FileManager.default.removeItem(at: target) }
-      try FileManager.default.copyItem(at: source, to: target)
-      let size = (try? FileManager.default.attributesOfItem(atPath: source.path)[.size] as? Int) ?? Int.max
-      let face = size <= FontFile.maxFileBytes ? (try? Data(contentsOf: source)).flatMap(FontFile.face) : nil
+      try Posix.mkdirs(dir)
+      let fileName = NodePath.basename(source)
+      let target = "\(dir)/\(fileName)"
+      if FileManager.default.fileExists(atPath: target) { try FileManager.default.removeItem(atPath: target) }
+      // copyfile, not copyItem: that stored "Schöne.woff2" decomposed while the rule names it
+      // composed, and a web server that compares bytes answers the rule with a 404.
+      try Posix.copyFile(source, target)
+      let size = (try? FileManager.default.attributesOfItem(atPath: source)[.size] as? Int) ?? Int.max
+      let face = size <= FontFile.maxFileBytes ? (try? Posix.read(source)).flatMap(FontFile.face) : nil
       var declarations = ["  font-family: \"\(family)\";", "  src: url(\"static/fonts/\(fileName)\") format(\"\(format)\");"]
       if let face { declarations.append("  font-weight: \(face.weight);") }
       if face?.italic == true { declarations.append("  font-style: italic;") }
@@ -172,16 +174,16 @@ public struct FontService: Sendable {
   /// The families of the `fonts` block nothing names: no typography slot (`draftFamilies` are the
   /// slots as the page shows them, unsaved included), no stylesheet under quartz/styles,
   /// quartz/components/styles or quartz/static, no variable. With the files that would go with them.
-  public func unusedImportedFonts(project: URL, draftFamilies: [String]) async throws -> [Unused] {
+  public func unusedImportedFonts(project: String, draftFamilies: [String]) async throws -> [Unused] {
     let sources = try StyleSheets.readSources(project: project)
     guard let body = StyleSheets.managedBody(sources, "fonts"), !body.isEmpty else { return [] }
     var texts = [Self.withoutComments(StyleSheets.sourcesWithout(sources, "fonts"))]
-    let custom = NodePath.normalize(StyleSheets.customScss(project).path), managed = NodePath.normalize(StyleSheets.managedScss(project).path)
+    let custom = NodePath.normalize(StyleSheets.customScss(project)), managed = NodePath.normalize(StyleSheets.managedScss(project))
     for path in FontFaces.allStylesheets(project: project) where path != custom && path != managed {
-      texts.append(Self.withoutComments(try StyleSheets.readText(URL(fileURLWithPath: path))))
+      texts.append(Self.withoutComments(try StyleSheets.readText(path)))
     }
     var typography: [JSONValue] = []
-    if let config = try? await readConfig(project.path) {
+    if let config = try? await readConfig(project) {
       switch config.theme["typography"] {
       case .object(let object)?: typography = object.keys.map { object[$0]! }
       case .array(let items)?: typography = items
@@ -219,8 +221,8 @@ public struct FontService: Sendable {
   }
 
   /// Takes a family's rules out of the `fonts` block and deletes the files only they named.
-  public func removeImportedFont(_ family: String, project: URL) async throws -> [String] {
-    try await ProjectLock.styles.run(project.path) {
+  public func removeImportedFont(_ family: String, project: String) async throws -> [String] {
+    try await ProjectLock.styles.run(project) {
       let body = StyleSheets.managedBody(try StyleSheets.readSources(project: project), "fonts") ?? ""
       let rules = ManagedBlocks.splitRules(body)
       let wanted = family.lowercased()
@@ -237,8 +239,8 @@ public struct FontService: Sendable {
   /// `protecting` adds the bare file name of any url(), resolving or not: `url("#{$f}/x.woff2")` is
   /// a path Sass builds, and a name too many protects a file nobody uses where one too few deletes
   /// one the site needs.
-  func fontFilesNamed(_ project: URL, _ css: String, protecting: Bool) -> [String] {
-    let dir = NodePath.normalize(FontFaces.projectFontsDirectory(project).path)
+  func fontFilesNamed(_ project: String, _ css: String, protecting: Bool) -> [String] {
+    let dir = NodePath.normalize(FontFaces.projectFontsDirectory(project))
     var files: [String] = []
     func add(_ file: String) { if !files.contains(file) { files.append(file) } }
     for face in FontFaces.parse(css) {
@@ -254,11 +256,11 @@ public struct FontService: Sendable {
 
   /// Every file any stylesheet still points at; `except` are rules taken out of the two managed
   /// files first (the ones about to go), each rule on its own.
-  func fontFilesStillNamed(_ project: URL, except: [String] = []) throws -> Set<String> {
+  func fontFilesStillNamed(_ project: String, except: [String] = []) throws -> Set<String> {
     var named: Set<String> = []
-    let custom = NodePath.normalize(StyleSheets.customScss(project).path), managed = NodePath.normalize(StyleSheets.managedScss(project).path)
+    let custom = NodePath.normalize(StyleSheets.customScss(project)), managed = NodePath.normalize(StyleSheets.managedScss(project))
     for path in FontFaces.allStylesheets(project: project) {
-      var css = try StyleSheets.readText(URL(fileURLWithPath: path))
+      var css = try StyleSheets.readText(path)
       if path == custom || path == managed {
         for rule in except { css = (css as NSString).replacingOccurrences(of: rule, with: "", options: .literal, range: NSRange(location: 0, length: JSText.length(css))) }
       }
@@ -269,7 +271,7 @@ public struct FontService: Sendable {
 
   /// The files a template import would delete by replacing the rules `previous` with `incoming`;
   /// only reads.
-  public func fontFilesReplacedRulesWouldRemove(previous: String, incoming: String, project: URL) throws -> [String] {
+  public func fontFilesReplacedRulesWouldRemove(previous: String, incoming: String, project: String) throws -> [String] {
     var stillNamed = try fontFilesStillNamed(project, except: ManagedBlocks.splitRules(previous))
     stillNamed.formUnion(fontFilesNamed(project, incoming, protecting: true))
     var out: [String] = []
@@ -281,12 +283,12 @@ public struct FontService: Sendable {
     return out
   }
 
-  public func deleteFontFilesOfReplacedRules(_ previous: String, project: URL) async throws -> [String] {
-    try await ProjectLock.styles.run(project.path) { try deleteUnreferencedFontFiles(project, previous) }
+  public func deleteFontFilesOfReplacedRules(_ previous: String, project: String) async throws -> [String] {
+    try await ProjectLock.styles.run(project) { try deleteUnreferencedFontFiles(project, previous) }
   }
 
   /// Deletes the files the rules in `css` pointed at that no rule in any stylesheet still names.
-  func deleteUnreferencedFontFiles(_ project: URL, _ css: String) throws -> [String] {
+  func deleteUnreferencedFontFiles(_ project: String, _ css: String) throws -> [String] {
     let stillNamed = try fontFilesStillNamed(project)
     var removed: [String] = []
     for file in fontFilesNamed(project, css, protecting: false) {
@@ -346,8 +348,8 @@ public struct FontService: Sendable {
     ((try? FileManager.default.attributesOfItem(atPath: path)[.size] as? Int) ?? 0) > 0
   }
 
-  func allFilesPresent(_ project: URL, _ body: String) -> Bool {
-    let dir = NodePath.normalize(FontFaces.projectFontsDirectory(project).path)
+  func allFilesPresent(_ project: String, _ body: String) -> Bool {
+    let dir = NodePath.normalize(FontFaces.projectFontsDirectory(project))
     return FontFaces.parse(body).allSatisfy { face in FontFaces.fileIn(dir, face.url).map(Self.usableFile) ?? false }
   }
 
@@ -368,21 +370,21 @@ public struct FontService: Sendable {
     if declared > Double(FontFile.maxFileBytes) || response.body.count > FontFile.maxFileBytes {
       throw Failure(message: L10n.t("main.googleFontsFileTooLarge", ["file": file]))
     }
-    let temp = NodePath.join(NodePath.normalize((target as NSString).deletingLastPathComponent), ".\(file).download")
-    try response.body.write(to: URL(fileURLWithPath: temp))
+    let temp = NodePath.join(NodePath.normalize(NodePath.dirname(target)), ".\(file).download")
+    try Posix.write(temp, response.body)
     if FileManager.default.fileExists(atPath: target) { try FileManager.default.removeItem(atPath: target) }
-    try FileManager.default.moveItem(atPath: temp, toPath: target)
+    try Posix.move(temp, target)
     return response.body.count
   }
 
   /// Fetches the Google fonts the typography names into the project and writes their block. Does
   /// nothing when the block answers the same request and all its files are there, which makes it
   /// cheap enough for every build. Files the previous block named and no rule names any more go.
-  public func fetchGoogleFonts(_ typography: JSONObject, project: URL) async throws -> Fetched {
-    try await ProjectLock.styles.run(project.path) { try await fetchGoogleFontsNow(typography, project: project) }
+  public func fetchGoogleFonts(_ typography: JSONObject, project: String) async throws -> Fetched {
+    try await ProjectLock.styles.run(project) { try await fetchGoogleFontsNow(typography, project: project) }
   }
 
-  func fetchGoogleFontsNow(_ typography: JSONObject, project: URL) async throws -> Fetched {
+  func fetchGoogleFontsNow(_ typography: JSONObject, project: String) async throws -> Fetched {
     guard GoogleFontRequest.css2Url(typography) != nil else { throw Failure(message: L10n.t("main.googleFontsNoFamily")) }
     let current = try StyleSheets.readSources(project: project)
     // What the project declares itself is not asked of Google again; but "declares the family" is
@@ -466,8 +468,8 @@ public struct FontService: Sendable {
       throw Failure(message: L10n.t("main.googleFontsTooManyFiles", ["count": String(urls.count), "max": String(Self.maxFiles)]))
     }
 
-    let dir = NodePath.normalize(FontFaces.projectFontsDirectory(project).path)
-    try FileManager.default.createDirectory(atPath: dir, withIntermediateDirectories: true)
+    let dir = NodePath.normalize(FontFaces.projectFontsDirectory(project))
+    try Posix.mkdirs(dir)
     // Google's names are content hashes: a readable file of that name is the same file. What this
     // run wrote goes again when it breaks off, so half a set never stands under no rule.
     var total = 0
@@ -595,8 +597,8 @@ public struct FontService: Sendable {
   }
 
   /// Removes the Google block and every file of it no other rule names.
-  public func dropGoogleFonts(project: URL) async throws -> Dropped {
-    try await ProjectLock.styles.run(project.path) {
+  public func dropGoogleFonts(project: String) async throws -> Dropped {
+    try await ProjectLock.styles.run(project) {
       guard let body = StyleSheets.managedBody(try StyleSheets.readSources(project: project), "google-fonts") else {
         return Dropped(dropped: false, removedFiles: [], removedFamilies: [])
       }
@@ -612,11 +614,11 @@ public struct FontService: Sendable {
   /// than the Basis tab. Never throws: a failed fetch is a sentence, and the build goes on with the
   /// files that are there. Under the lock from the first read: a template import takes the block
   /// out for the length of two writes.
-  public func refreshGoogleFonts(project: URL) async -> (failed: Bool, text: String)? {
+  public func refreshGoogleFonts(project: String) async -> (failed: Bool, text: String)? {
     do {
-      return try await ProjectLock.styles.run(project.path) { () async throws -> (failed: Bool, text: String)? in
+      return try await ProjectLock.styles.run(project) { () async throws -> (failed: Bool, text: String)? in
         guard Self.hasGoogleBlock(try StyleSheets.readSources(project: project)) else { return nil }
-        let config = try await readConfig(project.path)
+        let config = try await readConfig(project)
         guard config.theme["fontOrigin"] == .string("local") else { return nil }
         let result = try await fetchGoogleFontsNow(config.theme["typography"]?.objectValue ?? JSONObject(), project: project)
         guard result.changed else { return nil }

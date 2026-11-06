@@ -9,17 +9,17 @@ import Testing
 /// answer, every changed file and every request. Here the same script answers FontService.
 @Suite struct FontServiceTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures")
-  static let fonts = fixtures.appendingPathComponent("fonts")
+  static let fonts = fixtures.appendingPathComponent("fonts").path
   static var stepCases: [String] {
-    ((try? FileManager.default.contentsOfDirectory(atPath: fonts.appendingPathComponent("steps").path)) ?? [])
+    ((try? FileManager.default.contentsOfDirectory(atPath: "\(fonts)/steps")) ?? [])
       .filter { $0.hasSuffix(".json") }.map { String($0.dropLast(5)) }.sorted()
   }
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   static func json(_ name: String) throws -> JSONValue {
-    try JSJSON.parse(Data(contentsOf: fonts.appendingPathComponent(name)))
+    try JSJSON.parse(Posix.read("\(fonts)/\(name)"))
   }
 
   @Test func thereAreCases() { #expect(Self.stepCases.count >= 11) }
@@ -79,15 +79,15 @@ import Testing
   func stepsAsQuartzControl(_ file: String) async throws {
     let golden = try Self.json("steps/\(file).json")
     let google = try Self.json("google.json").objectValue ?? JSONObject()
-    let project = scratch.url.appendingPathComponent(file)
+    let project = "\(scratch.path)/\(file)"
     let tree = golden["tree"]?.objectValue ?? JSONObject()
     for path in tree.keys {
-      let url = project.appendingPathComponent(path)
-      try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      if let text = tree[path]?.stringValue { try Data(text.utf8).write(to: url) }
-      else { try FileManager.default.copyItem(at: Self.fixtures.appendingPathComponent(tree[path]!["fixture"]!.stringValue!), to: url) }
+      let url = "\(project)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(url))
+      if let text = tree[path]?.stringValue { try Posix.write(url, Data(text.utf8)) }
+      else { try TestFolder.copy(Self.fixtures.appendingPathComponent(tree[path]!["fixture"]!.stringValue!), to: url) }
     }
-    try FileManager.default.createDirectory(at: project.appendingPathComponent("quartz/styles"), withIntermediateDirectories: true)
+    try Posix.mkdirs("\(project)/quartz/styles")
     let box = Box()
     box.lock.withLock { $0.config = golden["config"] ?? .null }
     let service = FontService(fetch: Self.fake(google, box), readConfig: { _ in try Self.config(box.lock.withLock { $0.config }) })
@@ -95,7 +95,7 @@ import Testing
     for step in golden["steps"]?.arrayValue ?? [] {
       let call = step["call"]!.stringValue!
       let args = (step["args"]?.arrayValue ?? []).map { arg -> JSONValue in
-        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: project.appendingPathComponent("in").path, options: .literal)) }
+        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: "\(project)/in", options: .literal)) }
         return arg
       }
       box.lock.withLock { $0.requests = [] }
@@ -125,15 +125,14 @@ import Testing
   @Test(.enabled(if: HelperRuntime.available, "Runtime/ oder Helpers/dist fehlt"))
   func theBuildDoorRefreshesTheGoogleFonts() async throws {
     let golden = try Self.json("steps/refresh-every-family-own.json")
-    let project = scratch.url.appendingPathComponent("door")
+    let project = "\(scratch.path)/door"
     let tree = golden["tree"]?.objectValue ?? JSONObject()
     for path in tree.keys {
-      let url = project.appendingPathComponent(path)
-      try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(tree[path]!.stringValue!.utf8).write(to: url)
+      let url = "\(project)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(url))
+      try Posix.write(url, Data(tree[path]!.stringValue!.utf8))
     }
-    try Data("configuration:\n  pageTitle: door\n  theme:\n    fontOrigin: local\n    typography:\n      header: Inter\nplugins: []\n".utf8)
-      .write(to: project.appendingPathComponent("quartz.config.yaml"))
+    try Posix.write("\(project)/quartz.config.yaml", Data("configuration:\n  pageTitle: door\n  theme:\n    fontOrigin: local\n    typography:\n      header: Inter\nplugins: []\n".utf8))
     func run() async -> [String] {
       let said = Mutex<[String]>([])
       for step in BuildService.preparation { await step(project) { stream, text in said.withLock { $0.append("\(stream) \(text)") } } }
@@ -141,7 +140,7 @@ import Testing
     }
     let expected = L10n.t("main.googleFontsRefreshOwn", ["families": "Inter"]) + " " + L10n.t("main.googleFontsRefreshRemoved", ["count": "1"])
     #expect(await run() == ["stdout \(expected)\n"])
-    #expect(!FileManager.default.fileExists(atPath: project.appendingPathComponent("quartz/static/fonts/g-inter.woff2").path))
+    #expect(!FileManager.default.fileExists(atPath: "\(project)/quartz/static/fonts/g-inter.woff2"))
     #expect(await run() == [])
   }
 
@@ -160,18 +159,18 @@ import Testing
 
   static func strings(_ list: [String]) -> JSONValue { .array(list.map { .string($0) }) }
 
-  static func run(_ call: String, _ args: [JSONValue], _ service: FontService, _ project: URL, _ box: Box) async throws -> JSONValue {
+  static func run(_ call: String, _ args: [JSONValue], _ service: FontService, _ project: String, _ box: Box) async throws -> JSONValue {
     switch call {
     case "setConfig":
       box.lock.withLock { $0.config = args[0] }
       return .null
     case "write":
-      let url = project.appendingPathComponent(args[0].stringValue!)
-      try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(args[1].stringValue!.utf8).write(to: url)
+      let url = "\(project)/\(args[0].stringValue!)"
+      try Posix.mkdirs(NodePath.dirname(url))
+      try Posix.write(url, Data(args[1].stringValue!.utf8))
       return .null
     case "importFontFile":
-      let imported = try await service.importFontFile(URL(fileURLWithPath: args[0].stringValue!), family: args[1].stringValue!, project: project)
+      let imported = try await service.importFontFile(args[0].stringValue!, family: args[1].stringValue!, project: project)
       var pairs: [(String, JSONValue)] = [("fileName", .string(imported.fileName))]
       if let face = imported.face { pairs += [("weight", .string(face.weight)), ("italic", .bool(face.italic))] }
       return .object(JSONObject(pairs))
@@ -202,15 +201,15 @@ import Testing
   }
 
   /// Every file under quartz/, a font file as its size and SHA-1 (as the golden script wrote it).
-  static func files(_ project: URL) -> [String: JSONValue] {
+  static func files(_ project: String) -> [String: JSONValue] {
     var result: [String: JSONValue] = [:]
-    let root = project.appendingPathComponent("quartz")
-    guard let walker = FileManager.default.enumerator(atPath: root.path) else { return [:] }
+    let root = "\(project)/quartz"
+    guard let walker = FileManager.default.enumerator(atPath: root) else { return [:] }
     while let relative = walker.nextObject() as? String {
       var isDirectory: ObjCBool = false
-      let full = root.appendingPathComponent(relative)
-      guard FileManager.default.fileExists(atPath: full.path, isDirectory: &isDirectory), !isDirectory.boolValue,
-            let data = try? Data(contentsOf: full) else { continue }
+      let full = "\(root)/\(relative)"
+      guard FileManager.default.fileExists(atPath: full, isDirectory: &isDirectory), !isDirectory.boolValue,
+            let data = try? Posix.read(full) else { continue }
       let printable = data.allSatisfy { $0 == 0x09 || $0 == 0x0A || (0x20...0x7E).contains($0) }
       if JSText.test(relative, #"\.(woff2?|ttf|otf|TTF)\z"#) && !printable {
         let sha = Insecure.SHA1.hash(data: data).map { String(format: "%02x", $0) }.joined()

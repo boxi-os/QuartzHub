@@ -33,7 +33,7 @@ public enum StyleFiles {
 
   public struct File: Equatable, Sendable {
     public var relativePath: String
-    public var path: URL
+    public var path: String
     public var name: String
     public var imported: Bool
   }
@@ -46,22 +46,22 @@ public enum StyleFiles {
     public var consolidated: Bool
   }
 
-  static func file(_ project: URL, _ relativePath: String, imported: Bool) -> File {
+  static func file(_ project: String, _ relativePath: String, imported: Bool) -> File {
     File(relativePath: relativePath, path: StyleSheets.styleFile(project, relativePath),
          name: JSText.split(relativePath, "/").dropFirst().joined(separator: "/"), imported: imported)
   }
 
-  static func filesOnDisk(_ dir: URL) -> [String] {
-    LayoutFrames.directoryEntriesWithKind(dir.path).filter { $0.kind == .file && JSText.test($0.name, #"\.(scss|css)\z"#) }.map(\.name)
+  static func filesOnDisk(_ dir: String) -> [String] {
+    LayoutFrames.directoryEntriesWithKind(dir).filter { $0.kind == .file && JSText.test($0.name, #"\.(scss|css)\z"#) }.map(\.name)
   }
 
-  public static func list(project: URL) throws -> FileSet {
+  public static func list(project: String) throws -> FileSet {
     let main = try StyleSheets.readCustom(project: project)
     let order = StyleSheets.importOrder(project, StyleSheets.Sources(custom: main.content, managed: main.managed?.content ?? "", managedExists: main.managed != nil))
     var onDisk: [String] = []
     for dir in StyleSheets.styleDirectories {
-      let full = StyleSheets.stylesDirectory(project).appendingPathComponent(dir)
-      guard FileManager.default.fileExists(atPath: full.path) else { continue }
+      let full = "\(StyleSheets.stylesDirectory(project))/\(dir)"
+      guard FileManager.default.fileExists(atPath: full) else { continue }
       onDisk += filesOnDisk(full).map { "\(dir)/\($0)" }
     }
     onDisk.sort { $0.utf16.lexicographicallyPrecedes($1.utf16) }
@@ -71,21 +71,21 @@ public enum StyleFiles {
                    consolidated: StylesheetConsolidation.wasConsolidated(try consolidatedFiles(project), order))
   }
 
-  public static func read(_ relativePath: String, project: URL) throws -> String {
+  public static func read(_ relativePath: String, project: String) throws -> String {
     try checkEditable(relativePath)
     let path = StyleSheets.styleFile(project, relativePath)
-    return FileManager.default.fileExists(atPath: path.path) ? try StyleSheets.readText(path) : ""
+    return FileManager.default.fileExists(atPath: path) ? try StyleSheets.readText(path) : ""
   }
 
-  public static func write(_ relativePath: String, _ content: String, project: URL) async throws {
+  public static func write(_ relativePath: String, _ content: String, project: String) async throws {
     try checkEditable(relativePath)
-    try await ProjectLock.styles.run(project.path) { try writeNow(relativePath, content, project: project) }
+    try await ProjectLock.styles.run(project) { try writeNow(relativePath, content, project: project) }
   }
 
   /// Atomic, like custom.scss: the dev server imports this file on its own schedule.
-  static func writeNow(_ relativePath: String, _ content: String, project: URL) throws {
+  static func writeNow(_ relativePath: String, _ content: String, project: String) throws {
     let path = StyleSheets.styleFile(project, relativePath)
-    try FileManager.default.createDirectory(at: path.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try Posix.mkdirs(NodePath.dirname(path))
     try StyleSheets.writeText(content, to: path)
   }
 
@@ -99,15 +99,15 @@ public enum StyleFiles {
   }
 
   /// A new stylesheet in custom/, switched on at the end of the load order.
-  public static func create(_ name: String, project: URL) async throws -> File {
+  public static func create(_ name: String, project: String) async throws -> File {
     try checkName(name)
-    return try await ProjectLock.styles.run(project.path) {
+    return try await ProjectLock.styles.run(project) {
       let fileName = fileName(name)
       let relativePath = "custom/\(fileName)"
       let path = StyleSheets.styleFile(project, relativePath)
-      if FileManager.default.fileExists(atPath: path.path) { throw Exists(name: fileName) }
-      try FileManager.default.createDirectory(at: path.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data("// \(fileName)\n".utf8).write(to: path)
+      if FileManager.default.fileExists(atPath: path) { throw Exists(name: fileName) }
+      try Posix.mkdirs(NodePath.dirname(path))
+      try Posix.write(path, Data("// \(fileName)\n".utf8))
       try StyleSheets.setImportOrderNow(try StyleSheets.currentOrder(project: project) + [relativePath], project: project)
       return File(relativePath: relativePath, path: path, name: fileName, imported: true)
     }
@@ -116,18 +116,18 @@ public enum StyleFiles {
   /// Renames within its directory and carries the place in the load order. The order is read
   /// *before* the rename: it is resolved against the disk, and afterwards the old name would no
   /// longer resolve and the file would drop out of it.
-  public static func rename(_ relativePath: String, to newName: String, project: URL) async throws -> File {
+  public static func rename(_ relativePath: String, to newName: String, project: String) async throws -> File {
     try checkSubPath(relativePath)
     try checkName(newName)
-    return try await ProjectLock.styles.run(project.path) {
+    return try await ProjectLock.styles.run(project) {
       let dir = JSText.split(relativePath, "/")[0]
       let fileName = fileName(newName)
       let next = "\(dir)/\(fileName)"
       if next == relativePath { return File(relativePath: relativePath, path: StyleSheets.styleFile(project, relativePath), name: fileName, imported: true) }
       let target = StyleSheets.styleFile(project, next)
-      if FileManager.default.fileExists(atPath: target.path) { throw Exists(name: fileName) }
+      if FileManager.default.fileExists(atPath: target) { throw Exists(name: fileName) }
       let order = try StyleSheets.currentOrder(project: project).map { $0 == relativePath ? next : $0 }
-      try FileManager.default.moveItem(at: StyleSheets.styleFile(project, relativePath), to: target)
+      try Posix.move(StyleSheets.styleFile(project, relativePath), target)
       try StyleSheets.setImportOrderNow(order, project: project)
       return File(relativePath: next, path: target, name: fileName, imported: order.contains(next))
     }
@@ -135,24 +135,24 @@ public enum StyleFiles {
 
   /// The order first: a file left in the block after its deletion breaks the build, which is worse
   /// than a file left on disk after a failed unlink.
-  public static func delete(_ relativePath: String, project: URL) async throws {
+  public static func delete(_ relativePath: String, project: String) async throws {
     try checkSubPath(relativePath)
-    try await ProjectLock.styles.run(project.path) {
+    try await ProjectLock.styles.run(project) {
       try StyleSheets.setImportOrderNow(try StyleSheets.currentOrder(project: project).filter { $0 != relativePath }, project: project)
       let path = StyleSheets.styleFile(project, relativePath)
-      if FileManager.default.fileExists(atPath: path.path) { try FileManager.default.removeItem(at: path) }
+      if FileManager.default.fileExists(atPath: path) { try FileManager.default.removeItem(atPath: path) }
     }
   }
 
   /// Copies a stylesheet into imported/ and answers the `@use` line for it.
-  public static func importFile(_ source: URL, project: URL) async throws -> (importLine: String, relativePath: String) {
-    try await ProjectLock.styles.run(project.path) {
-      let dir = StyleSheets.stylesDirectory(project).appendingPathComponent("imported", isDirectory: true)
-      try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-      let fileName = NodePath.basename(source.path)
-      let target = dir.appendingPathComponent(fileName)
-      if FileManager.default.fileExists(atPath: target.path) { try FileManager.default.removeItem(at: target) }
-      try FileManager.default.copyItem(at: source, to: target)
+  public static func importFile(_ source: String, project: String) async throws -> (importLine: String, relativePath: String) {
+    try await ProjectLock.styles.run(project) {
+      let dir = "\(StyleSheets.stylesDirectory(project))/imported"
+      try Posix.mkdirs(dir)
+      let fileName = NodePath.basename(source)
+      let target = "\(dir)/\(fileName)"
+      if FileManager.default.fileExists(atPath: target) { try FileManager.default.removeItem(atPath: target) }
+      try Posix.copyFile(source, target)
       let specifier = "./imported/" + JSText.replaceAll(fileName, #"\.(scss|css)\z"#, with: "")
       return ("@use \"\(specifier)\";", "imported/\(fileName)")
     }
@@ -168,21 +168,21 @@ public enum StyleFiles {
 
   /// A CLI-installed plugin's own .scss files, read only, so the user sees the selectors they
   /// override; at most 20. Built-in plugins have no source on disk.
-  public static func references(plugin: String, project: URL) throws -> [Reference] {
+  public static func references(plugin: String, project: String) throws -> [Reference] {
     guard !plugin.isEmpty, !JSText.includes(plugin, "/"), plugin != ".", plugin != ".." else { throw InvalidName(value: plugin) }
-    let dir = NodePath.join(project.path, ".quartz/plugins", plugin)
+    let dir = NodePath.join(project, ".quartz/plugins", plugin)
     guard FileManager.default.fileExists(atPath: dir) else { return [] }
     var found: [String] = []
     func walk(_ current: String, _ depth: Int) {
       if depth > 6 { return }
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: current).path) where !ignoredDirectories.contains(entry.name) {
+      for entry in LayoutFrames.directoryEntriesWithKind(current) where !ignoredDirectories.contains(entry.name) {
         let full = NodePath.join(current, entry.name)
         if entry.kind == .directory { walk(full, depth + 1) } else if JSText.endsWith(entry.name, ".scss") { found.append(full) }
       }
     }
     walk(dir, 0)
     return try found.prefix(20).map { path in
-      Reference(label: String(path.dropFirst(dir.count + 1)), path: path, content: try StyleSheets.readText(URL(fileURLWithPath: path)))
+      Reference(label: String(path.dropFirst(dir.count + 1)), path: path, content: try StyleSheets.readText(path))
     }
   }
 
@@ -190,11 +190,11 @@ public enum StyleFiles {
 
   /// The twelve names on disk with their content: `wasConsolidated` reads the header line a run
   /// wrote, where the load order names the file.
-  static func consolidatedFiles(_ project: URL) throws -> [String: String] {
+  static func consolidatedFiles(_ project: String) throws -> [String: String] {
     var files: [String: String] = [:]
     for name in StylesheetConsolidation.order {
       let path = StyleSheets.styleFile(project, "custom/\(name).scss")
-      if FileManager.default.fileExists(atPath: path.path) { files["custom/\(name).scss"] = try StyleSheets.readText(path) }
+      if FileManager.default.fileExists(atPath: path) { files["custom/\(name).scss"] = try StyleSheets.readText(path) }
     }
     return files
   }
@@ -214,35 +214,35 @@ public enum StyleFiles {
 
   /// A snapshot of the project, of the kind the thinning keeps (`styleMigration`); answers its id.
   /// One that fails stops the run before anything moves.
-  public typealias Snapshot = @Sendable (_ project: URL, _ kind: String) async throws -> String?
+  public typealias Snapshot = @Sendable (_ project: String, _ kind: String) async throws -> String?
 
   /// `SnapshotStore.take` in this shape.
-  public static func snapshot(_ take: @escaping SnapshotStore.Take) -> Snapshot { { project, kind in try await take(project.path, kind, "") } }
+  public static func snapshot(_ take: @escaping SnapshotStore.Take) -> Snapshot { { project, kind in try await take(project, kind, "") } }
 
   /// Puts the 31 together, asked for on the Styles page, never by a writer: it renames and removes
   /// files the user may have open. A snapshot first, as the way back. The order is read before
   /// anything moves, the new files are written before the order names them, the old ones go last,
   /// so every state in between builds.
-  public static func consolidate(project: URL, snapshot: Snapshot) async throws -> Consolidated {
-    try await ProjectLock.styles.run(project.path) {
+  public static func consolidate(project: String, snapshot: Snapshot) async throws -> Consolidated {
+    try await ProjectLock.styles.run(project) {
       let order = try StyleSheets.currentOrder(project: project)
       let done = try consolidatedFiles(project)
       guard StylesheetConsolidation.canConsolidate(order, consolidated: StylesheetConsolidation.wasConsolidated(done, order)) else {
         return Consolidated(consolidated: false, snapshotId: nil, written: [], merged: 0, renamed: [])
       }
-      let customDir = StyleSheets.stylesDirectory(project).appendingPathComponent("custom")
+      let customDir = "\(StyleSheets.stylesDirectory(project))/custom"
       let onDisk = filesOnDisk(customDir).map { "custom/\($0)" }
       var files = done
       for path in order where onDisk.contains(path) { files[path] = try StyleSheets.readText(StyleSheets.styleFile(project, path)) }
       let plan = StylesheetConsolidation.plan(order, files, onDisk)
 
       let snapshotId = try await snapshot(project, "styleMigration")
-      for (from, to) in plan.rename { try FileManager.default.moveItem(at: StyleSheets.styleFile(project, from), to: StyleSheets.styleFile(project, to)) }
+      for (from, to) in plan.rename { try Posix.move(StyleSheets.styleFile(project, from), StyleSheets.styleFile(project, to)) }
       for (path, content) in plan.write { try writeNow(path, content, project: project) }
       try StyleSheets.setImportOrderNow(plan.order, project: project)
       for path in plan.remove {
         let url = StyleSheets.styleFile(project, path)
-        if FileManager.default.fileExists(atPath: url.path) { try FileManager.default.removeItem(at: url) }
+        if FileManager.default.fileExists(atPath: url) { try FileManager.default.removeItem(atPath: url) }
       }
       return Consolidated(consolidated: true, snapshotId: snapshotId, written: plan.write.map { String($0.path.dropFirst("custom/".count)) },
                           merged: StylesheetConsolidation.legacyCount(order, consolidated: false),

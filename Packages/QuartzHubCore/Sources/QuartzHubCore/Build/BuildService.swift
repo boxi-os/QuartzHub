@@ -86,7 +86,7 @@ public actor BuildService {
 
   /// One thing done to a project before every build and server start, reporting into the build's
   /// console. What runs there is `preparation`.
-  public typealias PreparationStep = @Sendable (_ project: URL, _ report: @Sendable (LogLine.Stream, String) -> Void) async -> Void
+  public typealias PreparationStep = @Sendable (_ project: String, _ report: @Sendable (LogLine.Stream, String) -> Void) async -> Void
 
   /// What QuartzControl does before every build and start (`refreshAuthoredFrames`,
   /// `refreshGoogleFonts`), as far as QuartzHub has it:
@@ -116,7 +116,7 @@ public actor BuildService {
       }
     },
     { project, report in
-      for problem in await LayoutFrames().writeAllFrames(project: project.path) { report(.warn, problem + "\n") }
+      for problem in await LayoutFrames().writeAllFrames(project: project) { report(.warn, problem + "\n") }
     },
     { project, report in
       do {
@@ -179,14 +179,14 @@ public actor BuildService {
   /// "Jetzt bauen". A second call for the same project and folder joins the running build; for
   /// another folder it is refused, naming the folder being built. The output folder has to have
   /// been judged by `BuildOutputGuard` before.
-  public func build(projectId: String, project: URL, outputDir: String?) async throws(Refusal) -> Result {
+  public func build(projectId: String, project: String, outputDir: String?) async throws(Refusal) -> Result {
     if let running = try joinRunningBuild(projectId: projectId, project: project, outputDir: outputDir) {
       return await running.value
     }
     try assertOutputFree(projectId: projectId, project: project, outputDir: outputDir)
     setActivity(projectId, BuildActivity(kind: .build, startedAt: Date(), phase: .preparing))
     let task = Task { await self.runBuild(projectId: projectId, project: project, outputDir: outputDir) }
-    runningBuilds[projectId] = (BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project.path, outputDir: outputDir)), task)
+    runningBuilds[projectId] = (BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project, outputDir: outputDir)), task)
     let result = await task.value
     if runningBuilds[projectId]?.task == task { runningBuilds[projectId] = nil }
     if activity(projectId)?.kind == .build { setActivity(projectId, nil) }
@@ -196,15 +196,15 @@ public actor BuildService {
   /// The build running for this project, which a second "Jetzt bauen" joins, but only into the
   /// same folder: the Übersicht builds into `public/`, Vorschau & Build into the page's choice, and
   /// joining would report "Build fertig" for a folder nobody built.
-  public func joinRunningBuild(projectId: String, project: URL, outputDir: String?) throws(Refusal) -> Task<Result, Never>? {
+  public func joinRunningBuild(projectId: String, project: String, outputDir: String?) throws(Refusal) -> Task<Result, Never>? {
     guard let running = runningBuilds[projectId] else { return nil }
-    let wanted = BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project.path, outputDir: outputDir))
+    let wanted = BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project, outputDir: outputDir))
     guard running.directory == wanted else { throw .anotherBuildRuns(running: running.directory, wanted: wanted) }
     return running.task
   }
 
-  private func runBuild(projectId: String, project: URL, outputDir: String?) async -> Result {
-    if let missing = ProjectDependencies.missingDependencies(project: project.path), !missing.isEmpty {
+  private func runBuild(projectId: String, project: String, outputDir: String?) async -> Result {
+    if let missing = ProjectDependencies.missingDependencies(project: project), !missing.isEmpty {
       let names = missing.prefix(3).joined(separator: ", ") + (missing.count > 3 ? " …" : "")
       log(.build, projectId, .warn, L10n.t("main.dependenciesMissing", ["names": names]) + "\n")
       return Result(success: false, duration: .zero, exitCode: nil)
@@ -241,7 +241,7 @@ public actor BuildService {
   }
 
   /// The preparation steps in order; what they report goes into the console of the run.
-  private func prepare(projectId: String, project: URL, into kind: LogBuffer.Kind) async {
+  private func prepare(projectId: String, project: String, into kind: LogBuffer.Kind) async {
     let (reports, feed) = AsyncStream.makeStream(of: (LogLine.Stream, String).self)
     let consumer = Task {
       for await (stream, text) in reports { self.log(kind, projectId, stream, text) }
@@ -305,8 +305,8 @@ public actor BuildService {
 
   /// After a successful npm install: a start that failed only for missing packages failed for
   /// nothing that is still true.
-  public func forgetDependencyErrors(project: URL) {
-    for (projectId, path) in dependencyErrors where path == project.path {
+  public func forgetDependencyErrors(project: String) {
+    for (projectId, path) in dependencyErrors where path == project {
       dependencyErrors[projectId] = nil
       lastTerminal[projectId] = nil
       emitStatus(projectId)
@@ -317,8 +317,8 @@ public actor BuildService {
   /// its folder and the server rebuilds on every change: QuartzControl measured 16 files of a
   /// rebuild landing in the middle of a build's "Emitting files". Only QuartzHub's own servers are
   /// known here; a stranger's is the scan's business.
-  public func assertOutputFree(projectId: String, project: URL, outputDir: String?) throws(Refusal) {
-    let directory = BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project.path, outputDir: outputDir))
+  public func assertOutputFree(projectId: String, project: String, outputDir: String?) throws(Refusal) {
+    let directory = BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project, outputDir: outputDir))
     // A start still waiting counts: it writes there as soon as it spawns.
     if let pending = pendingStarts[projectId] {
       if pending.outputDir == directory { throw .serverWriting(directory: directory) }
@@ -335,13 +335,13 @@ public actor BuildService {
   /// refuses when a server of this project runs that QuartzHub did not start (a second would empty
   /// and rebuild the same `public/`), when packages are missing, or when a port behind a tunnel is
   /// taken; otherwise moves a taken port to the next free one and spawns.
-  public func startServer(projectId: String, project: URL, options: ServerOptions = ServerOptions()) async -> ServerStatus {
+  public func startServer(projectId: String, project: String, options: ServerOptions = ServerOptions()) async -> ServerStatus {
     if let existing = servers[projectId] { return existing.status }
     if let waiting = pendingStarts[projectId] { return waiting.status }
     lastTerminal[projectId] = nil
     dependencyErrors[projectId] = nil
 
-    let outputDir = BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project.path, outputDir: nil))
+    let outputDir = BuildOutputGuard.resolve(BuildOutputGuard.buildDirectory(project: project, outputDir: nil))
     let pending = PendingStart(status: ServerStatus(state: .starting, options: options, startedAt: Date()), outputDir: outputDir)
     pendingStarts[projectId] = pending
     emitStatus(projectId)
@@ -358,9 +358,9 @@ public actor BuildService {
     return await inPortQueue {
       let holder = await sameProjectServer(project)
       if pending.aborted { return serverStatus(projectId) }
-      if let missing = ProjectDependencies.missingDependencies(project: project.path), !missing.isEmpty {
+      if let missing = ProjectDependencies.missingDependencies(project: project), !missing.isEmpty {
         let sentence = L10n.t("main.dependenciesMissing", ["names": missing.prefix(3).joined(separator: ", ") + (missing.count > 3 ? " …" : "")])
-        dependencyErrors[projectId] = project.path
+        dependencyErrors[projectId] = project
         return refuse(projectId, pending, sentence)
       }
       if let holder {
@@ -447,7 +447,7 @@ public actor BuildService {
 
   /// Stop and start with the options it had. The ports are waited for: npx's node can hold its
   /// sockets a moment longer, and a restart that found its own port taken would move.
-  public func restartServer(projectId: String, project: URL, options: ServerOptions? = nil) async -> ServerStatus {
+  public func restartServer(projectId: String, project: String, options: ServerOptions? = nil) async -> ServerStatus {
     let previous = servers[projectId]?.status.options ?? options ?? ServerOptions()
     await stopServer(projectId)
     await ServerPorts.waitUntilFree([previous.port, previous.wsPort], timeout: .seconds(3))
@@ -462,7 +462,7 @@ public actor BuildService {
     return serverStatus(projectId)
   }
 
-  private func spawnServer(_ projectId: String, _ project: URL, _ pending: PendingStart) async -> ServerStatus {
+  private func spawnServer(_ projectId: String, _ project: String, _ pending: PendingStart) async -> ServerStatus {
     let options = pending.status.options ?? ServerOptions()
     var arguments = ["quartz", "build", "--serve", "--port", String(options.port), "--wsPort", String(options.wsPort)]
     if !options.host.isEmpty { arguments += ["--remoteDevHost", options.host] }
@@ -472,7 +472,7 @@ public actor BuildService {
 
     var files: ServerLogFiles?
     do {
-      files = try ServerLogFiles.open(project: project.path)
+      files = try ServerLogFiles.open(project: project)
     } catch {
       // `warn`: a sentence about a run that goes on.
       log(.server, projectId, .warn, L10n.t("main.serverLogUnavailable", ["reason": String(describing: error)]) + "\n")
@@ -582,10 +582,10 @@ public actor BuildService {
   /// A Quartz server whose folder is this project and which QuartzHub did not start: a terminal,
   /// QuartzControl, one left running after a force quit. By real path on both sides. A scan that
   /// cannot read the process table finds nothing, and the start goes ahead.
-  private func sameProjectServer(_ project: URL) async -> (port: Int, pid: Int32)? {
+  private func sameProjectServer(_ project: String) async -> (port: Int, pid: Int32)? {
     let owned = ownedServerPids()
     let scan = await ServerScan.discover(projects: [], owned: owned, system: scanSystem)
-    let here = BuildOutputGuard.realPath(project.path)
+    let here = BuildOutputGuard.realPath(project)
     for server in scan.servers where owned[server.pid] == nil {
       if let cwd = server.cwd, BuildOutputGuard.realPath(cwd) == here { return (server.port, server.pid) }
     }

@@ -13,17 +13,17 @@ import Testing
     let (p1, w1) = BuildServerTests.freePorts()
     let other = base.scratch.url.appendingPathComponent("Zweites")
     try FileManager.default.createDirectory(at: other, withIntermediateDirectories: true)
-    _ = await servers.startServer(projectId: "p", project: base.project, options: .init(port: p1, wsPort: w1))
-    _ = await servers.startServer(projectId: "q", project: other, options: .init(port: p1, wsPort: w1))
+    _ = await servers.startServer(projectId: "p", project: base.project.path, options: .init(port: p1, wsPort: w1))
+    _ = await servers.startServer(projectId: "q", project: other.path, options: .init(port: p1, wsPort: w1))
     let pids = [await servers.serverStatus("p").pid, await servers.serverStatus("q").pid].compactMap { $0 }
     #expect(pids.count == 2)
     // A third project's start waits for its build.
     let third = base.scratch.url.appendingPathComponent("Drittes")
     try FileManager.default.createDirectory(at: third, withIntermediateDirectories: true)
     try "".write(to: base.scratch.url.appendingPathComponent("hold"), atomically: true, encoding: .utf8)
-    let build = Task { try await servers.build(projectId: "r", project: third, outputDir: nil) }
+    let build = Task { try await servers.build(projectId: "r", project: third.path, outputDir: nil) }
     try await BuildServerTests.until { base.calls.count == 3 }
-    let waiting = Task { await servers.startServer(projectId: "r", project: third) }
+    let waiting = Task { await servers.startServer(projectId: "r", project: third.path) }
     try await BuildServerTests.until { await servers.serverStatus("r").state == .starting }
 
     await servers.stopAllServers()
@@ -43,7 +43,7 @@ import Testing
     try base.mode("stubborn")
     let servers = base.service(try base.environment())
     let (port, wsPort) = BuildServerTests.freePorts()
-    _ = await servers.startServer(projectId: "p", project: base.project, options: .init(port: port, wsPort: wsPort))
+    _ = await servers.startServer(projectId: "p", project: base.project.path, options: .init(port: port, wsPort: wsPort))
     let pid = try #require(await servers.serverStatus("p").pid)
     defer { killpg(pid, SIGKILL) }
     try await BuildServerTests.until { base.calls.count == 1 }

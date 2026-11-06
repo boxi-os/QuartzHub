@@ -7,12 +7,12 @@ import Testing
 /// the real `quartz build` on a copy of gui-test (`QH_QUARTZ_TESTS=1`).
 @Suite struct BuildServiceTests {
   let scratch: HostPathTests.Scratch
-  var project: URL { scratch.url.appendingPathComponent("Projekt mit Ä") }
-  var calls: URL { scratch.url.appendingPathComponent("npx.log") }
+  var project: String { "\(scratch.path)/Projekt mit Ä" }
+  var calls: String { "\(scratch.path)/npx.log" }
   init() throws {
-    scratch = try HostPathTests.Scratch()
-    try FileManager.default.createDirectory(at: project, withIntermediateDirectories: true)
-    try "{}".write(to: project.appendingPathComponent("package.json"), atomically: true, encoding: .utf8)
+    scratch = try HostPathTests.Scratch(umlaut: true)
+    try Posix.mkdirs(project)
+    try Posix.write("\(project)/package.json", Data("{}".utf8))
   }
 
   final class Events: Sendable {
@@ -31,20 +31,20 @@ import Testing
   /// `exit`, if there is one.
   func environment(npx body: String? = nil) throws -> ToolEnvironment {
     let script = body ?? """
-    echo "npx $* @ $(pwd)" >> '\(calls.path)'
+    echo "npx $* @ $(pwd)" >> '\(calls)'
     echo "Quartz v5.0.0"
     echo "Cleaned output directory"
-    while [ -e '\(scratch.url.path)/hold' ]; do sleep 0.02; done
+    while [ -e '\(scratch.path)/hold' ]; do sleep 0.02; done
     printf 'Parsing input '; sleep 0.1; echo 'files using 8 threads'
     echo "Something to say" >&2
     sleep 0.1
     echo "Emitting files"
     sleep 0.1
     echo "Done processing 3 files in 0.3s"
-    exit $(cat '\(scratch.url.path)/exit' 2>/dev/null || echo 0)
+    exit $(cat '\(scratch.path)/exit' 2>/dev/null || echo 0)
     """
     try scratch.script("bin/npx", script)
-    let hostPath = HostPath(entries: [scratch.url.appendingPathComponent("bin").path, "/usr/bin", "/bin"], source: .inherited, added: [])
+    let hostPath = HostPath(entries: ["\(scratch.path)/bin", "/usr/bin", "/bin"], source: .inherited, added: [])
     return ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin"], hostPath: hostPath, nodeMode: .system,
                            runtime: .repository, git: nil, bundledGitFailure: nil)
   }
@@ -57,9 +57,9 @@ import Testing
   /// Holds the stand-in at its start until `release`, or for three seconds at most: a test whose
   /// expectation fails must not wait forever on a build nobody releases.
   func hold() throws -> @Sendable () -> Void {
-    let file = scratch.url.appendingPathComponent("hold")
-    try "".write(to: file, atomically: true, encoding: .utf8)
-    let release: @Sendable () -> Void = { try? FileManager.default.removeItem(at: file) }
+    let file = "\(scratch.path)/hold"
+    try Posix.write(file, Data("".utf8))
+    let release: @Sendable () -> Void = { try? FileManager.default.removeItem(atPath: file) }
     Task {
       try? await Task.sleep(for: .seconds(3))
       release()
@@ -67,7 +67,7 @@ import Testing
     return release
   }
 
-  var callLines: [String] { ((try? String(contentsOf: calls, encoding: .utf8)) ?? "").split(separator: "\n").map(String.init) }
+  var callLines: [String] { ((try? Posix.read(calls)).map { String(decoding: $0, as: UTF8.self) } ?? "").split(separator: "\n").map(String.init) }
 
   @Test func aBuildSaysWhatQuartzDoesWhileItRuns() async throws {
     let events = Events()
@@ -82,7 +82,7 @@ import Testing
     #expect(events.logs(.stderr) == "Something to say\n")
     #expect(logs.history("p").build.map(\.text).joined() == events.all.withLock { $0 }.compactMap {
       if case .log(_, let line) = $0 { line.text } else { nil } }.joined())
-    #expect(callLines == ["npx quartz build @ \(BuildOutputGuard.realPath(project.path))"])
+    #expect(callLines == ["npx quartz build @ \(BuildOutputGuard.realPath(project))"])
   }
 
   @Test func aSecondBuildIntoTheSameFolderJoinsTheFirst() async throws {
@@ -97,7 +97,7 @@ import Testing
     release()
     let (a, b) = try await (first, second)
     #expect(a == b && a.success)
-    #expect(callLines == ["npx quartz build --output dist @ \(BuildOutputGuard.realPath(project.path))"], "one build, not two")
+    #expect(callLines == ["npx quartz build --output dist @ \(BuildOutputGuard.realPath(project))"], "one build, not two")
   }
 
   @Test func aBuildIntoAnotherFolderWaitsItsTurn() async throws {
@@ -106,12 +106,12 @@ import Testing
     let release = try hold()
     async let first = builds.build(projectId: "p", project: project, outputDir: nil)
     try await LaunchedProcessTests.waitFor { !callLines.isEmpty }
-    let refusal = BuildService.Refusal.anotherBuildRuns(running: project.path + "/public", wanted: project.path + "/elsewhere")
+    let refusal = BuildService.Refusal.anotherBuildRuns(running: project + "/public", wanted: project + "/elsewhere")
     await #expect(throws: refusal) { try await builds.build(projectId: "p", project: project, outputDir: "elsewhere") }
-    #expect(refusal.message.contains("„\(project.path)/public“") || refusal.message.contains("“\(project.path)/public”"))
+    #expect(refusal.message.contains("„\(project)/public“") || refusal.message.contains("“\(project)/public”"))
     // Another project builds meanwhile.
-    let other = scratch.url.appendingPathComponent("Anderes")
-    try FileManager.default.createDirectory(at: other, withIntermediateDirectories: true)
+    let other = "\(scratch.path)/Anderes"
+    try Posix.mkdirs(other)
     release()
     #expect(try await builds.build(projectId: "q", project: other, outputDir: nil).success)
     #expect(try await first.success)
@@ -119,8 +119,7 @@ import Testing
   }
 
   @Test func missingPackagesAreASentenceAndNoBuild() async throws {
-    try #"{"dependencies":{"@jackyzha0/quartz":"5","left-pad":"1","a":"1","b":"1"}}"#
-      .write(to: project.appendingPathComponent("package.json"), atomically: true, encoding: .utf8)
+    try Posix.write("\(project)/package.json", Data(#"{"dependencies":{"@jackyzha0/quartz":"5","left-pad":"1","a":"1","b":"1"}}"#.utf8))
     let events = Events()
     let result = try await service(try environment(), events).build(projectId: "p", project: project, outputDir: nil)
     #expect(result == BuildService.Result(success: false, duration: .zero, exitCode: nil))
@@ -130,7 +129,7 @@ import Testing
   }
 
   @Test func theEndIsTheExitCodeOrNone() async throws {
-    try "3".write(to: scratch.url.appendingPathComponent("exit"), atomically: true, encoding: .utf8)
+    try Posix.write("\(scratch.path)/exit", Data("3".utf8))
     let failed = try await service(try environment(), Events()).build(projectId: "p", project: project, outputDir: nil)
     #expect(!failed.success && failed.exitCode == 3)
 
@@ -147,7 +146,7 @@ import Testing
 
   @Test func thePreparationReportsIntoTheConsoleBeforeTheBuild() async throws {
     let events = Events()
-    let seen = Mutex<[URL]>([])
+    let seen = Mutex<[String]>([])
     let step: BuildService.PreparationStep = { project, report in
       seen.withLock { $0.append(project) }
       report(.warn, "Frames aufgefrischt\n")
@@ -162,11 +161,11 @@ import Testing
   /// Node runtime in Runtime/.
   @Test(.enabled(if: ProcessInfo.processInfo.environment["QH_QUARTZ_TESTS"] == "1", "QH_QUARTZ_TESTS=1"))
   func theRealQuartzBuildsACopyOfGuiTest() async throws {
-    let original = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Documents/QuartzProjekte/gui-test")
-    let copy = scratch.url.appendingPathComponent("gui-test")
-    let clone = await ProcessRunner.run(Command("/bin/cp", ["-cR", original.path, copy.path]))
+    let original = "\(NSHomeDirectory())/Documents/QuartzProjekte/gui-test"
+    let copy = "\(scratch.path)/gui-test"
+    let clone = await ProcessRunner.run(Command("/bin/cp", ["-cR", original, copy]))
     try #require(clone.success, "\(clone.output)")
-    try? FileManager.default.removeItem(at: copy.appendingPathComponent("public"))
+    try? FileManager.default.removeItem(atPath: "\(copy)/public")
     let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
     let events = Events()
     let result = try await BuildService(logs: LogBuffer(), environment: { environment }, onEvent: events.add)
@@ -174,7 +173,7 @@ import Testing
     #expect(result.success, "\(events.logs(.stdout))\n\(events.logs(.stderr))")
     let phases = events.activities.map { $0.map { "\($0.kind) \($0.phase)" } }
     #expect(phases == ["build preparing", "build parsing", "build emitting", nil], "\(phases)")
-    #expect(BuildOutputGuard.looksLikeQuartzBuild(copy.appendingPathComponent("public").path))
+    #expect(BuildOutputGuard.looksLikeQuartzBuild("\(copy)/public"))
     print("gui-test: \(result.duration), \(events.logs(.stdout).split(separator: "\n").count) Zeilen")
   }
 }

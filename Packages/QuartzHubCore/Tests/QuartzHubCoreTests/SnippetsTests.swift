@@ -11,29 +11,28 @@ import Testing
 
   @Test func asQuartzControl() throws {
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("cases.json")))
-    let scratch = try HostPathTests.Scratch()
-    let work = URL(fileURLWithPath: try Snippets.realPath(scratch.url.path))
-    let project = work.appendingPathComponent("project")
-    let manager = FileManager.default
-    try manager.createDirectory(at: project.appendingPathComponent(".quartz-gui"), withIntermediateDirectories: true)
-    try Data("{ \"outputDir\": \"\" }".utf8).write(to: project.appendingPathComponent(".quartz-gui/project-prefs.json"))
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = try Snippets.realPath(scratch.path)
+    let project = "\(work)/project"
+    try Posix.mkdirs("\(project)/.quartz-gui")
+    try Posix.write("\(project)/.quartz-gui/project-prefs.json", Data("{ \"outputDir\": \"\" }".utf8))
     let big = String(repeating: "x", count: Int(golden["bigLength"]!.numberValue!))
     let tree = golden["tree"]?.objectValue ?? JSONObject()
     for path in tree.keys {
-      let url = URL(fileURLWithPath: NodePath.join(project.path, path))
-      try manager.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+      let file = NodePath.join(project, path)
+      try Posix.mkdirs(NodePath.dirname(file))
       let spec = tree[path]!
-      if let text = spec.stringValue { try Data(text.utf8).write(to: url) }
-      else if spec["length"] != nil { try Data((path.hasSuffix(".svg") ? "<svg>" + big + "</svg>" : big).utf8).write(to: url) }
-      else if let link = spec["link"]?.stringValue { try manager.createSymbolicLink(atPath: url.path, withDestinationPath: link) }
-      else if spec["dir"] != nil { try manager.createDirectory(at: url, withIntermediateDirectories: true) }
+      if let text = spec.stringValue { try Posix.write(file, Data(text.utf8)) }
+      else if spec["length"] != nil { try Posix.write(file, Data((path.hasSuffix(".svg") ? "<svg>" + big + "</svg>" : big).utf8)) }
+      else if let link = spec["link"]?.stringValue { try Posix.symlink(link, file) }
+      else if spec["dir"] != nil { try Posix.mkdirs(file) }
     }
     let trashed = Mutex<[String]>([])
     let fails = Mutex(false)
-    let snippets = Snippets(trash: { url in
+    let snippets = Snippets(trash: { path in
       if fails.withLock({ $0 }) { throw NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "no trash here"]) }
-      trashed.withLock { $0.append(url.path) }
-      try FileManager.default.removeItem(at: url)
+      trashed.withLock { $0.append(path) }
+      try FileManager.default.removeItem(atPath: path)
     })
     var before = Self.files(work)
     for step in golden["steps"]?.arrayValue ?? [] {
@@ -41,7 +40,7 @@ import Testing
       let raw = step["args"]?.arrayValue ?? []
       let args = raw.map { arg -> JSONValue in
         guard case .string(let text) = arg else { return arg }
-        return .string(text.replacingOccurrences(of: "@OUT@", with: work.appendingPathComponent("outside").path, options: .literal).replacingOccurrences(of: "@P@", with: project.path, options: .literal))
+        return .string(text.replacingOccurrences(of: "@OUT@", with: "\(work)/outside", options: .literal).replacingOccurrences(of: "@P@", with: project, options: .literal))
       }
       trashed.withLock { $0 = [] }
       var result: JSONValue
@@ -51,8 +50,8 @@ import Testing
         result = .object(JSONObject([("threw", .string(String(describing: error)))]))
       }
       let expected = FontServiceTests.rendered(step["result"] ?? .null)
-      #expect(Self.masked(result, work.path) == expected, "\(call) \(JSJSON.compact(.array(raw)))")
-      #expect(JSONValue.array(trashed.withLock { $0 }.map { .string($0.replacingOccurrences(of: work.path, with: "@W@", options: .literal)) }) == step["trash"], "\(call) trash")
+      #expect(Array(JSJSON.compact(Self.masked(result, work)).utf8) == Array(JSJSON.compact(expected).utf8), "\(call) \(JSJSON.compact(.array(raw)))")
+      #expect(JSONValue.array(trashed.withLock { $0 }.map { .string($0.replacingOccurrences(of: work, with: "@W@", options: .literal)) }) == step["trash"], "\(call) trash")
       let after = Self.files(work)
       var changed = JSONObject()
       for path in Set(before.keys).union(after.keys).sorted() where before[path] != after[path] { changed[path] = after[path] ?? .null }
@@ -69,7 +68,7 @@ import Testing
       if let expected = entry["contained"] {
         #expect(PackagePaths.contained(dir, name).map { JSONValue.string($0) } ?? .null == expected, "contained \(dir) \(name)")
       } else {
-        let got = PackagePaths.writable(project.path, name).map { JSONValue.string($0.replacingOccurrences(of: work.path, with: "@W@", options: .literal)) } ?? .null
+        let got = PackagePaths.writable(project, name).map { JSONValue.string($0.replacingOccurrences(of: work, with: "@W@", options: .literal)) } ?? .null
         #expect(got == entry["writable"], "writable \(name)")
       }
     }
@@ -88,7 +87,7 @@ import Testing
     .object(JSONObject([("state", .string(listing.state.rawValue)), ("files", .array(listing.files.map { .string($0) }))]))
   }
 
-  static func run(_ call: String, _ args: [JSONValue], _ snippets: Snippets, _ project: URL, _ fails: borrowing Mutex<Bool>) throws -> JSONValue {
+  static func run(_ call: String, _ args: [JSONValue], _ snippets: Snippets, _ project: String, _ fails: borrowing Mutex<Bool>) throws -> JSONValue {
     let s = { (i: Int) in args[i].stringValue }
     switch call {
     case "listSnippets": return listing(try snippets.listSnippets(project: project, dir: s(0)!))
@@ -112,14 +111,14 @@ import Testing
     }
   }
 
-  static func files(_ root: URL) -> [String: JSONValue] {
+  static func files(_ root: String) -> [String: JSONValue] {
     var result: [String: JSONValue] = [:]
     func walk(_ dir: String) {
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) {
+      for entry in LayoutFrames.directoryEntriesWithKind(dir) {
         let full = NodePath.join(dir, entry.name)
-        let relative = NodePath.relative(root.path, full)
+        let relative = NodePath.relative(root, full)
         switch entry.kind {
-        case .link: result[relative] = .object(JSONObject([("link", .string((try? FileManager.default.destinationOfSymbolicLink(atPath: full)) ?? ""))]))
+        case .link: result[relative] = .object(JSONObject([("link", .string((try? Posix.readlink(full)) ?? ""))]))
         case .directory: walk(full)
         default:
           let data = FileManager.default.contents(atPath: full) ?? Data()
@@ -128,7 +127,7 @@ import Testing
         }
       }
     }
-    walk(root.path)
+    walk(root)
     return result
   }
 }

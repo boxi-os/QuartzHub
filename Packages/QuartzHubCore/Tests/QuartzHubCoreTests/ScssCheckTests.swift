@@ -21,7 +21,7 @@ struct ScssCheckTests {
   static let sass = ProjectSass.sass
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   static func json(_ name: String) throws -> JSONValue { try JSJSON.parse(Data(contentsOf: fixtures.appendingPathComponent(name))) }
 
@@ -61,24 +61,24 @@ struct ScssCheckTests {
     #expect(cases.count >= 20)
     for entry in cases {
       let name = entry["name"]!.stringValue!
-      let project = scratch.url.appendingPathComponent(name.replacingOccurrences(of: " ", with: "-", options: .literal).replacingOccurrences(of: ":", with: "", options: .literal))
+      let project = "\(scratch.path)/\(name.replacingOccurrences(of: " ", with: "-", options: .literal).replacingOccurrences(of: ":", with: "", options: .literal))"
       let styles = StyleSheets.stylesDirectory(project)
-      try FileManager.default.createDirectory(at: styles, withIntermediateDirectories: true)
+      try Posix.mkdirs(styles)
       let tree = entry["tree"]?.objectValue ?? JSONObject()
       for path in tree.keys {
         let value = tree[path]!
         let text = value["gui"].flatMap { gui[$0.stringValue!]?.stringValue } ?? value["example"].flatMap { example[$0.stringValue!]?.stringValue } ?? value.stringValue!
-        let url = styles.appendingPathComponent(path)
-        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try Data(text.utf8).write(to: url)
+        let file = "\(styles)/\(path)"
+        try Posix.mkdirs(NodePath.dirname(file))
+        try Posix.write(file, Data(text.utf8))
       }
-      try Data("{ \"name\": \"golden\", \"private\": true }\n".utf8).write(to: project.appendingPathComponent("package.json"))
+      try Posix.write("\(project)/package.json", Data("{ \"name\": \"golden\", \"private\": true }\n".utf8))
       switch entry["sass"]?.stringValue {
       case "none": break
-      case "half": try FileManager.default.createDirectory(at: project.appendingPathComponent("node_modules/sass"), withIntermediateDirectories: true)
+      case "half": try Posix.mkdirs("\(project)/node_modules/sass")
       default:
-        try FileManager.default.createDirectory(at: project.appendingPathComponent("node_modules"), withIntermediateDirectories: true)
-        try FileManager.default.createSymbolicLink(at: project.appendingPathComponent("node_modules/sass"), withDestinationURL: Self.sass)
+        try Posix.mkdirs("\(project)/node_modules")
+        try Posix.symlink(Self.sass.path, "\(project)/node_modules/sass")
       }
       for answer in entry["answers"]?.arrayValue ?? [] {
         let call = answer["call"]!.stringValue!
@@ -91,7 +91,9 @@ struct ScssCheckTests {
         case "readQuartzFrameMeasures": got = Self.measures(await ScssCheck.frameMeasures(project: project, runtime: HelperRuntime.runtime))
         default: got = .null
         }
-        #expect(got == FontServiceTests.rendered(answer["answer"] ?? .null), "\(name): \(call)")
+        // By bytes: a path in sass's answer that came back decomposed would not match.
+        let want = FontServiceTests.rendered(answer["answer"] ?? .null)
+        #expect(Array(JSJSON.compact(got).utf8) == Array(JSJSON.compact(want).utf8), "\(name): \(call)\n\(JSJSON.compact(got))\n\(JSJSON.compact(want))")
       }
     }
   }

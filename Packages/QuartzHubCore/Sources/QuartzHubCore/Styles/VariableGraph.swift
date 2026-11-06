@@ -147,14 +147,14 @@ public enum VariableGraph {
 
   /// Which loaded stylesheet of the project declares a name in a global `:root` rule, the page's
   /// own block taken out first; the file whose rules come last on the site is asked first.
-  static func projectDeclarations(_ project: URL) throws -> [(String, ProjectDeclaration)] {
+  static func projectDeclarations(_ project: String) throws -> [(String, ProjectDeclaration)] {
     var out: [(String, ProjectDeclaration)] = []
-    let styles = NodePath.normalize(StyleSheets.stylesDirectory(project).path)
+    let styles = NodePath.normalize(StyleSheets.stylesDirectory(project))
     for file in try StyleSheets.loadedStylesheetsLastFirst(project: project) {
       let text = ManagedBlocks.strip((try? StyleSheets.readText(file)) ?? "", "css-vars")
       // `//` comments go: an apostrophe in one would open a string for the brace counter.
       let css = JSText.replaceAll(text, "(\\A|[\(JSText.space);{}])//[^\\n]*", template: "$1")
-      let source = NodePath.relative(styles, NodePath.normalize(file.path))
+      let source = NodePath.relative(styles, NodePath.normalize(file))
       eachRule(css) { selector, body, context in
         guard !context.conditional, let mode = rootMode(selector) else { return }
         for (name, value) in declarations(body) {
@@ -171,14 +171,14 @@ public enum VariableGraph {
   static func cssFiles(_ dir: String, _ depth: Int = 0) -> [String] {
     guard depth <= 6 else { return [] }
     var out: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) where !ignoredDirectories.contains(entry.name) {
+    for entry in LayoutFrames.directoryEntriesWithKind(dir) where !ignoredDirectories.contains(entry.name) {
       let full = NodePath.join(dir, entry.name)
       if entry.kind == .directory { out += cssFiles(full, depth + 1) } else if JSText.endsWith(entry.name, ".css") { out.append(full) }
     }
     return out
   }
 
-  public static func graph(project: URL, themeId: String? = nil, outputDir: String? = nil) throws -> Graph {
+  public static func graph(project: String, themeId: String? = nil, outputDir: String? = nil) throws -> Graph {
     var vars = JSONObject()
     var dependents: [(String, [String])] = []
     func addDependent(_ target: String, _ name: String) {
@@ -205,7 +205,7 @@ public enum VariableGraph {
 
     var theme: JSONValue?
     if let themeId {
-      let path = NodePath.join(project.path, "node_modules/@quartz-themes", themeId, "theme.json")
+      let path = NodePath.join(project, "node_modules/@quartz-themes", themeId, "theme.json")
       // `JSON.parse` of the file, and only a truthy one is a theme (`null`, `0` or `""` are none).
       if let data = FileManager.default.contents(atPath: path), let parsed = try? JSJSON.parse(data), JS.truthy(parsed) { theme = parsed }
     }
@@ -223,7 +223,7 @@ public enum VariableGraph {
     }
 
     let own = Set(try StyleSheets.variableOverrides(project: project).map(\.key))
-    let buildDir = BuildOutputGuard.buildDirectory(project: project.path, outputDir: outputDir)
+    let buildDir = BuildOutputGuard.buildDirectory(project: project, outputDir: outputDir)
     let hasBuild = FileManager.default.fileExists(atPath: buildDir)
     var unlayered: [(String, (light: String?, dark: String?))] = []
     func setUnlayered(_ name: String, light: String?? = .none, dark: String?? = .none, replace: Bool = false) {
@@ -238,7 +238,7 @@ public enum VariableGraph {
     if hasBuild {
       // A name the page sets is skipped when unlayered: that is where the page's own rule lands.
       for file in cssFiles(buildDir).prefix(50) {
-        let content = (try? StyleSheets.readText(URL(fileURLWithPath: file))) ?? ""
+        let content = (try? StyleSheets.readText(file)) ?? ""
         eachRule(content) { selector, body, context in
           // A :root inside @media is the exception to a base value, not one.
           guard !context.conditional, let mode = rootMode(selector) else { return }

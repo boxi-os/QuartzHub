@@ -62,8 +62,8 @@ public enum FontFaces {
   }
 
   /// `quartz/static/fonts`: Quartz copies quartz/static/ into the build's static/.
-  public static func projectFontsDirectory(_ project: URL) -> URL {
-    project.appendingPathComponent("quartz/static/fonts", isDirectory: true)
+  public static func projectFontsDirectory(_ project: String) -> String {
+    "\(project)/quartz/static/fonts"
   }
 
   /// A face's file in `dir`, for the one URL shape both sources write, `…static/fonts/<file>`
@@ -80,11 +80,11 @@ public enum FontFaces {
   /// Every .scss/.css under quartz/styles, quartz/components/styles and quartz/static, at any
   /// depth up to six, through links: for "does a rule still point at this file" and "does
   /// anything still name this family", where finding too much is the safe side.
-  public static func allStylesheets(project: URL) -> [String] {
+  public static func allStylesheets(project: String) -> [String] {
     var out: [String] = []
     func walk(_ dir: String, _ depth: Int) {
       guard depth <= 6, FileManager.default.fileExists(atPath: dir) else { return }
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) {
+      for entry in LayoutFrames.directoryEntriesWithKind(dir) {
         let full = NodePath.join(dir, entry.name)
         var kind = entry.kind
         if kind == .link {
@@ -95,7 +95,7 @@ public enum FontFaces {
         else if kind == .file && JSText.test(entry.name, #"\.(scss|css)\z"#) { out.append(full) }
       }
     }
-    let root = project.path
+    let root = project
     walk(NodePath.join(root, "quartz/styles"), 0)
     walk(NodePath.join(root, "quartz/components/styles"), 0)
     walk(NodePath.join(root, "quartz/static"), 0)

@@ -18,41 +18,41 @@ import Foundation
 public enum StyleSheets {
   // MARK: where
 
-  public static func stylesDirectory(_ project: URL) -> URL {
-    project.appendingPathComponent("quartz/styles", isDirectory: true)
+  public static func stylesDirectory(_ project: String) -> String {
+    "\(project)/quartz/styles"
   }
 
   /// The file Quartz's build imports (`componentResources.ts`), already in the dev server's watch.
-  public static func customScss(_ project: URL) -> URL {
-    stylesDirectory(project).appendingPathComponent("custom.scss")
+  public static func customScss(_ project: String) -> String {
+    "\(stylesDirectory(project))/custom.scss"
   }
 
-  public static func managedScss(_ project: URL) -> URL {
-    stylesDirectory(project).appendingPathComponent(ManagedBlocks.managedFile)
+  public static func managedScss(_ project: String) -> String {
+    "\(stylesDirectory(project))/\(ManagedBlocks.managedFile)"
   }
 
   /// `join(stylesDir, ...relativePath.split('/'))`, which also resolves `.` and `..`.
-  static func styleFile(_ project: URL, _ relativePath: String) -> URL {
-    URL(fileURLWithPath: stylesDirectory(project).path + "/" + relativePath).standardizedFileURL
+  static func styleFile(_ project: String, _ relativePath: String) -> String {
+    NodePath.normalize(stylesDirectory(project) + "/" + relativePath)
   }
 
-  static func exists(_ url: URL) -> Bool { FileManager.default.fileExists(atPath: url.path) }
+  static func exists(_ url: String) -> Bool { FileManager.default.fileExists(atPath: url) }
 
   /// `readFile(path, 'utf-8')`: invalid bytes become U+FFFD.
-  static func readText(_ url: URL) throws -> String {
-    String(decoding: try Data(contentsOf: url), as: UTF8.self)
+  static func readText(_ url: String) throws -> String {
+    String(decoding: try Posix.read(url), as: UTF8.self)
   }
 
-  static func writeText(_ text: String, to url: URL) throws {
+  static func writeText(_ text: String, to url: String) throws {
     try JSONStore.writeAtomic(Data(text.utf8), to: url)
   }
 
   // MARK: read
 
   public struct Info: Equatable, Sendable {
-    public var path: URL
+    public var path: String
     public var content: String
-    public var managed: (path: URL, content: String)?
+    public var managed: (path: String, content: String)?
     public var moved: Bool
 
     public static func == (a: Info, b: Info) -> Bool {
@@ -60,7 +60,7 @@ public enum StyleSheets {
     }
   }
 
-  public static func readCustom(project: URL) throws -> Info {
+  public static func readCustom(project: String) throws -> Info {
     let path = customScss(project)
     let content = exists(path) ? try readText(path) : ""
     let managedPath = managedScss(project)
@@ -75,7 +75,7 @@ public enum StyleSheets {
     public var managedExists: Bool
   }
 
-  public static func readSources(project: URL) throws -> Sources {
+  public static func readSources(project: String) throws -> Sources {
     let info = try readCustom(project: project)
     return Sources(custom: info.content, managed: info.managed?.content ?? "", managedExists: info.managed != nil)
   }
@@ -101,8 +101,8 @@ public enum StyleSheets {
   /// The whole file, from the CSS tab. In a moved project the line that loads
   /// `_quartzcontrol.scss` is put back when the text lacks it: without it the site loses every
   /// managed block and the Sass check still passes. The answer says whether it was.
-  public static func saveCustom(_ content: String, project: URL) async throws -> Bool {
-    try await ProjectLock.styles.run(project.path) {
+  public static func saveCustom(_ content: String, project: String) async throws -> Bool {
+    try await ProjectLock.styles.run(project) {
       let restore = exists(managedScss(project)) && !ManagedBlocks.hasManagedUse(content)
       try writeText(restore ? ManagedBlocks.ensureManagedUse(content) : content, to: customScss(project))
       return restore
@@ -111,7 +111,7 @@ public enum StyleSheets {
 
   /// custom.scss with a new free body, for the template import; the blocks other parts own stay
   /// (in the other file when moved, put back into the new body when not). The caller holds the lock.
-  public static func replaceCustomBodyNow(_ body: String, project: URL) throws {
+  public static func replaceCustomBodyNow(_ body: String, project: String) throws {
     let sources = try readSources(project: project)
     if isMoved(sources) {
       try writeText(ManagedBlocks.ensureManagedUse(body), to: customScss(project))
@@ -133,8 +133,8 @@ public enum StyleSheets {
   /// A moved project whose `@use` line is gone gets it back; one with the line but without the file
   /// gets an empty managed file. Either half alone empties or breaks the build. A project with
   /// neither has not been moved and is left alone.
-  public static func repairManagedUse(project: URL) async throws -> Repair? {
-    try await ProjectLock.styles.run(project.path) {
+  public static func repairManagedUse(project: String) async throws -> Repair? {
+    try await ProjectLock.styles.run(project) {
       let info = try readCustom(project: project)
       guard exists(info.path) else { return nil }
       let line = ManagedBlocks.hasManagedUse(info.content)
@@ -155,8 +155,8 @@ public enum StyleSheets {
   /// which finds nothing on a site under a sub-path (eight of nine projects QuartzControl measured).
   /// Not the marker rename: that costs an older build every block it can read, and pressing
   /// "build" is no reason to pay it.
-  public static func migrateFontUrls(project: URL) async throws -> Bool {
-    try await ProjectLock.styles.run(project.path) {
+  public static func migrateFontUrls(project: String) async throws -> Bool {
+    try await ProjectLock.styles.run(project) {
       var changed = false
       for path in [customScss(project), managedScss(project)] {
         let content = exists(path) ? try readText(path) : ""
@@ -184,7 +184,7 @@ public enum StyleSheets {
   /// (imports before any rule, the variables last), then custom.scss without the blocks and with
   /// the `@use` line. A write that breaks off in between leaves a block in both files, read twice
   /// and joined by the next write, never in neither.
-  public static func writeManagedBlocksNow(_ changes: [String: String?], move: Bool = false, project: URL) throws {
+  public static func writeManagedBlocksNow(_ changes: [String: String?], move: Bool = false, project: String) throws {
     let sources = try readSources(project: project)
     if !move && !isMoved(sources) {
       var custom = sources.custom
@@ -229,7 +229,7 @@ public enum StyleSheets {
   /// copies name the same stylesheets, and two `@use` of one module stop Sass ("There's already a
   /// module with namespace"). Then it is rebuilt from the order as it reads, deduplicated and
   /// without files that are gone. One copy without a duplicate stays byte for byte.
-  static func carriedImports(_ project: URL, _ sources: Sources) -> String? {
+  static func carriedImports(_ project: String, _ sources: Sources) -> String? {
     guard let body = managedBody(sources, "imports") else { return nil }
     let copies = [sources.managed, sources.custom].reduce(0) { $0 + ManagedBlocks.findBlocks($1, "imports").count }
     let order = importOrder(project, sources)
@@ -247,8 +247,8 @@ public enum StyleSheets {
   /// Moves a project's blocks to `_quartzcontrol.scss`; a moved project is left as it is. With
   /// `snapshot` (the Styles page) one comes first, of the kind the thinning keeps: the way back
   /// for a machine that stays on 1.0.x. Without, for a project just created.
-  public static func migrate(project: URL, snapshot: StyleFiles.Snapshot?) async throws -> Migration {
-    try await ProjectLock.styles.run(project.path) {
+  public static func migrate(project: String, snapshot: StyleFiles.Snapshot?) async throws -> Migration {
+    try await ProjectLock.styles.run(project) {
       if isMoved(try readSources(project: project)) { return Migration(moved: false, snapshotId: nil) }
       let id = try await snapshot?(project, "styleMigration") ?? nil
       try writeManagedBlocksNow([:], move: true, project: project)
@@ -268,12 +268,12 @@ public enum StyleSheets {
 
   /// The file a `@use` names, resolved against the disk (an extensionless specifier could be
   /// either extension, a partial may be `_name.scss`); nil outside custom/ and imported/.
-  static func relativePath(forSpecifier specifier: String, project: URL) -> String? {
+  static func relativePath(forSpecifier specifier: String, project: String) -> String? {
     let bare = JSText.replaceAll(JSText.replaceAll(specifier, #"\A\./"#, with: ""), #"\.(scss|css)\z"#, with: "")
     let parts = JSText.split(bare, "/")
     let dir = parts[0], name = parts.dropFirst().joined(separator: "/")
     guard styleDirectories.contains(dir), !name.isEmpty, !JSText.includes(name, "/") else { return nil }
-    for candidate in ["\(name).scss", "_\(name).scss", "\(name).css"] where exists(stylesDirectory(project).appendingPathComponent(dir).appendingPathComponent(candidate)) {
+    for candidate in ["\(name).scss", "_\(name).scss", "\(name).css"] where exists("\(stylesDirectory(project))/\(dir)/\(candidate)") {
       return "\(dir)/\(candidate)"
     }
     return nil
@@ -282,7 +282,7 @@ public enum StyleSheets {
   /// The stylesheets the block loads, in order. A line whose file is gone is dropped: the block is
   /// written only by the app, so an unresolvable `@use` means a file deleted outside it, and
   /// keeping it would break the next build.
-  static func importOrder(_ project: URL, _ sources: Sources) -> [String] {
+  static func importOrder(_ project: String, _ sources: Sources) -> [String] {
     guard let body = managedBody(sources, "imports"), !body.isEmpty else { return [] }
     var out: [String] = []
     for match in JSText.matches(body, "@use[\(JSText.space)]+[\"']([^\"']+)[\"']") {
@@ -291,7 +291,7 @@ public enum StyleSheets {
     return out
   }
 
-  public static func currentOrder(project: URL) throws -> [String] {
+  public static func currentOrder(project: String) throws -> [String] {
     importOrder(project, try readSources(project: project))
   }
 
@@ -325,11 +325,11 @@ public enum StyleSheets {
     return "@use \"\(specifier)\" as \(namespace);"
   }
 
-  public static func setImportOrder(_ relativePaths: [String], project: URL) async throws {
-    try await ProjectLock.styles.run(project.path) { try setImportOrderNow(relativePaths, project: project) }
+  public static func setImportOrder(_ relativePaths: [String], project: String) async throws {
+    try await ProjectLock.styles.run(project) { try setImportOrderNow(relativePaths, project: project) }
   }
 
-  public static func setImportOrderNow(_ relativePaths: [String], project: URL) throws {
+  public static func setImportOrderNow(_ relativePaths: [String], project: String) throws {
     var taken: Set<String> = []
     let body = relativePaths.map { useLine(for: $0, taken: &taken) }.joined(separator: "\n")
     let change: String? = body.isEmpty ? nil : body
@@ -340,24 +340,24 @@ public enum StyleSheets {
   /// The project stylesheets whose rules reach the site, the one whose rules come last first:
   /// custom.scss, `_quartzcontrol.scss`, then the load order from its end. A file in custom/ that
   /// the block does not load is not listed.
-  public static func loadedStylesheetsLastFirst(project: URL) throws -> [URL] {
+  public static func loadedStylesheetsLastFirst(project: String) throws -> [String] {
     let order = try currentOrder(project: project)
     return ([customScss(project), managedScss(project)] + order.reversed().map { styleFile(project, $0) }).filter(exists)
   }
 
   // MARK: the variables
 
-  public static func variableOverrides(project: URL) throws -> [VariableOverride] {
+  public static func variableOverrides(project: String) throws -> [VariableOverride] {
     managedBody(try readSources(project: project), "css-vars").map(VariableOverrides.parse) ?? []
   }
 
-  public static func variableCollisions(project: URL) throws -> [String] {
+  public static func variableCollisions(project: String) throws -> [String] {
     VariableOverrides.collisions(try readSources(project: project))
   }
 
   /// An empty list (or one of emptied values) clears the block rather than leaving stale rules.
-  public static func saveVariableOverrides(_ overrides: [VariableOverride], project: URL) async throws {
-    try await ProjectLock.styles.run(project.path) {
+  public static func saveVariableOverrides(_ overrides: [VariableOverride], project: String) async throws {
+    try await ProjectLock.styles.run(project) {
       let body = VariableOverrides.render(overrides)
       let change: String? = body.isEmpty ? nil : body
       let changes: [String: String?] = ["css-vars": change]
