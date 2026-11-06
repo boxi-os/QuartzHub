@@ -1,0 +1,26 @@
+{
+  "tree": {
+    "package.json": "{\"dependencies\":{\"sass\":\"1\",\"globby\":\"1\"}}",
+    "node_modules/sass/package.json": "{}",
+    "node_modules/globby/package.json": "{}"
+  },
+  "run": [
+    "installPluginSource",
+    "github:quartz-community/explorer"
+  ],
+  "answers": {
+    "add": {
+      "success": true,
+      "output": "added"
+    }
+  },
+  "expected": {
+    "result": {
+      "success": true,
+      "output": "added"
+    },
+    "log": [
+      "npx quartz plugin add github:quartz-community/explorer @W@/P"
+    ]
+  }
+}

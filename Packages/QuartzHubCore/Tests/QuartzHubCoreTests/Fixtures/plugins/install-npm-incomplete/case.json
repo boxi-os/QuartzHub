@@ -1,0 +1,32 @@
+{
+  "tree": {
+    "package.json": "{\"dependencies\":{\"sass\":\"1\",\"globby\":\"1\"}}"
+  },
+  "run": [
+    "installFromLock"
+  ],
+  "answers": {
+    "npm": {
+      "success": true,
+      "output": "added 1 package",
+      "creates": [
+        "node_modules/sass/package.json"
+      ]
+    },
+    "install": {
+      "success": true,
+      "output": ""
+    }
+  },
+  "expected": {
+    "result": {
+      "success": true,
+      "output": "added 1 package",
+      "failed": []
+    },
+    "log": [
+      "npm install @W@/P",
+      "npx quartz plugin install @W@/P"
+    ]
+  }
+}

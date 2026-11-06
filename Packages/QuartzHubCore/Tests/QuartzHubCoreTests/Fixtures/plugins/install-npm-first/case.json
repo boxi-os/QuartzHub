@@ -1,0 +1,34 @@
+{
+  "tree": {
+    "package.json": "{\"dependencies\":{\"sass\":\"1\",\"globby\":\"1\"}}"
+  },
+  "run": [
+    "installFromLock"
+  ],
+  "answers": {
+    "npm": {
+      "success": true,
+      "output": "added 2 packages\n",
+      "creates": [
+        "node_modules/sass/package.json",
+        "node_modules/globby/package.json"
+      ]
+    },
+    "install": {
+      "success": true,
+      "output": "  ✓ explorer\n"
+    }
+  },
+  "expected": {
+    "result": {
+      "success": true,
+      "output": "added 2 packages\n\n  ✓ explorer",
+      "failed": []
+    },
+    "log": [
+      "npm install @W@/P",
+      "forget @W@/P",
+      "npx quartz plugin install @W@/P"
+    ]
+  }
+}

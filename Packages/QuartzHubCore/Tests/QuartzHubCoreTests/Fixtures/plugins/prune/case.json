@@ -1,0 +1,25 @@
+{
+  "tree": {
+    "package.json": "{\"dependencies\":{\"sass\":\"1\",\"globby\":\"1\"}}",
+    "node_modules/sass/package.json": "{}",
+    "node_modules/globby/package.json": "{}"
+  },
+  "run": [
+    "prunePlugins"
+  ],
+  "answers": {
+    "prune": {
+      "success": true,
+      "output": "pruned 2"
+    }
+  },
+  "expected": {
+    "result": {
+      "success": true,
+      "output": "pruned 2"
+    },
+    "log": [
+      "npx quartz plugin prune @W@/P"
+    ]
+  }
+}

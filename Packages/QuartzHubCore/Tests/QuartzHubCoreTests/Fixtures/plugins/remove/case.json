@@ -1,0 +1,26 @@
+{
+  "tree": {
+    "package.json": "{\"dependencies\":{\"sass\":\"1\",\"globby\":\"1\"}}",
+    "node_modules/sass/package.json": "{}",
+    "node_modules/globby/package.json": "{}"
+  },
+  "run": [
+    "removePlugin",
+    "explorer"
+  ],
+  "answers": {
+    "remove": {
+      "success": false,
+      "output": "not found"
+    }
+  },
+  "expected": {
+    "result": {
+      "success": false,
+      "output": "not found"
+    },
+    "log": [
+      "npx quartz plugin remove explorer @W@/P"
+    ]
+  }
+}

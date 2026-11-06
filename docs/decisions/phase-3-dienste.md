@@ -373,3 +373,25 @@ holt).
   Prozess; die Frage bleibt, weil sie „packt noch aus“ von „kaputt“ trennt.
 - Gegenproben: ohne Suche nach oben, Suche über das Projekt hinaus, ohne `ownFramePath`, Listen ohne
   Schlüssel: jede lässt einen Fall scheitern.
+
+### Plugin-Befehle der CLI (`pluginService.ts` → `PluginCommands`)
+
+`quartz plugin add`/`remove`/`prune` und „Aus quartz.lock.json wiederherstellen“: erst `npm install`,
+wenn Pakete fehlen, dann `quartz plugin install`; die Namen aus den „✗ name: …“-Zeilen gehen mit
+(die CLI endet mit 0, wenn einzelne Plugins scheitern). Ein Lauf je Projekt (`realpath`), ein
+zweiter Aufruf hängt sich an. Schalten und Optionen bleiben Config-Schreibvorgänge (`ConfigFile`),
+weil die CLI sie für eingebaute Plugins stillschweigend nicht ausführt.
+
+- **Gemessen gegen QuartzControls Code**, `scripts/plugins-golden.mjs`, neun Fälle: nichts fehlt,
+  npm zuerst (vollständig und unvollständig), npm scheitert, keine package.json, CLI scheitert,
+  `add`, `remove`, `prune`, mit farbiger und doppelter Ausgabe. `PluginCommandsTests` kommt mit
+  Skripten für npm und npx auf dieselben Aufrufe, Ausgaben und Namen. Dazu: ein zweiter Aufruf
+  während des Laufs startet kein zweites npm, einer danach einen neuen Lauf.
+- `forgetDependencyErrors` des Build-Dienstes ist ein Rückruf (`afterPackagesInstalled`), bis
+  `buildService` da ist (Punkt 4). Der Snapshot vor `add`/`remove` kommt mit Punkt 7.
+- **Neu: Fristen** (20 min für alles, was klont oder installiert, 5 min für `remove`/`prune`).
+- Notiert, nicht behoben: Quelle und Name gehen ohne `--` an die CLI, wie in QuartzControl; ein
+  Wert mit führendem `-` würde als Option gelesen. Ob die Quartz-CLI `--` annimmt, ist nicht
+  gemessen.
+- Gegenproben: Farben nicht entfernt, Namen doppelt, `forget` auch bei unvollständigem npm, kein
+  Anhängen, Ausgabe nicht getrimmt: jede lässt einen Test scheitern.

@@ -1,0 +1,22 @@
+{
+  "tree": {},
+  "run": [
+    "installFromLock"
+  ],
+  "answers": {
+    "install": {
+      "success": true,
+      "output": "ok"
+    }
+  },
+  "expected": {
+    "result": {
+      "success": true,
+      "output": "ok",
+      "failed": []
+    },
+    "log": [
+      "npx quartz plugin install @W@/P"
+    ]
+  }
+}

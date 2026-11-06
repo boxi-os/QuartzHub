@@ -1,0 +1,30 @@
+{
+  "tree": {
+    "package.json": "{\"dependencies\":{\"sass\":\"1\",\"globby\":\"1\"}}",
+    "node_modules/sass/package.json": "{}",
+    "node_modules/globby/package.json": "{}"
+  },
+  "run": [
+    "installFromLock"
+  ],
+  "answers": {
+    "install": {
+      "success": true,
+      "output": "\u001b[1mInstalling plugins from quartz.lock.json\u001b[22m\n  \u001b[32m✓\u001b[39m explorer\n  \u001b[31m✗\u001b[39m frame-a: local path missing\n  ✗ frame-b: local path missing\n  ✗ frame-a: again\n✗ @scope/x: at the start of a line\n  ✗ no-colon here\n⚠ Installed 1 plugin(s), 3 failed"
+    }
+  },
+  "expected": {
+    "result": {
+      "success": true,
+      "output": "\u001b[1mInstalling plugins from quartz.lock.json\u001b[22m\n  \u001b[32m✓\u001b[39m explorer\n  \u001b[31m✗\u001b[39m frame-a: local path missing\n  ✗ frame-b: local path missing\n  ✗ frame-a: again\n✗ @scope/x: at the start of a line\n  ✗ no-colon here\n⚠ Installed 1 plugin(s), 3 failed",
+      "failed": [
+        "frame-a",
+        "frame-b",
+        "@scope/x"
+      ]
+    },
+    "log": [
+      "npx quartz plugin install @W@/P"
+    ]
+  }
+}

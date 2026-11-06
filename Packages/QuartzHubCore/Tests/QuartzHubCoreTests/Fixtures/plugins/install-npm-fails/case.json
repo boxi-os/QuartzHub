@@ -1,0 +1,23 @@
+{
+  "tree": {
+    "package.json": "{\"dependencies\":{\"sass\":\"1\",\"globby\":\"1\"}}"
+  },
+  "run": [
+    "installFromLock"
+  ],
+  "answers": {
+    "npm": {
+      "success": false,
+      "output": "ERR! network"
+    }
+  },
+  "expected": {
+    "result": {
+      "success": false,
+      "output": "ERR! network"
+    },
+    "log": [
+      "npm install @W@/P"
+    ]
+  }
+}

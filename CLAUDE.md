@@ -49,8 +49,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
-- `Runtime/node/bin/node scripts/{paths,duplicate,deps}-golden.mjs` — dasselbe für `ProjectPaths`,
-  `ProjectDuplicator` und `ProjectDependencies` aus den gleichnamigen TS-Dateien
+- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins}-golden.mjs` — dasselbe für
+  `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies` und `PluginCommands`
 - `node scripts/import-strings.mjs <QuartzControl> [--check]` — der einmalige Textimport
   (2026-11-06). Seitdem ist der Katalog die Quelle; `--check` weicht ab, sobald ein neuer Text dazukam
 
@@ -91,7 +91,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   brauchen (Projektliste, `.quartz-gui/` anlegen, Projekt-Einstellungen, Content-Ordner lesen,
   Projektbild, Anlegen); was fehlt, steht im Plan. Punkt 3 läuft: Config lesen und schreiben
   (`ConfigFile` über `yaml-edit`), dazu aus Punkt 2 `ProjectPaths` und Duplizieren, alle drei gegen
-  QuartzControls eigenen Code gemessen (`scripts/*-golden.mjs`). Als Nächstes `pluginService`.
+  QuartzControls eigenen Code gemessen (`scripts/*-golden.mjs`), dazu `ProjectDependencies` und
+  `PluginCommands`. Als Nächstes `pluginSchemaService` mit `pluginOptionSchema`.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 
