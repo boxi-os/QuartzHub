@@ -1,0 +1,1341 @@
+[
+  {
+    "name": "gui-test",
+    "real": true,
+    "files": {},
+    "answers": [
+      {
+        "call": "collectFontFaces",
+        "args": [
+          "minimal"
+        ],
+        "answer": [
+          {
+            "family": "Noto Sans",
+            "weight": "400 700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400 700",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400 700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          }
+        ]
+      },
+      {
+        "call": "collectFontFaces",
+        "args": [],
+        "answer": [
+          {
+            "family": "Noto Sans",
+            "weight": "400 700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400 700",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400 700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans Mono",
+            "weight": "600",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          }
+        ]
+      },
+      {
+        "call": "projectStylesheets",
+        "args": [],
+        "answer": [
+          "@P@/quartz/styles/custom.scss",
+          "@P@/quartz/styles/_quartzcontrol.scss",
+          "@P@/quartz/styles/custom/a11y.scss",
+          "@P@/quartz/styles/custom/callouts-2.scss",
+          "@P@/quartz/styles/custom/callouts.scss",
+          "@P@/quartz/styles/custom/components-header.scss",
+          "@P@/quartz/styles/custom/components-navigation.scss",
+          "@P@/quartz/styles/custom/components-note.scss",
+          "@P@/quartz/styles/custom/content.scss",
+          "@P@/quartz/styles/custom/fix-heading-fonts.scss",
+          "@P@/quartz/styles/custom/foundation.scss",
+          "@P@/quartz/styles/custom/layout.scss",
+          "@P@/quartz/styles/custom/pages.scss",
+          "@P@/quartz/styles/custom/plugin-layout-box.scss",
+          "@P@/quartz/styles/custom/plugin-multilanguage.scss",
+          "@P@/quartz/styles/custom/plugin-navigations.scss"
+        ]
+      },
+      {
+        "call": "readPreviewFonts",
+        "args": [
+          [
+            "Noto Sans",
+            "noto sans mono",
+            "Schibsted Grotesk",
+            "Source Sans Pro",
+            "IBM Plex Mono"
+          ]
+        ],
+        "answer": {
+          "built": false,
+          "faces": [
+            {
+              "family": "Noto Sans",
+              "weight": "400 700",
+              "style": "normal",
+              "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+              "length": 35856,
+              "sha1": "2579378342fde68f67ae952e3853ab60e1857237"
+            },
+            {
+              "family": "Noto Sans",
+              "weight": "400 700",
+              "style": "italic",
+              "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+              "length": 39604,
+              "sha1": "da8cbc24eb28439d2277c62fc91acf403d1407fa"
+            },
+            {
+              "family": "Noto Sans Mono",
+              "weight": "400 700",
+              "style": "normal",
+              "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+              "length": 32072,
+              "sha1": "a1864ac8f16a89bbbaaa5566f3ed8adcf2346294"
+            }
+          ]
+        }
+      },
+      {
+        "call": "takenClasses",
+        "args": [
+          [
+            "tpl-",
+            "nav-"
+          ]
+        ],
+        "answer": [
+          "nav-darkmode",
+          "nav-explorer",
+          "nav-file-title",
+          "nav-folder-title",
+          "nav-header",
+          "nav-language-switcher",
+          "nav-menue",
+          "nav-navigations",
+          "nav-page-title",
+          "nav-pager",
+          "nav-reader-mode",
+          "nav-search",
+          "nav-toolbar",
+          "tpl-col-right"
+        ]
+      },
+      {
+        "call": "takenClasses",
+        "args": [
+          [
+            "layout-box-"
+          ]
+        ],
+        "answer": [
+          "layout-box-colophon",
+          "layout-box-content",
+          "layout-box-cta",
+          "layout-box-current-folder",
+          "layout-box-hint",
+          "layout-box-mark",
+          "layout-box-missing",
+          "layout-box-note",
+          "layout-box-title"
+        ]
+      },
+      {
+        "call": "takenClasses",
+        "args": [
+          []
+        ],
+        "answer": []
+      }
+    ]
+  },
+  {
+    "name": "edges",
+    "real": false,
+    "files": {
+      "quartz/styles/custom.scss": "@use \"./quartzcontrol\";\n.layout-box-title {}\n.x-layout-box-no {}\n",
+      "quartz/styles/_quartzcontrol.scss": "/* --- QuartzControl:managed:fonts:start --- */\n@font-face { font-family: \"Noto Sans\"; src: url(\"static/fonts/noto-sans-latin-400-700.woff2\") format(\"woff2\"); font-weight: 100 900; unicode-range: U+0000-00FF; }\n@font-face { font-family: \"Noto Sans\"; font-style: italic; src: url(\"static/fonts/noto-sans-latin-italic-400-700.woff2\"); font-weight: 100 900; }\n@font-face { font-family: \"Linked\"; src: url(\"static/fonts/linked.woff2\"); }\n@font-face { font-family: \"Gone\"; src: url(\"static/fonts/gone.woff2\"); }\n@font-face { font-family: \"Big\"; src: url(\"static/fonts/big-a.woff2\"); }\n@font-face { font-family: \"Big\"; font-weight: 700; src: url(\"static/fonts/big-b.woff2\"); }\n@font-face { font-family: \"Big\"; font-weight: 900; src: url(\"static/fonts/big-c.woff2\"); }\n@font-face { font-family: \"Huge\"; src: url(\"static/fonts/huge.woff2\"); }\n@font-face { font-family: \"Remote\"; src: url(\"https://cdn.example/x.woff2\"); }\n/* --- QuartzControl:managed:fonts:end --- */\n",
+      "quartz/styles/custom/a.scss": "@font-face { font-family: \"Own\"; src: url(static/fonts/own.woff2); }\n.layout-box-hint-- {}\n--layout-box-var: 1;\n",
+      "quartz/styles/custom/skip.txt": "@font-face { font-family: \"Txt\"; }",
+      "quartz/styles/imported/b.css": "@font-face { font-family: \"Imported\"; }",
+      "public/index.css": "@font-face { font-family: \"Noto Sans\"; src: url(https://site/static/fonts/x.woff2); }\n@font-face { font-family: \"Built\"; src: url(https://site/static/fonts/built.woff2); font-style: italic; }",
+      "public/static/fonts/quartz-fonts.css": "@font-face { font-family: \"Selfhosted\"; src: url(\"static/fonts/self.woff2\"); }",
+      "public/static/fonts/built.woff2": {
+        "fixture": "font-file/files/noto-sans-latin-italic-400-700.woff2"
+      },
+      "public/static/fonts/notes.txt": "x",
+      "quartz/static/fonts/noto-sans-latin-400-700.woff2": {
+        "fixture": "font-file/files/noto-sans-latin-400-700.woff2"
+      },
+      "quartz/static/fonts/noto-sans-latin-italic-400-700.woff2": {
+        "fixture": "font-file/files/noto-sans-latin-italic-400-700.woff2"
+      },
+      "quartz/static/fonts/own.woff2": {
+        "size": 100
+      },
+      "quartz/static/fonts/big-a.woff2": {
+        "size": 12582912
+      },
+      "quartz/static/fonts/big-b.woff2": {
+        "size": 12582912
+      },
+      "quartz/static/fonts/big-c.woff2": {
+        "size": 12582912
+      },
+      "quartz/static/fonts/huge.woff2": {
+        "size": 68157440
+      },
+      "quartz/static/fonts/linked.woff2": {
+        "link": "own.woff2"
+      },
+      ".quartz/plugins/layout-box/dist/index.js": "const c = \"layout-box-content layout-box-title\"; x.classList.add(`layout-box-${y}`)\n",
+      ".quartz/plugins/layout-box/dist/deep/style.css": ".layout-box-deep {}",
+      ".quartz/plugins/layout-box/src/ignored.js": "\"layout-box-src\"",
+      ".quartz/plugins/other/dist/x.mjs": "\"layout-box-from-mjs nav-thing\"",
+      "node_modules/@quartz-themes/broken/theme.json": "{ nope",
+      "node_modules/@quartz-themes/fonts/theme.json": "{\"meta\":{\"fontFiles\":[{\"family\":\"Theme Sans\",\"weight\":\"100 1000\"},{\"style\":\"italic\"},{\"family\":\"Theme Mono\",\"style\":\"italic\",\"weight\":\"400\"}]}}"
+    },
+    "answers": [
+      {
+        "call": "collectFontFaces",
+        "args": [
+          "fonts"
+        ],
+        "answer": [
+          {
+            "family": "Theme Sans",
+            "weight": "100 1000",
+            "style": "normal",
+            "origin": "theme",
+            "source": "@quartz-themes/fonts"
+          },
+          {
+            "family": "Theme Mono",
+            "weight": "400",
+            "style": "italic",
+            "origin": "theme",
+            "source": "@quartz-themes/fonts"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "100 900",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "100 900",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Linked",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Gone",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "900",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Huge",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Remote",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Own",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "custom/a.scss"
+          },
+          {
+            "family": "Imported",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "imported/b.css"
+          },
+          {
+            "family": "Built",
+            "weight": "400",
+            "style": "italic",
+            "origin": "build",
+            "source": "public/index.css"
+          },
+          {
+            "family": "Selfhosted",
+            "weight": "400",
+            "style": "normal",
+            "origin": "build",
+            "source": "public/static/fonts/quartz-fonts.css"
+          }
+        ]
+      },
+      {
+        "call": "collectFontFaces",
+        "args": [
+          "broken"
+        ],
+        "answer": [
+          {
+            "family": "Noto Sans",
+            "weight": "100 900",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "100 900",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Linked",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Gone",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "900",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Huge",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Remote",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Own",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "custom/a.scss"
+          },
+          {
+            "family": "Imported",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "imported/b.css"
+          },
+          {
+            "family": "Built",
+            "weight": "400",
+            "style": "italic",
+            "origin": "build",
+            "source": "public/index.css"
+          },
+          {
+            "family": "Selfhosted",
+            "weight": "400",
+            "style": "normal",
+            "origin": "build",
+            "source": "public/static/fonts/quartz-fonts.css"
+          }
+        ]
+      },
+      {
+        "call": "collectFontFaces",
+        "args": [
+          "absent"
+        ],
+        "answer": [
+          {
+            "family": "Noto Sans",
+            "weight": "100 900",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Noto Sans",
+            "weight": "100 900",
+            "style": "italic",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Linked",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Gone",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "700",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Big",
+            "weight": "900",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Huge",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Remote",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "_quartzcontrol.scss"
+          },
+          {
+            "family": "Own",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "custom/a.scss"
+          },
+          {
+            "family": "Imported",
+            "weight": "400",
+            "style": "normal",
+            "origin": "project",
+            "source": "imported/b.css"
+          },
+          {
+            "family": "Built",
+            "weight": "400",
+            "style": "italic",
+            "origin": "build",
+            "source": "public/index.css"
+          },
+          {
+            "family": "Selfhosted",
+            "weight": "400",
+            "style": "normal",
+            "origin": "build",
+            "source": "public/static/fonts/quartz-fonts.css"
+          }
+        ]
+      },
+      {
+        "call": "projectStylesheets",
+        "args": [],
+        "answer": [
+          "@P@/quartz/styles/custom.scss",
+          "@P@/quartz/styles/_quartzcontrol.scss",
+          "@P@/quartz/styles/custom/a.scss",
+          "@P@/quartz/styles/imported/b.css"
+        ]
+      },
+      {
+        "call": "readPreviewFonts",
+        "args": [
+          [
+            "noto sans",
+            "Linked",
+            "Gone",
+            "Big",
+            "Huge",
+            "Remote",
+            "Own",
+            "Built",
+            "Selfhosted"
+          ]
+        ],
+        "answer": {
+          "built": true,
+          "faces": [
+            {
+              "family": "Noto Sans",
+              "weight": "100 900",
+              "style": "normal",
+              "unicodeRange": "U+0000-00FF",
+              "length": 35856,
+              "sha1": "2579378342fde68f67ae952e3853ab60e1857237"
+            },
+            {
+              "family": "Noto Sans",
+              "weight": "100 900",
+              "style": "italic",
+              "length": 39604,
+              "sha1": "da8cbc24eb28439d2277c62fc91acf403d1407fa"
+            },
+            {
+              "family": "Big",
+              "weight": "400",
+              "style": "normal",
+              "length": 12582912,
+              "sha1": "392f94f5da9424f47d4b4bc68dbb8269023693ab"
+            },
+            {
+              "family": "Big",
+              "weight": "700",
+              "style": "normal",
+              "length": 12582912,
+              "sha1": "392f94f5da9424f47d4b4bc68dbb8269023693ab"
+            },
+            {
+              "family": "Own",
+              "weight": "400",
+              "style": "normal",
+              "length": 100,
+              "sha1": "f0768288b8897f1bdf5334eaa4efcec854cbf9de"
+            },
+            {
+              "family": "Built",
+              "weight": "400",
+              "style": "italic",
+              "length": 39604,
+              "sha1": "da8cbc24eb28439d2277c62fc91acf403d1407fa"
+            }
+          ]
+        }
+      },
+      {
+        "call": "takenClasses",
+        "args": [
+          [
+            "layout-box-"
+          ]
+        ],
+        "answer": [
+          "layout-box-content",
+          "layout-box-deep",
+          "layout-box-from-mjs",
+          "layout-box-hint",
+          "layout-box-title"
+        ]
+      },
+      {
+        "call": "takenClasses",
+        "args": [
+          [
+            "layout-box-",
+            "nav-"
+          ]
+        ],
+        "answer": [
+          "layout-box-content",
+          "layout-box-deep",
+          "layout-box-from-mjs",
+          "layout-box-hint",
+          "layout-box-title",
+          "nav-thing"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "empty",
+    "real": false,
+    "files": {},
+    "answers": [
+      {
+        "call": "collectFontFaces",
+        "args": [],
+        "answer": []
+      },
+      {
+        "call": "projectStylesheets",
+        "args": [],
+        "answer": []
+      },
+      {
+        "call": "readPreviewFonts",
+        "args": [
+          [
+            "x"
+          ]
+        ],
+        "answer": {
+          "built": false,
+          "faces": []
+        }
+      },
+      {
+        "call": "takenClasses",
+        "args": [
+          [
+            "a-"
+          ]
+        ],
+        "answer": []
+      }
+    ]
+  }
+]

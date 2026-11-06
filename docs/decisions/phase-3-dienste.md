@@ -1054,3 +1054,19 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
   Build-Dateien. Elf Graphen (bis 1141 Variablen) und der Katalog, alles gleich.
 - Gegenproben (18, jede lässt einen Test scheitern; zwei waren erst ungefangen und bekamen ihren
   Fall: der dunkle Rückfall auf den hellen Wert, der Abbruch nach der überzähligen Klammer).
+
+### Schriften der Website, Vorschau, belegte Klassen (`collectFontFaces`, `readPreviewFonts`, `projectStylesheets`, `takenClasses` → `SiteFonts`)
+
+- Welche `@font-face` die gebaute Website haben wird (Theme-Schriften aus `meta.fontFiles`, die
+  eigenen Regeln, was ein Build schrieb), die Dateien dahinter für die Vorschau (ein Link ist keine
+  Schriftdatei des Projekts; 64 MiB je Datei, 32 MiB zusammen), und welche Klassennamen mit einem
+  Präfix Stylesheets und Plugin-Code schon benutzen. Die Präfixe prüft der Dienst wie dort das
+  Schema (höchstens acht, ein Bezeichner).
+- **Gemessen gegen QuartzControls Code:** `scripts/site-fonts-golden.mjs` auf gui-tests
+  Stylesheets, Schriften, Build-CSS und dem Theme `minimal`, auf erfundenen Rändern (verlinkte
+  Schriftdatei, Dateien über beiden Grenzen, kaputtes Theme, eine Familie, die der Build
+  wiederholt, Plugin-Code in `.js`, `.mjs` und `.css`, Variablen mit dem Präfix) und auf einem
+  leeren Projekt; alles gleich, die Vorschau-Dateien nach Länge und SHA-1.
+- Gegenproben (11, zehn fangen). Ungefangen bleibt die Grenze je Datei: 64 MiB liegen über der
+  Gesamtgrenze von 32 MiB, also entscheidet sie nie allein; eine doppelte Vorsicht aus
+  QuartzControl.
