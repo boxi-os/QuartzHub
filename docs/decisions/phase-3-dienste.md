@@ -1070,3 +1070,24 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
 - Gegenproben (11, zehn fangen). Ungefangen bleibt die Grenze je Datei: 64 MiB liegen über der
   Gesamtgrenze von 32 MiB, also entscheidet sie nie allein; eine doppelte Vorsicht aus
   QuartzControl.
+
+### Snippets und Bilder (`snippetService.ts`, `containedPath`/`writableTarget` aus `templatePackage/shared.ts` → `Snippets`, `PackagePaths`)
+
+- Die Dateien einer Layout-Box (`dir` + `file`) und die Bilder unter quartz/static/images:
+  auflisten, lesen, schreiben, holen, umbenennen, in den Papierkorb. Jeder Name und jeder Ordner
+  wird gegen das Projekt aufgelöst: nichts außerhalb, nichts durch einen Link, nichts in einen
+  Ordner eines Werkzeugs oder in die Build-Ausgabe. `PackagePaths` nimmt Punkt 6 mit.
+- **Fehlermeldungen von Node, wo sie im Satz stehen** (`NodeFileError`: „Error: ENOENT: no such
+  file or directory, stat '…'“), weil QuartzControl `String(err)` weitergab. Der Papierkorb ist
+  der des Systems (`FileManager.trashItem`); die Tests geben einen eigenen mit.
+- **Sortiert wie `localeCompare` mit `numeric`**: Foundations Vergleich mit Zahlen und Gebietsschema
+  (`file2` vor `file10`, `_under` vor `10-start`, `apfel` vor `Äpfel`), gleich mit Node in allen
+  Fällen.
+- **Gemessen gegen QuartzControls Code:** `scripts/snippets-golden.mjs`, ein Projekt mit
+  Snippet-Ordnern, Bildern, Links nach innen und außen (auf Datei, auf Ordner, aus dem Projekt
+  hinaus), reservierten Ordnern in jeder Schreibweise, der Build-Ausgabe und einem verlinkten
+  content/; 74 Aufrufe (auch zu groß, falsche Endung, `key.txt` als `key.md`, ein Ordner als
+  Quelle, Umbenennen nur in der Schreibweise, ein Papierkorb, der scheitert) und 20 Pfad-Fälle.
+  Alles gleich, samt geänderter Dateien und Papierkorb.
+- Zwei übernommene Texte sagen jetzt „QuartzHub“ (`snippetDirLink`, `snippetDirOutside`).
+- Gegenproben (15, jede lässt den Test scheitern).

@@ -28528,13 +28528,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Weg nach „{{dir}}“ führt über eine Verknüpfung. Lesen geht, schreiben tut QuartzControl dort nicht."
+            "value" : "Der Weg nach „{{dir}}“ führt über eine Verknüpfung. Lesen geht, schreiben tut QuartzHub dort nicht."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The way to “{{dir}}” leads through a link. Reading works; QuartzControl does not write there."
+            "value" : "The way to “{{dir}}” leads through a link. Reading works; QuartzHub does not write there."
           }
         }
       }
@@ -28544,13 +28544,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{dir}}“ führt aus dem Projektordner hinaus. QuartzControl liest und schreibt dort nicht."
+            "value" : "„{{dir}}“ führt aus dem Projektordner hinaus. QuartzHub liest und schreibt dort nicht."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“{{dir}}” leads out of the project folder. QuartzControl does not read or write there."
+            "value" : "“{{dir}}” leads out of the project folder. QuartzHub does not read or write there."
           }
         }
       }
