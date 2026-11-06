@@ -1,7 +1,7 @@
 # Plan: QuartzHub, die native Nachfolgerin von QuartzControl
 
-> Übernommen aus `~/.claude/plans/` am 2026-11-06, ab hier gepflegt. Stand: **Phase 0 und 1
-> abgeschlossen**, als Nächstes Phase 2. Abweichungen vom ursprünglichen Plan, mit Messung in
+> Übernommen aus `~/.claude/plans/` am 2026-11-06, ab hier gepflegt. Stand: **Phase 0 bis 2
+> abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`), als Nächstes Phase 3. Abweichungen vom ursprünglichen Plan, mit Messung in
 > `decisions/phase-1-geruest.md`:
 >
 > - Bundle-ID `io.github.boxios.quartzhub` (ohne Unterstrich: in `CFBundleIdentifier` nicht erlaubt)
@@ -108,6 +108,12 @@ App-ID ~~`io.github.boxi_os.quartzhub`~~ **`io.github.boxios.quartzhub`** (so he
 - **Nebeneinander-Betrieb:** QuartzControl kennt keine prozessübergreifenden Sperren. Laufen beide
   Apps (`NSRunningApplication`) oder gibt es fremde Server in `running-servers.json`, warnt
   QuartzHub, bevor es in ein Projekt schreibt. Fremde Server zählen nie als eigene Waisen.
+
+**Stand nach Phase 2:** Golden Files und Sichten gibt es für die JSON-Dateien aus Profil und
+`.quartz-gui/`. Die übrigen Formate (Stylesheet-Marker, Snapshot-Store, `.qtpl`, Locales,
+`quartz-books/`) bekommen ihre Leser, Schreiber und Tests mit dem Dienst, der sie braucht, in
+Phase 3; `formats.md` nennt sie. Die Warnung vor dem Schreiben bei laufendem QuartzControl kommt mit
+dem ersten Schreiber (`Coexistence` ist da, die Abfrage `NSRunningApplication` in der App fehlt noch).
 
 ## Phase 3 – Kern-Dienste in Swift (`QuartzHubCore`)
 

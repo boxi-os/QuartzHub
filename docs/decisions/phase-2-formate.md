@@ -101,3 +101,21 @@ es Geheimnisse gibt. Lehnt der Nutzer die Abfrage ab, wird alles außer den Gehe
 - **Eine Kennung an einem einfachen Stack geht an jedes Kind** und verdeckt deren eigene: XCUITest
   fand `migration.confirm` nicht, bis der Stack `accessibilityElement(children: .contain)` bekam.
 - Die App liest die Sprache jetzt aus QuartzHubs `settings.json` (Form von QuartzControl).
+
+### Die Übernahme am echten Profil (2026-11-06)
+
+Mit Erlaubnis des Nutzers: `projects.json`, `settings.json`, `connections.json` und
+`relay-secrets.json` aus `~/Library/Application Support/QuartzControl` in den Scratchpad kopiert
+(12 Projekte, 4 Zugänge, 3 Geheimnisse in Zugängen und 1 Relay, alle `v10`), QuartzHub mit
+`-QHMigrationSource` auf die Kopie und `-QHProfileDir` auf einen Wegwerf-Ordner gestartet,
+„Übernehmen“, die Abfrage des Schlüsselbunds hat der Nutzer erlaubt.
+
+- **Alle 4 Geheimnisse übernommen**, je ein Eintrag `QuartzHub` / `connection:…` bzw. `relay:…`; in
+  QuartzHubs `connections.json` kein `encryptedSecret` mehr, 3 × `secretInKeychain`, alle übrigen
+  Felder gleich der Quelle. `projects.json` byte-gleich, `settings.json` mit allen fünf Schlüsseln.
+- **QuartzControls Profil unverändert:** SHA-256 der vier Dateien vorher und nachher gleich.
+  QuartzControl liest seine Projekte also wie zuvor; die Übernahme fasst die Projekte nicht an.
+- Danach aufgeräumt: die vier Einträge von QuartzHub gelöscht, die Kopien gelöscht.
+- Nicht gemessen: den Inhalt der übernommenen Geheimnisse gegen die Originale zu vergleichen hieße,
+  sie auszulesen. Belegt ist, dass jedes Padding und jedes UTF-8 stimmte; ein falscher Schlüssel
+  scheitert daran (Testvektor von Electron).

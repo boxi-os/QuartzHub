@@ -61,18 +61,25 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
 
 ## Wo die Messungen stehen
 
+- [`formats.md`](docs/formats.md) — jede Datei, die QuartzControl liest oder schreibt, und was
+  QuartzHub damit tut
 - [`native-macos-spike.md`](docs/decisions/native-macos-spike.md) — der Prototyp vom 2026-11-05
   (DMG, Start, Speicher, WebKit-Export), Messgeschirr in `native-macos-spike-harness/`
 - [`phase-1-geruest.md`](docs/decisions/phase-1-geruest.md) — Gerüst: Inspektor, Texte,
   Laufzeit, Paket, UI-Test, mit allem, was beim ersten Bau anders war als gedacht
+- [`phase-2-formate.md`](docs/decisions/phase-2-formate.md) — JSON wie Node, Sichten statt
+  Codable, Golden Files, Übernahme samt Messung gegen Electron und am echten Profil
 
 ## Stand
 
 - **Phase 1 (Gerüst) abgeschlossen am 2026-11-06.** App mit Sidebar (Gruppen wie QuartzControl),
   jede Seite ein Platzhalter mit Inspektor; Katalog mit 2.994 übernommenen Texten; `qh-check
   i18n`; Runtime, Helfer, Paket (App 170 MB, DMG 63 MB).
-- **Als Nächstes Phase 2:** `docs/formats.md` und die Codable-Modelle mit Golden-File-Tests, dann
-  die Übernahme. Vorher nichts, was in Projekte oder Profile schreibt.
+- **Phase 2 (Formate, Übernahme) abgeschlossen am 2026-11-06.** `docs/formats.md` mit drei Teilen
+  unter `docs/formats/`; JSON wie Node (`JSONStore`, `JSJSON`, gegen Node gemessen); Sichten auf die
+  JSON-Dateien mit 13 Golden Files; Übernahme beim ersten Start (Dialog, Geheimnisse in den
+  Schlüsselbund), gemessen am echten Profil und gegen Electron.
+- **Als Nächstes Phase 3:** die Kern-Dienste, je Dienst mit seinen Formaten (`docs/plan.md`).
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

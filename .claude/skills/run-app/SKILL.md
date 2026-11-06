@@ -16,7 +16,13 @@ open -n build/DerivedData/Build/Products/Debug/QuartzHub.app --args -QHLanguage 
 
 Startargumente: `-QHLanguage de|en` (Sprache unabhängig vom Mac), `-QHWindowSize 1400x860`
 (Startgröße; entfernt gespeicherte Fensterrahmen), `-ApplePersistenceIgnoreState YES` (kein
-wiederhergestelltes Fenster). Für das Release-Paket: `scripts/package.sh`, dann
+wiederhergestelltes Fenster), `-QHProfileDir <ordner>` (QuartzHubs Profil woanders, sonst
+`~/Library/Application Support/QuartzHub`), `-QHMigrationSource <ordner>` (Profil von QuartzControl
+für die Übernahme; leer = aus). **Ohne diese beiden bietet die App die Übernahme aus dem echten
+QuartzControl-Profil an, solange QuartzHubs eigenes keine `projects.json` hat**; „Übernehmen“ liest
+dann den echten Schlüsselbund-Eintrag. Zum bloßen Ansehen `-QHMigrationSource ""` setzen. Die
+Übernahme-Tasten im Dialog: System Events findet den Button im Sheet nicht über `entire contents`;
+Return löst „Übernehmen“ aus (Standardtaste). Für das Release-Paket: `scripts/package.sh`, dann
 `build/package/QuartzHub.app`.
 
 Beenden: `pkill -x QuartzHub`.
