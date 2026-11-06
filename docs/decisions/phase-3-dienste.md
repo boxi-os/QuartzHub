@@ -105,3 +105,23 @@ Fenster den Renderer samt Store verlor; in QuartzHub leben Kern und Oberfläche 
 der Puffer ist trotzdem die eine Stelle, die die Ausgabe hält, und die Konsole liest ihn. Das Tailen
 der Dateien unter `.quartz-gui/logs/` kommt mit `buildService`. Gegenprobe: ohne Kappung scheitert
 `capsPerProjectAndKind`.
+
+### Sperren je Projekt (`projectLock.ts`, `styleLock.ts` → `ProjectLock`)
+
+`ProjectLock.styles` und `ProjectLock.config`: je Projekt (`realpath`) ein Schreiber nach dem
+anderen, ein späterer wartet, statt abgewiesen zu werden; wiedereintrittsfähig über einen
+`@TaskLocal` (Gegenstück zu Nodes `AsyncLocalStorage`); der Fehler eines Vorgängers hält die
+Schlange nicht an. Die Warteschlange ist eine Kette von Tasks, die nie scheitern, darum braucht es
+QuartzControls schluckende `catch` nicht.
+
+- **Die Falle aus QuartzControl gibt es auch hier, gemessen:** Ein `Task { }`, unter der Sperre
+  gestartet, erbt den Task-Local und lief als Halter an der Schlange vorbei (`A start`, `late`,
+  `A end`). Mit `Task.detached` wartet er wie jeder andere (`A start`, `A end`, `late`). Regel im
+  Kopf von `ProjectLock`: Unter der Sperre wird nichts gestartet, das sie überlebt.
+- Zwei Schreibweisen eines Ordners sind ein Schlüssel: ein Symlink und schon der temporäre Ordner
+  selbst (`/var` → `/private/var`).
+- **Gegenproben:** ohne `realpath`, ohne Wiedereintritt, ohne Warten auf den Vorgänger, eine Marke
+  für alle Sperren statt je Sperre: jede lässt einen Test scheitern. Die erste Fassung der Frist im
+  Test hing beim fehlenden Wiedereintritt, statt zu scheitern: Eine Task-Gruppe wartet am Ende auf
+  jedes Kind, auch auf das hängende; die Frist lässt es jetzt zurück.
+- Die dritte Schlange je Projekt (Snapshot-Store, `snapshotService.serialize`) kommt mit dem Dienst.
