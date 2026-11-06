@@ -36,6 +36,33 @@ import Testing
     #expect(Array(managed).firstRange(of: Array("static/fonts/Sch\u{F6}ne.woff2".utf8)) != nil)
   }
 
+  /// What a template import writes (fonts, static files) keeps the names the package gives.
+  @Test func aTemplateFileKeepsItsName() throws {
+    try TemplatePackage.write(Data("x".utf8), to: "\(project)/quartz/static/Gr\u{FC}\u{DF}e/Sch\u{F6}ne.woff2")
+    #expect(names("\(project)/quartz/static") == [Array("Gr\u{FC}\u{DF}e".utf8)])
+    #expect(names("\(project)/quartz/static/Gr\u{FC}\u{DF}e") == [Array("Sch\u{F6}ne.woff2".utf8)])
+  }
+
+  /// A font a template package brings, as the import writes it.
+  @Test func aTemplateFontKeepsItsName() async throws {
+    let environment = ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin"],
+                                      hostPath: HostPath(entries: ["/usr/bin", "/bin"], source: .inherited, added: []),
+                                      nodeMode: .system, runtime: .repository, git: nil, bundledGitFailure: nil)
+    let read: LayoutFrames.ReadConfig = { _ in QuartzConfig() }
+    let templates = TemplatePackage(runtime: .repository, locales: LocaleFiles(environment: environment), frames: LayoutFrames(readConfig: read),
+                                    fonts: FontService(readConfig: read), npm: { _, _ in .init(success: true, output: "") },
+                                    addPlugin: { _, _ in .init(success: true, output: "") }, head: { _ in nil }, snapshot: { _, _, _ in },
+                                    app: ("QuartzHub", "0"))
+    try Posix.mkdirs(StyleSheets.stylesDirectory(project))
+    try Posix.write(StyleSheets.customScss(project), Data())
+    try Posix.write(StyleSheets.managedScss(project), Data())
+    var files = ZipArchive.Files()
+    files.set("files/fonts/Sch\u{F6}ne.woff2", Data("x".utf8))
+    let run = TemplatePackage.Run(project: project, strategy: .packageWins, files: files)
+    try await templates.applyFonts(.object(JSONObject([("files", .array([.string("Sch\u{F6}ne.woff2")]))])), run)
+    #expect(names(FontFaces.projectFontsDirectory(project)) == [Array("Sch\u{F6}ne.woff2".utf8)])
+  }
+
   @Test func aSnippetFolderKeepsItsName() throws {
     try Posix.mkdirs("\(project)/snippets")
     let written = try Snippets().writeSnippet(project: project, dir: "snippets", file: "Gr\u{FC}\u{DF}e.md", content: "x", overwrite: false)

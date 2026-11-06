@@ -11,20 +11,20 @@ import Testing
 struct LocaleFilesTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/locales")
 
-  static func put(_ root: URL, _ files: JSONValue?) throws {
+  static func put(_ root: String, _ files: JSONValue?) throws {
     guard case .object(let object)? = files else { return }
     for path in object.keys {
-      let url = root.appendingPathComponent(path)
-      try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try Data(object[path]!.stringValue!.utf8).write(to: url)
+      let url = "\(root)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(url))
+      try Posix.write(url, Data(object[path]!.stringValue!.utf8))
     }
   }
 
-  static func tree(_ root: URL, _ prefix: String) -> [String: String] {
+  static func tree(_ root: String, _ prefix: String) -> [String: String] {
     var out: [String: String] = [:]
-    for path in (try? FileManager.default.subpathsOfDirectory(atPath: root.path)) ?? [] where path != ".git" && !path.hasPrefix(".git/") {
+    for path in (try? FileManager.default.subpathsOfDirectory(atPath: root)) ?? [] where path != ".git" && !path.hasPrefix(".git/") {
       var isDirectory: ObjCBool = false
-      let full = root.appendingPathComponent(path).path
+      let full = "\(root)/\(path)"
       guard FileManager.default.fileExists(atPath: full, isDirectory: &isDirectory), !isDirectory.boolValue else { continue }
       out[prefix + path] = String(decoding: FileManager.default.contents(atPath: full) ?? Data(), as: UTF8.self)
     }
@@ -36,11 +36,11 @@ struct LocaleFilesTests {
   }
 
   @Test func replaysQuartzControlsSteps() async throws {
-    let scratch = try HostPathTests.Scratch()
-    let roots = ["project": scratch.url.appendingPathComponent("project"), "plain": scratch.url.appendingPathComponent("plain")]
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let roots = ["project": "\(scratch.path)/project", "plain": "\(scratch.path)/plain"]
     let start = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("start.json")))
     let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
-    func git(_ arguments: [String], in root: URL) async -> CommandResult {
+    func git(_ arguments: [String], in root: String) async -> CommandResult {
       await ProcessRunner.run(environment.command("git", arguments, in: root, timeout: .seconds(30)))
     }
     let project = roots["project"]!
@@ -51,7 +51,7 @@ struct LocaleFilesTests {
     }
     try Self.put(project, start["edited"])
     try Self.put(roots["plain"]!, start["plain"])
-    try FileManager.default.createDirectory(at: roots["plain"]!.appendingPathComponent("quartz/i18n/locales/xy.ts"), withIntermediateDirectories: true)
+    try Posix.mkdirs("\(roots["plain"]!)/quartz/i18n/locales/xy.ts")
 
     let locales = LocaleFiles(environment: environment)
     func snapshot() -> [String: String] { Self.tree(roots["project"]!, "project/").merging(Self.tree(roots["plain"]!, "plain/")) { a, _ in a } }
@@ -79,7 +79,7 @@ struct LocaleFilesTests {
           })
         case "getGitAttributesStatus": got = .bool(await locales.gitAttributesActive(project: root))
         case "ensureGitAttributes": await locales.ensureGitAttributes(project: root)
-        case "writeFile": try Data(args[1].stringValue!.utf8).write(to: root.appendingPathComponent(args[0].stringValue!))
+        case "writeFile": try Posix.write("\(root)/\(args[0].stringValue!)", Data(args[1].stringValue!.utf8))
         case "git": _ = await git(args.compactMap(\.stringValue), in: root)
         default: Issue.record("\(label): unbekannter Schritt")
         }
@@ -106,19 +106,19 @@ struct LocaleFilesTests {
   /// QuartzControl's template import handed a package's locale code on unchecked; here a code
   /// that is no locale code reads nothing and writes nothing, even where the file exists.
   @Test func aCodeThatIsNoLocaleCodeIsNoFile() async throws {
-    let scratch = try HostPathTests.Scratch()
-    let project = scratch.url.appendingPathComponent("project")
-    let target = project.appendingPathComponent("quartz/util/path.ts")
-    try FileManager.default.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try FileManager.default.createDirectory(at: LocaleFiles.localesDirectory(project), withIntermediateDirectories: true)
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let project = "\(scratch.path)/project"
+    let target = "\(project)/quartz/util/path.ts"
+    try Posix.mkdirs(NodePath.dirname(target))
+    try Posix.mkdirs(LocaleFiles.localesDirectory(project))
     let text = "export default { title: \"x\" }\n"
-    try Data(text.utf8).write(to: target)
+    try Posix.write(target, Data(text.utf8))
     let locales = LocaleFiles(environment: await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded))
     #expect(try await locales.entries(project: project, code: "../../util/path").isEmpty)
     let saved = try await locales.save(project: project, code: "../../util/path", path: ["title"], kind: .string, value: "y")
     #expect(saved == LocaleFiles.SaveResult(success: false, error: "Locale file not found: ../../util/path"))
-    #expect(String(decoding: try Data(contentsOf: target), as: UTF8.self) == text)
-    #expect(!FileManager.default.fileExists(atPath: project.appendingPathComponent(".quartz-gui").path))
+    #expect(String(decoding: try Posix.read(target), as: UTF8.self) == text)
+    #expect(!FileManager.default.fileExists(atPath: "\(project)/.quartz-gui"))
   }
 
   @Test func localeCodes() {

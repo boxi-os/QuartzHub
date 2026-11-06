@@ -14,7 +14,7 @@ import Testing
                              "Runtime/ oder Helpers/dist fehlt: scripts/fetch-runtime.sh, scripts/build-helpers.sh"))
 struct TemplatePackageTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/templates")
-  static let basic = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../../../../Resources/templates/qc-basic.qtpl").standardizedFileURL
+  static let basic = NodePath.normalize("\(NodePath.dirname(#filePath))/../../../../Resources/templates/qc-basic.qtpl")
 
   final class Recorder: Sendable {
     struct State {
@@ -37,18 +37,18 @@ struct TemplatePackageTests {
     return .object(JSONObject([("sha256", .string(sha(data))), ("length", .number(Double(data.count)))]))
   }
 
-  static func tree(_ root: URL, mask: (String) -> String) -> [String: JSONValue] {
+  static func tree(_ root: String, mask: (String) -> String) -> [String: JSONValue] {
     var out: [String: JSONValue] = [:]
-    func walk(_ dir: URL, _ prefix: String) {
-      for entry in LayoutFrames.directoryEntriesWithKind(dir.path) where entry.name != ".git" {
-        let full = dir.appendingPathComponent(entry.name)
+    func walk(_ dir: String, _ prefix: String) {
+      for entry in LayoutFrames.directoryEntriesWithKind(dir) where entry.name != ".git" {
+        let full = "\(dir)/\(entry.name)"
         let rel = prefix + entry.name
         switch entry.kind {
-        case .link: out[rel] = .object(JSONObject([("link", .string(mask((try? FileManager.default.destinationOfSymbolicLink(atPath: full.path)) ?? "")))]))
+        case .link: out[rel] = .object(JSONObject([("link", .string(mask((try? FileManager.default.destinationOfSymbolicLink(atPath: full)) ?? "")))]))
         case .directory:
           out[rel] = .object(JSONObject([("dir", .bool(true))]))
           walk(full, rel + "/")
-        default: out[rel] = brief(FileManager.default.contents(atPath: full.path) ?? Data(), mask: mask)
+        default: out[rel] = brief(FileManager.default.contents(atPath: full) ?? Data(), mask: mask)
         }
       }
     }
@@ -56,21 +56,21 @@ struct TemplatePackageTests {
     return out
   }
 
-  static func build(_ root: URL, _ files: JSONObject, blobs: JSONObject, work: String) throws {
-    try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+  static func build(_ root: String, _ files: JSONObject, blobs: JSONObject, work: String) throws {
+    try Posix.mkdirs(root)
     for path in files.keys {
       let spec = files[path]!
-      let url = root.appendingPathComponent(path)
+      let url = "\(root)/\(path)"
       if spec["dir"] != nil {
-        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        try Posix.mkdirs(url)
       } else if let link = spec["link"]?.stringValue {
-        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try FileManager.default.createSymbolicLink(atPath: url.path, withDestinationPath: link.replacingOccurrences(of: "@W@", with: work, options: .literal))
+        try Posix.mkdirs(NodePath.dirname(url))
+        try Posix.symlink(link.replacingOccurrences(of: "@W@", with: work, options: .literal), url)
       } else {
-        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try Posix.mkdirs(NodePath.dirname(url))
         let data = if let text = spec["text"]?.stringValue { Data(text.replacingOccurrences(of: "@W@", with: work, options: .literal).utf8) }
           else { Data(base64Encoded: blobs[spec["blob"]!.stringValue!]!.stringValue!)! }
-        try data.write(to: url)
+        try Posix.write(url, data)
       }
     }
   }
@@ -87,7 +87,7 @@ struct TemplatePackageTests {
     }
   }
 
-  static func unpacked(_ file: URL, mask: (String) -> String) throws -> JSONValue {
+  static func unpacked(_ file: String, mask: (String) -> String) throws -> JSONValue {
     let files = try ZipArchive.read(contentsOf: file)
     var out = JSONObject()
     for name in files.names {
@@ -108,15 +108,15 @@ struct TemplatePackageTests {
   }
 
   @Test func replaysQuartzControlsSteps() async throws {
-    let scratch = try HostPathTests.Scratch()
+    let scratch = try HostPathTests.Scratch(umlaut: true)
     // The golden's work folder was a realpath; links and config entries carry it.
-    let work = Self.realpath(scratch.url.path)
+    let work = Self.realpath(scratch.path)
     let mask = { (text: String) in text.replacingOccurrences(of: work, with: "@W@", options: .literal) }
     let initial = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("initial.json"))).objectValue!
     let blobs = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("blobs.json"))).objectValue!
-    var roots: [String: URL] = [:]
+    var roots: [String: String] = [:]
     for name in initial.keys {
-      let root = URL(fileURLWithPath: work).appendingPathComponent(name)
+      let root = "\(work)/\(name)"
       try Self.build(root, initial[name]!.objectValue!, blobs: blobs, work: work)
       roots[name] = root
     }
@@ -137,9 +137,9 @@ struct TemplatePackageTests {
       npm: { arguments, project in
         recorder.command(["npm"] + arguments)
         for name in arguments.dropFirst() {
-          let dir = project.appendingPathComponent("node_modules").appendingPathComponent(name)
-          try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-          try? Data((JSJSON.compact(.object(JSONObject([("name", .string(name)), ("version", .string("0.0.0-stub"))]))) + "\n").utf8).write(to: dir.appendingPathComponent("package.json"))
+          let dir = "\(project)/node_modules/\(name)"
+          try? Posix.mkdirs(dir)
+          try? Posix.write("\(dir)/package.json", Data((JSJSON.compact(.object(JSONObject([("name", .string(name)), ("version", .string("0.0.0-stub"))]))) + "\n").utf8))
         }
         return PluginCommands.Result(success: true, output: "added \(arguments.count - 1) packages")
       },
@@ -169,11 +169,11 @@ struct TemplatePackageTests {
       let label = "\(index) \(on) \(call) \(args.first.map { JSJSON.compact($0) } ?? "")"
       let root = roots[on]!
       recorder.state.withLock { $0 = Recorder.State() }
-      func packagePath(_ value: JSONValue) -> URL {
+      func packagePath(_ value: JSONValue) -> String {
         let text = value.stringValue!
         if text == "@BASIC@" { return Self.basic }
-        if text.hasPrefix("@W@") { return URL(fileURLWithPath: text.replacingOccurrences(of: "@W@", with: work, options: .literal)) }
-        return roots["packages"]!.appendingPathComponent(text)
+        if text.hasPrefix("@W@") { return text.replacingOccurrences(of: "@W@", with: work, options: .literal) }
+        return "\(roots["packages"]!)/\(text)"
       }
       var got: JSONValue = .null
       do {
@@ -181,7 +181,7 @@ struct TemplatePackageTests {
         case "inspectProject": got = .array(await templates.inspect(project: root).map(\.json))
         case "exportPackage":
           let options = args[2]
-          let file = roots["packages"]!.appendingPathComponent(args[1].stringValue!)
+          let file = "\(roots["packages"]!)/\(args[1].stringValue!)"
           let exported = try await templates.export(project: roots[args[0].stringValue!]!, to: file, name: options["name"]!.stringValue!,
                                                     description: options["description"]?.stringValue, parts: options["parts"]!.arrayValue!.compactMap(\.stringValue),
                                                     scope: TemplatePackage.TranslationScope(rawValue: options["translationScope"]!.stringValue!)!)
@@ -240,15 +240,15 @@ struct TemplatePackageTests {
   /// The live import takes its snapshot from the store, and one that cannot be taken (no git
   /// here) stops it before it writes anything: only the store's own folder is there afterwards.
   @Test func anImportWhoseSnapshotFailsWritesNothing() async throws {
-    let scratch = try HostPathTests.Scratch()
+    let scratch = try HostPathTests.Scratch(umlaut: true)
     var environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
     environment.git = nil
     environment.hostPath = HostPath(entries: ["/nonexistent"], source: .inherited, added: [])
     let templates = TemplatePackage.live(environment: environment, locales: LocaleFiles(environment: environment), frames: LayoutFrames(), fonts: FontService(),
                                          snapshots: .live(environment: environment), appVersion: "0")
     await #expect(throws: SnapshotStore.Failure.self) {
-      _ = try await templates.importPackage(project: scratch.url, package: Self.basic, parts: TemplatePackage.partIds, strategy: .packageWins)
+      _ = try await templates.importPackage(project: scratch.path, package: Self.basic, parts: TemplatePackage.partIds, strategy: .packageWins)
     }
-    #expect(try FileManager.default.contentsOfDirectory(atPath: scratch.url.path) == [".quartz-gui"])
+    #expect(try FileManager.default.contentsOfDirectory(atPath: scratch.path) == [".quartz-gui"])
   }
 }

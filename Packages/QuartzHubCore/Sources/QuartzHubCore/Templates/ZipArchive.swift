@@ -138,8 +138,8 @@ public enum ZipArchive {
     return Data(locals + centrals + end)
   }
 
-  public static func write(_ entries: [Entry], to url: URL) throws {
-    try create(entries).write(to: url)
+  public static func write(_ entries: [Entry], to url: String) throws {
+    try Posix.write(url, create(entries))
   }
 
   // MARK: - Reading
@@ -216,9 +216,9 @@ public enum ZipArchive {
     return files
   }
 
-  public static func read(contentsOf url: URL) throws -> Files {
-    guard FileManager.default.fileExists(atPath: url.path) else { throw Failure(message: L10n.t("main.zipFileMissing")) }
-    return try read(Data(contentsOf: url))
+  public static func read(contentsOf url: String) throws -> Files {
+    guard FileManager.default.fileExists(atPath: url) else { throw Failure(message: L10n.t("main.zipFileMissing")) }
+    return try read(Posix.read(url))
   }
 
   /// Nothing QuartzHub writes has an absolute name, a `..` segment, a drive letter or a NUL; an

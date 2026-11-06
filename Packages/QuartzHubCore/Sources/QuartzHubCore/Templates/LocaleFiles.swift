@@ -46,10 +46,10 @@ public struct LocaleFiles: Sendable {
   static let mergeOursLine = "quartz/i18n/locales/*.ts merge=ours"
   static let baselineDirectory = "locale-baseline"
 
-  static func localesDirectory(_ project: URL) -> URL { project.appendingPathComponent("quartz/i18n/locales") }
-  static func localeFile(_ project: URL, _ code: String) -> URL { localesDirectory(project).appendingPathComponent("\(code).ts") }
-  static func baselineFile(_ project: URL, _ code: String) -> URL {
-    QuartzGuiDirectory(project: project).url.appendingPathComponent(baselineDirectory).appendingPathComponent("\(code).ts")
+  static func localesDirectory(_ project: String) -> String { "\(project)/quartz/i18n/locales" }
+  static func localeFile(_ project: String, _ code: String) -> String { "\(localesDirectory(project))/\(code).ts" }
+  static func baselineFile(_ project: String, _ code: String) -> String {
+    "\(QuartzGuiDirectory(project: project).path)/\(baselineDirectory)/\(code).ts"
   }
 
   /// `isLocaleCode` of QuartzControl's IPC contract: only what the save path accepts is a locale.
@@ -66,11 +66,11 @@ public struct LocaleFiles: Sendable {
   // MARK: - Reading
 
   /// Every `<code>.ts` but `definition.ts` whose name is a locale code, sorted as `localeCompare`.
-  public func list(project: URL) throws -> [String] {
+  public func list(project: String) throws -> [String] {
     let dir = Self.localesDirectory(project)
-    guard FileManager.default.fileExists(atPath: dir.path) else { return [] }
-    guard let names = try? FileManager.default.contentsOfDirectory(atPath: dir.path) else {
-      throw NodeFileError(code: ENOTDIR, syscall: "scandir", path: dir.path)
+    guard FileManager.default.fileExists(atPath: dir) else { return [] }
+    guard let names = try? FileManager.default.contentsOfDirectory(atPath: dir) else {
+      throw NodeFileError(code: ENOTDIR, syscall: "scandir", path: dir)
     }
     return names.filter { $0.hasSuffix(".ts") && $0 != "definition.ts" }
       .map { String($0.dropLast(3)) }
@@ -79,12 +79,12 @@ public struct LocaleFiles: Sendable {
   }
 
   /// `readFileSync(path, 'utf-8')`: a folder fails as in Node, without a path.
-  static func readText(_ url: URL) throws -> String {
+  static func readText(_ url: String) throws -> String {
     var isDirectory: ObjCBool = false
-    if FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory), isDirectory.boolValue {
+    if FileManager.default.fileExists(atPath: url, isDirectory: &isDirectory), isDirectory.boolValue {
       throw NodeFileError(code: EISDIR, syscall: "read")
     }
-    guard let data = FileManager.default.contents(atPath: url.path) else { throw NodeFileError(code: ENOENT, syscall: "open", path: url.path) }
+    guard let data = FileManager.default.contents(atPath: url) else { throw NodeFileError(code: ENOENT, syscall: "open", path: url) }
     return String(decoding: data, as: UTF8.self)
   }
 
@@ -105,19 +105,19 @@ public struct LocaleFiles: Sendable {
   /// A code that is no locale code is no file here, whoever asks. QuartzControl's IPC schema
   /// checked it for the Translations page, but its template import passed a package's code on
   /// unchecked, and `../../util/path` reached `quartz/util/path.ts`.
-  public func entries(project: URL, code: String) async throws -> [Entry] {
+  public func entries(project: String, code: String) async throws -> [Entry] {
     let file = Self.localeFile(project, code)
-    guard Self.isLocaleCode(code), FileManager.default.fileExists(atPath: file.path) else { return [] }
-    return try await parse([(try Self.readText(file), file.path)]).first.flatMap { $0 } ?? []
+    guard Self.isLocaleCode(code), FileManager.default.fileExists(atPath: file) else { return [] }
+    return try await parse([(try Self.readText(file), file)]).first.flatMap { $0 } ?? []
   }
 
   // MARK: - Saving
 
   /// Replaces one value, only its span: everything else in the file stays byte for byte. A string
   /// goes in as JSON, a template as written; the whole result must parse, or nothing is written.
-  public func save(project: URL, code: String, path: [String], kind: Kind, value: String) async throws -> SaveResult {
+  public func save(project: String, code: String, path: [String], kind: Kind, value: String) async throws -> SaveResult {
     let file = Self.localeFile(project, code)
-    guard Self.isLocaleCode(code), FileManager.default.fileExists(atPath: file.path) else {
+    guard Self.isLocaleCode(code), FileManager.default.fileExists(atPath: file) else {
       return SaveResult(success: false, error: "Locale file not found: \(code)")
     }
     // Before the first edit, not after: once the file is written the untouched version is gone.
@@ -125,7 +125,7 @@ public struct LocaleFiles: Sendable {
     try captureBaseline(project, code)
     let text = try Self.readText(file)
     let replacement = kind == .string ? JSJSON.compact(.string(value)) : value
-    let call = JSONObject([("kind", .string("splice")), ("text", .string(text)), ("fileName", .string(file.path)),
+    let call = JSONObject([("kind", .string("splice")), ("text", .string(text)), ("fileName", .string(file)),
                            ("path", .array(path.map(JSONValue.string))), ("replacement", .string(replacement))])
     let answer = try await Helper.call("locale-edit", JSONObject([("calls", .array([.object(call)]))]), runtime: environment.runtime)
     let result = answer["results"]?.arrayValue?.first ?? .null
@@ -134,26 +134,26 @@ public struct LocaleFiles: Sendable {
     if let syntax = result["syntax"]?.stringValue { return SaveResult(success: false, error: syntax) }
     guard let next = result["text"]?.stringValue else { throw Helper.Failure.refused("locale-edit answered no text") }
     // In place, as writeFileSync.
-    try Data(next.utf8).write(to: file)
+    try Posix.write(file, Data(next.utf8))
     await ensureGitAttributes(project: project)
     return SaveResult(success: true, error: nil)
   }
 
   /// A copy of the file as it was before QuartzHub (or QuartzControl) first edited it: the only
   /// exact answer to "what did the user change", once the edit is committed and merge=ours keeps it.
-  func captureBaseline(_ project: URL, _ code: String) throws {
+  func captureBaseline(_ project: String, _ code: String) throws {
     let source = Self.localeFile(project, code)
-    guard FileManager.default.fileExists(atPath: source.path), !FileManager.default.fileExists(atPath: Self.baselineFile(project, code).path) else { return }
+    guard FileManager.default.fileExists(atPath: source), !FileManager.default.fileExists(atPath: Self.baselineFile(project, code)) else { return }
     let dir = try QuartzGuiDirectory(project: project).create(Self.baselineDirectory)
     // The bytes, as copyFileSync: a locale file that is a symlink is copied as what it points to.
-    try Posix.write("\(dir)/\(code).ts", Data(contentsOf: source))
+    try Posix.write("\(dir)/\(code).ts", Posix.read(source))
   }
 
   // MARK: - What the user changed
 
   /// The second-best baseline: when the working tree differs from HEAD for that file, HEAD holds
   /// the version before the edits. A file equal to HEAD says nothing (the edits may be committed).
-  func gitBaseline(_ project: URL, _ code: String) async -> String? {
+  func gitBaseline(_ project: String, _ code: String) async -> String? {
     let relative = "quartz/i18n/locales/\(code).ts"
     let status = await ProcessRunner.run(environment.command("git", ["status", "--porcelain", "--", relative], in: project, timeout: .seconds(30)))
     guard status.success, !JS.trim(status.output).isEmpty else { return nil }
@@ -161,18 +161,18 @@ public struct LocaleFiles: Sendable {
     return show.success ? show.output : nil
   }
 
-  public func customizations(project: URL) async throws -> [Customizations] {
+  public func customizations(project: String) async throws -> [Customizations] {
     var texts: [(text: String, fileName: String)] = []
     var sources: [(code: String, source: BaselineSource)] = []
     for code in try list(project: project) {
       let current = Self.localeFile(project, code)
-      texts.append((try Self.readText(current), current.path))
+      texts.append((try Self.readText(current), current))
       let stored = Self.baselineFile(project, code)
-      if FileManager.default.fileExists(atPath: stored.path) {
-        texts.append((try Self.readText(stored), stored.path))
+      if FileManager.default.fileExists(atPath: stored) {
+        texts.append((try Self.readText(stored), stored))
         sources.append((code, .baseline))
       } else if let text = await gitBaseline(project, code) {
-        texts.append((text, stored.path))
+        texts.append((text, stored))
         sources.append((code, .git))
       } else {
         sources.append((code, .none))
@@ -198,26 +198,26 @@ public struct LocaleFiles: Sendable {
 
   /// `merge=ours` names a driver git does not ship: the line alone is inert (measured in
   /// QuartzControl against git 2.50.1), so both halves count.
-  func hasMergeDriver(_ project: URL) async -> Bool {
+  func hasMergeDriver(_ project: String) async -> Bool {
     let result = await ProcessRunner.run(environment.command("git", ["config", "--get", "merge.ours.driver"], in: project, timeout: .seconds(30)))
     return result.success && !JS.trim(result.stdout).isEmpty
   }
 
-  public func gitAttributesActive(project: URL) async -> Bool {
-    let path = project.appendingPathComponent(".gitattributes")
-    guard FileManager.default.fileExists(atPath: path.path), (try? Self.readText(path))?.contains(Self.mergeOursLine) == true else { return false }
+  public func gitAttributesActive(project: String) async -> Bool {
+    let path = "\(project)/.gitattributes"
+    guard FileManager.default.fileExists(atPath: path), (try? Self.readText(path))?.contains(Self.mergeOursLine) == true else { return false }
     return await hasMergeDriver(project)
   }
 
   /// Idempotent, after every successful save: the line, then the driver (`true` succeeds without
   /// writing, which git reads as "keep ours"). A project that is no repository gets the line only.
-  public func ensureGitAttributes(project: URL) async {
-    let path = project.appendingPathComponent(".gitattributes")
-    let existing = FileManager.default.fileExists(atPath: path.path) ? ((try? Self.readText(path)) ?? "") : ""
+  public func ensureGitAttributes(project: String) async {
+    let path = "\(project)/.gitattributes"
+    let existing = FileManager.default.fileExists(atPath: path) ? ((try? Self.readText(path)) ?? "") : ""
     if !existing.contains(Self.mergeOursLine) {
       // By scalar: "\r\n" is one Character, and endsWith('\n') is true for it.
       let next = !existing.isEmpty && existing.unicodeScalars.last != "\n" ? "\(existing)\n\(Self.mergeOursLine)\n" : "\(existing)\(Self.mergeOursLine)\n"
-      try? Data(next.utf8).write(to: path)
+      try? Posix.write(path, Data(next.utf8))
     }
     if await hasMergeDriver(project) { return }
     _ = await ProcessRunner.run(environment.command("git", ["config", "merge.ours.driver", "true"], in: project, timeout: .seconds(30)))

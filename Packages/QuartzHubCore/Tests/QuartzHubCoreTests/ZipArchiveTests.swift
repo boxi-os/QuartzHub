@@ -106,11 +106,11 @@ import Testing
     }
   }
 
-  static func run(_ tool: String, _ arguments: [String], in directory: URL? = nil) -> (status: Int32, output: String) {
+  static func run(_ tool: String, _ arguments: [String], in directory: String? = nil) -> (status: Int32, output: String) {
     let process = Process()
     process.executableURL = URL(fileURLWithPath: tool)
     process.arguments = arguments
-    if let directory { process.currentDirectoryURL = directory }
+    if let directory { process.currentDirectoryURL = URL(fileURLWithPath: directory) }
     let pipe = Pipe()
     process.standardOutput = pipe
     process.standardError = pipe
@@ -124,12 +124,12 @@ import Testing
   /// Python's zipfile and ditto, with unicode names, an empty file and stored and deflated entries.
   @Test(.enabled(if: ToolEnvironmentTests.hasRuntime, "Runtime/ fehlt: scripts/fetch-runtime.sh"))
   func foreignReadersReadQuartzHubsArchives() throws {
-    let scratch = try HostPathTests.Scratch()
+    let scratch = try HostPathTests.Scratch(umlaut: true)
     let deflated = Self.cases["created"]!.arrayValue!.first { $0["name"] == .string("deflated") }!
     var entries = try Self.entries(deflated["entries"]!)
     entries.append(ZipArchive.Entry(name: "files/content/Kapitel 1/Über uns.md", data: Data(String(repeating: "# Über uns\n\nText. ", count: 500).utf8)))
     entries.append(ZipArchive.Entry(name: "mimetype", data: Data("application/epub+zip".utf8), store: true))
-    let archive = scratch.url.appendingPathComponent("quartzhub.zip")
+    let archive = "\(scratch.path)/quartzhub.zip"
     try ZipArchive.write(entries, to: archive)
     let files = try ZipArchive.read(contentsOf: archive)
     let expected = Self.describe { files }
@@ -137,24 +137,24 @@ import Testing
     for entry in entries { #expect(files[entry.name] == entry.data, "\(entry.name)") }
 
     let node = "\(RuntimeLocation.repository.nodeBin)/node"
-    let quartzControl = Self.run(node, [Self.fixtures.appendingPathComponent("read-zip.cjs").path, archive.path])
+    let quartzControl = Self.run(node, [Self.fixtures.appendingPathComponent("read-zip.cjs").path, archive])
     #expect(quartzControl.status == 0)
     #expect(quartzControl.output.trimmingCharacters(in: .whitespacesAndNewlines) == JSJSON.compact(expected), "QuartzControls readZip")
 
-    let unzip = Self.run("/usr/bin/unzip", ["-t", archive.path])
+    let unzip = Self.run("/usr/bin/unzip", ["-t", archive])
     #expect(unzip.status == 0 && unzip.output.contains("No errors detected"), "unzip -t: \(unzip.output)")
 
-    let python = Self.run("/usr/bin/env", ["python3", "-I", "-c", "import zipfile, sys; z = zipfile.ZipFile(sys.argv[1]); print(z.testzip()); print(len(z.namelist()))", archive.path])
+    let python = Self.run("/usr/bin/env", ["python3", "-I", "-c", "import zipfile, sys; z = zipfile.ZipFile(sys.argv[1]); print(z.testzip()); print(len(z.namelist()))", archive])
     #expect(python.status == 0 && python.output == "None\n\(entries.count)\n", "zipfile: \(python.output)")
 
-    let target = scratch.url.appendingPathComponent("ditto")
-    let ditto = Self.run("/usr/bin/ditto", ["-x", "-k", archive.path, target.path])
+    let target = "\(scratch.path)/ditto"
+    let ditto = Self.run("/usr/bin/ditto", ["-x", "-k", archive, target])
     #expect(ditto.status == 0, "ditto: \(ditto.output)")
     for entry in entries {
-      #expect(FileManager.default.contents(atPath: target.appendingPathComponent(entry.name).path) == entry.data, "ditto: \(entry.name)")
+      #expect(FileManager.default.contents(atPath: "\(target)/\(entry.name)") == entry.data, "ditto: \(entry.name)")
     }
     // 0o644 from the external attributes, as QuartzControl writes them.
-    let mode = try FileManager.default.attributesOfItem(atPath: target.appendingPathComponent("mimetype").path)[.posixPermissions] as? Int
+    let mode = try FileManager.default.attributesOfItem(atPath: "\(target)/mimetype")[.posixPermissions] as? Int
     #expect(mode == 0o644)
   }
 
@@ -175,7 +175,7 @@ import Testing
   }
 
   @Test func aMissingFileIsSaidSo() {
-    #expect(throws: ZipArchive.Failure(message: L10n.t("main.zipFileMissing"))) { try ZipArchive.read(contentsOf: URL(fileURLWithPath: "/nonexistent/x.qtpl")) }
+    #expect(throws: ZipArchive.Failure(message: L10n.t("main.zipFileMissing"))) { try ZipArchive.read(contentsOf: "/nonexistent/x.qtpl") }
   }
 
   @Test func crc32IsZlibs() {

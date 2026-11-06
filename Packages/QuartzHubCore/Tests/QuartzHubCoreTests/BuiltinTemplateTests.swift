@@ -12,9 +12,9 @@ import Testing
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/builtin-template")
 
   @Test func findsAsQuartzControl() async throws {
-    let scratch = try HostPathTests.Scratch()
-    let work = TemplatePackageTests.realpath(scratch.url.path)
-    var packages: [String: Data] = ["bundled": try Data(contentsOf: BuiltinTemplate.bundledCopy)]
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = TemplatePackageTests.realpath(scratch.path)
+    var packages: [String: Data] = ["bundled": try Posix.read(BuiltinTemplate.bundledCopy)]
     let stored = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("packages.json"))).objectValue!
     for name in stored.keys { packages[name] = Data(base64Encoded: stored[name]!.stringValue!)! }
     // Exactly the ceiling and one byte more, as the golden builds them.
@@ -27,9 +27,9 @@ import Testing
     packages["atCeiling"] = try sized(25 * 1024 * 1024)
     packages["overCeiling"] = try sized(25 * 1024 * 1024 + 1)
     let served = packages
-    let profile = ProfileDirectory(URL(fileURLWithPath: work).appendingPathComponent("userData"))
-    let bundled = URL(fileURLWithPath: work).appendingPathComponent("resources/templates/qc-basic.qtpl")
-    let cache = profile.url.appendingPathComponent("templates/qc-basic.qtpl")
+    let profile = ProfileDirectory("\(work)/userData")
+    let bundled = "\(work)/resources/templates/qc-basic.qtpl"
+    let cache = "\(profile.path)/templates/qc-basic.qtpl"
     let now = Date()
 
     struct Net { var requests: [String] = []; var answer: JSONValue = .null }
@@ -45,14 +45,14 @@ import Testing
     }
     let template = BuiltinTemplate(profile: profile, bundled: bundled, fetch: fetch, now: { now })
 
-    func set(_ url: URL, _ name: JSONValue?, ageHours: Double) throws {
+    func set(_ url: String, _ name: JSONValue?, ageHours: Double) throws {
       guard let name = name?.stringValue else {
-        try? FileManager.default.removeItem(at: url)
+        try? FileManager.default.removeItem(atPath: url)
         return
       }
-      try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try packages[name]!.write(to: url)
-      try FileManager.default.setAttributes([.modificationDate: now.addingTimeInterval(-ageHours * 3600)], ofItemAtPath: url.path)
+      try Posix.mkdirs(NodePath.dirname(url))
+      try Posix.write(url, packages[name]!)
+      try FileManager.default.setAttributes([.modificationDate: now.addingTimeInterval(-ageHours * 3600)], ofItemAtPath: url)
     }
     func which(_ data: Data) -> String {
       packages.first { $0.value == data }?.key ?? SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
@@ -68,14 +68,14 @@ import Testing
       net.withLock { $0 = Net(answer: setup["answer"] ?? .null) }
       let found = await template.find()
       let got: JSONValue = found.map { found in
-        .object(JSONObject([("path", .string(found.path.path.replacingOccurrences(of: work, with: "@W@", options: .literal))), ("source", .string(found.source.rawValue)),
+        .object(JSONObject([("path", .string(found.path.replacingOccurrences(of: work, with: "@W@", options: .literal))), ("source", .string(found.source.rawValue)),
                             ("pages", .number(Double(found.pages)))]))
       } ?? .null
       #expect(got == step["result"], "\(name): \(JSJSON.compact(got))")
       #expect(JSONValue.array(net.withLock { $0.requests }.map(JSONValue.string)) == step["requests"], "\(name): Anfragen")
-      let after: JSONValue = FileManager.default.fileExists(atPath: cache.path) ? .string(which(try Data(contentsOf: cache))) : .null
+      let after: JSONValue = FileManager.default.fileExists(atPath: cache) ? .string(which(try Posix.read(cache))) : .null
       #expect(after == step["cacheAfter"], "\(name): Cache \(after)")
-      let leftovers = ((try? FileManager.default.contentsOfDirectory(atPath: cache.deletingLastPathComponent().path)) ?? []).filter { $0 != "qc-basic.qtpl" }
+      let leftovers = ((try? FileManager.default.contentsOfDirectory(atPath: NodePath.dirname(cache))) ?? []).filter { $0 != "qc-basic.qtpl" }
       #expect(leftovers.isEmpty, "\(name): \(leftovers)")
     }
   }

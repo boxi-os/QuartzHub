@@ -15,13 +15,13 @@ public struct TemplatePackage: Sendable {
   public enum TranslationScope: String, Sendable { case changed, all }
 
   /// `createSnapshot(project, kind, label)`.
-  public typealias Snapshot = @Sendable (_ project: URL, _ kind: String, _ label: String) async throws -> Void
+  public typealias Snapshot = @Sendable (_ project: String, _ kind: String, _ label: String) async throws -> Void
   /// `npm <arguments>` in the project.
-  public typealias Npm = @Sendable (_ arguments: [String], _ project: URL) async -> PluginCommands.Result
+  public typealias Npm = @Sendable (_ arguments: [String], _ project: String) async -> PluginCommands.Result
   /// `quartz plugin add <source>` without a snapshot (`installPluginSource`).
-  public typealias AddPlugin = @Sendable (_ source: String, _ project: URL) async -> PluginCommands.Result
+  public typealias AddPlugin = @Sendable (_ source: String, _ project: String) async -> PluginCommands.Result
   /// `git rev-parse --short HEAD`, trimmed; nil where it fails.
-  public typealias Head = @Sendable (_ project: URL) async -> String?
+  public typealias Head = @Sendable (_ project: String) async -> String?
   public typealias Progress = @Sendable (_ partId: String, _ message: String, _ done: Int, _ total: Int) -> Void
 
   /// Export order is import order: frames and plugins go through the Quartz CLI before the parts
@@ -68,12 +68,12 @@ public struct TemplatePackage: Sendable {
         let result = await ProcessRunner.run(environment.command("npm", arguments, in: project, timeout: .seconds(20 * 60)))
         return PluginCommands.Result(success: result.success, output: result.output)
       },
-      addPlugin: { source, project in await PluginCommands.shared.add(source: source, project: project.path, environment: environment) },
+      addPlugin: { source, project in await PluginCommands.shared.add(source: source, project: project, environment: environment) },
       head: { project in
         let result = await ProcessRunner.run(environment.command("git", ["rev-parse", "--short", "HEAD"], in: project, timeout: .seconds(30)))
         return result.success ? JS.trim(result.output) : nil
       },
-      snapshot: { project, kind, label in _ = try await snapshots.create(project: project, kind: kind, label: label) },
+      snapshot: { project, kind, label in _ = try await snapshots.create(project: URL(fileURLWithPath: project), kind: kind, label: label) },
       app: ("QuartzHub", appVersion))
   }
 
@@ -116,7 +116,7 @@ public struct TemplatePackage: Sendable {
   }
 
   public struct Exported: Equatable, Sendable {
-    public var file: URL
+    public var file: String
     public var bytes: Int
     public var parts: [Summary]
   }
@@ -138,7 +138,7 @@ public struct TemplatePackage: Sendable {
 
   /// What every part would bring from this project, for the export form's counts. A part that
   /// fails is left out, as there.
-  public func inspect(project: URL) async -> [Summary] {
+  public func inspect(project: String) async -> [Summary] {
     var out: [Summary] = []
     for id in Self.partIds {
       if id == "translations" {
@@ -151,7 +151,7 @@ public struct TemplatePackage: Sendable {
     return out
   }
 
-  public func export(project: URL, to file: URL, name: String, description: String? = nil, parts: [String], scope: TranslationScope) async throws -> Exported {
+  public func export(project: String, to file: String, name: String, description: String? = nil, parts: [String], scope: TranslationScope) async throws -> Exported {
     var entries: [ZipArchive.Entry] = []
     var summaries: [Summary] = []
     for id in Self.partIds where parts.contains(id) {
@@ -160,7 +160,7 @@ public struct TemplatePackage: Sendable {
       entries += collected.files
       summaries.append(Summary(id: id, stats: collected.stats, requires: collected.requires))
     }
-    var source = JSONObject([("projectName", .string(NodePath.basename(project.path)))])
+    var source = JSONObject([("projectName", .string(NodePath.basename(project)))])
     if let head = await head(project) { source["quartzHead"] = .string(head) }
     var manifest = JSONObject([("formatVersion", .number(Double(Self.formatVersion))), ("name", .string(name))])
     if let description, !description.isEmpty { manifest["description"] = .string(description) }
@@ -170,7 +170,7 @@ public struct TemplatePackage: Sendable {
     manifest["parts"] = .array(summaries.map(\.json))
     entries.insert(ZipArchive.Entry(name: Self.manifestFile, data: Data(JSJSON.stringify(.object(manifest)).utf8)), at: 0)
     try ZipArchive.write(entries, to: file)
-    let bytes = (try? FileManager.default.attributesOfItem(atPath: file.path)[.size] as? Int) ?? 0
+    let bytes = (try? FileManager.default.attributesOfItem(atPath: file)[.size] as? Int) ?? 0
     return Exported(file: file, bytes: bytes, parts: summaries)
   }
 
@@ -191,9 +191,9 @@ public struct TemplatePackage: Sendable {
 
   /// nil for no file, and for a file without a readable manifest; a ZIP the reader refuses throws
   /// its own sentence (the only place that knows what is wrong).
-  func load(_ path: URL) throws -> Loaded? {
+  func load(_ path: String) throws -> Loaded? {
     var isDirectory: ObjCBool = false
-    guard FileManager.default.fileExists(atPath: path.path, isDirectory: &isDirectory) else { return nil }
+    guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) else { return nil }
     if isDirectory.boolValue { return try loadLegacyFolder(path) }
     let files = try ZipArchive.read(contentsOf: path)
     guard let raw = files[Self.manifestFile], let manifest = try? JSJSON.parse(raw) else { return nil }
@@ -208,8 +208,8 @@ public struct TemplatePackage: Sendable {
   /// A package of the format before 1: a folder with fixed files and six categories. Read, never
   /// written. Its `plugins.json` held the theme and the frames' entries too; the frames' carry
   /// absolute paths of the machine that wrote them and are dropped (the frames part registers anew).
-  func loadLegacyFolder(_ dir: URL) throws -> Loaded? {
-    guard let data = FileManager.default.contents(atPath: dir.appendingPathComponent(Self.manifestFile).path),
+  func loadLegacyFolder(_ dir: String) throws -> Loaded? {
+    guard let data = FileManager.default.contents(atPath: "\(dir)/\(Self.manifestFile)"),
           let old = try? JSJSON.parse(data), old["categories"]?.arrayValue != nil else { return nil }
     var files = ZipArchive.Files()
     var parts: [JSONValue] = []
@@ -218,7 +218,7 @@ public struct TemplatePackage: Sendable {
       parts.append(Summary(id: id, stats: stats, requires: []).json)
     }
     func readJson(_ name: String) -> JSONValue? {
-      guard let data = FileManager.default.contents(atPath: dir.appendingPathComponent(name).path), let value = try? JSJSON.parse(data) else { return nil }
+      guard let data = FileManager.default.contents(atPath: "\(dir)/\(name)"), let value = try? JSJSON.parse(data) else { return nil }
       return value
     }
 
@@ -252,21 +252,21 @@ public struct TemplatePackage: Sendable {
       }
       if !rest.isEmpty { put("plugins", .object(JSONObject([("entries", .array(rest))])), JSONObject([("plugins", .number(Double(rest.count)))])) }
     }
-    let scss = dir.appendingPathComponent("custom.scss")
-    if FileManager.default.fileExists(atPath: scss.path) {
-      let imported = Self.listFilesFlat(dir.appendingPathComponent("imported"))
-      for name in imported { files.set("files/styles/imported/\(name)", try Data(contentsOf: dir.appendingPathComponent("imported").appendingPathComponent(name))) }
+    let scss = "\(dir)/custom.scss"
+    if FileManager.default.fileExists(atPath: scss) {
+      let imported = Self.listFilesFlat("\(dir)/imported")
+      for name in imported { files.set("files/styles/imported/\(name)", try Posix.read("\(dir)/imported/\(name)")) }
       let relative = imported.map { JSONValue.string("imported/\($0)") }
       put("styles", .object(JSONObject([("customScss", .string(try LocaleFiles.readText(scss))), ("order", .array(relative)), ("files", .array(relative))])),
           JSONObject([("files", .number(Double(relative.count)))]))
     }
-    let fontNames = Self.listFilesFlat(dir.appendingPathComponent("fonts"))
+    let fontNames = Self.listFilesFlat("\(dir)/fonts")
     if !fontNames.isEmpty {
-      for name in fontNames { files.set("files/fonts/\(name)", try Data(contentsOf: dir.appendingPathComponent("fonts").appendingPathComponent(name))) }
+      for name in fontNames { files.set("files/fonts/\(name)", try Posix.read("\(dir)/fonts/\(name)")) }
       put("fonts", .object(JSONObject([("fontFaceCss", .null), ("files", .array(fontNames.map(JSONValue.string)))])), JSONObject([("files", .number(Double(fontNames.count)))]))
     }
     let manifest = JSONObject([
-      ("formatVersion", .number(0)), ("name", old["name"] ?? .string(NodePath.basename(dir.path))),
+      ("formatVersion", .number(0)), ("name", old["name"] ?? .string(NodePath.basename(dir))),
       ("createdAt", old["createdAt"] ?? .string("1970-01-01T00:00:00.000Z")),
       ("createdBy", .object(JSONObject([("app", .string("QuartzControl")), ("appVersion", .string(""))]))),
       ("source", .object(JSONObject())), ("parts", .array(parts))
@@ -278,7 +278,7 @@ public struct TemplatePackage: Sendable {
 
   /// A real dry run: both the package and the project read, per part what would be added and what
   /// exists already, before anything is written. A part whose plan fails is "unknown", not fatal.
-  public func plan(project: URL, package path: URL) async throws -> Plan? {
+  public func plan(project: String, package path: String) async throws -> Plan? {
     guard let loaded = try load(path) else { return nil }
     var parts: [PartPlan] = []
     var unknown: [JSONValue] = []
@@ -300,7 +300,7 @@ public struct TemplatePackage: Sendable {
     return Plan(manifest: loaded.manifest, parts: parts, unknownParts: unknown, legacy: loaded.legacy)
   }
 
-  public func importPackage(project: URL, package path: URL, parts selected: [String], strategy: Strategy,
+  public func importPackage(project: String, package path: String, parts selected: [String], strategy: Strategy,
                             progress: Progress? = nil) async throws -> Imported {
     guard let loaded = try load(path) else { return Imported(success: false, warnings: ["packageUnreadable"]) }
     // The most far-reaching thing the app does to a project, and what a snapshot is for.
@@ -319,7 +319,7 @@ public struct TemplatePackage: Sendable {
       do {
         // The three that share custom.scss, one at a time under the stylesheets' lock.
         if ["styles", "fonts", "cssVariables"].contains(id) {
-          try await ProjectLock.styles.run(project.path) { try await applyPart(id, payload, run) }
+          try await ProjectLock.styles.run(project) { try await applyPart(id, payload, run) }
         } else {
           try await applyPart(id, payload, run)
         }
@@ -341,13 +341,13 @@ public struct TemplatePackage: Sendable {
 
   /// One import's warnings and progress; the parts run one after another.
   final class Run: @unchecked Sendable {
-    let project: URL
+    let project: String
     let strategy: Strategy
     let files: ZipArchive.Files
     var warnings: [String] = []
     var progress: (String) -> Void = { _ in }
 
-    init(project: URL, strategy: Strategy, files: ZipArchive.Files) {
+    init(project: String, strategy: Strategy, files: ZipArchive.Files) {
       self.project = project
       self.strategy = strategy
       self.files = files
@@ -363,7 +363,7 @@ public struct TemplatePackage: Sendable {
     var requires: [Dependency] = []
   }
 
-  func collect(_ id: String, _ project: URL, scope: TranslationScope) async throws -> Collected? {
+  func collect(_ id: String, _ project: String, scope: TranslationScope) async throws -> Collected? {
     switch id {
     case "appearance": try await collectAppearance(project)
     case "cssVariables": try collectVariables(project)
@@ -441,36 +441,37 @@ public struct TemplatePackage: Sendable {
   /// `JSON.stringify` for a comparison, with `undefined` for what is not there.
   static func stringified(_ value: JSONValue?) -> String { value.map(JSJSON.compact) ?? "undefined" }
 
-  func readConfig(_ project: URL) async throws -> QuartzConfig { try await ConfigFile.read(project: project, runtime: runtime) }
-  func writeConfig(_ config: QuartzConfig, _ project: URL) async throws { try await ConfigFile.write(config, project: project, runtime: runtime) }
+  func readConfig(_ project: String) async throws -> QuartzConfig { try await ConfigFile.read(project: project, runtime: runtime) }
+  func writeConfig(_ config: QuartzConfig, _ project: String) async throws { try await ConfigFile.write(config, project: project, runtime: runtime) }
 
-  static func hasNodeModule(_ project: URL, _ name: String) -> Bool {
-    FileManager.default.fileExists(atPath: NodePath.join(project.path, "node_modules", name, "package.json"))
+  static func hasNodeModule(_ project: String, _ name: String) -> Bool {
+    FileManager.default.fileExists(atPath: NodePath.join(project, "node_modules", name, "package.json"))
   }
 
-  static func installedVersion(_ project: URL, _ name: String) -> JSONValue? {
-    guard let data = FileManager.default.contents(atPath: NodePath.join(project.path, "node_modules", name, "package.json")),
+  static func installedVersion(_ project: String, _ name: String) -> JSONValue? {
+    guard let data = FileManager.default.contents(atPath: NodePath.join(project, "node_modules", name, "package.json")),
           let value = try? JSJSON.parse(data) else { return nil }
     return value["version"]
   }
 
-  static func stylesDir(_ project: URL) -> String { NodePath.join(project.path, "quartz", "styles") }
-  static func fontsDir(_ project: URL) -> String { NodePath.join(project.path, "quartz", "static", "fonts") }
-  static func staticDir(_ project: URL) -> String { NodePath.join(project.path, "quartz", "static") }
+  static func stylesDir(_ project: String) -> String { NodePath.join(project, "quartz", "styles") }
+  static func fontsDir(_ project: String) -> String { NodePath.join(project, "quartz", "static", "fonts") }
+  static func staticDir(_ project: String) -> String { NodePath.join(project, "quartz", "static") }
 
   static func exists(_ path: String) -> Bool { FileManager.default.fileExists(atPath: path) }
 
   static func write(_ data: Data, to path: String) throws {
-    try FileManager.default.createDirectory(atPath: NodePath.dirname(path), withIntermediateDirectories: true)
-    try data.write(to: URL(fileURLWithPath: path))
+    // POSIX: through a URL a font "Schöne.woff2" from a package landed decomposed.
+    try Posix.mkdirs(NodePath.dirname(path))
+    try Posix.write(path, data)
   }
 
   /// JavaScript's default `sort()`: by UTF-16 code units.
   static func jsSorted(_ names: [String]) -> [String] { names.sorted { $0.utf16.lexicographicallyPrecedes($1.utf16) } }
 
   /// The files of one folder, not its folders and not its links.
-  static func listFilesFlat(_ dir: URL) -> [String] {
-    jsSorted(LayoutFrames.directoryEntriesWithKind(dir.path).filter { $0.kind == .file }.map(\.name))
+  static func listFilesFlat(_ dir: String) -> [String] {
+    jsSorted(LayoutFrames.directoryEntriesWithKind(dir).filter { $0.kind == .file }.map(\.name))
   }
 
   /// Every file under a folder but the hidden ones, links followed (a link to a folder descended
@@ -479,7 +480,7 @@ public struct TemplatePackage: Sendable {
     guard exists(dir) else { return [] }
     if seen.isEmpty, let real = realpath(dir) { seen.insert(real) }
     var out: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) where !entry.name.hasPrefix(".") {
+    for entry in LayoutFrames.directoryEntriesWithKind(dir) where !entry.name.hasPrefix(".") {
       let full = NodePath.join(dir, entry.name)
       let rel = prefix.isEmpty ? entry.name : "\(prefix)/\(entry.name)"
       var isDirectory = entry.kind == .directory
@@ -546,7 +547,7 @@ public struct TemplatePackage: Sendable {
 
   // MARK: - appearance
 
-  func collectAppearance(_ project: URL) async throws -> Collected? {
+  func collectAppearance(_ project: String) async throws -> Collected? {
     let config = try await readConfig(project)
     var payload = JSONObject([("colors", Self.orEmptyObject(config.theme["colors"])), ("typography", Self.orEmptyObject(config.theme["typography"]))])
     if let origin = config.theme["fontOrigin"] { payload["fontOrigin"] = origin }
@@ -595,8 +596,8 @@ public struct TemplatePackage: Sendable {
                      dark: value["dark"].flatMap { $0 == .null ? nil : JS.string($0) }, lightOnly: value["lightOnly"] == .bool(true))
   }
 
-  func collectVariables(_ project: URL) throws -> Collected? {
-    let overrides = try StyleSheets.variableOverrides(project: project.path)
+  func collectVariables(_ project: String) throws -> Collected? {
+    let overrides = try StyleSheets.variableOverrides(project: project)
     guard !overrides.isEmpty else { return nil }
     return Collected(payload: .object(JSONObject([("overrides", .array(overrides.map(Self.json)))])),
                      stats: JSONObject([("variables", .number(Double(overrides.count)))]))
@@ -604,7 +605,7 @@ public struct TemplatePackage: Sendable {
 
   func planVariables(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
     var existing: [String: VariableOverride] = [:]
-    for override in try StyleSheets.variableOverrides(project: run.project.path) { existing[override.key] = override }
+    for override in try StyleSheets.variableOverrides(project: run.project) { existing[override.key] = override }
     var plan = PartPlan(id: "cssVariables")
     for override in try Self.list(payload["overrides"], "overrides") {
       let key = override["key"].map(JS.string) ?? "undefined"
@@ -624,24 +625,24 @@ public struct TemplatePackage: Sendable {
     func set(_ override: VariableOverride) {
       if merged.updateValue(override, forKey: override.key) == nil { order.append(override.key) }
     }
-    for override in try StyleSheets.variableOverrides(project: run.project.path) { set(override) }
+    for override in try StyleSheets.variableOverrides(project: run.project) { set(override) }
     for override in try await inFormOfTarget(run.project, try Self.list(payload["overrides"], "overrides").map(Self.override)) {
       if run.strategy == .projectWins && merged[override.key] != nil { continue }
       set(override)
     }
-    try await StyleSheets.saveVariableOverrides(order.map { merged[$0]! }, project: run.project.path)
+    try await StyleSheets.saveVariableOverrides(order.map { merged[$0]! }, project: run.project)
   }
 
   /// A light-only value goes into a project not moved to `_quartzcontrol.scss` with its dark half
   /// explicit, as the Variables tab writes it there (1.0.x drops a third rule): the dark value the
   /// tab shows as the base, from the variable graph, then from Quartz's own catalog.
-  func inFormOfTarget(_ project: URL, _ overrides: [VariableOverride]) async throws -> [VariableOverride] {
+  func inFormOfTarget(_ project: String, _ overrides: [VariableOverride]) async throws -> [VariableOverride] {
     let lightOnly = { (o: VariableOverride) in o.lightOnly && JS.trim(o.dark ?? "").isEmpty }
-    guard overrides.contains(where: lightOnly), !StyleSheets.isMoved(try StyleSheets.readSources(project: project.path)) else { return overrides }
+    guard overrides.contains(where: lightOnly), !StyleSheets.isMoved(try StyleSheets.readSources(project: project)) else { return overrides }
     let config = try await readConfig(project)
     let theme = Self.themeEntryIndex(config.plugins).map { config.plugins[$0] }
     let themeId = theme.flatMap { $0.enabled ? $0.object["options"]?["theme"]?.stringValue : nil }
-    let graph = try VariableGraph.graph(project: project.path, themeId: themeId)
+    let graph = try VariableGraph.graph(project: project, themeId: themeId)
     let colors = config.theme["colors"]?.objectValue
     return overrides.map { o in
       guard lightOnly(o) else { return o }
@@ -660,7 +661,7 @@ public struct TemplatePackage: Sendable {
 
   // MARK: - theme
 
-  func collectTheme(_ project: URL) async throws -> Collected? {
+  func collectTheme(_ project: String) async throws -> Collected? {
     let config = try await readConfig(project)
     guard let index = Self.themeEntryIndex(config.plugins) else { return nil }
     let entry = config.plugins[index].object
@@ -755,8 +756,8 @@ public struct TemplatePackage: Sendable {
 
   /// The stylesheets of the other template form (the 31 before 1.1 against the twelve), as far as
   /// this project loads them; `older` when the package brings the twelve.
-  static func otherFormStylesheets(_ order: [String], _ project: URL) throws -> (older: Bool, paths: [String]) {
-    let set = try StyleFiles.list(project: project.path)
+  static func otherFormStylesheets(_ order: [String], _ project: String) throws -> (older: Bool, paths: [String]) {
+    let set = try StyleFiles.list(project: project)
     let loaded = set.files.filter(\.imported).map(\.relativePath)
     if StylesheetConsolidation.isConsolidatedOrder(order) { return (true, loaded.filter(StylesheetConsolidation.isLegacyOnly)) }
     if order.contains(where: StylesheetConsolidation.isLegacyOnly) && set.consolidated { return (false, loaded.filter(StylesheetConsolidation.isConsolidatedOnly)) }
@@ -770,7 +771,7 @@ public struct TemplatePackage: Sendable {
   static func scssUnder(_ dir: String, _ depth: Int = 0) -> [String] {
     guard depth <= 6, exists(dir) else { return [] }
     var out: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) {
+    for entry in LayoutFrames.directoryEntriesWithKind(dir) {
       let path = NodePath.join(dir, entry.name)
       if entry.kind == .directory { out += scssUnder(path, depth + 1) } else if JSText.endsWith(entry.name, ".scss") { out.append(path) }
     }
@@ -778,7 +779,7 @@ public struct TemplatePackage: Sendable {
   }
 
   /// The template variables the package's stylesheets read and neither they nor the project define.
-  static func missingTemplateVariables(_ files: [String], _ project: URL, _ packageFiles: ZipArchive.Files) throws -> [String] {
+  static func missingTemplateVariables(_ files: [String], _ project: String, _ packageFiles: ZipArchive.Files) throws -> [String] {
     var used: [String] = []
     var defined: Set<String> = []
     for relativePath in files {
@@ -788,20 +789,20 @@ public struct TemplatePackage: Sendable {
     }
     if used.isEmpty { return [] }
     for path in scssUnder(stylesDir(project)) {
-      for match in JSText.matches(try LocaleFiles.readText(URL(fileURLWithPath: path)), definedVariable) { defined.insert(match.groups[1]!) }
+      for match in JSText.matches(try LocaleFiles.readText(path), definedVariable) { defined.insert(match.groups[1]!) }
     }
     return jsSorted(used.filter { !defined.contains($0) })
   }
 
-  func collectStyles(_ project: URL) throws -> Collected? {
-    let set = try StyleFiles.list(project: project.path)
+  func collectStyles(_ project: String) throws -> Collected? {
+    let set = try StyleFiles.list(project: project)
     let body = Self.stripAllManaged(set.main.content)
     let files = set.files.map(\.relativePath)
     if body.isEmpty && files.isEmpty { return nil }
     var entries: [ZipArchive.Entry] = []
     for relativePath in files {
-      let path = StyleSheets.styleFile(project.path, relativePath)
-      if Self.exists(URL(fileURLWithPath: path).path) { entries.append(ZipArchive.Entry(name: "files/styles/\(relativePath)", data: try Posix.read(path))) }
+      let path = StyleSheets.styleFile(project, relativePath)
+      if Self.exists(path) { entries.append(ZipArchive.Entry(name: "files/styles/\(relativePath)", data: try Posix.read(path))) }
     }
     let payload = JSONObject([("customScss", .string(body)), ("order", .array(set.files.filter(\.imported).map { .string($0.relativePath) })),
                               ("files", .array(files.map(JSONValue.string)))])
@@ -820,7 +821,7 @@ public struct TemplatePackage: Sendable {
       if Self.exists(target) { plan.conflicts.append(.string(relativePath)) } else { plan.additions.append(.string(relativePath)) }
     }
     let customScss = payload["customScss"].map(JS.string) ?? "undefined"
-    let current = Self.stripAllManaged(try StyleSheets.readCustom(project: run.project.path).content)
+    let current = Self.stripAllManaged(try StyleSheets.readCustom(project: run.project).content)
     if current != customScss { plan.conflicts.append(.string("custom.scss")) }
     if current != customScss && Self.projectWinsCustomScss(current, customScss) != current { plan.notes.append("customScssMerged") }
     let other = try Self.otherFormStylesheets(try Self.names(payload["order"], "order"), run.project)
@@ -846,22 +847,22 @@ public struct TemplatePackage: Sendable {
     }
     let order = try Self.names(payload["order"], "order")
     let old = try Self.otherFormStylesheets(order, project).paths
-    let before = try StyleSheets.readCustom(project: project.path)
-    var existingOrder = try StyleFiles.list(project: project.path).files.filter(\.imported).map(\.relativePath)
+    let before = try StyleSheets.readCustom(project: project)
+    var existingOrder = try StyleFiles.list(project: project).files.filter(\.imported).map(\.relativePath)
       .filter { !(run.strategy == .packageWins && old.contains($0)) }
     let customScss = payload["customScss"].map(JS.string) ?? "undefined"
     let body = run.strategy == .packageWins ? customScss : Self.projectWinsCustomScss(Self.stripAllManaged(before.content), customScss)
-    try StyleSheets.replaceCustomBodyNow(body, project: project.path)
+    try StyleSheets.replaceCustomBodyNow(body, project: project)
     // The package's order, restricted to files that exist here; under projectWins with the other
     // form loaded, the package's stylesheets are written but not loaded.
     var packageOrder = order.filter { Self.exists(NodePath.join(Self.stylesDir(project), $0)) }
       .filter { !(run.strategy == .projectWins && !old.isEmpty && !existingOrder.contains($0)) }
     if run.strategy == .packageWins {
       for path in existingOrder where !packageOrder.contains(path) { packageOrder.append(path) }
-      try StyleSheets.setImportOrderNow(packageOrder, project: project.path)
+      try StyleSheets.setImportOrderNow(packageOrder, project: project)
     } else {
       for path in packageOrder where !existingOrder.contains(path) { existingOrder.append(path) }
-      try StyleSheets.setImportOrderNow(existingOrder, project: project.path)
+      try StyleSheets.setImportOrderNow(existingOrder, project: project)
     }
   }
 
@@ -879,13 +880,13 @@ public struct TemplatePackage: Sendable {
     return ManagedBlocks.relativeFontUrls(body)
   }
 
-  func collectFonts(_ project: URL) throws -> Collected? {
-    let names = Self.listFilesFlat(URL(fileURLWithPath: Self.fontsDir(project)))
-    let sources = try StyleSheets.readSources(project: project.path)
+  func collectFonts(_ project: String) throws -> Collected? {
+    let names = Self.listFilesFlat(Self.fontsDir(project))
+    let sources = try StyleSheets.readSources(project: project)
     let fontFaceCss = StyleSheets.managedBody(sources, "fonts")
     let googleFontsCss = StyleSheets.managedBody(sources, "google-fonts")
     if names.isEmpty && (fontFaceCss ?? "").isEmpty && (googleFontsCss ?? "").isEmpty { return nil }
-    let entries = try names.map { ZipArchive.Entry(name: "files/fonts/\($0)", data: try Data(contentsOf: URL(fileURLWithPath: NodePath.join(Self.fontsDir(project), $0)))) }
+    let entries = try names.map { ZipArchive.Entry(name: "files/fonts/\($0)", data: try Posix.read(NodePath.join(Self.fontsDir(project), $0))) }
     let payload = JSONObject([("fontFaceCss", fontFaceCss.map(JSONValue.string) ?? .null), ("googleFontsCss", googleFontsCss.map(JSONValue.string) ?? .null),
                               ("files", .array(names.map(JSONValue.string)))])
     return Collected(payload: .object(payload), files: entries, stats: JSONObject([("files", .number(Double(names.count)))]))
@@ -914,20 +915,20 @@ public struct TemplatePackage: Sendable {
     func remove(_ names: [String]) { for name in names where !removed.contains(name) { removed.append(name) } }
     if let faceCss, JS.truthy(faceCss) {
       let face = JS.string(faceCss)
-      let current = Self.currentFontFaceCss(try StyleSheets.readSources(project: project.path))
+      let current = Self.currentFontFaceCss(try StyleSheets.readSources(project: project))
       if let current, !current.isEmpty, current != face {
         plan.conflicts.append(.string("@font-face"))
-        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project.path))
+        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project))
       } else if (current ?? "").isEmpty {
         plan.additions.append(.string("@font-face"))
       }
     }
     if let google, JS.truthy(google) {
       let css = JS.string(google)
-      let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project.path), "google-fonts")
+      let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project), "google-fonts")
       if let current, !current.isEmpty, current != css {
         plan.conflicts.append(.string("@font-face (Google)"))
-        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project.path))
+        remove(try fonts.fontFilesReplacedRulesWouldRemove(previous: current, incoming: incoming, project: project))
       } else if (current ?? "").isEmpty {
         plan.additions.append(.string("@font-face (Google)"))
       }
@@ -939,7 +940,7 @@ public struct TemplatePackage: Sendable {
   func applyFonts(_ payload: JSONValue, _ run: Run) async throws {
     let project = run.project
     let faceCss = Self.incomingFontFaceCss(payload)
-    try FileManager.default.createDirectory(atPath: Self.fontsDir(project), withIntermediateDirectories: true)
+    try Posix.mkdirs(Self.fontsDir(project))
     for name in try Self.names(payload["files"], "files") {
       guard let data = run.files["files/fonts/\(name)"] else { continue }
       guard let target = PackagePaths.writable(Self.fontsDir(project), name) else {
@@ -953,38 +954,38 @@ public struct TemplatePackage: Sendable {
           continue
         }
       }
-      try data.write(to: URL(fileURLWithPath: target))
+      try Posix.write(target, data)
     }
     // What the replaced rules pointed at goes too, once both blocks are written (packageWins only).
     var replaced: [String] = []
     if let previous = try applyGoogleFontsCss(project, payload["googleFontsCss"].flatMap { JS.truthy($0) ? JS.string($0) : nil }, run.strategy),
        !previous.isEmpty { replaced.append(previous) }
     if let faceCss, JS.truthy(faceCss),
-       let previous = try writeFontFaceBlock(project, try StyleSheets.readSources(project: project.path), JS.string(faceCss), run.strategy), !previous.isEmpty {
+       let previous = try writeFontFaceBlock(project, try StyleSheets.readSources(project: project), JS.string(faceCss), run.strategy), !previous.isEmpty {
       replaced.append(previous)
     }
     for css in replaced {
-      for name in try await fonts.deleteFontFilesOfReplacedRules(css, project: project.path) { run.warn("fontRemoved:\(name)") }
+      for name in try await fonts.deleteFontFilesOfReplacedRules(css, project: project) { run.warn("fontRemoved:\(name)") }
     }
   }
 
   /// One request's answer, replaced whole: under projectWins a project with its own keeps them.
   /// Answers the block it replaced.
-  func applyGoogleFontsCss(_ project: URL, _ css: String?, _ strategy: Strategy) throws -> String? {
+  func applyGoogleFontsCss(_ project: String, _ css: String?, _ strategy: Strategy) throws -> String? {
     guard let css else { return nil }
-    let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project.path), "google-fonts")
+    let current = StyleSheets.managedBody(try StyleSheets.readSources(project: project), "google-fonts")
     if current == css || (!(current ?? "").isEmpty && strategy == .projectWins) { return nil }
-    try StyleSheets.writeManagedBlocksNow(["google-fonts": css], project: project.path)
+    try StyleSheets.writeManagedBlocksNow(["google-fonts": css], project: project)
     return current
   }
 
   /// The package's @font-face rules; under projectWins appended to the project's, only the new
   /// ones. Answers the block they replaced (packageWins only).
-  func writeFontFaceBlock(_ project: URL, _ sources: StyleSheets.Sources, _ faceCss: String, _ strategy: Strategy) throws -> String? {
+  func writeFontFaceBlock(_ project: String, _ sources: StyleSheets.Sources, _ faceCss: String, _ strategy: Strategy) throws -> String? {
     let current = Self.currentFontFaceCss(sources)
     let hasCurrent = !(current ?? "").isEmpty
     let body = hasCurrent && strategy == .projectWins ? ManagedBlocks.joinUniqueRules([current!, faceCss]) : current == faceCss ? current! : faceCss
-    try StyleSheets.writeManagedBlocksNow(["fonts": body], project: project.path)
+    try StyleSheets.writeManagedBlocksNow(["fonts": body], project: project)
     return strategy == .packageWins && hasCurrent && current != body ? StyleSheets.managedBody(sources, "fonts") : nil
   }
 
@@ -993,14 +994,14 @@ public struct TemplatePackage: Sendable {
   /// The design's other files under quartz/static (snippets, logos, backgrounds), not the fonts.
   static let staticMaxBytes = 25 * 1024 * 1024
 
-  func collectStatic(_ project: URL) throws -> Collected? {
+  func collectStatic(_ project: String) throws -> Collected? {
     let dir = Self.staticDir(project)
     let names = Self.listFilesDeep(dir).filter { !JSText.startsWith($0, "fonts/") }
     if names.isEmpty { return nil }
     var entries: [ZipArchive.Entry] = []
     var bytes = 0
     for name in names {
-      let data = try Data(contentsOf: URL(fileURLWithPath: NodePath.join(dir, name)))
+      let data = try Posix.read(NodePath.join(dir, name))
       bytes += data.count
       // Thrown, not trimmed: a package that silently dropped half its images would be worse.
       if bytes > Self.staticMaxBytes { throw TemplateFailure(message: L10n.t("main.templateStaticTooLarge", ["limit": String(Self.staticMaxBytes / 1024 / 1024)])) }
@@ -1013,10 +1014,10 @@ public struct TemplatePackage: Sendable {
   func planStatic(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
     let dir = Self.staticDir(run.project)
     var plan = PartPlan(id: "static")
-    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project.path)
+    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project)
     var unrecorded: Set<String> = []
-    if ProjectIcon.hasUnrecordedIcon(project: run.project.path) { unrecorded.insert("icon.png") }
-    if ProjectIcon.hasUnrecordedDarkIcon(project: run.project.path) { unrecorded.insert("icon-dark.png") }
+    if ProjectIcon.hasUnrecordedIcon(project: run.project) { unrecorded.insert("icon.png") }
+    if ProjectIcon.hasUnrecordedDarkIcon(project: run.project) { unrecorded.insert("icon-dark.png") }
     for name in try Self.names(payload["files"], "files") {
       guard let target = PackagePaths.writable(dir, name) else {
         plan.notes.append("outside:\(name)")
@@ -1039,7 +1040,7 @@ public struct TemplatePackage: Sendable {
   func applyStatic(_ payload: JSONValue, _ run: Run) throws {
     let dir = Self.staticDir(run.project)
     // The project's own picture, chosen in the app, is theirs and not a design.
-    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project.path)
+    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project)
     for name in try Self.names(payload["files"], "files") {
       guard let data = run.files["files/static/\(name)"] else { continue }
       guard let target = PackagePaths.writable(dir, name) else {
@@ -1063,9 +1064,9 @@ public struct TemplatePackage: Sendable {
 
   // MARK: - layout
 
-  func collectLayout(_ project: URL) async throws -> Collected? {
+  func collectLayout(_ project: String) async throws -> Collected? {
     let config = try await readConfig(project)
-    let widths = LayoutFrames.widths(project: project.path)
+    let widths = LayoutFrames.widths(project: project)
     let layout = config.layout
     let payload = JSONObject([("layout", layout.map(JSONValue.object) ?? .null),
                               ("breakpoints", .object(JSONObject([("tablet", .number(widths.tablet)), ("mobile", .number(widths.mobile))])))])
@@ -1077,7 +1078,7 @@ public struct TemplatePackage: Sendable {
     let config = try await readConfig(run.project)
     var plan = PartPlan(id: "layout")
     if Self.stringified(config.layout.map(JSONValue.object) ?? .null) != Self.stringified(payload["layout"]) { plan.conflicts.append(.string("layout")) }
-    let current = LayoutFrames.widths(project: run.project.path)
+    let current = LayoutFrames.widths(project: run.project)
     if payload["breakpoints"]?["tablet"] != .number(current.tablet) || payload["breakpoints"]?["mobile"] != .number(current.mobile) {
       plan.conflicts.append(.string("breakpoints"))
     }
@@ -1096,7 +1097,7 @@ public struct TemplatePackage: Sendable {
     }
     // Every frame's media queries carry the widths, so every frame is rewritten.
     let breakpoints = payload["breakpoints"]
-    try await frames.saveWidths((JS.toNumber(breakpoints?["tablet"]), JS.toNumber(breakpoints?["mobile"])), project: run.project.path)
+    try await frames.saveWidths((JS.toNumber(breakpoints?["tablet"]), JS.toNumber(breakpoints?["mobile"])), project: run.project)
   }
 
   // MARK: - frames
@@ -1114,14 +1115,14 @@ public struct TemplatePackage: Sendable {
     return frame["id"] ?? .null
   }
 
-  func collectFrames(_ project: URL) -> Collected? {
-    let list = LayoutFrames.listFrames(project: project.path)
+  func collectFrames(_ project: String) -> Collected? {
+    let list = LayoutFrames.listFrames(project: project)
     guard !list.isEmpty else { return nil }
     return Collected(payload: .object(JSONObject([("frames", .array(list))])), stats: JSONObject([("frames", .number(Double(list.count)))]))
   }
 
   func planFrames(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
-    let existing = Set(LayoutFrames.listFrames(project: run.project.path).compactMap { $0["id"]?.stringValue })
+    let existing = Set(LayoutFrames.listFrames(project: run.project).compactMap { $0["id"]?.stringValue })
     var plan = PartPlan(id: "frames")
     for frame in try Self.list(payload["frames"], "frames") {
       // The question saveFrame will ask, asked while the answer is worth something, with its reason.
@@ -1135,7 +1136,7 @@ public struct TemplatePackage: Sendable {
   }
 
   func applyFrames(_ payload: JSONValue, _ run: Run) async throws {
-    let existing = Set(LayoutFrames.listFrames(project: run.project.path).compactMap { $0["id"]?.stringValue })
+    let existing = Set(LayoutFrames.listFrames(project: run.project).compactMap { $0["id"]?.stringValue })
     for frame in try Self.list(payload["frames"], "frames") {
       let shown = JS.string(Self.frameShown(frame))
       if let id = frame["id"]?.stringValue, existing.contains(id), run.strategy == .projectWins {
@@ -1145,7 +1146,7 @@ public struct TemplatePackage: Sendable {
       run.progress(shown)
       // saveFrame writes the frame's files and registers it with `quartz plugin add <its dir>`,
       // which is why a frame's entry never travels in the plugins part.
-      let result = try await frames.saveFrame(frame, project: run.project.path, snapshot: false)
+      let result = try await frames.saveFrame(frame, project: run.project, snapshot: false)
       guard result.success else {
         run.warn("frameFailed:\(L10n.t("main.frameNameAndReason", ["name": Self.frameLabel(frame), "reason": JSText.slice(result.output, -400)]))")
         continue
@@ -1155,7 +1156,7 @@ public struct TemplatePackage: Sendable {
       let id = frame["id"]?.stringValue ?? ""
       var config = try await readConfig(run.project)
       if !config.plugins.contains(where: { $0.name == id }) {
-        config.plugins.append(PluginEntry(object: JSONObject([("name", .string(id)), ("source", .string(try LayoutFrames.frameDirectory(project: run.project.path, id: id))),
+        config.plugins.append(PluginEntry(object: JSONObject([("name", .string(id)), ("source", .string(try LayoutFrames.frameDirectory(project: run.project, id: id))),
                                                               ("enabled", .bool(true))])))
         try await writeConfig(config, run.project)
       }
@@ -1204,9 +1205,9 @@ public struct TemplatePackage: Sendable {
     return (options, added.keys, kept, pinned)
   }
 
-  func collectPlugins(_ project: URL) async throws -> Collected? {
+  func collectPlugins(_ project: String) async throws -> Collected? {
     let config = try await readConfig(project)
-    let frameIds = Set(LayoutFrames.listFrames(project: project.path).compactMap { $0["id"]?.stringValue })
+    let frameIds = Set(LayoutFrames.listFrames(project: project).compactMap { $0["id"]?.stringValue })
     let themeIndex = Self.themeEntryIndex(config.plugins)
     let entries = config.plugins.enumerated().filter { $0.offset != themeIndex && !Self.isFrameEntry($0.element, frameIds) }.map(\.element)
     if entries.isEmpty { return nil }
@@ -1247,7 +1248,7 @@ public struct TemplatePackage: Sendable {
       }
       if let npmName = Self.npmPackageName(entry["source"]) {
         if !Self.hasNodeModule(run.project, npmName) { plan.missingPackages.append(Dependency(name: npmName)) }
-      } else if entry["source"]?.stringValue != nil && !Self.exists(NodePath.join(run.project.path, ".quartz", "plugins", name)) {
+      } else if entry["source"]?.stringValue != nil && !Self.exists(NodePath.join(run.project, ".quartz", "plugins", name)) {
         plan.notes.append("cliInstall:\(name)")
       }
     }
@@ -1293,7 +1294,7 @@ public struct TemplatePackage: Sendable {
         continue
       }
       // A github:/git+ source goes through the CLI: it clones, builds and writes quartz.lock.json.
-      if Self.npmPackageName(.string(source)) == nil && !Self.exists(NodePath.join(project.path, ".quartz", "plugins", name)) {
+      if Self.npmPackageName(.string(source)) == nil && !Self.exists(NodePath.join(project, ".quartz", "plugins", name)) {
         run.progress(name)
         let result = await addPlugin(source, project)
         guard result.success else {
@@ -1331,7 +1332,7 @@ public struct TemplatePackage: Sendable {
     .object(JSONObject([("path", .array(entry.path.map(JSONValue.string))), ("kind", .string(entry.kind.rawValue)), ("value", .string(entry.value))]))
   }
 
-  func probeTranslations(_ project: URL) async throws -> JSONObject {
+  func probeTranslations(_ project: String) async throws -> JSONObject {
     let customizations = try await locales.customizations(project: project)
     let withChanges = customizations.filter { !$0.changed.isEmpty }
     var all: [[LocaleFiles.Entry]] = []
@@ -1344,7 +1345,7 @@ public struct TemplatePackage: Sendable {
                        ("undetermined", .number(Double(customizations.filter { $0.source == .none }.count)))])
   }
 
-  func collectTranslations(_ project: URL, _ scope: TranslationScope) async throws -> Collected? {
+  func collectTranslations(_ project: String, _ scope: TranslationScope) async throws -> Collected? {
     var localesOut: [(code: String, entries: [LocaleFiles.Entry])] = []
     for item in try await locales.customizations(project: project) {
       let entries = scope == .all ? try await locales.entries(project: project, code: item.code) : item.changed
@@ -1358,13 +1359,13 @@ public struct TemplatePackage: Sendable {
   }
 
   /// Per locale: the keys the project changed itself (a conflict, not an addition).
-  func customised(_ project: URL) async throws -> [String: Set<String>] {
+  func customised(_ project: String) async throws -> [String: Set<String>] {
     var own: [String: Set<String>] = [:]
     for item in try await locales.customizations(project: project) { own[item.code] = Set(item.changed.map { $0.path.joined(separator: ".") }) }
     return own
   }
 
-  func current(_ project: URL, _ code: String) async throws -> [String: String] {
+  func current(_ project: String, _ code: String) async throws -> [String: String] {
     var map: [String: String] = [:]
     for entry in try await locales.entries(project: project, code: code) { map[entry.path.joined(separator: ".")] = entry.value }
     return map
@@ -1421,14 +1422,14 @@ public struct TemplatePackage: Sendable {
 
   // MARK: - presets
 
-  func collectPresets(_ project: URL) -> Collected? {
-    let list = ThemePresets.list(project: project.path)
+  func collectPresets(_ project: String) -> Collected? {
+    let list = ThemePresets.list(project: project)
     guard !list.isEmpty else { return nil }
     return Collected(payload: .object(JSONObject([("presets", .array(list))])), stats: JSONObject([("presets", .number(Double(list.count)))]))
   }
 
   func planPresets(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
-    let existing = ThemePresets.list(project: run.project.path).compactMap { $0["id"] }
+    let existing = ThemePresets.list(project: run.project).compactMap { $0["id"] }
     var plan = PartPlan(id: "presets")
     for preset in try Self.list(payload["presets"], "presets") {
       if let id = preset["id"], existing.contains(id) { plan.conflicts.append(preset["name"] ?? .null) } else { plan.additions.append(preset["name"] ?? .null) }
@@ -1437,13 +1438,13 @@ public struct TemplatePackage: Sendable {
   }
 
   func applyPresets(_ payload: JSONValue, _ run: Run) throws {
-    let existing = ThemePresets.list(project: run.project.path).compactMap { $0["id"] }
+    let existing = ThemePresets.list(project: run.project).compactMap { $0["id"] }
     for preset in try Self.list(payload["presets"], "presets") {
       if let id = preset["id"], existing.contains(id), run.strategy == .projectWins {
         run.warn("presetSkipped:\(preset["name"].map(JS.string) ?? "undefined")")
         continue
       }
-      try ThemePresets.save(preset, project: run.project.path)
+      try ThemePresets.save(preset, project: run.project)
     }
   }
 
@@ -1460,14 +1461,14 @@ public struct TemplatePackage: Sendable {
     return entry.object["options"]?["forms"]?.objectValue ?? JSONObject()
   }
 
-  func collectContent(_ project: URL) throws -> Collected? {
-    let dir = ContentFolder.path(project: project).path
+  func collectContent(_ project: String) throws -> Collected? {
+    let dir = ContentFolder.path(project: project)
     let names = Self.listFilesDeep(dir)
     if names.isEmpty { return nil }
     var entries: [ZipArchive.Entry] = []
     var bytes = 0
     for name in names {
-      let data = try Data(contentsOf: URL(fileURLWithPath: NodePath.join(dir, name)))
+      let data = try Posix.read(NodePath.join(dir, name))
       bytes += data.count
       if bytes > Self.contentMaxBytes { throw TemplateFailure(message: L10n.t("main.templateContentTooLarge", ["limit": String(Self.contentMaxBytes / 1024 / 1024)])) }
       entries.append(ZipArchive.Entry(name: "files/content/\(name)", data: data))
@@ -1482,7 +1483,7 @@ public struct TemplatePackage: Sendable {
       plan.notes.append("contentIsSymlink")
       return plan
     }
-    let dir = ContentFolder.path(project: run.project).path
+    let dir = ContentFolder.path(project: run.project)
     let files = try Self.names(payload["files"], "files")
     for name in files {
       guard let target = PackagePaths.writable(dir, name) else {
@@ -1517,7 +1518,7 @@ public struct TemplatePackage: Sendable {
       run.warn("contentIsSymlink:\(status.symlinkTarget ?? "")")
       return
     }
-    let dir = ContentFolder.path(project: run.project).path
+    let dir = ContentFolder.path(project: run.project)
     var done = 0
     for name in try Self.names(payload["files"], "files") {
       guard let data = run.files["files/content/\(name)"] else { continue }

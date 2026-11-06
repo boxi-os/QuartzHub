@@ -16,7 +16,7 @@ public struct BuiltinTemplate: Sendable {
   public enum Source: String, Sendable { case downloaded, bundled }
 
   public struct Found: Equatable, Sendable {
-    public var path: URL
+    public var path: String
     public var source: Source
     /// Markdown files in the package's content part, 0 when it has none.
     public var pages: Int
@@ -31,22 +31,22 @@ public struct BuiltinTemplate: Sendable {
 
   /// The copy inside the app (`Contents/Resources/templates`), in a development build the
   /// repository's `Resources/templates`.
-  public static let bundledCopy: URL = {
-    if let resources = Bundle.main.resourceURL {
-      let packaged = resources.appendingPathComponent("templates").appendingPathComponent(fileName)
-      if FileManager.default.fileExists(atPath: packaged.path) { return packaged }
+  public static let bundledCopy: String = {
+    if let resources = Bundle.main.resourceURL.map({ Posix.path($0) }) {
+      let packaged = "\(resources)/templates/\(fileName)"
+      if FileManager.default.fileExists(atPath: packaged) { return packaged }
     }
-    var root = URL(fileURLWithPath: #filePath)
-    for _ in 0..<6 { root.deleteLastPathComponent() }
-    return root.appendingPathComponent("Resources/templates").appendingPathComponent(fileName)
+    var root = #filePath
+    for _ in 0..<6 { root = NodePath.dirname(root) }
+    return "\(root)/Resources/templates/\(fileName)"
   }()
 
   let profile: ProfileDirectory
-  let bundled: URL
+  let bundled: String
   let fetch: FontService.Fetch
   let now: @Sendable () -> Date
 
-  public init(profile: ProfileDirectory = .quartzHub, bundled: URL = BuiltinTemplate.bundledCopy, fetch: @escaping FontService.Fetch = FontService.liveFetch,
+  public init(profile: ProfileDirectory = .quartzHub, bundled: String = BuiltinTemplate.bundledCopy, fetch: @escaping FontService.Fetch = FontService.liveFetch,
               now: @escaping @Sendable () -> Date = { Date() }) {
     self.profile = profile
     self.bundled = bundled
@@ -54,10 +54,10 @@ public struct BuiltinTemplate: Sendable {
     self.now = now
   }
 
-  var cached: URL { profile.url.appendingPathComponent("templates").appendingPathComponent(Self.fileName) }
+  var cached: String { "\(profile.path)/templates/\(Self.fileName)" }
 
-  func age(_ url: URL) -> TimeInterval {
-    guard let modified = (try? FileManager.default.attributesOfItem(atPath: url.path))?[.modificationDate] as? Date else { return .infinity }
+  func age(_ url: String) -> TimeInterval {
+    guard let modified = (try? FileManager.default.attributesOfItem(atPath: url))?[.modificationDate] as? Date else { return .infinity }
     return now().timeIntervalSince(modified)
   }
 
@@ -69,7 +69,7 @@ public struct BuiltinTemplate: Sendable {
     let data = response.body
     guard !data.isEmpty, data.count <= Self.maxBytes, (try? ZipArchive.read(data))?[TemplatePackage.manifestFile] != nil else { return false }
     do {
-      try FileManager.default.createDirectory(at: cached.deletingLastPathComponent(), withIntermediateDirectories: true)
+      try Posix.mkdirs(NodePath.dirname(cached))
       try JSONStore.writeAtomic(data, to: cached)
       return true
     } catch {
@@ -84,7 +84,7 @@ public struct BuiltinTemplate: Sendable {
   }
 
   /// The whole package read, which is what "usable" means; its pages counted on the way.
-  static func inspect(_ path: URL) -> Info? {
+  static func inspect(_ path: String) -> Info? {
     guard let files = try? ZipArchive.read(contentsOf: path), let manifest = files[TemplatePackage.manifestFile] else { return nil }
     return Info(pages: countPages(files[TemplatePackage.partFile("content")]), createdAt: createdAt(manifest))
   }
@@ -108,9 +108,9 @@ public struct BuiltinTemplate: Sendable {
   /// A cached copy that does not read is deleted (its mtime would hold off the repair for a day)
   /// and fetched again at once.
   func usableCache() async -> Info? {
-    guard FileManager.default.fileExists(atPath: cached.path) else { return nil }
+    guard FileManager.default.fileExists(atPath: cached) else { return nil }
     if let info = Self.inspect(cached) { return info }
-    try? FileManager.default.removeItem(at: cached)
+    try? FileManager.default.removeItem(atPath: cached)
     return await refresh() ? Self.inspect(cached) : nil
   }
 

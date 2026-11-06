@@ -224,7 +224,7 @@ import Testing
         try FileManager.default.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
         try await store.export(project: project, id: string(0), to: target)
         defer { try? FileManager.default.removeItem(at: target) }
-        let files = try ZipArchive.read(contentsOf: target)
+        let files = try ZipArchive.read(contentsOf: target.path)
         return .object(JSONObject(files.names.sorted(by: Self.utf16Order).map { ($0, .string(Self.sha(files[$0]!))) }))
       default:
         Issue.record("unknown op \(op)")
