@@ -1,0 +1,12 @@
+{
+  "edits": [
+    {
+      "set": [
+        "configuration",
+        "pageTitle"
+      ],
+      "value": "Neu"
+    }
+  ],
+  "replaceBeforeWrite": null
+}

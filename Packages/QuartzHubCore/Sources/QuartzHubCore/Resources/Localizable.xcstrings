@@ -24091,13 +24091,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml steht keine Zuordnung aus Schlüsseln und Werten. QuartzControl liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
+            "value" : "In quartz.config.yaml steht keine Zuordnung aus Schlüsseln und Werten. QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "quartz.config.yaml does not hold a mapping of keys and values. QuartzControl will not read it; fix it in an editor or use a restore point."
+            "value" : "quartz.config.yaml does not hold a mapping of keys and values. QuartzHub will not read it; fix it in an editor or use a restore point."
           }
         }
       }
@@ -24119,18 +24119,35 @@
         }
       }
     },
-    "main.configPluginsNotAList" : {
+    "main.configPluginEntryInvalid" : {
+      "comment" : "Thrown by ConfigFile.read; index is 1-based",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml ist „plugins“ keine Liste. QuartzControl liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
+            "value" : "In quartz.config.yaml nennt Eintrag {{index}} unter „plugins“ kein Plugin (es fehlt „source“). QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml, “plugins” is not a list. QuartzControl will not read it; fix it in an editor or use a restore point."
+            "value" : "In quartz.config.yaml, entry {{index}} under “plugins” names no plugin (“source” is missing). QuartzHub will not read it; fix it in an editor or use a restore point."
+          }
+        }
+      }
+    },
+    "main.configPluginsNotAList" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In quartz.config.yaml ist „plugins“ keine Liste. QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In quartz.config.yaml, “plugins” is not a list. QuartzHub will not read it; fix it in an editor or use a restore point."
           }
         }
       }

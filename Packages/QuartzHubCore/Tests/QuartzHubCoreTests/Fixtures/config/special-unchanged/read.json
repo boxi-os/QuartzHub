@@ -1,0 +1,48 @@
+{
+  "configuration": {
+    "pageTitle": "Garten",
+    "ratio": null,
+    "minus": 0,
+    "hex": 31,
+    "quoted": "einfach",
+    "long": "Ein langer Satz, der weit über die Breite hinausgeht, Ein langer Satz, der weit über die Breite hinausgeht, Ein langer Satz, der weit über die Breite hinausgeht, "
+  },
+  "theme": {
+    "colors": {
+      "lightMode": {
+        "light": "#fff"
+      }
+    }
+  },
+  "plugins": [
+    {
+      "source": "github:quartz-community/explorer#v1",
+      "name": "explorer",
+      "options": {
+        "depth": null
+      },
+      "enabled": false
+    },
+    {
+      "source": {
+        "repo": "https://github.com/a/b.git"
+      },
+      "enabled": true,
+      "name": "b"
+    },
+    {
+      "source": {
+        "repo": "x",
+        "name": "Benannt"
+      },
+      "enabled": false,
+      "name": "Benannt"
+    },
+    {
+      "source": "git+https://example.org/c/d.git#main",
+      "enabled": true,
+      "order": 30,
+      "name": "d.git"
+    }
+  ]
+}

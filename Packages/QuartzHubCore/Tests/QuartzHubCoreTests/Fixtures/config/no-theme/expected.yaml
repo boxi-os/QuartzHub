@@ -1,0 +1,4 @@
+configuration:
+  pageTitle: Ohne Thema
+  baseUrl: example.org
+plugins: []

@@ -253,3 +253,52 @@ Exit-Code des Assistenten. Die Sätze vor dem gescheiterten Schritt sind QuartzC
   Node. Der Test dafür steht bereit (`QH_NETWORK_TESTS=1 swift test --filter realQuartz`), lief
   aber noch nicht: Er lädt Quartz und seine Pakete aus dem Netz und führt sie aus, und das
   braucht die Freigabe des Nutzers.
+
+### Config lesen und schreiben (`configService.ts`, `framePaths.ts` → `ConfigFile`, `FramePaths`)
+
+Das YAML macht der Helfer `yaml-edit` mit demselben `yaml` 2.9.0 wie QuartzControl. Seine
+Operation `write` ist `writeConfigNow`, Aufruf für Aufruf: `syncMapping` für `configuration` (ohne
+`theme`) und `theme`, `doc.set('plugins', …)`, `layout.groups`/`byPageType` nur, wenn die Config
+ein `layout` trägt, `lineWidth` 120. Swift macht, was darum liegt: Datei, Sperre
+(`ProjectLock.config`), Frame-Pfade (`ownFramePath` vor dem Aufruf), die Sätze. Die Operationen
+`set`/`delete` aus Phase 1 sind weg; kein Dienst von QuartzControl schrieb einzelne Pfade.
+
+- **Gemessen gegen QuartzControls eigenen Code.** `scripts/config-golden.mjs` bündelt
+  `configService.ts` mit esbuild (Snapshot und `mainT` als Attrappen) und lässt ihn 17 Fälle lesen,
+  bearbeiten und schreiben: die Configs von `gui-test` und `Example` (Home maskiert), Randfälle,
+  Fehler. `ConfigFileTests` macht dasselbe über `ConfigFile` und vergleicht Objekt und Bytes. Alle
+  17 gleich. Ohne Änderung gespeichert sind `gui-test` (649 Zeilen) und `Example` byte-gleich.
+- **Was JSON nicht trägt, war der erste Befund.** QuartzControl gab die Config über Electrons
+  structured clone weiter; der erhält `.inf`, `.nan`, `-0` und geteilte Objekte. `toJS()` gibt
+  einem Alias das Objekt seines Ankers, und yaml schreibt ein wiederholtes Objekt wieder als Anker
+  und Alias. `Example` hat einen (`breakpoints: &a1` … `*a1`), und über JSON kam der Alias als
+  Kopie zurück. Darum gibt `write` überall dort, wo der ankommende Wert genau das ist, was JSON aus
+  dem Wert des Dokuments machte, dessen eigenen Wert zurück (`revive`). Ein geänderter Wert geht so
+  hinein, wie er kommt.
+- **Was QuartzControls Schreiber auch ohne Änderung umschreibt**, und QuartzHub daher ebenso:
+  Kommentare in der Plugin-Liste und in jedem ersetzten Teilbaum fallen weg (`theme.colors` …),
+  Flow-Listen werden zu Block-Listen, Anker unter `configuration` werden aufgelöst (jede `setIn`
+  baut eigene Knoten), `0x1F` wird `0x1f`, lange Zeichenketten brechen bei 120 um, ein `name:` an
+  einem Plugin-Eintrag verschwindet (der Renderer überschreibt ihn mit dem abgeleiteten Namen, das
+  Speichern lässt ihn weg). Ein `enabled` wie `yes` oder `0` wird `true`/`false`. Nur für Hand
+  geschriebene Dateien sichtbar; was die Quartz-CLI schreibt, hat keines davon.
+- **Bewusst anders als QuartzControl:**
+  - Ein Eintrag unter `plugins`, dessen `source` nichts nennt (fehlt, eine Zahl, ein Objekt ohne
+    `repo` und `name`, ein bloßer String als Eintrag), bekommt einen Satz mit seiner Nummer
+    (`main.configPluginEntryInvalid`). QuartzControl hielt an einem TypeError.
+  - Ein Schlüssel mit der falschen Art Wert gilt als nicht da und bleibt beim Speichern, wie er
+    ist: `layout:` leer (`null`) warf in QuartzControl beim Speichern `null.groups`;
+    `configuration: ein Satz` wurde zu `{ 0: "e", … }` gespreizt und ließ sich nicht speichern.
+    Wer dort trotzdem einen Schlüssel setzt, bekommt die Ablehnung des Helfers (keinen eigenen
+    Satz; der Fall braucht eine kaputte Datei).
+  - Atomar mit `fsync` (`JSONStore.writeAtomic`); QuartzControl benannte nur um.
+- `ownFramePath` vergleicht wie Node die Schreibweise (`resolve`, kein `realpath`).
+- Der Helfer läuft immer unter QuartzHubs Node und mit eigener Umgebung (`HOME`, `PATH`): ein
+  `NODE_OPTIONS` aus dem Profil der Shell könnte sonst etwas in den Prozess laden. Fehlt er, heißt
+  es `broken`, nicht `refused`. Ein Aufruf kostet rund 50 ms (`read` von `gui-test` 0,05 s, eine
+  leere Datei 0,03 s, je Start ein neuer Node-Prozess).
+- Gegenproben: ohne `revive` scheitern `Example`, die Anker- und die Sonderfälle; mit `name` im
+  Geschriebenen alle Fälle mit Plugins; `enabled` nur als Bool statt JavaScript-Wahrheit die
+  Sonderfälle; ohne `ownFramePath` der Frame-Test.
+- **Noch nicht:** der Snapshot vor dem Speichern (`configChange`) kommt mit dem Snapshot-Store
+  (Punkt 7). Bis dahin schreibt nichts in der App die Config.

@@ -1,0 +1,837 @@
+{
+  "configuration": {
+    "pageTitle": "Example",
+    "pageTitleSuffix": "",
+    "enableSPA": true,
+    "enablePopovers": true,
+    "analytics": {
+      "provider": "none"
+    },
+    "locale": "de-DE",
+    "baseUrl": "boxi-os.github.io/Quartz-Example-Template",
+    "ignorePatterns": [
+      "private",
+      "templates",
+      ".obsidian",
+      ".claude",
+      ".git",
+      "assets/Excalidraw"
+    ]
+  },
+  "theme": {
+    "fontOrigin": "local",
+    "cdnCaching": false,
+    "typography": {
+      "header": "Noto Sans",
+      "body": "Noto Sans",
+      "code": "Noto Sans Mono"
+    },
+    "colors": {
+      "lightMode": {
+        "light": "#FCFCFA",
+        "lightgray": "#DDDDDD",
+        "gray": "#5F5F5F",
+        "darkgray": "#333333",
+        "dark": "#17171A",
+        "secondary": "#1463A3",
+        "tertiary": "#196B6B",
+        "highlight": "rgba(42, 78, 108, 0.10)",
+        "textHighlight": "rgba(226, 189, 92, 0.55)"
+      },
+      "darkMode": {
+        "light": "#16171A",
+        "lightgray": "#2E2E2E",
+        "gray": "#A1A1A1",
+        "darkgray": "#DDDDDD",
+        "dark": "#FCFCFA",
+        "secondary": "#699DC3",
+        "tertiary": "#2CAFAD",
+        "highlight": "rgba(140, 184, 218, 0.12)",
+        "textHighlight": "rgba(140, 184, 218, 0.30)"
+      }
+    }
+  },
+  "plugins": [
+    {
+      "source": "@quartz-community/created-modified-date",
+      "enabled": true,
+      "options": {
+        "defaultDateType": "modified",
+        "priority": [
+          "frontmatter",
+          "filesystem"
+        ]
+      },
+      "order": 10,
+      "name": "created-modified-date"
+    },
+    {
+      "source": "@quartz-community/syntax-highlighting",
+      "enabled": true,
+      "options": {
+        "theme": {
+          "light": "github-light",
+          "dark": "github-dark"
+        },
+        "keepBackground": false
+      },
+      "order": 20,
+      "name": "syntax-highlighting"
+    },
+    {
+      "source": "@quartz-community/obsidian-flavored-markdown",
+      "enabled": true,
+      "options": {
+        "enableInHtmlEmbed": false,
+        "enableCheckbox": true,
+        "comments": true,
+        "highlight": true,
+        "wikilinks": true,
+        "callouts": true,
+        "mermaid": true,
+        "parseTags": true,
+        "parseArrows": true,
+        "parseBlockReferences": true,
+        "enableYouTubeEmbed": true,
+        "enableVideoEmbed": true
+      },
+      "order": 30,
+      "name": "obsidian-flavored-markdown"
+    },
+    {
+      "source": "@quartz-community/github-flavored-markdown",
+      "enabled": true,
+      "order": 40,
+      "name": "github-flavored-markdown"
+    },
+    {
+      "source": "@quartz-community/table-of-contents",
+      "enabled": true,
+      "order": 50,
+      "layout": {
+        "position": "right",
+        "priority": 10,
+        "display": "all"
+      },
+      "options": {
+        "maxDepth": 6,
+        "minEntries": 1,
+        "showByDefault": true,
+        "collapseByDefault": false
+      },
+      "name": "table-of-contents"
+    },
+    {
+      "source": "@quartz-community/crawl-links",
+      "enabled": true,
+      "options": {
+        "markdownLinkResolution": "shortest"
+      },
+      "order": 60,
+      "name": "crawl-links"
+    },
+    {
+      "source": "@quartz-community/description",
+      "enabled": true,
+      "order": 70,
+      "name": "description"
+    },
+    {
+      "source": "@quartz-community/latex",
+      "enabled": true,
+      "options": {
+        "renderEngine": "katex"
+      },
+      "order": 80,
+      "name": "latex"
+    },
+    {
+      "source": "@quartz-community/citations",
+      "enabled": false,
+      "order": 85,
+      "name": "citations"
+    },
+    {
+      "source": "@quartz-community/hard-line-breaks",
+      "enabled": false,
+      "order": 90,
+      "name": "hard-line-breaks"
+    },
+    {
+      "source": "@quartz-community/ox-hugo",
+      "enabled": false,
+      "order": 91,
+      "name": "ox-hugo"
+    },
+    {
+      "source": "@quartz-community/roam",
+      "enabled": false,
+      "order": 92,
+      "name": "roam"
+    },
+    {
+      "source": "@quartz-community/quartz-fonts",
+      "enabled": false,
+      "name": "quartz-fonts"
+    },
+    {
+      "source": "@quartz-themes/core",
+      "enabled": false,
+      "options": {
+        "theme": "minimal",
+        "mode": "both",
+        "themeFonts": false
+      },
+      "name": "core"
+    },
+    {
+      "source": "@quartz-community/remove-draft",
+      "enabled": true,
+      "name": "remove-draft"
+    },
+    {
+      "source": "@quartz-community/explicit-publish",
+      "enabled": false,
+      "name": "explicit-publish"
+    },
+    {
+      "source": "@quartz-community/unlisted-pages",
+      "enabled": true,
+      "options": {},
+      "order": 45,
+      "name": "unlisted-pages"
+    },
+    {
+      "source": "@quartz-community/encrypted-pages",
+      "enabled": false,
+      "options": {
+        "iterations": 600000,
+        "passwordField": "password",
+        "unlistWhenEncrypted": false,
+        "outputPath": "static/encryptedContentIndex.json"
+      },
+      "name": "encrypted-pages"
+    },
+    {
+      "source": "@quartz-community/stacked-pages",
+      "enabled": false,
+      "layout": {
+        "position": "afterBody",
+        "priority": 20,
+        "display": "all"
+      },
+      "name": "stacked-pages"
+    },
+    {
+      "source": "@quartz-community/alias-redirects",
+      "enabled": true,
+      "name": "alias-redirects"
+    },
+    {
+      "source": "@quartz-community/content-index",
+      "enabled": true,
+      "options": {
+        "enableSiteMap": true,
+        "enableRSS": true
+      },
+      "name": "content-index"
+    },
+    {
+      "source": "@quartz-community/favicon",
+      "enabled": true,
+      "name": "favicon"
+    },
+    {
+      "source": "@quartz-community/og-image",
+      "enabled": true,
+      "name": "og-image"
+    },
+    {
+      "source": "@quartz-community/cname",
+      "enabled": false,
+      "name": "cname"
+    },
+    {
+      "source": "@quartz-community/canvas-page",
+      "enabled": true,
+      "name": "canvas-page"
+    },
+    {
+      "source": "@quartz-community/content-page",
+      "enabled": true,
+      "name": "content-page"
+    },
+    {
+      "source": "@quartz-community/folder-page",
+      "enabled": true,
+      "name": "folder-page"
+    },
+    {
+      "source": "@quartz-community/tag-page",
+      "enabled": true,
+      "name": "tag-page"
+    },
+    {
+      "source": "@quartz-community/explorer",
+      "enabled": false,
+      "layout": {
+        "position": "left",
+        "priority": 30
+      },
+      "options": {
+        "folderDefaultState": "open",
+        "folderClickBehavior": "link",
+        "useSavedState": true
+      },
+      "name": "explorer"
+    },
+    {
+      "source": "@quartz-community/graph",
+      "enabled": true,
+      "layout": {
+        "position": "right",
+        "priority": 20,
+        "display": "desktop-only"
+      },
+      "name": "graph"
+    },
+    {
+      "source": "@quartz-community/search",
+      "enabled": true,
+      "layout": {
+        "position": "header",
+        "priority": 30,
+        "group": "toolbar",
+        "groupOptions": {
+          "shrink": false
+        }
+      },
+      "name": "search"
+    },
+    {
+      "source": "@quartz-community/backlinks",
+      "enabled": true,
+      "layout": {
+        "position": "afterBody",
+        "priority": 60,
+        "group": "custom-8",
+        "groupOptions": {
+          "grow": true,
+          "shrink": true,
+          "basis": "18rem",
+          "align": "stretch"
+        }
+      },
+      "name": "backlinks"
+    },
+    {
+      "source": "@quartz-community/article-title",
+      "enabled": true,
+      "layout": {
+        "position": "beforeBody",
+        "priority": 30
+      },
+      "name": "article-title"
+    },
+    {
+      "source": "@quartz-community/content-meta",
+      "enabled": true,
+      "layout": {
+        "position": "beforeBody",
+        "priority": 40
+      },
+      "name": "content-meta"
+    },
+    {
+      "source": "@quartz-community/tag-list",
+      "enabled": true,
+      "layout": {
+        "position": "beforeBody",
+        "priority": 20
+      },
+      "name": "tag-list"
+    },
+    {
+      "source": "@quartz-community/page-title",
+      "enabled": true,
+      "layout": {
+        "position": "header",
+        "priority": 20,
+        "group": "brand"
+      },
+      "name": "page-title"
+    },
+    {
+      "source": "@quartz-community/darkmode",
+      "enabled": true,
+      "layout": {
+        "position": "header",
+        "priority": 40,
+        "group": "toolbar"
+      },
+      "name": "darkmode"
+    },
+    {
+      "source": "@quartz-community/reader-mode",
+      "enabled": true,
+      "layout": {
+        "position": "header",
+        "priority": 50,
+        "group": "toolbar"
+      },
+      "name": "reader-mode"
+    },
+    {
+      "source": "@quartz-community/breadcrumbs",
+      "enabled": true,
+      "layout": {
+        "position": "beforeBody",
+        "priority": 10,
+        "condition": "not-index"
+      },
+      "name": "breadcrumbs"
+    },
+    {
+      "source": "@quartz-community/comments",
+      "enabled": false,
+      "options": {
+        "provider": "giscus",
+        "options": {}
+      },
+      "layout": {
+        "position": "afterBody",
+        "priority": 10
+      },
+      "name": "comments"
+    },
+    {
+      "source": "@quartz-community/footer",
+      "enabled": true,
+      "options": {
+        "links": {
+          "Quartz": "https://quartz.jzhao.xyz/",
+          "QuartzControl": "https://boxi-os.github.io/QuartzControl/",
+          "Example": "https://boxi-os.github.io/Quartz-Example-Template/",
+          "Plugins": "https://boxi-os.github.io/quartz-plugins/"
+        }
+      },
+      "layout": {
+        "position": "footer",
+        "priority": 20
+      },
+      "name": "footer"
+    },
+    {
+      "source": "@quartz-community/spacer",
+      "enabled": false,
+      "options": {},
+      "order": 25,
+      "layout": {
+        "position": "left",
+        "priority": 10,
+        "display": "mobile-only"
+      },
+      "name": "spacer"
+    },
+    {
+      "source": "@quartz-community/bases-page",
+      "enabled": true,
+      "options": {},
+      "order": 50,
+      "name": "bases-page"
+    },
+    {
+      "source": "@quartz-community/note-properties",
+      "enabled": true,
+      "options": {
+        "includeAll": false,
+        "includedProperties": [
+          "description",
+          "tags",
+          "section",
+          "zahl",
+          "wahr",
+          "falsch",
+          "liste",
+          "leer",
+          "number",
+          "truthy",
+          "falsy",
+          "list",
+          "empty"
+        ],
+        "excludedProperties": [],
+        "hidePropertiesView": false,
+        "delimiters": "---",
+        "language": "yaml"
+      },
+      "order": 5,
+      "layout": {
+        "position": "afterBody",
+        "priority": 40
+      },
+      "name": "note-properties"
+    },
+    {
+      "source": "/Users/example/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-editorial",
+      "enabled": true,
+      "options": {},
+      "order": 50,
+      "name": "frame-editorial"
+    },
+    {
+      "source": "/Users/example/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-index",
+      "enabled": true,
+      "options": {},
+      "order": 50,
+      "name": "frame-index"
+    },
+    {
+      "source": "/Users/example/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-focus",
+      "enabled": true,
+      "options": {},
+      "order": 50,
+      "name": "frame-focus"
+    },
+    {
+      "source": "github:quartz-community/obsidian-plugin-excalidraw",
+      "enabled": true,
+      "options": {
+        "enableInteraction": true,
+        "darkMode": "auto",
+        "exportPadding": 20
+      },
+      "order": 470,
+      "name": "obsidian-plugin-excalidraw"
+    },
+    {
+      "source": "/Users/example/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-drawing",
+      "enabled": true,
+      "options": {},
+      "order": 50,
+      "name": "frame-drawing"
+    },
+    {
+      "source": "@quartz-community/recent-notes",
+      "enabled": true,
+      "options": {
+        "limit": 5,
+        "hideFolderPages": true
+      },
+      "layout": {
+        "position": "afterBody",
+        "priority": 50,
+        "group": "custom-8",
+        "groupOptions": {
+          "grow": true,
+          "shrink": true,
+          "basis": "18rem",
+          "align": "stretch"
+        }
+      },
+      "name": "recent-notes"
+    },
+    {
+      "source": "github:boxi-os/quartz-layout-box",
+      "enabled": true,
+      "order": 500,
+      "options": {
+        "html": "<a class=\"site-mark\" href=\"{{root}}/\"><img class=\"img-light\" src=\"{{root}}/static/icon.png\" width=\"26\" height=\"26\" alt=\"\"><img class=\"img-dark\" src=\"{{root}}/static/icon-dark.png\" width=\"26\" height=\"26\" alt=\"\"><span class=\"site-mark-text\">{{siteTitle}}</span></a>",
+        "className": "layout-box-mark",
+        "placeholders": true,
+        "frontmatterKey": "layoutBoxMark"
+      },
+      "layout": {
+        "position": "header",
+        "priority": 10,
+        "group": "brand"
+      },
+      "name": "quartz-layout-box"
+    },
+    {
+      "source": "github:boxi-os/quartz-layout-box",
+      "enabled": true,
+      "order": 505,
+      "options": {
+        "html": "<span class=\"bar-page-name\" aria-hidden=\"true\" data-section=\"{{frontmatter.section}}\"></span>",
+        "className": "layout-box-page-name",
+        "placeholders": true,
+        "frontmatterKey": "layoutBoxPageName"
+      },
+      "layout": {
+        "position": "header",
+        "priority": 30,
+        "group": "brand"
+      },
+      "name": "quartz-layout-box"
+    },
+    {
+      "source": "github:boxi-os/quartz-layout-box",
+      "enabled": true,
+      "order": 510,
+      "options": {
+        "file": "sidebar-note.md",
+        "title": "Über dieses Handbuch",
+        "collapsible": true,
+        "collapsed": true,
+        "className": "layout-box-note",
+        "frontmatterKey": "layoutBoxNote",
+        "byLang": {
+          "en": {
+            "file": "sidebar-note.en.md",
+            "title": "About this handbook"
+          }
+        }
+      },
+      "layout": {
+        "position": "left",
+        "priority": 40,
+        "display": "desktop-only"
+      },
+      "name": "quartz-layout-box"
+    },
+    {
+      "source": "github:boxi-os/quartz-layout-box",
+      "enabled": true,
+      "order": 520,
+      "options": {
+        "html": "<p>Auf einem schmalen Bildschirm ist die Navigation oben eingeklappt.</p>",
+        "className": "layout-box-hint",
+        "frontmatterKey": "layoutBoxHint",
+        "byLang": {
+          "en": {
+            "html": "<p>On a narrow screen the navigation is collapsed at the top.</p>"
+          }
+        }
+      },
+      "layout": {
+        "position": "afterBody",
+        "priority": 70,
+        "display": "mobile-only"
+      },
+      "name": "quartz-layout-box"
+    },
+    {
+      "source": "github:boxi-os/quartz-layout-box",
+      "enabled": true,
+      "order": 530,
+      "options": {
+        "title": "Weiterlesen",
+        "html": "<p>Diese Seite gehört zu <a href=\"{{root}}/\">{{siteTitle}}</a> — der Beispielvorlage für QuartzControl. Ein Überblick über alle Bereiche steht auf der <a href=\"{{root}}/\">Startseite</a>.</p>",
+        "className": "layout-box-cta",
+        "frontmatterKey": "layoutBoxCta",
+        "byLang": {
+          "en": {
+            "title": "Read on",
+            "html": "<p>This page belongs to <a href=\"{{root}}/en/\">{{siteTitle}}</a> — the example template for QuartzControl. An overview of every area is on the <a href=\"{{root}}/en/\">English home page</a>.</p>"
+          }
+        }
+      },
+      "layout": {
+        "position": "afterBody",
+        "priority": 30
+      },
+      "name": "quartz-layout-box"
+    },
+    {
+      "source": "github:boxi-os/quartz-layout-box",
+      "enabled": true,
+      "order": 540,
+      "options": {
+        "html": "<p>{{siteTitle}} · Sprache: {{locale}} · Diese Seite: <code>{{slug}}</code></p>",
+        "className": "layout-box-colophon",
+        "frontmatterKey": "layoutBoxColophon",
+        "byLang": {
+          "en": {
+            "html": "<p>{{siteTitle}} · Language: {{locale}} · This page: <code>{{slug}}</code></p>"
+          }
+        }
+      },
+      "layout": {
+        "position": "footer",
+        "priority": 10
+      },
+      "name": "quartz-layout-box"
+    },
+    {
+      "source": "github:boxi-os/quartz-layout-box",
+      "enabled": true,
+      "order": 550,
+      "options": {
+        "html": "<style>.explorer .folder-container[data-folderpath=\"{{slug}}\"]{background:var(--tpl-surface-tint)}.explorer .folder-container[data-folderpath=\"{{slug}}\"] .folder-title{color:var(--secondary)}</style>",
+        "className": "layout-box-current-folder",
+        "placeholders": true
+      },
+      "layout": {
+        "position": "footer",
+        "priority": 20
+      },
+      "name": "quartz-layout-box"
+    },
+    {
+      "source": "github:boxi-os/quartz-multilanguage",
+      "enabled": true,
+      "order": 65,
+      "options": {
+        "languages": [
+          {
+            "code": "de",
+            "label": "German",
+            "native": "Deutsch",
+            "locale": "de-DE"
+          },
+          {
+            "code": "en",
+            "label": "English",
+            "native": "English",
+            "locale": "en-US"
+          }
+        ],
+        "defaultLanguage": "de",
+        "detection": [
+          "folder",
+          "suffix",
+          "frontmatter"
+        ],
+        "linking": [
+          "frontmatter",
+          "aliases",
+          "path"
+        ],
+        "frontmatterKeys": {
+          "lang": "lang",
+          "key": "translationKey",
+          "translations": "translations"
+        },
+        "rootRedirect": "none",
+        "rememberChoice": true,
+        "seo": {
+          "hreflang": true,
+          "ogLocale": true,
+          "xDefault": "default"
+        },
+        "switcher": {
+          "style": "dropdown",
+          "label": "native",
+          "showCurrent": true,
+          "missing": "home",
+          "separator": "|"
+        },
+        "missingTranslationNotice": true,
+        "availableTranslationNotice": true,
+        "fallbackPages": "none",
+        "rewriteCrossLanguageLinks": false,
+        "localizeDates": true,
+        "publishLanguages": []
+      },
+      "layout": {
+        "position": "header",
+        "group": "toolbar",
+        "priority": 60
+      },
+      "name": "quartz-multilanguage"
+    },
+    {
+      "source": "github:boxi-os/quartz-navigations",
+      "enabled": true,
+      "order": 600,
+      "options": {
+        "variant": "accordion",
+        "showHome": true,
+        "folderClick": "toggle",
+        "indexEntry": "first",
+        "exclusive": true,
+        "mobile": "offcanvas",
+        "id": "menue",
+        "className": "nav-menue",
+        "breakpoints": {
+          "mobile": "900px",
+          "desktop": "1200px"
+        }
+      },
+      "layout": {
+        "position": "left",
+        "priority": 30
+      },
+      "name": "quartz-navigations"
+    },
+    {
+      "source": "github:boxi-os/quartz-navigations",
+      "enabled": true,
+      "order": 601,
+      "options": {
+        "variant": "pager",
+        "id": "seiten-pager",
+        "className": "nav-pager",
+        "breakpoints": {
+          "mobile": "900px",
+          "desktop": "1200px"
+        }
+      },
+      "layout": {
+        "position": "afterBody",
+        "priority": 80
+      },
+      "name": "quartz-navigations"
+    }
+  ],
+  "layout": {
+    "groups": {
+      "brand": {
+        "priority": 10,
+        "direction": "row",
+        "wrap": "nowrap",
+        "gap": "0.75rem"
+      },
+      "toolbar": {
+        "priority": 35,
+        "direction": "row",
+        "wrap": "nowrap",
+        "gap": "0.5rem"
+      },
+      "custom-8": {
+        "priority": 40,
+        "direction": "row",
+        "wrap": "wrap",
+        "gap": "1.5rem"
+      }
+    },
+    "byPageType": {
+      "404": {
+        "template": "focus",
+        "positions": {
+          "left": [],
+          "right": [],
+          "beforeBody": [],
+          "afterBody": []
+        }
+      },
+      "content": {
+        "template": "editorial"
+      },
+      "folder": {
+        "template": "index"
+      },
+      "tag": {
+        "template": "index"
+      },
+      "bases": {
+        "template": "index"
+      },
+      "canvas": {
+        "template": "drawing",
+        "positions": {
+          "left": [],
+          "right": []
+        }
+      },
+      "excalidraw": {
+        "template": "drawing",
+        "positions": {
+          "left": [],
+          "right": []
+        }
+      }
+    }
+  }
+}

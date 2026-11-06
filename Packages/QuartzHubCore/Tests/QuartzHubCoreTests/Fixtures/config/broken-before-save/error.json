@@ -1,0 +1,7 @@
+{
+  "during": "write",
+  "key": "configNotParseable",
+  "args": {
+    "reason": "Missing closing \"quote at line 5, column 1"
+  }
+}

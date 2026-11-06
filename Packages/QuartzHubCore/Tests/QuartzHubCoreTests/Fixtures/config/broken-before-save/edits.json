@@ -1,0 +1,4 @@
+{
+  "edits": [],
+  "replaceBeforeWrite": "configuration:\n  pageTitle: \"abc\n  baseUrl: example.org\nplugins: []\n"
+}

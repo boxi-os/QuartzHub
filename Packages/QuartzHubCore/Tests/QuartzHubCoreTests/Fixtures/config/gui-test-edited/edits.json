@@ -1,0 +1,54 @@
+{
+  "edits": [
+    {
+      "set": [
+        "configuration",
+        "pageTitle"
+      ],
+      "value": "Neuer Titel"
+    },
+    {
+      "delete": [
+        "configuration",
+        "locale"
+      ]
+    },
+    {
+      "set": [
+        "theme",
+        "cdnCaching"
+      ],
+      "value": false
+    },
+    {
+      "set": [
+        "plugins",
+        3,
+        "enabled"
+      ],
+      "value": false
+    },
+    {
+      "set": [
+        "plugins",
+        5,
+        "options",
+        "neu"
+      ],
+      "value": {
+        "a": [
+          1,
+          2.5,
+          "drei"
+        ]
+      }
+    },
+    {
+      "move": [
+        10,
+        2
+      ]
+    }
+  ],
+  "replaceBeforeWrite": null
+}

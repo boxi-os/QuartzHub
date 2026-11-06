@@ -1,0 +1,55 @@
+{
+  "configuration": {
+    "pageTitle": "Anker",
+    "sizes": [
+      1,
+      null,
+      0
+    ],
+    "shared": {
+      "a": 1,
+      "b": [
+        "x",
+        "y"
+      ]
+    },
+    "again": {
+      "a": 1,
+      "b": [
+        "x",
+        "y"
+      ]
+    },
+    "list": [
+      1,
+      2
+    ],
+    "listAgain": [
+      1,
+      2
+    ]
+  },
+  "theme": {},
+  "plugins": [
+    {
+      "source": "a",
+      "enabled": true,
+      "options": {
+        "deep": {
+          "n": null
+        }
+      },
+      "name": "a"
+    },
+    {
+      "source": "b",
+      "enabled": true,
+      "options": {
+        "deep": {
+          "n": null
+        }
+      },
+      "name": "b"
+    }
+  ]
+}

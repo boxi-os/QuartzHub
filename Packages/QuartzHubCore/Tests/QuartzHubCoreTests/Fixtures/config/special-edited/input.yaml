@@ -1,0 +1,28 @@
+# Kopf der Datei
+configuration:
+  pageTitle: Garten # der Titel
+  ratio: .inf
+  minus: -0
+  hex: 0x1F
+  quoted: 'einfach'
+  long: "Ein langer Satz, der weit über die Breite hinausgeht, Ein langer Satz, der weit über die Breite hinausgeht, Ein langer Satz, der weit über die Breite hinausgeht, "
+  theme:
+    colors:
+      lightMode:
+        light: "#fff" # hell
+plugins:
+  # ein Kommentar in der Liste
+  - source: github:quartz-community/explorer#v1
+    name: alter-name
+    options:
+      depth: .nan
+  - source:
+      repo: https://github.com/a/b.git
+    enabled: yes
+  - source:
+      repo: x
+      name: Benannt
+    enabled: 0
+  - source: git+https://example.org/c/d.git#main
+    enabled: true
+    order: 30

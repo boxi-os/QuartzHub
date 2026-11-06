@@ -1,0 +1,12 @@
+{
+  "edits": [
+    {
+      "set": [
+        "configuration",
+        "baseUrl"
+      ],
+      "value": "example.org"
+    }
+  ],
+  "replaceBeforeWrite": null
+}

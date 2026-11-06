@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "set": [
+        "configuration",
+        "pageTitle"
+      ],
+      "value": "Kette"
+    },
+    {
+      "set": [
+        "configuration",
+        "again",
+        "a"
+      ],
+      "value": 2
+    },
+    {
+      "set": [
+        "plugins",
+        1,
+        "enabled"
+      ],
+      "value": false
+    }
+  ],
+  "replaceBeforeWrite": null
+}

@@ -1,0 +1,23 @@
+{
+  "edits": [
+    {
+      "set": [
+        "layout",
+        "groups",
+        "neu"
+      ],
+      "value": {
+        "priority": 5
+      }
+    },
+    {
+      "set": [
+        "theme",
+        "typography",
+        "header"
+      ],
+      "value": "Inter"
+    }
+  ],
+  "replaceBeforeWrite": null
+}

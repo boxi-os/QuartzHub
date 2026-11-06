@@ -1,0 +1,26 @@
+{
+  "edits": [
+    {
+      "set": [
+        "configuration",
+        "pageTitle"
+      ],
+      "value": "Wiese"
+    },
+    {
+      "delete": [
+        "theme",
+        "colors"
+      ]
+    },
+    {
+      "set": [
+        "plugins",
+        1,
+        "enabled"
+      ],
+      "value": false
+    }
+  ],
+  "replaceBeforeWrite": null
+}
