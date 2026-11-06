@@ -58,7 +58,7 @@ public struct CommandResult: Sendable, Equatable {
   }
 
   /// "Not there" and "there but refused" are two answers (conventions: "fehlt" ≠ "kaputt").
-  public enum StartFailure: Sendable, Equatable {
+  public enum StartFailure: Error, Sendable, Equatable {
     case notFound
     case directoryMissing
     /// argv and environment over ARG_MAX. QuartzControl measured 16000 paths / 834 KB spawning
@@ -111,13 +111,22 @@ public struct CommandResult: Sendable, Equatable {
 ///   leaves a grandchild holding stdout delivers "HEAD" at exit and "HEAD\nTAIL" at close. A
 ///   timeout answers at once instead, because that grandchild could keep the pipe open forever.
 public enum ProcessRunner {
-  public static func run(_ command: Command) async -> CommandResult {
+  public enum OutputStream: Sendable, Equatable {
+    case stdout
+    case stderr
+  }
+
+  /// `onOutput` gets the text as it arrives, from the supervising thread, before the answer: the
+  /// build's console fills while it runs. A character cut by a read boundary waits for its end
+  /// (`UTF8Stream`); the pieces together are `output`.
+  public static func run(_ command: Command,
+                         onOutput: (@Sendable (OutputStream, String) -> Void)? = nil) async -> CommandResult {
     let wake = WakePipe()
     defer { wake.close() }
     return await withTaskCancellationHandler {
       await withCheckedContinuation { (continuation: CheckedContinuation<CommandResult, Never>) in
         let thread = Thread {
-          var supervisor = Supervisor(command: command, wake: wake.readEnd) { continuation.resume(returning: $0) }
+          var supervisor = Supervisor(command: command, wake: wake.readEnd, onOutput: onOutput) { continuation.resume(returning: $0) }
           supervisor.run()
         }
         thread.name = "ProcessRunner \(command.executable)"
@@ -137,6 +146,47 @@ public enum ProcessRunner {
       if isExecutableFile(candidate) { return candidate }
     }
     return nil
+  }
+
+  /// Starts a process that is not waited for and may outlive QuartzHub: the dev server.
+  ///
+  /// - stdout and stderr go to the descriptors given (files, never a pipe to the app: a server
+  ///   left running at quit would die on its first write after the app was gone; QuartzControl's
+  ///   `spawnServer`), or to /dev/null. The caller closes its own copies once this returns.
+  /// - stdin is /dev/null; `input` and `timeout` of the command are not used.
+  /// - Its own process group, as with `run`: QuartzHub's quit, a Ctrl+C in the terminal that
+  ///   started it, do not reach it; `LaunchedProcess.signal` reaches all of it.
+  public static func launch(_ command: Command, stdout: Int32? = nil, stderr: Int32? = nil)
+    -> Result<LaunchedProcess, CommandResult.StartFailure> {
+    let path: String
+    switch preflight(command) {
+    case .success(let found): path = found
+    case .failure(let failure): return .failure(failure)
+    }
+    var pid: pid_t = 0
+    let status = spawnChild(command, path: path, stdin: nil, stdout: stdout, stderr: stderr, pid: &pid)
+    guard status == 0 else { return .failure(startFailure(status)) }
+    return .success(LaunchedProcess(pid: pid))
+  }
+
+  /// "Not there" before anything is spawned: the executable in the child's PATH, the directory.
+  static func preflight(_ command: Command) -> Result<String, CommandResult.StartFailure> {
+    guard let path = resolve(command.executable, path: command.environment["PATH"]) else { return .failure(.notFound) }
+    if let directory = command.directory {
+      var isDirectory: ObjCBool = false
+      guard FileManager.default.fileExists(atPath: directory.path, isDirectory: &isDirectory), isDirectory.boolValue else {
+        return .failure(.directoryMissing)
+      }
+    }
+    return .success(path)
+  }
+
+  static func startFailure(_ status: Int32) -> CommandResult.StartFailure {
+    switch status {
+    case ENOENT: .notFound
+    case E2BIG: .argumentsTooLong
+    default: .other(status)
+    }
   }
 
   private static func isExecutableFile(_ path: String) -> Bool {
@@ -183,15 +233,18 @@ private final class WakePipe: Sendable {
 private struct Supervisor {
   let command: Command
   let wake: Int32
+  let onOutput: (@Sendable (ProcessRunner.OutputStream, String) -> Void)?
   let finish: (CommandResult) -> Void
 
   private var answered = false
   private var output = Data()
   private var stdout = Data()
 
-  init(command: Command, wake: Int32, finish: @escaping (CommandResult) -> Void) {
+  init(command: Command, wake: Int32, onOutput: (@Sendable (ProcessRunner.OutputStream, String) -> Void)?,
+       finish: @escaping (CommandResult) -> Void) {
     self.command = command
     self.wake = wake
+    self.onOutput = onOutput
     self.finish = finish
   }
 
@@ -207,14 +260,10 @@ private struct Supervisor {
 
   mutating func run() {
     defer { close(wake) }
-    guard let path = ProcessRunner.resolve(command.executable, path: command.environment["PATH"]) else {
-      return answer(.couldNotStart(.notFound))
-    }
-    if let directory = command.directory {
-      var isDirectory: ObjCBool = false
-      guard FileManager.default.fileExists(atPath: directory.path, isDirectory: &isDirectory), isDirectory.boolValue else {
-        return answer(.couldNotStart(.directoryMissing))
-      }
+    let path: String
+    switch ProcessRunner.preflight(command) {
+    case .success(let found): path = found
+    case .failure(let failure): return answer(.couldNotStart(failure))
     }
 
     let out = Pipe(), err = Pipe()
@@ -222,63 +271,12 @@ private struct Supervisor {
     defer { out.closeBoth(); err.closeBoth(); stdin?.closeBoth() }
 
     var pid: pid_t = 0
-    let status = spawn(path: path, out: out, err: err, stdin: stdin, pid: &pid)
+    let status = spawnChild(command, path: path, stdin: stdin?.read, stdout: out.write, stderr: err.write, pid: &pid)
     out.closeWrite()
     err.closeWrite()
     stdin?.closeRead()
-    guard status == 0 else {
-      switch status {
-      case ENOENT: return answer(.couldNotStart(.notFound))
-      case E2BIG: return answer(.couldNotStart(.argumentsTooLong))
-      default: return answer(.couldNotStart(.other(status)))
-      }
-    }
+    guard status == 0 else { return answer(.couldNotStart(ProcessRunner.startFailure(status))) }
     supervise(pid: pid, out: out, err: err, stdin: stdin)
-  }
-
-  private func spawn(path: String, out: Pipe, err: Pipe, stdin: Pipe?, pid: inout pid_t) -> Int32 {
-    var actions: posix_spawn_file_actions_t?
-    var attributes: posix_spawnattr_t?
-    posix_spawn_file_actions_init(&actions)
-    posix_spawnattr_init(&attributes)
-    defer {
-      posix_spawn_file_actions_destroy(&actions)
-      posix_spawnattr_destroy(&attributes)
-    }
-    if let stdin {
-      posix_spawn_file_actions_adddup2(&actions, stdin.read, 0)
-    } else {
-      posix_spawn_file_actions_addopen(&actions, 0, "/dev/null", O_RDONLY, 0)
-    }
-    posix_spawn_file_actions_adddup2(&actions, out.write, 1)
-    posix_spawn_file_actions_adddup2(&actions, err.write, 2)
-    if let directory = command.directory {
-      posix_spawn_file_actions_addchdir_np(&actions, directory.path)
-    }
-
-    var all = sigset_t(), none = sigset_t()
-    sigfillset(&all)
-    sigemptyset(&none)
-    posix_spawnattr_setsigdefault(&attributes, &all)
-    posix_spawnattr_setsigmask(&attributes, &none)
-    posix_spawnattr_setpgroup(&attributes, 0)
-    posix_spawnattr_setflags(&attributes, Int16(POSIX_SPAWN_SETPGROUP | POSIX_SPAWN_CLOEXEC_DEFAULT
-      | POSIX_SPAWN_SETSIGDEF | POSIX_SPAWN_SETSIGMASK))
-
-    // strdup of the UTF-8 bytes: no normalization on the way (see ProcessRunner).
-    let argv = ([command.executable] + command.arguments).map { strdup($0) }
-    let envp = command.environment.map { strdup("\($0.key)=\($0.value)") }
-    defer {
-      for pointer in argv { free(pointer) }
-      for pointer in envp { free(pointer) }
-    }
-    return (argv + [nil]).withUnsafeBufferPointer { argvBuffer in
-      (envp + [nil]).withUnsafeBufferPointer { envpBuffer in
-        posix_spawn(&pid, path, &actions, &attributes,
-                    UnsafeMutablePointer(mutating: argvBuffer.baseAddress!),
-                    UnsafeMutablePointer(mutating: envpBuffer.baseAddress!))
-      }
-    }
   }
 
   private mutating func supervise(pid: pid_t, out: Pipe, err: Pipe, stdin: Pipe?) {
@@ -311,14 +309,21 @@ private struct Supervisor {
     var killAt: ContinuousClock.Instant?
     var stopping: CommandResult.Termination?
 
-    func read(_ fd: Int32, into stream: inout Data, alsoStdout: Bool, output: inout Data) -> Bool {
+    let deliver = onOutput
+    var pieces = (stdout: UTF8Stream(), stderr: UTF8Stream())
+
+    func read(_ fd: Int32, into stream: inout Data, alsoStdout: Bool, output: inout Data,
+              pieces: inout UTF8Stream) -> Bool {
       var buffer = [UInt8](repeating: 0, count: 65536)
+      let kind: ProcessRunner.OutputStream = alsoStdout ? .stdout : .stderr
       while true {
         let count = Darwin.read(fd, &buffer, buffer.count)
         if count > 0 {
           output.append(contentsOf: buffer[0..<count])
           if alsoStdout { stream.append(contentsOf: buffer[0..<count]) }
+          if let deliver, case let text = pieces.feed(buffer[0..<count]), !text.isEmpty { deliver(kind, text) }
         } else if count == 0 {
+          if let deliver, case let text = pieces.finish(), !text.isEmpty { deliver(kind, text) }
           return false
         } else {
           return errno == EAGAIN || errno == EINTR
@@ -371,7 +376,10 @@ private struct Supervisor {
           _ = kevent(queue, &drop, 1, nil, 0, nil)
         case EVFILT_READ:
           let isOut = fd == out.read
-          if !read(fd, into: &stdout, alsoStdout: isOut, output: &output) {
+          let more = isOut
+            ? read(fd, into: &stdout, alsoStdout: true, output: &output, pieces: &pieces.stdout)
+            : read(fd, into: &stdout, alsoStdout: false, output: &output, pieces: &pieces.stderr)
+          if !more {
             open.remove(fd)
             if isOut { out.closeRead() } else { err.closeRead() }
           }
@@ -405,6 +413,53 @@ private struct Supervisor {
 
   private func watch(fd: Int32, filter: Int32) -> Darwin.kevent {
     Darwin.kevent(ident: UInt(fd), filter: Int16(filter), flags: UInt16(EV_ADD), fflags: 0, data: 0, udata: nil)
+  }
+}
+
+/// posix_spawn with the decisions of `ProcessRunner`. A descriptor that is nil is /dev/null.
+private func spawnChild(_ command: Command, path: String, stdin: Int32?, stdout: Int32?, stderr: Int32?,
+                        pid: inout pid_t) -> Int32 {
+  var actions: posix_spawn_file_actions_t?
+  var attributes: posix_spawnattr_t?
+  posix_spawn_file_actions_init(&actions)
+  posix_spawnattr_init(&attributes)
+  defer {
+    posix_spawn_file_actions_destroy(&actions)
+    posix_spawnattr_destroy(&attributes)
+  }
+  for (fd, target, mode) in [(stdin, Int32(0), O_RDONLY), (stdout, 1, O_WRONLY), (stderr, 2, O_WRONLY)] {
+    if let fd {
+      posix_spawn_file_actions_adddup2(&actions, fd, target)
+    } else {
+      posix_spawn_file_actions_addopen(&actions, target, "/dev/null", mode, 0)
+    }
+  }
+  if let directory = command.directory {
+    posix_spawn_file_actions_addchdir_np(&actions, directory.path)
+  }
+
+  var all = sigset_t(), none = sigset_t()
+  sigfillset(&all)
+  sigemptyset(&none)
+  posix_spawnattr_setsigdefault(&attributes, &all)
+  posix_spawnattr_setsigmask(&attributes, &none)
+  posix_spawnattr_setpgroup(&attributes, 0)
+  posix_spawnattr_setflags(&attributes, Int16(POSIX_SPAWN_SETPGROUP | POSIX_SPAWN_CLOEXEC_DEFAULT
+    | POSIX_SPAWN_SETSIGDEF | POSIX_SPAWN_SETSIGMASK))
+
+  // strdup of the UTF-8 bytes: no normalization on the way (see ProcessRunner).
+  let argv = ([command.executable] + command.arguments).map { strdup($0) }
+  let envp = command.environment.map { strdup("\($0.key)=\($0.value)") }
+  defer {
+    for pointer in argv { free(pointer) }
+    for pointer in envp { free(pointer) }
+  }
+  return (argv + [nil]).withUnsafeBufferPointer { argvBuffer in
+    (envp + [nil]).withUnsafeBufferPointer { envpBuffer in
+      posix_spawn(&pid, path, &actions, &attributes,
+                  UnsafeMutablePointer(mutating: argvBuffer.baseAddress!),
+                  UnsafeMutablePointer(mutating: envpBuffer.baseAddress!))
+    }
   }
 }
 

@@ -545,3 +545,41 @@ gefragt wird (bis `connectionsService` portiert ist, ohne Token: anonym).
   gleichzeitiger Abrufe, ohne Token-Kopf, `_` im Besitzer erlaubt, „neu laden“ ohne READMEs,
   strenges UTF-8, keine Folgeseiten, Folgeseite auf fremdem Host, falscher `Accept`, 204 mit Body,
   404 als „nicht verfügbar“; dazu die Frist: ohne die Grenzen der Sitzung scheitert der Test.
+
+## Punkt 4: Build und Server
+
+Vor dem Build und vor jedem Serverstart bereitet QuartzControl das Projekt vor
+(`refreshAuthoredFrames`, `refreshGoogleFonts` in `buildService.ts`): Pfade zu den Frames
+umbiegen, alle Frames neu schreiben, die verwalteten Stil-Blöcke reparieren, Schrift-Adressen
+umstellen, Google-Schriften auffrischen. Bis auf das Umbiegen (`ProjectPaths`) liegt das in
+`layoutFrameService`, `styleService` und `fontService`, also in Punkt 5. Entschieden am
+2026-11-06 (Nutzer): Punkt 4 zuerst, mit einer ausdrücklichen Liste von Vorbereitungsschritten,
+in die Punkt 5 seine Schritte einträgt. Bis dahin baut QuartzHub mit den Frames, die zuletzt
+geschrieben wurden; eine Oberfläche, die bauen lässt, gibt es vor Phase 4 nicht. Die Fragen beim
+Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht erst in Phase 4.
+
+### Prozessstarter, zweiter Teil (`ProcessRunner.run(onOutput:)`, `ProcessRunner.launch`)
+
+- **Ausgabe während des Laufs.** `run` reicht stdout und stderr auf Wunsch stückweise weiter, für
+  die Konsole des Builds; die Antwort bleibt, wie sie war (wartet auf das Schließen beider Pipes).
+  Ein Zeichen, das eine Lesegrenze zerschneidet, wartet auf sein Ende (`UTF8Stream`).
+  QuartzControls Build-Konsole nahm `chunk.toString()` und zeigte dort zwei U+FFFD statt „ä“; nur
+  der Tail der Server-Logs hatte einen `StringDecoder`. Die Stücke ergeben zusammen genau
+  `String(decoding:)` über alles: 5000 Zufallsfolgen aus den Rändern von UTF-8 (jedes Lead-Byte,
+  die Grenzen des zweiten Bytes nach E0/ED/F0/F4, Folgebytes, nie gültige Bytes), zufällig in
+  Stücke von 1 bis 4 Bytes geteilt. Zurückgehalten wird nur, was noch ein Zeichen werden kann
+  (E0 80 nie).
+- **Ein Prozess, auf den keiner wartet** (`launch`, für den Dev-Server): stdout und stderr in
+  Dateien, die der Aufrufer öffnet und gleich wieder schließt, stdin /dev/null, eigene
+  Prozessgruppe. QuartzControl startete den Server ohne `detached`, also in Electrons Gruppe, und
+  beendete ihn mit `tree-kill`. Hier erreicht ihn ein Signal an die Gruppe der App nicht, und
+  `stop` erreicht die ganze Gruppe des Servers.
+  Abgeholt wird er von einem eigenen Thread mit `waitpid`, also nie ein Zombie.
+- **`stop` wartet auf die Gruppe, nicht nur auf den Prozess:** SIGTERM an die Gruppe, SIGKILL an
+  den Rest nach der Frist. Gemessen mit einer Shell, die auf SIGTERM endet, und einer Subshell,
+  die es ignoriert (wie ein node unter npx): Ohne das Warten auf die Gruppe überlebte die
+  Subshell den Stopp.
+- Gegenproben (5, jede lässt einen Test scheitern): kein Zurückhalten (2 Tests, 1864 Befunde),
+  ohne Prüfung des zweiten Bytes, kein Rest am Ende des Stroms, ohne eigene Prozessgruppe
+  (8 Tests; die Schleife, die SIGTERM ignoriert, lief dann ohne Ende, bis sie von Hand beendet
+  wurde), `stop` wartet nur auf den Prozess.

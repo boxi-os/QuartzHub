@@ -1,5 +1,6 @@
 import Darwin
 import Foundation
+import Synchronization
 import Testing
 @testable import QuartzHubCore
 
@@ -175,5 +176,174 @@ import Testing
     #expect(result.stdout == "ONLY=this\n")
     let added = await ProcessRunner.run(Command("/usr/bin/env", environment: ["A": "1"]).adding(["B": "2", "A": "3"]))
     #expect(Set(added.stdout.split(separator: "\n")) == ["A=3", "B=2"])
+  }
+}
+
+/// Output while the process runs (the build's console) and text across read boundaries.
+@Suite struct ProcessOutputTests {
+  final class Pieces: Sendable {
+    let items = Mutex<[(ProcessRunner.OutputStream, String, ContinuousClock.Instant)]>([])
+    func add(_ stream: ProcessRunner.OutputStream, _ text: String) {
+      items.withLock { $0.append((stream, text, ContinuousClock.now)) }
+    }
+    func text(_ stream: ProcessRunner.OutputStream) -> String {
+      items.withLock { $0.filter { $0.0 == stream }.map(\.1).joined() }
+    }
+  }
+
+  @Test func outputArrivesWhileTheProcessRuns() async throws {
+    let pieces = Pieces()
+    let start = ContinuousClock.now
+    let result = await ProcessRunner.run(ProcessRunnerTests.sh("echo a; sleep 0.6; echo b >&2; echo c"), onOutput: pieces.add)
+    let end = ContinuousClock.now
+    #expect(result.termination == .exited(0))
+    let first = try #require(pieces.items.withLock { $0.first })
+    #expect(first.0 == .stdout && first.1 == "a\n")
+    #expect(first.2 - start < .milliseconds(400), "the first line came \(first.2 - start) after the start")
+    #expect(end - first.2 > .milliseconds(400))
+    #expect(pieces.text(.stdout) == result.stdout)
+    #expect(pieces.text(.stderr) == "b\n")
+  }
+
+  @Test func aCharacterCutByAReadIsNotTorn() async {
+    let pieces = Pieces()
+    // "ä" is c3 a4; the two bytes come in two writes, a fifth of a second apart.
+    let result = await ProcessRunner.run(ProcessRunnerTests.sh(#"printf '\303'; sleep 0.2; printf '\244\n'; printf '\360\237' >&2"#),
+                                         onOutput: pieces.add)
+    #expect(result.stdout == "ä\n")
+    #expect(pieces.items.withLock { $0.filter { $0.0 == .stdout }.map(\.1) } == ["ä\n"])
+    // An end that never came is said at the end of its stream, as one U+FFFD (as the whole would).
+    #expect(pieces.text(.stderr) == "\u{FFFD}")
+  }
+
+  /// SplitMix64: the same bytes on every run.
+  struct Seeded: RandomNumberGenerator {
+    var state: UInt64
+    mutating func next() -> UInt64 {
+      state &+= 0x9E37_79B9_7F4A_7C15
+      var z = state
+      z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
+      z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
+      return z ^ (z >> 31)
+    }
+  }
+
+  @Test func thePiecesAreTheWhole() {
+    // Bytes from the edges of UTF-8: every lead, the bounds of the second byte after E0/ED/F0/F4,
+    // continuation bytes, what is never valid, plain ASCII.
+    let alphabet: [UInt8] = [0x41, 0x0a, 0x7f, 0x80, 0x8f, 0x90, 0x9f, 0xa0, 0xa4, 0xbf, 0xc0, 0xc1, 0xc2, 0xc3, 0xdf,
+                             0xe0, 0xe4, 0xed, 0xef, 0xf0, 0xf4, 0xf5, 0xff]
+    var random = Seeded(state: 2026_11_06)
+    var compared = 0
+    for _ in 0..<5000 {
+      let bytes = (0..<Int.random(in: 1...24, using: &random)).map { _ in alphabet.randomElement(using: &random)! }
+      var stream = UTF8Stream()
+      var text = ""
+      var rest = bytes[...]
+      while !rest.isEmpty {
+        let take = Int.random(in: 1...min(4, rest.count), using: &random)
+        text += stream.feed(rest.prefix(take))
+        rest = rest.dropFirst(take)
+      }
+      text += stream.finish()
+      #expect(text == String(decoding: bytes, as: UTF8.self), "\(bytes.map { String($0, radix: 16) })")
+      compared += 1
+    }
+    #expect(compared == 5000)
+    // What is held back is held back only as long as it can still become a character.
+    var stream = UTF8Stream()
+    #expect(stream.feed([0x41, 0xe4, 0xb8]) == "A")
+    #expect(stream.feed([0xad]) == "中")
+    #expect(stream.feed([0xe0, 0x80]) == "\u{FFFD}\u{FFFD}", "E0 80 can never become a character")
+    #expect(stream.feed([0xf0, 0x9f, 0x8e]) == "")
+    #expect(stream.feed([0x89]) == "🎉")
+  }
+}
+
+/// `ProcessRunner.launch`: the dev server's way to start.
+@Suite struct LaunchedProcessTests {
+  struct Files {
+    let directory: URL
+    init() throws {
+      directory = FileManager.default.temporaryDirectory.appendingPathComponent("qh-launch-\(UUID().uuidString)")
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    }
+    func open(_ name: String) -> Int32 {
+      Darwin.open(directory.appendingPathComponent(name).path, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o644)
+    }
+    func read(_ name: String) -> String {
+      (try? String(contentsOf: directory.appendingPathComponent(name), encoding: .utf8)) ?? ""
+    }
+    func remove() { try? FileManager.default.removeItem(at: directory) }
+  }
+
+  static func launch(_ script: String, _ files: Files) throws -> LaunchedProcess {
+    let out = files.open("out"), err = files.open("err")
+    // Our copies go at once: the child has its own, as QuartzControl's spawnServer does it.
+    defer { close(out); close(err) }
+    return try ProcessRunner.launch(Command("/bin/sh", ["-c", script]), stdout: out, stderr: err).get()
+  }
+
+  static func waitFor(_ condition: () -> Bool) async throws {
+    for _ in 0..<100 where !condition() { try await Task.sleep(for: .milliseconds(20)) }
+  }
+
+  @Test func itWritesIntoItsFilesAfterWeLetGo() async throws {
+    let files = try Files()
+    defer { files.remove() }
+    let process = try Self.launch("sleep 0.3; echo late; echo wrong >&2; exit 4", files)
+    #expect(process.termination == nil)
+    #expect(await process.exit() == .exited(4))
+    #expect(process.termination == .exited(4))
+    #expect(await process.exit() == .exited(4), "asked again after the end")
+    #expect(files.read("out") == "late\n")
+    #expect(files.read("err") == "wrong\n")
+  }
+
+  @Test func withoutFilesItsOutputGoesNowhereAndStdinIsEmpty() async throws {
+    // cat on an open stdin would wait; /dev/null ends it.
+    let process = try ProcessRunner.launch(Command("/bin/cat")).get()
+    #expect(await process.exit() == .exited(0))
+  }
+
+  @Test func itHasItsOwnGroupAndStopReachesAllOfIt() async throws {
+    let files = try Files()
+    defer { files.remove() }
+    let process = try Self.launch("sleep 30 & echo $!; wait", files)
+    try await Self.waitFor { !files.read("out").isEmpty }
+    let grandchild = try #require(pid_t(files.read("out").trimmingCharacters(in: .whitespacesAndNewlines)))
+    defer { kill(grandchild, SIGKILL) }
+    #expect(getpgid(process.pid) == process.pid)
+    #expect(getpgid(grandchild) == process.pid)
+    #expect(getpgid(process.pid) != getpgrp())
+    #expect(await process.stop(grace: .milliseconds(500)) == .signaled(SIGTERM))
+    #expect(!ProcessRunnerTests.alive(grandchild))
+    #expect(!process.groupIsAlive)
+    #expect(!process.signal(SIGTERM), "no group any more")
+  }
+
+  @Test func stopWaitsForWhatTheProcessLeftBehind() async throws {
+    // The shell ends on SIGTERM, the subshell it started ignores it and holds on, as a node under
+    // npx can: the stop is over when nothing of the group is left, not when the shell is.
+    let files = try Files()
+    defer { files.remove() }
+    let process = try Self.launch("(trap '' TERM; while :; do sleep 0.05; done) & echo $!; wait", files)
+    try await Self.waitFor { !files.read("out").isEmpty }
+    let stubborn = try #require(pid_t(files.read("out").trimmingCharacters(in: .whitespacesAndNewlines)))
+    defer { kill(stubborn, SIGKILL) }
+    let start = ContinuousClock.now
+    #expect(await process.stop(grace: .milliseconds(400)) == .signaled(SIGTERM))
+    #expect(ContinuousClock.now - start >= .milliseconds(400))
+    try await Self.waitFor { !ProcessRunnerTests.alive(stubborn) }
+    #expect(!ProcessRunnerTests.alive(stubborn), "\(stubborn) survived the stop")
+  }
+
+  @Test func startFailuresAreTheirOwnAnswers() {
+    #expect(throws: CommandResult.StartFailure.notFound) {
+      try ProcessRunner.launch(Command("qh-no-such-tool", environment: ["PATH": "/usr/bin:/bin"])).get()
+    }
+    #expect(throws: CommandResult.StartFailure.directoryMissing) {
+      try ProcessRunner.launch(Command("/bin/pwd", in: URL(fileURLWithPath: "/nowhere-\(UUID().uuidString)"))).get()
+    }
   }
 }
