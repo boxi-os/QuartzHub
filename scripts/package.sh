@@ -14,7 +14,7 @@ cd "$ROOT"
 [ -x Runtime/node/bin/node ] || { echo "Runtime/node fehlt: scripts/fetch-runtime.sh" >&2; exit 1; }
 [ -x Runtime/git/bin/git ] || { echo "Runtime/git fehlt: scripts/fetch-runtime.sh" >&2; exit 1; }
 scripts/build-helpers.sh 2>/dev/null
-for h in yaml-edit dts-schema sass-check; do
+for h in yaml-edit dts-schema sass-check locale-edit; do
   [ -f "Helpers/dist/$h.cjs" ] || { echo "Helpers/dist/$h.cjs fehlt nach dem Bau" >&2; exit 1; }
 done
 

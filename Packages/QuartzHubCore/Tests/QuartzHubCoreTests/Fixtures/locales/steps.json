@@ -1,0 +1,1873 @@
+[
+ {
+  "on": "project",
+  "call": "listLocales",
+  "args": [],
+  "result": [
+   {
+    "code": "Ab"
+   },
+   {
+    "code": "ab-CD"
+   },
+   {
+    "code": "de-DE"
+   },
+   {
+    "code": "Ef"
+   },
+   {
+    "code": "en-US"
+   },
+   {
+    "code": "qq-1234"
+   },
+   {
+    "code": "tlh-Latn"
+   },
+   {
+    "code": "xx"
+   },
+   {
+    "code": "yy"
+   },
+   {
+    "code": "zz"
+   }
+  ],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "de-DE"
+  ],
+  "result": [
+   {
+    "path": [
+     "propertyDefaults",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Unbenannt"
+   },
+   {
+    "path": [
+     "propertyDefaults",
+     "description"
+    ],
+    "kind": "string",
+    "value": "Ohne Beschreibung"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "note"
+    ],
+    "kind": "string",
+    "value": "Hinweis"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "abstract"
+    ],
+    "kind": "string",
+    "value": "Zusammenfassung"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "info"
+    ],
+    "kind": "string",
+    "value": "Info"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "todo"
+    ],
+    "kind": "string",
+    "value": "Zu erledigen"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "tip"
+    ],
+    "kind": "string",
+    "value": "Tipp"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "success"
+    ],
+    "kind": "string",
+    "value": "Erfolg"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "question"
+    ],
+    "kind": "string",
+    "value": "Frage"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "warning"
+    ],
+    "kind": "string",
+    "value": "Warnung"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "failure"
+    ],
+    "kind": "string",
+    "value": "Fehlgeschlagen"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "danger"
+    ],
+    "kind": "string",
+    "value": "Gefahr"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "bug"
+    ],
+    "kind": "string",
+    "value": "Fehler"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "example"
+    ],
+    "kind": "string",
+    "value": "Beispiel"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "quote"
+    ],
+    "kind": "string",
+    "value": "Zitat"
+   },
+   {
+    "path": [
+     "components",
+     "backlinks",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Verweise hierher"
+   },
+   {
+    "path": [
+     "components",
+     "backlinks",
+     "noBacklinksFound"
+    ],
+    "kind": "string",
+    "value": "Noch verweist nichts hierher"
+   },
+   {
+    "path": [
+     "components",
+     "themeToggle",
+     "lightMode"
+    ],
+    "kind": "string",
+    "value": "Helles Farbschema"
+   },
+   {
+    "path": [
+     "components",
+     "themeToggle",
+     "darkMode"
+    ],
+    "kind": "string",
+    "value": "Dunkles Farbschema"
+   },
+   {
+    "path": [
+     "components",
+     "readerMode",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Nur der Text"
+   },
+   {
+    "path": [
+     "components",
+     "explorer",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Inhalt"
+   },
+   {
+    "path": [
+     "components",
+     "footer",
+     "createdWith"
+    ],
+    "kind": "string",
+    "value": "Erstellt mit"
+   },
+   {
+    "path": [
+     "components",
+     "graph",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Umgebung"
+   },
+   {
+    "path": [
+     "components",
+     "recentNotes",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Zuletzt geändert"
+   },
+   {
+    "path": [
+     "components",
+     "recentNotes",
+     "seeRemainingMore"
+    ],
+    "kind": "template",
+    "value": "({ remaining }) => `${remaining} weitere ansehen →`"
+   },
+   {
+    "path": [
+     "components",
+     "transcludes",
+     "transcludeOf"
+    ],
+    "kind": "template",
+    "value": "({ targetSlug }) => `Transklusion von ${targetSlug}`"
+   },
+   {
+    "path": [
+     "components",
+     "transcludes",
+     "linkToOriginal"
+    ],
+    "kind": "string",
+    "value": "Zur vollständigen Seite"
+   },
+   {
+    "path": [
+     "components",
+     "search",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Suche"
+   },
+   {
+    "path": [
+     "components",
+     "search",
+     "searchBarPlaceholder"
+    ],
+    "kind": "string",
+    "value": "Suchen …"
+   },
+   {
+    "path": [
+     "components",
+     "tableOfContents",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Inhaltsverzeichnis"
+   },
+   {
+    "path": [
+     "components",
+     "contentMeta",
+     "readingTime"
+    ],
+    "kind": "template",
+    "value": "({ minutes }) => `${minutes} Min. Lesezeit`"
+   },
+   {
+    "path": [
+     "pages",
+     "rss",
+     "recentNotes"
+    ],
+    "kind": "string",
+    "value": "Zuletzt bearbeitete Seiten"
+   },
+   {
+    "path": [
+     "pages",
+     "rss",
+     "lastFewNotes"
+    ],
+    "kind": "template",
+    "value": "({ count }) => `Letzte ${count} Seiten`"
+   },
+   {
+    "path": [
+     "pages",
+     "error",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Nicht gefunden"
+   },
+   {
+    "path": [
+     "pages",
+     "error",
+     "notFound"
+    ],
+    "kind": "string",
+    "value": "Diese Seite ist entweder nicht öffentlich oder existiert nicht."
+   },
+   {
+    "path": [
+     "pages",
+     "error",
+     "home"
+    ],
+    "kind": "string",
+    "value": "Zur Startseite"
+   },
+   {
+    "path": [
+     "pages",
+     "folderContent",
+     "folder"
+    ],
+    "kind": "string",
+    "value": "Ordner"
+   },
+   {
+    "path": [
+     "pages",
+     "folderContent",
+     "itemsUnderFolder"
+    ],
+    "kind": "template",
+    "value": "({ count }) =>\n        count === 1 ? \"1 Datei in diesem Ordner.\" : `${count} Dateien in diesem Ordner.`"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "tag"
+    ],
+    "kind": "string",
+    "value": "Tag"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "tagIndex"
+    ],
+    "kind": "string",
+    "value": "Tag-Übersicht"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "itemsUnderTag"
+    ],
+    "kind": "template",
+    "value": "({ count }) =>\n        count === 1 ? \"1 Datei mit diesem Tag.\" : `${count} Dateien mit diesem Tag.`"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "showingFirst"
+    ],
+    "kind": "template",
+    "value": "({ count }) => `Die ersten ${count} Tags werden angezeigt.`"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "totalTags"
+    ],
+    "kind": "template",
+    "value": "({ count }) => `${count} Tags insgesamt.`"
+   }
+  ],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "xx"
+  ],
+  "result": [
+   {
+    "path": [
+     "plain"
+    ],
+    "kind": "string",
+    "value": "eins"
+   },
+   {
+    "path": [
+     "quoted-key"
+    ],
+    "kind": "string",
+    "value": "zwei"
+   },
+   {
+    "path": [
+     "with space"
+    ],
+    "kind": "string",
+    "value": "drei ä\n"
+   },
+   {
+    "path": [
+     "nested",
+     "deeper",
+     "leaf"
+    ],
+    "kind": "string",
+    "value": "ohne Ersatz"
+   },
+   {
+    "path": [
+     "nested",
+     "sibling"
+    ],
+    "kind": "string",
+    "value": "s"
+   },
+   {
+    "path": [
+     "template"
+    ],
+    "kind": "template",
+    "value": "({ n }: { n: number }) => `${n} Seiten`"
+   },
+   {
+    "path": [
+     "withSubstitution"
+    ],
+    "kind": "template",
+    "value": "`a ${\"b\"}`"
+   },
+   {
+    "path": [
+     "call"
+    ],
+    "kind": "template",
+    "value": "String(1)"
+   },
+   {
+    "path": [
+     "number"
+    ],
+    "kind": "template",
+    "value": "42"
+   },
+   {
+    "path": [
+     "empty"
+    ],
+    "kind": "string",
+    "value": ""
+   }
+  ],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "yy"
+  ],
+  "result": [],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "zz"
+  ],
+  "result": [],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "ab-CD"
+  ],
+  "result": [],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "Ab"
+  ],
+  "result": [
+   {
+    "path": [
+     "first"
+    ],
+    "kind": "string",
+    "value": "eins"
+   }
+  ],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "qq-1234"
+  ],
+  "result": [
+   {
+    "path": [
+     "kaputt"
+    ],
+    "kind": "string",
+    "value": "a"
+   },
+   {
+    "path": [
+     "weiter"
+    ],
+    "kind": "template",
+    "value": "(\"b\""
+   }
+  ],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "fr-FR"
+  ],
+  "result": [],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getGitAttributesStatus",
+  "args": [],
+  "result": false,
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getTranslationCustomizations",
+  "args": [],
+  "result": [
+   {
+    "code": "Ab",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "ab-CD",
+    "source": "none",
+    "changed": [],
+    "total": 0
+   },
+   {
+    "code": "de-DE",
+    "source": "none",
+    "changed": [],
+    "total": 43
+   },
+   {
+    "code": "Ef",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "en-US",
+    "source": "git",
+    "changed": [
+     {
+      "path": [
+       "propertyDefaults",
+       "title"
+      ],
+      "kind": "string",
+      "value": "Nameless"
+     }
+    ],
+    "total": 43
+   },
+   {
+    "code": "qq-1234",
+    "source": "none",
+    "changed": [],
+    "total": 2
+   },
+   {
+    "code": "tlh-Latn",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "xx",
+    "source": "none",
+    "changed": [],
+    "total": 10
+   },
+   {
+    "code": "yy",
+    "source": "none",
+    "changed": [],
+    "total": 0
+   },
+   {
+    "code": "zz",
+    "source": "none",
+    "changed": [],
+    "total": 0
+   }
+  ],
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "propertyDefaults",
+    "title"
+   ],
+   "string",
+   "Ohne „Titel“ – \"zitiert\" \\ ${x}\nzweite Zeile"
+  ],
+  "result": {
+   "success": true
+  },
+  "changed": {
+   "project/quartz/i18n/locales/de-DE.ts": "import { Translation } from \"./definition\"\n\nexport default {\n  propertyDefaults: {\n    title: \"Ohne „Titel“ – \\\"zitiert\\\" \\\\ ${x}\\nzweite Zeile\",\n    description: \"Ohne Beschreibung\",\n  },\n  components: {\n    callout: {\n      note: \"Hinweis\",\n      abstract: \"Zusammenfassung\",\n      info: \"Info\",\n      todo: \"Zu erledigen\",\n      tip: \"Tipp\",\n      success: \"Erfolg\",\n      question: \"Frage\",\n      warning: \"Warnung\",\n      failure: \"Fehlgeschlagen\",\n      danger: \"Gefahr\",\n      bug: \"Fehler\",\n      example: \"Beispiel\",\n      quote: \"Zitat\",\n    },\n    backlinks: {\n      title: \"Verweise hierher\",\n      noBacklinksFound: \"Noch verweist nichts hierher\",\n    },\n    themeToggle: {\n      lightMode: \"Helles Farbschema\",\n      darkMode: \"Dunkles Farbschema\",\n    },\n    readerMode: {\n      title: \"Nur der Text\",\n    },\n    explorer: {\n      title: \"Inhalt\",\n    },\n    footer: {\n      createdWith: \"Erstellt mit\",\n    },\n    graph: {\n      title: \"Umgebung\",\n    },\n    recentNotes: {\n      title: \"Zuletzt geändert\",\n      seeRemainingMore: ({ remaining }) => `${remaining} weitere ansehen →`,\n    },\n    transcludes: {\n      transcludeOf: ({ targetSlug }) => `Transklusion von ${targetSlug}`,\n      linkToOriginal: \"Zur vollständigen Seite\",\n    },\n    search: {\n      title: \"Suche\",\n      searchBarPlaceholder: \"Suchen …\",\n    },\n    tableOfContents: {\n      title: \"Inhaltsverzeichnis\",\n    },\n    contentMeta: {\n      readingTime: ({ minutes }) => `${minutes} Min. Lesezeit`,\n    },\n  },\n  pages: {\n    rss: {\n      recentNotes: \"Zuletzt bearbeitete Seiten\",\n      lastFewNotes: ({ count }) => `Letzte ${count} Seiten`,\n    },\n    error: {\n      title: \"Nicht gefunden\",\n      notFound: \"Diese Seite ist entweder nicht öffentlich oder existiert nicht.\",\n      home: \"Zur Startseite\",\n    },\n    folderContent: {\n      folder: \"Ordner\",\n      itemsUnderFolder: ({ count }) =>\n        count === 1 ? \"1 Datei in diesem Ordner.\" : `${count} Dateien in diesem Ordner.`,\n    },\n    tagContent: {\n      tag: \"Tag\",\n      tagIndex: \"Tag-Übersicht\",\n      itemsUnderTag: ({ count }) =>\n        count === 1 ? \"1 Datei mit diesem Tag.\" : `${count} Dateien mit diesem Tag.`,\n      showingFirst: ({ count }) => `Die ersten ${count} Tags werden angezeigt.`,\n      totalTags: ({ count }) => `${count} Tags insgesamt.`,\n    },\n  },\n} as const satisfies Translation\n",
+   "project/.gitattributes": "quartz/i18n/locales/*.ts merge=ours\n",
+   "project/.gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n",
+   "project/.quartz-gui/locale-baseline/de-DE.ts": "import { Translation } from \"./definition\"\n\nexport default {\n  propertyDefaults: {\n    title: \"Unbenannt\",\n    description: \"Ohne Beschreibung\",\n  },\n  components: {\n    callout: {\n      note: \"Hinweis\",\n      abstract: \"Zusammenfassung\",\n      info: \"Info\",\n      todo: \"Zu erledigen\",\n      tip: \"Tipp\",\n      success: \"Erfolg\",\n      question: \"Frage\",\n      warning: \"Warnung\",\n      failure: \"Fehlgeschlagen\",\n      danger: \"Gefahr\",\n      bug: \"Fehler\",\n      example: \"Beispiel\",\n      quote: \"Zitat\",\n    },\n    backlinks: {\n      title: \"Verweise hierher\",\n      noBacklinksFound: \"Noch verweist nichts hierher\",\n    },\n    themeToggle: {\n      lightMode: \"Helles Farbschema\",\n      darkMode: \"Dunkles Farbschema\",\n    },\n    readerMode: {\n      title: \"Nur der Text\",\n    },\n    explorer: {\n      title: \"Inhalt\",\n    },\n    footer: {\n      createdWith: \"Erstellt mit\",\n    },\n    graph: {\n      title: \"Umgebung\",\n    },\n    recentNotes: {\n      title: \"Zuletzt geändert\",\n      seeRemainingMore: ({ remaining }) => `${remaining} weitere ansehen →`,\n    },\n    transcludes: {\n      transcludeOf: ({ targetSlug }) => `Transklusion von ${targetSlug}`,\n      linkToOriginal: \"Zur vollständigen Seite\",\n    },\n    search: {\n      title: \"Suche\",\n      searchBarPlaceholder: \"Suchen …\",\n    },\n    tableOfContents: {\n      title: \"Inhaltsverzeichnis\",\n    },\n    contentMeta: {\n      readingTime: ({ minutes }) => `${minutes} Min. Lesezeit`,\n    },\n  },\n  pages: {\n    rss: {\n      recentNotes: \"Zuletzt bearbeitete Seiten\",\n      lastFewNotes: ({ count }) => `Letzte ${count} Seiten`,\n    },\n    error: {\n      title: \"Nicht gefunden\",\n      notFound: \"Diese Seite ist entweder nicht öffentlich oder existiert nicht.\",\n      home: \"Zur Startseite\",\n    },\n    folderContent: {\n      folder: \"Ordner\",\n      itemsUnderFolder: ({ count }) =>\n        count === 1 ? \"1 Datei in diesem Ordner.\" : `${count} Dateien in diesem Ordner.`,\n    },\n    tagContent: {\n      tag: \"Tag\",\n      tagIndex: \"Tag-Übersicht\",\n      itemsUnderTag: ({ count }) =>\n        count === 1 ? \"1 Datei mit diesem Tag.\" : `${count} Dateien mit diesem Tag.`,\n      showingFirst: ({ count }) => `Die ersten ${count} Tags werden angezeigt.`,\n      totalTags: ({ count }) => `${count} Tags insgesamt.`,\n    },\n  },\n} as const satisfies Translation\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "components",
+    "recentNotes",
+    "seeRemainingMore"
+   ],
+   "template",
+   "({ remaining }) => `noch ${remaining}`"
+  ],
+  "result": {
+   "success": true
+  },
+  "changed": {
+   "project/quartz/i18n/locales/de-DE.ts": "import { Translation } from \"./definition\"\n\nexport default {\n  propertyDefaults: {\n    title: \"Ohne „Titel“ – \\\"zitiert\\\" \\\\ ${x}\\nzweite Zeile\",\n    description: \"Ohne Beschreibung\",\n  },\n  components: {\n    callout: {\n      note: \"Hinweis\",\n      abstract: \"Zusammenfassung\",\n      info: \"Info\",\n      todo: \"Zu erledigen\",\n      tip: \"Tipp\",\n      success: \"Erfolg\",\n      question: \"Frage\",\n      warning: \"Warnung\",\n      failure: \"Fehlgeschlagen\",\n      danger: \"Gefahr\",\n      bug: \"Fehler\",\n      example: \"Beispiel\",\n      quote: \"Zitat\",\n    },\n    backlinks: {\n      title: \"Verweise hierher\",\n      noBacklinksFound: \"Noch verweist nichts hierher\",\n    },\n    themeToggle: {\n      lightMode: \"Helles Farbschema\",\n      darkMode: \"Dunkles Farbschema\",\n    },\n    readerMode: {\n      title: \"Nur der Text\",\n    },\n    explorer: {\n      title: \"Inhalt\",\n    },\n    footer: {\n      createdWith: \"Erstellt mit\",\n    },\n    graph: {\n      title: \"Umgebung\",\n    },\n    recentNotes: {\n      title: \"Zuletzt geändert\",\n      seeRemainingMore: ({ remaining }) => `noch ${remaining}`,\n    },\n    transcludes: {\n      transcludeOf: ({ targetSlug }) => `Transklusion von ${targetSlug}`,\n      linkToOriginal: \"Zur vollständigen Seite\",\n    },\n    search: {\n      title: \"Suche\",\n      searchBarPlaceholder: \"Suchen …\",\n    },\n    tableOfContents: {\n      title: \"Inhaltsverzeichnis\",\n    },\n    contentMeta: {\n      readingTime: ({ minutes }) => `${minutes} Min. Lesezeit`,\n    },\n  },\n  pages: {\n    rss: {\n      recentNotes: \"Zuletzt bearbeitete Seiten\",\n      lastFewNotes: ({ count }) => `Letzte ${count} Seiten`,\n    },\n    error: {\n      title: \"Nicht gefunden\",\n      notFound: \"Diese Seite ist entweder nicht öffentlich oder existiert nicht.\",\n      home: \"Zur Startseite\",\n    },\n    folderContent: {\n      folder: \"Ordner\",\n      itemsUnderFolder: ({ count }) =>\n        count === 1 ? \"1 Datei in diesem Ordner.\" : `${count} Dateien in diesem Ordner.`,\n    },\n    tagContent: {\n      tag: \"Tag\",\n      tagIndex: \"Tag-Übersicht\",\n      itemsUnderTag: ({ count }) =>\n        count === 1 ? \"1 Datei mit diesem Tag.\" : `${count} Dateien mit diesem Tag.`,\n      showingFirst: ({ count }) => `Die ersten ${count} Tags werden angezeigt.`,\n      totalTags: ({ count }) => `${count} Tags insgesamt.`,\n    },\n  },\n} as const satisfies Translation\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "components",
+    "recentNotes",
+    "seeRemainingMore"
+   ],
+   "template",
+   "({ remaining }) => `kaputt"
+  ],
+  "result": {
+   "success": false,
+   "error": "',' expected.; ',' expected.; ',' expected.; ',' expected.; ';' expected.; Module declaration names may only use ' or \" quoted strings.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Module declaration names may only use ' or \" quoted strings.; Unexpected keyword or identifier.; ';' expected.; Identifier expected.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Identifier expected.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Identifier expected.; Unexpected keyword or identifier.; Unexpected keyword or identifier.; Identifier expected.; Unterminated template literal."
+  },
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "components",
+    "recentNotes",
+    "seeRemainingMore"
+   ],
+   "template",
+   "\"Text statt Funktion\""
+  ],
+  "result": {
+   "success": true
+  },
+  "changed": {
+   "project/quartz/i18n/locales/de-DE.ts": "import { Translation } from \"./definition\"\n\nexport default {\n  propertyDefaults: {\n    title: \"Ohne „Titel“ – \\\"zitiert\\\" \\\\ ${x}\\nzweite Zeile\",\n    description: \"Ohne Beschreibung\",\n  },\n  components: {\n    callout: {\n      note: \"Hinweis\",\n      abstract: \"Zusammenfassung\",\n      info: \"Info\",\n      todo: \"Zu erledigen\",\n      tip: \"Tipp\",\n      success: \"Erfolg\",\n      question: \"Frage\",\n      warning: \"Warnung\",\n      failure: \"Fehlgeschlagen\",\n      danger: \"Gefahr\",\n      bug: \"Fehler\",\n      example: \"Beispiel\",\n      quote: \"Zitat\",\n    },\n    backlinks: {\n      title: \"Verweise hierher\",\n      noBacklinksFound: \"Noch verweist nichts hierher\",\n    },\n    themeToggle: {\n      lightMode: \"Helles Farbschema\",\n      darkMode: \"Dunkles Farbschema\",\n    },\n    readerMode: {\n      title: \"Nur der Text\",\n    },\n    explorer: {\n      title: \"Inhalt\",\n    },\n    footer: {\n      createdWith: \"Erstellt mit\",\n    },\n    graph: {\n      title: \"Umgebung\",\n    },\n    recentNotes: {\n      title: \"Zuletzt geändert\",\n      seeRemainingMore: \"Text statt Funktion\",\n    },\n    transcludes: {\n      transcludeOf: ({ targetSlug }) => `Transklusion von ${targetSlug}`,\n      linkToOriginal: \"Zur vollständigen Seite\",\n    },\n    search: {\n      title: \"Suche\",\n      searchBarPlaceholder: \"Suchen …\",\n    },\n    tableOfContents: {\n      title: \"Inhaltsverzeichnis\",\n    },\n    contentMeta: {\n      readingTime: ({ minutes }) => `${minutes} Min. Lesezeit`,\n    },\n  },\n  pages: {\n    rss: {\n      recentNotes: \"Zuletzt bearbeitete Seiten\",\n      lastFewNotes: ({ count }) => `Letzte ${count} Seiten`,\n    },\n    error: {\n      title: \"Nicht gefunden\",\n      notFound: \"Diese Seite ist entweder nicht öffentlich oder existiert nicht.\",\n      home: \"Zur Startseite\",\n    },\n    folderContent: {\n      folder: \"Ordner\",\n      itemsUnderFolder: ({ count }) =>\n        count === 1 ? \"1 Datei in diesem Ordner.\" : `${count} Dateien in diesem Ordner.`,\n    },\n    tagContent: {\n      tag: \"Tag\",\n      tagIndex: \"Tag-Übersicht\",\n      itemsUnderTag: ({ count }) =>\n        count === 1 ? \"1 Datei mit diesem Tag.\" : `${count} Dateien mit diesem Tag.`,\n      showingFirst: ({ count }) => `Die ersten ${count} Tags werden angezeigt.`,\n      totalTags: ({ count }) => `${count} Tags insgesamt.`,\n    },\n  },\n} as const satisfies Translation\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "components",
+    "fehlt"
+   ],
+   "string",
+   "x"
+  ],
+  "result": {
+   "success": false,
+   "error": "Key not found: components.fehlt"
+  },
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "propertyDefaults",
+    "title",
+    "zu-tief"
+   ],
+   "string",
+   "x"
+  ],
+  "result": {
+   "success": false,
+   "error": "Key not found: propertyDefaults.title.zu-tief"
+  },
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [],
+   "string",
+   "x"
+  ],
+  "result": {
+   "success": false,
+   "error": "Key not found: "
+  },
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "fr-FR",
+   [
+    "a"
+   ],
+   "string",
+   "x"
+  ],
+  "result": {
+   "success": false,
+   "error": "Locale file not found: fr-FR"
+  },
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "yy",
+   [
+    "a"
+   ],
+   "string",
+   "x"
+  ],
+  "result": {
+   "success": false,
+   "error": "Could not find the default-exported translation object"
+  },
+  "changed": {
+   "project/.quartz-gui/locale-baseline/yy.ts": "export const translation = { a: \"b\" }\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "xx",
+   [
+    "nested"
+   ],
+   "string",
+   "ganzes Objekt"
+  ],
+  "result": {
+   "success": true
+  },
+  "changed": {
+   "project/quartz/i18n/locales/xx.ts": "import { Translation } from \"./definition\"\n\n// A comment that must stay.\nexport default (({\n  plain: \"eins\",\n  'quoted-key': 'zwei',\n  \"with space\": \"drei \\u00e4\\n\",\n  nested: \"ganzes Objekt\",\n  template: ({ n }: { n: number }) => `${n} Seiten`,\n  withSubstitution: `a ${\"b\"}`,\n  call: String(1),\n  number: 42,\n  [computed]: \"nie\",\n  ...spread,\n  shorthand,\n  method() { return \"nie\" },\n  get getter() { return \"nie\" },\n  42: \"numerischer Schlüssel\",\n  empty: \"\",\n}) as const) satisfies Translation\n",
+   "project/.quartz-gui/locale-baseline/xx.ts": "import { Translation } from \"./definition\"\n\n// A comment that must stay.\nexport default (({\n  plain: \"eins\",\n  'quoted-key': 'zwei',\n  \"with space\": \"drei \\u00e4\\n\",\n  nested: { deeper: { leaf: `ohne Ersatz` }, sibling: \"s\" },\n  template: ({ n }: { n: number }) => `${n} Seiten`,\n  withSubstitution: `a ${\"b\"}`,\n  call: String(1),\n  number: 42,\n  [computed]: \"nie\",\n  ...spread,\n  shorthand,\n  method() { return \"nie\" },\n  get getter() { return \"nie\" },\n  42: \"numerischer Schlüssel\",\n  empty: \"\",\n}) as const) satisfies Translation\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "xx",
+   [
+    "42"
+   ],
+   "string",
+   "neu"
+  ],
+  "result": {
+   "success": false,
+   "error": "Key not found: 42"
+  },
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "xx",
+   [
+    "quoted-key"
+   ],
+   "string",
+   "neu"
+  ],
+  "result": {
+   "success": true
+  },
+  "changed": {
+   "project/quartz/i18n/locales/xx.ts": "import { Translation } from \"./definition\"\n\n// A comment that must stay.\nexport default (({\n  plain: \"eins\",\n  'quoted-key': \"neu\",\n  \"with space\": \"drei \\u00e4\\n\",\n  nested: \"ganzes Objekt\",\n  template: ({ n }: { n: number }) => `${n} Seiten`,\n  withSubstitution: `a ${\"b\"}`,\n  call: String(1),\n  number: 42,\n  [computed]: \"nie\",\n  ...spread,\n  shorthand,\n  method() { return \"nie\" },\n  get getter() { return \"nie\" },\n  42: \"numerischer Schlüssel\",\n  empty: \"\",\n}) as const) satisfies Translation\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "xx",
+   [
+    "computed"
+   ],
+   "string",
+   "neu"
+  ],
+  "result": {
+   "success": false,
+   "error": "Key not found: computed"
+  },
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "qq-1234",
+   [
+    "kaputt"
+   ],
+   "string",
+   "neu"
+  ],
+  "result": {
+   "success": false,
+   "error": "Property assignment expected.; ')' expected."
+  },
+  "changed": {
+   "project/.quartz-gui/locale-baseline/qq-1234.ts": "export default { kaputt: \"a\", , weiter: (\"b\" }\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "getGitAttributesStatus",
+  "args": [],
+  "result": true,
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "getTranslationCustomizations",
+  "args": [],
+  "result": [
+   {
+    "code": "Ab",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "ab-CD",
+    "source": "none",
+    "changed": [],
+    "total": 0
+   },
+   {
+    "code": "de-DE",
+    "source": "baseline",
+    "changed": [
+     {
+      "path": [
+       "propertyDefaults",
+       "title"
+      ],
+      "kind": "string",
+      "value": "Ohne „Titel“ – \"zitiert\" \\ ${x}\nzweite Zeile"
+     },
+     {
+      "path": [
+       "components",
+       "recentNotes",
+       "seeRemainingMore"
+      ],
+      "kind": "string",
+      "value": "Text statt Funktion"
+     }
+    ],
+    "total": 43
+   },
+   {
+    "code": "Ef",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "en-US",
+    "source": "git",
+    "changed": [
+     {
+      "path": [
+       "propertyDefaults",
+       "title"
+      ],
+      "kind": "string",
+      "value": "Nameless"
+     }
+    ],
+    "total": 43
+   },
+   {
+    "code": "qq-1234",
+    "source": "baseline",
+    "changed": [],
+    "total": 2
+   },
+   {
+    "code": "tlh-Latn",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "xx",
+    "source": "baseline",
+    "changed": [
+     {
+      "path": [
+       "quoted-key"
+      ],
+      "kind": "string",
+      "value": "neu"
+     }
+    ],
+    "total": 9
+   },
+   {
+    "code": "yy",
+    "source": "baseline",
+    "changed": [],
+    "total": 0
+   },
+   {
+    "code": "zz",
+    "source": "none",
+    "changed": [],
+    "total": 0
+   }
+  ],
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "propertyDefaults",
+    "title"
+   ],
+   "string",
+   "Unbenannt"
+  ],
+  "result": {
+   "success": true
+  },
+  "changed": {
+   "project/quartz/i18n/locales/de-DE.ts": "import { Translation } from \"./definition\"\n\nexport default {\n  propertyDefaults: {\n    title: \"Unbenannt\",\n    description: \"Ohne Beschreibung\",\n  },\n  components: {\n    callout: {\n      note: \"Hinweis\",\n      abstract: \"Zusammenfassung\",\n      info: \"Info\",\n      todo: \"Zu erledigen\",\n      tip: \"Tipp\",\n      success: \"Erfolg\",\n      question: \"Frage\",\n      warning: \"Warnung\",\n      failure: \"Fehlgeschlagen\",\n      danger: \"Gefahr\",\n      bug: \"Fehler\",\n      example: \"Beispiel\",\n      quote: \"Zitat\",\n    },\n    backlinks: {\n      title: \"Verweise hierher\",\n      noBacklinksFound: \"Noch verweist nichts hierher\",\n    },\n    themeToggle: {\n      lightMode: \"Helles Farbschema\",\n      darkMode: \"Dunkles Farbschema\",\n    },\n    readerMode: {\n      title: \"Nur der Text\",\n    },\n    explorer: {\n      title: \"Inhalt\",\n    },\n    footer: {\n      createdWith: \"Erstellt mit\",\n    },\n    graph: {\n      title: \"Umgebung\",\n    },\n    recentNotes: {\n      title: \"Zuletzt geändert\",\n      seeRemainingMore: \"Text statt Funktion\",\n    },\n    transcludes: {\n      transcludeOf: ({ targetSlug }) => `Transklusion von ${targetSlug}`,\n      linkToOriginal: \"Zur vollständigen Seite\",\n    },\n    search: {\n      title: \"Suche\",\n      searchBarPlaceholder: \"Suchen …\",\n    },\n    tableOfContents: {\n      title: \"Inhaltsverzeichnis\",\n    },\n    contentMeta: {\n      readingTime: ({ minutes }) => `${minutes} Min. Lesezeit`,\n    },\n  },\n  pages: {\n    rss: {\n      recentNotes: \"Zuletzt bearbeitete Seiten\",\n      lastFewNotes: ({ count }) => `Letzte ${count} Seiten`,\n    },\n    error: {\n      title: \"Nicht gefunden\",\n      notFound: \"Diese Seite ist entweder nicht öffentlich oder existiert nicht.\",\n      home: \"Zur Startseite\",\n    },\n    folderContent: {\n      folder: \"Ordner\",\n      itemsUnderFolder: ({ count }) =>\n        count === 1 ? \"1 Datei in diesem Ordner.\" : `${count} Dateien in diesem Ordner.`,\n    },\n    tagContent: {\n      tag: \"Tag\",\n      tagIndex: \"Tag-Übersicht\",\n      itemsUnderTag: ({ count }) =>\n        count === 1 ? \"1 Datei mit diesem Tag.\" : `${count} Dateien mit diesem Tag.`,\n      showingFirst: ({ count }) => `Die ersten ${count} Tags werden angezeigt.`,\n      totalTags: ({ count }) => `${count} Tags insgesamt.`,\n    },\n  },\n} as const satisfies Translation\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "getTranslationCustomizations",
+  "args": [],
+  "result": [
+   {
+    "code": "Ab",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "ab-CD",
+    "source": "none",
+    "changed": [],
+    "total": 0
+   },
+   {
+    "code": "de-DE",
+    "source": "baseline",
+    "changed": [
+     {
+      "path": [
+       "components",
+       "recentNotes",
+       "seeRemainingMore"
+      ],
+      "kind": "string",
+      "value": "Text statt Funktion"
+     }
+    ],
+    "total": 43
+   },
+   {
+    "code": "Ef",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "en-US",
+    "source": "git",
+    "changed": [
+     {
+      "path": [
+       "propertyDefaults",
+       "title"
+      ],
+      "kind": "string",
+      "value": "Nameless"
+     }
+    ],
+    "total": 43
+   },
+   {
+    "code": "qq-1234",
+    "source": "baseline",
+    "changed": [],
+    "total": 2
+   },
+   {
+    "code": "tlh-Latn",
+    "source": "none",
+    "changed": [],
+    "total": 1
+   },
+   {
+    "code": "xx",
+    "source": "baseline",
+    "changed": [
+     {
+      "path": [
+       "quoted-key"
+      ],
+      "kind": "string",
+      "value": "neu"
+     }
+    ],
+    "total": 9
+   },
+   {
+    "code": "yy",
+    "source": "baseline",
+    "changed": [],
+    "total": 0
+   },
+   {
+    "code": "zz",
+    "source": "none",
+    "changed": [],
+    "total": 0
+   }
+  ],
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "de-DE"
+  ],
+  "result": [
+   {
+    "path": [
+     "propertyDefaults",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Unbenannt"
+   },
+   {
+    "path": [
+     "propertyDefaults",
+     "description"
+    ],
+    "kind": "string",
+    "value": "Ohne Beschreibung"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "note"
+    ],
+    "kind": "string",
+    "value": "Hinweis"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "abstract"
+    ],
+    "kind": "string",
+    "value": "Zusammenfassung"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "info"
+    ],
+    "kind": "string",
+    "value": "Info"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "todo"
+    ],
+    "kind": "string",
+    "value": "Zu erledigen"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "tip"
+    ],
+    "kind": "string",
+    "value": "Tipp"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "success"
+    ],
+    "kind": "string",
+    "value": "Erfolg"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "question"
+    ],
+    "kind": "string",
+    "value": "Frage"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "warning"
+    ],
+    "kind": "string",
+    "value": "Warnung"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "failure"
+    ],
+    "kind": "string",
+    "value": "Fehlgeschlagen"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "danger"
+    ],
+    "kind": "string",
+    "value": "Gefahr"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "bug"
+    ],
+    "kind": "string",
+    "value": "Fehler"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "example"
+    ],
+    "kind": "string",
+    "value": "Beispiel"
+   },
+   {
+    "path": [
+     "components",
+     "callout",
+     "quote"
+    ],
+    "kind": "string",
+    "value": "Zitat"
+   },
+   {
+    "path": [
+     "components",
+     "backlinks",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Verweise hierher"
+   },
+   {
+    "path": [
+     "components",
+     "backlinks",
+     "noBacklinksFound"
+    ],
+    "kind": "string",
+    "value": "Noch verweist nichts hierher"
+   },
+   {
+    "path": [
+     "components",
+     "themeToggle",
+     "lightMode"
+    ],
+    "kind": "string",
+    "value": "Helles Farbschema"
+   },
+   {
+    "path": [
+     "components",
+     "themeToggle",
+     "darkMode"
+    ],
+    "kind": "string",
+    "value": "Dunkles Farbschema"
+   },
+   {
+    "path": [
+     "components",
+     "readerMode",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Nur der Text"
+   },
+   {
+    "path": [
+     "components",
+     "explorer",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Inhalt"
+   },
+   {
+    "path": [
+     "components",
+     "footer",
+     "createdWith"
+    ],
+    "kind": "string",
+    "value": "Erstellt mit"
+   },
+   {
+    "path": [
+     "components",
+     "graph",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Umgebung"
+   },
+   {
+    "path": [
+     "components",
+     "recentNotes",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Zuletzt geändert"
+   },
+   {
+    "path": [
+     "components",
+     "recentNotes",
+     "seeRemainingMore"
+    ],
+    "kind": "string",
+    "value": "Text statt Funktion"
+   },
+   {
+    "path": [
+     "components",
+     "transcludes",
+     "transcludeOf"
+    ],
+    "kind": "template",
+    "value": "({ targetSlug }) => `Transklusion von ${targetSlug}`"
+   },
+   {
+    "path": [
+     "components",
+     "transcludes",
+     "linkToOriginal"
+    ],
+    "kind": "string",
+    "value": "Zur vollständigen Seite"
+   },
+   {
+    "path": [
+     "components",
+     "search",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Suche"
+   },
+   {
+    "path": [
+     "components",
+     "search",
+     "searchBarPlaceholder"
+    ],
+    "kind": "string",
+    "value": "Suchen …"
+   },
+   {
+    "path": [
+     "components",
+     "tableOfContents",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Inhaltsverzeichnis"
+   },
+   {
+    "path": [
+     "components",
+     "contentMeta",
+     "readingTime"
+    ],
+    "kind": "template",
+    "value": "({ minutes }) => `${minutes} Min. Lesezeit`"
+   },
+   {
+    "path": [
+     "pages",
+     "rss",
+     "recentNotes"
+    ],
+    "kind": "string",
+    "value": "Zuletzt bearbeitete Seiten"
+   },
+   {
+    "path": [
+     "pages",
+     "rss",
+     "lastFewNotes"
+    ],
+    "kind": "template",
+    "value": "({ count }) => `Letzte ${count} Seiten`"
+   },
+   {
+    "path": [
+     "pages",
+     "error",
+     "title"
+    ],
+    "kind": "string",
+    "value": "Nicht gefunden"
+   },
+   {
+    "path": [
+     "pages",
+     "error",
+     "notFound"
+    ],
+    "kind": "string",
+    "value": "Diese Seite ist entweder nicht öffentlich oder existiert nicht."
+   },
+   {
+    "path": [
+     "pages",
+     "error",
+     "home"
+    ],
+    "kind": "string",
+    "value": "Zur Startseite"
+   },
+   {
+    "path": [
+     "pages",
+     "folderContent",
+     "folder"
+    ],
+    "kind": "string",
+    "value": "Ordner"
+   },
+   {
+    "path": [
+     "pages",
+     "folderContent",
+     "itemsUnderFolder"
+    ],
+    "kind": "template",
+    "value": "({ count }) =>\n        count === 1 ? \"1 Datei in diesem Ordner.\" : `${count} Dateien in diesem Ordner.`"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "tag"
+    ],
+    "kind": "string",
+    "value": "Tag"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "tagIndex"
+    ],
+    "kind": "string",
+    "value": "Tag-Übersicht"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "itemsUnderTag"
+    ],
+    "kind": "template",
+    "value": "({ count }) =>\n        count === 1 ? \"1 Datei mit diesem Tag.\" : `${count} Dateien mit diesem Tag.`"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "showingFirst"
+    ],
+    "kind": "template",
+    "value": "({ count }) => `Die ersten ${count} Tags werden angezeigt.`"
+   },
+   {
+    "path": [
+     "pages",
+     "tagContent",
+     "totalTags"
+    ],
+    "kind": "template",
+    "value": "({ count }) => `${count} Tags insgesamt.`"
+   }
+  ],
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "getLocaleEntries",
+  "args": [
+   "xx"
+  ],
+  "result": [
+   {
+    "path": [
+     "plain"
+    ],
+    "kind": "string",
+    "value": "eins"
+   },
+   {
+    "path": [
+     "quoted-key"
+    ],
+    "kind": "string",
+    "value": "neu"
+   },
+   {
+    "path": [
+     "with space"
+    ],
+    "kind": "string",
+    "value": "drei ä\n"
+   },
+   {
+    "path": [
+     "nested"
+    ],
+    "kind": "string",
+    "value": "ganzes Objekt"
+   },
+   {
+    "path": [
+     "template"
+    ],
+    "kind": "template",
+    "value": "({ n }: { n: number }) => `${n} Seiten`"
+   },
+   {
+    "path": [
+     "withSubstitution"
+    ],
+    "kind": "template",
+    "value": "`a ${\"b\"}`"
+   },
+   {
+    "path": [
+     "call"
+    ],
+    "kind": "template",
+    "value": "String(1)"
+   },
+   {
+    "path": [
+     "number"
+    ],
+    "kind": "template",
+    "value": "42"
+   },
+   {
+    "path": [
+     "empty"
+    ],
+    "kind": "string",
+    "value": ""
+   }
+  ],
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "git",
+  "args": [
+   "config",
+   "--unset",
+   "merge.ours.driver"
+  ],
+  "result": null,
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "getGitAttributesStatus",
+  "args": [],
+  "result": false,
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "project",
+  "call": "ensureGitAttributes",
+  "args": [],
+  "result": null,
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "git",
+  "args": [
+   "config",
+   "merge.ours.driver",
+   ""
+  ],
+  "result": null,
+  "changed": {},
+  "driver": ""
+ },
+ {
+  "on": "project",
+  "call": "getGitAttributesStatus",
+  "args": [],
+  "result": false,
+  "changed": {},
+  "driver": ""
+ },
+ {
+  "on": "project",
+  "call": "ensureGitAttributes",
+  "args": [],
+  "result": null,
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "writeFile",
+  "args": [
+   ".gitattributes",
+   "*.png binary"
+  ],
+  "result": null,
+  "changed": {
+   "project/.gitattributes": "*.png binary"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "getGitAttributesStatus",
+  "args": [],
+  "result": false,
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "ensureGitAttributes",
+  "args": [],
+  "result": null,
+  "changed": {
+   "project/.gitattributes": "*.png binary\nquartz/i18n/locales/*.ts merge=ours\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "ensureGitAttributes",
+  "args": [],
+  "result": null,
+  "changed": {},
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "writeFile",
+  "args": [
+   ".gitattributes",
+   ""
+  ],
+  "result": null,
+  "changed": {
+   "project/.gitattributes": ""
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "ensureGitAttributes",
+  "args": [],
+  "result": null,
+  "changed": {
+   "project/.gitattributes": "quartz/i18n/locales/*.ts merge=ours\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "writeFile",
+  "args": [
+   ".gitattributes",
+   "*.png binary\n"
+  ],
+  "result": null,
+  "changed": {
+   "project/.gitattributes": "*.png binary\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "project",
+  "call": "ensureGitAttributes",
+  "args": [],
+  "result": null,
+  "changed": {
+   "project/.gitattributes": "*.png binary\nquartz/i18n/locales/*.ts merge=ours\n"
+  },
+  "driver": "true"
+ },
+ {
+  "on": "plain",
+  "call": "getGitAttributesStatus",
+  "args": [],
+  "result": false,
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "plain",
+  "call": "ensureGitAttributes",
+  "args": [],
+  "result": null,
+  "changed": {
+   "plain/.gitattributes": "quartz/i18n/locales/*.ts merge=ours\n"
+  },
+  "driver": null
+ },
+ {
+  "on": "plain",
+  "call": "getGitAttributesStatus",
+  "args": [],
+  "result": false,
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "plain",
+  "call": "saveLocaleEntry",
+  "args": [
+   "de-DE",
+   [
+    "title"
+   ],
+   "string",
+   "y"
+  ],
+  "result": {
+   "success": true
+  },
+  "changed": {
+   "plain/quartz/i18n/locales/de-DE.ts": "export default { title: \"y\" }\n",
+   "plain/.quartz-gui/locale-baseline/de-DE.ts": "export default { title: \"x\" }\n"
+  },
+  "driver": null
+ },
+ {
+  "on": "plain",
+  "call": "getTranslationCustomizations",
+  "args": [],
+  "result": {
+   "threw": "EISDIR: illegal operation on a directory, read"
+  },
+  "changed": {},
+  "driver": null
+ },
+ {
+  "on": "plain",
+  "call": "listLocales",
+  "args": [],
+  "result": [
+   {
+    "code": "de-DE"
+   },
+   {
+    "code": "xy"
+   }
+  ],
+  "changed": {},
+  "driver": null
+ }
+]

@@ -1191,3 +1191,28 @@ QuartzControl 1.3.0 ins Repo, abgerufen wird dieselbe Adresse (Nutzer, 2026-11-0
 - Gegenproben: 26, alle gefangen; eine (Gleichstand gilt als Gewinn) erst mit dem eigenen Test.
   Zwei (Jahresklammer weg) enden im Absturz statt in einer Erwartung, weil das Jahr dann nicht in
   16 Bit passt.
+
+### Übersetzungen (`localizationService.ts` → `LocaleFiles`, Helfer `locale-edit`)
+
+- **Gemessen gegen QuartzControls Code:** `scripts/locales-golden.mjs` baut ein git-Projekt mit
+  gui-tests de-DE und en-US (kopiert) und Sprachdateien jeder schiefen Form (Klammern, `as`,
+  `satisfies`, berechnete Schlüssel, Spread, Kurzform, Methoden, Zahlen als Schlüssel, zwei
+  `export default`, `export =`, keine Objekt-Ausgabe, eine Datei mit Syntaxfehlern), dazu ein
+  Projekt ohne git. 51 Schritte (lesen, speichern, Baseline, git-Baseline, `merge=ours` in beiden
+  Hälften); je Schritt Antwort, geänderte Dateien und `merge.ours.driver`. Alle stimmen, auch
+  TypeScripts Fehlersätze beim Speichern einer kaputten Vorlage Wort für Wort.
+- **Der Helfer `locale-edit`** liest und spleißt mit TypeScript 5.9.3 (QuartzControls Fassung)
+  und tut nichts mit Dateien. Preis: 9 MB, weil er TypeScript ein zweites Mal bündelt (wie
+  `dts-schema`). Ein gemeinsamer Helfer für beide spart sie und kann später kommen.
+- **Wie dort:** Ein Speichern, das scheitert, legt die Baseline trotzdem an (Schritte 19 und 24).
+  Ein Ordner namens `xy.ts` lässt die ganze Übersicht mit `EISDIR` scheitern (Schritt 49). Die
+  Fehlersätze beim Speichern bleiben Englisch, wie sie der Kanal dort antwortete.
+- **Abweichung:** Ein Code, der kein Sprachcode ist, liest und schreibt hier nichts. In
+  QuartzControl prüfte das das IPC-Schema der Übersetzungs-Seite, der Import einer Vorlage aber
+  reichte den Code aus dem Paket ungeprüft weiter: `../../util/path` hätte in
+  `quartz/util/path.ts` geschrieben, wenn die Datei ein `export default {…}` hat. Nebenbefund für
+  QuartzControl (Wartung: notiert, nicht behoben).
+- Gegenproben: 24, alle gefangen bis auf eine unerreichbare (`definition.ts` auslassen: „definition“
+  ist ohnehin kein Sprachcode). Zwei waren erst ungefangen und bekamen ihren Fall: ICU- gegen
+  Byte-Sortierung (`Ef`), eine `.gitattributes`, die schon mit Zeilenumbruch endet; dazu der leere
+  Merge-Treiber.

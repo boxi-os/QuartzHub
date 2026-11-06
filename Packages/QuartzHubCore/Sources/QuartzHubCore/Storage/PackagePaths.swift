@@ -35,11 +35,12 @@ public enum PackagePaths {
 }
 
 /// Node's error for a failed file call, as `String(err)` prints it: `Error: ENOENT: no such file or
-/// directory, stat '/x'`. Only the codes the ports meet.
+/// directory, stat '/x'`. Only the codes the ports meet. Without a path where Node names none
+/// (`readFileSync` on a folder: `EISDIR: illegal operation on a directory, read`).
 struct NodeFileError: Error, CustomStringConvertible {
   let code: Int32
   let syscall: String
-  let path: String
+  var path: String?
 
   var description: String {
     let (name, text): (String, String) = switch code {
@@ -49,7 +50,7 @@ struct NodeFileError: Error, CustomStringConvertible {
     case ENOTDIR: ("ENOTDIR", "not a directory")
     default: ("E\(code)", String(cString: strerror(code)).lowercased())
     }
-    return "Error: \(name): \(text), \(syscall) '\(path)'"
+    return "Error: \(name): \(text), \(syscall)" + (path.map { " '\($0)'" } ?? "")
   }
 
   /// `fs.stat`: follows links.
