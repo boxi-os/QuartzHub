@@ -179,7 +179,9 @@ public enum ProfileMigration {
   }
 
   /// QuartzControl's key, from its Keychain item. Asks the user (the item belongs to another app).
+  /// Electron names the item "<App> Safe Storage" with the account "<App> Key" (read from the
+  /// item's attributes, 2026-11-06).
   public static func quartzControlKey() throws(Keychain.Failure) -> Data {
-    ChromiumSafeStorage.key(password: try Keychain.read(service: "QuartzControl Safe Storage", account: nil))
+    ChromiumSafeStorage.key(password: try Keychain.read(service: "QuartzControl Safe Storage", account: "QuartzControl Key"))
   }
 }

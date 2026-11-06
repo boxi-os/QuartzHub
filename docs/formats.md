@@ -95,8 +95,8 @@ Dafür kommen die Leser und Schreiber mit dem jeweiligen Dienst in Phase 3. `qua
 QuartzControl verschlüsselt mit Electrons `safeStorage`; auf macOS liegt der Schlüssel im
 Schlüsselbund-Eintrag „QuartzControl Safe Storage“. Gespeichert wird base64 der rohen Ausgabe, ohne
 eigenes Präfix. Das Format der Ausgabe ist Chromiums (`v10`, AES-128-CBC, Schlüssel per PBKDF2-SHA1
-aus dem Passwort, Salz `saltysalt`, 1003 Runden, IV aus 16 Leerzeichen). **Noch nicht an einem echten
-Chiffretext von Electron gemessen**; das ist der erste Schritt der Übernahme.
+aus dem Passwort, Salz `saltysalt`, 1003 Runden, IV aus 16 Leerzeichen); Konto des Eintrags
+„QuartzControl Key“. Gegen Electron 43.4.1 gemessen (`decisions/phase-2-formate.md`).
 
 QuartzHub verschlüsselt nicht selbst, sondern legt je Geheimnis einen eigenen Schlüsselbund-Eintrag
 an. Die Dateien von QuartzControl bleiben unberührt.

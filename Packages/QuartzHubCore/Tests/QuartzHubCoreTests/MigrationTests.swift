@@ -3,9 +3,8 @@ import Testing
 @testable import QuartzHubCore
 
 @Suite struct ChromiumSafeStorageTests {
-  // Chromium's own test vector would be better; until the measurement against Electron
-  // (docs/decisions/phase-2-formate.md) this checks the formula against Node's crypto, an
-  // independent implementation of the same primitives.
+  // Node's crypto, an independent implementation of the same primitives; Electron itself is the
+  // vector in decryptsWhatElectronWrote.
   @Test(.enabled(if: JSJSONTests.node != nil, "Runtime/node fehlt"))
   func matchesNodeCrypto() throws {
     // Password and text go in on stdin: Foundation's Process passes arguments through
@@ -20,6 +19,14 @@ import Testing
     let key = ChromiumSafeStorage.key(password: "pass wört")
     #expect(try ChromiumSafeStorage.decrypt(base64: fromNode, key: key) == "geheim €")
     #expect(ChromiumSafeStorage.encrypt("geheim €", key: key) == fromNode)
+  }
+
+  /// Measured 2026-11-06: Electron 43.4.1 (QuartzControl's, from its node_modules) encrypted this
+  /// with `safeStorage.encryptString` under app name "QHProbe", against a throwaway Keychain item
+  /// "QHProbe Safe Storage" / "QHProbe Key" holding the password below; the item is deleted.
+  @Test func decryptsWhatElectronWrote() throws {
+    let key = ChromiumSafeStorage.key(password: "known-probe-password-1")
+    #expect(try ChromiumSafeStorage.decrypt(base64: "djEwtkXxLUXbVGvBKJFylvZZembWICNGVD/x/0BLDSYD60E=", key: key) == "geheim € probe")
   }
 
   @Test func failuresAreTold() {

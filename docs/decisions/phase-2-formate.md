@@ -72,8 +72,14 @@ nichts beiseitelegt: die Dateien gehören einer anderen App), `run` schreibt Qua
   einen anderen Schlüssel als Swift; über stdin stimmen beide. Gegengemessen mit `printf %s wört`:
   aus `Process` kommt `6f cc 88` (o + Trema), aus der Shell `c3 b6`. Gilt für jeden Kindprozess, dem
   QuartzHub Nicht-ASCII mitgibt (Prozessstarter, Phase 3).
-- Gemessen ist die Formel bisher gegen Nodes `crypto`, eine unabhängige Umsetzung derselben
-  Bausteine, **nicht gegen Electron**.
+- **Gegen Electron gemessen (2026-11-06):** Ein Wegwerf-Eintrag „QHProbe Safe Storage“ / „QHProbe
+  Key“ mit bekanntem Passwort (`security add-generic-password … -A`), Electron 43.4.1 aus
+  QuartzControls `node_modules` mit `app.setName('QHProbe')` und eigenem `userData` verschlüsselte
+  „geheim € probe“; Electron legte keinen neuen Eintrag an, Swift entschlüsselte mit dem bekannten
+  Passwort den Text und mit einem falschen sauber „undecryptable“. Der Eintrag ist gelöscht, der
+  Chiffretext steht als Testvektor in `decryptsWhatElectronWrote`. Dazu gegen Nodes `crypto`.
+- Electron nennt den Eintrag „<App> Safe Storage“ mit dem Konto **„<App> Key“** (aus den Attributen
+  von „QuartzControl Safe Storage“ gelesen, ohne das Passwort); `quartzControlKey` fragt genau ihn.
 
 ### Nebeneinander-Betrieb
 
