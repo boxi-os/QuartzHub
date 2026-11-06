@@ -1,0 +1,273 @@
+// Code — inline, blocks, the language label and the copy button.
+//
+// `keepBackground: false` is set on the syntax-highlighting plugin (plugins.mjs), so shiki emits
+// token colours but no background of its own: the block's surface is this template's, in both
+// modes, and the two themes (github-light / github-dark) only have to agree with it once.
+
+article {
+  code {
+    font-family: var(--codeFont);
+    // The mono face runs large next to Inter at the same nominal size.
+    font-size: 0.9em;
+    font-variant-ligatures: none;
+  }
+
+  // Inline code: a tint, not a box. Enough to separate it from prose, not enough to interrupt a
+  // sentence.
+  :not(pre) > code {
+    background: var(--tpl-surface);
+    color: var(--dark);
+    padding: 0.1em 0.35em;
+    border-radius: var(--tpl-radius-sm);
+    // Long identifiers must be allowed to break rather than widen the column.
+    overflow-wrap: anywhere;
+  }
+
+  a > code {
+    color: inherit;
+  }
+}
+
+// The block that a code block hangs in.
+//
+// `pre` is the scroller (`overflow-x: auto` below), and an absolutely positioned child of a
+// scroller scrolls away with the content - which is exactly what the copy button did: on a wide
+// block it walked off to the left and out of sight, the one direction a copy button must not go.
+// The fix is to take the containing block off `pre` and give it to whatever holds it, which does
+// not scroll. `sticky` was tried first and does not stick horizontally here in any form - with a
+// float, without one, with an explicit inline size (measured in Blink at 1440px).
+//
+// The parent is named through `:has` rather than assumed: six of the seven blocks on the code page
+// sit in a `<figure>`, the seventh in a plain `<div>`, and a rule that only knew about `figure`
+// would have left that one behind.
+:is(figure, div, li, blockquote, td):has(> pre) {
+  position: relative;
+}
+
+pre {
+  // Static, so the button's containing block is the element above - see the rule just before this.
+  position: static;
+  margin-block: var(--tpl-space-lg);
+  padding: var(--tpl-space-md);
+  padding-block-start: var(--tpl-space-lg);
+  // A surface of its own, lighter than --tpl-surface in light mode: a block is a large area, and
+  // the tint that is right for a line of inline code makes a twenty-line block a grey slab. In
+  // dark mode the token stays on --lightgray - there, lifting the surface would push it towards
+  // the text instead of away from it. The border is --tpl-rule, which is what --tpl-surface used
+  // to be, so the block now has an edge instead of dissolving into one.
+  background: var(--tpl-surface-code);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  overflow-x: auto;
+  // Wrapping a shell command costs more than scrolling it, so a block scrolls rather than breaks.
+  max-width: none;
+  line-height: 1.55;
+  tab-size: 2;
+
+  > code {
+    background: none;
+    padding: 0;
+    display: block;
+    // A block wide enough to scroll must scroll as a whole, not lose its last line's indent.
+    min-width: max-content;
+  }
+
+  .line {
+    display: inline-block;
+    width: 100%;
+  }
+
+  // shiki's line highlight, restated so it reads on both grounds.
+  .line-highlight {
+    background: var(--tpl-surface-tint);
+    box-shadow: inset var(--tpl-accent-bar) 0 0 var(--secondary);
+  }
+}
+
+// The language, from the attribute shiki writes. `::before` rather than markup so it can never
+// end up in a copied selection.
+//
+// Positioned against the block around `pre`, like the copy button and for the same reason - it
+// would otherwise scroll out of the left edge on a wide block.
+pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  inset-block-start: var(--tpl-space-2xs);
+  inset-inline-start: var(--tpl-space-md);
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-xs);
+  letter-spacing: var(--tpl-tracking-caps);
+  text-transform: uppercase;
+  color: var(--gray);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------- copy button */
+
+// Just the icon. No box, no border, no surface.
+//
+// The selector is `pre .clipboard-button` and not `.clipboard-button`, and that is the whole
+// finding: quartz ships this button's styling in a *resource* stylesheet
+// (`static/resource-style-….css`), which is **not** inside `@layer quartz-base` and is linked
+// *after* index.css. So the rule everything else in this template relies on - "custom.scss is
+// unlayered, therefore it wins" - does not hold here. Same specificity, later in the document,
+// and it wins instead:
+//
+//     .clipboard-button { float: right; border: 1px solid; border-color: var(--dark);
+//                         background-color: var(--light); margin: .3rem; padding: .4rem }
+//
+// Measured on the built page: with `border: none` and `background: transparent` written here, the
+// button still reported a 1px border and --light behind it. One descendant in the selector settles
+// it, and `pre` is where this button always is.
+//
+// It stays `absolute`; what changed is what it is absolute *to* - see the `:has(> pre)` rule at
+// the top of this file for why `pre` is no longer the containing block.
+pre .clipboard-button {
+  position: absolute;
+  inset-block-start: var(--tpl-space-2xs);
+  inset-inline-end: var(--tpl-space-2xs);
+  display: grid;
+  place-items: center;
+  // 44px is the smallest comfortable pointer target; the icon inside stays small.
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+  // Every one of these undoes something from the rule quoted above.
+  float: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  appearance: none;
+  color: var(--gray);
+  cursor: pointer;
+  // Hidden until the block is hovered or something inside it has focus — but never hidden from a
+  // keyboard: `opacity` rather than `display`, and focus-within brings it back.
+  opacity: 0;
+  transition: opacity var(--tpl-motion), color var(--tpl-motion);
+
+  > svg {
+    width: 1rem;
+    height: 1rem;
+    // The resource stylesheet fills the glyph with --light and drops the contrast; on a surface
+    // this light that leaves a white smudge. currentColor is what a lucide icon expects.
+    fill: none;
+    filter: none;
+    stroke: currentColor;
+  }
+
+  // The state is the colour of the icon, because there is nothing else left to change.
+  &:hover {
+    color: var(--dark);
+  }
+
+  &:focus-visible {
+    opacity: 1;
+  }
+}
+
+pre:hover .clipboard-button,
+pre:focus-within .clipboard-button {
+  opacity: 1;
+}
+
+// Coarse pointers have no hover, so the button would never appear.
+@media (hover: none) {
+  pre .clipboard-button {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------- syntax colours, corrected */
+
+// Five token colours of github-light / github-dark do not reach 4.5:1 on this template's code
+// surface. Measured over the whole built site - every `--shiki-light` / `--shiki-dark` value in
+// all 333 pages, counted and rated against #F1EFE9 and --lightgray:
+//
+//     hell    #24292E  1179x  12.76      dunkel  #E1E4E8  1179x  10.34
+//             #005CC5   260x   5.47              #79B8FF   260x   6.35
+//             #22863A   206x   4.02  <--         #85E89D   206x   8.81
+//             #032F62   148x  11.51              #9ECBFF   148x   7.81
+//             #D73A49   112x   3.98  <--         #F97583   112x   4.96
+//             #E36209    82x   3.04  <--         #FFAB70    82x   7.10
+//             #6F42C1    48x   5.66              #B392F0    48x   5.20
+//             #6A737D     4x   4.19  <--         #6A737D     4x   2.74  <--
+//             #B31D28     2x   5.85              #FDAEB7     2x   7.48
+//
+// Each correction keeps the hue and the saturation and moves only the lightness, so github-light
+// still reads as github-light - the same thing body-callouts.scss does with quartz' callout
+// colours. The new values are checked on every run by `--check-contrast`, which reads them out of
+// this file.
+//
+// `!important` is not a shortcut here, it is the only lever: shiki writes the colour as an inline
+// custom property on every single span (`style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"`),
+// and an inline declaration beats any author rule that is not important. Overriding the variable
+// rather than `color` means quartz' own light/dark switch keeps doing the switching.
+//
+// This is the one place where a colour is pinned that this template did not choose. A language
+// whose tokens produce a tenth colour would arrive unmeasured; the audit above is repeatable by
+// grepping `--shiki-light:` out of `public/`.
+
+/* --- QuartzControl:syntax:start --- */
+pre span[style*="--shiki-light:#22863A"] { --shiki-light: #1F7A35 !important; }  // 4.02 -> 4.72
+pre span[style*="--shiki-light:#D73A49"] { --shiki-light: #CA2938 !important; }  // 3.98 -> 4.70
+pre span[style*="--shiki-light:#E36209"] { --shiki-light: #B04C07 !important; }  // 3.04 -> 4.71
+pre span[style*="--shiki-light:#6A737D"] { --shiki-light: #636B74 !important; }  // 4.19 -> 4.71
+pre span[style*="--shiki-dark:#6A737D"] { --shiki-dark: #949CA4 !important; }    // 2.74 -> 4.72
+/* --- QuartzControl:syntax:end --- */
+
+/* ------------------------------------------------------------------- block title */
+
+// A `title=` after the language produces a `<figcaption>` above the block (rehype-pretty-code).
+// Unstyled it looks like a stray line of body text sitting on top of a grey box.
+figcaption[data-rehype-pretty-code-title] {
+  // The caption and its block are one object: the caption keeps the block's top margin and the
+  // block gives up its own, rather than the two being pulled together with a negative margin.
+  margin-block: var(--tpl-space-lg) 0;
+  padding: var(--tpl-space-2xs) var(--tpl-space-md);
+  background: var(--tpl-surface);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-block-end: none;
+  border-start-start-radius: var(--tpl-radius-md);
+  border-start-end-radius: var(--tpl-radius-md);
+  font-family: var(--codeFont);
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+  // The filename is the point; it stays on one line and truncates rather than wrapping.
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// The block under a title joins it: square top corners, no doubled border.
+figcaption[data-rehype-pretty-code-title] + pre {
+  margin-block-start: 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+
+  // The language label would repeat what the title already says.
+  &::before {
+    content: none;
+  }
+}
+
+/* ------------------------------------------------------------- definition list */
+
+// Not markdown - the only way to write one is HTML (see besonderes/html). Styled so that the one
+// place using it does not fall back to browser defaults.
+article dl {
+  margin-block: var(--tpl-space-md);
+}
+
+article dt {
+  font-family: var(--headerFont);
+  font-weight: 600;
+  color: var(--dark);
+}
+
+article dd {
+  margin-inline-start: 0;
+  padding-inline-start: var(--tpl-space-md);
+  border-inline-start: var(--tpl-rule-width) solid var(--tpl-rule);
+  margin-block-end: var(--tpl-space-xs);
+  color: var(--darkgray);
+}

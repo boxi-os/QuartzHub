@@ -1,0 +1,54 @@
+// Link popovers — the preview that opens on hover over an internal link.
+//
+// Real depth, for the reason stated in nav-search.scss: it is transient and floats above
+// everything, so it gets the shadow and a solid ground: a translucent popover over body text is
+// unreadable.
+
+.popover {
+  > .popover-inner {
+    background: var(--light);
+    border: var(--tpl-rule-width) dotted var(--tpl-rule-control);
+    border-radius: var(--tpl-radius-lg);
+    box-shadow: var(--tpl-shadow);
+    padding: var(--tpl-space-sm) var(--tpl-space-md);
+    font-size: var(--tpl-text-sm);
+    color: var(--darkgray);
+    // A preview is a preview: enough to decide whether to follow the link.
+    max-height: 20rem;
+    overflow: hidden;
+
+    h1, h2, h3, h4, h5, h6 {
+      margin-block: 0 var(--tpl-space-2xs);
+      font-size: var(--tpl-text-lg);
+    }
+
+    p {
+      margin-block: 0 var(--tpl-space-xs);
+    }
+
+    // Inside a preview, the apparatus of a page is noise.
+    .callout,
+    .tags,
+    pre {
+      display: none;
+    }
+  }
+
+  // The fade at the cut, so a clipped preview looks cut rather than broken.
+  > .popover-inner::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    height: var(--tpl-space-lg);
+    background: linear-gradient(to bottom, transparent, var(--light));
+    pointer-events: none;
+  }
+}
+
+// A popover is pointer-only by nature; nothing here may be the sole route to information.
+@media (hover: none) {
+  .popover {
+    display: none;
+  }
+}

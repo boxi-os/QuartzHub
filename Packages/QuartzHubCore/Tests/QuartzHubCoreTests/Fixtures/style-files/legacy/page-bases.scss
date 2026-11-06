@@ -1,0 +1,461 @@
+// Bases — the page type that turns a `.base` query into a table, cards or a list.
+//
+// The plugin emits its own markup with its own class names, none of which overlap with the folder
+// and tag listings (page-folder.scss). Read off a real build:
+//
+//   .bases-page > .bases-view-tabs > button[data-view-index]      one per view, .is-active
+//                > .bases-view-container > .bases-view[data-view-type]
+//                    table:  .bases-table-wrapper > .bases-view-meta + table.bases-table
+//                    cards:  .bases-cards-wrapper > .bases-view-meta + .bases-cards > a.bases-card
+//                    list:   .bases-list-wrapper  > .bases-view-meta + .bases-list-group
+//                    board:  .bases-board-wrapper > .bases-view-meta + .bases-board > .bases-board-column
+//                    gallery:.bases-gallery-wrapper > .bases-view-meta + .bases-gallery > .bases-gallery-item
+//
+// The plugin ships no colours of its own, so everything below is this template's — same tokens,
+// same rhythm as the rest of the site.
+
+.bases-page {
+  margin-block-start: var(--tpl-space-md);
+}
+
+/* ------------------------------------------------------------------- the view tabs */
+
+// A base can hold several views of the same data. The switcher is a real tablist, so it gets a
+// real control's treatment rather than a row of links.
+.bases-view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tpl-space-2xs);
+  margin-block-end: var(--tpl-space-sm);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  padding-block-end: var(--tpl-space-2xs);
+
+  button {
+    min-height: var(--tpl-target);
+    padding-inline: var(--tpl-space-sm);
+    background: none;
+    border: var(--tpl-rule-width) solid transparent;
+    border-radius: var(--tpl-radius-md);
+    font-family: var(--font-interface);
+    font-size: var(--tpl-text-sm);
+    color: var(--gray);
+    cursor: pointer;
+    transition: color var(--tpl-motion), background-color var(--tpl-motion), border-color var(--tpl-motion);
+
+    &:hover {
+      color: var(--dark);
+      background: var(--tpl-surface);
+    }
+
+    // Colour *and* weight *and* a border: the selected view is a state, and a state never rests on
+    // colour alone in this template.
+    &.is-active {
+      color: var(--secondary);
+      font-weight: 600;
+      background: var(--tpl-surface-tint);
+      border-color: color-mix(in srgb, var(--secondary) 35%, transparent);
+    }
+  }
+}
+
+// The row count above every view. The plugin writes it in English ("Showing 45 of 45 entries") and
+// offers no way to translate it, so it is set quiet rather than removed - a wrong-language line
+// that shouts is worse than one that recedes.
+.bases-view-meta {
+  margin-block-end: var(--tpl-space-xs);
+  color: var(--gray);
+  font-size: var(--tpl-text-xs);
+}
+
+/* ----------------------------------------------------------------------- table view */
+
+.bases-table-wrapper {
+  overflow-x: auto;
+}
+
+table.bases-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--tpl-text-sm);
+
+  th,
+  td {
+    text-align: start;
+    vertical-align: top;
+    padding: var(--tpl-space-xs) var(--tpl-space-sm);
+    border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  }
+
+  th {
+    border-block-end: 2px solid var(--tpl-rule-strong);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td {
+    border-block-end: none;
+  }
+
+  // Zebra striping would fight the hairlines; a hover row is enough to follow a line across.
+  tbody tr:hover {
+    background: var(--tpl-surface-tint);
+  }
+
+  a {
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+      text-underline-offset: var(--tpl-underline-offset);
+    }
+  }
+}
+
+.bases-table-header {
+  font-family: var(--headerFont);
+  font-weight: 600;
+  color: var(--ink, var(--dark));
+}
+
+// The sort indicator sits in the header next to the label; it is a hint, not a word.
+.bases-table-header-sort {
+  margin-inline-start: var(--tpl-space-2xs);
+  color: var(--gray);
+}
+
+th[data-sortable="true"] {
+  cursor: pointer;
+
+  &:hover .bases-table-header {
+    color: var(--secondary);
+  }
+}
+
+/* ----------------------------------------------------------------------- cards view */
+
+.bases-cards {
+  display: grid;
+  // Cards find their own column count; nothing stretches across dead space.
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--tpl-space-sm);
+}
+
+a.bases-card {
+  display: block;
+  padding: var(--tpl-space-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--light);
+  text-decoration: none;
+  transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--tpl-rule-control);
+    background: var(--tpl-surface-tint);
+  }
+}
+
+// A cover fills the card, edge to edge - the card's own padding would otherwise frame the picture
+// in a 12px strip of card ground, which reads as a mistake rather than as a margin. The negative
+// inset is exactly the padding above it, and the top corners are rounded by one hairline less than
+// the card so the two curves sit concentric rather than crossing.
+.bases-card-image {
+  margin: calc(var(--tpl-space-sm) * -1) calc(var(--tpl-space-sm) * -1) var(--tpl-space-sm);
+  border-start-start-radius: calc(var(--tpl-radius-md) - var(--tpl-rule-width));
+  border-start-end-radius: calc(var(--tpl-radius-md) - var(--tpl-rule-width));
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--tpl-surface);
+
+  // `margin: 0` is not belt and braces: body-media.scss gives every `<img>` on the site 16px of
+  // vertical margin, which is right in an article and is a 16px band of card ground above a cover.
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: cover;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+.bases-card-title {
+  display: block;
+  font-family: var(--headerFont);
+  font-weight: 600;
+  color: var(--dark);
+  margin-block-end: var(--tpl-space-2xs);
+}
+
+.bases-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-space-3xs);
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+}
+
+.bases-card-label {
+  color: var(--gray);
+  margin-inline-end: var(--tpl-space-2xs);
+}
+
+/* ------------------------------------------------------------------------ list view */
+
+.bases-list-group + .bases-list-group {
+  margin-block-start: var(--tpl-space-lg);
+}
+
+// The group heading a `groupBy` produces.
+.bases-list-group > :first-child:not(.bases-list-group-list) {
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-label);
+  color: var(--gray);
+  font-weight: 700;
+  margin-block-end: var(--tpl-space-xs);
+}
+
+.bases-list-item {
+  padding-block: var(--tpl-space-2xs);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  font-size: var(--tpl-text-sm);
+
+  &:last-child {
+    border-block-end: none;
+  }
+}
+
+.bases-list-item-properties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tpl-space-2xs) var(--tpl-space-xs);
+  align-items: baseline;
+}
+
+// The first property is the title; everything after it is detail.
+.bases-list-property:not(:first-child) {
+  color: var(--gray);
+  font-size: var(--tpl-text-xs);
+}
+
+// The plugin prints a literal "-" as the bullet. It is punctuation, so it recedes.
+.list-bullet {
+  color: var(--tpl-rule-strong);
+  margin-inline-end: var(--tpl-space-3xs);
+}
+
+.bases-rendered-value a {
+  color: var(--dark);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+    text-underline-offset: var(--tpl-underline-offset);
+  }
+}
+
+/* ----------------------------------------------------------------------- board view */
+
+// A `groupBy` turns the base into columns, one per value — a kanban over whatever field was
+// chosen. The columns scroll sideways as a block; each column scrolls on its own vertically.
+.bases-board-wrapper {
+  overflow-x: auto;
+}
+
+.bases-board {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tpl-space-sm);
+  // Columns keep a usable width instead of shrinking to fit; the board scrolls instead.
+  min-width: max-content;
+}
+
+.bases-board-column {
+  flex: 0 0 15rem;
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+  overflow: hidden;
+}
+
+.bases-board-column-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--tpl-space-xs);
+  padding: var(--tpl-space-xs) var(--tpl-space-sm);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  background: var(--light);
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-caps);
+  color: var(--gray);
+
+  // The group's value can be a whole path; it truncates rather than wrapping the header.
+  > span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// The count is a fact about the column, not a label — it gets figures that line up.
+.bases-board-count {
+  flex: 0 0 auto;
+  font-family: var(--codeFont);
+  font-variant-numeric: tabular-nums;
+  color: var(--gray);
+}
+
+.bases-board-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-space-2xs);
+  padding: var(--tpl-space-xs);
+  // A column with forty cards scrolls on its own rather than stretching the page.
+  max-height: 32rem;
+  overflow-y: auto;
+  // Kein `contain`: Eine Spalte mit drei Karten läuft nicht über und hielt das Rad trotzdem fest
+  // (Chrome, gemessen am 2026-09-30) — Begründung bei `ul.explorer-ul` in base.scss.
+}
+
+.bases-board-card {
+  padding: var(--tpl-space-xs) var(--tpl-space-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-sm);
+  background: var(--light);
+  font-size: var(--tpl-text-sm);
+  transition: border-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--tpl-rule-control);
+  }
+
+  a {
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+}
+
+/* --------------------------------------------------------------------- gallery view */
+
+// The plugin writes `grid-template-columns` as an inline style (three columns), which no
+// stylesheet can outrank without `!important`. Rather than fight it at every width, the column
+// count is restated per breakpoint — three columns at 1728px are right, at 390px they are not.
+.bases-gallery {
+  display: grid;
+  gap: var(--tpl-space-sm);
+}
+
+@media (max-width: 1200px) {
+  .bases-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .bases-gallery {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+.bases-gallery-item {
+  // Two rows, picture then caption - see the note at .bases-gallery-title for why the caption is
+  // not the overlay the plugin makes of it.
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--light);
+  overflow: hidden;
+  transition: border-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--tpl-rule-control);
+  }
+}
+
+.bases-gallery-image {
+  aspect-ratio: 3 / 2;
+  background: var(--tpl-surface);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: cover;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+// Entries without an image get a placeholder. It is a state, not a failure, so it says so quietly
+// with a mark rather than staying an empty grey box.
+.bases-gallery-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--tpl-rule-strong);
+
+  &::before {
+    content: "▨";
+    font-size: 1.75rem;
+  }
+}
+
+// The plugin lays the title *over* the bottom of the picture: `position: absolute; inset: auto 0
+// 0` on the title and `overflow: hidden` on the tile. That works while every entry shows the grey
+// placeholder and stops working the moment they have covers - the label is `--dark`, which in
+// light mode is near-black, and a cover can be any colour. Measured with the fourteen covers in
+// place: a two-line title also ran out of the bottom of the tile and was clipped mid-word, because
+// an absolutely positioned title takes no part in the tile's height.
+//
+// So it goes back into the flow. The tile is then image plus caption, the way the cards view of
+// the same data already reads, the caption sits on the card's own ground in the site's own ink,
+// and a title of any length simply makes its tile taller.
+.bases-gallery-title {
+  position: static;
+  padding: var(--tpl-space-xs) var(--tpl-space-sm);
+  font-family: var(--headerFont);
+  font-weight: 600;
+  font-size: var(--tpl-text-sm);
+  line-height: var(--tpl-leading-snug);
+
+  a {
+    color: var(--dark);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+}
+
+// Any further property under the title is detail.
+.bases-gallery-item .bases-card-meta,
+.bases-gallery-meta {
+  padding: 0 var(--tpl-space-sm) var(--tpl-space-xs);
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+}

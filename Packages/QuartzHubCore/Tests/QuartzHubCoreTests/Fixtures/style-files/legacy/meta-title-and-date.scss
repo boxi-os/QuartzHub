@@ -1,0 +1,43 @@
+// The article's own h1 and the line of dates and reading time under it.
+//
+// One file because they are read as one block: the gap between them belongs to neither alone, and
+// setting it from two files meant deciding it twice.
+
+.article-title {
+  margin-block: 0 var(--tpl-space-xs);
+  font-size: var(--tpl-text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  // A heading is scanned rather than read line by line, so its lines are balanced rather than
+  // filled - a title that breaks after four words looks like an accident.
+  text-wrap: balance;
+}
+
+// At the narrow end the 2.25rem title is most of the screen; it steps down rather than wrapping
+// to five lines.
+@media (max-width: 720px) {
+  .article-title {
+    font-size: var(--tpl-text-2xl);
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+// Content meta — dates and reading time under the title.
+
+.content-meta {
+  margin-block: 0;
+  color: var(--gray);
+  font-size: var(--tpl-text-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--tpl-space-2xs) var(--tpl-space-xs);
+
+  // The plugin joins its parts with a separator span; give it the faint colour so the values read
+  // as the content and the punctuation recedes.
+  > span:not(:last-child)::after {
+    content: "·";
+    margin-inline-start: var(--tpl-space-xs);
+    color: var(--tpl-rule-strong);
+  }
+}

@@ -1,0 +1,101 @@
+// Images, video, audio and embeds.
+
+article {
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--tpl-radius-md);
+    // An image with a white background on a warm ground looks like a hole without this.
+    border: var(--tpl-rule-width) solid var(--tpl-rule);
+  }
+
+  // An image the author sized explicitly (`![[x.png|300]]`) keeps that size; the rule above only
+  // stops it exceeding the column.
+  img[width] {
+    width: auto;
+  }
+
+  // The audio player is the browser's own. Nothing here restyles the control itself: a rebuilt
+  // player loses its keyboard handling, its media-key support and its screen-reader labels, and
+  // gains nothing this template needs.
+  audio {
+    display: block;
+    width: 100%;
+    margin-block: var(--tpl-space-md);
+    // Chrome's player has its own rounded shell; matching the radius stops the two from fighting.
+    border-radius: var(--tpl-radius-md);
+  }
+
+  // A video is a figure like an image, so it gets the same edges — and keeps its own proportions
+  // rather than being forced into a ratio it does not have.
+  video {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-block: var(--tpl-space-md);
+    background: var(--tpl-surface);
+  }
+
+  // An embed with no intrinsic size: YouTube, a map, anything in an iframe. Without a ratio it
+  // collapses to zero height inside a grid cell — which is every page in this template.
+  iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: var(--tpl-rule-width) solid var(--tpl-rule);
+    border-radius: var(--tpl-radius-md);
+    max-width: none;
+  }
+
+  // A PDF is the exception: quartz turns `![[x.pdf]]` into `<iframe class="pdf">`, and a document
+  // is taller than it is wide. 16/9 would show two centimetres of the first page.
+  // `:not([height])` matters: this rule is for the iframe quartz generates from `![[x.pdf]]`, which
+  // carries no dimensions. An iframe someone wrote by hand with `height="500"` said what it wanted,
+  // and a ratio here would silently overrule it.
+  iframe.pdf:not([height]) {
+    aspect-ratio: 1 / 1.2;
+    min-height: 28rem;
+  }
+
+  iframe.pdf,
+  iframe[src$=".pdf"] {
+    background: var(--tpl-surface);
+  }
+
+  @media (max-width: 720px) {
+    // On a phone a document viewer inside a scrolling page is unusable; it gets a fixed, modest
+    // height so the page stays scrollable past it.
+    iframe.pdf:not([height]) {
+      aspect-ratio: auto;
+      height: 22rem;
+      min-height: 0;
+    }
+  }
+
+  figure {
+    margin-inline: 0;
+    margin-block: var(--tpl-space-lg);
+  }
+
+  figcaption {
+    font-size: var(--tpl-text-sm);
+    color: var(--gray);
+    margin-block-start: var(--tpl-space-2xs);
+  }
+
+  // A transcluded note is another page inside this one; the inset says where it starts and ends.
+  .transclude {
+    margin-block: var(--tpl-space-lg);
+    padding: var(--tpl-space-xs) var(--tpl-space-md);
+    border-inline-start: 2px dashed var(--tpl-rule-strong);
+    background: var(--tpl-surface-tint);
+    border-radius: 0 var(--tpl-radius-md) var(--tpl-radius-md) 0;
+
+    > :first-child { margin-block-start: 0; }
+    > :last-child { margin-block-end: 0; }
+  }
+
+  .external-embed {
+    border-radius: var(--tpl-radius-md);
+  }
+}

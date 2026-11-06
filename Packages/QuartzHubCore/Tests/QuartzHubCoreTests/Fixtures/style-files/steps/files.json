@@ -1,0 +1,371 @@
+{
+  "name": "files",
+  "tree": {
+    "custom.scss": "@use \"./variables.scss\" as *;\n.x {}\n",
+    "imported/old.css": ".old {}",
+    "custom/orphan.scss": "",
+    "in/fremd.scss": ".fremd {}\n",
+    "in/plain.css": "p {}"
+  },
+  "steps": [
+    {
+      "call": "listStyleFiles",
+      "args": [],
+      "result": {
+        "main": {
+          "path": "@P@/quartz/styles/custom.scss",
+          "content": "@use \"./variables.scss\" as *;\n.x {}\n",
+          "managed": null,
+          "moved": false
+        },
+        "files": [
+          {
+            "relativePath": "custom/orphan.scss",
+            "path": "@P@/quartz/styles/custom/orphan.scss",
+            "name": "orphan.scss",
+            "imported": false
+          },
+          {
+            "relativePath": "imported/old.css",
+            "path": "@P@/quartz/styles/imported/old.css",
+            "name": "old.css",
+            "imported": false
+          }
+        ],
+        "consolidated": false
+      },
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "createStyleFile",
+      "args": [
+        "neu"
+      ],
+      "result": {
+        "relativePath": "custom/neu.scss",
+        "path": "@P@/quartz/styles/custom/neu.scss",
+        "name": "neu.scss",
+        "imported": true
+      },
+      "changed": {
+        "custom.scss": "@use \"./variables.scss\" as *;\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/neu\";\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n",
+        "custom/neu.scss": "// neu.scss\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "createStyleFile",
+      "args": [
+        "neu"
+      ],
+      "result": {
+        "threw": "Error: {\"key\":\"styleFileExists\",\"args\":{\"name\":\"neu.scss\"}}"
+      },
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "createStyleFile",
+      "args": [
+        "zwei.css"
+      ],
+      "result": {
+        "relativePath": "custom/zwei.css",
+        "path": "@P@/quartz/styles/custom/zwei.css",
+        "name": "zwei.css",
+        "imported": true
+      },
+      "changed": {
+        "custom.scss": "@use \"./variables.scss\" as *;\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/neu\";\n@use \"./custom/zwei\";\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n",
+        "custom/zwei.css": "// zwei.css\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "createStyleFile",
+      "args": [
+        "01-typo"
+      ],
+      "result": {
+        "relativePath": "custom/01-typo.scss",
+        "path": "@P@/quartz/styles/custom/01-typo.scss",
+        "name": "01-typo.scss",
+        "imported": true
+      },
+      "changed": {
+        "custom.scss": "@use \"./variables.scss\" as *;\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/neu\";\n@use \"./custom/zwei\";\n@use \"./custom/01-typo\" as ns-01-typo;\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n",
+        "custom/01-typo.scss": "// 01-typo.scss\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "listStyleFiles",
+      "args": [],
+      "result": {
+        "main": {
+          "path": "@P@/quartz/styles/custom.scss",
+          "content": "@use \"./variables.scss\" as *;\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/neu\";\n@use \"./custom/zwei\";\n@use \"./custom/01-typo\" as ns-01-typo;\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n",
+          "managed": null,
+          "moved": false
+        },
+        "files": [
+          {
+            "relativePath": "custom/neu.scss",
+            "path": "@P@/quartz/styles/custom/neu.scss",
+            "name": "neu.scss",
+            "imported": true
+          },
+          {
+            "relativePath": "custom/zwei.css",
+            "path": "@P@/quartz/styles/custom/zwei.css",
+            "name": "zwei.css",
+            "imported": true
+          },
+          {
+            "relativePath": "custom/01-typo.scss",
+            "path": "@P@/quartz/styles/custom/01-typo.scss",
+            "name": "01-typo.scss",
+            "imported": true
+          },
+          {
+            "relativePath": "custom/orphan.scss",
+            "path": "@P@/quartz/styles/custom/orphan.scss",
+            "name": "orphan.scss",
+            "imported": false
+          },
+          {
+            "relativePath": "imported/old.css",
+            "path": "@P@/quartz/styles/imported/old.css",
+            "name": "old.css",
+            "imported": false
+          }
+        ],
+        "consolidated": false
+      },
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "renameStyleFile",
+      "args": [
+        "custom/neu.scss",
+        "umbenannt"
+      ],
+      "result": {
+        "relativePath": "custom/umbenannt.scss",
+        "path": "@P@/quartz/styles/custom/umbenannt.scss",
+        "name": "umbenannt.scss",
+        "imported": true
+      },
+      "changed": {
+        "custom/neu.scss": null,
+        "custom.scss": "@use \"./variables.scss\" as *;\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/umbenannt\";\n@use \"./custom/zwei\";\n@use \"./custom/01-typo\" as ns-01-typo;\n/* --- QuartzControl:managed:imports:end --- */\n.x {}\n",
+        "custom/umbenannt.scss": "// neu.scss\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "renameStyleFile",
+      "args": [
+        "custom/umbenannt.scss",
+        "umbenannt.scss"
+      ],
+      "result": {
+        "relativePath": "custom/umbenannt.scss",
+        "path": "@P@/quartz/styles/custom/umbenannt.scss",
+        "name": "umbenannt.scss",
+        "imported": true
+      },
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "renameStyleFile",
+      "args": [
+        "custom/umbenannt.scss",
+        "zwei.css"
+      ],
+      "result": {
+        "threw": "Error: {\"key\":\"styleFileExists\",\"args\":{\"name\":\"zwei.css\"}}"
+      },
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "renameStyleFile",
+      "args": [
+        "custom/orphan.scss",
+        "waise"
+      ],
+      "result": {
+        "relativePath": "custom/waise.scss",
+        "path": "@P@/quartz/styles/custom/waise.scss",
+        "name": "waise.scss",
+        "imported": false
+      },
+      "changed": {
+        "custom/orphan.scss": null,
+        "custom/waise.scss": ""
+      },
+      "snapshots": []
+    },
+    {
+      "call": "writeStyleFile",
+      "args": [
+        "custom/umbenannt.scss",
+        ".u { color: red; }\n"
+      ],
+      "result": null,
+      "changed": {
+        "custom/umbenannt.scss": ".u { color: red; }\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "readStyleFile",
+      "args": [
+        "custom/umbenannt.scss"
+      ],
+      "result": ".u { color: red; }\n",
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "readStyleFile",
+      "args": [
+        "custom/fehlt.scss"
+      ],
+      "result": "",
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "writeStyleFile",
+      "args": [
+        "_quartzcontrol.scss",
+        "// written by hand\n"
+      ],
+      "result": null,
+      "changed": {
+        "_quartzcontrol.scss": "// written by hand\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "readStyleFile",
+      "args": [
+        "_quartzcontrol.scss"
+      ],
+      "result": "// written by hand\n",
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "deleteStyleFile",
+      "args": [
+        "custom/zwei.css"
+      ],
+      "result": null,
+      "changed": {
+        "_quartzcontrol.scss": "// written by hand\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/umbenannt\";\n@use \"./custom/01-typo\" as ns-01-typo;\n/* --- QuartzControl:managed:imports:end --- */",
+        "custom/zwei.css": null,
+        "custom.scss": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n\n.x {}\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "deleteStyleFile",
+      "args": [
+        "custom/nie-da.scss"
+      ],
+      "result": null,
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "importStyleFile",
+      "args": [
+        "@IN@/fremd.scss"
+      ],
+      "result": {
+        "importLine": "@use \"./imported/fremd\";",
+        "relativePath": "imported/fremd.scss"
+      },
+      "changed": {
+        "imported/fremd.scss": ".fremd {}\n"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "importStyleFile",
+      "args": [
+        "@IN@/plain.css"
+      ],
+      "result": {
+        "importLine": "@use \"./imported/plain\";",
+        "relativePath": "imported/plain.css"
+      },
+      "changed": {
+        "imported/plain.css": "p {}"
+      },
+      "snapshots": []
+    },
+    {
+      "call": "listStyleFiles",
+      "args": [],
+      "result": {
+        "main": {
+          "path": "@P@/quartz/styles/custom.scss",
+          "content": "@use \"./variables.scss\" as *;\n\n@use \"./quartzcontrol\";\n\n.x {}\n",
+          "managed": {
+            "path": "@P@/quartz/styles/_quartzcontrol.scss",
+            "content": "// written by hand\n\n/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/umbenannt\";\n@use \"./custom/01-typo\" as ns-01-typo;\n/* --- QuartzControl:managed:imports:end --- */"
+          },
+          "moved": true
+        },
+        "files": [
+          {
+            "relativePath": "custom/umbenannt.scss",
+            "path": "@P@/quartz/styles/custom/umbenannt.scss",
+            "name": "umbenannt.scss",
+            "imported": true
+          },
+          {
+            "relativePath": "custom/01-typo.scss",
+            "path": "@P@/quartz/styles/custom/01-typo.scss",
+            "name": "01-typo.scss",
+            "imported": true
+          },
+          {
+            "relativePath": "custom/waise.scss",
+            "path": "@P@/quartz/styles/custom/waise.scss",
+            "name": "waise.scss",
+            "imported": false
+          },
+          {
+            "relativePath": "imported/fremd.scss",
+            "path": "@P@/quartz/styles/imported/fremd.scss",
+            "name": "fremd.scss",
+            "imported": false
+          },
+          {
+            "relativePath": "imported/old.css",
+            "path": "@P@/quartz/styles/imported/old.css",
+            "name": "old.css",
+            "imported": false
+          },
+          {
+            "relativePath": "imported/plain.css",
+            "path": "@P@/quartz/styles/imported/plain.css",
+            "name": "plain.css",
+            "imported": false
+          }
+        ],
+        "consolidated": false
+      },
+      "changed": {},
+      "snapshots": []
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+// The language switcher of `quartz-multilanguage`.
+//
+// The plugin can render three shapes and this file styles all three, although only one is ever
+// visible: `switcher.style` in quartz.config.yaml decides, and it stands on `dropdown`. Styling
+// the other two is not decoration - someone who switches the option in the app should get a
+// control that fits the toolbar, not an unstyled list. Each shape is one block below.
+//
+// Whatever the shape, the component sits in the `toolbar` group at the end of the header,
+// alongside search, dark mode and reader mode. Those three agreed on 44px, one border, one
+// radius and one hover; a fourth control that disagreed with them would read as broken. That is
+// why the measurements below are the same tokens, not new ones.
+//
+// The plugin ships its own stylesheet, and it is emitted inside `@layer quartz-base` like every
+// other component's. Everything here is unlayered and therefore wins regardless of specificity -
+// which is also why the few `display` values below are stated rather than assumed.
+
+.multilanguage-switcher {
+  font-family: var(--font-interface);
+  font-size: var(--tpl-text-sm);
+  line-height: var(--tpl-leading-snug);
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  // The current language is not a link, so it carries no underline and no hover. It is still
+  // shown (`showCurrent: true`) because a switcher that only offers the other language does not
+  // say which one you are in.
+  .current {
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  // A language whose page does not exist here links to that language's home page instead
+  // (`missing: home`). It is a weaker offer than a real translation and says so.
+  a.fallback {
+    color: var(--gray);
+  }
+
+  .disabled {
+    color: var(--gray);
+    cursor: default;
+  }
+}
+
+/* ------------------------------------------------------------------ style: dropdown */
+
+// One box, whatever the number of languages - the reason this is the shape in use. The list is
+// a real `<details>`, so it opens without JavaScript; the plugin's script only adds closing on
+// an outside click and on Escape.
+.multilanguage-switcher.style-dropdown {
+  position: relative;
+
+  > summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--tpl-space-2xs);
+    // The plugin's own rule sets `padding: 0.15rem 0.5rem`; overriding only the inline half left
+    // 2.4px above and below, and with a summary defaulting to content-box that made the control
+    // 51px tall next to three 44px neighbours. Both halves are stated, and so is the box model.
+    box-sizing: border-box;
+    padding: 0 var(--tpl-space-sm);
+    min-width: var(--tpl-target);
+    min-height: var(--tpl-target);
+    background: var(--light);
+    // The same dotted control edge as its three neighbours in the toolbar; --lightgray measures
+    // 1.34:1 against the ground and may not draw a control (base.scss).
+    border: var(--tpl-rule-width) dotted var(--tpl-rule-control);
+    border-radius: var(--tpl-radius-md);
+    color: var(--darkgray);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+    // The chevron is the one base.scss puts on every <summary>, not a second one of our own -
+    // adding an `::after` here drew two. It only moves: on a menu button the marker belongs
+    // after the label, whereas on the disclosures in the sidebars it belongs in front of it.
+    &::before {
+      order: 1;
+      width: var(--tpl-icon-sm);
+      height: var(--tpl-icon-sm);
+    }
+
+    // The plugin draws a third marker of its own, a text "▾" in an `::after`. Measured on the
+    // built page: "English ▾ ⌄". The slot is not wasted - the mobile block below fills it with
+    // the language code.
+    &::after {
+      content: none;
+    }
+
+    &:hover {
+      border-color: var(--secondary);
+      background: var(--tpl-surface-tint);
+      color: var(--dark);
+    }
+  }
+
+  &[open] > summary {
+    border-color: var(--secondary);
+  }
+
+  // The list. Right-aligned under the button because the button sits at the right end of the
+  // header - a list that opened to the right would leave the page.
+  > ul {
+    position: absolute;
+    z-index: 20;
+    inset-inline-end: 0;
+    min-width: 100%;
+    margin-block-start: var(--tpl-space-2xs);
+    padding-block: var(--tpl-space-2xs);
+    background: var(--light);
+    border: var(--tpl-rule-width) solid var(--tpl-rule-control);
+    border-radius: var(--tpl-radius-md);
+    // Real depth, for the reason stated in nav-search.scss: it genuinely floats above the page.
+    box-shadow: var(--tpl-shadow);
+  }
+
+  li {
+    white-space: nowrap;
+  }
+
+  // A separator only means something in a row. In a column it would be a line of its own.
+  li.separator {
+    display: none;
+  }
+
+  a,
+  .current,
+  .disabled {
+    display: flex;
+    align-items: center;
+    min-height: var(--tpl-target);
+    padding-inline: var(--tpl-space-md);
+    text-decoration: none;
+    color: var(--darkgray);
+  }
+
+  a:hover {
+    background: var(--tpl-surface-tint);
+    color: var(--secondary);
+  }
+
+  .current {
+    background: var(--tpl-surface-tint);
+  }
+}
+
+/* --------------------------------------------------------------------- style: links */
+
+// The languages side by side. Readable at a glance, but it grows with every language added -
+// which is why it is not the shape in use here.
+.multilanguage-switcher.style-links {
+  display: flex;
+  align-items: center;
+  min-height: var(--tpl-target);
+
+  > ul {
+    display: flex;
+    align-items: center;
+    gap: var(--tpl-space-xs);
+    white-space: nowrap;
+  }
+
+  a {
+    // Colour and underline, like every other link in this template: colour alone is no signal
+    // that something can be clicked.
+    color: var(--darkgray);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+
+    &:hover {
+      color: var(--secondary);
+      text-decoration-color: currentColor;
+    }
+  }
+
+  li.separator {
+    color: var(--gray);
+    user-select: none;
+  }
+}
+
+/* --------------------------------------------------------------------- style: flags */
+
+// The tightest shape. A flag is a country, not a language, so the native name stays as the
+// `title` and as the accessible name - the emoji alone would be a guess for the reader.
+.multilanguage-switcher.style-flags {
+  display: flex;
+  align-items: center;
+
+  > ul {
+    display: flex;
+    align-items: center;
+    gap: var(--tpl-space-3xs);
+  }
+
+  li.separator {
+    display: none;
+  }
+
+  a,
+  .current,
+  .disabled {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // Square and the full target size: an emoji is small, the thing you tap is not.
+    width: var(--tpl-target);
+    min-height: var(--tpl-target);
+    // Reading size rather than icon size - a flag at 0.875rem is a coloured smudge.
+    font-size: var(--tpl-text-xl);
+    line-height: 1;
+    text-decoration: none;
+    border-radius: var(--tpl-radius-md);
+    border: var(--tpl-rule-width) solid transparent;
+  }
+
+  a:hover {
+    border-color: var(--secondary);
+    background: var(--tpl-surface-tint);
+  }
+
+  // The current language is the one state that has to survive without colour: on a row of flags,
+  // colour is already taken.
+  .current {
+    border-color: var(--tpl-rule-control);
+    background: var(--tpl-surface-tint);
+  }
+
+  .disabled {
+    opacity: 0.45;
+  }
+}
+
+/* -------------------------------------------------------------------------- mobile */
+
+// In the app bar the switcher gives up its word, for the same reason the search gives up "Suche":
+// measured at 390px, the bar holds the drawer trigger, the site name and four controls, and
+// "Deutsch" plus a chevron made the row 19px wider than the screen. The page title shrinks first
+// and had already shrunk to zero; the word mark does not shrink at all.
+//
+// What replaces it is the language code, not an icon: there is no glyph for "language" that is
+// read as one, and two letters in the language's own alphabet are. The code cannot be derived
+// from the markup - the plugin writes the *label*, and `attr()` only reads the element's own
+// attributes - so the two languages of this template are named here. A third would be a third
+// line, and that is the honest cost of this shortcut.
+@media (max-width: 900px) {
+  .multilanguage-switcher.style-dropdown > summary {
+    padding-inline: var(--tpl-space-xs);
+    // Collapses the label the plugin rendered. The chevron is sized in rem and is unaffected.
+    font-size: 0;
+
+    &::after {
+      order: 0;
+      font-size: var(--tpl-text-sm);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  .multilanguage-switcher[data-lang="de"].style-dropdown > summary::after {
+    content: "DE";
+  }
+
+  .multilanguage-switcher[data-lang="en"].style-dropdown > summary::after {
+    content: "EN";
+  }
+
+  // The list keeps the full names - there is room for them there, and that is where the choice
+  // is actually made.
+  .multilanguage-switcher.style-dropdown > ul {
+    font-size: var(--tpl-text-sm);
+  }
+}
+
+/* ------------------------------------------------------------------------- the notice */
+
+// "This page is also available in English." The plugin renders an empty, hidden blockquote with
+// the `callout` class at the top of every page and fills it in the browser, so the text reaches
+// neither the search index nor the description. Because it carries `callout` and
+// `data-callout="info"`, the callout styles of this template apply and it needs almost nothing
+// here - only the two things that follow from having no title row.
+.multilanguage-notice {
+  margin-block: 0 var(--tpl-space-lg);
+
+  .callout-content {
+    margin-block: 0;
+  }
+
+  // The hidden state has to win over anything the callout styles set, including a `display`.
+  &[hidden] {
+    display: none !important;
+  }
+}

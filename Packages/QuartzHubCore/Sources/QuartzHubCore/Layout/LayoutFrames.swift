@@ -132,8 +132,9 @@ public struct LayoutFrames: Sendable {
     }
   }
 
-  /// `readdir(dir, { withFileTypes: true })`: the order the file system gives, and a symlink is not
-  /// a directory.
+  /// `readdir(dir, { withFileTypes: true })`: sorted by the bytes of the name, as libuv's
+  /// `scandir` sorts for Node (strcmp), not in the order the file system gives; a symlink is not a
+  /// directory.
   static func directoryEntries(_ dir: URL) -> [(name: String, isDirectory: Bool)] {
     directoryEntriesWithKind(dir).map { ($0.name, $0.kind == .directory) }
   }
@@ -141,6 +142,8 @@ public struct LayoutFrames: Sendable {
   enum EntryKind { case directory, file, link, other }
 
   /// The same with the Dirent's kind: a link is a link, not what it points at.
+  /// (Measured: the 22 files of a plugin came back in the file system's hash order, Node's in
+  /// name order.)
   static func directoryEntriesWithKind(_ dir: URL) -> [(name: String, kind: EntryKind)] {
     guard let stream = opendir(dir.path) else { return [] }
     defer { closedir(stream) }
@@ -159,7 +162,7 @@ public struct LayoutFrames: Sendable {
       }
       result.append((name, kind))
     }
-    return result
+    return result.sorted { Array($0.0.utf8).lexicographicallyPrecedes(Array($1.0.utf8)) }
   }
 
   // MARK: write

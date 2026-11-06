@@ -1,0 +1,62 @@
+// Everything under the article: the footer's links row, the colophon layout-box below it, and the
+// comment thread that would follow if the giscus plugin were switched on.
+//
+// One file because they are one region and one documentation page - and because all three take the
+// same hairline and the same top margin from the text above them, which is a single decision.
+
+footer {
+  margin-block-start: var(--tpl-space-xl);
+  padding-block-start: var(--tpl-space-md);
+  border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+  color: var(--gray);
+  font-size: var(--tpl-text-sm);
+  text-align: center;
+
+  p {
+    margin-block: 0 var(--tpl-space-xs);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--tpl-space-xs) var(--tpl-space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    color: var(--gray);
+    text-decoration: none;
+    // Footer links are small and often the last thing anyone tries to hit on a phone.
+    display: inline-block;
+    padding-block: var(--tpl-space-2xs);
+
+    &:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+      text-underline-offset: var(--tpl-underline-offset);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+// Comments (giscus).
+//
+// The plugin is off in this template - it needs a repository the importing site does not have -
+// but the styling travels with it, so switching it on in the app does not land an unstyled iframe
+// at the bottom of every page.
+
+.giscus,
+.giscus-frame {
+  margin-block-start: var(--tpl-space-xl);
+  padding-block-start: var(--tpl-space-md);
+  border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+  width: 100%;
+  border-radius: var(--tpl-radius-md);
+}

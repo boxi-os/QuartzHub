@@ -1,0 +1,34 @@
+// Dark mode toggle.
+//
+// The component is a single `<button class="darkmode" aria-label="…">` holding two SVGs, one of
+// which the theme hides — read off the built page. An earlier version of this file styled an
+// `<input>`/`<label>` pair that does not exist here, so those rules matched nothing. It sits in
+// the toolbar group next to search and reader mode, so all three have to agree on size.
+
+button.darkmode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // Same target as its neighbours - a row of controls with different heights reads as broken.
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+  border: var(--tpl-rule-width) dotted var(--tpl-rule-control);
+  border-radius: var(--tpl-radius-md);
+  background: var(--light);
+  transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--secondary);
+    background: var(--tpl-surface-tint);
+  }
+
+  svg {
+    width: var(--tpl-icon);
+    height: var(--tpl-icon);
+    color: var(--darkgray);
+    // The icons are stacked; the theme decides which is visible. Colour only, no transform, so
+    // reduced-motion has nothing to suppress.
+    fill: var(--darkgray);
+  }
+
+}

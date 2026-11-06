@@ -1,0 +1,67 @@
+// Search results — the list inside the overlay.
+
+.result-card {
+  display: block;
+  padding: var(--tpl-space-sm) var(--tpl-space-md);
+  border: none;
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: 0;
+  background: none;
+  cursor: pointer;
+  text-align: start;
+  width: 100%;
+
+  &:last-child {
+    border-block-end: none;
+  }
+
+  // The keyboard cursor and the pointer hover are the same state and must look the same - the
+  // arrow keys move through this list and the highlighted row is the only thing saying where.
+  &:hover,
+  &:focus-visible,
+  &.focus {
+    background: var(--tpl-surface-tint);
+    outline: none;
+    box-shadow: inset var(--tpl-accent-bar) 0 0 var(--secondary);
+  }
+
+  > h3 {
+    margin: 0 0 var(--tpl-space-3xs);
+    font-size: var(--tpl-text-base);
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  > ul.tags {
+    margin: var(--tpl-space-3xs) 0 0;
+  }
+
+  > p {
+    margin: 0;
+    color: var(--gray);
+    font-size: var(--tpl-text-sm);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// The matched substring inside a result. Uses the same mark colour as ==highlight== in the body,
+// so "this is what you searched for" means one thing across the site.
+.search .highlight {
+  background: var(--textHighlight);
+  color: var(--darkgray);
+  border-radius: var(--tpl-radius-sm);
+  padding-inline: 0.1em;
+}
+
+.search-path {
+  color: var(--gray);
+  font-size: var(--tpl-text-xs);
+  font-family: var(--codeFont);
+}
+
+.match-tag {
+  color: var(--secondary);
+}

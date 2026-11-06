@@ -1,0 +1,118 @@
+// Graph.
+//
+// The graph draws itself in canvas/SVG with colours it reads from CSS variables at runtime, so
+// this file styles the box around it and leaves the drawing alone.
+
+.graph {
+  min-width: 0;
+
+  h1, h2, h3 {
+    margin-block: 0 var(--tpl-space-xs);
+    font-family: var(--headerFont);
+    font-size: var(--tpl-text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tpl-tracking-label);
+    color: var(--gray);
+    font-weight: 700;
+  }
+}
+
+.graph-outer {
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+  overflow: hidden;
+}
+
+.graph-container {
+  // A square well: the local graph is round, and a letterboxed container wastes the sidebar.
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+.global-graph-icon {
+  display: grid;
+  place-items: center;
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+  margin-inline-start: auto;
+  color: var(--gray);
+  cursor: pointer;
+  border-radius: var(--tpl-radius-sm);
+
+  &:hover {
+    color: var(--dark);
+    background: var(--tpl-surface);
+  }
+}
+
+.global-graph-outer {
+  background: color-mix(in srgb, var(--light) 70%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.global-graph-container {
+  background: var(--light);
+  border: var(--tpl-rule-width) solid var(--tpl-rule-control);
+  border-radius: var(--tpl-radius-lg);
+  box-shadow: var(--tpl-shadow);
+}
+
+/* ----------------------------------------------------- die Vollansicht darf hinaus */
+
+// Der Knopf „Global Graph" öffnet ein Overlay über die ganze Seite — und bis zum 2026-09-20 tat
+// er das nicht: Die Vollansicht stand als schmaler Streifen in der rechten Spalte, rund 120 px
+// breit, und der Rest der Seite war weiter bedienbar.
+//
+// Die Ursache ist **keine** z-index-Frage, auch wenn sie danach aussieht. Gemessen an der
+// gebauten Seite: `.global-graph-outer` ist `position: fixed; left: 0; top: 0; width: 100vw; height: 100%;
+// z-index: 9999` (so schreibt es das Graph-Plugin), und sein
+// Rechteck ist auch wirklich das ganze Fenster (1440×1000 @ 0,0 bei 1440×1000 Fenster). Es war
+// also richtig positioniert und nur **beschnitten**: `.qgframe-area-right` trägt eine
+// `mask-image` für die weiche Unterkante der Spalte (base.scss), und eine Maske beschneidet
+// alles, was in ihrem Stapelkontext gemalt wird — ein `position: fixed` darin eingeschlossen.
+//
+// Gegenprobe, drei Läufe mit eingespeistem CSS: nur die Maske aus → `elementFromPoint` in der
+// Bildschirmmitte liefert das `<canvas>` des Graphen statt eines `<li>` der Seite. Sticky und
+// `max-height` zusätzlich abzuräumen ändert daran nichts mehr; deshalb bleibt beides stehen, und
+// die Spalte verliert weder ihre Haftung noch ihre Höhe.
+//
+// `:has()` auf `.qgframe-area` statt auf `-right`, weil der Graph in jeder Spalte stehen darf —
+// das Layout-Board der App verschiebt ihn mit einem Zug. Die Spezifität (0,3,0) schlägt die
+// Maskenregeln beider Spalten (base.scss, rechts zwei, links eine), die Reihenfolge der Dateien
+// spielt also keine Rolle.
+//
+// **Die zweite Zeile ist die, nach der es aussah.** Die Spalte ist `position: sticky` und damit
+// ein Stapelkontext, auch ohne z-index; die 9999 des Overlays gelten also nur *innerhalb* der
+// Spalte, und nach außen zählt, wo die Spalte selbst steht. Gemessen mit abgeräumter Maske: Der
+// Kopfbereich lag weiter darüber — scharf statt abgedunkelt, und das Suchfeld war durch den
+// Schleier hindurch anklickbar (`elementFromPoint(1095, 54)` → `button.search-button`).
+//
+// Die Leiter dieser Vorlage, damit die Zahl nicht geraten ist:
+//
+//     80   die Leiste am Schreibtisch (nav-header.scss)
+//     90   die Leiste am Telefon
+//     98   der Burger der Navigation (nav-navigations.scss)
+//     99   der Schleier der Explorer-Schublade und der der Navigation (`--quartz-nav-offcanvas-z` - 1)
+//    100   „Zum Inhalt springen" (base.scss), beide Schubladen
+//    101   der Auslöser der Explorer-Schublade (nav-explorer.scss)
+//    110   diese Regel
+//    120   die Leiste, solange die Suche offen ist (nav-search.scss)
+//
+// Nach der Änderung: `elementFromPoint` liefert an allen vier gemessenen Stellen
+// `div.global-graph-outer`.
+//
+// Die Suche steht darüber, aber nicht mit ihren 999: Hier stand bis zum 35. Review, Quartz'
+// Suchfenster liege mit 999 ohnehin über allem. Es liegt *in* der Leiste, und die ist `sticky`
+// mit eigenem z-index, also ein Stapelkontext - die 999 zählen nur darin, nach außen zählt die 80.
+// Gemessen: Graph offen, Cmd+K, `.search-container.active` gesetzt, und `elementFromPoint`
+// lieferte am Suchfeld wie in der Bildmitte das `<canvas>` des Graphen. Wer tippte, tippte in ein
+// Feld, das er nicht sah. Die Zahl in der Leiter ist deshalb die der Leiste, nicht die der Suche.
+//
+// Die Sperre bleibt trotzdem stehen, statt sie aufzulösen: `position: sticky` und `max-height`
+// tragen die Spalte, und gemessen ändert ihr Abräumen am Overlay nichts mehr.
+.qgframe-area:has(.global-graph-outer.active) {
+  mask-image: none;
+  -webkit-mask-image: none;
+  z-index: 110;
+}

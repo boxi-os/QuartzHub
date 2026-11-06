@@ -1,0 +1,95 @@
+// Recent notes.
+//
+// The box is meant to be a glance, not a second listing page. Measured before this pass: one entry
+// was 113px tall - an uppercase, letter-spaced title, a date on its own line and a row of tag
+// pills - so five entries filled 700px of a sidebar that also holds the tree and a note box.
+//
+// Two of those three lines were an accident. `.recent-notes h1, h2, h3` was meant for the box's
+// own heading, but every entry title is an <h3> as well, so all five were being set as small caps.
+// Hence the `>` below: the heading rule now names the box's own child and nothing deeper.
+
+.recent-notes {
+  min-width: 0;
+
+  > h1, > h2, > h3 {
+    margin-block: 0 var(--tpl-space-xs);
+    font-family: var(--headerFont);
+    font-size: var(--tpl-text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tpl-tracking-label);
+    color: var(--gray);
+    font-weight: 700;
+  }
+}
+
+.recent-ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.recent-li {
+  // Quartz gives every `li` a 1rem margin above and below. The backlinks box resets it and this one
+  // did not, so each of the five entries carried 32px nobody had asked for - measured at 1600px,
+  // 160px of the box's 408, which is why it stood a head taller than the box beside it and why the
+  // gap under the heading read as an indent. The row's own rhythm is the padding below.
+  margin-block: 0;
+  padding-block: var(--tpl-space-2xs);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  font-size: var(--tpl-text-sm);
+  line-height: var(--tpl-leading-snug);
+
+  &:last-child {
+    border-block-end: none;
+  }
+
+  // The entry title. An <h3> in the markup, but a link in a list here - it gives up the heading
+  // scale and the small caps it inherited and takes the size of the bar around it.
+  .desc {
+    margin: 0;
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      font-family: var(--bodyFont);
+      font-size: var(--tpl-text-sm);
+      font-weight: 600;
+      line-height: var(--tpl-leading-snug);
+      letter-spacing: normal;
+      text-transform: none;
+      color: var(--darkgray);
+    }
+  }
+
+  a.internal {
+    color: var(--darkgray);
+    text-decoration: none;
+    font-weight: 600;
+    // A long note name wraps to two lines and stops; the bar is three columns wide and a fourth
+    // line of one title costs an entire other entry.
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+
+  // The date sits under the title in the smallest size there is. It answers "how recent", which is
+  // the only question this box exists to answer.
+  .meta {
+    display: block;
+    color: var(--gray);
+    font-size: var(--tpl-text-xs);
+    margin: 0;
+  }
+
+  // Neither belongs in a glance. The description repeats what the title says at half the
+  // legibility, and a row of tag pills is taller than the entry it labels - both are one click
+  // away on the page itself.
+  .desc > p,
+  .tags {
+    display: none;
+  }
+}

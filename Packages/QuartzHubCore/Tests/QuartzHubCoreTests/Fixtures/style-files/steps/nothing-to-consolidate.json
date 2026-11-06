@@ -1,0 +1,52 @@
+{
+  "name": "nothing to consolidate",
+  "tree": {
+    "custom.scss": "/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/layout\";\n@use \"./custom/a11y\";\n/* --- QuartzControl:managed:imports:end --- */\n",
+    "custom/layout.scss": "// Layout: sticky header, columns and their scrolling, panels, breakpoints, footer.\n",
+    "custom/a11y.scss": ""
+  },
+  "steps": [
+    {
+      "call": "listStyleFiles",
+      "args": [],
+      "result": {
+        "main": {
+          "path": "@P@/quartz/styles/custom.scss",
+          "content": "/* --- QuartzControl:managed:imports:start --- */\n@use \"./custom/layout\";\n@use \"./custom/a11y\";\n/* --- QuartzControl:managed:imports:end --- */\n",
+          "managed": null,
+          "moved": false
+        },
+        "files": [
+          {
+            "relativePath": "custom/layout.scss",
+            "path": "@P@/quartz/styles/custom/layout.scss",
+            "name": "layout.scss",
+            "imported": true
+          },
+          {
+            "relativePath": "custom/a11y.scss",
+            "path": "@P@/quartz/styles/custom/a11y.scss",
+            "name": "a11y.scss",
+            "imported": true
+          }
+        ],
+        "consolidated": true
+      },
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "consolidateStylesheets",
+      "args": [],
+      "result": {
+        "consolidated": false,
+        "snapshotId": null,
+        "written": [],
+        "merged": 0,
+        "renamed": []
+      },
+      "changed": {},
+      "snapshots": []
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+// Folder and tag listing pages.
+//
+// One file because a tag page *is* a folder page with a different title - it reuses the same markup
+// and the second file only ever held the two rules that differ. Splitting it suggested two page
+// types where there is one listing with two headings.
+
+.page-listing {
+  // The list is a new thing on the page, not the next paragraph of the one above it - it gets the
+  // distance a section gets, not the one between two blocks of text.
+  margin-block-start: var(--tpl-space-xl);
+
+  // The count line above the list.
+  > p:first-child {
+    margin-block: 0 var(--tpl-space-sm);
+    color: var(--gray);
+    font-size: var(--tpl-text-sm);
+  }
+}
+
+ul.section-ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li.section-li {
+  padding-block: var(--tpl-space-sm);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+
+  &:last-child {
+    border-block-end: none;
+  }
+}
+
+// Date, title, tags. The date column is fixed so the titles line up down the page; the title takes
+// what is left and the tags sit at the end.
+//
+// Everything below is scoped under `.page-listing`, and that is not tidiness: the recent-notes
+// component reuses these very class names — `.section`, `.meta`, `.desc`, `.tags` — inside a 240px
+// sidebar. Unscoped, this three-column grid landed there too and stacked the date on top of the
+// title. Measured on the built page.
+// `minmax(0, auto)` on the tag column, and `start` rather than `baseline`.
+//
+// Both are about what happens when the column gets narrow. An `auto` track takes its minimum from
+// its content, and the pills inside carry `white-space: nowrap` - so the widest single tag name
+// set the floor, and everything it needed came out of the title column, which has `min-width: 0`
+// and gives way without limit. A row could end up with two characters of title beside three tags.
+// With `minmax(0, auto)` the tag column yields too and its pills wrap, which is what
+// `flex-wrap: wrap` on `.tags` was there for all along.
+//
+// And once they wrap, `baseline` is wrong: it aligns the *first* line of the pill block with the
+// date and the title, so a second row of pills pushes the whole cell up and the row stops looking
+// like a row. `start` keeps the three cells hanging from the same top edge.
+.page-listing .section {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) minmax(0, auto);
+  gap: var(--tpl-space-xs) var(--tpl-space-md);
+  align-items: start;
+}
+
+.page-listing .section .meta {
+  margin: 0;
+  color: var(--gray);
+  font-size: var(--tpl-text-sm);
+  // Tabular figures so the dates form a column rather than a ragged edge.
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.page-listing .section .desc {
+  min-width: 0;
+
+  h3 {
+    margin: 0;
+    font-size: var(--tpl-text-base);
+    font-weight: 600;
+
+    a {
+      color: var(--dark);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--secondary);
+        text-decoration: underline;
+        text-underline-offset: var(--tpl-underline-offset);
+      }
+    }
+  }
+
+  // If a page has a description, it follows the title inside the same cell.
+  p {
+    margin: var(--tpl-space-3xs) 0 0;
+    color: var(--gray);
+    font-size: var(--tpl-text-sm);
+  }
+}
+
+.page-listing .section .tags {
+  margin: 0;
+  justify-content: flex-end;
+  // The grid track can shrink now; without this the flex item inside it still could not.
+  min-width: 0;
+}
+
+// One column below the tablet breakpoint: a 7.5rem date column plus a title plus tags does not
+// fit in 390px, and the date is the part that can move.
+@media (max-width: 720px) {
+  .page-listing .section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-listing .section .tags {
+    justify-content: flex-start;
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+// Tag pages.
+//
+// A tag page reuses the folder-page markup (see page-folder.scss), so almost everything is already
+// covered. What is left is the little that differs: the page title is the bare tag name, and the
+// count line says "with this tag" rather than "in this folder".
+//
+// An earlier version of this file styled `.tag-listing-header`, `.tag-index` and
+// `article > h1 > a.tag-link`. None of the three is emitted by anything — the tag's name arrives
+// The tag name as a page title. The slug attribute sits on <body>, not on .page - measured.
+//
+// A mark in front says what kind of page this is without needing a heading above it, and it is the
+// same lucide `tag` the pills carry (meta-tag-list.scss) rather than a "#": the two say the same
+// thing on the same site, and a page that hands out labelled pills should not name itself with a
+// character. Decoration, so it stays out of the accessibility tree.
+//
+// Masked rather than drawn, because only a mask's alpha survives - the glyph is painted in
+// `currentColor` and follows the heading.
+body[data-slug^="tags/"] .article-title::before {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-inline-end: 0.3em;
+  background-color: var(--gray);
+  mask-image: var(--icon-tag);
+  -webkit-mask-image: var(--icon-tag);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+// Every tag link on a tag page points at a sibling tag; the current one is not linked, so no
+// "current" styling is needed here.

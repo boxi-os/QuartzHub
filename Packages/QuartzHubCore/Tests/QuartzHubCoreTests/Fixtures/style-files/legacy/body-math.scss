@@ -1,0 +1,31 @@
+// KaTeX. The plugin ships its own stylesheet; these are the three things it cannot know about —
+// the surrounding colour, the overflow behaviour and the size relationship to body text.
+//
+// `.katex` and `.katex-display` are the only two classes on the page. `.math-display`, which an
+// earlier version of this file also styled, is emitted by nothing — measured on the maths page:
+// 4 × `.katex-display`, 0 × `.math-display`.
+
+.katex {
+  // KaTeX sets its own font; only the size has to agree with the paragraph around it.
+  font-size: 1.05em;
+  color: var(--darkgray);
+}
+
+// Display maths is a block, and a long expression has to scroll rather than widen the column.
+.katex-display {
+  margin-block: var(--tpl-space-lg);
+  padding-block: var(--tpl-space-2xs);
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // Scrolling needs something to grab; a hairline says the block continues.
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+}
+
+// An equation number, where one is set, must not be the thing that makes the row scroll.
+.katex-display > .katex > .katex-html > .tag {
+  position: relative;
+  inset-inline-start: 0;
+}

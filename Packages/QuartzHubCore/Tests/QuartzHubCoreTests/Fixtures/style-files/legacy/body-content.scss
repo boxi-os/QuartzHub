@@ -1,0 +1,290 @@
+// Article body — everything that comes out of a Markdown file.
+
+article {
+  // Anchors quartz adds to headings: present for the pointer, never in the way of the text.
+  a[data-no-popover],
+  .internal.broken {
+    color: var(--gray);
+  }
+
+  // The gap between one block and the next, and it is one number for every kind of block.
+  //
+  // Measured before this: a paragraph was followed by 16px while a blockquote, a figure, a callout
+  // and a code block were followed by 24px. At a 25.6px line the 16 is 0.63 of a line - too little
+  // to end a paragraph with, so two of them read as one, and inconsistent with the four block types
+  // that already had it right. 24px is 0.94 of a line: the blank line a reader expects, and no
+  // more. The scale stays three-valued and says what it means:
+  //
+  //     40px (--tpl-space-xl)  before a heading   - the heading belongs to what follows it
+  //     24px (--tpl-space-lg)  between two blocks - one blank line
+  //      8px (--tpl-space-xs)  heading to its text, and between two list items
+  p {
+    margin-block: 0 var(--tpl-space-lg);
+  }
+
+  /* ------------------------------------------------------------------------- links */
+
+  a {
+    color: var(--secondary);
+    // A colour alone is not a link affordance for someone who cannot separate these two hues.
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: var(--tpl-underline-offset);
+    text-decoration-color: color-mix(in srgb, var(--secondary) 40%, transparent);
+    transition: color var(--tpl-motion), text-decoration-color var(--tpl-motion);
+
+    &:hover {
+      color: var(--tertiary);
+      text-decoration-color: currentColor;
+    }
+
+    // External links get a mark rather than only a different colour.
+    &.external::after {
+      content: "↗";
+      display: inline-block;
+      margin-inline-start: 0.15em;
+      font-size: 0.85em;
+      text-decoration: none;
+      color: var(--gray);
+    }
+
+    // A wikilink to a page that does not exist should look unfinished, not broken.
+    //
+    // Measured: this build does not emit the class — a link to a missing page came out as
+    // `internal internal-link` like any other. `.broken` is in quartz's own base.scss, so some
+    // configuration does produce it; the rule stays as the one that will apply when it does,
+    // rather than being deleted and rediscovered later.
+    &.internal.broken {
+      text-decoration-style: dotted;
+    }
+  }
+
+  /* ------------------------------------------------------------------------- lists */
+
+  ul,
+  ol {
+    padding-inline-start: var(--tpl-space-lg);
+    margin-block: 0 var(--tpl-space-lg);
+  }
+
+  // 8px between two items, and the reason it is not more: this margin collapses with the list's
+  // own, so whatever stands here is also the smallest gap a list can have above and below it. At
+  // 8px the items are separated - four was not enough to see at a 25.6px line - and the 24px the
+  // block before it sets still wins the collapse.
+  li {
+    margin-block: var(--tpl-space-xs);
+
+    &::marker {
+      color: var(--gray);
+    }
+  }
+
+  // Nested lists tighten rather than repeat the full gap.
+  li > ul,
+  li > ol {
+    margin-block: var(--tpl-space-2xs);
+  }
+
+  /* ------------------------------------------------------------------- task lists */
+
+  // Six states, not two. Obsidian lets any character stand in the brackets - `[/]` in Arbeit,
+  // `[-]` verworfen, `[>]` verschoben, `[?]` fraglich - and until 2026-09-06 quartz dropped all
+  // but `[ ]` and `[x]`, so this template said so on its own tasks page and left it at that
+  // (BEFUNDE 18). The plugin writes `data-task="<zeichen>"` on the `li` now; measured in this
+  // site's build, all six arrive. So they get drawn.
+  //
+  // One system, two colours. The box is always the same outlined square, the mark inside it is a
+  // masked glyph, and the colour says which half of the six a state belongs to: accent for the
+  // two that are still going somewhere (erledigt, in Arbeit), muted for the three that are not
+  // (verworfen, verschoben, fraglich). A reader who does not know the characters still sees two
+  // groups; a reader who does gets the exact one.
+  //
+  // The native checkbox stays the box rather than being hidden behind a pseudo-element: it is
+  // what the markup offers, it is focusable, and quartz leaves it enabled. `appearance: none`
+  // takes its painting away, nothing else.
+  input[type="checkbox"] {
+    appearance: none;
+    // `em` on a form control means the control's own font, and WebKit gives inputs a smaller one:
+    // measured 12x12 against 14x14 in Chrome and Firefox from the same rule. One line makes the
+    // box the same size in all three.
+    font: inherit;
+    margin-inline-end: var(--tpl-space-xs);
+    inline-size: 1.1em;
+    block-size: 1.1em;
+    flex: none;
+    vertical-align: -0.2em;
+    // The whole glyph - box and mark - comes from the mask; the element paints nothing of its own.
+    // See base.scss for why the box is not a `border`.
+    background-color: var(--gray);
+    mask-image: var(--icon-task-open);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+  }
+
+  // Driven by the character the author typed, not by `:checked` - a page states what its author
+  // wrote, and clicking a box on a built site changes nothing but the pixel. The one exception is
+  // the open state, where a reader's tick means something to them.
+  li[data-task="x"] > input[type="checkbox"],
+  li[data-task=" "] > input[type="checkbox"]:checked {
+    mask-image: var(--icon-task-done);
+    background-color: var(--secondary);
+  }
+
+  li[data-task="/"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-doing);
+    background-color: var(--secondary);
+  }
+
+  li[data-task="-"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-cancelled);
+  }
+
+  li[data-task=">"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-forwarded);
+  }
+
+  li[data-task="?"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-question);
+  }
+
+  // Done and cancelled are both finished with; the difference is whether it happened. Same
+  // treatment for the line, and the box above is what tells them apart.
+  li[data-task="x"],
+  li[data-task="-"],
+  li[data-task=" "]:has(> input[type="checkbox"]:checked) {
+    color: var(--gray);
+    text-decoration: line-through;
+    text-decoration-color: color-mix(in srgb, var(--gray) 50%, transparent);
+  }
+
+  // And the other three have to be *un*struck, which is not obvious and was measured: the markdown
+  // parser calls every non-space character checked, so `[/]`, `[>]` and `[?]` arrive with
+  // `checked` on the input and `is-checked` on the item - and quartz's own
+  // `li:has(> input:checked) { text-decoration: line-through; color: var(--gray) }` then strikes
+  // four of the six states. In Arbeit, verschoben und fraglich sind nicht erledigt; sie sind noch
+  // offen, und ein durchgestrichener offener Punkt sagt das Gegenteil.
+  li[data-task="/"],
+  li[data-task=">"],
+  li[data-task="?"] {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ul:has(> li > input[type="checkbox"]) {
+    list-style: none;
+    padding-inline-start: var(--tpl-space-xs);
+  }
+
+  /* -------------------------------------------------------------------- quotations */
+
+  blockquote {
+    margin-block: var(--tpl-space-lg);
+    margin-inline: 0;
+    padding: var(--tpl-space-xs) var(--tpl-space-md);
+    border-inline-start: var(--tpl-accent-bar) solid var(--secondary);
+    background: var(--tpl-surface-tint);
+    border-start-end-radius: var(--tpl-radius-md);
+    border-end-end-radius: var(--tpl-radius-md);
+    color: var(--darkgray);
+
+    > :last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  /* ------------------------------------------------------------------------ tables */
+
+  // Quartz already wraps every content table in a .table-container, so the scrolling belongs
+  // there. Putting `display: block; overflow-x: auto` on the <table> itself - the obvious first
+  // attempt - destroys the table layout: measured against the note-properties table, whose keys
+  // and values then rendered on top of each other. The container is also the only correct place
+  // for it, because the table has to keep `display: table` to lay out at all.
+  //
+  // Scoped to the container rather than to `article table`, which would also catch the
+  // note-properties and layout-box tables that quartz does not wrap.
+  .table-container {
+    overflow-x: auto;
+    margin-block: var(--tpl-space-lg);
+    // The wrapper is the block; the table inside it may be wider than the column.
+    max-width: none;
+  }
+
+  .table-container > table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--tpl-text-sm);
+    // Overriding quartz's own 1rem margin + 1.5rem padding on this element (base.scss), which
+    // would otherwise indent every table inside its own scroll box.
+    margin: 0;
+    padding: 0;
+  }
+
+  .table-container th,
+  .table-container td,
+  th,
+  td {
+    padding: var(--tpl-space-xs) var(--tpl-space-sm);
+    border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  thead th {
+    font-family: var(--headerFont);
+    font-weight: 600;
+    color: var(--dark);
+    border-block-end: 2px solid var(--tpl-rule-strong);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td {
+    border-block-end: none;
+  }
+
+  /* ------------------------------------------------------------------------- rules */
+
+  hr {
+    border: none;
+    border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+    margin-block: var(--tpl-space-xl);
+  }
+
+  /* -------------------------------------------------------------------- highlights */
+
+  mark {
+    background: var(--textHighlight);
+    color: var(--darkgray);
+    padding-inline: 0.15em;
+    border-radius: var(--tpl-radius-sm);
+  }
+
+  // Obsidian comments (%%...%%) are stripped at build time; this catches the case where a theme
+  // renders them instead of removing them.
+  .comment {
+    display: none;
+  }
+
+  /* -------------------------------------------------------------------- footnotes */
+
+  .footnotes {
+    margin-block-start: var(--tpl-space-xl);
+    padding-block-start: var(--tpl-space-md);
+    border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+    font-size: var(--tpl-text-sm);
+    color: var(--gray);
+
+    li:target {
+      background: var(--tpl-surface-tint);
+      border-radius: var(--tpl-radius-sm);
+    }
+  }
+
+  .data-footnote-backref {
+    text-decoration: none;
+  }
+
+  sup a {
+    text-decoration: none;
+    padding-inline: 0.1em;
+  }
+}

@@ -980,3 +980,35 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
 - Gegenproben (23, jede lässt einen Test scheitern; vier waren erst ungefangen und bekamen einen
   Fall: der Abdruck der eigenen Regeln bei gleicher Anfrage, eigene Familien in „nicht geliefert“
   und in „entfernt“, `fontOrigin: cdn` mit anderer Typografie).
+
+### Stylesheet-Dateien und „Zusammenlegen“ (`styleService.ts`, zweiter Teil, `shared/stylesheetConsolidation.ts` → `StyleFiles`, `StylesheetConsolidation`)
+
+- Auflisten (Ladereihenfolge zuerst, dann was nicht geladen ist), lesen, schreiben, anlegen,
+  umbenennen (die Reihenfolge vor dem Umbenennen gelesen), löschen (die Reihenfolge zuerst), ein
+  Stylesheet nach imported/ holen, die Referenz-Stylesheets eines Plugins, und das Zusammenlegen
+  der 31 Vorlagen-Stylesheets von 1.0 zu den zwölf von 1.1.
+- **Die Tür prüft die Namen.** QuartzControls IPC-Schemas ließen nur `custom/…` und `imported/…`
+  mit `.scss`/`.css` durch (und `_quartzcontrol.scss` zum Lesen und Speichern), Dateinamen aus
+  einem Segment. Ohne IPC stehen dieselben Regeln am Dienst (`StyleFiles.InvalidName`).
+- **Ein Verzeichnis lesen heißt hier: nach Bytes sortiert.** Node liest Verzeichnisse über libuvs
+  `scandir`, das nach `strcmp` sortiert; `readdir` gibt die Reihenfolge des Dateisystems. Gemessen
+  an den 22 Referenz-Stylesheets eines Plugins: in Hash-Reihenfolge statt nach Namen. Das gilt
+  jetzt für jede Verzeichnisliste des Kerns (`LayoutFrames.directoryEntriesWithKind`), auch für die
+  Frames.
+- **Zusammenlegen braucht einen Snapshot, und den gibt es erst mit Punkt 7.** Bis dahin lehnt
+  `consolidate` ab, bevor etwas bewegt wird; die Tests geben einen nachgestellten Snapshot mit, um
+  den Lauf selbst gegen QuartzControl zu messen. Die Kopfzeile der zwölf („put together by
+  QuartzControl …“, auch die frühere Fassung) bleibt QuartzControls: An ihr erkennen beide Apps
+  ein zusammengelegtes Projekt.
+- **Gemessen gegen QuartzControls Code:** `scripts/style-files-golden.mjs` holt die 31
+  Stylesheets aus QuartzControls git-Geschichte (`f2cdb69~1`) und zeichnet auf: den Plan für 15
+  Reihenfolgen (mit eigenen Dateien davor und dahinter, eine abgeschaltet, nur drei geladen,
+  `base` mit nur einem Anteil, eine unbekannte Überschrift, eine eigene Datei hinter `base`, eine
+  eigene `layout.scss`, beide Kopfzeilen, die erste Zeile der Vorlage, nicht geladen, imported/ und
+  `.css`), dazu fünf Abläufe auf Projekten (zusammenlegen, umgezogen und mit einer abgeschalteten,
+  nichts zu tun, alle Datei-Aufrufe, Referenzen mit ausgelassenen Ordnern, Tiefe und mehr als 20
+  Dateien). Alles gleich.
+- Gegenproben (19, 18 fangen; eine war erst ungefangen und bekam den Fall „eigene Datei hinter
+  `base`“). Ungefangen bleibt, dass das Ausweichen beim Umbenennen auch die eben geschriebenen
+  Namen meidet: Kein Name der zwölf endet auf „-<Zahl>“, die Abfrage ist eine Vorsicht aus
+  QuartzControl, die nie greift.

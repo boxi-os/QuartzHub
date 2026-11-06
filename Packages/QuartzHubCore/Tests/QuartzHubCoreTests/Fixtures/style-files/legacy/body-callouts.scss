@@ -1,0 +1,174 @@
+// Callouts.
+//
+// Quartz ships twelve colours for these, and eleven of them fail AA against a light ground:
+// measured against this template's page colour, `note` (#448aff) reaches 3.23:1, `question`
+// (#dba642) 2.14:1, and the red used by danger/failure/bug fails in *both* modes at ~4.2:1. Since
+// the callout title is text and the type colour is the only thing distinguishing one callout from
+// another, every one of them gets a corrected colour of its own, in both modes.
+//
+// The values are measured, not picked: `npm run template:example -- --check-contrast` checks each
+// one against the ground it sits on and against its own tinted background. Seit dem 2026-09-20
+// stehen sie als `--tpl-callout-*` in variables.mjs; die Prüfung liest die Zuordnung hier und löst
+// das Token dahinter auf, beide Hälften müssen also stimmen, damit ein Wert gemessen wird.
+//
+// Hue is preserved throughout — blue stays blue — so the type is still recognisable at a glance
+// for anyone who reads these by colour.
+
+.callout {
+  --callout-tint: 8%;
+  --border: color-mix(in srgb, var(--color) 35%, transparent);
+  --bg: color-mix(in srgb, var(--color) var(--callout-tint), var(--light));
+
+  margin-block: var(--tpl-space-lg);
+  border: var(--tpl-rule-width) solid var(--border);
+  border-inline-start: var(--tpl-accent-bar) solid var(--color);
+  border-radius: var(--tpl-radius-md);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------- the type colours */
+
+// Dreizehn Zeilen, die sagen, welcher Callout welche Farbe liest — die Werte selbst stehen als
+// `--tpl-callout-*` in variables.mjs und damit im Variablen-Tab der App.
+//
+// Sie standen bis zum 2026-09-20 hier, als 26 Literale in zwei Blöcken. Der Umzug hat drei Folgen,
+// und die dritte ist der Grund: Der Dunkelmodus-Block mit seinen dreizehn Farben entfällt ganz
+// (ein Token trägt Hell und Dunkel), die Werte sind in der App änderbar, und diese Datei sagt
+// jetzt nur noch *welcher* Callout *welche* Farbe hat — eine Zuordnung, keine Entscheidung.
+//
+// Die Kontrastprüfung liest weiter diese Zeilen und löst die Tokens dahinter auf
+// (`calloutPairs()` in palette.mjs). Dass die Werte woanders stehen, nimmt ihr also nichts: Ein
+// Callout, der hier ein Token liest, das es nicht gibt, ist ein Fehler und kein übersprungener
+// Wert.
+.callout[data-callout="note"] { --color: var(--tpl-callout-note); }
+.callout[data-callout="abstract"] { --color: var(--tpl-callout-abstract); }
+.callout[data-callout="info"] { --color: var(--tpl-callout-info); }
+.callout[data-callout="todo"] { --color: var(--tpl-callout-todo); }
+.callout[data-callout="tip"] { --color: var(--tpl-callout-tip); }
+.callout[data-callout="success"] { --color: var(--tpl-callout-success); }
+.callout[data-callout="question"] { --color: var(--tpl-callout-question); }
+.callout[data-callout="warning"] { --color: var(--tpl-callout-warning); }
+.callout[data-callout="failure"] { --color: var(--tpl-callout-failure); }
+.callout[data-callout="danger"] { --color: var(--tpl-callout-danger); }
+.callout[data-callout="bug"] { --color: var(--tpl-callout-bug); }
+.callout[data-callout="example"] { --color: var(--tpl-callout-example); }
+.callout[data-callout="quote"] { --color: var(--tpl-callout-quote); }
+
+/* ------------------------------------------------------------------ dark mode tint */
+
+:root[saved-theme="dark"] .callout {
+  // A tint has to be stronger on a dark ground to be visible at all. Die Farben selbst kommen aus
+  // den Tokens und brauchen hier keinen zweiten Block mehr.
+  --callout-tint: 12%;
+}
+
+/* ------------------------------------------------------------------------ structure */
+
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: var(--tpl-space-xs);
+  padding: var(--tpl-space-xs) var(--tpl-space-md);
+  font-family: var(--headerFont);
+  font-weight: 600;
+  color: var(--color);
+}
+
+.callout-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  // The icon repeats what the title says; it is decoration, not information.
+  > svg {
+    width: 1.05em;
+    height: 1.05em;
+  }
+}
+
+.callout-title-inner {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  // Quartz wraps the title text in a <p>, which keeps its paragraph margin. Measured: the title
+  // row was 57.6px and centred its three children on 453.4, but the <p> inside this box sat at
+  // 445.4 - eight pixels above the icon, because the 16px it carried below it pushed it up inside
+  // a box that was centred as a whole. The icon looked like it had dropped; it had not.
+  > * {
+    margin-block: 0;
+  }
+}
+
+.callout-content {
+  padding: 0 var(--tpl-space-md) var(--tpl-space-xs);
+  color: var(--darkgray);
+
+  > :first-child {
+    margin-block-start: 0;
+  }
+
+  > :last-child {
+    margin-block-end: 0;
+  }
+
+  // A callout is already a tinted box; a quote inside one repeating the treatment reads as damage.
+  blockquote {
+    background: none;
+    border-inline-start-color: var(--border);
+  }
+}
+
+/* ------------------------------------------------------------------------ folding */
+
+.callout.is-collapsible .callout-title {
+  cursor: pointer;
+}
+
+// The fold marker is Quartz' own `--callout-icon-fold`, an empty <div> with the icon as a
+// background - not an SVG like the explorer's and the outline's. Pointing the variable at the same
+// lucide chevron is what makes "one disclosure glyph on the whole site" literally true rather than
+// only nearly: quartz' default draws the same shape at a different stroke weight and with square
+// caps, which is visible when a callout and the table of contents are on screen together.
+.callout {
+  --callout-icon-fold: var(--icon-chevron);
+}
+
+.callout-fold {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  transition: transform var(--tpl-motion);
+
+  > svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.callout.is-collapsed .callout-fold {
+  transform: rotate(-90deg);
+}
+
+// The title is the control when a callout folds, so it needs a focus ring of its own — the
+// element that takes focus is not the one the browser would outline by default here.
+.callout.is-collapsible .callout-title:focus-visible {
+  outline: var(--tpl-focus-width) solid var(--color);
+  outline-offset: calc(var(--tpl-focus-offset) * -1);
+}
+
+.callout-metadata {
+  display: none;
+}
+
+/* --------------------------------------------------------------------- nesting */
+
+// One level in, the box drops its own border so two nested callouts do not read as a frame in a
+// frame; the accent bar keeps the type visible.
+.callout .callout {
+  margin-block: var(--tpl-space-md);
+  border-block: none;
+  border-inline-end: none;
+  border-radius: 0;
+  border-start-start-radius: var(--tpl-radius-sm);
+  border-end-start-radius: var(--tpl-radius-sm);
+}

@@ -1,0 +1,117 @@
+// Canvas and Excalidraw — the two page types that are a picture.
+//
+// Both plugins bring their own complete styling for the drawing itself, including dark-mode
+// palettes they compute. That is the right split: the colours inside a drawing belong to the
+// drawing, and a stylesheet that fights them recolours half of it and leaves the rest.
+//
+// What this file does own is everything *around* the drawing, and since 2026-09-06 that includes
+// the one thing neither plugin can supply: a height. Both page types now use the site's own
+// `drawing` frame (frames.mjs, layout.mjs) instead of the frame their plugin ships, so they have
+// the same header, breadcrumb and footer as every other page - and the drawing sits in a grid row
+// rather than under them.
+//
+// A grid row does not give it a height. `.canvas-page`, `.canvas-container` and
+// `.excalidraw-container` are all `height: 100%`, the grid's own height is `auto`, and `1fr` in an
+// auto-height grid is the content's height - so the percentage resolved against nothing and the
+// box collapsed. Measured on the built canvas page before the frame change: a 406px container
+// holding a 1456 x 807 drawing, with the footer painted across the middle of it. The height below
+// is therefore stated, once, for both.
+
+/* -------------------------------------------------------- the drawing's own height */
+
+// Tall enough to be a drawing rather than a strip, short enough that the page it belongs to is
+// still visibly a page: the header stays above it and the footer is one scroll away. `dvh` and not
+// `vh` because on a phone the two differ by the browser chrome, and 78vh there is a drawing that
+// starts under the address bar and ends under the tab strip.
+.canvas-page,
+.excalidraw-page {
+  block-size: clamp(320px, 72dvh, 900px);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  // A drawing in a page is a figure and wants an edge, which under the plugins' own full-screen
+  // frames it did not: there, the drawing *was* the page. The canvas draws its own dotted ground so
+  // its extent is visible either way; the excalidraw stage is plain and had no boundary at all.
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  overflow: hidden;
+}
+
+// The plugins pin their controls to the *window* (`position: fixed`), which under their own
+// full-screen frames was the same thing as pinning them to the drawing. It is not the same thing
+// here: fixed controls float over the header, the breadcrumb and the footer, and stay on screen
+// while the drawing scrolls away underneath them. Both containers already establish a positioning
+// context, so absolute is all it takes to hand them back to the picture they belong to.
+.canvas-container,
+.excalidraw-container,
+.excalidraw-stage {
+  position: relative;
+}
+
+.canvas-controls,
+.excalidraw-controls,
+.canvas-sidebar-toggle,
+.excalidraw-sidebar-toggle {
+  position: absolute;
+}
+
+/* --------------------------------------------------------------------------- canvas */
+
+// The controls float over the drawing. They are buttons, so they get this template's target size
+// and the same edge every other control uses — measured against `gray`, not `lightgray`.
+.canvas-controls button,
+.canvas-sidebar-toggle,
+.canvas-fullscreen-toggle {
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+  display: grid;
+  place-items: center;
+  border: var(--tpl-rule-width) dotted var(--tpl-rule-control);
+  border-radius: var(--tpl-radius-md);
+  background: var(--light);
+  color: var(--darkgray);
+  cursor: pointer;
+  transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--secondary);
+    background: var(--tpl-surface-tint);
+  }
+}
+
+// A node that points at a note. The label is the note's name and doubles as the link.
+.canvas-file-label,
+.canvas-file-link {
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-sm);
+  font-weight: 600;
+  color: var(--dark);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--secondary);
+  }
+}
+
+// Text nodes carry markdown; give it the body face rather than the browser default.
+.canvas-embed-content {
+  font-family: var(--bodyFont);
+  font-size: var(--tpl-text-sm);
+  color: var(--darkgray);
+}
+
+/* ---------------------------------------------------------------------- excalidraw */
+
+// Nothing. The plugin renders the drawing as SVG with its own palette - all 65 Excalidraw colours
+// have a pre-computed dark-mode equivalent - and its own frame. Every rule this template could add
+// would either duplicate that or fight it.
+//
+// Except one: its controls are buttons like any other, and this template's rule about target size
+// applies to them too.
+.excalidraw-controls button,
+.excalidraw-zoom-in,
+.excalidraw-zoom-out,
+.excalidraw-zoom-reset {
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+}

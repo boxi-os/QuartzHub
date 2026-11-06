@@ -1,0 +1,175 @@
+{
+  "name": "references",
+  "tree": {
+    "custom.scss": "",
+    "../.quartz/plugins/demo/styles/a.scss": ".a {}",
+    "../.quartz/plugins/demo/dist/x.scss": "no",
+    "../.quartz/plugins/demo/node_modules/m.scss": "no",
+    "../.quartz/plugins/demo/b/c/d/e/f/g/deep.scss": "deep",
+    "../.quartz/plugins/demo/b/c/d/e/f/g/h/deeper.scss": "deeper",
+    "../.quartz/plugins/demo/z.css": "css",
+    "../.quartz/plugins/many/s00.scss": ".s0 {}",
+    "../.quartz/plugins/many/s01.scss": ".s1 {}",
+    "../.quartz/plugins/many/s02.scss": ".s2 {}",
+    "../.quartz/plugins/many/s03.scss": ".s3 {}",
+    "../.quartz/plugins/many/s04.scss": ".s4 {}",
+    "../.quartz/plugins/many/s05.scss": ".s5 {}",
+    "../.quartz/plugins/many/s06.scss": ".s6 {}",
+    "../.quartz/plugins/many/s07.scss": ".s7 {}",
+    "../.quartz/plugins/many/s08.scss": ".s8 {}",
+    "../.quartz/plugins/many/s09.scss": ".s9 {}",
+    "../.quartz/plugins/many/s10.scss": ".s10 {}",
+    "../.quartz/plugins/many/s11.scss": ".s11 {}",
+    "../.quartz/plugins/many/s12.scss": ".s12 {}",
+    "../.quartz/plugins/many/s13.scss": ".s13 {}",
+    "../.quartz/plugins/many/s14.scss": ".s14 {}",
+    "../.quartz/plugins/many/s15.scss": ".s15 {}",
+    "../.quartz/plugins/many/s16.scss": ".s16 {}",
+    "../.quartz/plugins/many/s17.scss": ".s17 {}",
+    "../.quartz/plugins/many/s18.scss": ".s18 {}",
+    "../.quartz/plugins/many/s19.scss": ".s19 {}",
+    "../.quartz/plugins/many/s20.scss": ".s20 {}",
+    "../.quartz/plugins/many/s21.scss": ".s21 {}"
+  },
+  "steps": [
+    {
+      "call": "getStyleReferences",
+      "args": [
+        "demo"
+      ],
+      "result": [
+        {
+          "label": "b/c/d/e/f/g/deep.scss",
+          "path": "@P@/.quartz/plugins/demo/b/c/d/e/f/g/deep.scss",
+          "content": "deep"
+        },
+        {
+          "label": "styles/a.scss",
+          "path": "@P@/.quartz/plugins/demo/styles/a.scss",
+          "content": ".a {}"
+        }
+      ],
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "getStyleReferences",
+      "args": [
+        "many"
+      ],
+      "result": [
+        {
+          "label": "s00.scss",
+          "path": "@P@/.quartz/plugins/many/s00.scss",
+          "content": ".s0 {}"
+        },
+        {
+          "label": "s01.scss",
+          "path": "@P@/.quartz/plugins/many/s01.scss",
+          "content": ".s1 {}"
+        },
+        {
+          "label": "s02.scss",
+          "path": "@P@/.quartz/plugins/many/s02.scss",
+          "content": ".s2 {}"
+        },
+        {
+          "label": "s03.scss",
+          "path": "@P@/.quartz/plugins/many/s03.scss",
+          "content": ".s3 {}"
+        },
+        {
+          "label": "s04.scss",
+          "path": "@P@/.quartz/plugins/many/s04.scss",
+          "content": ".s4 {}"
+        },
+        {
+          "label": "s05.scss",
+          "path": "@P@/.quartz/plugins/many/s05.scss",
+          "content": ".s5 {}"
+        },
+        {
+          "label": "s06.scss",
+          "path": "@P@/.quartz/plugins/many/s06.scss",
+          "content": ".s6 {}"
+        },
+        {
+          "label": "s07.scss",
+          "path": "@P@/.quartz/plugins/many/s07.scss",
+          "content": ".s7 {}"
+        },
+        {
+          "label": "s08.scss",
+          "path": "@P@/.quartz/plugins/many/s08.scss",
+          "content": ".s8 {}"
+        },
+        {
+          "label": "s09.scss",
+          "path": "@P@/.quartz/plugins/many/s09.scss",
+          "content": ".s9 {}"
+        },
+        {
+          "label": "s10.scss",
+          "path": "@P@/.quartz/plugins/many/s10.scss",
+          "content": ".s10 {}"
+        },
+        {
+          "label": "s11.scss",
+          "path": "@P@/.quartz/plugins/many/s11.scss",
+          "content": ".s11 {}"
+        },
+        {
+          "label": "s12.scss",
+          "path": "@P@/.quartz/plugins/many/s12.scss",
+          "content": ".s12 {}"
+        },
+        {
+          "label": "s13.scss",
+          "path": "@P@/.quartz/plugins/many/s13.scss",
+          "content": ".s13 {}"
+        },
+        {
+          "label": "s14.scss",
+          "path": "@P@/.quartz/plugins/many/s14.scss",
+          "content": ".s14 {}"
+        },
+        {
+          "label": "s15.scss",
+          "path": "@P@/.quartz/plugins/many/s15.scss",
+          "content": ".s15 {}"
+        },
+        {
+          "label": "s16.scss",
+          "path": "@P@/.quartz/plugins/many/s16.scss",
+          "content": ".s16 {}"
+        },
+        {
+          "label": "s17.scss",
+          "path": "@P@/.quartz/plugins/many/s17.scss",
+          "content": ".s17 {}"
+        },
+        {
+          "label": "s18.scss",
+          "path": "@P@/.quartz/plugins/many/s18.scss",
+          "content": ".s18 {}"
+        },
+        {
+          "label": "s19.scss",
+          "path": "@P@/.quartz/plugins/many/s19.scss",
+          "content": ".s19 {}"
+        }
+      ],
+      "changed": {},
+      "snapshots": []
+    },
+    {
+      "call": "getStyleReferences",
+      "args": [
+        "none"
+      ],
+      "result": [],
+      "changed": {},
+      "snapshots": []
+    }
+  ]
+}

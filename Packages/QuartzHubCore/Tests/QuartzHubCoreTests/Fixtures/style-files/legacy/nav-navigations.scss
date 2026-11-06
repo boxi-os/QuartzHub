@@ -1,0 +1,357 @@
+// Navigation — quartz-navigations, alle zehn Darstellungen.
+//
+// Diese Website setzt zwei davon ein: das Akkordeon in der linken Spalte (`.nav-menue`), das auf
+// dem Telefon zur Schublade wird, und den Pager unter dem Text (`.nav-pager`). Gestaltet sind
+// trotzdem alle zehn, aus demselben Grund, aus dem nav-explorer.scss mitreist, obwohl der Explorer
+// aus ist: Wer eine davon einschaltet, soll sie fertig vorfinden.
+//
+// Eine waagerechte Kapitelleiste im Kopf stand hier am 2026-09-20 einen Nachmittag lang und ist
+// an einer Rechnung gescheitert, die keine Regel in dieser Datei lösen kann: Sieben Kapitelnamen
+// dieses Handbuchs sind zusammen rund 880 px breit, und der Kopf hat bei 1440 px Fenster neben
+// der Marke (267) und den vier Bedienelementen (436) rund 680 px übrig. Gemessen in Chrome und
+// WebKit, identisch: umbrechend wuchs der Kopf von 69 auf 90 px und drückte die Marke auf 198 px,
+// einzeilig und rollbar blieben 5 von 7 Kapiteln sichtbar (bei 1280 px vier). Die Leiste ist
+// deshalb nicht im Einsatz — gestaltet ist sie weiter, wie die anderen acht.
+//
+//
+// WAS HIER NICHT STEHT
+//
+// Das Plugin bringt 975 Zeilen SCSS mit (0.3.1) und deckt damit Zeilen, Typskala, Symbole, Klappen,
+// geteilte Zeilen, Leisten, Panels, Reiter, Spalten, Führungslinien, Pager und die
+// Offcanvas-Schublade bereits ab. Nachgebaut wird davon nichts. Diese Datei tut zwei Dinge:
+// sie *verkabelt* die Variablen des Plugins mit den Tokens dieser Vorlage, und sie ergänzt das,
+// wofür es keine Variable gibt.
+//
+// Verkabelt wird dabei nur, wo die Vorlage etwas anderes sagt als das Plugin. `--quartz-nav-focus`
+// steht schon auf `var(--secondary)` und `--tpl-focus-color` ist dasselbe; eine Zeile, die einen
+// Wert durch sich selbst ersetzt, ist kein Anschluss, sondern Rauschen, in dem der nächste Leser
+// die drei Zeilen sucht, die wirklich etwas tun.
+//
+//
+// WARUM DIESE VARIABLEN NICHT IM VARIABLEN-TAB DER APP STEHEN
+//
+// Das Plugin deklariert seine rund 60 `--quartz-nav-*` auf `.quartz-nav` selbst
+// (navigations.scss:35), nicht auf `:root`. Eine Custom Property, die auf dem Element deklariert
+// ist, schlägt jeden geerbten Wert — Kaskadenschicht und Spezifität spielen dabei keine Rolle,
+// weil Vererbung nur dort greift, wo *kein* deklarierter Wert vorliegt. Ein
+// `:root { --quartz-nav-indent: … }` aus dem `css-vars`-Block der App hätte damit exakt null
+// Wirkung, und zwar stillschweigend: Der Wert stünde im Variablen-Tab, ließe sich dort ändern,
+// und auf der Seite bewegte sich nichts.
+//
+// Also gilt die Arbeitsteilung, die `variables.mjs` beschreibt: Was ein Mensch ändern wollen
+// könnte, ist ein `--tpl-*`-Token und steht im Variablen-Tab. Was hier steht, ist die Zuordnung
+// von dort nach da — keine Entscheidung, sondern eine Verkabelung. Fehlt ein Token, entsteht ein
+// neues in `variables.mjs` (so kamen `--tpl-backdrop` und `--tpl-backdrop-blur` dazu), nie ein
+// Literal an dieser Stelle.
+//
+//
+// DIE FALLE, DIE DAS AUFMACHT
+//
+// Was wir hier ungeschichtet auf `.quartz-nav` deklarieren, besitzen wir in *beiden* Modi. Das
+// Plugin hat einen Dunkel-Feinschliff, und er besteht aus genau zwei Zeilen
+// (navigations.scss:972):
+//
+//     :root[saved-theme="dark"] .quartz-nav {
+//       --quartz-nav-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+//       --quartz-nav-backdrop: rgba(0, 0, 0, 0.55);
+//     }
+//
+// Er liegt in `@layer quartz-base` und verliert gegen jede ungeschichtete Deklaration. Es sind
+// ausgerechnet die zwei, die diese Datei überschreiben muss — also muss sie den Dunkelmodus
+// gleich mit beantworten. Sie tut das nicht mit einer zweiten Regel, sondern über Tokens, die
+// selbst modusabhängig sind: `--tpl-shadow` trägt einen eigenen Dunkelwert, `--tpl-backdrop`
+// ausdrücklich keinen (variables.mjs sagt, warum). Eine Zeile, zwei Modi.
+
+.quartz-nav {
+  /* ------------------------------------------------------------------ Maß und Form */
+
+  // Die Tokens dieser Vorlage, wo sie dasselbe meinen wie die Vorgabe des Plugins. Die
+  // Zahlenwerte sind nah beieinander; der Gewinn ist nicht der Unterschied, sondern dass eine
+  // Änderung am Token die Navigation mitnimmt, statt sie zurückzulassen.
+  --quartz-nav-gap: var(--tpl-space-2xs) var(--tpl-space-xs);
+  --quartz-nav-nested-gap: var(--tpl-space-2xs) var(--tpl-space-xs);
+  --quartz-nav-item-padding-y: var(--tpl-space-2xs);
+  --quartz-nav-item-padding-x: var(--tpl-space-xs);
+  --quartz-nav-radius: var(--tpl-radius-sm);
+  --quartz-nav-line-height: var(--tpl-leading-normal);
+  --quartz-nav-transition: var(--tpl-motion);
+  --quartz-nav-icon-size: var(--tpl-icon-sm);
+  --quartz-nav-accent-bar: var(--tpl-accent-bar);
+
+  // Die Einrückung ist die des Explorers, nicht die des Plugins (0.85 statt 1rem). Sie war an
+  // einer vierstufigen Gliederung in einer 300px-Spalte gemessen, und das ist dieselbe Spalte.
+  --quartz-nav-indent: var(--tpl-indent);
+
+  /* --------------------------------------------------------------------- Typskala */
+
+  // Eins zu eins die Staffel, die nav-explorer.scss für denselben Platz gemessen hat: Ebene 1 ist
+  // der Abschnitt, Ebene 2 das Kapitel, Ebene 3 und tiefer sind nur noch Orte. Die Tiefe zeigt
+  // sich im Gewicht und in der Einrückung, nicht in der Größe — erst die vierte Ebene wird
+  // kleiner. Vier Regeln mit fünf Nachfahrenselektoren dort, fünf Variablen hier.
+  //
+  // Nur die Größen. Die Gewichte der Staffel - 700, 600, 500, 500 und 400 für Seiten - sind
+  // zeichengleich die Vorgaben des Plugins (navigations.scss:56-61); sie standen hier als fünf
+  // Literale und damit genau als der Wert durch sich selbst, den der Kopf dieser Datei Rauschen
+  // nennt (35. Review, Befund 9c).
+  --quartz-nav-level-1-size: var(--tpl-text-sm);
+  --quartz-nav-level-2-size: var(--tpl-text-sm);
+  --quartz-nav-level-3-size: var(--tpl-text-sm);
+  --quartz-nav-level-4-size: var(--tpl-text-xs);
+  --quartz-nav-page-size: var(--tpl-text-sm);
+
+  --quartz-nav-title-size: var(--tpl-text-sm);
+  --quartz-nav-title-margin: 0 0 var(--tpl-space-xs);
+
+  /* ---------------------------------------------------------------- Panels, Schublade */
+
+  --quartz-nav-panel-padding: var(--tpl-space-xs);
+  --quartz-nav-panel-radius: var(--tpl-radius-md);
+  --quartz-nav-column-gap: var(--tpl-space-md) var(--tpl-space-lg);
+  --quartz-nav-offcanvas-padding: var(--tpl-space-md);
+
+  // Dieselbe Breite wie die Schublade des Explorers. Die zwei sind dieselbe Geste am selben
+  // Platz, und sie standen mit zwei verschiedenen Zahlen nebeneinander, solange beide da waren.
+  --quartz-nav-offcanvas-width: var(--tpl-drawer-width);
+
+  /* -------------------------------------------------- die zwei aus dem Dunkel-Block */
+
+  // Siehe den Kopf dieser Datei: Diese beiden Zeilen nehmen dem Plugin seinen Dunkelmodus ab und
+  // müssen ihn deshalb selbst beantworten. Beide Tokens tun das — `--tpl-shadow` mit einem
+  // eigenen Dunkelwert, `--tpl-backdrop` mit der Begründung, dass ein Scrim keine Fläche ist.
+  --quartz-nav-shadow: var(--tpl-shadow);
+  --quartz-nav-backdrop: var(--tpl-backdrop);
+}
+
+/* ==================================================================== die Überschrift */
+
+// `__title` ist die Überschrift einer Navigation, und in der linken Spalte steht sie neben der
+// des Inhaltsverzeichnisses und der des Explorers. Die drei sahen verschieden aus, solange jede
+// ihre eigene Regel hatte; das ist die eine des Explorers (nav-explorer.scss, Zeile 52 ff.),
+// hierher übertragen statt ein zweites Mal erfunden.
+.quartz-nav__title {
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-label);
+  font-weight: 700;
+  color: var(--gray);
+  font-family: var(--headerFont);
+}
+
+/* ================================================================= die zehn Darstellungen */
+
+// Was hier folgt, ist je Darstellung das, wofür es keine Variable gibt. Jede Regel sagt, warum
+// nicht — die Liste ist damit zugleich die Vorlage für einen späteren Vorschlag ans Plugin.
+
+/* ------------------------------------------------------------------------ bar */
+
+// Auch hier steht nichts, und auch das ist gemessen. Der erste Entwurf setzte zwischen die
+// Geschwister der obersten Ebene einen senkrechten Trennstrich, weil das Plugin sie nur durch
+// den Abstand trennt (geschachtelte Ebenen bekommen einen Doppelpunkt, navigations.scss:478).
+//
+// Eine Leiste bricht um, und ein `border-inline-start` bricht mit: An einer Probe-Instanz mit
+// `depth: 2` stand der Strich am linken Rand jeder Folgezeile — sieben senkrechte Striche
+// untereinander, die nichts trennten. Eine Regel, die nur solange stimmt, wie alles in eine
+// Zeile passt, ist keine Regel, und ob etwas in eine Zeile passt, kann CSS nicht fragen.
+
+/* --------------------------------------------------------------------- accordion */
+
+// Hier steht nichts, und das ist eine Messung, keine Lücke.
+//
+// Der erste Entwurf gab `.quartz-nav--accordion .quartz-nav__summary` eine untere Kante, damit
+// die Klappzeile sich als Fläche zu erkennen gibt. An der gebauten Website bei 390px sah man,
+// was das damals wirklich war: Mit `folderClick: 'link'` ist `__summary` **nicht** die Zeile,
+// sondern nur der Umschaltknopf am rechten Ende (das Plugin nennt das eine geteilte Zeile,
+// navigations.scss:326). Die Kante lief also unter dem Pfeil und sonst nirgends — ein Strich von
+// der Breite des Knopfs (`--quartz-nav-toggle-size`, 1.75rem = 28px) je Zeile, der wie ein Fehler
+// aussah, weil er einer war.
+//
+// Seit `db0c46e` steht die Website auf `folderClick: 'toggle'`, und dort *ist* `__summary` die
+// ganze Zeile - die Kante träfe heute, was sie meinte. Die Frage darunter ist davon unberührt,
+// und sie ist die eigentliche: Braucht
+// eine vierstufige Gliederung in einer 300px-Spalte 13 waagerechte Linien? Der Explorer kam am
+// selben Platz ohne aus, und die Tiefe steht schon im Gewicht, in der Einrückung und in der
+// Führungslinie, die das Plugin zeichnet (navigations.scss:664).
+
+/* -------------------------------------------------- dropdown, flyout, mega, columns */
+
+// `dropdown`, `flyout` und `mega` brauchen nichts über die Verkabelung hinaus: Das Plugin gibt
+// ihren Panels Hintergrund, Rand, Radius und Schatten. Radius und Schatten setzt der Block oben;
+// Hintergrund und Rand sind die Vorgaben des Plugins, `--light` und `--lightgray`, also schon die
+// Palette dieser Vorlage. An einer Probe-Instanz nachgesehen — das Flyout-Panel trägt den
+// Schatten dieser Vorlage und ihren Radius.
+//
+// `columns` ist der eine Fall, der etwas bekommt, und das ist eine Entscheidung dieser Vorlage
+// und keine Lücke des Plugins: Es setzt der Spaltenüberschrift `margin-bottom: 0.25rem`
+// (navigations.scss:659), also Abstand, aber keine Linie. In einem Fuß mit sieben Spalten liest
+// sich ein Abstand allein nicht als Überschrift — hier steht dieselbe Haarlinie, die die
+// Vorlage überall zum Abtrennen benutzt.
+//
+// **Nur die erste Ebene.** Der erste Entwurf traf `.quartz-nav__item--folder` überall und zog
+// damit auch unter jeden Unterordner einen Strich — an der Probe gemessen: eine Linie unter
+// „2.2 – Struktur", „2.3 – Listen" und zehn weiteren, wo eine Spaltenüberschrift gemeint war.
+//
+// Ein Selektor, nicht zwei. Der zweite zielte auf `__folder > __summary`, aber `columns` rendert
+// kein `<details>` (render.tsx, `variantCollapsible`), und die Überschrift trägt in beiden Formen -
+// Link oder statischer Titel - `quartz-nav__link`. Er traf nur mit `mobile: 'accordion'` etwas, und
+// zwar den Umschaltknopf: eine Haarlinie unter dem Pfeil, der Fehler aus dem Akkordeon-Abschnitt.
+.quartz-nav--columns .quartz-nav__list[data-level='1'] > .quartz-nav__item > .quartz-nav__link {
+  padding-block-end: var(--tpl-space-2xs);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  margin-block-end: var(--tpl-space-2xs);
+}
+
+/* ---------------------------------------------------------------------- tabs */
+
+// Hier steht nichts, und das ist eine Korrektur. Der erste Entwurf gab dem aktiven Reiter eine
+// Unterkante mit der Begründung, eine Variable könne keine Kante wechseln — im Baum sitzt der
+// Akzent links von der Zeile, im Reiter unter ihr.
+//
+// Das Plugin tut es selbst (navigations.scss:630): `.quartz-nav__tabs > .active > .link` bekommt
+// `border-bottom-color: var(--quartz-nav-color-active)` auf einer 2px-Kante, die schon
+// transparent dasteht. Der Unterschied war eine Kante von 3 statt 2 Pixeln, und dafür stand ein
+// Satz da, der das Gegenteil dessen behauptete, was die Quelle sagt.
+
+/* ---------------------------------------------------------------------- select */
+
+// Das Auswahlfeld und der Knopf daneben, und hier steht nur noch, was die Vorlage wirklich
+// hinzufügt.
+//
+// Der erste Entwurf setzte Schrift, Farbe, Hintergrund, Radius und Polsterung und begründete das
+// damit, ein Formularelement werde vom Betriebssystem gezeichnet und keine Variable des Plugins
+// erreiche es. Beides ist falsch: Das Plugin gestaltet beide (navigations.scss:376) mit
+// `font: inherit`, `--quartz-nav-color-heading`, `--quartz-nav-bg-panel`,
+// `--quartz-nav-border` und `--quartz-nav-panel-radius`. Den Radius setzt der Block oben; die
+// anderen drei sind die Vorgaben des Plugins (`--dark`, `--light`, `--lightgray`), also schon die
+// Palette dieser Vorlage. Die Hälfte der Deklarationen schrieb also einen Wert
+// durch sich selbst.
+//
+// Was bleibt, sind zwei Entscheidungen, die die Vorlage trifft und das Plugin nicht:
+//
+//   --tpl-target        44px Mindesthöhe. Ein Auswahlfeld ist ein Ziel für einen Daumen, und die
+//                       Vorlage misst Ziele (a11y.scss); das Plugin kommt mit 0.35rem Polsterung
+//                       auf rund 32px.
+//   --tpl-rule-control  Die Kante eines Bedienelements. `--quartz-nav-border` ist `--lightgray`
+//                       und damit die Linie zwischen zwei Zeilen; eine Kante, die ein Feld vom
+//                       Grund trennt, ist in dieser Vorlage ein eigener, auf 3:1 gemessener Wert
+//                       (palette.mjs, `controlEdgePairs`).
+//
+// `.quartz-nav__mobile-select` stand hier mit in der Liste und gehört nicht hinein: Es ist das
+// `<div>` um das Feld (render.tsx), bekommt vom Plugin nur `display` und hat keinen Rand - die
+// Kante tat dort nichts, und die Mindesthöhe hat das `<select>` darin schon.
+.quartz-nav__select,
+.quartz-nav__go {
+  min-height: var(--tpl-target);
+  border-color: var(--tpl-rule-control);
+}
+
+// Die Kante oben steht ungeschichtet und schlägt damit auch die Hover-Regel des Plugins
+// (navigations.scss:392, in `@layer quartz-base`) - der Knopf verlor seinen Kantenwechsel. Also
+// sagt die Vorlage den Hover selbst, mit der Variable des Plugins (35. Review, Befund 9i).
+.quartz-nav__go:hover {
+  border-color: var(--quartz-nav-color-hover);
+}
+
+/* ---------------------------------------------------------------------- pager */
+
+// Die zwei Knöpfe unter dem Text bekommen hier **keine** Kastenregel, und das ist eine Korrektur:
+// Der erste Entwurf gab ihnen Rand, Radius, Polsterung und Hover mit der Begründung, das Plugin
+// beschreibe nur Zeilen und keine Flächen. Nachgelesen (navigations.scss:697 ff.) tut es genau
+// das schon — und zwar über `--quartz-nav-panel-radius`, den der Block oben setzt, und
+// `--quartz-nav-border`, dessen Vorgabe `--lightgray` schon die Palette dieser Vorlage ist. Die
+// Karte ist also bereits die dieser Vorlage; eine zweite Fassung derselben
+// Regel wäre die Kopie, die beim nächsten Mal driftet.
+//
+// Zwei weitere standen hier bis zum 2026-09-20 als Übergangsregeln: der leere Kasten auf der
+// Startseite, wo es kein „Zurück" gibt, und der Umbruch am Telefon, wo `max-width: 48%` einem
+// Seitentitel 168px lässt. Das Plugin tut seit **0.3.1** beides selbst (die Befunde kamen aus
+// dieser Vorlage), und die Vorlage installiert es über `github:` von `main` — zwei Fassungen
+// derselben Entscheidung sind eine zu viel.
+//
+// Was bleibt, ist die Beschriftung: „Zurück"/„Weiter" ist in dieser Vorlage ein Micro-Label und
+// sieht überall gleich aus — klein, versal, gesperrt, gedämpft (so wie in meta-breadcrumbs und
+// in den Überschriften der Kästen daneben). Das Plugin setzt nur Größe und Farbe.
+.quartz-nav__pager-label {
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-label);
+}
+
+/* ------------------------------------------------------------------- offcanvas */
+
+// Die Schublade. Das Plugin färbt den Scrim über `--quartz-nav-backdrop` (oben verkabelt), aber
+// die Unschärfe darunter ist eine eigene Eigenschaft ohne Variable. Sie ist der Unterschied
+// zwischen einer dunklen Folie über einer lesbaren Seite und einer Seite, die erkennbar da und
+// unmissverständlich nicht das Ding davor ist — gemessen, als der Explorer seine Schublade bekam.
+.quartz-nav__backdrop {
+  backdrop-filter: blur(var(--tpl-backdrop-blur));
+}
+
+/* ==================================================================== die zwei Instanzen */
+
+/* ------------------------------------------- das Menü in der linken Spalte */
+
+// Es steht dort, wo der Explorer stand, und hat dessen Platz mitsamt seiner einen Regel geerbt:
+// Die Zeilen bekommen unter 900px ihre Daumenhöhe zurück. 32px sind für eine dichte Seitenleiste
+// richtig und für einen Finger zu wenig.
+//
+// Die Höhe kommt aus dem Innenabstand, nicht aus `min-height`: Seit quartz-navigations 0.3.2
+// oben ausrichtet, damit ein umbrochener Titel sein Symbol neben der ersten Zeile behält, stünde
+// eine einzeilige Zeile mit Mindesthöhe oben in ihrem Kasten statt in der Mitte. Ausgenommen sind
+// der Link *in* einer Ordnerzeile (`--static`) und der Umschaltknopf (`--toggle`) — die Regel traf
+// beide mit, deshalb waren Ordnerzeilen 52 statt 44 px hoch.
+@media (max-width: 900px) {
+  .nav-menue
+    :is(
+      .quartz-nav__link:not(.quartz-nav__link--static),
+      .quartz-nav__summary:not(.quartz-nav__summary--toggle)
+    ) {
+    padding-block: max(
+      var(--quartz-nav-item-padding-y),
+      calc((var(--tpl-target) - 1lh) / 2)
+    );
+  }
+
+  // Der Burger gehört in die App-Leiste, und dorthin kommt er nur so: Er ist ein Kind des linken
+  // Bereichs, die Leiste ist der Kopfbereich, und zwei Rasterbereiche lassen sich im Dokument
+  // nicht ineinanderschieben. Also wird er darübergelegt — genau wie der Auslöser des Explorers
+  // vor ihm (nav-explorer.scss, Zeile 543), an derselben Stelle und mit derselben Rechnung:
+  // Die Leiste ist `--tpl-header-h` hoch, der Knopf `--tpl-target`, der Abstand oben ist die
+  // halbe Differenz. Als Subtraktion geschrieben und nicht als Zahl, weil die Leiste beim
+  // Schrumpfen ihre Höhe ändert und ein festes 8px nur bei einer der beiden stimmte.
+  //
+  // Der Platz dafür steht schon frei: `nav-header.scss` legt der Leiste
+  // `padding-inline-start: calc(var(--tpl-target) + var(--tpl-space-sm))` an den Anfang. Ohne
+  // diese Regel blieb er leer, und der Burger stand — gemessen an der gebauten Website bei
+  // 390px — über der ersten Brotkrume.
+  //
+  // z-index 98, also **unter** dem Scrim des Plugins (99) und der Schublade (100). Der Explorer
+  // brauchte 101, weil sein einziger Auslöser sich im offenen Zustand in ein Kreuz verwandelte;
+  // dieses Plugin hat dafür ein eigenes `__close` im Panel. Ein Burger, der auf der offenen
+  // Schublade läge, wäre ein zweiter Schließknopf an einer Stelle, an der das Plugin keinen
+  // vorsieht.
+  .nav-menue .quartz-nav__burger {
+    position: fixed;
+    top: calc((var(--tpl-header-h) - var(--tpl-target)) / 2);
+    inset-inline-start: var(--tpl-space-xs);
+    z-index: 98;
+    display: grid;
+    place-items: center;
+    width: var(--tpl-target);
+    height: var(--tpl-target);
+    padding: 0;
+    border-radius: var(--tpl-radius-md);
+    background: var(--light);
+  }
+
+  // Derselbe Fall wie beim Knopf „Los“ oben: `background` steht ungeschichtet und schlug die
+  // Hover-Regel des Plugins (navigations.scss:890), der Burger reagierte nicht mehr auf die Maus.
+  // Gemessen bei 390px: vorher `rgb(252, 252, 250)` mit und ohne Zeiger, jetzt die Hover-Fläche.
+  .nav-menue .quartz-nav__burger:hover {
+    background: var(--quartz-nav-bg-hover);
+  }
+
+  // Der Daumen braucht die ganze Fläche, das Auge das Zeichen in der Größe der übrigen
+  // Leistensymbole (nav-explorer.scss hielt dieselben zwei Zahlen auseinander).
+  .nav-menue .quartz-nav__burger svg {
+    width: var(--tpl-icon);
+    height: var(--tpl-icon);
+  }
+}

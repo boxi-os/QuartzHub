@@ -1,0 +1,35 @@
+// The 404 page.
+//
+// Uses the `focus` frame, which since 2026-09-04 is the same twelve-column grid as every other page
+// type: the error sits in the same six columns the article text sits in, with both side columns
+// reserved and empty. That is deliberate - a 404 that puts its text somewhere the site never puts
+// text reads as a different site rather than as a missing page.
+//
+// The vertical room the page wants is set here and not in the frame. A frame's `paddingBlock` also
+// moves the header, and a site whose logo sits sixty pixels lower on the error page looks broken
+// rather than calm.
+
+article:has(> h1:only-child),
+.page:has([data-slug="404"]) article {
+  text-align: center;
+}
+
+// Quartz renders the 404 as a plain h1 + p. Give it room rather than leaving it at the top of an
+// empty column.
+.page[data-frame="focus"] article {
+  padding-block: var(--tpl-space-2xl) var(--tpl-space-xl);
+
+  h1 {
+    font-size: var(--tpl-text-3xl);
+    margin-block-end: var(--tpl-space-md);
+  }
+
+  p {
+    color: var(--gray);
+    max-width: none;
+  }
+
+  a {
+    color: var(--secondary);
+  }
+}

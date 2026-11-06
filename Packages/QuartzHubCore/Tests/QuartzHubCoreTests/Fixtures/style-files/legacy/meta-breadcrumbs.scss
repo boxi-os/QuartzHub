@@ -1,0 +1,58 @@
+// Breadcrumbs — the path down to this page.
+//
+// The trail is orientation, not content: it says where you are, and the page's own title says what
+// you are looking at. So it is set below the body size and above the body colour's lightness, and
+// the separator - a `❯` the plugin writes into a `<p>` between the links - is set smaller again
+// and given room on both sides. Measured before: at --tpl-text-sm with a 2px gap the arrows sat
+// tight against the words and read as part of them.
+
+.breadcrumb-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+}
+
+.breadcrumb-element {
+  display: flex;
+  align-items: center;
+
+  a {
+    color: var(--gray);
+    text-decoration: none;
+    // A trail four levels deep on a phone needs targets that are not 14px tall.
+    padding-block: var(--tpl-space-3xs);
+
+    &:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+      text-underline-offset: var(--tpl-underline-offset);
+    }
+  }
+
+  // The separator is decoration and must not be read out as content or picked up by a selection.
+  //
+  // The `em` is deliberate: it shrinks with the trail rather than against it, so raising the
+  // breadcrumb size later keeps the arrow in the same proportion. The margin is the "more space"
+  // half - it sits on the arrow rather than on the container's gap so the two words on either side
+  // of it are equally far away and the links keep their own hit areas touching nothing.
+  > p {
+    margin: 0 0.65em;
+    font-size: 0.75em;
+    line-height: 1;
+    user-select: none;
+    color: var(--tpl-rule-control);
+  }
+
+  // The last crumb is this page: not a link, and a shade darker than the trail leading to it.
+  // Not bold any more - the `<h1>` two lines below says the same word at four times the size, and
+  // two emphatic copies of one title is one too many.
+  &:last-child a {
+    color: var(--darkgray);
+    font-weight: 500;
+    pointer-events: none;
+  }
+}

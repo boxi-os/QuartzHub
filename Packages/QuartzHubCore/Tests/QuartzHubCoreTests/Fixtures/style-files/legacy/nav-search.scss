@@ -1,0 +1,107 @@
+// Search — the button in the toolbar, and the overlay it opens.
+
+// Die offene Suche liegt über allem, und das muss die Leiste tun, nicht die Suche. Ihr Fenster
+// hat z-index 999, aber es sitzt im Kopfbereich, und der ist `sticky` mit z-index 80 (90 am
+// Telefon) und damit ein Stapelkontext: Die 999 gelten nur darin. Gemessen an der gebauten
+// Website (35. Review, Befund 9a): Mit offener Graph-Vollansicht (110) lag die Suche unsichtbar
+// darunter - `elementFromPoint` am Suchfeld lieferte das `<canvas>` -, und am Telefon stand der
+// Burger der Navigation (98) scharf und klickbar im Schleier des Suchdialogs. Mit dieser Regel:
+// am Suchfeld `input.search-bar`, in der Bildmitte und am Burger `div.search-container`.
+// 120 ist die höchste Zahl der Leiter in aside-graph.scss.
+.qgframe-area-header:has(.search-container.active) {
+  z-index: 120;
+}
+
+.search {
+  min-width: 0;
+}
+
+.search-button {
+  display: flex;
+  align-items: center;
+  gap: var(--tpl-space-xs);
+  width: 100%;
+  // 44px: this is the primary control in the sidebar and is used on touch.
+  min-height: var(--tpl-target);
+  padding-inline: var(--tpl-space-sm);
+  background: var(--light);
+  // --tpl-rule-control, not --lightgray: this is a control's edge, and lightgray measures 1.34:1
+  // against the ground (see palette.mjs). The control tone reaches the 3:1 that WCAG 1.4.11 asks
+  // for and no more - see base.scss for why it is not `gray` any more.
+  //
+  // Dotted, and that is the point of the tone change rather than a decoration on top of it: at
+  // 1px a dotted edge puts roughly half the ink of a solid one on the page, so the four controls
+  // in the header read as a group of fields rather than four hard rectangles. The `:hover` state
+  // keeps the same style and only changes the colour, so nothing moves under the pointer.
+  border: var(--tpl-rule-width) dotted var(--tpl-rule-control);
+  border-radius: var(--tpl-radius-md);
+  color: var(--gray);
+  cursor: pointer;
+  font-family: var(--font-interface);
+  font-size: var(--tpl-text-sm);
+  transition: border-color var(--tpl-motion), color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--secondary);
+    color: var(--dark);
+  }
+
+  > p {
+    margin: 0;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* ---------------------------------------------------------------------- the overlay */
+
+.search-container {
+  // Depth in this template is not decoration but a statement: this thing floats above the page,
+  // rather than sitting in it. Five elements qualify and all of them use `--tpl-shadow` - this
+  // overlay, the link preview, the language menu, the drawer on a phone and the global graph.
+  // Nothing that merely sits on the page gets one. Counting them in a comment goes stale; the rule
+  // does not.
+  backdrop-filter: blur(2px);
+  background: color-mix(in srgb, var(--light) 70%, transparent);
+}
+
+.search-space {
+  background: var(--light);
+  // Solid, unlike the button that opens it: this is a panel, not a control, and a dotted hairline
+  // around a 600px box with a shadow under it reads as unfinished rather than as light.
+  border: var(--tpl-rule-width) solid var(--tpl-rule-control);
+  border-radius: var(--tpl-radius-lg);
+  box-shadow: var(--tpl-shadow);
+  overflow: hidden;
+}
+
+.search-bar {
+  width: 100%;
+  padding: var(--tpl-space-sm) var(--tpl-space-md);
+  font-family: var(--font-interface);
+  font-size: var(--tpl-text-lg);
+  color: var(--dark);
+  background: var(--light);
+  border: none;
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+
+  &::placeholder {
+    color: var(--gray);
+  }
+
+  // The field is the only focusable thing when the overlay opens; an outline inside a rounded
+  // container looks like a mistake, so the border does the work instead.
+  &:focus-visible {
+    outline: none;
+    border-block-end-color: var(--secondary);
+    box-shadow: inset 0 -2px 0 var(--secondary);
+  }
+}
+
+.search-layout {
+  border: none;
+}

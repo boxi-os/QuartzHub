@@ -1,0 +1,90 @@
+// Backlinks — what points here.
+
+.backlinks {
+  min-width: 0;
+
+  h1, h2, h3 {
+    margin-block: 0 var(--tpl-space-xs);
+    font-family: var(--headerFont);
+    font-size: var(--tpl-text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tpl-tracking-label);
+    color: var(--gray);
+    font-weight: 700;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--tpl-text-sm);
+  }
+
+  // Das Plugin gibt der Liste `overflow-y: auto` und `overscroll-behavior: contain`. Gemessen am
+  // 2026-09-30 in gui-test: 313px Inhalt in 306px — das Rad rollte über der Liste 7px und blieb
+  // dann stehen, die Seite nicht. Begründung bei `ul.explorer-ul` in base.scss.
+  > ul {
+    overscroll-behavior: auto;
+  }
+
+  li {
+    margin-block: 0;
+    border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+
+    &:last-child {
+      border-block-end: none;
+    }
+  }
+
+  // 2xs, the same step "zuletzt bearbeitet" uses for its entries. The two boxes stand side by side
+  // under the article now, so a row of one that is taller than a row of the other is simply
+  // visible.
+  a {
+    padding-block: var(--tpl-space-2xs);
+    color: var(--darkgray);
+    text-decoration: none;
+    // Two lines, then ellipsis: a backlink list of full titles is a wall of text in a 260px column.
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    &:hover {
+      color: var(--secondary);
+    }
+
+    // The mark that says where this goes. Behind the title rather than in front of it, so the
+    // titles keep one starting edge and the column still reads as a list.
+    //
+    // `currentColor` is why it turns with the link on hover, and it is masked like every other
+    // icon here: only a mask's alpha survives, so the source is drawn in black and painted from
+    // the property.
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 0.7em;
+      height: 0.7em;
+      margin-inline-start: 0.35em;
+      background-color: currentColor;
+      mask-image: var(--icon-arrow-up-right);
+      -webkit-mask-image: var(--icon-arrow-up-right);
+      mask-size: contain;
+      -webkit-mask-size: contain;
+      mask-position: center;
+      -webkit-mask-position: center;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      opacity: 0.6;
+    }
+  }
+
+  // "No backlinks found" - the component's empty state, which should look like an answer rather
+  // than a failure.
+  li:only-child:not(:has(a)),
+  > p {
+    color: var(--gray);
+    font-size: var(--tpl-text-sm);
+    font-style: italic;
+    margin: 0;
+  }
+}

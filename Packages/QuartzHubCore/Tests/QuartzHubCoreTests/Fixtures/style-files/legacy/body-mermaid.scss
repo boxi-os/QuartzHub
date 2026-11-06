@@ -1,0 +1,547 @@
+// Mermaid — fourteen diagram kinds, one palette.
+//
+// The starting point is better than it looks: quartz already hands mermaid nine of this template's
+// CSS variables as `themeVariables` (--light as primaryColor, --darkgray as lineColor and so on,
+// see the mermaid initialiser in quartz's client bundle). Everything that mermaid derives from
+// those follows the palette by itself.
+//
+// It does not cover everything, and the gaps are the reason this file is long:
+//
+//   * Mermaid computes *section* colours (mindmap, timeline, journey, gantt) from primaryColor.
+//     With a near-white ground it derives near-black: measured `rgb(2, 4, 4)` and `rgb(0, 0, 0)`
+//     as node fills on the mindmap and the timeline — black boxes with black text in them.
+//   * Pie, sankey, xychart and quadrant bring their own palettes, untouched by themeVariables.
+//   * Every diagram is laid out to its own natural width and then capped by an inline `max-width`
+//     that mermaid writes onto the svg. Measured: 294px to 594px inside a 900px column.
+//
+// So this file sets a series of section colours from the template's own tokens, restates the four
+// self-coloured kinds, and lets every diagram use the width it has. Colours are set on the `fill`
+// and `stroke` *properties*, which beat the presentation attributes mermaid writes into the markup.
+
+/* ------------------------------------------------------------------ the frame around it */
+
+// The markup is `<pre><button class="expand-button">…<code class="mermaid">`, so `.mermaid` is the
+// *code element*, not the box. Everything body-code.scss does to a code block therefore applies
+// here too - including `pre > code { min-width: max-content }`, which was holding every diagram at
+// 432px inside a 690px column. A diagram is a figure, not code, so the code treatment is undone.
+pre:has(> code.mermaid) {
+  padding: var(--tpl-space-md);
+  padding-block-start: var(--tpl-space-md);
+  // No plate under the drawing. A code block gets a surface because its content is a block of
+  // text that has to separate itself from the prose; a diagram separates itself by being a
+  // drawing, and a tinted plate behind it only adds a second edge inside the first. The hairline
+  // stays and does the whole job.
+  background: none;
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  margin-block: var(--tpl-space-lg);
+  max-width: none;
+  overflow-x: auto;
+  line-height: normal;
+
+  // No language label on a diagram - `::before` would print "mermaid" over the drawing.
+  &::before {
+    content: none;
+  }
+}
+
+code.mermaid {
+  display: block;
+  // The one that mattered: max-content made the svg as narrow as its own layout.
+  min-width: 0;
+  width: 100%;
+  background: none;
+  padding: 0;
+  text-align: center;
+}
+
+// Mermaid writes `max-width: <computed>px` inline on the svg, which caps a diagram at whatever
+// width its own layout happened to produce - measured between 294px and 700px. Overriding it lets
+// a diagram use the column. `width: 100%` on top of that scales the viewBox up, which is what
+// makes a 500px quadrant chart readable in a 690px column.
+code.mermaid > svg {
+  max-width: 100% !important;
+  width: 100%;
+  height: auto;
+}
+
+/* ------------------------------------------------------------------------ typography */
+
+// The initialiser sets `fontFamily` to --codeFont for everything. A monospace face is right for
+// node labels in a technical diagram and wrong for a title, so the two are separated here.
+.mermaid svg {
+  font-family: var(--bodyFont);
+}
+
+.mermaid .nodeLabel,
+.mermaid .edgeLabel,
+.mermaid .label text,
+.mermaid text.actor,
+.mermaid .messageText,
+.mermaid .taskText,
+.mermaid .entityLabel,
+.mermaid .nodeLabel p {
+  font-family: var(--bodyFont) !important;
+  font-size: 14px !important;
+}
+
+.mermaid .titleText,
+.mermaid .pieTitleText,
+.mermaid .chart-title,
+.mermaid .title {
+  font-family: var(--headerFont) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  fill: var(--dark) !important;
+}
+
+/* --------------------------------------------------------------- section colour series
+   Mindmap, timeline, journey and gantt all colour their sections by index. Mermaid derives those
+   from primaryColor, which on a near-white ground produces near-black. The series below is built
+   from this template's own accent, stepping through it rather than around the colour wheel — four
+   distinguishable tints that all sit on the same ground and all carry legible text. */
+
+.mermaid {
+  --mm-1: color-mix(in srgb, var(--secondary) 16%, var(--light));
+  --mm-2: color-mix(in srgb, var(--secondary) 32%, var(--light));
+  --mm-3: color-mix(in srgb, var(--tertiary) 24%, var(--light));
+  --mm-4: color-mix(in srgb, var(--gray) 22%, var(--light));
+  --mm-edge: var(--tpl-rule-strong);
+}
+
+// The black boxes. `.node-bkg` covers mindmap and timeline nodes; both were measured at rgb(2,4,4).
+.mermaid .node-bkg,
+.mermaid .mindmap-node .node-bkg,
+.mermaid .timeline-node .node-bkg,
+// Mermaid draws its own plate inside the svg for some kinds (journey, gantt). With the box behind
+// it now unpainted, that plate would be the only tinted rectangle on the page - so it goes too and
+// the hairline of the box is the only edge.
+.mermaid rect.background {
+  fill: none !important;
+  stroke: none !important;
+}
+
+.mermaid .section-0 .node-bkg,
+.mermaid g.section-0 rect { fill: var(--mm-1) !important; }
+.mermaid .section-1 .node-bkg,
+.mermaid g.section-1 rect { fill: var(--mm-2) !important; }
+.mermaid .section-2 .node-bkg,
+.mermaid g.section-2 rect { fill: var(--mm-3) !important; }
+.mermaid .section-3 .node-bkg,
+.mermaid g.section-3 rect { fill: var(--mm-4) !important; }
+
+// Text inside those nodes, whichever tint it landed on.
+.mermaid .mindmap-node text,
+.mermaid .timeline-node text,
+.mermaid .text-inner-tspan,
+.mermaid .text-outer-tspan {
+  fill: var(--darkgray) !important;
+}
+
+.mermaid .mindmap-edges .edge,
+.mermaid .lineWrapper line {
+  stroke: var(--mm-edge) !important;
+}
+
+/* ------------------------------------------------------------------------ flowchart */
+
+// Mermaid 11 fills a <rect> node from `secondaryColor` and every other shape from `primaryColor`,
+// but takes the label colour from `primaryTextColor` for all of them. On this palette that put
+// --darkgray on the accent navy: measured 1.47:1 in light and 1.31:1 in dark, on every rectangular
+// node of every flowchart. In a flowchart the *shape* carries the meaning, not the fill, so all
+// four get the same ground and the accent stays where it reads - on the edge.
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node polygon,
+.mermaid .node path {
+  // `!important` like everywhere else in this file: mermaid writes its own <style> into each svg,
+  // and its selectors carry the svg's generated id, so they outrank anything written from outside.
+  fill: var(--light) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .edgePath .path,
+.mermaid .flowchart-link {
+  stroke: var(--darkgray);
+}
+
+// The label on an edge sits on the line; it needs its own ground to stay readable.
+.mermaid .edgeLabel,
+.mermaid .edgeLabel rect,
+.mermaid .labelBkg {
+  fill: var(--light) !important;
+  background-color: var(--light) !important;
+  color: var(--darkgray) !important;
+}
+
+.mermaid .cluster rect {
+  fill: var(--tpl-surface-tint) !important;
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+/* ------------------------------------------------------------------------- sequence */
+
+.mermaid .actor {
+  fill: var(--mm-1) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid text.actor > tspan {
+  fill: var(--dark) !important;
+}
+
+.mermaid .messageLine0,
+.mermaid .messageLine1 {
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .note {
+  fill: var(--tpl-surface-tint) !important;
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .activation0,
+.mermaid .activation1,
+.mermaid .activation2 {
+  fill: var(--mm-2) !important;
+  stroke: var(--tertiary) !important;
+}
+
+/* --------------------------------------------------------------------- class and ER */
+
+.mermaid .classGroup rect,
+.mermaid .entityBox {
+  fill: var(--light) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .attributeBoxOdd {
+  fill: var(--light) !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .attributeBoxEven {
+  fill: var(--tpl-surface-tint) !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+// The relationship label sits in a filled box on the line. Measured: green text on a green box —
+// the box took the accent and the text kept it too.
+.mermaid .relationshipLabelBox {
+  fill: var(--light) !important;
+  opacity: 1 !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .relationshipLabel,
+.mermaid .entityLabel {
+  fill: var(--darkgray) !important;
+}
+
+.mermaid .relationshipLine {
+  stroke: var(--darkgray) !important;
+}
+
+/* ---------------------------------------------------------------------- state chart */
+
+.mermaid .statediagram-state rect,
+.mermaid .statediagram-cluster rect {
+  fill: var(--mm-1) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .statediagram-state .divider {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid circle.state-start,
+.mermaid .node circle.state-start {
+  fill: var(--darkgray) !important;
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .state-end circle,
+.mermaid .node circle.state-end {
+  fill: var(--light) !important;
+  stroke: var(--darkgray) !important;
+}
+
+/* --------------------------------------------------------------------------- gantt */
+
+.mermaid .section0,
+.mermaid .section2 { fill: var(--mm-1) !important; opacity: 1 !important; }
+.mermaid .section1,
+.mermaid .section3 { fill: var(--tpl-surface-tint) !important; opacity: 1 !important; }
+
+.mermaid .task0,
+.mermaid .task1,
+.mermaid .task2,
+.mermaid .task3 {
+  fill: var(--mm-2) !important;
+  stroke: var(--tertiary) !important;
+}
+
+// The three states a task can carry. `crit` is the only place in this template where a red is
+// used for meaning, so it takes the danger colour from the callouts rather than a new one.
+.mermaid .done0, .mermaid .done1, .mermaid .done2, .mermaid .done3 {
+  fill: var(--mm-4) !important;
+  stroke: var(--gray) !important;
+}
+
+.mermaid .active0, .mermaid .active1, .mermaid .active2, .mermaid .active3 {
+  fill: var(--secondary) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .crit0, .mermaid .crit1, .mermaid .crit2, .mermaid .crit3 {
+  fill: #B02020 !important;
+  stroke: #B02020 !important;
+}
+
+:root[saved-theme="dark"] .mermaid .crit0,
+:root[saved-theme="dark"] .mermaid .crit1,
+:root[saved-theme="dark"] .mermaid .crit2,
+:root[saved-theme="dark"] .mermaid .crit3 {
+  fill: #FF9C93 !important;
+  stroke: #FF9C93 !important;
+}
+
+.mermaid .taskText,
+.mermaid .taskTextOutsideRight,
+.mermaid .taskTextOutsideLeft,
+.mermaid .taskText0, .mermaid .taskText1, .mermaid .taskText2, .mermaid .taskText3 {
+  fill: var(--darkgray) !important;
+}
+
+// Text that sits *on* the active bar needs the inverse, because that bar is the accent colour.
+.mermaid .activeText0, .mermaid .activeText1, .mermaid .activeText2, .mermaid .activeText3 {
+  fill: var(--light) !important;
+}
+
+.mermaid .grid .tick line {
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .grid path {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+/* --------------------------------------------------------------------------- journey */
+
+.mermaid .journey-section,
+.mermaid .section-type-0 rect,
+.mermaid .section-type-1 rect,
+.mermaid .section-type-2 rect { fill: var(--mm-1) !important; }
+
+.mermaid .task-type-0 rect { fill: var(--mm-1) !important; stroke: var(--tertiary) !important; }
+.mermaid .task-type-1 rect { fill: var(--mm-2) !important; stroke: var(--tertiary) !important; }
+.mermaid .task-type-2 rect { fill: var(--mm-3) !important; stroke: var(--tertiary) !important; }
+
+// The little faces rating each step. They stay neutral rather than picking up a tint.
+.mermaid .face {
+  fill: var(--light) !important;
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .mouth,
+.mermaid .face circle,
+.mermaid .face path {
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .task-line {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+/* -------------------------------------------------------------------------- gitGraph */
+
+// Measured black: the branch label background and the commit circles came out at rgb(2, 4, 4).
+.mermaid .commit,
+.mermaid circle.commit {
+  fill: var(--secondary) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .commit-label,
+.mermaid .branch-label {
+  fill: var(--darkgray) !important;
+}
+
+.mermaid .branchLabelBkg,
+.mermaid .commit-label-bkg {
+  fill: var(--light) !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .branch {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .arrow {
+  stroke: var(--darkgray) !important;
+}
+
+/* ------------------------------------------------------------------------------ pie */
+
+// Pie brings its own twelve-colour palette. Four slices in two barely different greens - which is
+// what the theme variables produced - cannot be told apart, so the series is restated.
+.mermaid .pieCircle:nth-of-type(1) { fill: var(--secondary) !important; }
+.mermaid .pieCircle:nth-of-type(2) { fill: var(--mm-3) !important; }
+.mermaid .pieCircle:nth-of-type(3) { fill: var(--mm-2) !important; }
+.mermaid .pieCircle:nth-of-type(4) { fill: var(--mm-4) !important; }
+.mermaid .pieCircle:nth-of-type(5) { fill: var(--mm-1) !important; }
+
+.mermaid .pieCircle {
+  stroke: var(--light) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .pieOuterCircle {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .slice {
+  fill: var(--darkgray) !important;
+  font-size: 12px !important;
+}
+
+// The swatch beside each legend entry is a *different element* from the slice it names, and
+// mermaid fills it from its own `pie1..pieN` theme variables rather than from the series above.
+// Measured on the built page: the first swatch came out `--light` in light mode and near black in
+// dark - the page's own ground, so invisible in both - while the slice it belonged to was navy.
+// Same series, same order; the rows are one `g.legend` each, so the count is over the groups.
+.mermaid g.legend:nth-of-type(1) rect { fill: var(--secondary) !important; }
+.mermaid g.legend:nth-of-type(2) rect { fill: var(--mm-3) !important; }
+.mermaid g.legend:nth-of-type(3) rect { fill: var(--mm-2) !important; }
+.mermaid g.legend:nth-of-type(4) rect { fill: var(--mm-4) !important; }
+.mermaid g.legend:nth-of-type(5) rect { fill: var(--mm-1) !important; }
+
+.mermaid g.legend rect {
+  stroke: var(--mm-edge) !important;
+  stroke-width: 1px !important;
+}
+
+// The legend text, which mermaid leaves at its own default size.
+.mermaid .legend text {
+  fill: var(--darkgray) !important;
+  font-size: 13px !important;
+}
+
+/* -------------------------------------------------------------------------- quadrant */
+
+.mermaid .quadrant {
+  opacity: 1 !important;
+}
+
+.mermaid .quadrants rect:nth-of-type(1) { fill: var(--mm-1) !important; }
+.mermaid .quadrants rect:nth-of-type(2) { fill: var(--tpl-surface-tint) !important; }
+.mermaid .quadrants rect:nth-of-type(3) { fill: var(--tpl-surface-tint) !important; }
+.mermaid .quadrants rect:nth-of-type(4) { fill: var(--mm-1) !important; }
+
+.mermaid .quadrants .border,
+.mermaid .border line {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .data-point circle,
+.mermaid .data-points circle {
+  fill: var(--secondary) !important;
+  stroke: var(--light) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .labels text,
+.mermaid .quadrants text {
+  fill: var(--darkgray) !important;
+  font-size: 12px !important;
+}
+
+/* ---------------------------------------------------------------------------- sankey */
+
+// Sankey's own palette is a rainbow; four tints of the accent carry the same information without
+// asserting a meaning the numbers do not have.
+//
+// Two things had to be fixed here at once, both measured on 2026-09-05:
+//
+//   • A *flowchart* builds the same `g.nodes > g.node > rect` as sankey does, so `.mermaid .nodes
+//     rect` painted every rectangular flowchart node in the accent while its label kept
+//     `primaryTextColor`: 1.47:1 in light, 1.31:1 in dark, on four pages. Structure cannot tell the
+//     two apart - `aria-roledescription` can, and mermaid writes it on every diagram it draws.
+//   • The series never stepped. `:nth-of-type` counts among siblings, and every `rect` is the only
+//     one inside its own `g.node`, so *every* node matched `4n + 1` and the four tints rendered as
+//     one. The count belongs on the `g.node` elements, which really are siblings.
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n + 1) rect { fill: var(--secondary) !important; }
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n + 2) rect { fill: var(--mm-3) !important; }
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n + 3) rect { fill: var(--mm-2) !important; }
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n) rect { fill: var(--mm-4) !important; }
+
+.mermaid .links path,
+.mermaid .link path {
+  fill: var(--secondary) !important;
+  opacity: 0.22 !important;
+}
+
+.mermaid .node-labels text {
+  fill: var(--darkgray) !important;
+  font-size: 12px !important;
+}
+
+/* --------------------------------------------------------------------------- xychart */
+
+.mermaid .bar-plot-0 rect,
+.mermaid [class^="bar-plot"] rect {
+  fill: var(--mm-2) !important;
+}
+
+.mermaid .line-plot-1 path,
+.mermaid [class^="line-plot"] path {
+  stroke: var(--secondary) !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+}
+
+.mermaid .axis-line,
+.mermaid .axisl-line {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .ticks text,
+.mermaid .bottom-axis text,
+.mermaid .left-axis text {
+  fill: var(--gray) !important;
+  font-size: 11px !important;
+}
+
+.mermaid .plot rect.background,
+.mermaid .main > rect.background {
+  fill: transparent !important;
+}
+
+/* ---------------------------------------------------------------------------- errors */
+
+// When a diagram fails to parse, mermaid draws a bomb. Left visible on purpose - a silently blank
+// figure is worse - but set in this template's colours so it reads as a message, not as damage.
+.mermaid .error-icon {
+  fill: var(--gray) !important;
+}
+
+.mermaid .error-text {
+  fill: var(--darkgray) !important;
+  font-family: var(--bodyFont) !important;
+}
+
+/* -------------------------------------------------------------------- expand control */
+
+.mermaid .expand-button {
+  border-radius: var(--tpl-radius-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule-strong);
+  background: var(--light);
+  color: var(--darkgray);
+  min-width: 32px;
+  min-height: 32px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--tpl-surface);
+  }
+}

@@ -1,0 +1,84 @@
+// Tags — the list under the title, and every inline tag in the body.
+//
+// One rule set for `.tag-link` wherever it appears: the tag list, note properties, recent notes
+// and inside a paragraph. A tag that looks different in four places is four things to learn.
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tpl-space-2xs);
+  list-style: none;
+  margin-block: var(--tpl-space-xs);
+  padding: 0;
+}
+
+a.tag-link,
+.tag-link {
+  display: inline-flex;
+  align-items: center;
+  // Just enough padding to read as a token; a tag is not a button.
+  padding: 0.1em 0.5em;
+  border-radius: 999px;
+  background: var(--tag-background);
+  color: var(--tag-color);
+  // Dotted already at rest, invisibly: the style has to match the hover state or the pill's edge
+  // changes shape under the pointer as well as colour.
+  border: var(--tpl-rule-width) dotted transparent;
+  font-size: var(--tpl-text-xs);
+  font-family: var(--font-interface);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+  // The lucide `tag` glyph instead of a hash, drawn the way every other icon in this template is:
+  // a box wearing the shape as a mask, coloured by `currentColor`. So it follows the pill's own
+  // colour into the hover state and into dark mode without a second copy, which a glyph in a font
+  // or a `background-image` would both need.
+  //
+  // Sized in `em`, not in --tpl-icon-sm: a tag appears at four sizes on this site (the list under
+  // a title, a properties row, a recent-notes entry, running text) and the mark has to follow the
+  // text it sits in rather than stay one absolute size.
+  &::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 0.95em;
+    height: 0.95em;
+    // The mark's own margin rather than a `gap` on the pill: `gap` would also apply in running
+    // text, where the padding is gone and the two belong closer together.
+    margin-inline-end: 0.3em;
+    background-color: currentColor;
+    mask-image: var(--icon-tag);
+    -webkit-mask-image: var(--icon-tag);
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-position: center;
+    -webkit-mask-position: center;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    opacity: 0.75;
+  }
+
+  // The accent used to draw this ring, and on a 20px pill a full-strength navy outline is a lot
+  // of statement for "the pointer is here" - the background already says it. The control tone
+  // says the same thing at a third of the weight.
+  &:hover {
+    background: var(--tag-background-hover);
+    border-color: var(--tpl-rule-control);
+    text-decoration: none;
+  }
+}
+
+// In running text a tag must not break the line's rhythm, so it loses the pill and keeps only the
+// colour - a paragraph full of pills is unreadable.
+article p a.tag-link {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+
+  &:hover {
+    background: none;
+    text-decoration: underline;
+    text-underline-offset: var(--tpl-underline-offset);
+  }
+}

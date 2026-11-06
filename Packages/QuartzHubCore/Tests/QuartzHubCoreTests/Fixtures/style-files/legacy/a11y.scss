@@ -1,0 +1,148 @@
+// Accessibility — the rules that are about how the page behaves rather than how it looks.
+//
+// Loaded last on purpose: several of these have to win over a decision made earlier in the
+// cascade (a hover-only affordance, a colour-only state), and putting them at the end means they
+// do so by order rather than by specificity games.
+
+/* ------------------------------------------------------------------ target sizes */
+
+// WCAG 2.2 (2.5.8) asks for 24x24 CSS px; 44px is the comfortable size and is what the controls
+// in this template use. This catches the small links that are not controls but are still the only
+// way to reach something on a touch screen.
+@media (pointer: coarse) {
+  .breadcrumb-element a,
+  a.nav-file-title,
+  .folder-title,
+  .toc-content a,
+  footer a,
+  .tag-link {
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* --------------------------------------------------------------- screen readers */
+
+// For text that exists only to be announced. `clip-path` rather than `display: none` (which
+// removes it from the accessibility tree) or a negative text-indent (which breaks RTL).
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* -------------------------------------------------------------- forced colours */
+
+// Windows high contrast and similar: the system takes over colour entirely, and anything drawn
+// with a background instead of a border disappears. Listed below is everything in this template
+// that expresses a surface or a state as a fill; a new one belongs in the list.
+@media (forced-colors: active) {
+  .callout,
+  .layout-box-cta,
+  .layout-box-note,
+  .note-properties,
+  .graph-outer,
+  pre {
+    border: 1px solid CanvasText;
+  }
+
+  .explorer a.active,
+  .toc-content a.in-view,
+  .result-card:hover,
+  .result-card.focus {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  // Icons drawn with currentColor survive; ones with a hard-coded fill do not.
+  svg {
+    forced-color-adjust: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ transparency */
+
+@media (prefers-reduced-transparency: reduce) {
+  .search-container,
+  .global-graph-outer {
+    backdrop-filter: none;
+    background: var(--light);
+  }
+}
+
+/* ------------------------------------------------------------------------- print */
+
+// A printed page has no sidebars, no dark mode and no hover.
+@media print {
+  // `.qgframe-area-left/-right` rather than `.sidebar`: an authored frame renders its own areas and
+  // quartz's `.sidebar` wrapper never appears (measured). Both are listed so the rule also holds
+  // for a page using one of quartz's built-in frames.
+  .sidebar,
+  .qgframe-area-left,
+  .qgframe-area-right,
+  .explorer,
+  .toc,
+  .graph,
+  .backlinks,
+  .recent-notes,
+  .search,
+  .darkmode,
+  .readermode,
+  .layout-box-cta,
+  .layout-box-hint,
+  .clipboard-button {
+    display: none !important;
+  }
+
+  .page,
+  #quartz-body,
+  .qgframe-grid {
+    display: block !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  article > * {
+    max-width: none;
+  }
+
+  // Zwei Farbliterale, die nicht in einem Attributselektor stehen — und sie bleiben es. Nicht die
+  // einzigen, wie hier bis zum 35. Review stand: body-mermaid.scss setzt Mermaids „crit“ in
+  // gewöhnlichen Klassenselektoren auf `#B02020` / `#FF9C93`, die Werte von
+  // `--tpl-callout-danger`. Wer die Warnfarbe im Variablen-Tab ändert, ändert dort also nichts mit.
+  //
+  // Ein Token liest sich hier falsch: `--tpl-rule` und die neun Palettenfarben kippen mit dem
+  // Modus, und `:root[saved-theme="dark"]` steht beim Drucken genauso da wie am Bildschirm. Wer
+  // im Dunkelmodus druckt, bekäme also hellgraue Schrift und eine fast weiße Linie auf weißem
+  // Papier. Druckfarben sind Tinte und keine Oberfläche; sie kennen nur einen Modus.
+  //
+  // `#555` ist die Adresse unter einem Link, `#999` die Kante um einen Kasten — beide dunkel
+  // genug für Papier und hell genug, um nicht mit dem Text zu konkurrieren.
+
+  // A link's destination is lost on paper unless it is written out.
+  article a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+    word-break: break-all;
+  }
+
+  pre,
+  .callout,
+  blockquote {
+    break-inside: avoid;
+    border: 1px solid #999;
+    background: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    break-after: avoid;
+  }
+}
