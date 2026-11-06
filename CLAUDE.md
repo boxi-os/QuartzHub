@@ -54,7 +54,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
-- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets,inline-svg,themes,zip,locales,templates,builtin-template,snapshots,content,git}-golden.mjs` — dasselbe für
+- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets,inline-svg,themes,zip,locales,templates,builtin-template,snapshots,content,git,package-deps,core-update,plugin-updates}-golden.mjs` — dasselbe für
   `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies`, `PluginCommands`, `Marketplace`, die Build- und Server-Dienste, `LayoutFrames`, `StyleSheets`, `StyleFiles`, `ScssCheck`, `VariableGraph`, `SiteFonts`, `Snippets`, `InlineSvg` (dessen Skript in Chrome, über QuartzControls playwright-core), `FontFile` und `FontService`
   (`layout-frames` und `managed-styles` lesen Frames und Stylesheets von gui-test und Example, nur lesend)
 - `Runtime/node/bin/node scripts/option-schema-golden.mjs [QuartzControl] [gui-test]` — Plugin-Namen,
@@ -117,8 +117,10 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Schreiber nehmen ihren Snapshot als `SnapshotStore.Take`). **Neue Schreiber legen Namen über
   `Posix` an, nicht über Foundation:** Foundation zerlegt „Über“ auf dem Weg zur Platte (NFD), Node
   nicht; Dateilisten in Tests nach UTF-8-Bytes vergleichen, nicht mit `==`. Die übrigen Dienste
-  stellt ein eigener Durchgang nach Punkt 7 um. 7b fertig (`GitStatus`, `GitAuth`, `GitHubRemote`,
-  `Sync`). Als Nächstes 7c.
+  stellt ein eigener Durchgang nach Punkt 7 um. Punkt 7 ist fertig: 7b `GitStatus`, `GitAuth`,
+  `GitHubRemote`, `Sync`; 7c `PackageJsonDeps`, `CoreUpdate` (Stash-Name und Merge-Betreff sind
+  QuartzControls Wortlaut, ein Format beider Apps), `PluginUpdates`. Als Nächstes der NFD-Durchgang,
+  dann Punkt 8.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

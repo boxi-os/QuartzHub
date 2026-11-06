@@ -1453,3 +1453,64 @@ wie QuartzControl:
   ist nie wörtlich github.com). Sync 22, davon 21; gleichwertig ein leeres quartz-upstream. Die
   Frist von `git fetch` fragt ein eigener Test (ein git, das beim Holen hängt).
 - **Preis:** Fixture 230 KB, der Golden-Test eines Dienstes läuft 3 bis 5 s.
+
+### Core-Update (`updateService.ts`, `shared/packageJsonDeps.ts` → `CoreUpdate`, `PackageJsonDeps`)
+
+- **Vorher gelesen:** die Langfassung „Eine Datei, die ein Werkzeug erzeugt“ in
+  `conventions-full.md` und die Messungen in `snapshots-and-updates.md` (R1–R6, h1–h7).
+- **Der Plan, rein:** `scripts/package-deps-golden.mjs`, 83 Aufrufe von `localPackageChanges`,
+  `reinstallCommands`, `missingFrom`, `absentFrom`, `outstandingPackages`, mit der echten
+  `package.json` von gui-test und einer Liste, die denselben Eintrag zweimal hält (QuartzControl
+  vergleicht die Einträge selbst, nicht ihre Werte: hier nach Position).
+- **Der Dienst, mit echtem git:** `scripts/core-update-golden.mjs`, 85 Schritte in 30 Szenen gegen
+  ein lokales Upstream mit sechs Zweigen (Pakete gehoben, nur README, eine andere Datei, Content,
+  Docs). npm ist `Fixtures/core-update/npm-stub.cjs`, auf beiden Seiten dieselbe Datei unter
+  demselben Node: Es schreibt `install --save-X name@range` in den Abschnitt, auf Wunsch mit dem
+  Bereich, den npm auflösen würde, scheitert auf Wunsch an EACCES, an einem 404 oder nur im
+  `--save-peer`-Aufruf, und schreibt die Notiz mit, wie sie beim Aufruf steht (die erste Notiz vor
+  npm ist sonst unsichtbar: Sie zählt nur, wenn die App mitten im Lauf endet). Identität und Datum
+  gepinnt, auch für die Merges und Amends des Dienstes. Nach jedem Schritt: Antwort, Aufrufe von
+  npm, npx und Snapshot, HEAD mit Eltern, Betreff und Reflog, `git status`, die Stash-Liste,
+  MERGE_HEAD, beide Paketdateien, die Notiz, wohin `content/` zeigt. Darunter R1 bis R6 aus dem
+  Review, Konflikte in den Paketdateien und anderswo, ein Lockfile außerhalb des Index, drei
+  Fassungen einer Datei, Stashes des Nutzers über und unter dem der App, Notizen alt, kaputt, mit
+  unsicheren Einträgen, von Hand beantwortet oder mit verschwundenem Commit, ein gepushter
+  Merge-Commit vor dem fortsetzenden Lauf, ein Amend neben anderer uncommitteter Arbeit, ein
+  Merge, den der Nutzer selbst begonnen hat, Content als Link. `explainGitFailure` getrennt über
+  84 Texte und Listen (aus dem Bündel freigelegt).
+- **Keine Abweichung im Verhalten.** Stash-Name („QuartzControl: core update“) und Merge-Betreff
+  („Merge quartz-upstream (via QuartzControl)“) bleiben wörtlich: Beide Apps öffnen dieselben
+  Projekte und erkennen die Reste der anderen daran. Zwei Sätze des Katalogs sagen jetzt QuartzHub
+  (`updateStashFitsHead`, `updateStashFitsHeadBesides`). Klein: Maschinenantworten aus stdout wie
+  in 7a/7b; der Satz einer Notiz, die sich nicht schreiben ließ, nennt den Fehler in Swifts Worten.
+- **Im Golden gesehen, nicht im Code:** Die Sätze eines abgelehnten Abbruchs teilt QuartzControl an
+  „\n\n“; die `mainT`-Attrappe antwortete JSON ohne „\n\n“, also teilt der Test die gerenderten
+  Sätze so, wie es das echte QuartzControl tut.
+- **Gegenproben:** 64, davon 61 gefangen. 25 kamen im ersten Durchgang durch und brachten die neun
+  Szenen ab 22, die Notiz im npm-Log und den Vergleich von `explainGitFailure`. Gleichwertig mit
+  diesem git: ein `stash pop` mitten im Merge (git verweigert ihn bei unaufgelösten Dateien), der
+  Abgleich des eigenen Stashs vor dem Freigeben (unter dem Schloss schreibt niemand sonst einen),
+  `merge --abort` ohne englische Textvariablen (Apples git übersetzt nicht; QuartzControl hat den
+  deutschen Fall gemessen).
+- **Preis:** Fixture 296 KB, der Test läuft 29 s.
+
+### Plugin-Updates (`getPluginsUpdateStatus`, `updatePlugin` → `PluginUpdates`)
+
+- **Gemessen:** `scripts/plugin-updates-golden.mjs`, 13 Schritte mit echtem git gegen ein
+  Plugin-Repository mit Zweig, leichtem und annotiertem Tag, einem Namen, der beides ist, und
+  neuerem HEAD; Lockfiles mit jeder Art Eintrag, kaputt, ohne `plugins`, mit Liste oder Text statt
+  Objekt, eine Quelle und ein Ref mit führendem Strich (es läuft nichts). Vier zugleich, in der
+  Reihenfolge des Lockfiles (eigener Test).
+- **Abweichungen:** Ein Eintrag `null` war ein TypeError, der die ganze Liste scheitern ließ; hier
+  ist er lokal. Ein gescheiterter Snapshot antwortet wie bei `PluginCommands`. Die Installation
+  bekommt deren Frist fürs Netz.
+- **Befund, übernommen wie gemessen:** Ein annotiertes Tag antwortet mit seinem Tag-Objekt, nicht
+  mit dem Commit. `ls-remote` mit einem Muster liefert `refs/tags/v1^{}` nie (das Muster vergleicht
+  das Ende), also greift QuartzControls Zweig dafür nicht, und ein Plugin auf einem annotierten Tag
+  heißt für immer „veraltet“. Zu entscheiden: hier beheben (Abweichung) oder so lassen.
+- **Gegenproben:** 16, davon 15 gefangen; die übrige ist dieser tote Zweig.
+
+### Punkt 7 fertig
+
+Offen bleiben, je einzeln zu fragen: der Push zu GitHub mit Token, ein echtes Core-Update gegen
+jackyzha0/quartz mit echtem npm. Danach der Durchgang zu NFD (siehe Snapshot-Speicher).
