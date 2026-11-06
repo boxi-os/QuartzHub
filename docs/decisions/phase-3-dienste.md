@@ -1159,3 +1159,35 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
 - Gegenproben (21, jede lässt den Test scheitern). Fünf waren erst ungefangen und bekamen ihren
   Fall: die Registry von der Platte, ein Registry-Eintrag ohne Autor, ein 404 von jsDelivr zweimal
   (gecacht), eine Antwort `null` zweimal (nicht gecacht), ein npm-Eintrag ohne Namen.
+
+## Punkt 6: Vorlagen und Übersetzungen
+
+In drei Teilen in einem Zug (Nutzer, 2026-11-06): 6a Zip, 6b Übersetzungen, 6c Vorlagen-Paket.
+Der Import eines Pakets legt in QuartzControl vorher einen Snapshot an; bis Punkt 7 lehnt er
+hier ab, Export und Dry-Run gehen schon (Nutzer, 2026-11-06). `qc-basic.qtpl` kommt aus
+QuartzControl 1.3.0 ins Repo, abgerufen wird dieselbe Adresse (Nutzer, 2026-11-06).
+
+### Zip (`zipArchive.ts` → `ZipArchive`)
+
+- **Gemessen gegen QuartzControls Code:** `scripts/zip-golden.mjs` lässt `readZip` 56 Archive
+  lesen (von Hand gebaut mit jedem Rand: unsichere Namen, lügende Größen, die 256-MiB-Decke genau
+  getroffen und um ein Byte überschritten, kaputte Kopfzeilen, Data Descriptor, Kommentare bis
+  65535 Bytes, doppelte Namen; dazu Archive von Pythons zipfile, Info-ZIP und ditto) und
+  `createZip` sechs schreiben. Der Swift-Test liest dieselben Dateien und vergleicht Namen,
+  Reihenfolge, Länge, SHA-256 und die Fehlersätze.
+- **Nicht byte-gleich, wo deflatet wird:** Apples Compression-Framework (`COMPRESSION_ZLIB`, ein
+  roher Deflate-Strom wie `deflateRawSync`) ist zlib auf Stufe 5, Node Stufe 6. Verglichen werden
+  darum die festen Felder des Zentralverzeichnisses (Signatur, Versionen, Flags, Methode, Zeit,
+  CRC, Größe, Modus, Name) und was ein Leser daraus macht; vier der sechs Archive, in denen nichts
+  deflatet wird, sind byte-gleich. Die Wahl „speichern statt deflaten“ bleibt QuartzControls:
+  Deflate muss gewinnen, ein Gleichstand wird gespeichert (eigener Test, denn wo ein Gleichstand
+  liegt, hängt am Deflater).
+- **Die andere Richtung:** Das Golden bündelt QuartzControls Leser als `read-zip.cjs`; der Test
+  lässt ihn ein Archiv von QuartzHub lesen, dazu `unzip -t`, Pythons zipfile und `ditto -x -k`
+  (Modus 0644 nach dem Entpacken).
+- **Abweichung:** Wo QuartzControls Leser über das Ende des Puffers las (ein Offset, der
+  hinauszeigt), warf Node einen `RangeError` ohne Satz; hier ist das ein beschädigtes Verzeichnis
+  bzw. ein beschädigter Dateiheader, je nachdem, was gerade gelesen wurde (zwei Fälle im Golden).
+- Gegenproben: 26, alle gefangen; eine (Gleichstand gilt als Gewinn) erst mit dem eigenen Test.
+  Zwei (Jahresklammer weg) enden im Absturz statt in einer Erwartung, weil das Jahr dann nicht in
+  16 Bit passt.

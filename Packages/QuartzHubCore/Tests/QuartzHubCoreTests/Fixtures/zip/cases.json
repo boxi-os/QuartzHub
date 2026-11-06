@@ -1,0 +1,811 @@
+{
+ "created": [
+  {
+   "name": "stored-only",
+   "when": [
+    2026,
+    10,
+    6,
+    13,
+    37,
+    42
+   ],
+   "entries": [
+    [
+     "mimetype",
+     "short",
+     true
+    ],
+    [
+     "a/kurz.txt",
+     "short"
+    ],
+    [
+     "leer.txt",
+     "empty"
+    ],
+    [
+     "zufall.bin",
+     "random"
+    ]
+   ],
+   "file": "create-stored-only.zip",
+   "read": {
+    "files": [
+     {
+      "name": "mimetype",
+      "length": 3,
+      "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "text": "abc"
+     },
+     {
+      "name": "a/kurz.txt",
+      "length": 3,
+      "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "text": "abc"
+     },
+     {
+      "name": "leer.txt",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     },
+     {
+      "name": "zufall.bin",
+      "length": 3000,
+      "sha256": "ed25f883fb16f862b5dcef7226c2f903f70626a9b08e2ccf7195b98e26244c8c"
+     }
+    ]
+   }
+  },
+  {
+   "name": "deflated",
+   "when": [
+    2026,
+    10,
+    6,
+    13,
+    37,
+    43
+   ],
+   "entries": [
+    [
+     "manifest.json",
+     "text"
+    ],
+    [
+     "teile/schriften/Ünicode.woff2",
+     "random"
+    ],
+    [
+     "nullen.bin",
+     "zeros"
+    ],
+    [
+     "leer",
+     "empty"
+    ]
+   ],
+   "file": "create-deflated.zip",
+   "read": {
+    "files": [
+     {
+      "name": "manifest.json",
+      "length": 1320,
+      "sha256": "5ff0b1fb8a10b3e6fe5a8d3416f76584c1aac8ae0369b1b96060ffb09159ad94"
+     },
+     {
+      "name": "teile/schriften/Ünicode.woff2",
+      "length": 3000,
+      "sha256": "ed25f883fb16f862b5dcef7226c2f903f70626a9b08e2ccf7195b98e26244c8c"
+     },
+     {
+      "name": "nullen.bin",
+      "length": 20000,
+      "sha256": "28b4f41a7f3ee6d8cc87272db6e09c6d3566551fd4d18702b041a21658272a85"
+     },
+     {
+      "name": "leer",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     }
+    ]
+   }
+  },
+  {
+   "name": "stored-forced",
+   "when": [
+    2026,
+    0,
+    31,
+    23,
+    59,
+    59
+   ],
+   "entries": [
+    [
+     "mimetype",
+     "text",
+     true
+    ],
+    [
+     "nullen.bin",
+     "zeros",
+     true
+    ]
+   ],
+   "file": "create-stored-forced.zip",
+   "read": {
+    "files": [
+     {
+      "name": "mimetype",
+      "length": 1320,
+      "sha256": "5ff0b1fb8a10b3e6fe5a8d3416f76584c1aac8ae0369b1b96060ffb09159ad94"
+     },
+     {
+      "name": "nullen.bin",
+      "length": 20000,
+      "sha256": "28b4f41a7f3ee6d8cc87272db6e09c6d3566551fd4d18702b041a21658272a85"
+     }
+    ]
+   }
+  },
+  {
+   "name": "year-1970",
+   "when": [
+    1970,
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "entries": [
+    [
+     "a",
+     "short"
+    ]
+   ],
+   "file": "create-year-1970.zip",
+   "read": {
+    "files": [
+     {
+      "name": "a",
+      "length": 3,
+      "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "text": "abc"
+     }
+    ]
+   }
+  },
+  {
+   "name": "year-2200",
+   "when": [
+    2200,
+    5,
+    15,
+    12,
+    30,
+    10
+   ],
+   "entries": [
+    [
+     "a",
+     "short"
+    ]
+   ],
+   "file": "create-year-2200.zip",
+   "read": {
+    "files": [
+     {
+      "name": "a",
+      "length": 3,
+      "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "text": "abc"
+     }
+    ]
+   }
+  },
+  {
+   "name": "none",
+   "when": [
+    2026,
+    10,
+    6,
+    0,
+    0,
+    0
+   ],
+   "entries": [],
+   "file": "create-none.zip",
+   "read": {
+    "files": []
+   }
+  }
+ ],
+ "read": [
+  {
+   "name": "plain",
+   "file": "read-plain.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a.txt",
+      "length": 5,
+      "sha256": "753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e",
+      "text": "Hallo"
+     },
+     {
+      "name": "b/c.txt",
+      "length": 4,
+      "sha256": "e339011b9533aeabd6fc3ee413e98f9605f500e3f08c9365e711fa7293249228",
+      "text": "Welt"
+     }
+    ]
+   }
+  },
+  {
+   "name": "unicode-name",
+   "file": "read-unicode-name.zip",
+   "result": {
+    "files": [
+     {
+      "name": "teile/schriften/Ünicode – ß.woff2",
+      "length": 1,
+      "sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "text": "x"
+     }
+    ]
+   }
+  },
+  {
+   "name": "invalid-utf8-name",
+   "file": "read-invalid-utf8-name.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a��b",
+      "length": 1,
+      "sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "text": "x"
+     }
+    ]
+   }
+  },
+  {
+   "name": "directory-entry",
+   "file": "read-directory-entry.zip",
+   "result": {
+    "files": [
+     {
+      "name": "ordner/datei",
+      "length": 1,
+      "sha256": "18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4",
+      "text": "d"
+     }
+    ]
+   }
+  },
+  {
+   "name": "dotdot",
+   "file": "read-dotdot.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"files/content/../PROOF.md\"}}"
+   }
+  },
+  {
+   "name": "dotdot-only",
+   "file": "read-dotdot-only.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"..\"}}"
+   }
+  },
+  {
+   "name": "dotdot-backslash",
+   "file": "read-dotdot-backslash.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"a\\\\..\\\\b\"}}"
+   }
+  },
+  {
+   "name": "dotdot-prefix-ok",
+   "file": "read-dotdot-prefix-ok.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a/..b/...",
+      "length": 1,
+      "sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "text": "x"
+     }
+    ]
+   }
+  },
+  {
+   "name": "absolute",
+   "file": "read-absolute.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"/etc/x\"}}"
+   }
+  },
+  {
+   "name": "drive",
+   "file": "read-drive.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"C:x\"}}"
+   }
+  },
+  {
+   "name": "drive-lower",
+   "file": "read-drive-lower.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"z:/x\"}}"
+   }
+  },
+  {
+   "name": "drive-digit-ok",
+   "file": "read-drive-digit-ok.zip",
+   "result": {
+    "files": [
+     {
+      "name": "1:x",
+      "length": 1,
+      "sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "text": "x"
+     }
+    ]
+   }
+  },
+  {
+   "name": "nul",
+   "file": "read-nul.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"a\\u0000b\"}}"
+   }
+  },
+  {
+   "name": "empty-name",
+   "file": "read-empty-name.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"\"}}"
+   }
+  },
+  {
+   "name": "unsafe-after-good",
+   "file": "read-unsafe-after-good.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryUnsafeName\",\"args\":{\"name\":\"../x\"}}"
+   }
+  },
+  {
+   "name": "method-12",
+   "file": "read-method-12.zip",
+   "result": {
+    "threw": "{\"key\":\"zipUnsupportedMethod\",\"args\":{\"method\":12}}"
+   }
+  },
+  {
+   "name": "bad-crc",
+   "file": "read-bad-crc.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "bad-crc-deflate",
+   "file": "read-bad-crc-deflate.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "size-low-store",
+   "file": "read-size-low-store.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "size-high-store",
+   "file": "read-size-high-store.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "size-low-deflate",
+   "file": "read-size-low-deflate.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "size-high-deflate",
+   "file": "read-size-high-deflate.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "empty-deflated-0300",
+   "file": "read-empty-deflated-0300.zip",
+   "result": {
+    "files": [
+     {
+      "name": "leer",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     }
+    ]
+   }
+  },
+  {
+   "name": "empty-deflated-garbage",
+   "file": "read-empty-deflated-garbage.zip",
+   "result": {
+    "files": [
+     {
+      "name": "leer",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     }
+    ]
+   }
+  },
+  {
+   "name": "empty-stored",
+   "file": "read-empty-stored.zip",
+   "result": {
+    "files": [
+     {
+      "name": "leer",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     }
+    ]
+   }
+  },
+  {
+   "name": "deflate-garbage",
+   "file": "read-deflate-garbage.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "deflate-truncated",
+   "file": "read-deflate-truncated.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "compressed-size-past-end",
+   "file": "read-compressed-size-past-end.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "ceiling-exact",
+   "file": "read-ceiling-exact.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"b\"}}"
+   }
+  },
+  {
+   "name": "ceiling-over",
+   "file": "read-ceiling-over.zip",
+   "result": {
+    "threw": "{\"key\":\"zipTooLarge\",\"args\":{\"limit\":256}}"
+   }
+  },
+  {
+   "name": "ceiling-single",
+   "file": "read-ceiling-single.zip",
+   "result": {
+    "threw": "{\"key\":\"zipTooLarge\",\"args\":{\"limit\":256}}"
+   }
+  },
+  {
+   "name": "ceiling-after-directory",
+   "file": "read-ceiling-after-directory.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 1,
+      "sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "text": "x"
+     }
+    ]
+   }
+  },
+  {
+   "name": "bomb-small-claim",
+   "file": "read-bomb-small-claim.zip",
+   "result": {
+    "threw": "{\"key\":\"zipEntryCorrupt\",\"args\":{\"name\":\"a\"}}"
+   }
+  },
+  {
+   "name": "data-descriptor",
+   "file": "read-data-descriptor.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 17,
+      "sha256": "7ed9af49caef7941ea321484b308925d1a83c9b5afab5a27280a1d14854c6044",
+      "text": "Hallo Hallo Hallo"
+     }
+    ]
+   }
+  },
+  {
+   "name": "local-extra",
+   "file": "read-local-extra.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 5,
+      "sha256": "753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e",
+      "text": "Hallo"
+     }
+    ]
+   }
+  },
+  {
+   "name": "central-extra-comment",
+   "file": "read-central-extra-comment.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 5,
+      "sha256": "753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e",
+      "text": "Hallo"
+     },
+     {
+      "name": "b",
+      "length": 4,
+      "sha256": "9dbe3cfc5af797f3516eb7c92f37fe507b83c13017aa9ddb57b9afe25a75a3a6",
+      "text": "zwei"
+     }
+    ]
+   }
+  },
+  {
+   "name": "archive-comment",
+   "file": "read-archive-comment.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 5,
+      "sha256": "753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e",
+      "text": "Hallo"
+     }
+    ]
+   }
+  },
+  {
+   "name": "comment-max",
+   "file": "read-comment-max.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 5,
+      "sha256": "753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e",
+      "text": "Hallo"
+     }
+    ]
+   }
+  },
+  {
+   "name": "trailer-past-comment",
+   "file": "read-trailer-past-comment.zip",
+   "result": {
+    "threw": "{\"key\":\"zipNotAPackage\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "leading-junk",
+   "file": "read-leading-junk.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 5,
+      "sha256": "753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e",
+      "text": "Hallo"
+     }
+    ]
+   }
+  },
+  {
+   "name": "duplicate-names",
+   "file": "read-duplicate-names.zip",
+   "result": {
+    "files": [
+     {
+      "name": "a",
+      "length": 4,
+      "sha256": "06cb6c291501e7d4dd2577fe8753defd6300fb30a11fe2e9f8c74b0a93863621",
+      "text": "dann"
+     },
+     {
+      "name": "b",
+      "length": 1,
+      "sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+      "text": "b"
+     }
+    ]
+   }
+  },
+  {
+   "name": "bad-central-sig",
+   "file": "read-bad-central-sig.zip",
+   "result": {
+    "threw": "{\"key\":\"zipBadDirectory\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "bad-local-sig",
+   "file": "read-bad-local-sig.zip",
+   "result": {
+    "threw": "{\"key\":\"zipBadHeader\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "count-too-high",
+   "file": "read-count-too-high.zip",
+   "result": {
+    "threw": "{\"key\":\"zipBadDirectory\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "count-zero",
+   "file": "read-count-zero.zip",
+   "result": {
+    "files": []
+   }
+  },
+  {
+   "name": "central-offset-past-end",
+   "file": "read-central-offset-past-end.zip",
+   "result": {
+    "threw": "The value of \"offset\" is out of range. It must be >= 0 and <= 97. Received 100032",
+    "range": true
+   }
+  },
+  {
+   "name": "local-offset-past-end",
+   "file": "read-local-offset-past-end.zip",
+   "result": {
+    "threw": "The value of \"offset\" is out of range. It must be >= 0 and <= 97. Received 100000",
+    "range": true
+   }
+  },
+  {
+   "name": "local-offset-near-end",
+   "file": "read-local-offset-near-end.zip",
+   "result": {
+    "threw": "{\"key\":\"zipBadHeader\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "no-eocd",
+   "file": "read-no-eocd.zip",
+   "result": {
+    "threw": "{\"key\":\"zipNotAPackage\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "empty-file",
+   "file": "read-empty-file.zip",
+   "result": {
+    "threw": "{\"key\":\"zipNotAPackage\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "short-file",
+   "file": "read-short-file.zip",
+   "result": {
+    "threw": "{\"key\":\"zipNotAPackage\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "eocd-only",
+   "file": "read-eocd-only.zip",
+   "result": {
+    "files": []
+   }
+  },
+  {
+   "name": "eocd-truncated",
+   "file": "read-eocd-truncated.zip",
+   "result": {
+    "threw": "{\"key\":\"zipNotAPackage\",\"args\":{}}"
+   }
+  },
+  {
+   "name": "foreign-python",
+   "file": "read-foreign-python.zip",
+   "result": {
+    "files": [
+     {
+      "name": "leer.txt",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     },
+     {
+      "name": "manifest.json",
+      "length": 390,
+      "sha256": "9902dc40cf365f9336c063bc415376ff8bab89295cebe332b77c4644a21d38c6"
+     },
+     {
+      "name": "teile/schriften/Ünicode.woff2",
+      "length": 3000,
+      "sha256": "ed25f883fb16f862b5dcef7226c2f903f70626a9b08e2ccf7195b98e26244c8c"
+     }
+    ]
+   }
+  },
+  {
+   "name": "foreign-infozip",
+   "file": "read-foreign-infozip.zip",
+   "result": {
+    "files": [
+     {
+      "name": "leer.txt",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     },
+     {
+      "name": "teile/schriften/Ünicode.woff2",
+      "length": 3000,
+      "sha256": "ed25f883fb16f862b5dcef7226c2f903f70626a9b08e2ccf7195b98e26244c8c"
+     },
+     {
+      "name": "manifest.json",
+      "length": 390,
+      "sha256": "9902dc40cf365f9336c063bc415376ff8bab89295cebe332b77c4644a21d38c6"
+     }
+    ]
+   }
+  },
+  {
+   "name": "foreign-ditto",
+   "file": "read-foreign-ditto.zip",
+   "result": {
+    "files": [
+     {
+      "name": "leer.txt",
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     },
+     {
+      "name": "teile/schriften/Ünicode.woff2",
+      "length": 3000,
+      "sha256": "ed25f883fb16f862b5dcef7226c2f903f70626a9b08e2ccf7195b98e26244c8c"
+     },
+     {
+      "name": "manifest.json",
+      "length": 390,
+      "sha256": "9902dc40cf365f9336c063bc415376ff8bab89295cebe332b77c4644a21d38c6"
+     }
+    ]
+   }
+  }
+ ]
+}
