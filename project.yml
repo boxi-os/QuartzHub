@@ -1,0 +1,85 @@
+# Source of QuartzHub.xcodeproj. The .xcodeproj is generated (scripts/xcodegen.sh) and not
+# versioned: this file is the one to edit.
+name: QuartzHub
+options:
+  bundleIdPrefix: io.github.boxios
+  deploymentTarget:
+    macOS: "15.0"
+  developmentLanguage: de
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    # Apple Silicon only (docs/plan.md).
+    ARCHS: arm64
+    # Ad hoc, like the releases: no team, no notarization.
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+packages:
+  QuartzHubCore:
+    path: Packages/QuartzHubCore
+
+targets:
+  QuartzHub:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+    dependencies:
+      - package: QuartzHubCore
+        product: QuartzHubCore
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: QuartzHub
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: de
+        CFBundleLocalizations: [de, en]
+        LSApplicationCategoryType: public.app-category.developer-tools
+        NSHumanReadableCopyright: "GPL-3.0-or-later"
+    settings:
+      base:
+        # Not boxi_os: CFBundleIdentifier allows letters, digits, hyphen and period only. Same form
+        # as QuartzControl's macOS ID (io.github.boxios.quartzcontrol, electron-builder.yml).
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.boxios.quartzhub
+        PRODUCT_NAME: QuartzHub
+        # No sandbox: QuartzHub runs node, npm and git in the user's project folders.
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        GENERATE_INFOPLIST_FILE: NO
+
+  QuartzHubUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: QuartzHub
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.boxios.quartzhub.uitests
+        TEST_TARGET_NAME: QuartzHub
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  QuartzHub:
+    build:
+      targets:
+        QuartzHub: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - QuartzHubUITests
+        - package: QuartzHubCore/QuartzHubCoreTests

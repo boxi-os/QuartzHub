@@ -1,0 +1,27 @@
+# Generated from project.yml (scripts/xcodegen.sh)
+QuartzHub.xcodeproj/
+
+# Build output
+.build/
+build/
+DerivedData/
+*.xcresult
+
+# Project-local tools (scripts/xcodegen.sh) and fetched runtime (scripts/fetch-runtime.sh)
+.tools/
+Runtime/node/
+Runtime/npm/
+Runtime/git/
+
+# Helpers: npm packages and esbuild output (scripts/build-helpers.sh)
+Helpers/node_modules/
+Helpers/dist/
+
+.DS_Store
+xcuserdata/
+.swiftpm/
+
+# Claude: local settings and linked skills
+.claude/settings.local.json
+.claude/skills/firecrawl*
+App/Info.plist
