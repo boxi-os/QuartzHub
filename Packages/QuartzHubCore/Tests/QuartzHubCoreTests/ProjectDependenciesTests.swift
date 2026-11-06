@@ -12,7 +12,7 @@ struct ProjectDependenciesTests {
   }
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   @Test func thereAreCases() {
     #expect(Self.cases.count >= 7, "scripts/deps-golden.mjs")
@@ -21,9 +21,9 @@ struct ProjectDependenciesTests {
   @Test(arguments: cases)
   func sameAsQuartzControl(_ name: String) async throws {
     let spec = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("\(name)/case.json")))
-    let w = scratch.url.appendingPathComponent("w")
-    let project = w.appendingPathComponent("P")
-    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project) { $0.replacingOccurrences(of: "@W@", with: w.path, options: .literal) }
+    let w = "\(scratch.path)/w"
+    let project = "\(w)/P"
+    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: URL(fileURLWithPath: project)) { $0.replacingOccurrences(of: "@W@", with: w, options: .literal) }
 
     let strings = { (list: [String]?) in list.map { JSONValue.array($0.map(JSONValue.string)) } ?? .null }
     for (index, question) in (spec["ask"]?.arrayValue ?? []).enumerated() {
@@ -33,7 +33,9 @@ struct ProjectDependenciesTests {
       case "halfUnpackedModule": ProjectDependencies.halfUnpackedModule(project: project, ask[1]).map(JSONValue.string) ?? .null
       default: strings(await ProjectDependencies.missingAuthoredFrames(project: project, runtime: HelperRuntime.runtime))
       }
-      #expect(answer == spec["answers"]?.arrayValue?[index], "\(name): \(ask.joined(separator: " "))")
+      // By bytes: a name the answer took through Foundation would come back decomposed.
+      #expect(Array(JSJSON.compact(answer).utf8) == Array(JSJSON.compact(spec["answers"]?.arrayValue?[index] ?? .null).utf8),
+              "\(name): \(ask.joined(separator: " "))")
     }
   }
 }

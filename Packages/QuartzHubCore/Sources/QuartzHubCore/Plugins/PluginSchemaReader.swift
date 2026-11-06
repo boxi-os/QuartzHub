@@ -46,27 +46,27 @@ public final class PluginSchemaReader: Sendable {
   /// others under `.quartz/plugins/<quartzName>`. Nil if that would leave its base, or for an empty
   /// name. As Node's `path.relative`: a first segment that starts with ".." (a folder "..x") counts
   /// as leaving.
-  public static func packageDirectory(project: URL, source: PluginSource) -> URL? {
+  public static func packageDirectory(project: String, source: PluginSource) -> String? {
     let name = source.quartzName
-    let base = FramePaths.resolve(project.path + (source.isNpm ? "/node_modules" : "/.quartz/plugins"))
+    let base = FramePaths.resolve(project + (source.isNpm ? "/node_modules" : "/.quartz/plugins"))
     let dir = FramePaths.resolve(name.hasPrefix("/") ? name : base + "/" + name)
     guard !name.isEmpty, dir.hasPrefix(base + "/") else { return nil }
     let relative = dir.dropFirst(base.count + 1)
     guard !relative.hasPrefix("..") else { return nil }
-    return URL(fileURLWithPath: dir)
+    return dir
   }
 
   // MARK: options
 
-  public func optionSchema(project: URL, source: PluginSource, runtime: RuntimeLocation = .current) async -> PluginOptionSchemaResult {
+  public func optionSchema(project: String, source: PluginSource, runtime: RuntimeLocation = .current) async -> PluginOptionSchemaResult {
     await optionSchemas(project: project, sources: [source], runtime: runtime)[0]
   }
 
   /// One answer per source, in order; at most one helper call for all of them.
-  public func optionSchemas(project: URL, sources: [PluginSource], runtime: RuntimeLocation = .current) async -> [PluginOptionSchemaResult] {
+  public func optionSchemas(project: String, sources: [PluginSource], runtime: RuntimeLocation = .current) async -> [PluginOptionSchemaResult] {
     enum Step {
       case done(PluginOptionSchemaResult)
-      case types(dir: URL, fingerprint: String, read: PackageRead, helperIndex: Int?)
+      case types(dir: String, fingerprint: String, read: PackageRead, helperIndex: Int?)
     }
     var steps: [Step] = []
     var distDirs: [String] = []
@@ -76,7 +76,7 @@ public final class PluginSchemaReader: Sendable {
         continue
       }
       let fingerprint = Self.fingerprint(dir)
-      if let cached = optionCache.withLock({ $0[dir.path] }), cached.fingerprint == fingerprint {
+      if let cached = optionCache.withLock({ $0[dir] }), cached.fingerprint == fingerprint {
         steps.append(.done(cached.result))
         continue
       }
@@ -92,11 +92,11 @@ public final class PluginSchemaReader: Sendable {
           continue
         }
         // No dist, no .d.ts: the helper would answer null (indexDts); spare the process.
-        let dist = dir.appendingPathComponent("dist")
+        let dist = "\(dir)/dist"
         var helperIndex: Int?
-        if FileManager.default.fileExists(atPath: dist.path) {
+        if FileManager.default.fileExists(atPath: dist) {
           helperIndex = distDirs.count
-          distDirs.append(dist.path)
+          distDirs.append(dist)
         }
         steps.append(.types(dir: dir, fingerprint: fingerprint, read: read, helperIndex: helperIndex))
       }
@@ -136,8 +136,8 @@ public final class PluginSchemaReader: Sendable {
     }
   }
 
-  private func store(_ dir: URL, _ fingerprint: String, _ result: PluginOptionSchemaResult) {
-    optionCache.withLock { $0[dir.path] = (fingerprint, result) }
+  private func store(_ dir: String, _ fingerprint: String, _ result: PluginOptionSchemaResult) {
+    optionCache.withLock { $0[dir] = (fingerprint, result) }
   }
 
   /// What package.json says, before the `.d.ts` are asked.
@@ -172,8 +172,8 @@ public final class PluginSchemaReader: Sendable {
     case read(PackageRead)
   }
 
-  static func readPackage(_ dir: URL) -> PackageOutcome {
-    let path = dir.appendingPathComponent("package.json").path
+  static func readPackage(_ dir: String) -> PackageOutcome {
+    let path = "\(dir)/package.json"
     var info = stat()
     guard stat(path, &info) == 0 else {
       // Not installed (yet) is the ordinary case for a plugin that was just added: no schema, no
@@ -233,9 +233,9 @@ public final class PluginSchemaReader: Sendable {
   /// Size and mtime of package.json and of every `.d.ts` under dist/: what the answer depends on.
   /// QuartzControl's old cache was keyed by name only, and after `quartz plugin update` the page
   /// kept the previous version's options until the app restarted.
-  static func fingerprint(_ dir: URL) -> String {
-    var parts = [stamp(dir.appendingPathComponent("package.json").path)]
-    let dist = dir.appendingPathComponent("dist").path
+  static func fingerprint(_ dir: String) -> String {
+    var parts = [stamp("\(dir)/package.json")]
+    let dist = "\(dir)/dist"
     if FileManager.default.fileExists(atPath: dist) {
       do {
         parts += try dtsFiles(dist).prefix(maxDtsFiles).map(stamp)
@@ -277,11 +277,11 @@ public final class PluginSchemaReader: Sendable {
   /// For the layout board: which of these plugins are built-in page types with a frame of their
   /// own, keyed by the name the caller gives (QuartzControl's renderer passed the display name).
   /// Only string sources count, and only packages under node_modules, as in QuartzControl.
-  public func pageTypeFrames(project: URL, plugins: [(name: String, source: JSONValue?)], runtime: RuntimeLocation = .current) async -> [String: String] {
+  public func pageTypeFrames(project: String, plugins: [(name: String, source: JSONValue?)], runtime: RuntimeLocation = .current) async -> [String: String] {
     var known: [String: String?] = [:]
     var parse: [(key: String, source: String, fingerprint: String, file: String)] = []
     for case (_, .string(let source)?) in plugins where known[source] == nil && !parse.contains(where: { $0.source == source }) {
-      let key = "\(project.path)::\(source)"
+      let key = "\(project)::\(source)"
       let lookup = Self.pageTypeEntry(project: project, source: source)
       if let cached = frameCache.withLock({ $0[key] }), cached.fingerprint == lookup.fingerprint {
         known[source] = .some(cached.frame)
@@ -309,8 +309,8 @@ public final class PluginSchemaReader: Sendable {
 
   /// The entry file to parse, or nil when the package is no page type or has no entry; and the key
   /// the answer depends on.
-  static func pageTypeEntry(project: URL, source: String) -> (entry: String?, fingerprint: String) {
-    let packageDir = FramePaths.resolve(project.path + "/node_modules/" + source)
+  static func pageTypeEntry(project: String, source: String) -> (entry: String?, fingerprint: String) {
+    let packageDir = FramePaths.resolve(project + "/node_modules/" + source)
     let packageJSON = packageDir + "/package.json"
     var fingerprint = stamp(packageJSON)
     guard FileManager.default.fileExists(atPath: packageJSON),
@@ -358,7 +358,7 @@ public final class PluginSchemaReader: Sendable {
   /// The Obsidian Style Settings ids a ported theme declared, and its class keys (there is no
   /// title or type next to them, so a form can only offer switches). Nil when the theme is not
   /// installed or its theme.json cannot be read.
-  public static func themeStyleSettings(project: URL, themeId: String) -> ThemeStyleSettingsInfo? {
+  public static func themeStyleSettings(project: String, themeId: String) -> ThemeStyleSettingsInfo? {
     guard let theme = themeJSON(project: project, themeId: themeId) else { return nil }
     let ids = styleSettingsIds(theme)
     guard !ids.isEmpty else { return ThemeStyleSettingsInfo(styleSettingsId: [], classSettingKeys: []) }
@@ -372,7 +372,7 @@ public final class PluginSchemaReader: Sendable {
   }
 
   /// The fuller shape for the theme catalog's detail panel; local only.
-  public static func localThemeDetail(project: URL, themeId: String) -> ThemeDetail? {
+  public static func localThemeDetail(project: String, themeId: String) -> ThemeDetail? {
     guard let theme = themeJSON(project: project, themeId: themeId) else { return nil }
     let meta = theme.objectValue?["meta"]?.objectValue
     let strings = { (key: String) in meta?[key]?.arrayValue?.compactMap(\.stringValue) ?? [] }
@@ -390,9 +390,9 @@ public final class PluginSchemaReader: Sendable {
   /// `node_modules/@quartz-themes/<id>/theme.json`; nil for an id QuartzControl's channel refused
   /// (`^[a-z0-9][a-z0-9._-]*$`, at most 128), a file that is not there or not JSON, and a JSON
   /// value JavaScript calls falsy.
-  static func themeJSON(project: URL, themeId: String) -> JSONValue? {
+  static func themeJSON(project: String, themeId: String) -> JSONValue? {
     guard themeId.utf16.count <= 128, themeId.wholeMatch(of: themeIdPattern) != nil else { return nil }
-    let path = project.appendingPathComponent("node_modules/@quartz-themes/\(themeId)/theme.json").path
+    let path = "\(project)/node_modules/@quartz-themes/\(themeId)/theme.json"
     guard FileManager.default.fileExists(atPath: path), let value = try? JSJSON.parse(try readFile(path)), JS.truthy(value) else { return nil }
     return value
   }

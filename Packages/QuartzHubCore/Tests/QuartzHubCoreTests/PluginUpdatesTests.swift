@@ -38,10 +38,10 @@ import Testing
       calls.snapshots.withLock { $0 = [] }
       var result: JSONValue = .null
       switch step["op"]!.stringValue! {
-      case "status": result = .array(await PluginUpdates.status(project: project, core: core).map(Self.json))
+      case "status": result = .array(await PluginUpdates.status(project: project.path, core: core).map(Self.json))
       case "update":
         let args = step["args"]!.arrayValue!
-        let answer = await PluginUpdates.update(project: project, name: args.first?.stringValue, environment: golden.environment,
+        let answer = await PluginUpdates.update(project: project.path, name: args.first?.stringValue, environment: golden.environment,
                                                 snapshot: { _, kind, label in calls.snapshots.withLock { $0.append([kind, label]) }; return "snap-1" })
         result = .object(JSONObject([("success", .bool(answer.success)), ("output", .string(answer.output))]))
       default:
@@ -103,7 +103,7 @@ import Testing
     try SnapshotStoreTests.Harness.write(scratch.url.appendingPathComponent("quartz.lock.json").path,
                                          JSJSON.stringify(.object(JSONObject([("plugins", .object(JSONObject(plugins)))]))))
     let core = CoreUpdate(environment: environment, snapshot: { _, _, _ in nil })
-    let statuses = await PluginUpdates.status(project: scratch.url, core: core)
+    let statuses = await PluginUpdates.status(project: scratch.url.path, core: core)
     #expect(statuses.map(\.name) == plugins.map(\.0))
     #expect(statuses.allSatisfy { $0.state == .unknown })
     var running = 0, most = 0

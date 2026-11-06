@@ -68,7 +68,7 @@ public struct TemplatePackage: Sendable {
         let result = await ProcessRunner.run(environment.command("npm", arguments, in: project, timeout: .seconds(20 * 60)))
         return PluginCommands.Result(success: result.success, output: result.output)
       },
-      addPlugin: { source, project in await PluginCommands.shared.add(source: source, project: project, environment: environment) },
+      addPlugin: { source, project in await PluginCommands.shared.add(source: source, project: project.path, environment: environment) },
       head: { project in
         let result = await ProcessRunner.run(environment.command("git", ["rev-parse", "--short", "HEAD"], in: project, timeout: .seconds(30)))
         return result.success ? JS.trim(result.output) : nil

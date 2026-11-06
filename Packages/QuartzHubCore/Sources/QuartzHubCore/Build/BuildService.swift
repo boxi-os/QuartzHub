@@ -204,7 +204,7 @@ public actor BuildService {
   }
 
   private func runBuild(projectId: String, project: URL, outputDir: String?) async -> Result {
-    if let missing = ProjectDependencies.missingDependencies(project: project), !missing.isEmpty {
+    if let missing = ProjectDependencies.missingDependencies(project: project.path), !missing.isEmpty {
       let names = missing.prefix(3).joined(separator: ", ") + (missing.count > 3 ? " …" : "")
       log(.build, projectId, .warn, L10n.t("main.dependenciesMissing", ["names": names]) + "\n")
       return Result(success: false, duration: .zero, exitCode: nil)
@@ -358,7 +358,7 @@ public actor BuildService {
     return await inPortQueue {
       let holder = await sameProjectServer(project)
       if pending.aborted { return serverStatus(projectId) }
-      if let missing = ProjectDependencies.missingDependencies(project: project), !missing.isEmpty {
+      if let missing = ProjectDependencies.missingDependencies(project: project.path), !missing.isEmpty {
         let sentence = L10n.t("main.dependenciesMissing", ["names": missing.prefix(3).joined(separator: ", ") + (missing.count > 3 ? " …" : "")])
         dependencyErrors[projectId] = project.path
         return refuse(projectId, pending, sentence)

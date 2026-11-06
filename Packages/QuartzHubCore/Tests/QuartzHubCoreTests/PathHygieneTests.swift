@@ -41,10 +41,7 @@ enum TestFolder {
     "QuartzHubCore/L10n/StringCatalog.swift",
     "QuartzHubCore/Layout/LayoutFrames.swift",
     "QuartzHubCore/Migration/Coexistence.swift",
-    "QuartzHubCore/Plugins/PluginCommands.swift",
-    "QuartzHubCore/Plugins/PluginSchemaReader.swift",
     "QuartzHubCore/Projects/ProjectCreator.swift",
-    "QuartzHubCore/Projects/ProjectDependencies.swift",
     "QuartzHubCore/Projects/ProjectDuplicator.swift",
     "QuartzHubCore/Projects/ProjectIcon.swift",
     "QuartzHubCore/Snapshots/SnapshotStore+Restore.swift",
@@ -68,7 +65,6 @@ enum TestFolder {
     "QuartzHubCore/Updates/CoreUpdate+Abort.swift",
     "QuartzHubCore/Updates/CoreUpdate+Note.swift",
     "QuartzHubCore/Updates/CoreUpdate.swift",
-    "QuartzHubCore/Updates/PluginUpdates.swift",
     "qh-check/InlineSvgRun.swift",
     "qh-check/main.swift"
   ]

@@ -136,7 +136,7 @@ public actor ThemeMarketplace {
   /// jsDelivr. A network failure is not cached; an answer without the file is, for an hour.
   public func detail(themeId: String, project: URL) async throws -> ThemeDetail? {
     try StyleSettingsSchema.check(themeId)
-    if let local = PluginSchemaReader.localThemeDetail(project: project, themeId: themeId) { return local }
+    if let local = PluginSchemaReader.localThemeDetail(project: project.path, themeId: themeId) { return local }
     if let cached = details[themeId], now().timeIntervalSince(cached.at) < Self.detailLifetime { return cached.detail }
     guard let (data, response) = try? await session.data(from: URL(string: "https://cdn.jsdelivr.net/npm/@quartz-themes/\(themeId)/theme.json")!),
           let http = response as? HTTPURLResponse else { return nil }

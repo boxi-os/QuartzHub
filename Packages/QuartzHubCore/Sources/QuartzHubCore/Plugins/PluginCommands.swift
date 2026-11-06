@@ -35,22 +35,22 @@ public final class PluginCommands: Sendable {
 
   /// `quartz plugin add <source>`: with `snapshot` QuartzControl's `addPlugin`, without it
   /// `installPluginSource`, for the template import (48 plugins would leave 48 snapshots behind).
-  public func add(source: String, project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
+  public func add(source: String, project: String, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
                   snapshot: SnapshotStore.Take? = nil) async -> Result {
     if let failure = await Self.snapshotFirst(snapshot, project, source) { return failure }
     return await quartz(["plugin", "add", source], project, environment, deadlines.network)
   }
 
-  public func remove(name: String, project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
+  public func remove(name: String, project: String, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
                      snapshot: SnapshotStore.Take? = nil) async -> Result {
     if let failure = await Self.snapshotFirst(snapshot, project, name) { return failure }
     return await quartz(["plugin", "remove", name], project, environment, deadlines.local)
   }
 
-  static func snapshotFirst(_ snapshot: SnapshotStore.Take?, _ project: URL, _ label: String) async -> Result? {
+  static func snapshotFirst(_ snapshot: SnapshotStore.Take?, _ project: String, _ label: String) async -> Result? {
     guard let snapshot else { return nil }
     do {
-      _ = try await snapshot(project.path, "pluginChange", label)
+      _ = try await snapshot(project, "pluginChange", label)
       return nil
     } catch {
       return Result(success: false, output: "\(error)")
@@ -58,11 +58,11 @@ public final class PluginCommands: Sendable {
   }
 
   /// Drops the directories under `.quartz/plugins` that no config entry points at any more.
-  public func prune(project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines()) async -> Result {
+  public func prune(project: String, environment: ToolEnvironment, deadlines: Deadlines = Deadlines()) async -> Result {
     await quartz(["plugin", "prune"], project, environment, deadlines.local)
   }
 
-  private func quartz(_ arguments: [String], _ project: URL, _ environment: ToolEnvironment, _ timeout: Duration) async -> Result {
+  private func quartz(_ arguments: [String], _ project: String, _ environment: ToolEnvironment, _ timeout: Duration) async -> Result {
     let command = environment.command("npx", ["quartz"] + arguments, in: project, timeout: timeout)
     let result = await ProcessRunner.run(command)
     return Result(success: result.success, output: result.report(for: command))
@@ -79,9 +79,9 @@ public final class PluginCommands: Sendable {
   /// of starting a second npm in the same folder (QuartzControl's forty-sixth review, Niedrig 4).
   /// `afterPackagesInstalled` runs when npm went through and nothing is missing any more: the build
   /// service forgets the starts that failed only for missing packages (`forgetDependencyErrors`).
-  public func installFromLock(project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
-                              afterPackagesInstalled: @escaping @Sendable (URL) -> Void = { _ in }) async -> Result {
-    let key = ProjectLock.key(project.path)
+  public func installFromLock(project: String, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
+                              afterPackagesInstalled: @escaping @Sendable (String) -> Void = { _ in }) async -> Result {
+    let key = ProjectLock.key(project)
     let task = installs.withLock { installs -> Task<Result, Never> in
       if let running = installs[key] { return running }
       // The run clears its own entry, as QuartzControl's `finally` does: a call after the end
@@ -97,12 +97,12 @@ public final class PluginCommands: Sendable {
     return await task.value
   }
 
-  public func isInstallingFromLock(project: URL) -> Bool {
-    installs.withLock { $0[ProjectLock.key(project.path)] != nil }
+  public func isInstallingFromLock(project: String) -> Bool {
+    installs.withLock { $0[ProjectLock.key(project)] != nil }
   }
 
-  private static func installFromLockNow(_ project: URL, _ environment: ToolEnvironment, _ deadlines: Deadlines,
-                                         _ afterPackagesInstalled: @Sendable (URL) -> Void) async -> Result {
+  private static func installFromLockNow(_ project: String, _ environment: ToolEnvironment, _ deadlines: Deadlines,
+                                         _ afterPackagesInstalled: @Sendable (String) -> Void) async -> Result {
     var npmOutput = ""
     if let missing = ProjectDependencies.missingDependencies(project: project), !missing.isEmpty {
       let npm = environment.command("npm", ["install"], in: project, timeout: deadlines.network)

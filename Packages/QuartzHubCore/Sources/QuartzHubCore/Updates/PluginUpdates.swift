@@ -30,8 +30,8 @@ public enum PluginUpdates {
 
   static let maxParallelChecks = 4
 
-  public static func status(project: URL, core: CoreUpdate) async -> [Status] {
-    guard let data = try? Data(contentsOf: project.appendingPathComponent("quartz.lock.json")),
+  public static func status(project: String, core: CoreUpdate) async -> [Status] {
+    guard let data = try? Posix.read("\(project)/quartz.lock.json"),
           let lockfile = try? JSJSON.parse(Data(String(decoding: data, as: UTF8.self).utf8)) else { return [] }
     let entries = jsEntries(lockfile["plugins"])
     var results = [Status?](repeating: nil, count: entries.count)
@@ -94,7 +94,7 @@ public enum PluginUpdates {
   /// `quartz plugin install --latest [name]`, after a `pluginChange` snapshot; a failed snapshot
   /// stops it, as with `PluginCommands.add`. With the network deadline of the plugin commands,
   /// which QuartzControl did not set.
-  public static func update(project: URL, name: String? = nil, environment: ToolEnvironment, snapshot: @escaping SnapshotStore.Take,
+  public static func update(project: String, name: String? = nil, environment: ToolEnvironment, snapshot: @escaping SnapshotStore.Take,
                             deadline: Duration = PluginCommands.Deadlines().network) async -> PluginCommands.Result {
     if let failure = await PluginCommands.snapshotFirst(snapshot, project, name ?? "") { return failure }
     var arguments = ["quartz", "plugin", "install", "--latest"]

@@ -11,16 +11,16 @@ public enum ProjectDependencies {
   /// The packages `package.json` names under `dependencies` that `node_modules` does not hold, in
   /// its order; empty when all are there. Nil when package.json cannot be read: "cannot tell", not
   /// "nothing missing", and the callers leave the question to npm and Quartz.
-  public static func missingDependencies(project: URL) -> [String]? {
-    guard let data = try? Data(contentsOf: project.appendingPathComponent("package.json")),
+  public static func missingDependencies(project: String) -> [String]? {
+    guard let data = try? Posix.read("\(project)/package.json"),
           let manifest = try? JSJSON.parse(data), manifest != .null else { return nil }
     return keys(manifest["dependencies"], spreadingStrings: false).filter { !hasNodeModule(project: project, $0) }
   }
 
   /// `hasNodeModule` (templatePackage/shared.ts): resolvable is what a build resolves against,
   /// `node_modules/<name>/package.json`, not the list in package.json.
-  public static func hasNodeModule(project: URL, _ name: String) -> Bool {
-    FileManager.default.fileExists(atPath: project.appendingPathComponent("node_modules/\(name)/package.json").path)
+  public static func hasNodeModule(project: String, _ name: String) -> Bool {
+    FileManager.default.fileExists(atPath: "\(project)/node_modules/\(name)/package.json")
   }
 
   /// The first package in `name`'s dependency tree whose folder is there without a readable
@@ -30,14 +30,14 @@ public enum ProjectDependencies {
   /// missing package.json for the life of the process; QuartzHub asks it before the same packages
   /// run in a child, where it still tells "still unpacking" from "broken". Lookup as Node's: the
   /// package's own node_modules, then each one above it up to the project.
-  public static func halfUnpackedModule(project: URL, _ name: String) -> String? {
-    let projectPath = project.path
+  public static func halfUnpackedModule(project: String, _ name: String) -> String? {
+    let projectPath = project
     var seen = Set<String>()
     var queue = [(name: name, from: projectPath)]
     while !queue.isEmpty {
       let next = queue.removeFirst()
       guard let dir = moduleDirectory(projectPath, from: next.from, next.name), seen.insert(dir).inserted else { continue }
-      guard let data = try? Data(contentsOf: URL(fileURLWithPath: dir + "/package.json")),
+      guard let data = try? Posix.read(dir + "/package.json"),
             let manifest = try? JSJSON.parse(data) else { return next.name }
       // `{ ...dependencies, ...optionalDependencies }`: the first one's order, new names after.
       var names: [String] = []
@@ -53,10 +53,10 @@ public enum ProjectDependencies {
     var dir = from
     while true {
       let candidate = FramePaths.resolve(dir + "/node_modules/" + name)
-      if (dir as NSString).lastPathComponent != "node_modules" && FileManager.default.fileExists(atPath: candidate) {
+      if NodePath.basename(dir) != "node_modules" && FileManager.default.fileExists(atPath: candidate) {
         return candidate
       }
-      let parent = (dir as NSString).deletingLastPathComponent
+      let parent = NodePath.dirname(dir)
       if dir == projectPath || parent == dir { return nil }
       dir = parent
     }
@@ -78,7 +78,7 @@ public enum ProjectDependencies {
   /// copied into this project's `.quartz-gui/` is not missing while the config still names the
   /// other path: the build door repoints it. Nil when the config cannot be read; the overview says
   /// that one on its own.
-  public static func missingAuthoredFrames(project: URL, runtime: RuntimeLocation = .current) async -> [String]? {
+  public static func missingAuthoredFrames(project: String, runtime: RuntimeLocation = .current) async -> [String]? {
     guard let config = try? await ConfigFile.read(project: project, runtime: runtime) else { return nil }
     return config.plugins.filter { entry in
       guard case .string(let source)? = entry.source, source.contains(FramePaths.marker),

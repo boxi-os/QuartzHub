@@ -39,9 +39,9 @@ public struct LayoutFrames: Sendable {
     public static func cli(environment: @escaping @Sendable () async -> ToolEnvironment, snapshot: SnapshotStore.Take?) -> Plugins {
       Plugins(
         add: { source, project, withSnapshot in
-          await PluginCommands.shared.add(source: source, project: project, environment: environment(), snapshot: withSnapshot ? snapshot : nil)
+          await PluginCommands.shared.add(source: source, project: project.path, environment: environment(), snapshot: withSnapshot ? snapshot : nil)
         },
-        remove: { name, project in await PluginCommands.shared.remove(name: name, project: project, environment: environment()) })
+        remove: { name, project in await PluginCommands.shared.remove(name: name, project: project.path, environment: environment()) })
     }
   }
 

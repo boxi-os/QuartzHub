@@ -41,7 +41,7 @@ struct PluginSchemaReaderTests {
     let queries = spec["options"]!.arrayValue!
     let sources = try queries.map { try #require(PluginSource($0["source"]), "\(JSJSON.stringify($0["source"]!))") }
     let reader = PluginSchemaReader()
-    let results = await reader.optionSchemas(project: project, sources: sources, runtime: HelperRuntime.runtime)
+    let results = await reader.optionSchemas(project: project.path, sources: sources, runtime: HelperRuntime.runtime)
     for (query, result) in zip(queries, results) {
       let ours = try JSJSON.parse(masked(JSJSON.stringify(result.canonicalJSON)))
       #expect(Self.comparable(ours) == Self.comparable(query["expected"]!), "\(JSJSON.stringify(query["source"]!))")
@@ -49,18 +49,18 @@ struct PluginSchemaReaderTests {
 
     if let frames = spec["frames"], frames != .null {
       let plugins = frames["plugins"]!.arrayValue!.map { (name: $0["name"]!.stringValue!, source: $0["source"]) }
-      let found = await reader.pageTypeFrames(project: project, plugins: plugins, runtime: HelperRuntime.runtime)
+      let found = await reader.pageTypeFrames(project: project.path, plugins: plugins, runtime: HelperRuntime.runtime)
       let expected = frames["expected"]!.objectValue!
       #expect(found == Dictionary(uniqueKeysWithValues: expected.keys.map { ($0, expected[$0]!.stringValue!) }))
     }
 
     for theme in spec["themes"]?.arrayValue ?? [] {
       let id = theme["id"]!.stringValue!
-      let info = PluginSchemaReader.themeStyleSettings(project: project, themeId: id).map {
+      let info = PluginSchemaReader.themeStyleSettings(project: project.path, themeId: id).map {
         JSONValue.object(JSONObject([("styleSettingsId", .array($0.styleSettingsId.map(JSONValue.string))),
                                      ("classSettingKeys", .array($0.classSettingKeys.map(JSONValue.string)))]))
       } ?? .null
-      let detail = PluginSchemaReader.localThemeDetail(project: project, themeId: id).map {
+      let detail = PluginSchemaReader.localThemeDetail(project: project.path, themeId: id).map {
         JSONValue.object(JSONObject([("modes", .array($0.modes.map(JSONValue.string))), ("variations", .array($0.variations.map(JSONValue.string))),
                                      ("styleSettingsId", .array($0.styleSettingsId.map(JSONValue.string))), ("fonts", .array($0.fonts.map(JSONValue.string)))]))
       } ?? .null
@@ -126,16 +126,16 @@ struct PluginSchemaReaderTests {
     let reader = PluginSchemaReader()
     let sources = ["a", "b", "c", "local"].map { PluginSource.string("github:x/\($0)") }
 
-    let first = await reader.optionSchemas(project: project, sources: sources, runtime: runtime)
+    let first = await reader.optionSchemas(project: project.path, sources: sources, runtime: runtime)
     #expect(first.map { $0.schema?.fields.map(\.key) ?? [] } == [["a"], ["b"], ["c"], ["x"]])
     #expect(calls() == 1)
-    _ = await reader.optionSchemas(project: project, sources: sources, runtime: runtime)
+    _ = await reader.optionSchemas(project: project.path, sources: sources, runtime: runtime)
     #expect(calls() == 1, "cached")
 
     // `quartz plugin update` writes new declarations: the next read sees them.
     try "export interface BOptions { b: string; added: boolean }\n"
       .write(to: project.appendingPathComponent(".quartz/plugins/b/dist/index.d.ts"), atomically: true, encoding: .utf8)
-    let second = await reader.optionSchemas(project: project, sources: sources, runtime: runtime)
+    let second = await reader.optionSchemas(project: project.path, sources: sources, runtime: runtime)
     #expect(second[1].schema?.fields.map(\.key) == ["b", "added"])
     #expect(calls() == 2)
   }
@@ -147,12 +147,12 @@ struct PluginSchemaReaderTests {
     var broken = HelperRuntime.runtime
     broken.helpers = "\(scratch.path)/no-helpers"
     let reader = PluginSchemaReader()
-    let results = await reader.optionSchemas(project: project, sources: [.string("github:x/a"), .string("github:x/local")], runtime: broken)
+    let results = await reader.optionSchemas(project: project.path, sources: [.string("github:x/a"), .string("github:x/local")], runtime: broken)
     #expect(results[0].schema == nil)
     #expect(Self.sentence(.string(results[0].unreadable ?? "")) == .string("<pluginSchemaTypesUnreadable>"))
     #expect(results[1].schema?.fields.map(\.key) == ["x"], "a schema from package.json needs no helper")
     // Not cached: with the helper back, the answer comes.
-    let again = await reader.optionSchemas(project: project, sources: [.string("github:x/a")], runtime: HelperRuntime.runtime)
+    let again = await reader.optionSchemas(project: project.path, sources: [.string("github:x/a")], runtime: HelperRuntime.runtime)
     #expect(again[0].schema?.fields.map(\.key) == ["a"])
   }
 
@@ -163,7 +163,7 @@ struct PluginSchemaReaderTests {
     try FileManager.default.createDirectory(at: locked, withIntermediateDirectories: true)
     chmod(locked.path, 0)
     defer { chmod(locked.path, 0o755) }
-    let result = await PluginSchemaReader().optionSchema(project: project, source: .string("github:x/a"), runtime: HelperRuntime.runtime)
+    let result = await PluginSchemaReader().optionSchema(project: project.path, source: .string("github:x/a"), runtime: HelperRuntime.runtime)
     #expect(Self.sentence(.string(result.unreadable ?? "")) == .string("<pluginSchemaTypesUnreadable>"), "\(String(describing: result.unreadable))")
   }
 
@@ -175,8 +175,8 @@ struct PluginSchemaReaderTests {
     try #"x = { match: 1, frame: "one" }"#.write(to: dir.appendingPathComponent("i.js"), atomically: true, encoding: .utf8)
     let reader = PluginSchemaReader()
     let plugins: [(name: String, source: JSONValue?)] = [("pt", .string("@quartz-community/pt")), ("same", .string("@quartz-community/pt"))]
-    #expect(await reader.pageTypeFrames(project: project, plugins: plugins, runtime: HelperRuntime.runtime) == ["pt": "one", "same": "one"])
+    #expect(await reader.pageTypeFrames(project: project.path, plugins: plugins, runtime: HelperRuntime.runtime) == ["pt": "one", "same": "one"])
     try #"x = { match: 1, frame: "two!" }"#.write(to: dir.appendingPathComponent("i.js"), atomically: true, encoding: .utf8)
-    #expect(await reader.pageTypeFrames(project: project, plugins: plugins, runtime: HelperRuntime.runtime) == ["pt": "two!", "same": "two!"])
+    #expect(await reader.pageTypeFrames(project: project.path, plugins: plugins, runtime: HelperRuntime.runtime) == ["pt": "two!", "same": "two!"])
   }
 }

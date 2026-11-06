@@ -47,7 +47,7 @@ public enum ScssCheck {
 
   /// The helper's answer per call, or why there is no Sass to ask.
   static func compile(_ project: URL, _ calls: [Call], runtime: RuntimeLocation) async -> Swift.Result<[Compiled], Unanswered> {
-    if let unpacking = ProjectDependencies.halfUnpackedModule(project: project, "sass") {
+    if let unpacking = ProjectDependencies.halfUnpackedModule(project: project.path, "sass") {
       return .failure(Unanswered(reason: L10n.t("main.styleSassUnpacking", ["name": unpacking])))
     }
     let request = JSONObject([("project", .string(project.path)), ("calls", .array(calls.map(\.json)))])
