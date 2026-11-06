@@ -23,7 +23,7 @@ Abschnitt in `../QuartzControl/docs/decisions/`. Die Messungen und Ränder dort 
   (Prüfungen, Nachfolger der `check:*`-Skripte) und `QuartzHubCoreTests` (Swift Testing). Der
   String Catalog liegt hier (`Resources/Localizable.xcstrings`), weil auch der Kern Texte hat.
 - `UITests/` — XCUITest-Rauchtest (Nachfolger von `npm run smoke`).
-- `Helpers/` — JS-Helfer (`yaml-edit`, `dts-schema`), mit esbuild zu `.cjs` gebündelt.
+- `Helpers/` — JS-Helfer (`yaml-edit`; `dts-schema`: `.d.ts` und Page-Type-Einstiege mit TypeScripts Parser), mit esbuild zu `.cjs` gebündelt.
 - `Runtime/` — geholtes Node und git (nicht versioniert). `Resources/licenses/` — Lizenztexte.
 - `project.yml` — Quelle des Xcode-Projekts (XcodeGen). `QuartzHub.xcodeproj` und
   `App/Info.plist` sind erzeugt und nicht versioniert.
@@ -51,6 +51,9 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
 - `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins}-golden.mjs` — dasselbe für
   `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies` und `PluginCommands`
+- `Runtime/node/bin/node scripts/option-schema-golden.mjs [QuartzControl] [gui-test]` — Plugin-Namen,
+  Normalisierer und Leser des Options-Schemas aus QuartzControls Code; liest gui-tests Plugins (nur lesend)
+  und kopiert ihre package.json und `.d.ts` nach `Fixtures/option-schema/real`
 - `node scripts/import-strings.mjs <QuartzControl> [--check]` — der einmalige Textimport
   (2026-11-06). Seitdem ist der Katalog die Quelle; `--check` weicht ab, sobald ein neuer Text dazukam
 

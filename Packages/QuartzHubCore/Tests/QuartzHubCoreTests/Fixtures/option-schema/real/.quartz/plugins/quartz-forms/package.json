@@ -1,0 +1,1840 @@
+{
+  "name": "quartz-forms",
+  "version": "0.6.0",
+  "description": "Quartz v5 plugin for web forms: contact, feedback, sign-up and survey forms rendered at build time, validated in the browser, encrypted with OpenPGP before they leave the page, and sent through a configurable transport (own relay, generic endpoint, mailto).",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "author": "boxi-os",
+  "homepage": "https://github.com/boxi-os/quartz-forms",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boxi-os/quartz-forms"
+  },
+  "keywords": [
+    "quartz",
+    "quartz-plugin",
+    "forms",
+    "contact-form",
+    "openpgp"
+  ],
+  "files": [
+    "dist",
+    "relay/php/send.php",
+    "relay/php/config.example.php",
+    "relay/php/counters/.htaccess",
+    "relay/php/counters/qf-probe.count",
+    "relay/php/README.md",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier . --check",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint && npm run format && npm run test",
+    "relay:config": "node scripts/relay-config.mjs"
+  },
+  "peerDependencies": {
+    "preact": "^10.0.0",
+    "vfile": "^6.0.3"
+  },
+  "dependencies": {
+    "@quartz-community/types": "^0.2.1",
+    "@quartz-community/utils": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/hast": "^3.0.4",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^24.10.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "hast-util-to-html": "^9.0.5",
+    "hast-util-to-jsx-runtime": "^2.3.6",
+    "hast-util-to-string": "^3.0.1",
+    "hastscript": "^9.0.1",
+    "jsdom": "^25.0.1",
+    "openpgp": "^6.3.2",
+    "preact": "^10.28.2",
+    "preact-render-to-string": "^6.8.1",
+    "prettier": "^3.6.2",
+    "rehype-raw": "^7.0.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "sass": "^1.97.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0",
+    "vfile": "^6.0.3",
+    "vitest": "^2.1.9",
+    "yaml": "^2.9.1"
+  },
+  "quartz": {
+    "name": "quartz-forms",
+    "displayName": "Forms",
+    "description": "Web forms for Quartz: contact, feedback, sign-up and survey forms, encrypted with OpenPGP in the browser, sent through a configurable transport.",
+    "category": [
+      "transformer",
+      "emitter",
+      "component"
+    ],
+    "version": "0.6.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultEnabled": true,
+    "defaultOrder": 70,
+    "defaultOptions": {
+      "forms": {},
+      "transport": {
+        "kind": "relay"
+      },
+      "keys": {},
+      "spam": {
+        "honeypot": true,
+        "minSeconds": 3,
+        "noScript": true,
+        "pow": false,
+        "powDifficulty": 16,
+        "captcha": "none",
+        "captchaSiteKey": "",
+        "rateLimitPerHour": 60,
+        "maxFieldLength": 2000,
+        "maxTextareaLength": 20000,
+        "maxKeyLength": 16384,
+        "maxBytes": 131072
+      },
+      "frontmatterKey": "form",
+      "codeBlockLang": "quartz-form",
+      "layoutForm": "",
+      "language": "auto",
+      "texts": {}
+    },
+    "components": {
+      "FormBox": {
+        "displayName": "Form",
+        "defaultPosition": "afterBody",
+        "defaultPriority": 20
+      }
+    },
+    "configSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "forms": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/formDefinition"
+          },
+          "description": "The forms of this site, by id. A page embeds a form by this id.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Die Formulare dieser Website, nach Kennung. Eine Seite bindet ein Formular über diese Kennung ein.",
+              "group": "Formulare"
+            }
+          },
+          "x-quartz-order": 10,
+          "x-quartz-group": "Forms"
+        },
+        "transport": {
+          "$ref": "#/$defs/transport",
+          "description": "Where a submission goes. Every form can override single fields of it.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Wohin eine Sendung geht. Jedes Formular kann einzelne Felder davon überschreiben.",
+              "group": "Versand"
+            }
+          },
+          "x-quartz-order": 100,
+          "x-quartz-group": "Sending"
+        },
+        "keys": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/keySource"
+          },
+          "description": "Public PGP keys, by name. A form names the keys it encrypts to.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Öffentliche PGP-Schlüssel, nach Name. Ein Formular nennt die Schlüssel, für die es verschlüsselt.",
+              "group": "Versand"
+            }
+          },
+          "x-quartz-order": 110,
+          "x-quartz-group": "Sending"
+        },
+        "spam": {
+          "$ref": "#/$defs/spam",
+          "description": "Spam protection and size limits. Every form can override single fields of it.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Spam-Schutz und Größengrenzen. Jedes Formular kann einzelne Felder davon überschreiben.",
+              "group": "Spam-Schutz"
+            }
+          },
+          "x-quartz-order": 200,
+          "x-quartz-group": "Spam protection"
+        },
+        "frontmatterKey": {
+          "type": "string",
+          "description": "Frontmatter key that embeds a form on a page (form: contact) or hides the form placed through the layout on this page (form: false).",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Frontmatter-Schlüssel, der ein Formular auf einer Seite einbindet (form: kontakt) oder das über das Layout platzierte auf dieser Seite ausblendet (form: false).",
+              "group": "Technisch"
+            }
+          },
+          "x-quartz-order": 900,
+          "x-quartz-advanced": true,
+          "x-quartz-group": "Technical"
+        },
+        "codeBlockLang": {
+          "type": "string",
+          "description": "Language tag of the fenced code block that embeds a form in the text.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Sprachkennung des eingezäunten Codeblocks, der ein Formular im Text einbindet.",
+              "group": "Technisch"
+            }
+          },
+          "x-quartz-order": 910,
+          "x-quartz-advanced": true,
+          "x-quartz-group": "Technical"
+        },
+        "layoutForm": {
+          "type": "string",
+          "description": "Id of the form placed through the layout block of this entry (sidebar, footer, after the body on every page). Empty: forms are embedded per page only.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Kennung des Formulars, das über den Layout-Block dieses Eintrags platziert wird (Sidebar, Footer, unter dem Text auf jeder Seite). Leer: Formulare nur je Seite eingebunden.",
+              "group": "Formulare"
+            }
+          },
+          "x-quartz-order": 50,
+          "x-quartz-group": "Forms"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language of the form placed through the layout: auto takes the page language, or a language code.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Sprache des über das Layout platzierten Formulars: auto nimmt die Seitensprache, oder ein Sprachcode.",
+              "group": "Technisch"
+            }
+          },
+          "x-quartz-order": 920,
+          "x-quartz-group": "Technical"
+        },
+        "texts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "description": "Own wording for the plugin's texts, by locale and text key (de: { submit: Abschicken }).",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Eigener Wortlaut für die Texte von quartz-forms, nach Sprache und Textschlüssel (de: { submit: Abschicken }).",
+              "group": "Technisch"
+            }
+          },
+          "x-quartz-order": 930,
+          "x-quartz-advanced": true,
+          "x-quartz-group": "Technical"
+        }
+      },
+      "$defs": {
+        "text": {
+          "description": "A text: one string for every language, or a record keyed by language code.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Ein Text: eine Zeichenkette für alle Sprachen oder ein Record nach Sprachcode."
+            }
+          },
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "x-quartz-keys": "languages"
+            }
+          ]
+        },
+        "formDefinition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "template": {
+              "type": "string",
+              "enum": [
+                "contact",
+                "feedback",
+                "rsvp",
+                "survey"
+              ],
+              "description": "Start from a built-in field set. Own fields replace it entirely.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Mit einem mitgelieferten Feldsatz beginnen. Eigene Felder ersetzen ihn ganz."
+                }
+              },
+              "x-quartz-order": 10
+            },
+            "title": {
+              "$ref": "#/$defs/text",
+              "description": "Heading above the form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Überschrift über dem Formular."
+                }
+              },
+              "x-quartz-order": 20
+            },
+            "description": {
+              "$ref": "#/$defs/text",
+              "description": "A sentence under the heading.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Satz unter der Überschrift."
+                }
+              },
+              "x-quartz-order": 30
+            },
+            "submitLabel": {
+              "$ref": "#/$defs/text",
+              "description": "Text of the submit button; default from the plugin's texts.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Text des Senden-Buttons; Vorgabe aus den Texten von quartz-forms."
+                }
+              },
+              "x-quartz-order": 40
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/field"
+              },
+              "description": "The fields, in order. Required unless a template is set.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Die Felder, in Reihenfolge. Pflicht, wenn keine Vorlage gewählt ist."
+                }
+              },
+              "x-quartz-order": 50
+            },
+            "recipient": {
+              "type": "string",
+              "description": "Who receives the submission: for the relay a name it maps to an address in its own config.php (the address never reaches the site); for mailto the address.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wer die Sendung bekommt: für das Relay ein Name, den es in seiner config.php auf eine Adresse abbildet (die Adresse kommt nie auf die Website); für mailto die Adresse."
+                }
+              },
+              "x-quartz-order": 60
+            },
+            "subject": {
+              "$ref": "#/$defs/text",
+              "description": "Fixed subject line of the mail.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Fester Betreff der Mail."
+                }
+              },
+              "x-quartz-order": 70
+            },
+            "transport": {
+              "$ref": "#/$defs/transportOverride",
+              "description": "Overrides single fields of the global transport.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Überschreibt einzelne Felder des globalen Versandwegs."
+                }
+              },
+              "x-quartz-order": 80,
+              "x-quartz-advanced": true
+            },
+            "encryption": {
+              "$ref": "#/$defs/encryption",
+              "description": "Encryption in the browser before sending. Default: off.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Verschlüsselung im Browser vor dem Senden. Vorgabe: aus."
+                }
+              },
+              "x-quartz-order": 90
+            },
+            "anonymous": {
+              "type": "boolean",
+              "description": "Anonymous mode: no required personal fields, no Reply-To, no page context, no third-party captcha, no logging in the relay.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Anonymer Modus: keine Pflicht-Personenfelder, kein Reply-To, kein Seitenkontext, kein fremdes Captcha, kein Protokoll im Relay."
+                }
+              },
+              "x-quartz-order": 100
+            },
+            "pageContext": {
+              "type": "boolean",
+              "description": "Send the page's title and slug along (for a feedback form).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Titel und Slug der Seite mitschicken (für ein Feedback-Formular)."
+                }
+              },
+              "x-quartz-order": 110
+            },
+            "spam": {
+              "$ref": "#/$defs/spamOverride",
+              "description": "Overrides single fields of the global spam settings.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Überschreibt einzelne Felder der globalen Spam-Einstellungen."
+                }
+              },
+              "x-quartz-order": 120,
+              "x-quartz-advanced": true
+            },
+            "success": {
+              "$ref": "#/$defs/success",
+              "description": "What happens after a successful send. Default: a thank-you sentence in place.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Was nach dem Senden passiert. Vorgabe: ein Dankessatz an Ort und Stelle."
+                }
+              },
+              "x-quartz-order": 130
+            },
+            "className": {
+              "type": "string",
+              "description": "Extra class(es) on the form element, next to the fixed quartz-form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Zusätzliche Klasse(n) am Formular, neben der festen quartz-form."
+                }
+              },
+              "x-quartz-order": 140,
+              "x-quartz-advanced": true
+            }
+          }
+        },
+        "fieldWidth": {
+          "type": "string",
+          "enum": [
+            "full",
+            "half",
+            "third"
+          ]
+        },
+        "choiceLayout": {
+          "type": "string",
+          "enum": [
+            "stacked",
+            "inline"
+          ]
+        },
+        "showIf": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "type": "string",
+              "description": "The name of an earlier select, radio, checkboxes, checkbox or scale field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Name eines früheren Felds vom Typ select, radio, checkboxes, checkbox oder scale."
+                }
+              }
+            },
+            "equals": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "description": "The value or values that show the field: an option value, \"yes\" for a ticked checkbox, a scale's number.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Wert oder die Werte, bei denen das Feld erscheint: ein Optionswert, \"yes\" für ein angehaktes Häkchen, die Zahl einer Skala."
+                }
+              }
+            }
+          },
+          "required": [
+            "field",
+            "equals"
+          ]
+        },
+        "field": {
+          "description": "One field; its type decides the other keys.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "Ein Feld; sein Typ bestimmt die übrigen Schlüssel."
+            }
+          },
+          "anyOf": [
+            {
+              "$ref": "#/$defs/inputField"
+            },
+            {
+              "$ref": "#/$defs/choiceField"
+            },
+            {
+              "$ref": "#/$defs/checkboxField"
+            },
+            {
+              "$ref": "#/$defs/scaleField"
+            },
+            {
+              "$ref": "#/$defs/consentField"
+            },
+            {
+              "$ref": "#/$defs/pgpKeyField"
+            },
+            {
+              "$ref": "#/$defs/hiddenField"
+            },
+            {
+              "$ref": "#/$defs/pageBreakField"
+            }
+          ]
+        },
+        "inputField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "text",
+                "email",
+                "tel",
+                "url",
+                "number",
+                "date",
+                "textarea"
+              ],
+              "description": "A single-value field rendered as an input or a textarea.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Feld mit einem Wert, als Eingabefeld oder Textfeld."
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name in the submission: a letter, then letters, digits, _ or -; unique per form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Name in der Sendung: ein Buchstabe, dann Buchstaben, Ziffern, _ oder -; eindeutig je Formular."
+                }
+              }
+            },
+            "label": {
+              "$ref": "#/$defs/text",
+              "description": "Label shown above the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Bezeichnung über dem Feld."
+                }
+              }
+            },
+            "required": {
+              "type": "boolean",
+              "description": "The visitor must fill this field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Besucher muss dieses Feld ausfüllen."
+                }
+              }
+            },
+            "hint": {
+              "$ref": "#/$defs/text",
+              "description": "A sentence under the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Satz unter dem Feld."
+                }
+              }
+            },
+            "placeholder": {
+              "$ref": "#/$defs/text",
+              "description": "Grey example text inside the empty field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Grauer Beispieltext im leeren Feld."
+                }
+              }
+            },
+            "autocomplete": {
+              "type": "string",
+              "description": "HTML autocomplete token (name, email, tel, off).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "HTML-autocomplete-Kennung (name, email, tel, off)."
+                }
+              }
+            },
+            "pattern": {
+              "type": "string",
+              "description": "Regular expression the value must match.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Regulärer Ausdruck, dem der Wert entsprechen muss."
+                }
+              }
+            },
+            "min": {
+              "type": "number",
+              "description": "Lower bound for number.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Untergrenze für number."
+                }
+              }
+            },
+            "max": {
+              "type": "number",
+              "description": "Upper bound for number.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Obergrenze für number."
+                }
+              }
+            },
+            "step": {
+              "type": "number",
+              "description": "Step for number.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Schrittweite für number."
+                }
+              }
+            },
+            "rows": {
+              "type": "integer",
+              "description": "Rows of a textarea.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Zeilen eines Textfelds."
+                }
+              }
+            },
+            "maxLength": {
+              "type": "integer",
+              "description": "Maximum length in characters; default from the spam settings.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Höchstlänge in Zeichen; Vorgabe aus den Spam-Einstellungen."
+                }
+              }
+            },
+            "width": {
+              "$ref": "#/$defs/fieldWidth",
+              "description": "How much of the form's width the field takes: full (default), half or third. Falls to halves, then to one column in a narrow form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wie viel der Formularbreite das Feld einnimmt: full (Vorgabe), half oder third. Wird in einem schmalen Formular zu Hälften, dann zu einer Spalte.",
+                  "enum": {
+                    "full": "ganze Breite",
+                    "half": "halbe Breite",
+                    "third": "ein Drittel"
+                  }
+                }
+              }
+            },
+            "showIf": {
+              "$ref": "#/$defs/showIf",
+              "description": "Show the field only while an earlier field has one of the given values; otherwise it is not required, not sent and not mailed.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Das Feld nur zeigen, solange ein früheres Feld einen der Werte hat; sonst ist es weder Pflicht noch wird es gesendet oder gemailt."
+                }
+              }
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "label"
+          ]
+        },
+        "choiceOption": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Value in the submission.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wert in der Sendung."
+                }
+              }
+            },
+            "label": {
+              "$ref": "#/$defs/text",
+              "description": "Label shown to the visitor.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Bezeichnung für den Besucher."
+                }
+              }
+            }
+          },
+          "required": [
+            "value",
+            "label"
+          ]
+        },
+        "choiceField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "select",
+                "radio",
+                "checkboxes"
+              ],
+              "description": "One of several (select, radio) or several of several (checkboxes).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Eins von mehreren (select, radio) oder mehrere von mehreren (checkboxes)."
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name in the submission: a letter, then letters, digits, _ or -; unique per form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Name in der Sendung: ein Buchstabe, dann Buchstaben, Ziffern, _ oder -; eindeutig je Formular."
+                }
+              }
+            },
+            "label": {
+              "$ref": "#/$defs/text",
+              "description": "Label shown above the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Bezeichnung über dem Feld."
+                }
+              }
+            },
+            "required": {
+              "type": "boolean",
+              "description": "The visitor must fill this field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Besucher muss dieses Feld ausfüllen."
+                }
+              }
+            },
+            "hint": {
+              "$ref": "#/$defs/text",
+              "description": "A sentence under the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Satz unter dem Feld."
+                }
+              }
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/choiceOption"
+              },
+              "description": "The options, in order.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Die Optionen, in Reihenfolge."
+                }
+              }
+            },
+            "width": {
+              "$ref": "#/$defs/fieldWidth",
+              "description": "How much of the form's width the field takes: full (default), half or third. Falls to halves, then to one column in a narrow form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wie viel der Formularbreite das Feld einnimmt: full (Vorgabe), half oder third. Wird in einem schmalen Formular zu Hälften, dann zu einer Spalte.",
+                  "enum": {
+                    "full": "ganze Breite",
+                    "half": "halbe Breite",
+                    "third": "ein Drittel"
+                  }
+                }
+              }
+            },
+            "layout": {
+              "$ref": "#/$defs/choiceLayout",
+              "description": "How the options stand: stacked (default) under each other or inline side by side. No effect on a select.",
+              "x-quartz-when": {
+                "type": [
+                  "radio",
+                  "checkboxes"
+                ]
+              },
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wie die Optionen stehen: stacked (Vorgabe) untereinander oder inline nebeneinander. Wirkt nicht bei select.",
+                  "enum": {
+                    "stacked": "untereinander",
+                    "inline": "nebeneinander"
+                  }
+                }
+              }
+            },
+            "showIf": {
+              "$ref": "#/$defs/showIf",
+              "description": "Show the field only while an earlier field has one of the given values; otherwise it is not required, not sent and not mailed.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Das Feld nur zeigen, solange ein früheres Feld einen der Werte hat; sonst ist es weder Pflicht noch wird es gesendet oder gemailt."
+                }
+              }
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "label",
+            "options"
+          ]
+        },
+        "checkboxField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "checkbox"
+              ],
+              "description": "A single checkbox with a label.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein einzelnes Häkchen mit Bezeichnung."
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name in the submission: a letter, then letters, digits, _ or -; unique per form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Name in der Sendung: ein Buchstabe, dann Buchstaben, Ziffern, _ oder -; eindeutig je Formular."
+                }
+              }
+            },
+            "label": {
+              "$ref": "#/$defs/text",
+              "description": "Label shown above the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Bezeichnung über dem Feld."
+                }
+              }
+            },
+            "required": {
+              "type": "boolean",
+              "description": "The visitor must fill this field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Besucher muss dieses Feld ausfüllen."
+                }
+              }
+            },
+            "hint": {
+              "$ref": "#/$defs/text",
+              "description": "A sentence under the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Satz unter dem Feld."
+                }
+              }
+            },
+            "width": {
+              "$ref": "#/$defs/fieldWidth",
+              "description": "How much of the form's width the field takes: full (default), half or third. Falls to halves, then to one column in a narrow form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wie viel der Formularbreite das Feld einnimmt: full (Vorgabe), half oder third. Wird in einem schmalen Formular zu Hälften, dann zu einer Spalte.",
+                  "enum": {
+                    "full": "ganze Breite",
+                    "half": "halbe Breite",
+                    "third": "ein Drittel"
+                  }
+                }
+              }
+            },
+            "showIf": {
+              "$ref": "#/$defs/showIf",
+              "description": "Show the field only while an earlier field has one of the given values; otherwise it is not required, not sent and not mailed.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Das Feld nur zeigen, solange ein früheres Feld einen der Werte hat; sonst ist es weder Pflicht noch wird es gesendet oder gemailt."
+                }
+              }
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "label"
+          ]
+        },
+        "scaleField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "scale"
+              ],
+              "description": "A rating from min to max, as a row of radio buttons.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Eine Bewertung von min bis max, als Reihe von Radiobuttons."
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name in the submission: a letter, then letters, digits, _ or -; unique per form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Name in der Sendung: ein Buchstabe, dann Buchstaben, Ziffern, _ oder -; eindeutig je Formular."
+                }
+              }
+            },
+            "label": {
+              "$ref": "#/$defs/text",
+              "description": "Label shown above the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Bezeichnung über dem Feld."
+                }
+              }
+            },
+            "required": {
+              "type": "boolean",
+              "description": "The visitor must fill this field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Besucher muss dieses Feld ausfüllen."
+                }
+              }
+            },
+            "hint": {
+              "$ref": "#/$defs/text",
+              "description": "A sentence under the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Satz unter dem Feld."
+                }
+              }
+            },
+            "min": {
+              "type": "integer",
+              "description": "Lowest value.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Kleinster Wert."
+                }
+              }
+            },
+            "max": {
+              "type": "integer",
+              "description": "Highest value; at most 20 above min.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Größter Wert; höchstens 20 über min."
+                }
+              }
+            },
+            "minLabel": {
+              "$ref": "#/$defs/text",
+              "description": "Caption at the low end.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Beschriftung am unteren Ende."
+                }
+              }
+            },
+            "maxLabel": {
+              "$ref": "#/$defs/text",
+              "description": "Caption at the high end.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Beschriftung am oberen Ende."
+                }
+              }
+            },
+            "width": {
+              "$ref": "#/$defs/fieldWidth",
+              "description": "How much of the form's width the field takes: full (default), half or third. Falls to halves, then to one column in a narrow form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wie viel der Formularbreite das Feld einnimmt: full (Vorgabe), half oder third. Wird in einem schmalen Formular zu Hälften, dann zu einer Spalte.",
+                  "enum": {
+                    "full": "ganze Breite",
+                    "half": "halbe Breite",
+                    "third": "ein Drittel"
+                  }
+                }
+              }
+            },
+            "showIf": {
+              "$ref": "#/$defs/showIf",
+              "description": "Show the field only while an earlier field has one of the given values; otherwise it is not required, not sent and not mailed.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Das Feld nur zeigen, solange ein früheres Feld einen der Werte hat; sonst ist es weder Pflicht noch wird es gesendet oder gemailt."
+                }
+              }
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "label",
+            "min",
+            "max"
+          ]
+        },
+        "consentField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "consent"
+              ],
+              "description": "A checkbox the visitor must tick, with a sentence and an optional link.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Häkchen, das der Besucher setzen muss, mit einem Satz und optionalem Link."
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name in the submission.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Name in der Sendung."
+                }
+              }
+            },
+            "text": {
+              "$ref": "#/$defs/text",
+              "description": "The sentence next to the checkbox.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Satz neben dem Häkchen."
+                }
+              }
+            },
+            "link": {
+              "type": "string",
+              "description": "Link target shown after the sentence (privacy policy).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Linkziel nach dem Satz (Datenschutzerklärung)."
+                }
+              }
+            },
+            "linkLabel": {
+              "$ref": "#/$defs/text",
+              "description": "Link text; default from the plugin's texts.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Linktext; Vorgabe aus den Texten von quartz-forms."
+                }
+              }
+            },
+            "width": {
+              "$ref": "#/$defs/fieldWidth",
+              "description": "How much of the form's width the field takes: full (default), half or third. Falls to halves, then to one column in a narrow form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wie viel der Formularbreite das Feld einnimmt: full (Vorgabe), half oder third. Wird in einem schmalen Formular zu Hälften, dann zu einer Spalte.",
+                  "enum": {
+                    "full": "ganze Breite",
+                    "half": "halbe Breite",
+                    "third": "ein Drittel"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "text"
+          ]
+        },
+        "pgpKeyField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "pgpKey"
+              ],
+              "description": "The visitor's own public PGP key, pasted or chosen as a file, so the owner can reply encrypted.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der eigene öffentliche PGP-Schlüssel des Besuchers, eingefügt oder als Datei gewählt, damit verschlüsselt geantwortet werden kann."
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name in the submission: a letter, then letters, digits, _ or -; unique per form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Name in der Sendung: ein Buchstabe, dann Buchstaben, Ziffern, _ oder -; eindeutig je Formular."
+                }
+              }
+            },
+            "label": {
+              "$ref": "#/$defs/text",
+              "description": "Label shown above the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Bezeichnung über dem Feld."
+                }
+              }
+            },
+            "required": {
+              "type": "boolean",
+              "description": "The visitor must fill this field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Besucher muss dieses Feld ausfüllen."
+                }
+              }
+            },
+            "hint": {
+              "$ref": "#/$defs/text",
+              "description": "A sentence under the field.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Satz unter dem Feld."
+                }
+              }
+            },
+            "width": {
+              "$ref": "#/$defs/fieldWidth",
+              "description": "How much of the form's width the field takes: full (default), half or third. Falls to halves, then to one column in a narrow form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Wie viel der Formularbreite das Feld einnimmt: full (Vorgabe), half oder third. Wird in einem schmalen Formular zu Hälften, dann zu einer Spalte.",
+                  "enum": {
+                    "full": "ganze Breite",
+                    "half": "halbe Breite",
+                    "third": "ein Drittel"
+                  }
+                }
+              }
+            },
+            "showIf": {
+              "$ref": "#/$defs/showIf",
+              "description": "Show the field only while an earlier field has one of the given values; otherwise it is not required, not sent and not mailed.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Das Feld nur zeigen, solange ein früheres Feld einen der Werte hat; sonst ist es weder Pflicht noch wird es gesendet oder gemailt."
+                }
+              }
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "label"
+          ]
+        },
+        "hiddenField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "hidden"
+              ],
+              "description": "A fixed value sent along, invisible.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein fester Wert, der unsichtbar mitgeschickt wird."
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name in the submission.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Name in der Sendung."
+                }
+              }
+            },
+            "value": {
+              "type": "string",
+              "description": "The value.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Wert."
+                }
+              }
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "value"
+          ]
+        },
+        "pageBreakField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "pageBreak"
+              ],
+              "description": "A page break: the fields after it are the next step of the form.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Seitenumbruch: Die Felder danach sind der nächste Schritt des Formulars."
+                }
+              }
+            },
+            "title": {
+              "$ref": "#/$defs/text",
+              "description": "Heading of the step that starts here.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Überschrift des Schritts, der hier beginnt."
+                }
+              }
+            },
+            "showIf": {
+              "$ref": "#/$defs/showIf",
+              "description": "Skip the step that starts here unless an earlier field has one of the given values.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Den Schritt, der hier beginnt, überspringen, außer ein früheres Feld hat einen der Werte."
+                }
+              }
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "transport": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "relay",
+                "endpoint",
+                "formspree",
+                "web3forms",
+                "mailto",
+                "demo"
+              ],
+              "description": "relay: the plugin's own PHP relay. endpoint: any URL that takes a POST. formspree, web3forms: presets for those services. mailto: opens the visitor's mail program. demo: sends nothing and shows below the form what would have been sent.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "relay: das eigene PHP-Relay von quartz-forms. endpoint: jede URL, die einen POST annimmt. formspree, web3forms: Voreinstellungen für diese Dienste. mailto: öffnet das Mailprogramm des Besuchers. demo: sendet nichts und zeigt unter dem Formular, was gesendet worden wäre."
+                }
+              },
+              "x-quartz-order": 10
+            },
+            "url": {
+              "type": "string",
+              "description": "POST target for relay and endpoint; the form id or access key for the presets.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "POST-Ziel für relay und endpoint; die Formular-Kennung oder der Zugangsschlüssel für die Voreinstellungen."
+                }
+              },
+              "x-quartz-order": 20
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "json",
+                "form"
+              ],
+              "description": "Body encoding for endpoint; relay always sends JSON.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Kodierung des Inhalts für endpoint; relay sendet immer JSON."
+                }
+              },
+              "x-quartz-order": 30,
+              "x-quartz-when": {
+                "kind": "endpoint"
+              }
+            },
+            "extra": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Extra fields sent with every submission (a service's access key, for instance).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Zusätzliche Felder, die mit jeder Sendung gehen (etwa der Zugangsschlüssel eines Dienstes)."
+                }
+              },
+              "x-quartz-order": 40,
+              "x-quartz-advanced": true
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        "keySource": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "file": {
+              "type": "string",
+              "description": "Path of an armored public key, relative to the site root.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Pfad einer armierten öffentlichen Schlüsseldatei, relativ zum Site-Ordner."
+                }
+              }
+            },
+            "armored": {
+              "type": "string",
+              "description": "The armored public key itself.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der armierte öffentliche Schlüssel selbst."
+                }
+              }
+            }
+          }
+        },
+        "encryption": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "required",
+                "optional",
+                "off"
+              ],
+              "description": "required: nothing is sent unencrypted; without JavaScript the form cannot send. optional: the visitor decides with a checkbox. off: plain text.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "required: nichts geht unverschlüsselt; ohne JavaScript kann das Formular nicht senden. optional: der Besucher entscheidet per Häkchen. off: Klartext."
+                }
+              },
+              "x-quartz-order": 10
+            },
+            "keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Names from keys to encrypt to; default: all keys.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Namen aus keys, für die verschlüsselt wird; Vorgabe: alle Schlüssel."
+                }
+              },
+              "x-quartz-order": 20
+            },
+            "showFingerprint": {
+              "type": "boolean",
+              "description": "Show the recipient key's fingerprint under the form. Default: true.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Den Fingerabdruck des Empfängerschlüssels unter dem Formular zeigen. Vorgabe: ja."
+                }
+              },
+              "x-quartz-order": 30
+            }
+          },
+          "required": [
+            "mode"
+          ]
+        },
+        "spam": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "honeypot": {
+              "type": "boolean",
+              "description": "An invisible field that must stay empty.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein unsichtbares Feld, das leer bleiben muss."
+                }
+              },
+              "x-quartz-order": 10
+            },
+            "minSeconds": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Whole seconds a visitor needs at least between opening the page and sending. 0 turns it off.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ganze Sekunden, die ein Besucher mindestens zwischen Öffnen der Seite und Senden braucht. 0 schaltet es ab."
+                }
+              },
+              "x-quartz-order": 20
+            },
+            "noScript": {
+              "type": "boolean",
+              "description": "Accept submissions from browsers without JavaScript (plain form posts). They skip the time trap and the proof of work; honeypot, rate limit and field checks still apply.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Sendungen aus Browsern ohne JavaScript annehmen (einfache Formular-Posts). Sie umgehen Zeitfalle und Proof of Work; Honeypot, Ratenbegrenzung und Feldprüfung gelten weiter."
+                }
+              },
+              "x-quartz-order": 25,
+              "x-quartz-advanced": true
+            },
+            "pow": {
+              "type": "boolean",
+              "description": "Proof of work checked by the relay (transport relay only).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Proof-of-Work, das das Relay prüft (nur mit Versandweg relay)."
+                }
+              },
+              "x-quartz-order": 30
+            },
+            "powDifficulty": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 20,
+              "description": "Leading zero bits the proof must reach, 8 to 20; 16 takes up to a second on a desktop, 18 and more take seconds on a phone.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Führende Nullbits, die der Nachweis erreichen muss, 8 bis 20; 16 dauert auf einem Desktop bis zu einer Sekunde, ab 18 auf einem Telefon Sekunden."
+                }
+              },
+              "x-quartz-order": 40,
+              "x-quartz-when": {
+                "pow": true
+              }
+            },
+            "captcha": {
+              "type": "string",
+              "enum": [
+                "none",
+                "turnstile",
+                "hcaptcha"
+              ],
+              "description": "A third-party captcha. Loads that provider's script; ignored for anonymous forms.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Captcha eines Drittanbieters. Lädt dessen Skript; bei anonymen Formularen ignoriert."
+                }
+              },
+              "x-quartz-order": 50
+            },
+            "captchaSiteKey": {
+              "type": "string",
+              "description": "The provider's site key.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Site-Schlüssel des Anbieters."
+                }
+              },
+              "x-quartz-order": 60,
+              "x-quartz-when": {
+                "captcha": [
+                  "turnstile",
+                  "hcaptcha"
+                ]
+              }
+            },
+            "rateLimitPerHour": {
+              "type": "integer",
+              "description": "Submissions per form and hour the relay accepts; 0 turns it off. No addresses are stored.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Sendungen je Formular und Stunde, die das Relay annimmt; 0 schaltet es ab. Es werden keine Adressen gespeichert."
+                }
+              },
+              "x-quartz-order": 70
+            },
+            "maxFieldLength": {
+              "type": "integer",
+              "description": "Default maximum length of a single-line field, in characters.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Vorgabe für die Höchstlänge eines einzeiligen Felds, in Zeichen."
+                }
+              },
+              "x-quartz-order": 80,
+              "x-quartz-advanced": true
+            },
+            "maxTextareaLength": {
+              "type": "integer",
+              "description": "Default maximum length of a textarea, in characters.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Vorgabe für die Höchstlänge eines Textfelds, in Zeichen."
+                }
+              },
+              "x-quartz-order": 90,
+              "x-quartz-advanced": true
+            },
+            "maxKeyLength": {
+              "type": "integer",
+              "description": "Maximum length of a pasted public key, in characters.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Höchstlänge eines eingefügten öffentlichen Schlüssels, in Zeichen."
+                }
+              },
+              "x-quartz-order": 100,
+              "x-quartz-advanced": true
+            },
+            "maxBytes": {
+              "type": "integer",
+              "description": "Maximum size of a whole submission, in bytes.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Höchstgröße einer ganzen Sendung, in Bytes."
+                }
+              },
+              "x-quartz-order": 110,
+              "x-quartz-advanced": true
+            }
+          }
+        },
+        "success": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "inline",
+                "redirect"
+              ],
+              "description": "inline: a sentence replaces the form. redirect: go to a page of the site.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "inline: ein Satz ersetzt das Formular. redirect: zu einer Seite der Website wechseln."
+                }
+              },
+              "x-quartz-order": 10
+            },
+            "text": {
+              "$ref": "#/$defs/text",
+              "description": "The sentence for inline; default from the plugin's texts.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Satz für inline; Vorgabe aus den Texten von quartz-forms."
+                }
+              },
+              "x-quartz-order": 20,
+              "x-quartz-when": {
+                "mode": "inline"
+              }
+            },
+            "slug": {
+              "type": "string",
+              "description": "Slug of the page for redirect (thanks, kontakt/danke).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Slug der Seite für redirect (danke, kontakt/danke)."
+                }
+              },
+              "x-quartz-order": 30,
+              "x-quartz-when": {
+                "mode": "redirect"
+              }
+            }
+          },
+          "required": [
+            "mode"
+          ]
+        },
+        "transportOverride": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "relay",
+                "endpoint",
+                "formspree",
+                "web3forms",
+                "mailto",
+                "demo"
+              ],
+              "description": "relay: the plugin's own PHP relay. endpoint: any URL that takes a POST. formspree, web3forms: presets for those services. mailto: opens the visitor's mail program. demo: sends nothing and shows below the form what would have been sent.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "relay: das eigene PHP-Relay von quartz-forms. endpoint: jede URL, die einen POST annimmt. formspree, web3forms: Voreinstellungen für diese Dienste. mailto: öffnet das Mailprogramm des Besuchers. demo: sendet nichts und zeigt unter dem Formular, was gesendet worden wäre."
+                }
+              },
+              "x-quartz-order": 10
+            },
+            "url": {
+              "type": "string",
+              "description": "POST target for relay and endpoint; the form id or access key for the presets.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "POST-Ziel für relay und endpoint; die Formular-Kennung oder der Zugangsschlüssel für die Voreinstellungen."
+                }
+              },
+              "x-quartz-order": 20
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "json",
+                "form"
+              ],
+              "description": "Body encoding for endpoint; relay always sends JSON.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Kodierung des Inhalts für endpoint; relay sendet immer JSON."
+                }
+              },
+              "x-quartz-order": 30,
+              "x-quartz-when": {
+                "kind": "endpoint"
+              }
+            },
+            "extra": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Extra fields sent with every submission (a service's access key, for instance).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Zusätzliche Felder, die mit jeder Sendung gehen (etwa der Zugangsschlüssel eines Dienstes)."
+                }
+              },
+              "x-quartz-order": 40,
+              "x-quartz-advanced": true
+            }
+          }
+        },
+        "spamOverride": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "honeypot": {
+              "type": "boolean",
+              "description": "An invisible field that must stay empty.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein unsichtbares Feld, das leer bleiben muss."
+                }
+              },
+              "x-quartz-order": 10
+            },
+            "minSeconds": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Whole seconds a visitor needs at least between opening the page and sending. 0 turns it off.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ganze Sekunden, die ein Besucher mindestens zwischen Öffnen der Seite und Senden braucht. 0 schaltet es ab."
+                }
+              },
+              "x-quartz-order": 20
+            },
+            "noScript": {
+              "type": "boolean",
+              "description": "Accept submissions from browsers without JavaScript (plain form posts). They skip the time trap and the proof of work; honeypot, rate limit and field checks still apply.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Sendungen aus Browsern ohne JavaScript annehmen (einfache Formular-Posts). Sie umgehen Zeitfalle und Proof of Work; Honeypot, Ratenbegrenzung und Feldprüfung gelten weiter."
+                }
+              },
+              "x-quartz-order": 25,
+              "x-quartz-advanced": true
+            },
+            "pow": {
+              "type": "boolean",
+              "description": "Proof of work checked by the relay (transport relay only).",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Proof-of-Work, das das Relay prüft (nur mit Versandweg relay)."
+                }
+              },
+              "x-quartz-order": 30
+            },
+            "powDifficulty": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 20,
+              "description": "Leading zero bits the proof must reach, 8 to 20; 16 takes up to a second on a desktop, 18 and more take seconds on a phone.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Führende Nullbits, die der Nachweis erreichen muss, 8 bis 20; 16 dauert auf einem Desktop bis zu einer Sekunde, ab 18 auf einem Telefon Sekunden."
+                }
+              },
+              "x-quartz-order": 40,
+              "x-quartz-when": {
+                "pow": true
+              }
+            },
+            "captcha": {
+              "type": "string",
+              "enum": [
+                "none",
+                "turnstile",
+                "hcaptcha"
+              ],
+              "description": "A third-party captcha. Loads that provider's script; ignored for anonymous forms.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Ein Captcha eines Drittanbieters. Lädt dessen Skript; bei anonymen Formularen ignoriert."
+                }
+              },
+              "x-quartz-order": 50
+            },
+            "captchaSiteKey": {
+              "type": "string",
+              "description": "The provider's site key.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Der Site-Schlüssel des Anbieters."
+                }
+              },
+              "x-quartz-order": 60,
+              "x-quartz-when": {
+                "captcha": [
+                  "turnstile",
+                  "hcaptcha"
+                ]
+              }
+            },
+            "rateLimitPerHour": {
+              "type": "integer",
+              "description": "Submissions per form and hour the relay accepts; 0 turns it off. No addresses are stored.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Sendungen je Formular und Stunde, die das Relay annimmt; 0 schaltet es ab. Es werden keine Adressen gespeichert."
+                }
+              },
+              "x-quartz-order": 70
+            },
+            "maxFieldLength": {
+              "type": "integer",
+              "description": "Default maximum length of a single-line field, in characters.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Vorgabe für die Höchstlänge eines einzeiligen Felds, in Zeichen."
+                }
+              },
+              "x-quartz-order": 80,
+              "x-quartz-advanced": true
+            },
+            "maxTextareaLength": {
+              "type": "integer",
+              "description": "Default maximum length of a textarea, in characters.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Vorgabe für die Höchstlänge eines Textfelds, in Zeichen."
+                }
+              },
+              "x-quartz-order": 90,
+              "x-quartz-advanced": true
+            },
+            "maxKeyLength": {
+              "type": "integer",
+              "description": "Maximum length of a pasted public key, in characters.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Höchstlänge eines eingefügten öffentlichen Schlüssels, in Zeichen."
+                }
+              },
+              "x-quartz-order": 100,
+              "x-quartz-advanced": true
+            },
+            "maxBytes": {
+              "type": "integer",
+              "description": "Maximum size of a whole submission, in bytes.",
+              "x-quartz-l10n": {
+                "de": {
+                  "description": "Höchstgröße einer ganzen Sendung, in Bytes."
+                }
+              },
+              "x-quartz-order": 110,
+              "x-quartz-advanced": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10.9.2"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.21.5": true
+  }
+}

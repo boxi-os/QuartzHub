@@ -27270,6 +27270,23 @@
         }
       }
     },
+    "main.pluginSchemaTypesUnreadable" : {
+      "comment" : "Option schema: the .d.ts files under dist/ could not be read (unreadable folder, or QuartzHub's reader did not answer). {{reason}} is the error text.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Typdeklarationen dieses Plugins konnten nicht gelesen werden: {{reason}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This plugin’s type declarations could not be read: {{reason}}"
+          }
+        }
+      }
+    },
     "main.projectAlreadyRegistered" : {
       "localizations" : {
         "de" : {

@@ -1,0 +1,13 @@
+{
+  "name": "frame-editorial",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "quartz": {
+    "frames": {
+      "Frame": {
+        "exportName": "Frame"
+      }
+    }
+  }
+}

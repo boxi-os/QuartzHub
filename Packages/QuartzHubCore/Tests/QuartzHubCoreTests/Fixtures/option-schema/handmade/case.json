@@ -1,0 +1,7415 @@
+{
+ "tree": {
+  ".quartz/plugins/dts-all/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{}}",
+  ".quartz/plugins/dts-all/dist/index.d.ts": "\nimport type { X } from \"./other\"\nexport interface Base { inherited: string; overridden: number }\n/** A shape */\nexport interface AllOptions extends Base, Missing {\n  /** A switch. */\n  bool: boolean\n  str: string\n  num: number\n  anyValue: any\n  unknownValue: unknown\n  paren: (string)\n  ro: readonly string[]\n  litS: \"a\"\n  litN: 1.5\n  litT: true\n  litF: false\n  litNull: null\n  opt?: string | undefined\n  nullable: string | null\n  en: \"a\" | \"b\" | 3 | true\n  mixed: \"a\" | number\n  arr: string[]\n  gen: Array<number>\n  roArr: ReadonlyArray<boolean>\n  genBare: Array\n  rec: Record<string, number>\n  recBare: Record<string>\n  part: Partial<Inner>\n  req: Required<Inner>\n  partBare: Partial\n  omit: Omit<Inner, \"b\">\n  pick: Pick<Inner, \"a\" | \"c\">\n  pickBad: Pick<Inner, keyof Inner>\n  lit: { x: string; y?: { z: boolean } }\n  fn: (a: string) => void\n  method(a: string): void\n  both: Inner & { extra: string }\n  bothBad: Inner & string\n  undeclared: Undeclared\n  imported: X\n  self: AllOptions\n  ns: ns.Inner\n  tuple: [string, number]\n  keys: keyof Inner\n  index: { [key: string]: boolean }\n  \"quoted-name\": string\n  42: string\n  [Symbol.iterator]: string\n  noType\n  deep: D1\n  alias: InnerAlias\n  layout: LayoutBoxOptions\n}\ninterface Inner { a: string; b: number; c?: boolean }\ntype InnerAlias = Inner\ninterface LayoutBoxOptions { title: string; byLang: Record<string, Omit<LayoutBoxOptions, \"byLang\">> }\ntype D1 = { d: D2 }\ntype D2 = { d: D3 }\ntype D3 = { d: D4 }\ntype D4 = { d: D5 }\ntype D5 = { d: D6 }\ntype D6 = { d: D7 }\ntype D7 = { d: D8 }\ntype D8 = { d: string }\ndeclare const Plugin: QuartzTransformerPlugin<Partial<AllOptions>>\nexport default Plugin\n",
+  ".quartz/plugins/dts-votes/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"version\":\"2.0.0-q\"}}",
+  ".quartz/plugins/dts-votes/dist/a.d.ts": "export interface BigOptions { a: string; b: string; c: string }\nexport interface Voted { v: boolean }\ndeclare const A: QuartzComponentConstructor<Voted>\ndeclare const B: QuartzEmitterPlugin<Readonly<Voted>>, C: QuartzFilterPlugin<Other>\n",
+  ".quartz/plugins/dts-votes/dist/sub/b.d.ts": "export interface Other { o: number }\ndeclare const D: QuartzFilterPlugin<Other>\ndeclare const E: NotQuartzPlugin<BigOptions>\n",
+  ".quartz/plugins/dts-outermost/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{}}",
+  ".quartz/plugins/dts-outermost/dist/index.d.ts": "export interface SeoOptions { hreflang: boolean; ogLocale: boolean; xDefault: string }\nexport interface MultilanguageOptions { languages: string[]; seo: SeoOptions }\nexport interface ResolvedPluginOptions { a: string; b: string; c: string; d: string }\nexport interface EmptyOptions { method(): void }\n",
+  ".quartz/plugins/dts-cycle/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{}}",
+  ".quartz/plugins/dts-cycle/dist/index.d.ts": "export interface AOptions { b: BOptions }\nexport interface BOptions { a: AOptions; n: number }\n",
+  ".quartz/plugins/dts-none/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{}}",
+  ".quartz/plugins/dts-none/dist/index.d.ts": "export declare function f(): void\n",
+  ".quartz/plugins/dts-alias-root/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{}}",
+  ".quartz/plugins/dts-alias-root/dist/index.d.ts": "type Opts = { a: string } & { b: number }\ndeclare const P: QuartzPlugin<Opts>\n",
+  ".quartz/plugins/dts-alias-scalar/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{}}",
+  ".quartz/plugins/dts-alias-scalar/dist/index.d.ts": "type Opts = string\ndeclare const P: QuartzPlugin<Opts>\n",
+  ".quartz/plugins/dts-skips-node-modules/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{}}",
+  ".quartz/plugins/dts-skips-node-modules/dist/node_modules/x/index.d.ts": "export interface HiddenOptions { h: string }\n",
+  ".quartz/plugins/dts-skips-node-modules/dist/index.d.ts": "export interface ShownOptions { s: string }\n",
+  ".quartz/plugins/dts-no-dist/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"defaultOptions\":{\"only\":\"defaults\"}}}",
+  "node_modules/@scope/npm-plugin/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"configSchema\":{\"type\":\"object\",\"properties\":{\"a\":{\"type\":\"string\",\"default\":\"s\"}}},\"defaultOptions\":{\"a\":\"d\",\"b\":2},\"category\":[\"emitter\",5,\"component\"]}}",
+  "node_modules/plain/package.json": "{\"name\":\"x\",\"version\":\"3.1.4\",\"quartz\":{\"optionSchema\":{\"x\":{\"type\":\"boolean\"}},\"category\":\"transformer\"}}",
+  "node_modules/no-quartz/package.json": "{\"version\":7}",
+  "node_modules/quartz-array/package.json": "{\"quartz\":[\"x\"],\"version\":\"1\"}",
+  "node_modules/versions/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"version\":2}}",
+  "node_modules/fallbacks/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"configSchema\":{\"type\":\"object\"},\"optionSchema\":{},\"defaultOptions\":{\"d\":true}}}",
+  "node_modules/fallback-to-optionschema/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"configSchema\":{\"type\":\"object\",\"properties\":{}},\"optionSchema\":{\"o\":{\"type\":\"string\"}},\"defaultOptions\":{\"o\":\"x\",\"p\":1}}}",
+  "node_modules/configschema-null/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"configSchema\":null,\"optionSchema\":{\"o\":{\"type\":\"string\"}}}}",
+  "node_modules/nothing/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"defaultOptions\":{}}}",
+  "node_modules/defaults-array/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"defaultOptions\":[1]}}",
+  "node_modules/broken/package.json": "{\"quartz\": ",
+  "node_modules/array-json/package.json": "[1, 2]",
+  "node_modules/null-json/package.json": "null",
+  "node_modules/is-a-dir/package.json": {
+   "dir": 493
+  },
+  "node_modules/too-large/package.json": {
+   "fill": 1048577
+  },
+  "node_modules/exactly-max/package.json": {
+   "fill": 1048576
+  },
+  "node_modules/not-a-dir": "a file where the package should be",
+  "node_modules/with-dts/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"optionSchema\":{}}}",
+  "node_modules/with-dts/dist/index.d.ts": "export interface WOptions { w: \"x\" | \"y\" }\n",
+  "node_modules/@quartz-community/pt-object/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"exports\":{\".\":{\"types\":\"./dist/index.d.ts\",\"import\":\"./dist/index.js\"}},\"quartz\":{\"category\":[\"pageType\",\"component\"]}}",
+  "node_modules/@quartz-community/pt-object/dist/index.js": "const rehype = { frame: null, iframe: \"iframe\" };\nconst tags = [\"frame\", \"noframes\"];\nexport default () => ({ name: \"x\", match: m, frame: \"canvas\", body: b });\n",
+  "node_modules/@quartz-community/pt-string-export/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"exports\":{\".\":\"./lib/entry.js\"},\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-string-export/lib/entry.js": "export const a = { \"match\": 1, \"frame\": 'quoted' }\n",
+  "node_modules/@quartz-community/pt-main/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"main.js\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-main/main.js": "const first = { frame: \"no-match-here\" }\nconst second = { match, frame: `template` }\nconst third = { match, frame: \"third\" }\n",
+  "node_modules/@quartz-community/pt-nested/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"i.js\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-nested/i.js": "function f() { return [{ inner: { match: 1, frame: \"deep\" } }] }\nconst later = { match: 1, frame: \"later\" }\n",
+  "node_modules/@quartz-community/pt-category-string/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"i.js\",\"quartz\":{\"category\":\"notapageTypex\"}}",
+  "node_modules/@quartz-community/pt-category-string/i.js": "x = { match: 1, frame: \"substring\" }\n",
+  "node_modules/@quartz-community/pt-not-pagetype/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"i.js\",\"quartz\":{\"category\":[\"component\"]}}",
+  "node_modules/@quartz-community/pt-not-pagetype/i.js": "x = { match: 1, frame: \"never\" }\n",
+  "node_modules/@quartz-community/pt-exports-string/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"exports\":\"./x.js\",\"main\":\"i.js\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-exports-string/i.js": "x = { match: 1, frame: \"from-main\" }\n",
+  "node_modules/@quartz-community/pt-no-import/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"exports\":{\".\":{\"require\":\"./r.js\"}},\"main\":\"i.js\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-no-import/i.js": "x = { match: 1, frame: \"main-again\" }\n",
+  "node_modules/@quartz-community/pt-no-entry/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-entry-missing/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"gone.js\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-entry-dir/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"d\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-entry-dir/d": {
+   "dir": 493
+  },
+  "node_modules/@quartz-community/pt-syntax/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"i.js\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-syntax/i.js": "x = { match: 1, frame: \"despite\" ,,, } }}} (((\n",
+  "node_modules/@quartz-community/pt-computed/package.json": "{\"name\":\"x\",\"version\":\"1.0.0\",\"main\":\"i.js\",\"quartz\":{\"category\":[\"pageType\"]}}",
+  "node_modules/@quartz-community/pt-computed/i.js": "x = { match() {}, frame: \"method-match\" }\ny = { [\"match\"]: 1, frame: \"computed\" }\nz = { match: 1, frame: name }\n",
+  "node_modules/@quartz-community/pt-broken-json/package.json": "{",
+  "node_modules/@quartz-themes/full/theme.json": "{\"meta\":{\"styleSettingsId\":[\"a\",\"b\"],\"modes\":[\"light\",\"dark\"],\"variations\":[\"v\"],\"fonts\":[\"F\"]},\"classSettings\":{\"k1\":\"css\",\"k2\":\"css\"}}",
+  "node_modules/@quartz-themes/single/theme.json": "{\"meta\":{\"styleSettingsId\":\"one\"},\"classSettings\":{\"k\":1}}",
+  "node_modules/@quartz-themes/no-id/theme.json": "{\"meta\":{\"modes\":[\"dark\"]},\"classSettings\":{\"k\":1}}",
+  "node_modules/@quartz-themes/empty-id/theme.json": "{\"meta\":{\"styleSettingsId\":[]},\"classSettings\":{\"k\":1}}",
+  "node_modules/@quartz-themes/no-classes/theme.json": "{\"meta\":{\"styleSettingsId\":\"x\"}}",
+  "node_modules/@quartz-themes/broken/theme.json": "{",
+  "node_modules/@quartz-themes/null/theme.json": "null",
+  "node_modules/@quartz-themes/empty/theme.json": "{}"
+ },
+ "options": [
+  {
+   "source": "github:a/dts-all",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "42",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "inherited",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "overridden",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bool",
+       "node": {
+        "kind": "boolean"
+       },
+       "description": "A switch.",
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "str",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "num",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "anyValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "unknownValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "paren",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ro",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litS",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a"
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litN",
+       "node": {
+        "kind": "enum",
+        "values": [
+         1.5
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litT",
+       "node": {
+        "kind": "enum",
+        "values": [
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litF",
+       "node": {
+        "kind": "enum",
+        "values": [
+         false
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litNull",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "opt",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "nullable",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "en",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a",
+         "b",
+         3,
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "mixed",
+       "node": {
+        "kind": "union",
+        "variants": [
+         {
+          "kind": "enum",
+          "values": [
+           "a"
+          ]
+         },
+         {
+          "kind": "number"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "arr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "gen",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "roArr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "genBare",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "rec",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "recBare",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "part",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "req",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "partBare",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "omit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pick",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pickBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "lit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "x",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "y",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "z",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "fn",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "method",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "both",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "extra",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bothBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "undeclared",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "imported",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "self",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "42",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "inherited",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "overridden",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bool",
+          "node": {
+           "kind": "boolean"
+          },
+          "description": "A switch.",
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "str",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "num",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "anyValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "unknownValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "paren",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ro",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litS",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a"
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litN",
+          "node": {
+           "kind": "enum",
+           "values": [
+            1.5
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litT",
+          "node": {
+           "kind": "enum",
+           "values": [
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litF",
+          "node": {
+           "kind": "enum",
+           "values": [
+            false
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litNull",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "opt",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "nullable",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "en",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a",
+            "b",
+            3,
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "mixed",
+          "node": {
+           "kind": "union",
+           "variants": [
+            {
+             "kind": "enum",
+             "values": [
+              "a"
+             ]
+            },
+            {
+             "kind": "number"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "arr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "gen",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "roArr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "genBare",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "rec",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "recBare",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "part",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "req",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "partBare",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "omit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pick",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pickBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "lit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "x",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "y",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "z",
+                "node": {
+                 "kind": "boolean"
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "fn",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "method",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "both",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "extra",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bothBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "undeclared",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "imported",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "self",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ns",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "tuple",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "keys",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "index",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "quoted-name",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "noType",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "deep",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "alias",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "layout",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "title",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "byLang",
+             "node": {
+              "kind": "record",
+              "value": {
+               "kind": "object",
+               "fields": [
+                {
+                 "key": "title",
+                 "node": {
+                  "kind": "string"
+                 },
+                 "hasDefault": false,
+                 "origin": "schema"
+                }
+               ]
+              }
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ns",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "tuple",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "keys",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "index",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "quoted-name",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "noType",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "deep",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "d",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "alias",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "layout",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "title",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "byLang",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "object",
+            "fields": [
+             {
+              "key": "title",
+              "node": {
+               "kind": "string"
+              },
+              "hasDefault": false,
+              "origin": "schema"
+             }
+            ]
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": [
+      {
+       "path": [
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "self",
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "self",
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "self",
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "self",
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "self"
+       ],
+       "reason": "type AllOptions refers to itself"
+      },
+      {
+       "path": [
+        "self",
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "self",
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "self",
+        "deep",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      },
+      {
+       "path": [
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "deep",
+        "d",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      }
+     ]
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "github:a/dts-votes",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "v",
+       "node": {
+        "kind": "boolean"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "2.0.0-q"
+   }
+  },
+  {
+   "source": "github:a/dts-outermost",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "languages",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "seo",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "hreflang",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ogLocale",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "xDefault",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "github:a/dts-cycle",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "a",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "b",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "json"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "n",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "n",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": [
+      {
+       "path": [
+        "a",
+        "b",
+        "a"
+       ],
+       "reason": "type AOptions refers to itself"
+      }
+     ]
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "github:a/dts-none",
+   "expected": {
+    "schema": null,
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "github:a/dts-alias-root",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "a",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "b",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "github:a/dts-alias-scalar",
+   "expected": {
+    "schema": null,
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "github:a/dts-skips-node-modules",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "s",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "github:a/dts-no-dist",
+   "expected": {
+    "schema": {
+     "source": "defaults",
+     "fields": [
+      {
+       "key": "only",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": true,
+       "default": "defaults",
+       "origin": "defaults"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "@scope/npm-plugin",
+   "expected": {
+    "schema": {
+     "source": "configSchema",
+     "fields": [
+      {
+       "key": "a",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": true,
+       "default": "s",
+       "origin": "schema"
+      },
+      {
+       "key": "b",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": true,
+       "default": 2,
+       "origin": "defaults"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0",
+    "categories": [
+     "emitter",
+     "component"
+    ]
+   }
+  },
+  {
+   "source": "plain",
+   "expected": {
+    "schema": {
+     "source": "optionSchema",
+     "fields": [
+      {
+       "key": "x",
+       "node": {
+        "kind": "boolean"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "3.1.4",
+    "categories": [
+     "transformer"
+    ]
+   }
+  },
+  {
+   "source": "no-quartz",
+   "expected": {
+    "schema": null
+   }
+  },
+  {
+   "source": "quartz-array",
+   "expected": {
+    "schema": null,
+    "packageVersion": "1"
+   }
+  },
+  {
+   "source": "versions",
+   "expected": {
+    "schema": null,
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "fallbacks",
+   "expected": {
+    "schema": {
+     "source": "defaults",
+     "fields": [
+      {
+       "key": "d",
+       "node": {
+        "kind": "boolean"
+       },
+       "hasDefault": true,
+       "default": true,
+       "origin": "defaults"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "fallback-to-optionschema",
+   "expected": {
+    "schema": {
+     "source": "optionSchema",
+     "fields": [
+      {
+       "key": "o",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": true,
+       "default": "x",
+       "origin": "schema"
+      },
+      {
+       "key": "p",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": true,
+       "default": 1,
+       "origin": "defaults"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "configschema-null",
+   "expected": {
+    "schema": {
+     "source": "optionSchema",
+     "fields": [
+      {
+       "key": "o",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "nothing",
+   "expected": {
+    "schema": null,
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "defaults-array",
+   "expected": {
+    "schema": null,
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "broken",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaPackageUnreadable\",\"args\":{\"reason\":\"Unexpected end of JSON input\"}}"
+   }
+  },
+  {
+   "source": "array-json",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaPackageNotObject\",\"args\":{}}"
+   }
+  },
+  {
+   "source": "null-json",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaPackageNotObject\",\"args\":{}}"
+   }
+  },
+  {
+   "source": "is-a-dir",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaPackageUnreadable\",\"args\":{\"reason\":\"EISDIR: illegal operation on a directory, read\"}}"
+   }
+  },
+  {
+   "source": "too-large",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaPackageTooLarge\",\"args\":{\"size\":1048577}}"
+   }
+  },
+  {
+   "source": "exactly-max",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaPackageUnreadable\",\"args\":{\"reason\":\"Unexpected token 'x', \\\"xxxxxxxxxx\\\"... is not valid JSON\"}}"
+   }
+  },
+  {
+   "source": "not-a-dir",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaPackageUnreadable\",\"args\":{\"reason\":\"ENOTDIR: not a directory, stat '@P@/node_modules/not-a-dir/package.json'\"}}"
+   }
+  },
+  {
+   "source": "with-dts",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "w",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "x",
+         "y"
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "not-installed",
+   "expected": {
+    "schema": null
+   }
+  },
+  {
+   "source": "github:a/not-installed",
+   "expected": {
+    "schema": null
+   }
+  },
+  {
+   "source": "/abs/dts-all",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "42",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "inherited",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "overridden",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bool",
+       "node": {
+        "kind": "boolean"
+       },
+       "description": "A switch.",
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "str",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "num",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "anyValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "unknownValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "paren",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ro",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litS",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a"
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litN",
+       "node": {
+        "kind": "enum",
+        "values": [
+         1.5
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litT",
+       "node": {
+        "kind": "enum",
+        "values": [
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litF",
+       "node": {
+        "kind": "enum",
+        "values": [
+         false
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litNull",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "opt",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "nullable",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "en",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a",
+         "b",
+         3,
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "mixed",
+       "node": {
+        "kind": "union",
+        "variants": [
+         {
+          "kind": "enum",
+          "values": [
+           "a"
+          ]
+         },
+         {
+          "kind": "number"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "arr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "gen",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "roArr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "genBare",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "rec",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "recBare",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "part",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "req",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "partBare",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "omit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pick",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pickBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "lit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "x",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "y",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "z",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "fn",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "method",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "both",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "extra",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bothBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "undeclared",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "imported",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "self",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "42",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "inherited",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "overridden",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bool",
+          "node": {
+           "kind": "boolean"
+          },
+          "description": "A switch.",
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "str",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "num",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "anyValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "unknownValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "paren",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ro",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litS",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a"
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litN",
+          "node": {
+           "kind": "enum",
+           "values": [
+            1.5
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litT",
+          "node": {
+           "kind": "enum",
+           "values": [
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litF",
+          "node": {
+           "kind": "enum",
+           "values": [
+            false
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litNull",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "opt",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "nullable",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "en",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a",
+            "b",
+            3,
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "mixed",
+          "node": {
+           "kind": "union",
+           "variants": [
+            {
+             "kind": "enum",
+             "values": [
+              "a"
+             ]
+            },
+            {
+             "kind": "number"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "arr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "gen",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "roArr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "genBare",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "rec",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "recBare",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "part",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "req",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "partBare",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "omit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pick",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pickBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "lit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "x",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "y",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "z",
+                "node": {
+                 "kind": "boolean"
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "fn",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "method",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "both",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "extra",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bothBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "undeclared",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "imported",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "self",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ns",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "tuple",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "keys",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "index",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "quoted-name",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "noType",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "deep",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "alias",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "layout",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "title",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "byLang",
+             "node": {
+              "kind": "record",
+              "value": {
+               "kind": "object",
+               "fields": [
+                {
+                 "key": "title",
+                 "node": {
+                  "kind": "string"
+                 },
+                 "hasDefault": false,
+                 "origin": "schema"
+                }
+               ]
+              }
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ns",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "tuple",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "keys",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "index",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "quoted-name",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "noType",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "deep",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "d",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "alias",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "layout",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "title",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "byLang",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "object",
+            "fields": [
+             {
+              "key": "title",
+              "node": {
+               "kind": "string"
+              },
+              "hasDefault": false,
+              "origin": "schema"
+             }
+            ]
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": [
+      {
+       "path": [
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "self",
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "self",
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "self",
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "self",
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "self"
+       ],
+       "reason": "type AllOptions refers to itself"
+      },
+      {
+       "path": [
+        "self",
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "self",
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "self",
+        "deep",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      },
+      {
+       "path": [
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "deep",
+        "d",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      }
+     ]
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "./dts-all",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "42",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "inherited",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "overridden",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bool",
+       "node": {
+        "kind": "boolean"
+       },
+       "description": "A switch.",
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "str",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "num",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "anyValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "unknownValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "paren",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ro",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litS",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a"
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litN",
+       "node": {
+        "kind": "enum",
+        "values": [
+         1.5
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litT",
+       "node": {
+        "kind": "enum",
+        "values": [
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litF",
+       "node": {
+        "kind": "enum",
+        "values": [
+         false
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litNull",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "opt",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "nullable",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "en",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a",
+         "b",
+         3,
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "mixed",
+       "node": {
+        "kind": "union",
+        "variants": [
+         {
+          "kind": "enum",
+          "values": [
+           "a"
+          ]
+         },
+         {
+          "kind": "number"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "arr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "gen",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "roArr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "genBare",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "rec",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "recBare",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "part",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "req",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "partBare",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "omit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pick",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pickBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "lit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "x",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "y",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "z",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "fn",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "method",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "both",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "extra",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bothBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "undeclared",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "imported",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "self",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "42",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "inherited",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "overridden",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bool",
+          "node": {
+           "kind": "boolean"
+          },
+          "description": "A switch.",
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "str",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "num",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "anyValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "unknownValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "paren",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ro",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litS",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a"
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litN",
+          "node": {
+           "kind": "enum",
+           "values": [
+            1.5
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litT",
+          "node": {
+           "kind": "enum",
+           "values": [
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litF",
+          "node": {
+           "kind": "enum",
+           "values": [
+            false
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litNull",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "opt",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "nullable",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "en",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a",
+            "b",
+            3,
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "mixed",
+          "node": {
+           "kind": "union",
+           "variants": [
+            {
+             "kind": "enum",
+             "values": [
+              "a"
+             ]
+            },
+            {
+             "kind": "number"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "arr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "gen",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "roArr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "genBare",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "rec",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "recBare",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "part",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "req",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "partBare",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "omit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pick",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pickBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "lit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "x",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "y",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "z",
+                "node": {
+                 "kind": "boolean"
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "fn",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "method",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "both",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "extra",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bothBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "undeclared",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "imported",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "self",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ns",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "tuple",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "keys",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "index",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "quoted-name",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "noType",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "deep",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "alias",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "layout",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "title",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "byLang",
+             "node": {
+              "kind": "record",
+              "value": {
+               "kind": "object",
+               "fields": [
+                {
+                 "key": "title",
+                 "node": {
+                  "kind": "string"
+                 },
+                 "hasDefault": false,
+                 "origin": "schema"
+                }
+               ]
+              }
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ns",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "tuple",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "keys",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "index",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "quoted-name",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "noType",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "deep",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "d",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "alias",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "layout",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "title",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "byLang",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "object",
+            "fields": [
+             {
+              "key": "title",
+              "node": {
+               "kind": "string"
+              },
+              "hasDefault": false,
+              "origin": "schema"
+             }
+            ]
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": [
+      {
+       "path": [
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "self",
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "self",
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "self",
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "self",
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "self"
+       ],
+       "reason": "type AllOptions refers to itself"
+      },
+      {
+       "path": [
+        "self",
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "self",
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "self",
+        "deep",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      },
+      {
+       "path": [
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "deep",
+        "d",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      }
+     ]
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": {
+    "repo": "github:x/y",
+    "name": "dts-votes"
+   },
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "v",
+       "node": {
+        "kind": "boolean"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "2.0.0-q"
+   }
+  },
+  {
+   "source": {
+    "repo": "plain"
+   },
+   "expected": {
+    "schema": {
+     "source": "optionSchema",
+     "fields": [
+      {
+       "key": "x",
+       "node": {
+        "kind": "boolean"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "3.1.4",
+    "categories": [
+     "transformer"
+    ]
+   }
+  },
+  {
+   "source": {
+    "repo": "../plain"
+   },
+   "expected": {
+    "schema": null
+   }
+  },
+  {
+   "source": "a/../../b",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaOutsideProject\",\"args\":{}}"
+   }
+  },
+  {
+   "source": "a/../plain",
+   "expected": {
+    "schema": {
+     "source": "optionSchema",
+     "fields": [
+      {
+       "key": "x",
+       "node": {
+        "kind": "boolean"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": []
+    },
+    "packageVersion": "3.1.4",
+    "categories": [
+     "transformer"
+    ]
+   }
+  },
+  {
+   "source": "github:a/",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaOutsideProject\",\"args\":{}}"
+   }
+  },
+  {
+   "source": "https://h/x/dts-all.git#v2",
+   "expected": {
+    "schema": {
+     "source": "dts",
+     "fields": [
+      {
+       "key": "42",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "inherited",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "overridden",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bool",
+       "node": {
+        "kind": "boolean"
+       },
+       "description": "A switch.",
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "str",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "num",
+       "node": {
+        "kind": "number"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "anyValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "unknownValue",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "paren",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ro",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litS",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a"
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litN",
+       "node": {
+        "kind": "enum",
+        "values": [
+         1.5
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litT",
+       "node": {
+        "kind": "enum",
+        "values": [
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litF",
+       "node": {
+        "kind": "enum",
+        "values": [
+         false
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "litNull",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "opt",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "nullable",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "en",
+       "node": {
+        "kind": "enum",
+        "values": [
+         "a",
+         "b",
+         3,
+         true
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "mixed",
+       "node": {
+        "kind": "union",
+        "variants": [
+         {
+          "kind": "enum",
+          "values": [
+           "a"
+          ]
+         },
+         {
+          "kind": "number"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "arr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "gen",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "roArr",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "genBare",
+       "node": {
+        "kind": "array",
+        "items": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "rec",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "number"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "recBare",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "json"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "part",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "req",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "partBare",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "omit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pick",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "pickBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "lit",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "x",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "y",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "z",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "fn",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "method",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "both",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "extra",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "bothBad",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "undeclared",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "imported",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "self",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "42",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "inherited",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "overridden",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bool",
+          "node": {
+           "kind": "boolean"
+          },
+          "description": "A switch.",
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "str",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "num",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "anyValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "unknownValue",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "paren",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ro",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litS",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a"
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litN",
+          "node": {
+           "kind": "enum",
+           "values": [
+            1.5
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litT",
+          "node": {
+           "kind": "enum",
+           "values": [
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litF",
+          "node": {
+           "kind": "enum",
+           "values": [
+            false
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "litNull",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "opt",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "nullable",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "en",
+          "node": {
+           "kind": "enum",
+           "values": [
+            "a",
+            "b",
+            3,
+            true
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "mixed",
+          "node": {
+           "kind": "union",
+           "variants": [
+            {
+             "kind": "enum",
+             "values": [
+              "a"
+             ]
+            },
+            {
+             "kind": "number"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "arr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "string"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "gen",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "roArr",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "genBare",
+          "node": {
+           "kind": "array",
+           "items": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "rec",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "number"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "recBare",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "json"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "part",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "req",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "partBare",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "omit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pick",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "pickBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "lit",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "x",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "y",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "z",
+                "node": {
+                 "kind": "boolean"
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "fn",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "method",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "both",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "extra",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "bothBad",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "undeclared",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "imported",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "self",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "ns",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "tuple",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "keys",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "index",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "boolean"
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "quoted-name",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "noType",
+          "node": {
+           "kind": "json"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "deep",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "alias",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "a",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "b",
+             "node": {
+              "kind": "number"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "c",
+             "node": {
+              "kind": "boolean"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "layout",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "title",
+             "node": {
+              "kind": "string"
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            },
+            {
+             "key": "byLang",
+             "node": {
+              "kind": "record",
+              "value": {
+               "kind": "object",
+               "fields": [
+                {
+                 "key": "title",
+                 "node": {
+                  "kind": "string"
+                 },
+                 "hasDefault": false,
+                 "origin": "schema"
+                }
+               ]
+              }
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "ns",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "tuple",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "keys",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "index",
+       "node": {
+        "kind": "record",
+        "value": {
+         "kind": "boolean"
+        }
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "quoted-name",
+       "node": {
+        "kind": "string"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "noType",
+       "node": {
+        "kind": "json"
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "deep",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "d",
+          "node": {
+           "kind": "object",
+           "fields": [
+            {
+             "key": "d",
+             "node": {
+              "kind": "object",
+              "fields": [
+               {
+                "key": "d",
+                "node": {
+                 "kind": "object",
+                 "fields": [
+                  {
+                   "key": "d",
+                   "node": {
+                    "kind": "json"
+                   },
+                   "hasDefault": false,
+                   "origin": "schema"
+                  }
+                 ]
+                },
+                "hasDefault": false,
+                "origin": "schema"
+               }
+              ]
+             },
+             "hasDefault": false,
+             "origin": "schema"
+            }
+           ]
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "alias",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "b",
+          "node": {
+           "kind": "number"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "c",
+          "node": {
+           "kind": "boolean"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      },
+      {
+       "key": "layout",
+       "node": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "title",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         },
+         {
+          "key": "byLang",
+          "node": {
+           "kind": "record",
+           "value": {
+            "kind": "object",
+            "fields": [
+             {
+              "key": "title",
+              "node": {
+               "kind": "string"
+              },
+              "hasDefault": false,
+              "origin": "schema"
+             }
+            ]
+           }
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       "hasDefault": false,
+       "origin": "schema"
+      }
+     ],
+     "notes": [
+      {
+       "path": [
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "litNull"
+       ],
+       "reason": "a null literal"
+      },
+      {
+       "path": [
+        "self",
+        "partBare"
+       ],
+       "reason": "Partial without an argument"
+      },
+      {
+       "path": [
+        "self",
+        "pickBad"
+       ],
+       "reason": "Pick with keys that are not string literals"
+      },
+      {
+       "path": [
+        "self",
+        "fn"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "method"
+       ],
+       "reason": "a function cannot be written in YAML"
+      },
+      {
+       "path": [
+        "self",
+        "bothBad"
+       ],
+       "reason": "an intersection of non-object types"
+      },
+      {
+       "path": [
+        "self",
+        "undeclared"
+       ],
+       "reason": "type Undeclared is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "imported"
+       ],
+       "reason": "type X is not declared in the package"
+      },
+      {
+       "path": [
+        "self",
+        "self"
+       ],
+       "reason": "type AllOptions refers to itself"
+      },
+      {
+       "path": [
+        "self",
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "self",
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "self",
+        "deep",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      },
+      {
+       "path": [
+        "tuple"
+       ],
+       "reason": "type syntax TupleType is not supported"
+      },
+      {
+       "path": [
+        "noType"
+       ],
+       "reason": "no type"
+      },
+      {
+       "path": [
+        "deep",
+        "d",
+        "d",
+        "d",
+        "d"
+       ],
+       "reason": "types nested too deeply"
+      }
+     ]
+    },
+    "packageVersion": "1.0.0"
+   }
+  },
+  {
+   "source": "..x",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaOutsideProject\",\"args\":{}}"
+   }
+  },
+  {
+   "source": "@scope/../../../etc",
+   "expected": {
+    "schema": null,
+    "unreadable": "{\"key\":\"pluginSchemaOutsideProject\",\"args\":{}}"
+   }
+  }
+ ],
+ "frames": {
+  "plugins": [
+   {
+    "name": "entry-0",
+    "source": "@quartz-community/pt-object"
+   },
+   {
+    "name": "entry-1",
+    "source": "@quartz-community/pt-string-export"
+   },
+   {
+    "name": "entry-2",
+    "source": "@quartz-community/pt-main"
+   },
+   {
+    "name": "entry-3",
+    "source": "@quartz-community/pt-nested"
+   },
+   {
+    "name": "entry-4",
+    "source": "@quartz-community/pt-category-string"
+   },
+   {
+    "name": "entry-5",
+    "source": "@quartz-community/pt-not-pagetype"
+   },
+   {
+    "name": "entry-6",
+    "source": "@quartz-community/pt-exports-string"
+   },
+   {
+    "name": "entry-7",
+    "source": "@quartz-community/pt-no-import"
+   },
+   {
+    "name": "entry-8",
+    "source": "@quartz-community/pt-no-entry"
+   },
+   {
+    "name": "entry-9",
+    "source": "@quartz-community/pt-entry-missing"
+   },
+   {
+    "name": "entry-10",
+    "source": "@quartz-community/pt-entry-dir"
+   },
+   {
+    "name": "entry-11",
+    "source": "@quartz-community/pt-syntax"
+   },
+   {
+    "name": "entry-12",
+    "source": "@quartz-community/pt-computed"
+   },
+   {
+    "name": "entry-13",
+    "source": "@quartz-community/pt-broken-json"
+   },
+   {
+    "name": "entry-14",
+    "source": "@quartz-community/pt-absent"
+   },
+   {
+    "name": "object-source",
+    "source": {
+     "repo": "@quartz-community/pt-object"
+    }
+   },
+   {
+    "name": "pt-object",
+    "source": "@quartz-community/pt-object"
+   }
+  ],
+  "expected": {
+   "entry-0": "canvas",
+   "entry-1": "quoted",
+   "entry-3": "deep",
+   "entry-4": "substring",
+   "entry-6": "from-main",
+   "entry-7": "main-again",
+   "entry-11": "despite",
+   "pt-object": "canvas"
+  }
+ },
+ "themes": [
+  {
+   "id": "full",
+   "info": {
+    "styleSettingsId": [
+     "a",
+     "b"
+    ],
+    "classSettingKeys": [
+     "k1",
+     "k2"
+    ]
+   },
+   "detail": {
+    "modes": [
+     "light",
+     "dark"
+    ],
+    "variations": [
+     "v"
+    ],
+    "styleSettingsId": [
+     "a",
+     "b"
+    ],
+    "fonts": [
+     "F"
+    ]
+   }
+  },
+  {
+   "id": "single",
+   "info": {
+    "styleSettingsId": [
+     "one"
+    ],
+    "classSettingKeys": [
+     "k"
+    ]
+   },
+   "detail": {
+    "modes": [],
+    "variations": [],
+    "styleSettingsId": [
+     "one"
+    ],
+    "fonts": []
+   }
+  },
+  {
+   "id": "no-id",
+   "info": {
+    "styleSettingsId": [],
+    "classSettingKeys": []
+   },
+   "detail": {
+    "modes": [
+     "dark"
+    ],
+    "variations": [],
+    "styleSettingsId": [],
+    "fonts": []
+   }
+  },
+  {
+   "id": "empty-id",
+   "info": {
+    "styleSettingsId": [],
+    "classSettingKeys": []
+   },
+   "detail": {
+    "modes": [],
+    "variations": [],
+    "styleSettingsId": [],
+    "fonts": []
+   }
+  },
+  {
+   "id": "no-classes",
+   "info": {
+    "styleSettingsId": [
+     "x"
+    ],
+    "classSettingKeys": []
+   },
+   "detail": {
+    "modes": [],
+    "variations": [],
+    "styleSettingsId": [
+     "x"
+    ],
+    "fonts": []
+   }
+  },
+  {
+   "id": "broken",
+   "info": null,
+   "detail": null
+  },
+  {
+   "id": "null",
+   "info": null,
+   "detail": null
+  },
+  {
+   "id": "empty",
+   "info": {
+    "styleSettingsId": [],
+    "classSettingKeys": []
+   },
+   "detail": {
+    "modes": [],
+    "variations": [],
+    "styleSettingsId": [],
+    "fonts": []
+   }
+  },
+  {
+   "id": "absent",
+   "info": null,
+   "detail": null
+  }
+ ]
+}

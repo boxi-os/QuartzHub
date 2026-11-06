@@ -437,3 +437,47 @@ und die Pfad-Helfer der Formulare. Unlesbares wird ein JSON-Feld mit Notiz, nie 
 - Gegenproben: keine Duplikate entfernt, abgeleitete verschachtelte Felder mit falscher Herkunft,
   Annotation neben dem `$ref` verliert, Bedingung ohne Vorgabe, leere Elternobjekte bleiben,
   Verschachtelung nur unter der Config: jede lässt Fälle scheitern.
+
+### Options-Schema: Leser (`pluginSchemaService.ts` → `PluginSchemaReader`)
+
+Wo das Paket eines Plugins liegt (wie Quartz: npm unter `node_modules`, alles andere unter
+`.quartz/plugins/<quartzName>`), was es über seine Optionen sagt (configSchema → optionSchema →
+`.d.ts` → nur Vorgaben, die Vorgaben darüber), dazu der eingebaute Frame eines Page-Type-Plugins
+und die theme.json eines Themes. Die `.d.ts` und die Einstiegsdateien liest der Helfer
+`dts-schema` mit TypeScripts Parser; ausgeführt wird nichts.
+
+- **Gemessen gegen QuartzControls Code**, `scripts/option-schema-golden.mjs`:
+  - 40 Fragen an ein Projekt aus handgemachten Paketen: jeder Zweig der `.d.ts`-Übersetzung,
+    Stimmen der Konstruktoren, das äußerste `…Options`, Zyklen, kaputte, zu große (1 MiB + 1),
+    leere und fehlende package.json, Ordner statt Datei, Quellen aus dem Projekt hinaus.
+  - 17 Page-Type-Fälle, darunter Lockvögel (`frame: null`, `"iframe"`), Kurzschreibweise,
+    Template-Literal, Syntaxfehler und eine Kategorie als Text. Dazu 9 theme.json.
+  - Die 64 Plugins, die gui-test verwendet (package.json und `.d.ts` kopiert nach
+    `Fixtures/option-schema/real`, 1,9 MB, dazu die Einstiegsdateien von vier Page-Type-Plugins):
+    configSchema 11, optionSchema 34, dts 1, nichts 18, dieselbe Verteilung wie QuartzControls
+    `check:option-schema`.
+  - `PluginSchemaReaderTests` gibt dieselben Antworten.
+- **Ein Aufruf je Seite statt je Plugin.** Der Helfer kostet rund 130 ms (gemessen 127 ms für einen
+  leeren Aufruf, fast alles das Laden von TypeScript). `optionSchemas` und `pageTypeFrames` fragen
+  alles in einem Aufruf; ohne `dist/` gibt es keinen. Der Cache hängt an Größe und mtime von
+  package.json und jeder `.d.ts`.
+- **Abweichungen:**
+  - Der Page-Type-Cache folgt den Dateien. In QuartzControl hielt er bis zum Neustart, weil
+    `invalidateBuiltinPageTypeFrameCache` keinen Aufrufer hatte.
+  - Ein unlesbarer `dist/`-Ordner oder ein Helfer, der nicht antwortet, ist ein Satz
+    (`main.pluginSchemaTypesUnreadable`, neu) und wird nicht gemerkt. In QuartzControl war der
+    erste Fall eine Ausnahme aus dem IPC-Handler.
+  - Der Grund einer unlesbaren package.json steht in den Worten des Systems (`strerror`, die
+    Meldung des JSON-Lesers), nicht in Nodes (`EISDIR: illegal operation …`). Verglichen wird
+    deshalb nur „unlesbar, mit Grund“.
+  - Was QuartzControl ungeprüft durchreichte, ist getypt: Die Listen einer theme.json behalten nur
+    ihre Texte. Wo QuartzControl mit TypeError abbrach (`category: 5`, `main: 5`, eine package.json
+    `null`), gibt es keinen Frame.
+- Der Helfer bekam einen zweiten wortgleichen Block (`findPageTypeFrameLiteral`, `propName`).
+  Beide Blöcke sind gegen `pluginSchemaService.ts` von QuartzControl 1.3.0 verglichen: identisch.
+  Einzige Änderung auf dem Weg: JSON kennt kein Infinity, ein Literaltyp `1e999` kommt als
+  `const: null` an.
+- Gegenproben: das „..x“-Verhalten von `path.relative`, die Größengrenze um ein Byte, Kategorie
+  als Text, Version aus dem falschen Feld, ein leeres configSchema gewinnt, `pageType` als Teilwort,
+  ohne `exports`, Cache ohne `.d.ts`, eine Style-Settings-Id als Text, der falsche Satz: jede lässt
+  Fälle scheitern.

@@ -1,13 +1,25 @@
-// dts-schema: the options of a Quartz plugin, read from its .d.ts files, as JSON Schema.
+// dts-schema: what QuartzHub reads from a plugin package with TypeScript's parser, never running
+// it. Two questions, asked in one call for a whole page (a call costs some 130 ms, mostly loading
+// typescript, measured 2026-11-06):
 //
-// Request on stdin:  { "distDir": "<plugin>/dist" }
-// Answer on stdout:  { "ok": true, "schema": {…} | null }   (null: no .d.ts or no options type)
-//                    { "ok": false, "error": "…" }           (could not read; never "no options")
+//   dts     the plugin's options, read from the .d.ts files under a dist directory, as JSON Schema
+//   frames  the default frame a page-type plugin bakes into its entry file (`frame: "canvas"` in
+//           the object that also has `match`)
 //
-// The code below `── copied ──` is QuartzControl 1.3.0, electron/main/services/pluginSchemaService.ts
-// (indexDts … membersOf), unchanged: the measurements behind it (docs/decisions/plugins-and-config.md
-// in QuartzControl) stay valid only as long as it is the same code. The normalizer
-// (shared/pluginOptionSchema.ts) moves to Swift in Phase 3; this helper only translates.
+// Request on stdin:  { "dts": ["<plugin>/dist", …], "frames": ["<entry file>", …] }  (both optional)
+// Answer on stdout:  { "ok": true,
+//                      "dts": [{ "schema": {…} | null } | { "error": "…" }, …],
+//                      "frames": [{ "frame": "…" | null } | { "error": "…" }, …] }
+//   schema null: no .d.ts or no options type. error: that one could not be read (an unreadable
+//   directory); never "no options". The answers are in the order of the request.
+//
+// The two blocks below `── copied ──` are QuartzControl 1.3.0, electron/main/services/
+// pluginSchemaService.ts, unchanged (findPageTypeFrameLiteral and propName; indexDts … membersOf):
+// the measurements behind them (docs/decisions/plugins-and-config.md in QuartzControl) stay valid
+// only as long as it is the same code. The normalizer (shared/pluginOptionSchema.ts) is Swift
+// (OptionSchema); this helper only translates. QuartzControl ran this code in its own process, so
+// one thing differs on the way out: JSON has no Infinity, and a literal type `1e999` arrives as
+// `const: null`.
 import { readdirSync, readFileSync, statSync, existsSync } from 'fs'
 import { join } from 'path'
 import ts from 'typescript'
@@ -29,13 +41,60 @@ function walkFiles(dir: string, extension: string): string[] {
   return results
 }
 
+const strings = (value: unknown, name: string): string[] => {
+  if (value === undefined) return []
+  if (!Array.isArray(value) || !value.every((v) => typeof v === 'string' && v !== '')) throw new Error(`${name} is not a list of paths`)
+  return value
+}
+
+const each = <T>(paths: string[], answer: (path: string) => T): Record<string, unknown>[] =>
+  paths.map((path) => {
+    try {
+      return answer(path) as Record<string, unknown>
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : String(error) }
+    }
+  })
+
 runHelper((request) => {
-  const distDir = (request as { distDir?: unknown }).distDir
-  if (typeof distDir !== 'string' || distDir === '') throw new Error('distDir missing')
-  return { schema: optionsJsonSchemaFromDts(distDir) }
+  if (!isPlainObject(request)) throw new Error('request is not an object')
+  return {
+    dts: each(strings(request.dts, 'dts'), (dir) => ({ schema: optionsJsonSchemaFromDts(dir) })),
+    frames: each(strings(request.frames, 'frames'), (file) => ({ frame: findPageTypeFrameLiteral(file) }))
+  }
 })
 
-// ── copied ──
+// ── copied ── findPageTypeFrameLiteral, propName
+function findPageTypeFrameLiteral(file: string): string | null {
+  let source: ts.SourceFile
+  try {
+    source = ts.createSourceFile(file, readFileSync(file, 'utf-8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS)
+  } catch {
+    return null
+  }
+
+  let result: string | null = null
+  const visit = (node: ts.Node): void => {
+    if (result) return
+    if (ts.isObjectLiteralExpression(node)) {
+      const hasMatchProp = node.properties.some((p) => ts.isPropertyAssignment(p) && propName(p.name) === 'match')
+      const frameProp = node.properties.find((p) => ts.isPropertyAssignment(p) && propName(p.name) === 'frame')
+      if (hasMatchProp && frameProp && ts.isPropertyAssignment(frameProp) && ts.isStringLiteral(frameProp.initializer)) {
+        result = frameProp.initializer.text
+        return
+      }
+    }
+    ts.forEachChild(node, visit)
+  }
+  ts.forEachChild(source, visit)
+  return result
+}
+
+function propName(name: ts.PropertyName): string | null {
+  return ts.isIdentifier(name) || ts.isStringLiteral(name) ? name.text : null
+}
+
+// ── copied ── indexDts … membersOf
 type Decl = ts.InterfaceDeclaration | ts.TypeAliasDeclaration
 type JsonSchema = Record<string, unknown>
 

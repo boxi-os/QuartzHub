@@ -1,0 +1,13 @@
+{
+  "name": "frame-1787519243386",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "quartz": {
+    "frames": {
+      "Frame": {
+        "exportName": "Frame"
+      }
+    }
+  }
+}

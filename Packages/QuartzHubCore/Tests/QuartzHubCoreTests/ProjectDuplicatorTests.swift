@@ -105,6 +105,9 @@ struct ProjectDuplicatorTests {
         try Data(fill(text).utf8).write(to: url)
       } else if let link = spec["link"]?.stringValue {
         try manager.createSymbolicLink(atPath: url.path, withDestinationPath: fill(link))
+      } else if let size = spec["fill"]?.numberValue {
+        // A file of that many "x", for size limits (option-schema-golden.mjs fills it the same way).
+        try Data(repeating: UInt8(ascii: "x"), count: Int(size)).write(to: url)
       } else if let mode = spec["dir"]?.numberValue {
         try manager.createDirectory(at: url, withIntermediateDirectories: true)
         modes.append((url, Int(mode)))
