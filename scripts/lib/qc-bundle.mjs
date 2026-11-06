@@ -36,7 +36,9 @@ export async function loadQuartzControl(control, entry, stubs = commonStubs, { e
           for (const specifier of Object.keys(stubs)) {
             b.onResolve({ filter: new RegExp(`^${escape(specifier)}$`) }, () => ({ path: specifier, namespace: 'stub' }))
           }
-          b.onLoad({ filter: /.*/, namespace: 'stub' }, (args) => ({ contents: stubs[args.path], loader: 'js' }))
+          // resolveDir: a stand-in may import QuartzControl's own file by a path from its root
+          // (`./electron/main/services/runCommand.ts`), to wrap it rather than replace it.
+          b.onLoad({ filter: /.*/, namespace: 'stub' }, (args) => ({ contents: stubs[args.path], loader: 'js', resolveDir: control }))
           if (expose.length) {
             const target = join(control, entry)
             b.onLoad({ filter: new RegExp(`^${escape(target)}$`) }, () => ({

@@ -1277,3 +1277,76 @@ QuartzControl 1.3.0 ins Repo, abgerufen wird dieselbe Adresse (Nutzer, 2026-11-0
   Pakete mit gespeichertem Füller, im Golden und im Test gebaut, nicht als Fixture), und ein Paket
   ohne Manifest als einzige Kopie und als Cache.
 - Nicht gemessen: der echte Abruf von GitHub (Netzlauf, fragt der Nutzer einzeln frei).
+
+## Punkt 7: Git, Snapshots, Updates
+
+In drei Teilen in einem Zug (Nutzer, 2026-11-06): 7a der Snapshot-Speicher und was auf ihn wartet,
+7b Git-Status und Sync, 7c Core-Update und Plugin-Updates. Die Update-Prüfung der App
+(`appUpdateService`) kommt mit Phase 5, weil es für QuartzHub noch keinen Release-Kanal gibt.
+
+### Snapshot-Speicher (`snapshotService.ts` → `SnapshotStore`)
+
+- **Gemessen gegen QuartzControls Code mit echtem git:** `scripts/snapshots-golden.mjs` lässt
+  `snapshotService.ts` mit seinem echten `runCommand`, `projectDirs` und `contentSymlink` laufen;
+  nur npm und die Frame-Reparatur sind Attrappen, die ihre Aufrufe aufschreiben. Die Uhr steht
+  (`Date` und `GIT_AUTHOR_DATE`/`GIT_COMMITTER_DATE`), der Zufallsteil der ID zählt hoch. 70
+  Schritte (erst 67; drei kamen mit den Gegenproben dazu): anlegen, überspringen (nichts geändert), zusammenfassen (15 Minuten), vergleichen,
+  Content aus und an, eine Datei, die der Index weiter führt, obwohl das Projekt sie inzwischen
+  ignoriert, ein Label über 120 Zeichen, zurückspielen (alles, zwei Dateien, mit HEAD, durch einen
+  verlinkten Vault, 2150 benannte Pfade), die alten Config-Sicherungen, Ausdünnen nach Tag, Woche
+  und Monat, die Fehler. Nach jedem Schritt: Antwort, Aufrufe, die Refs mit ihrem Commit-Objekt
+  (Identität maskiert) und Baum, der Index des Speichers, seine Exclude-Datei und jede Datei des
+  Ordners. Gleich in allen.
+- **In beide Richtungen und gleichzeitig:** `qc-snapshots.cjs` ist derselbe Dienst als Befehl.
+  QuartzControl liest, vergleicht und spielt einen Snapshot zurück, den QuartzHub schrieb, und
+  umgekehrt; `git fsck` danach sauber. Beide Apps legen gleichzeitig je acht Snapshots an: keiner
+  scheitert, alle 17 sind da.
+- **Abweichung 1, ein Index je Vorgang** (Entscheidung des Nutzers, 2026-11-06). QuartzControl
+  schützt den einen Index des Speichers nur mit einer Warteschlange im eigenen Prozess. Jeder
+  Vorgang hier beginnt mit einer Kopie dieses Index (`GIT_INDEX_FILE`), nicht mit einem leeren:
+  Der Index entscheidet mit, was ein Snapshot enthält. `git add -A` führt eine Datei weiter, die der
+  Speicher schon kennt, auch wenn das Projekt sie inzwischen ignoriert (Golden-Schritt „stays
+  tracked“); ein leerer Index hätte sie weggelassen. Danach geht die Kopie zurück, wie git selbst
+  einen Index schreibt: über `index.lock`, und nur, wenn niemand das Schloss hält. Hält
+  QuartzControl es, bleibt sein Index (Test `aHeldIndexLockIsLeftAlone`). Reste nach einem Absturz
+  gehen nach einer Stunde.
+- **Abweichung 2, Aufräumen nach zehn Minuten.** Beim Vorschlag hatte ich gesagt, Refs schreibe
+  git ohnehin atomar. Das stimmt, reicht aber nicht: Zwischen `write-tree` und `update-ref` ist ein
+  frisch geschriebenes Objekt unerreichbar, und `gc --prune=now` der anderen App nimmt es mit.
+  QuartzHub räumt deshalb mit `--prune=10.minutes.ago` auf. Die Objekte eines gelöschten
+  Snapshots sind älter und gehen wie bisher (Test `pruningWaitsTenMinutes`, zurückdatiert *vor*
+  dem ersten `gc`: seit git 2.40 steht das Alter eines unerreichbaren Objekts je Objekt im
+  Cruft-Pack (`.mtimes`), das Datum der Datei sagt danach nichts mehr). Die Gegenrichtung bleibt
+  offen: QuartzControl räumt weiter mit `now` auf, und ein Snapshot, den QuartzHub genau in dem
+  Moment schreibt, in dem QuartzControl einen löscht, kann Objekte verlieren. QuartzControl ist in
+  Wartung; ein Fix dort wäre klein (`--prune=10.minutes.ago` an zwei Stellen), ist aber nicht
+  kritisch im Sinne der Wartungsregel.
+- **Abweichung 3, der HEAD nur, wenn git antwortet.** QuartzControl nimmt die Ausgabe von
+  `rev-parse HEAD`, was immer sie sagt. In einem Ordner ohne git steht dann „fatal: not a git
+  repository …“ im Betreff: Der Kopf heißt „fatal:“, und der Rest des Satzes wird zur
+  Bezeichnung (Golden-Schritte „no repository“, „without a commit“). Hier steht „-“; QuartzControl
+  liest das als „kein Kopf“.
+- **Abweichung 4, die Einstellungsdatei.** `null` darin ließ QuartzControl mit einem TypeError
+  scheitern; hier gilt sie als nicht geschrieben. Ein Wert, der kein Boolean ist („ja“), wird nach
+  JavaScripts Wahrheit gelesen, statt weitergereicht zu werden.
+- **Abweichung 5, klein:** Maschinenantworten (Baum, Commit, Refs) aus stdout, wo QuartzControl
+  stdout und stderr zusammen las; die Identität eines Speichers, den QuartzHub anlegt, ist
+  „QuartzHub“.
+- **Nebenbefund, betrifft ganz QuartzHub: Foundation legt Namen zerlegt an.** Gemessen auf APFS:
+  `URL(fileURLWithPath:).path`, `appendingPathComponent`, `Data.write(to:)`, `createFile`,
+  `createDirectory`, `copyItem`, `moveItem` und `createSymbolicLink` machen aus „Über“
+  U+0055 U+0308 (NFD); `readdir` liefert danach genau diese Bytes. Nur POSIX mit einer
+  Zeichenkette behält U+00DC, wie Node. APFS findet die Datei unter beiden Formen, und git
+  speichert dank `core.precomposeunicode` NFC. Quartz liest die Namen aber mit Node: Eine Seite,
+  die QuartzHub angelegt hat, bekäme einen anderen Slug als dieselbe Seite aus QuartzControl.
+  Aufgefallen ist es am Test (die Golden-Liste kam in anderer Reihenfolge an). Die neuen Schreiber
+  dieses Punkts arbeiten mit Zeichenketten und POSIX (`Posix`); die übrigen Dienste sind noch
+  nicht umgestellt (Entscheidung des Nutzers steht aus).
+- **Gegenproben:** 50, alle gefangen. Vier erst mit einem eigenen Fall: die Sortierung des
+  Vergleichs (`localeCompare` gegen Bytes: `content/B.md` und `content/a.md`), die Tagesstufe der
+  Ausdünnung (zwei Snapshots, gut sechs Tage alt, an zwei Tagen einer Woche), ein Ref von Hand
+  ohne Betreff (liest sich als `manual`) und die Frist beim Aufräumen, die der Test vorher selbst
+  hereinreichte statt den Standard des Dienstes zu nehmen. Die Größe der Pfad-Pakete (1000)
+  erreicht kein Golden-Fall (argv reißt erst bei rund 10000), sie fragt ein eigener Test.
+- **Preis:** Die Fixtures sind 520 KB groß (Zustand nach jedem Schritt, Bäume einmal), der
+  Golden-Test läuft 22 s (rund 900 git-Aufrufe); `qc-snapshots.cjs` 21 KB.

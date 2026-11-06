@@ -16,8 +16,9 @@ import Synchronization
 ///   writer in line (QuartzControl measured exactly this with a timer). `Task.detached` does not
 ///   inherit it, and is not a holder either: it waits in the queue like anyone else.
 ///
-/// Three exist, and no holder of one takes another: `styles`, `config` and `frames`. The next queue
-/// per project, the snapshot store's, comes with `snapshotService`.
+/// Three exist, and no holder of one takes another: `styles`, `config` and `frames`. A fourth queue
+/// per project is the snapshot store's (`SnapshotStore.lock`), and that one is ordered: a restore
+/// holds it and takes the config lock at its end, so nothing holding the config lock waits on it.
 public final class ProjectLock: Sendable {
   /// One writer at a time for a project's stylesheets and its font folder (`styleLock.ts`: the
   /// font writers, the variables, the import order, a template import). Not covered: a snapshot
