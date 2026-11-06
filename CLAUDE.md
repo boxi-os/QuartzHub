@@ -83,7 +83,10 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Schlüsselbund), gemessen am echten Profil und gegen Electron.
 - **Phase 3 (Kern-Dienste) läuft.** Punkt 1, Grundlagen, fertig am 2026-11-06: Prozessstarter,
   PATH, Node-/git-Laufzeit und Umgebung der Kindprozesse, Log-Puffer, Sperren je Projekt
-  (`docs/decisions/phase-3-dienste.md`). Als Nächstes Punkt 2, Projekte.
+  (`docs/decisions/phase-3-dienste.md`). Punkt 2, Projekte, ohne die Teile, die die Config
+  brauchen (Projektliste, `.quartz-gui/` anlegen, Projekt-Einstellungen, Content-Ordner lesen,
+  Projektbild, Anlegen); was fehlt, steht im Plan. Als Nächstes Punkt 3, Konfiguration und Plugins,
+  danach gleich `projectPaths` und Duplizieren.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

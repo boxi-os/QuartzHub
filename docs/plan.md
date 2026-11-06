@@ -2,7 +2,8 @@
 
 > Übernommen aus `~/.claude/plans/` am 2026-11-06, ab hier gepflegt. Stand: **Phase 0 bis 2
 > abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`); Phase 3 läuft, Punkt 1
-> (Grundlagen) fertig am 2026-11-06 (`decisions/phase-3-dienste.md`), als Nächstes Punkt 2 (Projekte). Abweichungen vom ursprünglichen Plan, mit Messung in
+> (Grundlagen) fertig am 2026-11-06 (`decisions/phase-3-dienste.md`), Punkt 2 (Projekte) bis auf
+> die Teile, die die Config brauchen; als Nächstes Punkt 3 (Konfiguration und Plugins). Abweichungen vom ursprünglichen Plan, mit Messung in
 > `decisions/phase-1-geruest.md`:
 >
 > - Bundle-ID `io.github.boxios.quartzhub` (ohne Unterstrich: in `CFBundleIdentifier` nicht erlaubt)
@@ -136,6 +137,15 @@ nach Abhängigkeit:
 2. **Projekte:** `projectStore`, `projectOverviewService`, `projectPrefsService`, `projectPaths`
    (repoint), `duplicateService`, `createService`, `contentService`/`contentSymlink`,
    `projectIconService` (ImageIO statt `nativeImage`)
+   - **Stand 2026-11-06:** fertig sind `ProjectStore`, `QuartzGuiDirectory.create` (mit der
+     `.gitignore`-Zeile), `ProjectPrefsStore`, `ContentFolder` (Status, Zählen, Symlink parken),
+     `ProjectIcon` (ImageIO), `ProjectCreator`. **Nach hinten gezogen, weil sie `readConfig`/
+     `writeConfig` brauchen:** `projectPaths` und `duplicateService` (direkt nach `configService`
+     in Punkt 3), die Übersicht (`pageTitle`/`baseUrl` aus der Config, dazu Serverstatus und
+     Relay-Geheimnisse: mit Punkt 4 und 8), aus `contentService` Quelle wechseln (Snapshot, Punkt 7),
+     Startseite anlegen und Formular-Verwendungen (Config, globby des Projekts als Kindprozess).
+     Der echte Lauf von `ProjectCreator` gegen GitHub ist noch nicht gemessen
+     (`QH_NETWORK_TESTS=1`).
 3. **Konfiguration und Plugins:** `configService` über `yaml-edit.cjs`; `pluginService`
    (Quartz-CLI); `pluginSchemaService` über `dts-schema.cjs` plus Portierung von
    `shared/pluginOptionSchema.ts`; `marketplaceService`, `projectDependencies`
