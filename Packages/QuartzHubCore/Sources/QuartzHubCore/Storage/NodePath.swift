@@ -6,9 +6,9 @@ import Foundation
 /// `PathHygieneTests`.
 ///
 /// Node's `path` for POSIX paths, as far as the ports need it.
-enum NodePath {
+public enum NodePath {
   /// `path.basename`: the last segment, trailing slashes ignored.
-  static func basename(_ path: String) -> String {
+  public static func basename(_ path: String) -> String {
     var trimmed = path
     while trimmed.count > 1 && JSText.endsWith(trimmed, "/") { trimmed = JSText.slice(trimmed, 0, JSText.length(trimmed) - 1) }
     if trimmed == "/" { return "" }
@@ -16,7 +16,7 @@ enum NodePath {
   }
 
   /// `path.dirname` for POSIX: everything before the last segment, "/" for the root, "." for none.
-  static func dirname(_ path: String) -> String {
+  public static func dirname(_ path: String) -> String {
     guard !path.isEmpty else { return "." }
     var trimmed = path
     while JSText.length(trimmed) > 1 && JSText.endsWith(trimmed, "/") { trimmed = JSText.slice(trimmed, 0, JSText.length(trimmed) - 1) }
@@ -28,7 +28,7 @@ enum NodePath {
   }
 
   /// `path.extname`: from the last dot of the basename, unless that dot leads it.
-  static func extname(_ path: String) -> String {
+  public static func extname(_ path: String) -> String {
     let base = basename(path)
     guard let dot = (base as NSString).range(of: ".", options: [.literal, .backwards]).location as Int?, dot != NSNotFound, dot > 0 else { return "" }
     let leading = JSText.slice(base, 0, dot)
@@ -37,11 +37,11 @@ enum NodePath {
   }
 
   /// `path.join` + `normalize` for POSIX: `.` and `..` resolved, repeated slashes folded.
-  static func join(_ parts: String...) -> String {
+  public static func join(_ parts: String...) -> String {
     normalize(parts.filter { !$0.isEmpty }.joined(separator: "/"))
   }
 
-  static func normalize(_ path: String) -> String {
+  public static func normalize(_ path: String) -> String {
     guard !path.isEmpty else { return "." }
     let absolute = JSText.startsWith(path, "/")
     let trailing = JSText.endsWith(path, "/")
@@ -63,7 +63,7 @@ enum NodePath {
 
 extension NodePath {
   /// `path.relative(from, to)` for absolute, normalised paths.
-  static func relative(_ from: String, _ to: String) -> String {
+  public static func relative(_ from: String, _ to: String) -> String {
     let a = JSText.split(normalize(from), "/").filter { !$0.isEmpty }
     let b = JSText.split(normalize(to), "/").filter { !$0.isEmpty }
     var common = 0

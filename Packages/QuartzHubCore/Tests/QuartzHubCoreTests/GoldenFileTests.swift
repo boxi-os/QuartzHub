@@ -34,11 +34,11 @@ import Testing
     let source = Self.fixtures.appendingPathComponent(name)
     let copy = dir.appendingPathComponent(source.lastPathComponent)
     try FileManager.default.copyItem(at: source, to: copy)
-    guard case .ok(let value) = JSONStore.read(copy) else {
+    guard case .ok(let value) = JSONStore.read(copy.path) else {
       Issue.record("not readable")
       return
     }
-    try JSONStore.write(value, to: copy)
+    try JSONStore.write(value, to: copy.path)
     #expect(try Data(contentsOf: copy) == Data(contentsOf: source))
   }
 

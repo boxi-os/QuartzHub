@@ -40,7 +40,7 @@ public enum Coexistence {
   /// `ps -p <pid> -o command=`, as QuartzControl asks; nil when the process is gone.
   public static func commandLine(_ pid: Int32) -> String? {
     let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/bin/ps")
+    process.executableURL = URL(fileURLWithPath: "/bin/ps") // path boundary: Process takes a URL; the path is a constant
     process.arguments = ["-p", String(pid), "-o", "command="]
     let output = Pipe()
     process.standardOutput = output

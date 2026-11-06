@@ -104,7 +104,7 @@ import Testing
                 "GIT_AUTHOR_NAME": "QuartzHub Test", "GIT_AUTHOR_EMAIL": "test@example.com",
                 "GIT_COMMITTER_NAME": "QuartzHub Test", "GIT_COMMITTER_EMAIL": "test@example.com"]) { $1 }
     let environment = await ToolEnvironment.resolve(base: base, runtime: .repository, nodeMode: .embedded)
-    func git(_ args: [String], in dir: URL = copy) async -> CommandResult { await ProcessRunner.run(environment.command("git", args, in: dir)) }
+    func git(_ args: [String], in dir: URL = copy) async -> CommandResult { await ProcessRunner.run(environment.command("git", args, in: dir.path)) }
 
     // Never GitHub: origin is a bare repository here, for fetch and push, before anything runs.
     let bare = URL(fileURLWithPath: "\(work)/remote.git")

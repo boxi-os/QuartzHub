@@ -20,7 +20,7 @@ public enum L10n {
       return StringCatalog(sourceLanguage: "de", entries: [:])
     }
     do {
-      return try StringCatalog.load(from: url)
+      return try StringCatalog.load(from: Posix.path(url))
     } catch {
       assertionFailure("Localizable.xcstrings: \(error)")
       return StringCatalog(sourceLanguage: "de", entries: [:])

@@ -29,8 +29,8 @@ public struct StringCatalog: Sendable {
     public let description: String
   }
 
-  public static func load(from url: URL) throws -> StringCatalog {
-    try parse(Data(contentsOf: url))
+  public static func load(from path: String) throws -> StringCatalog {
+    try parse(Posix.read(path))
   }
 
   public static func parse(_ data: Data) throws -> StringCatalog {

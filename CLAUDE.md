@@ -114,13 +114,16 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   (Helfer `locale-edit`), `TemplatePackage` (zwölf Bausteine), `BuiltinTemplate`
   (`Resources/templates/qc-basic.qtpl`). Punkt 7 läuft: 7a fertig (`SnapshotStore` mit einem Index
   je Vorgang, mit QuartzControl geteilt; `ContentBackups`, `ContentFolder.changeSource`; die
-  Schreiber nehmen ihren Snapshot als `SnapshotStore.Take`). **Neue Schreiber legen Namen über
-  `Posix` an, nicht über Foundation:** Foundation zerlegt „Über“ auf dem Weg zur Platte (NFD), Node
-  nicht; Dateilisten in Tests nach UTF-8-Bytes vergleichen, nicht mit `==`. Die übrigen Dienste
-  stellt ein eigener Durchgang nach Punkt 7 um. Punkt 7 ist fertig: 7b `GitStatus`, `GitAuth`,
-  `GitHubRemote`, `Sync`; 7c `PackageJsonDeps`, `CoreUpdate` (Stash-Name und Merge-Betreff sind
-  QuartzControls Wortlaut, ein Format beider Apps), `PluginUpdates`. Als Nächstes der NFD-Durchgang,
-  dann Punkt 8.
+  Schreiber nehmen ihren Snapshot als `SnapshotStore.Take`). Punkt 7 ist fertig: 7b `GitStatus`,
+  `GitAuth`, `GitHubRemote`, `Sync`; 7c `PackageJsonDeps`, `CoreUpdate` (Stash-Name und
+  Merge-Betreff sind QuartzControls Wortlaut, ein Format beider Apps), `PluginUpdates`. Danach der
+  NFD-Durchgang. Als Nächstes Punkt 8.
+- **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
+  zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
+  nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über
+  `Posix.path(url)`. `PathHygieneTests` verbietet die zerlegenden Formen in `Sources` und `App`.
+  Tests laufen in Ordnern mit „Gärten-Ü“, maskieren mit `.literal` und vergleichen Namen nach
+  UTF-8-Bytes, nicht mit `==`.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

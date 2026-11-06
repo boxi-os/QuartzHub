@@ -29,7 +29,7 @@ public enum FramePaths {
   }
 
   /// `path.resolve` for an absolute path: `.` and `..` resolved, repeated and trailing slashes gone.
-  static func resolve(_ path: String) -> String {
+  public static func resolve(_ path: String) -> String {
     var parts: [Substring] = []
     for part in path.split(separator: "/") {
       switch part {

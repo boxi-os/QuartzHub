@@ -129,7 +129,7 @@ import Testing
     try "<html><head><title>Echt</title><meta name=\"generator\" content=\"Quartz\"></head></html>"
       .write(to: folder.appendingPathComponent("index.html"), atomically: true, encoding: .utf8)
     let script = "sleep 60 & /usr/bin/python3 -m http.server \(port) --bind 127.0.0.1 --directory . # quartz --serve --port \(port)"
-    let process = try ProcessRunner.launch(Command("/bin/sh", ["-c", script], in: folder)).get()
+    let process = try ProcessRunner.launch(Command("/bin/sh", ["-c", script], in: folder.path)).get()
     defer { process.signal(SIGKILL) }
     var found: ServerScan.Server?
     for _ in 0..<50 where found?.reachable != true {

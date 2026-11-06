@@ -49,7 +49,7 @@ import Testing
     }
 
     func git(_ args: [String], _ dir: String) async -> CommandResult {
-      await ProcessRunner.run(environment.command("git", args, in: URL(fileURLWithPath: dir)))
+      await ProcessRunner.run(environment.command("git", args, in: dir))
     }
 
     func act(_ action: JSONValue) async throws {

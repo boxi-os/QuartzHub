@@ -12,9 +12,9 @@ import Testing
     let path: String
     var url: URL { URL(fileURLWithPath: path) }
 
-    /// `umlaut`: a name with a composed "ä" and "Ü" (`TestFolder`), for the tests of services that
-    /// take string paths; the others follow as their service moves (NFD pass, until it is the only kind).
-    init(umlaut: Bool = false) throws { path = TestFolder.make("qh-scratch", umlaut: umlaut) }
+    /// A name with a composed "ä" and "Ü" (`TestFolder`) by default, since the NFD pass: a path a
+    /// service decomposed no longer matches it by bytes. `umlaut: false` for an ASCII folder.
+    init(umlaut: Bool = true) throws { path = TestFolder.make("qh-scratch", umlaut: umlaut) }
     deinit { try? FileManager.default.removeItem(atPath: path) }
 
     @discardableResult

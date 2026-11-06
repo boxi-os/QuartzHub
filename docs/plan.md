@@ -211,8 +211,10 @@ nach Abhängigkeit:
      `GitAuth` mit `GitHubRemote`, `Sync` (das echte `quartz sync` gegen ein lokales Bare-Repo
      gemessen; der Push zu GitHub mit Token steht als Netzlauf aus). 7c fertig: `PackageJsonDeps`,
      `CoreUpdate` (85 Golden-Schritte in 30 Szenen samt R1–R6, ohne Abweichung im Verhalten),
-     `PluginUpdates`. **Punkt 7 fertig.** Offen: zwei Netzläufe (Push mit Token, echtes
-     Core-Update mit npm), dann der NFD-Durchgang, dann Punkt 8.
+     `PluginUpdates`. **Punkt 7 fertig.** Danach der NFD-Durchgang (Weg A, Pfade als Text):
+     fertig; was er an echten Fehlern fand, steht in `decisions/phase-3-dienste.md` (letzter
+     Abschnitt). Offen: zwei Netzläufe (Push mit Token, echtes Core-Update mit npm, vom Nutzer auf später gelegt),
+     dann Punkt 8.
 8. **Veröffentlichen:**
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:

@@ -37,7 +37,7 @@ public enum OptionSchemaCheck {
                          runtime: RuntimeLocation = .current) async throws(Failure) -> Report {
     // `path.join(projekt, 'quartz.config.yaml')` for the head line, `path.resolve` for the rest.
     let configPath = normalizedJoin(given, "quartz.config.yaml")
-    let project = URL(fileURLWithPath: FramePaths.resolve(given.hasPrefix("/") ? given : FileManager.default.currentDirectoryPath + "/" + given))
+    let project = FramePaths.resolve(given.hasPrefix("/") ? given : FileManager.default.currentDirectoryPath + "/" + given)
     guard let data = FileManager.default.contents(atPath: configPath) else { throw .noConfig(given) }
     let answer: JSONObject
     do {
@@ -85,7 +85,7 @@ public enum OptionSchemaCheck {
       counted.append((name, object, source))
     }
     // One helper call for the whole project, as the plugin page makes it.
-    var results = await reader.optionSchemas(project: project.path, sources: counted.compactMap(\.source), runtime: runtime).makeIterator()
+    var results = await reader.optionSchemas(project: project, sources: counted.compactMap(\.source), runtime: runtime).makeIterator()
 
     for (name, object, source) in counted {
       let manifest = source.map { readManifest(project: project, source: $0) } ?? (location: "keine package.json", quartz: nil)
@@ -176,13 +176,13 @@ public enum OptionSchemaCheck {
   }
 
   /// Where the package.json lies and its `quartz` block, as the script's `readManifest` said it.
-  static func readManifest(project: URL, source: PluginSource) -> (location: String, quartz: JSONObject?) {
-    guard let dir = PluginSchemaReader.packageDirectory(project: project.path, source: source) else { return ("keine package.json", nil) }
+  static func readManifest(project: String, source: PluginSource) -> (location: String, quartz: JSONObject?) {
+    guard let dir = PluginSchemaReader.packageDirectory(project: project, source: source) else { return ("keine package.json", nil) }
     let path = "\(dir)/package.json"
     guard FileManager.default.fileExists(atPath: path) else { return ("keine package.json", nil) }
     do {
       let value = try JSJSON.parse(try PluginSchemaReader.readFile(path))
-      let location = String(dir.dropFirst(project.path.count + 1))
+      let location = String(dir.dropFirst(project.count + 1))
       return (location, value.objectValue?["quartz"]?.objectValue)
     } catch {
       return ("unlesbar: \(error)", nil)

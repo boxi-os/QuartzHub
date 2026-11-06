@@ -35,12 +35,15 @@ func option(_ name: String) -> String? {
 }
 
 /// The repository root: --root, else the nearest parent of the working directory with project.yml.
-func repositoryRoot() -> URL {
-  if let given = option("--root") { return URL(fileURLWithPath: given).standardizedFileURL }
-  var url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-  while url.path != "/" {
-    if FileManager.default.fileExists(atPath: url.appendingPathComponent("project.yml").path) { return url }
-    url.deleteLastPathComponent()
+func repositoryRoot() -> String {
+  if let given = option("--root") {
+    let absolute = NodePath.normalize(given.hasPrefix("/") ? given : FileManager.default.currentDirectoryPath + "/" + given)
+    return absolute.count > 1 && absolute.hasSuffix("/") ? String(absolute.dropLast()) : absolute
+  }
+  var dir = FileManager.default.currentDirectoryPath
+  while dir != "/" {
+    if FileManager.default.fileExists(atPath: "\(dir)/project.yml") { return dir }
+    dir = NodePath.dirname(dir)
   }
   FileHandle.standardError.write(Data("project.yml nicht gefunden; --root <repo> angeben\n".utf8))
   exit(2)
@@ -59,17 +62,17 @@ func runAndExit(_ body: @escaping @MainActor () async -> Int32) -> Never {
 switch command {
 case "i18n":
   let root = repositoryRoot()
-  let catalogURL = root.appendingPathComponent("Packages/QuartzHubCore/Sources/QuartzHubCore/Resources/Localizable.xcstrings")
+  let catalogURL = "\(root)/Packages/QuartzHubCore/Sources/QuartzHubCore/Resources/Localizable.xcstrings"
   let catalog: StringCatalog
   do {
     catalog = try StringCatalog.load(from: catalogURL)
   } catch {
-    print("Katalog nicht lesbar (\(catalogURL.path)): \(error)")
+    print("Katalog nicht lesbar (\(catalogURL)): \(error)")
     exit(3)
   }
   let sources = I18nCheck.swiftSources(in: [
-    root.appendingPathComponent("App"),
-    root.appendingPathComponent("Packages/QuartzHubCore/Sources")
+    "\(root)/App",
+    "\(root)/Packages/QuartzHubCore/Sources"
   ])
   let report: I18nCheck.Report
   do {

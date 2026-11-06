@@ -1523,3 +1523,46 @@ wie QuartzControl:
 Offen bleiben, je einzeln zu fragen (vom Nutzer auf später gelegt): der Push zu GitHub mit Token,
 ein echtes Core-Update gegen jackyzha0/quartz mit echtem npm. Stash-Name und Merge-Betreff bleiben
 QuartzControls Wortlaut (Nutzer, 2026-11-06). Danach der Durchgang zu NFD (siehe Snapshot-Speicher).
+
+## Durchgang zu NFD: Pfade als Text (Nutzer, 2026-11-06: Weg A)
+
+- **Gemessen (macOS 27.2, APFS):** Zerlegt wird „Ü“ (U+00DC → U+0055 U+0308) schon von
+  `URL(fileURLWithPath:)` beim Anlegen, von jedem `appendingPathComponent`/`appending(path:)` (auch
+  auf einer URL, die NFC behalten hatte), von `resolvingSymlinksInPath`, `standardizedFileURL`,
+  `fileSystemRepresentation` und von jedem FileManager-Schreiber, auch mit String-Pfad:
+  `createDirectory(atPath:)`, `createFile`, `String.write(toFile:)`, `copyItem`, `moveItem`,
+  `createSymbolicLink` (Name und Ziel). Die Bytes behalten: `realpath`, `getcwd`,
+  `contentsOfDirectory`, `enumerator(atPath:)`, `NSString`-Joins, `System.FilePath`, POSIX.
+  `replacingOccurrences` ohne `.literal`, `hasPrefix`, `==`, Set und Dictionary halten beide Formen
+  für gleich; eine Test-Maske ohne `.literal` versteckte also jeden zerlegten Pfad.
+- **Die Regel:** Der Kern rechnet mit Zeichenketten, die die Bytes der Platte tragen (`NodePath`
+  nach Nodes `path`, `Posix` für jeden Zugriff, der einen Namen anlegt). Eine URL von außen kommt
+  einmal über `Posix.path(url)` herein (`Posix.onDisk`: je Segment der gespeicherte Name über
+  `getattrlist`, ohne Links zu folgen, ohne den Ordner zu lesen; der temporäre Ordner hatte
+  17.365 Einträge). `PathHygieneTests` verbietet die zerlegenden Formen in `Sources` und `App`; eine
+  Zeile, die für eine Datei eine URL braucht (Papierkorb, `Process`), sagt „path boundary“.
+  Vergleiche, die Node macht (`relative`, „schon unser Frame“, „liegt im Original“), gehen nach
+  Bytes.
+- **Gefunden und behoben** (je mit einem Fall, dessen Gegenprobe anschlägt):
+  - Der Content-Link kam nach jedem Core-Update und Abbruch zerlegt zurück (`withSymlinkParked`).
+  - Der Frame-Pfad ging zerlegt in `quartz.config.yaml`: über `ownFramePath` und über die Quelle,
+    die `saveFrame` an `quartz plugin add` gab. QuartzControl vergleicht mit `===` und hätte den
+    Pfad bei jedem Speichern zurückgedreht.
+  - Duplizieren legte den neuen Ordner, den Vault-Link und den Titel der leeren Startseite
+    zerlegt an; „Neues Projekt“ ließ `git clone` den Projektordner zerlegt anlegen.
+  - Schriften (Import und Vorlagen-Paket) lagen zerlegt in `quartz/static/fonts`, die
+    `@font-face`-Regel nennt sie vorkomponiert: Ein Webserver, der Bytes vergleicht, antwortet mit
+    404. Ebenso importierte Stylesheets, Snippet- und Profil-Ordner.
+- **Golden-Tests:** Alle laufen in einem Ordner mit „Gärten-Ü“ (`TestFolder`, seit dem Ende des
+  Durchgangs der Standard von `HostPathTests.Scratch`), Masken ersetzen wörtlich, und wo eine
+  Antwort Pfade oder Namen trägt, wird nach Bytes verglichen. Die Fixtures der Golden-Skripte sind
+  unverändert; Fälle mit Umlaut-Namen stehen als eigene Tests daneben (`StylePathsTests`,
+  `aCopyWithUmlautsKeepsItsBytes`, `theFolderKeepsTheBytesOfItsName`, …), denn Node behält die
+  Bytes, die es bekommt.
+- **Gegenproben:** je Commit genannt; überlebt haben nur Fälle, in denen der zerlegte Pfad nur
+  noch etwas nachschlägt (ein Ordner, der schon da ist, ein ASCII-Name darunter, ein Arbeitsordner).
+- **Nebenbefunde, nicht Teil des Durchgangs:** `SnapshotStoreTests.bothAppsAtOnce` scheiterte in
+  zwei Volläufen je einmal (ein Snapshot fehlte, ohne Fehler auf beiden Seiten; isoliert 11 von 11
+  grün): `createUnlocked` prüft das Ergebnis von `update-ref` nicht. Der temporäre Ordner hält
+  17.365 Einträge, die meisten Reste früherer Testläufe (zip, qh-store, qh-migration).
+

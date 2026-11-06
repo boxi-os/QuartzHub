@@ -154,9 +154,9 @@ import Testing
   }
 
   @Test func startFailuresAreTheirOwnAnswers() async {
-    let missingDirectory = await ProcessRunner.run(Command("/bin/pwd", in: URL(fileURLWithPath: "/nowhere-\(UUID().uuidString)")))
+    let missingDirectory = await ProcessRunner.run(Command("/bin/pwd", in: URL(fileURLWithPath: "/nowhere-\(UUID().uuidString)").path))
     #expect(missingDirectory.termination == .couldNotStart(.directoryMissing))
-    let directory = await ProcessRunner.run(Command("/bin/pwd", in: URL(fileURLWithPath: "/private/tmp")))
+    let directory = await ProcessRunner.run(Command("/bin/pwd", in: URL(fileURLWithPath: "/private/tmp").path))
     #expect(directory.stdout == "/private/tmp\n")
     // QuartzControl measured 18000 paths / 940 KB failing with E2BIG.
     let paths = (0..<30000).map { "content/some/longer/folder/note-\($0).md" }
@@ -344,7 +344,7 @@ import Testing
       try ProcessRunner.launch(Command("qh-no-such-tool", environment: ["PATH": "/usr/bin:/bin"])).get()
     }
     #expect(throws: CommandResult.StartFailure.directoryMissing) {
-      try ProcessRunner.launch(Command("/bin/pwd", in: URL(fileURLWithPath: "/nowhere-\(UUID().uuidString)"))).get()
+      try ProcessRunner.launch(Command("/bin/pwd", in: URL(fileURLWithPath: "/nowhere-\(UUID().uuidString)").path)).get()
     }
   }
 }

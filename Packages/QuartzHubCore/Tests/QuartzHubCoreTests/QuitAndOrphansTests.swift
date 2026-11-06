@@ -59,7 +59,7 @@ import Testing
     let store = RunningServersStore(profile: base.profile)
     let (port, wsPort) = BuildServerTests.freePorts()
     var command = Command("/usr/bin/python3", [BuildServerTests.fake.path, "quartz", "build", "--serve", "--port", String(port),
-                                               "--wsPort", String(wsPort)], in: base.project)
+                                               "--wsPort", String(wsPort)], in: base.project.path)
     command.environment["QH_FAKE_DIR"] = base.scratch.url.path
     let left = try ProcessRunner.launch(command).get()
     defer { left.signal(SIGKILL) }

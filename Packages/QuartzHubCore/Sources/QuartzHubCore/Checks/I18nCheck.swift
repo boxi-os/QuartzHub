@@ -24,7 +24,7 @@ public struct I18nCheck: Sendable {
 
   public static let languages = ["de", "en"]
 
-  public static func run(catalog: StringCatalog, sources: [URL], relativeTo root: URL) throws -> Report {
+  public static func run(catalog: StringCatalog, sources: [String], relativeTo root: String) throws -> Report {
     // Calls look like `L10n.t("key"` or `L10n.t(in: lang, "key"`. Local, because Regex is not
     // Sendable and a static would need an unchecked exemption.
     let literalCall = try Regex(#"L10n\.t\(\s*(?:in:\s*[^,]+,\s*)?"((?:[^"\\]|\\.)*)""#)
@@ -32,9 +32,9 @@ public struct I18nCheck: Sendable {
     var report = Report()
     var used = Set<String>()
     for file in sources {
-      let text = try String(contentsOf: file, encoding: .utf8)
+      let text = String(decoding: try Posix.read(file), as: UTF8.self)
       report.scannedFiles += 1
-      let relative = file.path.replacingOccurrences(of: root.path + "/", with: "")
+      let relative = file.replacingOccurrences(of: root + "/", with: "", options: .literal)
       for (index, line) in text.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
         // Comments are not calls, and neither is the definition of L10n.t itself.
         if line.trimmingCharacters(in: .whitespaces).hasPrefix("//") || line.contains("func t(") { continue }
@@ -89,18 +89,19 @@ public struct I18nCheck: Sendable {
   }
 
   /// Swift files under the given directories, skipping build output.
-  public static func swiftSources(in directories: [URL]) -> [URL] {
-    var result: [URL] = []
+  public static func swiftSources(in directories: [String]) -> [String] {
+    var result: [String] = []
     for directory in directories {
-      guard let walker = FileManager.default.enumerator(at: directory, includingPropertiesForKeys: nil) else { continue }
-      for case let url as URL in walker {
-        if url.pathComponents.contains(".build") || url.pathComponents.contains("DerivedData") {
+      guard let walker = FileManager.default.enumerator(atPath: directory) else { continue }
+      for case let relative as String in walker {
+        let parts = relative.split(separator: "/")
+        if parts.contains(".build") || parts.contains("DerivedData") {
           walker.skipDescendants()
           continue
         }
-        if url.pathExtension == "swift" { result.append(url) }
+        if NodePath.extname(relative) == ".swift" { result.append("\(directory)/\(relative)") }
       }
     }
-    return result.sorted { $0.path < $1.path }
+    return result.sorted()
   }
 }

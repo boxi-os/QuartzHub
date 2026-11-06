@@ -12,7 +12,7 @@ import Testing
   static let fake = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/fake-quartz-server.py")
   let scratch: HostPathTests.Scratch
   var project: URL { scratch.url.appendingPathComponent("Projekt") }
-  var profile: ProfileDirectory { ProfileDirectory(scratch.url.appendingPathComponent("Profile")) }
+  var profile: ProfileDirectory { ProfileDirectory(scratch.url.appendingPathComponent("Profile").path) }
 
   init() throws {
     scratch = try HostPathTests.Scratch()
@@ -166,7 +166,7 @@ import Testing
   @Test func aServerOfThisProjectStartedElsewhereIsRefused() async throws {
     let (port, wsPort) = Self.freePorts()
     var outside = Command("/usr/bin/python3", [Self.fake.path, "quartz", "build", "--serve", "--port", String(port), "--wsPort", String(wsPort)],
-                          in: project)
+                          in: project.path)
     outside.environment["QH_FAKE_DIR"] = scratch.url.path
     let stranger = try ProcessRunner.launch(outside).get()
     defer { stranger.signal(SIGKILL) }
@@ -319,7 +319,7 @@ import Testing
   }
 
   @Test func onlyTheLogsOfEndedRunsAreRemoved() async throws {
-    let logs = try QuartzGuiDirectory(project: project).create("logs")
+    let logs = try QuartzGuiDirectory(project: project.path).create("logs")
     for name in ["dev-server-999999.out.log", "dev-server-tmp-1.err.log", "dev-server.out.log", "notes.txt", "build.log"] {
       try Posix.write("\(logs)/\(name)", Data())
     }

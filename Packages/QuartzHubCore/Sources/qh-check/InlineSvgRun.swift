@@ -88,18 +88,18 @@ final class InlineSvgRun: NSObject, WKNavigationDelegate {
 }
 
 /// The Markdown chain of the project's quartz-layout-box, through scripts/lib/layout-box-markdown.mjs.
-func layoutBoxMarkdown(project: String?, root: URL, inputs: [String]) -> (outputs: [String]?, chain: String) {
+func layoutBoxMarkdown(project: String?, root: String, inputs: [String]) -> (outputs: [String]?, chain: String) {
   guard let project else { return (nil, "nicht geprüft: kein Projekt genannt") }
-  let node = root.appendingPathComponent("Runtime/node/bin/node").path
-  let script = root.appendingPathComponent("scripts/lib/layout-box-markdown.mjs").path
+  let node = "\(root)/Runtime/node/bin/node"
+  let script = "\(root)/scripts/lib/layout-box-markdown.mjs"
   let process = Process()
-  process.executableURL = URL(fileURLWithPath: node)
+  process.executableURL = URL(fileURLWithPath: node) // path boundary: Process takes a URL, and only finds the file with it
   process.arguments = [script]
   let input = Pipe(), output = Pipe()
   process.standardInput = input
   process.standardOutput = output
   do { try process.run() } catch { return (nil, "nicht geprüft: \(node) startet nicht") }
-  let request = JSONObject([("project", .string(URL(fileURLWithPath: project).standardizedFileURL.path)), ("inputs", .array(inputs.map { .string($0) }))])
+  let request = JSONObject([("project", .string(FramePaths.resolve(project.hasPrefix("/") ? project : FileManager.default.currentDirectoryPath + "/" + project))), ("inputs", .array(inputs.map { .string($0) }))])
   input.fileHandleForWriting.write(Data(JSJSON.compact(.object(request)).utf8))
   try? input.fileHandleForWriting.close()
   let data = output.fileHandleForReading.readDataToEndOfFile()
@@ -107,11 +107,11 @@ func layoutBoxMarkdown(project: String?, root: URL, inputs: [String]) -> (output
   guard let answer = try? JSJSON.parse(data) else { return (nil, "nicht geprüft: die Kette antwortete nicht") }
   if let error = answer["error"]?.stringValue { return (nil, "nicht geprüft: \(error)") }
   let outputs = (answer["outputs"]?.arrayValue ?? []).compactMap(\.stringValue)
-  return (outputs, "aus quartz-layout-box \(answer["version"]?.stringValue ?? "?") (\(URL(fileURLWithPath: project).lastPathComponent))")
+  return (outputs, "aus quartz-layout-box \(answer["version"]?.stringValue ?? "?") (\(NodePath.basename(project)))")
 }
 
 @MainActor
-func runInlineSvgCheck(project: String?, root: URL) async -> Int32 {
+func runInlineSvgCheck(project: String?, root: String) async -> Int32 {
   let run = InlineSvgRun()
   var failures = 0
   func check(_ ok: Bool, _ sentence: String) {

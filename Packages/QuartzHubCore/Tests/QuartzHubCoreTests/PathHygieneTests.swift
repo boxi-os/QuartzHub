@@ -39,26 +39,23 @@ enum TestFolder {
     #"[:>\[(]\s*URL\b(?!\()"#, #"\bURL\?"#,
   ]
 
-  /// Not yet moved to string paths; each service takes itself off when it is. Shrinks to nothing.
-  static let pending: Set<String> = [
-    "QuartzHubCore/Checks/I18nCheck.swift",
-    "QuartzHubCore/Checks/OptionSchemaCheck.swift",
-    "QuartzHubCore/L10n/StringCatalog.swift",
-    "QuartzHubCore/Migration/Coexistence.swift",
-    "QuartzHubCore/Storage/URLBridges.swift",
-    "qh-check/InlineSvgRun.swift",
-    "qh-check/main.swift"
-  ]
+  /// Not yet moved to string paths. Empty since the NFD pass; a file that needs a URL for a file
+  /// path says why on the line ("path boundary").
+  static let pending: Set<String> = []
 
   static let sources = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
     .deletingLastPathComponent().appendingPathComponent("Sources").path
+  /// The app's own sources too: a panel's URL comes in there and goes on only through `Posix.path`.
+  static let app = NodePath.normalize("\(sources)/../../../App")
 
   static func offending() throws -> [String: [String]] {
     let pattern = try NSRegularExpression(pattern: banned.joined(separator: "|"))
     var found: [String: [String]] = [:]
-    let files = try FileManager.default.subpathsOfDirectory(atPath: sources).filter { $0.hasSuffix(".swift") }
-    for file in files {
-      let text = try String(contentsOfFile: "\(sources)/\(file)", encoding: .utf8)
+    let files = try FileManager.default.subpathsOfDirectory(atPath: sources).filter { $0.hasSuffix(".swift") }.map { (sources, $0, $0) }
+      + FileManager.default.subpathsOfDirectory(atPath: app).filter { $0.hasSuffix(".swift") }.map { (app, $0, "App/\($0)") }
+    #expect(files.contains { $0.2.hasPrefix("App/") }, "the app's sources were not found at \(app)")
+    for (root, relative, file) in files {
+      let text = try String(contentsOfFile: "\(root)/\(relative)", encoding: .utf8)
       for (number, line) in text.components(separatedBy: "\n").enumerated() {
         let trimmed = line.trimmingCharacters(in: .whitespaces)
         if trimmed.hasPrefix("//") || line.contains("not a file path") || line.contains("path boundary") { continue }

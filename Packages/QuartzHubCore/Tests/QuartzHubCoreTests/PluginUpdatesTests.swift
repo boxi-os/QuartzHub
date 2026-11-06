@@ -72,7 +72,7 @@ import Testing
   /// no lockfile holds; here it is the tag's commit, and the state follows from it.
   static func tagCommits(_ plugin: String, _ environment: ToolEnvironment) async throws -> [String: String] {
     let command = environment.command("git", ["for-each-ref", "--format=%(objectname) %(*objectname)", "refs/tags"],
-                                      in: URL(fileURLWithPath: plugin))
+                                      in: plugin)
     let result = await ProcessRunner.run(command)
     try #require(result.success)
     var commits: [String: String] = [:]
