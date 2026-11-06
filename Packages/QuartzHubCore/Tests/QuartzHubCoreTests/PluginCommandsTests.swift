@@ -124,8 +124,8 @@ import Testing
 
     // A frame through the CLI: with a snapshot when the frame asks for one.
     let frames = LayoutFrames.Plugins.cli(environment: { environment }, snapshot: snapshot)
-    _ = await frames.add("/frame/one", URL(fileURLWithPath: project), true)
-    _ = await frames.add("/frame/two", URL(fileURLWithPath: project), false)
+    _ = await frames.add("/frame/one", project, true)
+    _ = await frames.add("/frame/two", project, false)
     #expect(calls.all.last == ["pluginChange", "/frame/one"] && calls.all.count == 3)
     #expect(seen.withLock { $0 } == [0, 1, 3])
   }

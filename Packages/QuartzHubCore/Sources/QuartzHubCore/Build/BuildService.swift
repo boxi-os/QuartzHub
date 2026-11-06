@@ -116,7 +116,7 @@ public actor BuildService {
       }
     },
     { project, report in
-      for problem in await LayoutFrames().writeAllFrames(project: project) { report(.warn, problem + "\n") }
+      for problem in await LayoutFrames().writeAllFrames(project: project.path) { report(.warn, problem + "\n") }
     },
     { project, report in
       do {

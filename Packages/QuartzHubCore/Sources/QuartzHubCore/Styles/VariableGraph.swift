@@ -171,7 +171,7 @@ public enum VariableGraph {
   static func cssFiles(_ dir: String, _ depth: Int = 0) -> [String] {
     guard depth <= 6 else { return [] }
     var out: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir)) where !ignoredDirectories.contains(entry.name) {
+    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) where !ignoredDirectories.contains(entry.name) {
       let full = NodePath.join(dir, entry.name)
       if entry.kind == .directory { out += cssFiles(full, depth + 1) } else if JSText.endsWith(entry.name, ".css") { out.append(full) }
     }

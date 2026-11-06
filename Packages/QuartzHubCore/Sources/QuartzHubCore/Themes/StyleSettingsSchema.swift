@@ -201,7 +201,7 @@ public actor StyleSettingsSchema {
   /// Size and number of the cached answers, for the Settings page; creates nothing.
   public func cacheStats() -> (entries: Int, bytes: Int) {
     var entries = 0, bytes = 0
-    for entry in LayoutFrames.directoryEntriesWithKind(directory) {
+    for entry in LayoutFrames.directoryEntriesWithKind(directory.path) {
       guard let size = try? FileManager.default.attributesOfItem(atPath: directory.appendingPathComponent(entry.name).path)[.size] as? Int,
             entry.kind == .file || entry.kind == .link, size > 0 else { continue }
       entries += 1
@@ -214,7 +214,7 @@ public actor StyleSettingsSchema {
   public func clearCache() -> Int {
     registry = nil
     var removed = 0
-    for entry in LayoutFrames.directoryEntriesWithKind(directory) where JSText.endsWith(entry.name, ".json") {
+    for entry in LayoutFrames.directoryEntriesWithKind(directory.path) where JSText.endsWith(entry.name, ".json") {
       if (try? FileManager.default.removeItem(at: directory.appendingPathComponent(entry.name))) != nil { removed += 1 }
     }
     return removed

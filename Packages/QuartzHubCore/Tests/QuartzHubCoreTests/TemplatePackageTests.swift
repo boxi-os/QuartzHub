@@ -40,7 +40,7 @@ struct TemplatePackageTests {
   static func tree(_ root: URL, mask: (String) -> String) -> [String: JSONValue] {
     var out: [String: JSONValue] = [:]
     func walk(_ dir: URL, _ prefix: String) {
-      for entry in LayoutFrames.directoryEntriesWithKind(dir) where entry.name != ".git" {
+      for entry in LayoutFrames.directoryEntriesWithKind(dir.path) where entry.name != ".git" {
         let full = dir.appendingPathComponent(entry.name)
         let rel = prefix + entry.name
         switch entry.kind {

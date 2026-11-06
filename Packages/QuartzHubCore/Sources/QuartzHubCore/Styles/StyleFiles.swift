@@ -52,7 +52,7 @@ public enum StyleFiles {
   }
 
   static func filesOnDisk(_ dir: URL) -> [String] {
-    LayoutFrames.directoryEntriesWithKind(dir).filter { $0.kind == .file && JSText.test($0.name, #"\.(scss|css)\z"#) }.map(\.name)
+    LayoutFrames.directoryEntriesWithKind(dir.path).filter { $0.kind == .file && JSText.test($0.name, #"\.(scss|css)\z"#) }.map(\.name)
   }
 
   public static func list(project: URL) throws -> FileSet {
@@ -175,7 +175,7 @@ public enum StyleFiles {
     var found: [String] = []
     func walk(_ current: String, _ depth: Int) {
       if depth > 6 { return }
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: current)) where !ignoredDirectories.contains(entry.name) {
+      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: current).path) where !ignoredDirectories.contains(entry.name) {
         let full = NodePath.join(current, entry.name)
         if entry.kind == .directory { walk(full, depth + 1) } else if JSText.endsWith(entry.name, ".scss") { found.append(full) }
       }

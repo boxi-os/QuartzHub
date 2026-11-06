@@ -37,7 +37,6 @@ enum TestFolder {
     "QuartzHubCore/Git/GitStatus.swift",
     "QuartzHubCore/Git/Sync.swift",
     "QuartzHubCore/L10n/StringCatalog.swift",
-    "QuartzHubCore/Layout/LayoutFrames.swift",
     "QuartzHubCore/Migration/Coexistence.swift",
     "QuartzHubCore/Snapshots/SnapshotStore+Restore.swift",
     "QuartzHubCore/Snapshots/SnapshotStore.swift",

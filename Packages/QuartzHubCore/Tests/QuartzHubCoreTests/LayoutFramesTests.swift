@@ -18,7 +18,7 @@ import Testing
   }
 
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   @Test func thereAreCases() {
     #expect(Self.writeCases.count >= 15, "scripts/layout-frames-golden.mjs")
@@ -29,15 +29,16 @@ import Testing
   @Test(arguments: writeCases)
   func writesWhatQuartzControlWrote(_ name: String) async throws {
     let golden = try Self.fixture("write/\(name).json")
-    let project = scratch.url.appendingPathComponent("p")
+    let path = "\(scratch.path)/p"
+    let project = URL(fileURLWithPath: path)
     try Self.layOut(golden, at: project)
     let frames = LayoutFrames(readConfig: Self.config(golden["config"]!))
-    let problems = await frames.writeAllFrames(project: project)
-    #expect(problems == (golden["problems"]?.arrayValue ?? []).map { QC.render($0.stringValue!, mask: project.path) }, "\(name)")
-    let written = Self.files(project.appendingPathComponent(".quartz-gui"), mask: project.path)
+    let problems = await frames.writeAllFrames(project: path)
+    #expect(problems == (golden["problems"]?.arrayValue ?? []).map { QC.render($0.stringValue!, mask: path) }, "\(name)")
+    let written = Self.files(project.appendingPathComponent(".quartz-gui"), mask: path)
     let expected = Self.normalize(golden["files"]!.objectValue!)
     #expect(written.keys.sorted() == expected.keys.sorted(), "\(name)")
-    for key in expected.keys.sorted() where written[key] != expected[key] {
+    for key in expected.keys.sorted() where Array((written[key] ?? "").utf8) != Array(expected[key]!.utf8) {
       Issue.record("\(name): \(key) differs\n\(firstDifference(written[key] ?? "", expected[key]!))")
     }
   }
@@ -46,10 +47,11 @@ import Testing
   /// frames after it in the list are not written (QuartzControl's loop stopped there too).
   @Test func aBrokenFrameLeavesNoTemporaryFiles() async throws {
     let golden = try Self.fixture("write/shape-breaks-the-write.json")
-    let project = scratch.url.appendingPathComponent("p")
+    let path = "\(scratch.path)/p"
+    let project = URL(fileURLWithPath: path)
     try Self.layOut(golden, at: project)
-    _ = await LayoutFrames(readConfig: Self.config(golden["config"]!)).writeAllFrames(project: project)
-    let all = Self.files(project.appendingPathComponent(".quartz-gui"), mask: project.path, keepTemporary: true)
+    _ = await LayoutFrames(readConfig: Self.config(golden["config"]!)).writeAllFrames(project: path)
+    let all = Self.files(project.appendingPathComponent(".quartz-gui"), mask: path, keepTemporary: true)
     #expect(all.keys.sorted() == ["authored-frames/frame-bad/frame.json", "authored-frames/frame-made/frame.json"])
   }
 
@@ -64,7 +66,8 @@ import Testing
   /// and says in the console that it could not read the groups (here: no quartz.config.yaml).
   @Test func theBuildDoorRewritesTheFrames() async throws {
     let golden = try Self.fixture("write/made-default-widths.json")
-    let project = scratch.url.appendingPathComponent("door")
+    let path = "\(scratch.path)/door"
+    let project = URL(fileURLWithPath: path)
     try Self.layOut(golden, at: project)
     let said = Mutex<[String]>([])
     for step in BuildService.preparation {
@@ -80,7 +83,8 @@ import Testing
 
   @Test func saveAndDeleteAsQuartzControl() async throws {
     let golden = try Self.fixture("save.json")
-    let project = scratch.url.appendingPathComponent("save")
+    let path = "\(scratch.path)/save"
+    let project = URL(fileURLWithPath: path)
     try FileManager.default.createDirectory(at: project, withIntermediateDirectories: true)
     let made = try Self.fixture("write/made-default-widths.json")
     let calls = Mutex<[[String]]>([])
@@ -96,18 +100,18 @@ import Testing
     }
     let legacy = try JSJSON.parse(#"{"id":"frame-old","frameName":"old","rows":1,"cols":1,"gap":"0","areas":[{"id":"x","name":"only","slot":"pageBody","row":1,"col":1,"rowSpan":1,"colSpan":1}]}"#)
     let steps: [(String, () async throws -> PluginCommands.Result?)] = [
-      ("new frame registers", { try await frames.saveFrame(def, project: project) }),
-      ("existing frame only rewrites", { try await frames.saveFrame(with("frameName", .string("renamed")), project: project) }),
-      ("new frame without snapshot installs", { try await frames.saveFrame(with("id", .string("frame-two")), project: project, snapshot: false) }),
-      ("legacy definition is migrated", { try await frames.saveFrame(legacy, project: project) }),
+      ("new frame registers", { try await frames.saveFrame(def, project: path) }),
+      ("existing frame only rewrites", { try await frames.saveFrame(with("frameName", .string("renamed")), project: path) }),
+      ("new frame without snapshot installs", { try await frames.saveFrame(with("id", .string("frame-two")), project: path, snapshot: false) }),
+      ("legacy definition is migrated", { try await frames.saveFrame(legacy, project: path) }),
       ("a problem writes nothing", { try await frames.saveFrame(with("id", .string("frame-three")).replacingAreas(
-        #"[{"id":"a","name":"twice"},{"id":"b","name":"twice"}]"#), project: project) }),
-      ("widths rewrite every frame", { try await frames.saveWidths((tablet: 1000, mobile: 600), project: project); return nil }),
-      ("delete", { try await frames.deleteFrame(id: "frame-two", project: project) }),
-      ("delete with a bad id throws", { try await frames.deleteFrame(id: "../x", project: project) }),
+        #"[{"id":"a","name":"twice"},{"id":"b","name":"twice"}]"#), project: path) }),
+      ("widths rewrite every frame", { try await frames.saveWidths((tablet: 1000, mobile: 600), project: path); return nil }),
+      ("delete", { try await frames.deleteFrame(id: "frame-two", project: path) }),
+      ("delete with a bad id throws", { try await frames.deleteFrame(id: "../x", project: path) }),
       ("a failing add keeps the files", {
         answer.withLock { $0 = PluginCommands.Result(success: false, output: "cli failed") }
-        return try await frames.saveFrame(with("id", .string("frame-four")), project: project)
+        return try await frames.saveFrame(with("id", .string("frame-four")), project: path)
       })
     ]
     let expected = golden.arrayValue ?? []
@@ -121,25 +125,27 @@ import Testing
         #expect(result?.success == step["result"]?["success"]?.boolValue, "\(label)")
         #expect(result?.output == step["result"]?["output"]?.stringValue.map { QC.render($0, mask: "") }, "\(label)")
       } catch {
-        let threw = step["result"]?["threw"]?.stringValue.map { QC.render($0, mask: project.path) }
+        let threw = step["result"]?["threw"]?.stringValue.map { QC.render($0, mask: path) }
         #expect(LayoutFrames.errorText(error) == threw, "\(label)")
       }
       // The golden script masked the folder the project sits in.
-      let made = calls.withLock { $0 }.map { JSONValue.array($0.map { .string(QC.mask($0, scratch.url.path)) }) }
-      #expect(.array(made) == step["calls"], "\(label)")
-      let written = Self.files(project.appendingPathComponent(".quartz-gui"), mask: project.path)
+      let made = calls.withLock { $0 }.map { JSONValue.array($0.map { .string(QC.mask($0, scratch.path)) }) }
+      // By bytes: the frame's folder goes into the config as the plugin's source.
+      #expect(Array(JSJSON.compact(.array(made)).utf8) == Array(JSJSON.compact(step["calls"] ?? .null).utf8), "\(label)")
+      let written = Self.files(project.appendingPathComponent(".quartz-gui"), mask: path)
       #expect(written == Self.normalize(step["files"]!.objectValue!), "\(label)")
     }
   }
 
   @Test func widthsAsQuartzControlReadsThem() throws {
     for entry in try Self.fixture("widths.json").arrayValue ?? [] {
-      let project = scratch.url.appendingPathComponent("w-\(UUID().uuidString)")
+      let path = "\(scratch.path)/w-\(UUID().uuidString)"
+      let project = URL(fileURLWithPath: path)
       try FileManager.default.createDirectory(at: project.appendingPathComponent(".quartz-gui"), withIntermediateDirectories: true)
       if let text = entry["file"]?.stringValue {
         try Data(text.utf8).write(to: project.appendingPathComponent(".quartz-gui/layout-breakpoints.json"))
       }
-      let widths = LayoutFrames.widths(project: project)
+      let widths = LayoutFrames.widths(project: path)
       #expect(.number(widths.tablet) == entry["widths"]?["tablet"] && .number(widths.mobile) == entry["widths"]?["mobile"], "\(entry["file"] ?? .null)")
     }
   }

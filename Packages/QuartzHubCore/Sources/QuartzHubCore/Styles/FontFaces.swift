@@ -84,7 +84,7 @@ public enum FontFaces {
     var out: [String] = []
     func walk(_ dir: String, _ depth: Int) {
       guard depth <= 6, FileManager.default.fileExists(atPath: dir) else { return }
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir)) {
+      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) {
         let full = NodePath.join(dir, entry.name)
         var kind = entry.kind
         if kind == .link {

@@ -24,7 +24,7 @@ public enum SiteFonts {
     var files = [NodePath.join(build, "index.css")]
     let fonts = NodePath.join(build, "static/fonts")
     if FileManager.default.fileExists(atPath: fonts) {
-      files += LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: fonts)).filter { $0.kind == .file && JSText.endsWith($0.name, ".css") }.map { NodePath.join(fonts, $0.name) }
+      files += LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: fonts).path).filter { $0.kind == .file && JSText.endsWith($0.name, ".css") }.map { NodePath.join(fonts, $0.name) }
     }
     return files.filter { FileManager.default.fileExists(atPath: $0) }
   }
@@ -137,7 +137,7 @@ public enum SiteFonts {
     var files = FontFaces.allStylesheets(project: project)
     func walk(_ dir: String, _ depth: Int) {
       guard depth <= 6, FileManager.default.fileExists(atPath: dir) else { return }
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir)) {
+      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) {
         let full = NodePath.join(dir, entry.name)
         var kind = entry.kind
         if kind == .link {
@@ -149,7 +149,7 @@ public enum SiteFonts {
     }
     let plugins = NodePath.join(project.path, ".quartz/plugins")
     if FileManager.default.fileExists(atPath: plugins) {
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: plugins)) { walk(NodePath.join(plugins, entry.name, "dist"), 0) }
+      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: plugins).path) { walk(NodePath.join(plugins, entry.name, "dist"), 0) }
     }
     var found: Set<String> = []
     for file in files {

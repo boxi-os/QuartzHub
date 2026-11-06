@@ -102,7 +102,7 @@ public struct Snippets: Sendable {
     }
     closedir(stream)
     var files: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: abs)) {
+    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: abs).path) {
       guard allowed.contains(NodePath.extname(entry.name).lowercased()), !JSText.startsWith(entry.name, ".") else { continue }
       // A link to a file counts as a file.
       if entry.kind == .file { files.append(entry.name); continue }

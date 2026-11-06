@@ -181,7 +181,7 @@ public struct FontService: Sendable {
       texts.append(Self.withoutComments(try StyleSheets.readText(URL(fileURLWithPath: path))))
     }
     var typography: [JSONValue] = []
-    if let config = try? await readConfig(project) {
+    if let config = try? await readConfig(project.path) {
       switch config.theme["typography"] {
       case .object(let object)?: typography = object.keys.map { object[$0]! }
       case .array(let items)?: typography = items
@@ -616,7 +616,7 @@ public struct FontService: Sendable {
     do {
       return try await ProjectLock.styles.run(project.path) { () async throws -> (failed: Bool, text: String)? in
         guard Self.hasGoogleBlock(try StyleSheets.readSources(project: project)) else { return nil }
-        let config = try await readConfig(project)
+        let config = try await readConfig(project.path)
         guard config.theme["fontOrigin"] == .string("local") else { return nil }
         let result = try await fetchGoogleFontsNow(config.theme["typography"]?.objectValue ?? JSONObject(), project: project)
         guard result.changed else { return nil }

@@ -115,7 +115,7 @@ import Testing
   static func files(_ root: URL) -> [String: JSONValue] {
     var result: [String: JSONValue] = [:]
     func walk(_ dir: String) {
-      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir)) {
+      for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) {
         let full = NodePath.join(dir, entry.name)
         let relative = NodePath.relative(root.path, full)
         switch entry.kind {

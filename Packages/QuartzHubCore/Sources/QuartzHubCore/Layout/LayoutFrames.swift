@@ -21,17 +21,17 @@ import Synchronization
 /// of them within a second. Atomic writes keep each file whole; the lock keeps a set of three from
 /// being half one caller's and half another's.
 public struct LayoutFrames: Sendable {
-  public typealias ReadConfig = @Sendable (URL) async throws -> QuartzConfig
+  public typealias ReadConfig = @Sendable (String) async throws -> QuartzConfig
 
   /// The two CLI calls a frame needs, injectable for the tests. `snapshot` is QuartzControl's
   /// `addPlugin` (with one) against `installPluginSource` (without, for a template import that
   /// takes one for the whole import).
   public struct Plugins: Sendable {
-    public var add: @Sendable (_ source: String, _ project: URL, _ snapshot: Bool) async -> PluginCommands.Result
-    public var remove: @Sendable (_ name: String, _ project: URL) async -> PluginCommands.Result
+    public var add: @Sendable (_ source: String, _ project: String, _ snapshot: Bool) async -> PluginCommands.Result
+    public var remove: @Sendable (_ name: String, _ project: String) async -> PluginCommands.Result
 
-    public init(add: @escaping @Sendable (String, URL, Bool) async -> PluginCommands.Result,
-                remove: @escaping @Sendable (String, URL) async -> PluginCommands.Result) {
+    public init(add: @escaping @Sendable (String, String, Bool) async -> PluginCommands.Result,
+                remove: @escaping @Sendable (String, String) async -> PluginCommands.Result) {
       self.add = add
       self.remove = remove
     }
@@ -39,9 +39,9 @@ public struct LayoutFrames: Sendable {
     public static func cli(environment: @escaping @Sendable () async -> ToolEnvironment, snapshot: SnapshotStore.Take?) -> Plugins {
       Plugins(
         add: { source, project, withSnapshot in
-          await PluginCommands.shared.add(source: source, project: project.path, environment: environment(), snapshot: withSnapshot ? snapshot : nil)
+          await PluginCommands.shared.add(source: source, project: project, environment: environment(), snapshot: withSnapshot ? snapshot : nil)
         },
-        remove: { name, project in await PluginCommands.shared.remove(name: name, project: project.path, environment: environment()) })
+        remove: { name, project in await PluginCommands.shared.remove(name: name, project: project, environment: environment()) })
     }
   }
 
@@ -58,8 +58,8 @@ public struct LayoutFrames: Sendable {
 
   // MARK: where
 
-  static func framesDirectory(_ project: URL) -> URL {
-    URL(fileURLWithPath: QuartzGuiDirectory(project: project).file("authored-frames"))
+  static func framesDirectory(_ project: String) -> String {
+    QuartzGuiDirectory(project: project).file("authored-frames")
   }
 
   /// A frame id becomes a directory name and the plugin name `quartz plugin add` derives, so it is a
@@ -79,15 +79,15 @@ public struct LayoutFrames: Sendable {
   }
 
   /// The directory of frame `id`, or why there is none.
-  public static func frameDirectory(project: URL, id: String) throws -> URL {
+  public static func frameDirectory(project: String, id: String) throws -> String {
     try frameDirectory(project, .string(id))
   }
 
-  static func frameDirectory(_ project: URL, _ id: JSONValue?) throws -> URL {
+  static func frameDirectory(_ project: String, _ id: JSONValue?) throws -> String {
     let text = JS.string(id)
     guard isSlug(text) else { throw FrameIdInvalid(id: text) }
     switch id {
-    case .string(let id)?: return framesDirectory(project).appendingPathComponent(id, isDirectory: true)
+    case .string(let id)?: return "\(framesDirectory(project))/\(id)"
     case nil: throw InvalidPathArgument(received: "undefined")
     case .null?: throw InvalidPathArgument(received: "null")
     case .number(let number)?: throw InvalidPathArgument(received: "type number (\(JSJSON.numberToString(number)))")
@@ -101,16 +101,16 @@ public struct LayoutFrames: Sendable {
   /// One file per project, not a field per frame: two frames that disagree about where "mobile"
   /// starts would reflow one site at two widths. Absent, unreadable or inconsistent means Quartz's
   /// own numbers; a broken file must not make the frames unbuildable.
-  public static func widths(project: URL) -> Widths {
+  public static func widths(project: String) -> Widths {
     let raw = JSONStore.read(QuartzGuiDirectory(project: project).layoutBreakpoints, orEmpty: .object)
     return FrameBreakpointWidths(object: raw.objectValue ?? JSONObject()).widths
   }
 
   /// The widths are baked into each frame's media queries, so every frame is rewritten with them.
-  public func saveWidths(_ widths: Widths, project: URL) async throws {
+  public func saveWidths(_ widths: Widths, project: String) async throws {
     let file = "\(try QuartzGuiDirectory(project: project).create())/layout-breakpoints.json"
     try JSONStore.write(.object(JSONObject([("tablet", .number(widths.tablet)), ("mobile", .number(widths.mobile))])), to: file)
-    try await ProjectLock.frames.run(project.path) {
+    try await ProjectLock.frames.run(project) {
       let groupLayouts = await readGroupLayouts(project, problems: nil)
       for def in Self.listFrames(project: project) {
         try write(def, project: project, widths: widths, groupLayouts: groupLayouts)
@@ -123,11 +123,11 @@ public struct LayoutFrames: Sendable {
   /// Every readable frame of the project, in the order the directory lists them, each in the
   /// current shape. A frame.json that does not parse is left out and left alone: moving it aside
   /// would take the frame's directory apart while its plugin entry still points at it.
-  public static func listFrames(project: URL) -> [JSONValue] {
+  public static func listFrames(project: String) -> [JSONValue] {
     let dir = framesDirectory(project)
     return directoryEntries(dir).filter(\.isDirectory).compactMap { entry -> JSONValue? in
-      let file = dir.appendingPathComponent(entry.name).appendingPathComponent("frame.json")
-      guard let data = try? Data(contentsOf: file), let raw = try? JSJSON.parse(data),
+      let file = "\(dir)/\(entry.name)/frame.json"
+      guard let data = try? Posix.read(file), let raw = try? JSJSON.parse(data),
             let def = try? GridFrameCss.migrate(raw), def != .null else { return nil }
       return def
     }
@@ -136,7 +136,7 @@ public struct LayoutFrames: Sendable {
   /// `readdir(dir, { withFileTypes: true })`: sorted by the bytes of the name, as libuv's
   /// `scandir` sorts for Node (strcmp), not in the order the file system gives; a symlink is not a
   /// directory.
-  static func directoryEntries(_ dir: URL) -> [(name: String, isDirectory: Bool)] {
+  static func directoryEntries(_ dir: String) -> [(name: String, isDirectory: Bool)] {
     directoryEntriesWithKind(dir).map { ($0.name, $0.kind == .directory) }
   }
 
@@ -145,8 +145,8 @@ public struct LayoutFrames: Sendable {
   /// The same with the Dirent's kind: a link is a link, not what it points at.
   /// (Measured: the 22 files of a plugin came back in the file system's hash order, Node's in
   /// name order.)
-  static func directoryEntriesWithKind(_ dir: URL) -> [(name: String, kind: EntryKind)] {
-    guard let stream = opendir(dir.path) else { return [] }
+  static func directoryEntriesWithKind(_ dir: String) -> [(name: String, kind: EntryKind)] {
+    guard let stream = opendir(dir) else { return [] }
     defer { closedir(stream) }
     var result: [(String, EntryKind)] = []
     while let entry = readdir(stream) {
@@ -173,7 +173,7 @@ public struct LayoutFrames: Sendable {
   /// Unreadable config means no groups rather than a failed write: a frame that shows every
   /// position undivided still builds. But "no groups" and "could not tell" render the same, so the
   /// difference is said where it is known, in the build log.
-  func readGroupLayouts(_ project: URL, problems: ProblemList?) async -> GroupLayoutsFor {
+  func readGroupLayouts(_ project: String, problems: ProblemList?) async -> GroupLayoutsFor {
     do {
       let config = try await readConfig(project)
       let plugins = config.plugins.map(\.object)
@@ -188,7 +188,7 @@ public struct LayoutFrames: Sendable {
   /// The three files of one frame. All three contents are made before the first is written: a
   /// definition whose module cannot be generated gets none of them, where QuartzControl had started
   /// two atomic writes before the third threw and left their temporary files behind.
-  func write(_ def: JSONValue, project: URL, widths: Widths, groupLayouts: GroupLayoutsFor) throws {
+  func write(_ def: JSONValue, project: String, widths: Widths, groupLayouts: GroupLayoutsFor) throws {
     if def == .null { throw JS.readError(.null, "id") }
     let dir = try Self.frameDirectory(project, def["id"])
     let package = JSJSON.stringify(.object(GridFrameCss.present([
@@ -199,23 +199,23 @@ public struct LayoutFrames: Sendable {
     let module = FrameModule.source(frameName: def["frameName"], areas: def["areas"], groupLayouts: layouts,
                                     css: try GridFrameCss.frameCss(def, widths: widths))
     try QuartzGuiDirectory(project: project).create("authored-frames")
-    try FileManager.default.createDirectory(at: dir.appendingPathComponent("dist"), withIntermediateDirectories: true)
-    try JSONStore.write(def, to: dir.appendingPathComponent("frame.json"))
-    try JSONStore.writeAtomic(Data(package.utf8), to: dir.appendingPathComponent("package.json"))
-    try JSONStore.writeAtomic(Data(module.utf8), to: dir.appendingPathComponent("dist/frames.js"))
+    try Posix.mkdirs("\(dir)/dist")
+    try JSONStore.write(def, to: "\(dir)/frame.json")
+    try JSONStore.writeAtomic(Data(package.utf8), to: "\(dir)/package.json")
+    try JSONStore.writeAtomic(Data(module.utf8), to: "\(dir)/dist/frames.js")
   }
 
   /// Rewrites every frame against the config and the widths as they stand now. Never throws and
   /// returns at once for a project without frames, because it sits in front of every build; what
   /// went wrong comes back as sentences for the build log. Silence would read "built with the
   /// frames as they were", which looks exactly like success.
-  public func writeAllFrames(project: URL) async -> [String] {
+  public func writeAllFrames(project: String) async -> [String] {
     let problems = ProblemList()
     do {
       guard !Self.listFrames(project: project).isEmpty else { return [] }
       // Read inside the queue: reading first leaves a window in which the caller with the older
       // config writes last.
-      try await ProjectLock.frames.run(project.path) {
+      try await ProjectLock.frames.run(project) {
         let frames = Self.listFrames(project: project)
         let widths = Self.widths(project: project)
         let groupLayouts = await readGroupLayouts(project, problems: problems)
@@ -249,27 +249,27 @@ public struct LayoutFrames: Sendable {
 
   /// Writes a frame; a new one is also registered with `quartz plugin add <dir>`, an existing one
   /// only rewritten. `snapshot: false` for a template import (see `Plugins`).
-  public func saveFrame(_ raw: JSONValue, project: URL, snapshot: Bool = true) async throws -> PluginCommands.Result {
+  public func saveFrame(_ raw: JSONValue, project: String, snapshot: Bool = true) async throws -> PluginCommands.Result {
     if let problem = Self.problem(raw) { return PluginCommands.Result(success: false, output: problem) }
     let def = try GridFrameCss.migrate(raw)
     let dir = try Self.frameDirectory(project, def["id"])
-    let isNew = !FileManager.default.fileExists(atPath: dir.path)
-    try await ProjectLock.frames.run(project.path) {
+    let isNew = !FileManager.default.fileExists(atPath: dir)
+    try await ProjectLock.frames.run(project) {
       try write(def, project: project, widths: Self.widths(project: project), groupLayouts: await readGroupLayouts(project, problems: nil))
     }
     guard isNew else { return PluginCommands.Result(success: true, output: "") }
     guard let plugins else { return PluginCommands.Result(success: false, output: "no plugin commands") }
-    return await plugins.add(dir.path, project, snapshot)
+    return await plugins.add(dir, project, snapshot)
   }
 
   /// Unregisters the frame and removes its directory. The id is checked before the CLI runs.
-  public func deleteFrame(id: String, project: URL) async throws -> PluginCommands.Result {
+  public func deleteFrame(id: String, project: String) async throws -> PluginCommands.Result {
     let dir = try Self.frameDirectory(project: project, id: id)
     guard let plugins else { return PluginCommands.Result(success: false, output: "no plugin commands") }
     let result = await plugins.remove(id, project)
     // `rmSync(dir, { recursive: true, force: true })`: a missing directory is fine, one that
     // cannot be removed is not.
-    if FileManager.default.fileExists(atPath: dir.path) { try FileManager.default.removeItem(at: dir) }
+    if FileManager.default.fileExists(atPath: dir) { try FileManager.default.removeItem(atPath: dir) }
     return result
   }
 }

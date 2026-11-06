@@ -470,7 +470,7 @@ public struct TemplatePackage: Sendable {
 
   /// The files of one folder, not its folders and not its links.
   static func listFilesFlat(_ dir: URL) -> [String] {
-    jsSorted(LayoutFrames.directoryEntriesWithKind(dir).filter { $0.kind == .file }.map(\.name))
+    jsSorted(LayoutFrames.directoryEntriesWithKind(dir.path).filter { $0.kind == .file }.map(\.name))
   }
 
   /// Every file under a folder but the hidden ones, links followed (a link to a folder descended
@@ -479,7 +479,7 @@ public struct TemplatePackage: Sendable {
     guard exists(dir) else { return [] }
     if seen.isEmpty, let real = realpath(dir) { seen.insert(real) }
     var out: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir)) where !entry.name.hasPrefix(".") {
+    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) where !entry.name.hasPrefix(".") {
       let full = NodePath.join(dir, entry.name)
       let rel = prefix.isEmpty ? entry.name : "\(prefix)/\(entry.name)"
       var isDirectory = entry.kind == .directory
@@ -770,7 +770,7 @@ public struct TemplatePackage: Sendable {
   static func scssUnder(_ dir: String, _ depth: Int = 0) -> [String] {
     guard depth <= 6, exists(dir) else { return [] }
     var out: [String] = []
-    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir)) {
+    for entry in LayoutFrames.directoryEntriesWithKind(URL(fileURLWithPath: dir).path) {
       let path = NodePath.join(dir, entry.name)
       if entry.kind == .directory { out += scssUnder(path, depth + 1) } else if JSText.endsWith(entry.name, ".scss") { out.append(path) }
     }
@@ -1065,7 +1065,7 @@ public struct TemplatePackage: Sendable {
 
   func collectLayout(_ project: URL) async throws -> Collected? {
     let config = try await readConfig(project)
-    let widths = LayoutFrames.widths(project: project)
+    let widths = LayoutFrames.widths(project: project.path)
     let layout = config.layout
     let payload = JSONObject([("layout", layout.map(JSONValue.object) ?? .null),
                               ("breakpoints", .object(JSONObject([("tablet", .number(widths.tablet)), ("mobile", .number(widths.mobile))])))])
@@ -1077,7 +1077,7 @@ public struct TemplatePackage: Sendable {
     let config = try await readConfig(run.project)
     var plan = PartPlan(id: "layout")
     if Self.stringified(config.layout.map(JSONValue.object) ?? .null) != Self.stringified(payload["layout"]) { plan.conflicts.append(.string("layout")) }
-    let current = LayoutFrames.widths(project: run.project)
+    let current = LayoutFrames.widths(project: run.project.path)
     if payload["breakpoints"]?["tablet"] != .number(current.tablet) || payload["breakpoints"]?["mobile"] != .number(current.mobile) {
       plan.conflicts.append(.string("breakpoints"))
     }
@@ -1096,7 +1096,7 @@ public struct TemplatePackage: Sendable {
     }
     // Every frame's media queries carry the widths, so every frame is rewritten.
     let breakpoints = payload["breakpoints"]
-    try await frames.saveWidths((JS.toNumber(breakpoints?["tablet"]), JS.toNumber(breakpoints?["mobile"])), project: run.project)
+    try await frames.saveWidths((JS.toNumber(breakpoints?["tablet"]), JS.toNumber(breakpoints?["mobile"])), project: run.project.path)
   }
 
   // MARK: - frames
@@ -1115,13 +1115,13 @@ public struct TemplatePackage: Sendable {
   }
 
   func collectFrames(_ project: URL) -> Collected? {
-    let list = LayoutFrames.listFrames(project: project)
+    let list = LayoutFrames.listFrames(project: project.path)
     guard !list.isEmpty else { return nil }
     return Collected(payload: .object(JSONObject([("frames", .array(list))])), stats: JSONObject([("frames", .number(Double(list.count)))]))
   }
 
   func planFrames(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
-    let existing = Set(LayoutFrames.listFrames(project: run.project).compactMap { $0["id"]?.stringValue })
+    let existing = Set(LayoutFrames.listFrames(project: run.project.path).compactMap { $0["id"]?.stringValue })
     var plan = PartPlan(id: "frames")
     for frame in try Self.list(payload["frames"], "frames") {
       // The question saveFrame will ask, asked while the answer is worth something, with its reason.
@@ -1135,7 +1135,7 @@ public struct TemplatePackage: Sendable {
   }
 
   func applyFrames(_ payload: JSONValue, _ run: Run) async throws {
-    let existing = Set(LayoutFrames.listFrames(project: run.project).compactMap { $0["id"]?.stringValue })
+    let existing = Set(LayoutFrames.listFrames(project: run.project.path).compactMap { $0["id"]?.stringValue })
     for frame in try Self.list(payload["frames"], "frames") {
       let shown = JS.string(Self.frameShown(frame))
       if let id = frame["id"]?.stringValue, existing.contains(id), run.strategy == .projectWins {
@@ -1145,7 +1145,7 @@ public struct TemplatePackage: Sendable {
       run.progress(shown)
       // saveFrame writes the frame's files and registers it with `quartz plugin add <its dir>`,
       // which is why a frame's entry never travels in the plugins part.
-      let result = try await frames.saveFrame(frame, project: run.project, snapshot: false)
+      let result = try await frames.saveFrame(frame, project: run.project.path, snapshot: false)
       guard result.success else {
         run.warn("frameFailed:\(L10n.t("main.frameNameAndReason", ["name": Self.frameLabel(frame), "reason": JSText.slice(result.output, -400)]))")
         continue
@@ -1155,7 +1155,7 @@ public struct TemplatePackage: Sendable {
       let id = frame["id"]?.stringValue ?? ""
       var config = try await readConfig(run.project)
       if !config.plugins.contains(where: { $0.name == id }) {
-        config.plugins.append(PluginEntry(object: JSONObject([("name", .string(id)), ("source", .string(try LayoutFrames.frameDirectory(project: run.project, id: id).path)),
+        config.plugins.append(PluginEntry(object: JSONObject([("name", .string(id)), ("source", .string(try LayoutFrames.frameDirectory(project: run.project.path, id: id))),
                                                               ("enabled", .bool(true))])))
         try await writeConfig(config, run.project)
       }
@@ -1206,7 +1206,7 @@ public struct TemplatePackage: Sendable {
 
   func collectPlugins(_ project: URL) async throws -> Collected? {
     let config = try await readConfig(project)
-    let frameIds = Set(LayoutFrames.listFrames(project: project).compactMap { $0["id"]?.stringValue })
+    let frameIds = Set(LayoutFrames.listFrames(project: project.path).compactMap { $0["id"]?.stringValue })
     let themeIndex = Self.themeEntryIndex(config.plugins)
     let entries = config.plugins.enumerated().filter { $0.offset != themeIndex && !Self.isFrameEntry($0.element, frameIds) }.map(\.element)
     if entries.isEmpty { return nil }
