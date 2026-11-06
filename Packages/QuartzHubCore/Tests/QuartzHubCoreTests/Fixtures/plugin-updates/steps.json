@@ -1,0 +1,445 @@
+{
+ "npx": "#!/bin/sh\nprintf '%s\\n' \"npx $* @ $(pwd -P)\" >> '@W@/npx-calls.log'\necho 'Installed plugins'\n",
+ "steps": [
+  {
+   "name": "the plugin repository",
+   "setup": [
+    {
+     "do": "mkdir",
+     "path": "plugin"
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "init",
+      "-q",
+      "-b",
+      "main"
+     ]
+    },
+    {
+     "do": "write",
+     "path": "plugin/index.js",
+     "text": "1\n"
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "add",
+      "-A"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "commit",
+      "-q",
+      "-m",
+      "one"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "tag",
+      "light"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "tag",
+      "-a",
+      "v1",
+      "-m",
+      "v1"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "branch",
+      "dev"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "tag",
+      "both"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "branch",
+      "both"
+     ]
+    },
+    {
+     "do": "write",
+     "path": "plugin/index.js",
+     "text": "2\n"
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "commit",
+      "-q",
+      "-am",
+      "two"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "branch",
+      "-f",
+      "both"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "branch",
+      "feature/x"
+     ]
+    },
+    {
+     "do": "git",
+     "path": "plugin",
+     "args": [
+      "branch",
+      "other/x",
+      "dev"
+     ]
+    },
+    {
+     "do": "mkdir",
+     "path": "p"
+    }
+   ],
+   "op": "none",
+   "args": [],
+   "result": null,
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "no lockfile",
+   "setup": [],
+   "op": "status",
+   "args": [],
+   "result": [],
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "lockfile unreadable",
+   "setup": [
+    {
+     "do": "write",
+     "path": "p/quartz.lock.json",
+     "text": "{ nope"
+    }
+   ],
+   "op": "status",
+   "args": [],
+   "result": [],
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "no plugins key",
+   "setup": [
+    {
+     "do": "write",
+     "path": "p/quartz.lock.json",
+     "text": "{\n  \"version\": \"1\"\n}\n"
+    }
+   ],
+   "op": "status",
+   "args": [],
+   "result": [],
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "plugins null",
+   "setup": [
+    {
+     "do": "write",
+     "path": "p/quartz.lock.json",
+     "text": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": null\n}\n"
+    }
+   ],
+   "op": "status",
+   "args": [],
+   "result": [],
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "plugins an array",
+   "setup": [
+    {
+     "do": "write",
+     "path": "p/quartz.lock.json",
+     "text": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": [\n    {\n      \"resolved\": \"@W@/plugin\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"x\"\n  ]\n}\n"
+    }
+   ],
+   "op": "status",
+   "args": [],
+   "result": [
+    {
+     "name": "0",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "behind"
+    },
+    {
+     "name": "1",
+     "state": "local"
+    }
+   ],
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "plugins a string",
+   "setup": [
+    {
+     "do": "write",
+     "path": "p/quartz.lock.json",
+     "text": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": \"ab\"\n}\n"
+    }
+   ],
+   "op": "status",
+   "args": [],
+   "result": [
+    {
+     "name": "0",
+     "state": "local"
+    },
+    {
+     "name": "1",
+     "state": "local"
+    }
+   ],
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "every kind of entry",
+   "setup": [
+    {
+     "do": "write",
+     "path": "p/quartz.lock.json",
+     "text": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"local\": {\n      \"source\": \"./x\",\n      \"commit\": \"local\",\n      \"resolved\": \"@W@/plugin\"\n    },\n    \"unresolved\": {\n      \"source\": \"github:a/b\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"emptyResolved\": {\n      \"resolved\": \"\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"current\": {\n      \"resolved\": \"@W@/plugin\",\n      \"commit\": \"cc3cbf776e14c0a0b687607ce49a96929457f5c1\"\n    },\n    \"behind\": {\n      \"resolved\": \"@W@/plugin\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"noCommit\": {\n      \"resolved\": \"@W@/plugin\"\n    },\n    \"branch\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"dev\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"branchBehind\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"main\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"lightTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"light\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"annotatedTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"v1\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"branchAndTag\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"both\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"tailMatch\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"x\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"missingRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"nope\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"emptyRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"\",\n      \"commit\": \"cc3cbf776e14c0a0b687607ce49a96929457f5c1\"\n    },\n    \"unreachable\": {\n      \"resolved\": \"@W@/nothing-here\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"dashed\": {\n      \"resolved\": \"--upload-pack=touch @W@/pwned\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"dashedRef\": {\n      \"resolved\": \"@W@/plugin\",\n      \"ref\": \"--upload-pack=touch @W@/pwned\",\n      \"commit\": \"9998b616e06a55f6e6a9019708ca97869ac24c44\"\n    },\n    \"string\": \"just a string\",\n    \"number\": 3\n  }\n}\n"
+    }
+   ],
+   "op": "status",
+   "args": [],
+   "result": [
+    {
+     "name": "local",
+     "state": "local"
+    },
+    {
+     "name": "unresolved",
+     "state": "local"
+    },
+    {
+     "name": "emptyResolved",
+     "state": "local"
+    },
+    {
+     "name": "current",
+     "installedCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "upToDate"
+    },
+    {
+     "name": "behind",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "behind"
+    },
+    {
+     "name": "noCommit",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "behind"
+    },
+    {
+     "name": "branch",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "state": "upToDate"
+    },
+    {
+     "name": "branchBehind",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "behind"
+    },
+    {
+     "name": "lightTag",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "state": "upToDate"
+    },
+    {
+     "name": "annotatedTag",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "35c987504a00cca4a607771b4e85a2a8655994cf",
+     "state": "behind"
+    },
+    {
+     "name": "branchAndTag",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "behind"
+    },
+    {
+     "name": "tailMatch",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "behind"
+    },
+    {
+     "name": "missingRef",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": null,
+     "state": "unknown"
+    },
+    {
+     "name": "emptyRef",
+     "installedCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "latestCommit": "cc3cbf776e14c0a0b687607ce49a96929457f5c1",
+     "state": "upToDate"
+    },
+    {
+     "name": "unreachable",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": null,
+     "state": "unknown"
+    },
+    {
+     "name": "dashed",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": null,
+     "state": "unknown"
+    },
+    {
+     "name": "dashedRef",
+     "installedCommit": "9998b616e06a55f6e6a9019708ca97869ac24c44",
+     "latestCommit": null,
+     "state": "unknown"
+    },
+    {
+     "name": "string",
+     "state": "local"
+    },
+    {
+     "name": "number",
+     "state": "local"
+    }
+   ],
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "nothing ran from a dashed source",
+   "setup": [],
+   "op": "none",
+   "args": [],
+   "result": false,
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "an entry that is null",
+   "setup": [
+    {
+     "do": "write",
+     "path": "p/quartz.lock.json",
+     "text": "{\n  \"version\": \"1.0.0\",\n  \"plugins\": {\n    \"a\": null\n  }\n}\n"
+    }
+   ],
+   "op": "status",
+   "args": [],
+   "error": "Cannot read properties of null (reading 'commit')",
+   "npx": "",
+   "snapshots": []
+  },
+  {
+   "name": "update all",
+   "setup": [],
+   "op": "update",
+   "args": [],
+   "result": {
+    "success": true,
+    "output": "Installed plugins\n",
+    "stdout": "Installed plugins\n"
+   },
+   "npx": "npx quartz plugin install --latest @ @W@/p\n",
+   "snapshots": [
+    [
+     "pluginChange",
+     ""
+    ]
+   ]
+  },
+  {
+   "name": "update one",
+   "setup": [],
+   "op": "update",
+   "args": [
+    "@quartz-community/explorer"
+   ],
+   "result": {
+    "success": true,
+    "output": "Installed plugins\n",
+    "stdout": "Installed plugins\n"
+   },
+   "npx": "npx quartz plugin install --latest @quartz-community/explorer @ @W@/p\n",
+   "snapshots": [
+    [
+     "pluginChange",
+     "@quartz-community/explorer"
+    ]
+   ]
+  },
+  {
+   "name": "update an empty name",
+   "setup": [],
+   "op": "update",
+   "args": [
+    ""
+   ],
+   "result": {
+    "success": true,
+    "output": "Installed plugins\n",
+    "stdout": "Installed plugins\n"
+   },
+   "npx": "npx quartz plugin install --latest @ @W@/p\n",
+   "snapshots": [
+    [
+     "pluginChange",
+     ""
+    ]
+   ]
+  }
+ ]
+}
