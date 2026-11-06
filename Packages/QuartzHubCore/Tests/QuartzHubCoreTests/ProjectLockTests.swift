@@ -88,7 +88,10 @@ import Testing
     let lock = ProjectLock(name: "test")
     let scratch = try HostPathTests.Scratch()
     let project = scratch.url.path
-    let answer = await Self.within(.seconds(2)) {
+    // Ten seconds, not two: with the whole suite starting at once the task alone could take more
+    // than two to be scheduled (failed 2 of 3 runs on 2026-11-06 at 3227beb). A lock that waits for
+    // itself never answers, so the deadline only decides how long that failure takes.
+    let answer = await Self.within(.seconds(10)) {
       await lock.run(project) {
         await lock.run(project + "/.") { 42 }
       }
