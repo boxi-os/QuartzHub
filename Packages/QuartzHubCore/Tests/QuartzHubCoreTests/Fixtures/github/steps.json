@@ -1,0 +1,1264 @@
+{
+ "steps": [
+  {
+   "name": "viewer",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{\"login\":\"boxi-os\",\"name\":\"Boxi Ö\",\"id\":1}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "login": "boxi-os",
+     "name": "Boxi Ö"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/user",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "viewer without a name",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{\"login\":\"boxi-os\",\"name\":null}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "login": "boxi-os"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/user",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "viewer refused",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 401,
+     "body": "{\"message\":\"Bad credentials\"}"
+    }
+   ],
+   "result": {
+    "ok": null
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/user",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "viewer without a token",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {},
+   "scripted": [],
+   "result": {
+    "ok": null
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "viewer with an empty token",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {
+    "value": ""
+   },
+   "scripted": [],
+   "result": {
+    "ok": null
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "viewer with a token that cannot be read",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {
+    "unreadable": true
+   },
+   "scripted": [],
+   "result": {
+    "ok": null
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "viewer, network down",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "network": true
+    }
+   ],
+   "result": {
+    "error": "fetch failed"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/user",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "viewer, timeout",
+   "call": "viewer",
+   "args": [
+    null
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "timeout": true
+    }
+   ],
+   "result": {
+    "error": "The operation was aborted due to timeout"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/user",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "origin on github",
+   "call": "originRepo",
+   "args": [
+    "github"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [],
+   "result": {
+    "ok": {
+     "owner": "boxi-os",
+     "repo": "site",
+     "htmlUrl": "https://github.com/boxi-os/site"
+    }
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "origin elsewhere",
+   "call": "originRepo",
+   "args": [
+    "gitlab"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [],
+   "result": {
+    "ok": null
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "no origin",
+   "call": "originRepo",
+   "args": [
+    "none"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [],
+   "result": {
+    "ok": null
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "create where there is an origin",
+   "call": "createRepo",
+   "args": [
+    "github",
+    {
+     "name": "site",
+     "private": true
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubOriginExists\",\"args\":{\"remote\":\"https://github.com/boxi-os/site.git\"}}"
+    }
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "create without a token",
+   "call": "createRepo",
+   "args": [
+    "none",
+    {
+     "name": "site",
+     "private": false
+    }
+   ],
+   "token": {},
+   "scripted": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubRepoCreateFailed\",\"args\":{}}\n401: {\"key\":\"githubNoToken\",\"args\":{}}"
+    }
+   },
+   "requests": [],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "create refused",
+   "call": "createRepo",
+   "args": [
+    "none",
+    {
+     "name": "site",
+     "private": false,
+     "description": "Meine Seite"
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 422,
+     "body": "{\"message\":\"Repository creation failed.\",\"errors\":[{\"message\":\"name already exists on this account\"}]}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubRepoCreateFailed\",\"args\":{}}\n422: Repository creation failed."
+    }
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.github.com/user/repos",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"name\":\"site\",\"private\":false,\"description\":\"Meine Seite\",\"auto_init\":false}"
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "create, an error page",
+   "call": "createRepo",
+   "args": [
+    "none",
+    {
+     "name": "site",
+     "private": false
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 502,
+     "body": "<html>Bad gateway</html>"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubRepoCreateFailed\",\"args\":{}} (HTTP 502)"
+    }
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.github.com/user/repos",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"name\":\"site\",\"private\":false,\"auto_init\":false}"
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "create, a 200 is not a 201",
+   "call": "createRepo",
+   "args": [
+    "none",
+    {
+     "name": "site",
+     "private": false
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{\"full_name\":\"boxi-os/site\"}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubRepoCreateFailed\",\"args\":{}} (HTTP 200)"
+    }
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.github.com/user/repos",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"name\":\"site\",\"private\":false,\"auto_init\":false}"
+    }
+   ],
+   "origins": {
+    "none": null,
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "create",
+   "call": "createRepo",
+   "args": [
+    "none",
+    {
+     "name": "site-ü",
+     "private": true,
+     "description": "Gärten"
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 201,
+     "body": "{\"full_name\":\"boxi-os/site-ü\",\"clone_url\":\"https://github.com/boxi-os/site-ü.git\",\"html_url\":\"https://github.com/boxi-os/site-ü\"}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"githubRepoCreated\",\"args\":{\"repo\":\"boxi-os/site-ü\"}}\nhttps://github.com/boxi-os/site-ü"
+    }
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.github.com/user/repos",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"name\":\"site-ü\",\"private\":true,\"description\":\"Gärten\",\"auto_init\":false}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "pages elsewhere",
+   "call": "pagesInfo",
+   "args": [
+    "gitlab"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [],
+   "result": {
+    "ok": null
+   },
+   "requests": [],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "pages none yet",
+   "call": "pagesInfo",
+   "args": [
+    "github"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 404,
+     "body": "{\"message\":\"Not Found\"}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "configured": false
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "pages",
+   "call": "pagesInfo",
+   "args": [
+    "github"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{\"status\":\"built\",\"html_url\":\"https://boxi-os.github.io/site/\",\"cname\":null,\"https_enforced\":true,\"source\":{\"branch\":\"gh-pages\",\"path\":\"/\"},\"public\":true}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "configured": true,
+     "status": "built",
+     "htmlUrl": "https://boxi-os.github.io/site/",
+     "cname": null,
+     "httpsEnforced": true,
+     "sourceBranch": "gh-pages",
+     "sourcePath": "/"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "pages without a status",
+   "call": "pagesInfo",
+   "args": [
+    "github"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{\"html_url\":\"https://x/\",\"cname\":\"blog.example.org\",\"https_enforced\":false}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "configured": true,
+     "htmlUrl": "https://x/",
+     "cname": "blog.example.org",
+     "httpsEnforced": false
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "pages forbidden",
+   "call": "pagesInfo",
+   "args": [
+    "github"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 403,
+     "body": "{\"message\":\"Resource not accessible by personal access token\"}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "configured": false,
+     "error": "Resource not accessible by personal access token"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "pages, an error page",
+   "call": "pagesInfo",
+   "args": [
+    "github"
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 500,
+     "body": "oops"
+    }
+   ],
+   "result": {
+    "ok": {
+     "configured": false,
+     "error": "HTTP 500"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "pages without a token",
+   "call": "pagesInfo",
+   "args": [
+    "github"
+   ],
+   "token": {},
+   "scripted": [],
+   "result": {
+    "ok": {
+     "configured": false,
+     "error": "{\"key\":\"githubNoToken\",\"args\":{}}"
+    }
+   },
+   "requests": [],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure elsewhere",
+   "call": "configurePages",
+   "args": [
+    "gitlab",
+    {
+     "branch": "gh-pages"
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubNoGithubOrigin\",\"args\":{}}"
+    }
+   },
+   "requests": [],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure a new site with https",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "gh-pages",
+     "httpsEnforced": true
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 404,
+     "body": "{\"message\":\"Not Found\"}"
+    },
+    {
+     "status": 201,
+     "body": "{\"status\":null}"
+    },
+    {
+     "status": 204
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"githubPagesCreated\",\"args\":{\"branch\":\"gh-pages\"}}\n{\"key\":\"githubHttpsEnforced\",\"args\":{\"state\":\"{\\\"key\\\":\\\"githubOn\\\",\\\"args\\\":{}}\"}}\n"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    },
+    {
+     "method": "POST",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"source\":{\"branch\":\"gh-pages\",\"path\":\"/\"}}"
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"https_enforced\":true}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure, creation refused",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "gh-pages"
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 404,
+     "body": "{}"
+    },
+    {
+     "status": 422,
+     "body": "{\"message\":\"Your current plan does not support GitHub Pages for this repository.\"}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubPagesSetupFailed\",\"args\":{}}\n422: Your current plan does not support GitHub Pages for this repository."
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    },
+    {
+     "method": "POST",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"source\":{\"branch\":\"gh-pages\",\"path\":\"/\"}}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure a domain, https not yet",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "gh-pages",
+     "cname": "blog.example.org",
+     "httpsEnforced": true
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{}"
+    },
+    {
+     "status": 204
+    },
+    {
+     "status": 404,
+     "body": "{\"message\":\"The certificate does not exist yet\"}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"githubPagesSourceSet\",\"args\":{\"branch\":\"gh-pages\"}}\n{\"key\":\"githubDomainSet\",\"args\":{\"domain\":\"blog.example.org\"}}\n{\"key\":\"githubHttpsPending\",\"args\":{}}\nThe certificate does not exist yet\n"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"source\":{\"branch\":\"gh-pages\",\"path\":\"/\"},\"cname\":\"blog.example.org\"}"
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"https_enforced\":true}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure, clear the domain",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "pages",
+     "cname": ""
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{}"
+    },
+    {
+     "status": 204
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"githubPagesSourceSet\",\"args\":{\"branch\":\"pages\"}}\n{\"key\":\"githubDomainCleared\",\"args\":{}}\n"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"source\":{\"branch\":\"pages\",\"path\":\"/\"},\"cname\":null}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure, domain null",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "pages",
+     "cname": null,
+     "httpsEnforced": false
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{}"
+    },
+    {
+     "status": 204
+    },
+    {
+     "status": 204
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"githubPagesSourceSet\",\"args\":{\"branch\":\"pages\"}}\n{\"key\":\"githubDomainCleared\",\"args\":{}}\n{\"key\":\"githubHttpsEnforced\",\"args\":{\"state\":\"{\\\"key\\\":\\\"githubOff\\\",\\\"args\\\":{}}\"}}\n"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"source\":{\"branch\":\"pages\",\"path\":\"/\"},\"cname\":null}"
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"https_enforced\":false}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure, saving refused",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "gh-pages"
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{}"
+    },
+    {
+     "status": 409,
+     "body": ""
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubPagesSaveFailed\",\"args\":{}} (HTTP 409)"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"source\":{\"branch\":\"gh-pages\",\"path\":\"/\"}}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure, a 200 is not the 204 it means",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "gh-pages"
+    }
+   ],
+   "token": {
+    "value": "ghp_token"
+   },
+   "scripted": [
+    {
+     "status": 200,
+     "body": "{}"
+    },
+    {
+     "status": 200,
+     "body": "{}"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubPagesSaveFailed\",\"args\":{}} (HTTP 200)"
+    }
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": null,
+     "body": null
+    },
+    {
+     "method": "PUT",
+     "url": "https://api.github.com/repos/boxi-os/site/pages",
+     "accept": "application/vnd.github+json",
+     "version": "2022-11-28",
+     "authorization": "Bearer ghp_token",
+     "contentType": "application/json",
+     "body": "{\"source\":{\"branch\":\"gh-pages\",\"path\":\"/\"}}"
+    }
+   ],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  },
+  {
+   "name": "configure without a token",
+   "call": "configurePages",
+   "args": [
+    "github",
+    {
+     "branch": "gh-pages"
+    }
+   ],
+   "token": {},
+   "scripted": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"githubPagesSaveFailed\",\"args\":{}}\n401: {\"key\":\"githubNoToken\",\"args\":{}}"
+    }
+   },
+   "requests": [],
+   "origins": {
+    "none": "https://github.com/boxi-os/site-ü.git",
+    "github": "https://github.com/boxi-os/site.git",
+    "gitlab": "git@gitlab.com:boxi/site.git"
+   },
+   "unused": 0
+  }
+ ]
+}
