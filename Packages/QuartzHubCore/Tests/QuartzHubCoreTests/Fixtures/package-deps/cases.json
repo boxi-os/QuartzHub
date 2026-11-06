@@ -1,0 +1,4823 @@
+[
+ {
+  "name": "identical",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "added locally",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "theme": "^2.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "theme",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "added in every section",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "p": "1"
+    },
+    "devDependencies": {
+     "t": "^1.0.0",
+     "d": "2"
+    },
+    "optionalDependencies": {
+     "o": "3"
+    },
+    "peerDependencies": {
+     "e": "4"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "p",
+     "section": "dependencies",
+     "range": "1"
+    },
+    {
+     "name": "d",
+     "section": "devDependencies",
+     "range": "2"
+    },
+    {
+     "name": "o",
+     "section": "optionalDependencies",
+     "range": "3"
+    },
+    {
+     "name": "e",
+     "section": "peerDependencies",
+     "range": "4"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "re-pinned locally",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.5.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "a",
+     "section": "dependencies",
+     "range": "^1.5.0"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "re-pinned on both sides",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.1.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^2.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [
+    "core"
+   ],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "re-pinned here, removed upstream",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.1.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "core",
+     "section": "dependencies",
+     "range": "^1.1.0"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "added on both sides, other ranges",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "n": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "n": "^2.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [
+    "n"
+   ],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "added on both sides, same range",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "n": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "n": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [
+    "n"
+   ],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "removed locally",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": [
+    "dependencies.a"
+   ]
+  }
+ },
+ {
+  "name": "moved to another section",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0",
+     "a": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "a",
+     "section": "devDependencies",
+     "range": "^1.0.0"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": [
+    "dependencies.a"
+   ]
+  }
+ },
+ {
+  "name": "removed, re-pinned and added at once",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "dependencies": {
+     "a": "1",
+     "b": "1"
+    }
+   },
+   {
+    "dependencies": {
+     "c": "1",
+     "b": "2"
+    }
+   },
+   {}
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "b",
+     "section": "dependencies",
+     "range": "2"
+    },
+    {
+     "name": "c",
+     "section": "dependencies",
+     "range": "1"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": [
+    "dependencies.a"
+   ]
+  }
+ },
+ {
+  "name": "a script changed",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "y"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": [
+    "scripts"
+   ]
+  }
+ },
+ {
+  "name": "a key added",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    },
+    "type": "module"
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": [
+    "type"
+   ]
+  }
+ },
+ {
+  "name": "a key removed",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": [
+    "version"
+   ]
+  }
+ },
+ {
+  "name": "key order only",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "version": "1.0.0",
+    "name": "q",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "nested key order",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x",
+     "a": "b"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": [
+    "scripts"
+   ]
+  }
+ },
+ {
+  "name": "non-string ranges are ignored",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "dependencies": {
+     "a": 1,
+     "b": "^1"
+    }
+   },
+   {
+    "dependencies": {
+     "a": 2,
+     "b": "^1",
+     "c": null,
+     "d": "^2"
+    }
+   },
+   {}
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "d",
+     "section": "dependencies",
+     "range": "^2"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "section not an object",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "dependencies": [
+     "a"
+    ]
+   },
+   {
+    "dependencies": "a"
+   },
+   {
+    "dependencies": null
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "base null",
+  "fn": "localPackageChanges",
+  "args": [
+   null,
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [
+    "a",
+    "core",
+    "t"
+   ],
+   "unreproducible": [
+    "name",
+    "version",
+    "scripts"
+   ]
+  }
+ },
+ {
+  "name": "ours an array",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   [
+    1,
+    2
+   ],
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": [
+    "dependencies.a",
+    "dependencies.core",
+    "devDependencies.t",
+    "name",
+    "version",
+    "scripts"
+   ]
+  }
+ },
+ {
+  "name": "theirs a string",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "x": "1"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   "nope"
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "x",
+     "section": "dependencies",
+     "range": "1"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "all empty",
+  "fn": "localPackageChanges",
+  "args": [
+   {},
+   {},
+   {}
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "numeric names first",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "dependencies": {
+     "b": "1"
+    }
+   },
+   {
+    "dependencies": {
+     "2": "1",
+     "10": "1",
+     "b": "1",
+     "a": "1"
+    }
+   },
+   {}
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "2",
+     "section": "dependencies",
+     "range": "1"
+    },
+    {
+     "name": "10",
+     "section": "dependencies",
+     "range": "1"
+    },
+    {
+     "name": "a",
+     "section": "dependencies",
+     "range": "1"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "scoped names",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "@s/z": "1",
+     "@s/a": "1"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "@s/z",
+     "section": "dependencies",
+     "range": "1"
+    },
+    {
+     "name": "@s/a",
+     "section": "dependencies",
+     "range": "1"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "empty range",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0",
+     "e": ""
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   },
+   {
+    "name": "q",
+    "version": "1.0.0",
+    "scripts": {
+     "build": "x"
+    },
+    "dependencies": {
+     "a": "^1.0.0",
+     "core": "^1.0.0"
+    },
+    "devDependencies": {
+     "t": "^1.0.0"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "e",
+     "section": "dependencies",
+     "range": ""
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "undefined-like keys",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "x": null
+   },
+   {
+    "x": null,
+    "y": false
+   },
+   {}
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": [
+    "y"
+   ]
+  }
+ },
+ {
+  "name": "gui-test with own themes",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "@jackyzha0/quartz",
+    "description": "🌱 publish your digital garden and notes as a website",
+    "private": true,
+    "version": "5.0.0",
+    "type": "module",
+    "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://quartz.jzhao.xyz",
+    "repository": {
+     "type": "git",
+     "url": "https://github.com/jackyzha0/quartz.git"
+    },
+    "scripts": {
+     "quartz": "./quartz/bootstrap-cli.mjs",
+     "docs": "npx quartz build --serve -d docs",
+     "check": "tsc --noEmit && npx prettier . --check",
+     "format": "npx prettier . --write",
+     "test": "tsx --test",
+     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
+     "prebuild": "npm run install-plugins"
+    },
+    "engines": {
+     "npm": ">=10.9.2",
+     "node": ">=22"
+    },
+    "keywords": [
+     "site generator",
+     "ssg",
+     "digital-garden",
+     "markdown",
+     "blog",
+     "quartz"
+    ],
+    "bin": {
+     "quartz": "./quartz/bootstrap-cli.mjs"
+    },
+    "dependencies": {
+     "@clack/prompts": "^1.8.0",
+     "@floating-ui/dom": "^1.7.4",
+     "@myriaddreamin/rehype-typst": "^0.7.0",
+     "@napi-rs/simple-git": "1.1.0",
+     "@quartz-community/alias-redirects": "^1.0.0",
+     "@quartz-community/article-title": "^1.0.0",
+     "@quartz-community/backlinks": "^1.0.0",
+     "@quartz-community/bases-page": "^1.0.0",
+     "@quartz-community/breadcrumbs": "^1.0.0",
+     "@quartz-community/canvas-page": "^1.0.0",
+     "@quartz-community/citations": "^1.0.0",
+     "@quartz-community/cname": "^1.0.0",
+     "@quartz-community/comments": "^1.0.0",
+     "@quartz-community/content-index": "^1.0.0",
+     "@quartz-community/content-meta": "^1.0.0",
+     "@quartz-community/content-page": "^1.0.0",
+     "@quartz-community/crawl-links": "^1.0.0",
+     "@quartz-community/created-modified-date": "^1.0.0",
+     "@quartz-community/darkmode": "^1.0.0",
+     "@quartz-community/description": "^1.0.0",
+     "@quartz-community/encrypted-pages": "^1.0.0",
+     "@quartz-community/explicit-publish": "^1.0.0",
+     "@quartz-community/explorer": "^1.0.0",
+     "@quartz-community/favicon": "^1.0.0",
+     "@quartz-community/folder-page": "^1.0.0",
+     "@quartz-community/footer": "^1.0.0",
+     "@quartz-community/github-flavored-markdown": "^1.0.0",
+     "@quartz-community/graph": "^1.0.0",
+     "@quartz-community/hard-line-breaks": "^1.0.0",
+     "@quartz-community/latex": "^1.0.0",
+     "@quartz-community/note-properties": "^1.0.0",
+     "@quartz-community/obsidian-flavored-markdown": "^1.0.0",
+     "@quartz-community/obsidian-plugin-excalidraw": "^1.0.0",
+     "@quartz-community/og-image": "^1.0.0",
+     "@quartz-community/ox-hugo": "^1.0.0",
+     "@quartz-community/page-title": "^1.0.0",
+     "@quartz-community/quartz-fonts": "^1.0.0",
+     "@quartz-community/reader-mode": "^1.0.0",
+     "@quartz-community/recent-notes": "^1.0.0",
+     "@quartz-community/remove-draft": "^1.0.0",
+     "@quartz-community/roam": "^1.0.0",
+     "@quartz-community/search": "^1.0.0",
+     "@quartz-community/spacer": "^1.0.0",
+     "@quartz-community/stacked-pages": "^1.0.0",
+     "@quartz-community/syntax-highlighting": "^1.0.1",
+     "@quartz-community/table-of-contents": "^1.0.0",
+     "@quartz-community/tag-list": "^1.0.0",
+     "@quartz-community/tag-page": "^1.0.0",
+     "@quartz-community/unlisted-pages": "^1.0.0",
+     "@quartz-themes/core": "^2.0.0",
+     "@quartz-themes/cupertino": "^1.0.1",
+     "@quartz-themes/default": "^1.0.1",
+     "@quartz-themes/hidden-grotto": "^1.0.1",
+     "@quartz-themes/its-theme": "^1.0.1",
+     "@quartz-themes/minimal": "^1.0.1",
+     "@quartz-themes/origami": "^1.0.1",
+     "@quartz-themes/ultra-lobster": "^1.0.1",
+     "@quartz-themes/velocity": "^1.0.1",
+     "ansi-truncate": "^1.4.0",
+     "async-mutex": "^0.5.0",
+     "chokidar": "^5.0.0",
+     "esbuild-sass-plugin": "^3.6.0",
+     "github-slugger": "^2.0.0",
+     "globby": "^16.1.0",
+     "hast-util-from-html": "^2.0.0",
+     "hast-util-to-jsx-runtime": "^2.3.6",
+     "isomorphic-git": "^1.36.3",
+     "lightningcss": "^1.31.1",
+     "micromorph": "^0.4.5",
+     "minimatch": "^10.1.1",
+     "preact": "^10.28.2",
+     "preact-render-to-string": "^6.6.5",
+     "pretty-bytes": "^7.1.0",
+     "pretty-time": "^1.1.0",
+     "remark-parse": "^11.0.0",
+     "remark-rehype": "^11.1.2",
+     "rfdc": "^1.4.1",
+     "serve-handler": "^6.1.6",
+     "sharp": "^0.35.4",
+     "source-map-support": "^0.5.21",
+     "to-vfile": "^8.0.0",
+     "unified": "^11.0.5",
+     "unist-util-visit": "^5.1.0",
+     "vfile": "^6.0.3",
+     "workerpool": "^10.0.1",
+     "ws": "^8.19.0",
+     "yaml": "^2.8.2",
+     "yargs": "^18.0.0"
+    },
+    "devDependencies": {
+     "@quartz-community/types": "^1.0.0",
+     "@quartz-community/utils": "^1.0.1",
+     "@types/hast": "^3.0.4",
+     "@types/node": "^26.5.1",
+     "@types/pretty-time": "^1.1.5",
+     "@types/source-map-support": "^0.5.10",
+     "@types/ws": "^8.18.1",
+     "@types/yargs": "^17.0.35",
+     "esbuild": "^0.28.2",
+     "prettier": "^3.8.1",
+     "tsx": "^4.21.0",
+     "typescript": "^5.9.3"
+    }
+   },
+   {
+    "name": "@jackyzha0/quartz",
+    "description": "🌱 publish your digital garden and notes as a website",
+    "private": true,
+    "version": "5.0.0",
+    "type": "module",
+    "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://quartz.jzhao.xyz",
+    "repository": {
+     "type": "git",
+     "url": "https://github.com/jackyzha0/quartz.git"
+    },
+    "scripts": {
+     "quartz": "./quartz/bootstrap-cli.mjs",
+     "docs": "npx quartz build --serve -d docs",
+     "check": "tsc --noEmit && npx prettier . --check",
+     "format": "npx prettier . --write",
+     "test": "tsx --test",
+     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
+     "prebuild": "npm run install-plugins"
+    },
+    "engines": {
+     "npm": ">=10.9.2",
+     "node": ">=22"
+    },
+    "keywords": [
+     "site generator",
+     "ssg",
+     "digital-garden",
+     "markdown",
+     "blog",
+     "quartz"
+    ],
+    "bin": {
+     "quartz": "./quartz/bootstrap-cli.mjs"
+    },
+    "dependencies": {
+     "@clack/prompts": "^1.8.0",
+     "@floating-ui/dom": "^1.7.4",
+     "@myriaddreamin/rehype-typst": "^0.7.0",
+     "@napi-rs/simple-git": "1.1.0",
+     "@quartz-community/alias-redirects": "^1.0.0",
+     "@quartz-community/article-title": "^1.0.0",
+     "@quartz-community/backlinks": "^1.0.0",
+     "@quartz-community/bases-page": "^1.0.0",
+     "@quartz-community/breadcrumbs": "^1.0.0",
+     "@quartz-community/canvas-page": "^1.0.0",
+     "@quartz-community/citations": "^1.0.0",
+     "@quartz-community/cname": "^1.0.0",
+     "@quartz-community/comments": "^1.0.0",
+     "@quartz-community/content-index": "^1.0.0",
+     "@quartz-community/content-meta": "^1.0.0",
+     "@quartz-community/content-page": "^1.0.0",
+     "@quartz-community/crawl-links": "^1.0.0",
+     "@quartz-community/created-modified-date": "^1.0.0",
+     "@quartz-community/darkmode": "^1.0.0",
+     "@quartz-community/description": "^1.0.0",
+     "@quartz-community/encrypted-pages": "^1.0.0",
+     "@quartz-community/explicit-publish": "^1.0.0",
+     "@quartz-community/explorer": "^1.0.0",
+     "@quartz-community/favicon": "^1.0.0",
+     "@quartz-community/folder-page": "^1.0.0",
+     "@quartz-community/footer": "^1.0.0",
+     "@quartz-community/github-flavored-markdown": "^1.0.0",
+     "@quartz-community/graph": "^1.0.0",
+     "@quartz-community/hard-line-breaks": "^1.0.0",
+     "@quartz-community/latex": "^1.0.0",
+     "@quartz-community/note-properties": "^1.0.0",
+     "@quartz-community/obsidian-flavored-markdown": "^1.0.0",
+     "@quartz-community/obsidian-plugin-excalidraw": "^1.0.0",
+     "@quartz-community/og-image": "^1.0.0",
+     "@quartz-community/ox-hugo": "^1.0.0",
+     "@quartz-community/page-title": "^1.0.0",
+     "@quartz-community/quartz-fonts": "^1.0.0",
+     "@quartz-community/reader-mode": "^1.0.0",
+     "@quartz-community/recent-notes": "^1.0.0",
+     "@quartz-community/remove-draft": "^1.0.0",
+     "@quartz-community/roam": "^1.0.0",
+     "@quartz-community/search": "^1.0.0",
+     "@quartz-community/spacer": "^1.0.0",
+     "@quartz-community/stacked-pages": "^1.0.0",
+     "@quartz-community/syntax-highlighting": "^1.0.1",
+     "@quartz-community/table-of-contents": "^1.0.0",
+     "@quartz-community/tag-list": "^1.0.0",
+     "@quartz-community/tag-page": "^1.0.0",
+     "@quartz-community/unlisted-pages": "^1.0.0",
+     "@quartz-themes/core": "^2.0.0",
+     "@quartz-themes/cupertino": "^1.0.1",
+     "@quartz-themes/default": "^2.0.0",
+     "@quartz-themes/hidden-grotto": "^1.0.1",
+     "@quartz-themes/its-theme": "^1.0.1",
+     "@quartz-themes/minimal": "^1.0.1",
+     "@quartz-themes/origami": "^1.0.1",
+     "@quartz-themes/ultra-lobster": "^1.0.1",
+     "@quartz-themes/velocity": "^1.0.1",
+     "ansi-truncate": "^1.4.0",
+     "async-mutex": "^0.5.0",
+     "chokidar": "^5.0.0",
+     "esbuild-sass-plugin": "^3.6.0",
+     "github-slugger": "^2.0.0",
+     "globby": "^16.1.0",
+     "hast-util-from-html": "^2.0.0",
+     "hast-util-to-jsx-runtime": "^2.3.6",
+     "isomorphic-git": "^1.36.3",
+     "lightningcss": "^1.31.1",
+     "micromorph": "^0.4.5",
+     "minimatch": "^10.1.1",
+     "preact": "^10.28.2",
+     "preact-render-to-string": "^6.6.5",
+     "pretty-bytes": "^7.1.0",
+     "pretty-time": "^1.1.0",
+     "remark-parse": "^11.0.0",
+     "remark-rehype": "^11.1.2",
+     "rfdc": "^1.4.1",
+     "serve-handler": "^6.1.6",
+     "sharp": "^0.35.4",
+     "source-map-support": "^0.5.21",
+     "to-vfile": "^8.0.0",
+     "unified": "^11.0.5",
+     "unist-util-visit": "^5.1.0",
+     "vfile": "^6.0.3",
+     "workerpool": "^10.0.1",
+     "ws": "^8.19.0",
+     "yaml": "^2.8.2",
+     "yargs": "^18.0.0",
+     "is-odd": "^3.0.0"
+    },
+    "devDependencies": {
+     "@quartz-community/types": "^1.0.0",
+     "@quartz-community/utils": "^1.0.1",
+     "@types/hast": "^3.0.4",
+     "@types/node": "^26.5.1",
+     "@types/pretty-time": "^1.1.5",
+     "@types/source-map-support": "^0.5.10",
+     "@types/ws": "^8.18.1",
+     "@types/yargs": "^17.0.35",
+     "esbuild": "^0.28.2",
+     "prettier": "^3.8.1",
+     "tsx": "^4.21.0",
+     "typescript": "^5.9.3"
+    }
+   },
+   {
+    "name": "@jackyzha0/quartz",
+    "description": "🌱 publish your digital garden and notes as a website",
+    "private": true,
+    "version": "5.0.0",
+    "type": "module",
+    "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://quartz.jzhao.xyz",
+    "repository": {
+     "type": "git",
+     "url": "https://github.com/jackyzha0/quartz.git"
+    },
+    "scripts": {
+     "quartz": "./quartz/bootstrap-cli.mjs",
+     "docs": "npx quartz build --serve -d docs",
+     "check": "tsc --noEmit && npx prettier . --check",
+     "format": "npx prettier . --write",
+     "test": "tsx --test",
+     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
+     "prebuild": "npm run install-plugins"
+    },
+    "engines": {
+     "npm": ">=10.9.2",
+     "node": ">=22"
+    },
+    "keywords": [
+     "site generator",
+     "ssg",
+     "digital-garden",
+     "markdown",
+     "blog",
+     "quartz"
+    ],
+    "bin": {
+     "quartz": "./quartz/bootstrap-cli.mjs"
+    },
+    "dependencies": {
+     "@floating-ui/dom": "^1.7.4",
+     "@myriaddreamin/rehype-typst": "^0.7.0",
+     "@napi-rs/simple-git": "1.1.0",
+     "@quartz-community/alias-redirects": "^1.0.0",
+     "@quartz-community/article-title": "^1.0.0",
+     "@quartz-community/backlinks": "^1.0.0",
+     "@quartz-community/bases-page": "^1.0.0",
+     "@quartz-community/breadcrumbs": "^1.0.0",
+     "@quartz-community/canvas-page": "^1.0.0",
+     "@quartz-community/citations": "^1.0.0",
+     "@quartz-community/cname": "^1.0.0",
+     "@quartz-community/comments": "^1.0.0",
+     "@quartz-community/content-index": "^1.0.0",
+     "@quartz-community/content-meta": "^1.0.0",
+     "@quartz-community/content-page": "^1.0.0",
+     "@quartz-community/crawl-links": "^1.0.0",
+     "@quartz-community/created-modified-date": "^1.0.0",
+     "@quartz-community/darkmode": "^1.0.0",
+     "@quartz-community/description": "^1.0.0",
+     "@quartz-community/encrypted-pages": "^1.0.0",
+     "@quartz-community/explicit-publish": "^1.0.0",
+     "@quartz-community/explorer": "^1.0.0",
+     "@quartz-community/favicon": "^1.0.0",
+     "@quartz-community/folder-page": "^1.0.0",
+     "@quartz-community/footer": "^1.0.0",
+     "@quartz-community/github-flavored-markdown": "^1.0.0",
+     "@quartz-community/graph": "^1.0.0",
+     "@quartz-community/hard-line-breaks": "^1.0.0",
+     "@quartz-community/latex": "^1.0.0",
+     "@quartz-community/note-properties": "^1.0.0",
+     "@quartz-community/obsidian-flavored-markdown": "^1.0.0",
+     "@quartz-community/obsidian-plugin-excalidraw": "^1.0.0",
+     "@quartz-community/og-image": "^1.0.0",
+     "@quartz-community/ox-hugo": "^1.0.0",
+     "@quartz-community/page-title": "^1.0.0",
+     "@quartz-community/quartz-fonts": "^1.0.0",
+     "@quartz-community/reader-mode": "^1.0.0",
+     "@quartz-community/recent-notes": "^1.0.0",
+     "@quartz-community/remove-draft": "^1.0.0",
+     "@quartz-community/roam": "^1.0.0",
+     "@quartz-community/search": "^1.0.0",
+     "@quartz-community/spacer": "^1.0.0",
+     "@quartz-community/stacked-pages": "^1.0.0",
+     "@quartz-community/syntax-highlighting": "^1.0.1",
+     "@quartz-community/table-of-contents": "^1.0.0",
+     "@quartz-community/tag-list": "^1.0.0",
+     "@quartz-community/tag-page": "^1.0.0",
+     "@quartz-community/unlisted-pages": "^1.0.0",
+     "@quartz-themes/core": "^9.0.0",
+     "@quartz-themes/cupertino": "^1.0.1",
+     "@quartz-themes/default": "^1.0.1",
+     "@quartz-themes/hidden-grotto": "^1.0.1",
+     "@quartz-themes/its-theme": "^1.0.1",
+     "@quartz-themes/minimal": "^1.0.1",
+     "@quartz-themes/origami": "^1.0.1",
+     "@quartz-themes/ultra-lobster": "^1.0.1",
+     "@quartz-themes/velocity": "^1.0.1",
+     "ansi-truncate": "^1.4.0",
+     "async-mutex": "^0.5.0",
+     "chokidar": "^5.0.0",
+     "esbuild-sass-plugin": "^3.6.0",
+     "github-slugger": "^2.0.0",
+     "globby": "^16.1.0",
+     "hast-util-from-html": "^2.0.0",
+     "hast-util-to-jsx-runtime": "^2.3.6",
+     "isomorphic-git": "^1.36.3",
+     "lightningcss": "^1.31.1",
+     "micromorph": "^0.4.5",
+     "minimatch": "^10.1.1",
+     "preact": "^10.28.2",
+     "preact-render-to-string": "^6.6.5",
+     "pretty-bytes": "^7.1.0",
+     "pretty-time": "^1.1.0",
+     "remark-parse": "^11.0.0",
+     "remark-rehype": "^11.1.2",
+     "rfdc": "^1.4.1",
+     "serve-handler": "^6.1.6",
+     "sharp": "^0.35.4",
+     "source-map-support": "^0.5.21",
+     "to-vfile": "^8.0.0",
+     "unified": "^11.0.5",
+     "unist-util-visit": "^5.1.0",
+     "vfile": "^6.0.3",
+     "workerpool": "^10.0.1",
+     "ws": "^8.19.0",
+     "yaml": "^2.8.2",
+     "yargs": "^18.0.0"
+    },
+    "devDependencies": {
+     "@quartz-community/types": "^1.0.0",
+     "@quartz-community/utils": "^1.0.1",
+     "@types/hast": "^3.0.4",
+     "@types/node": "^26.5.1",
+     "@types/pretty-time": "^1.1.5",
+     "@types/source-map-support": "^0.5.10",
+     "@types/ws": "^8.18.1",
+     "@types/yargs": "^17.0.35",
+     "esbuild": "^0.28.2",
+     "prettier": "^3.8.1",
+     "tsx": "^4.21.0",
+     "typescript": "^5.9.3"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    },
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    }
+   ],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "gui-test against itself",
+  "fn": "localPackageChanges",
+  "args": [
+   {
+    "name": "@jackyzha0/quartz",
+    "description": "🌱 publish your digital garden and notes as a website",
+    "private": true,
+    "version": "5.0.0",
+    "type": "module",
+    "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://quartz.jzhao.xyz",
+    "repository": {
+     "type": "git",
+     "url": "https://github.com/jackyzha0/quartz.git"
+    },
+    "scripts": {
+     "quartz": "./quartz/bootstrap-cli.mjs",
+     "docs": "npx quartz build --serve -d docs",
+     "check": "tsc --noEmit && npx prettier . --check",
+     "format": "npx prettier . --write",
+     "test": "tsx --test",
+     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
+     "prebuild": "npm run install-plugins"
+    },
+    "engines": {
+     "npm": ">=10.9.2",
+     "node": ">=22"
+    },
+    "keywords": [
+     "site generator",
+     "ssg",
+     "digital-garden",
+     "markdown",
+     "blog",
+     "quartz"
+    ],
+    "bin": {
+     "quartz": "./quartz/bootstrap-cli.mjs"
+    },
+    "dependencies": {
+     "@clack/prompts": "^1.8.0",
+     "@floating-ui/dom": "^1.7.4",
+     "@myriaddreamin/rehype-typst": "^0.7.0",
+     "@napi-rs/simple-git": "1.1.0",
+     "@quartz-community/alias-redirects": "^1.0.0",
+     "@quartz-community/article-title": "^1.0.0",
+     "@quartz-community/backlinks": "^1.0.0",
+     "@quartz-community/bases-page": "^1.0.0",
+     "@quartz-community/breadcrumbs": "^1.0.0",
+     "@quartz-community/canvas-page": "^1.0.0",
+     "@quartz-community/citations": "^1.0.0",
+     "@quartz-community/cname": "^1.0.0",
+     "@quartz-community/comments": "^1.0.0",
+     "@quartz-community/content-index": "^1.0.0",
+     "@quartz-community/content-meta": "^1.0.0",
+     "@quartz-community/content-page": "^1.0.0",
+     "@quartz-community/crawl-links": "^1.0.0",
+     "@quartz-community/created-modified-date": "^1.0.0",
+     "@quartz-community/darkmode": "^1.0.0",
+     "@quartz-community/description": "^1.0.0",
+     "@quartz-community/encrypted-pages": "^1.0.0",
+     "@quartz-community/explicit-publish": "^1.0.0",
+     "@quartz-community/explorer": "^1.0.0",
+     "@quartz-community/favicon": "^1.0.0",
+     "@quartz-community/folder-page": "^1.0.0",
+     "@quartz-community/footer": "^1.0.0",
+     "@quartz-community/github-flavored-markdown": "^1.0.0",
+     "@quartz-community/graph": "^1.0.0",
+     "@quartz-community/hard-line-breaks": "^1.0.0",
+     "@quartz-community/latex": "^1.0.0",
+     "@quartz-community/note-properties": "^1.0.0",
+     "@quartz-community/obsidian-flavored-markdown": "^1.0.0",
+     "@quartz-community/obsidian-plugin-excalidraw": "^1.0.0",
+     "@quartz-community/og-image": "^1.0.0",
+     "@quartz-community/ox-hugo": "^1.0.0",
+     "@quartz-community/page-title": "^1.0.0",
+     "@quartz-community/quartz-fonts": "^1.0.0",
+     "@quartz-community/reader-mode": "^1.0.0",
+     "@quartz-community/recent-notes": "^1.0.0",
+     "@quartz-community/remove-draft": "^1.0.0",
+     "@quartz-community/roam": "^1.0.0",
+     "@quartz-community/search": "^1.0.0",
+     "@quartz-community/spacer": "^1.0.0",
+     "@quartz-community/stacked-pages": "^1.0.0",
+     "@quartz-community/syntax-highlighting": "^1.0.1",
+     "@quartz-community/table-of-contents": "^1.0.0",
+     "@quartz-community/tag-list": "^1.0.0",
+     "@quartz-community/tag-page": "^1.0.0",
+     "@quartz-community/unlisted-pages": "^1.0.0",
+     "@quartz-themes/core": "^2.0.0",
+     "@quartz-themes/cupertino": "^1.0.1",
+     "@quartz-themes/default": "^1.0.1",
+     "@quartz-themes/hidden-grotto": "^1.0.1",
+     "@quartz-themes/its-theme": "^1.0.1",
+     "@quartz-themes/minimal": "^1.0.1",
+     "@quartz-themes/origami": "^1.0.1",
+     "@quartz-themes/ultra-lobster": "^1.0.1",
+     "@quartz-themes/velocity": "^1.0.1",
+     "ansi-truncate": "^1.4.0",
+     "async-mutex": "^0.5.0",
+     "chokidar": "^5.0.0",
+     "esbuild-sass-plugin": "^3.6.0",
+     "github-slugger": "^2.0.0",
+     "globby": "^16.1.0",
+     "hast-util-from-html": "^2.0.0",
+     "hast-util-to-jsx-runtime": "^2.3.6",
+     "isomorphic-git": "^1.36.3",
+     "lightningcss": "^1.31.1",
+     "micromorph": "^0.4.5",
+     "minimatch": "^10.1.1",
+     "preact": "^10.28.2",
+     "preact-render-to-string": "^6.6.5",
+     "pretty-bytes": "^7.1.0",
+     "pretty-time": "^1.1.0",
+     "remark-parse": "^11.0.0",
+     "remark-rehype": "^11.1.2",
+     "rfdc": "^1.4.1",
+     "serve-handler": "^6.1.6",
+     "sharp": "^0.35.4",
+     "source-map-support": "^0.5.21",
+     "to-vfile": "^8.0.0",
+     "unified": "^11.0.5",
+     "unist-util-visit": "^5.1.0",
+     "vfile": "^6.0.3",
+     "workerpool": "^10.0.1",
+     "ws": "^8.19.0",
+     "yaml": "^2.8.2",
+     "yargs": "^18.0.0"
+    },
+    "devDependencies": {
+     "@quartz-community/types": "^1.0.0",
+     "@quartz-community/utils": "^1.0.1",
+     "@types/hast": "^3.0.4",
+     "@types/node": "^26.5.1",
+     "@types/pretty-time": "^1.1.5",
+     "@types/source-map-support": "^0.5.10",
+     "@types/ws": "^8.18.1",
+     "@types/yargs": "^17.0.35",
+     "esbuild": "^0.28.2",
+     "prettier": "^3.8.1",
+     "tsx": "^4.21.0",
+     "typescript": "^5.9.3"
+    }
+   },
+   {
+    "name": "@jackyzha0/quartz",
+    "description": "🌱 publish your digital garden and notes as a website",
+    "private": true,
+    "version": "5.0.0",
+    "type": "module",
+    "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://quartz.jzhao.xyz",
+    "repository": {
+     "type": "git",
+     "url": "https://github.com/jackyzha0/quartz.git"
+    },
+    "scripts": {
+     "quartz": "./quartz/bootstrap-cli.mjs",
+     "docs": "npx quartz build --serve -d docs",
+     "check": "tsc --noEmit && npx prettier . --check",
+     "format": "npx prettier . --write",
+     "test": "tsx --test",
+     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
+     "prebuild": "npm run install-plugins"
+    },
+    "engines": {
+     "npm": ">=10.9.2",
+     "node": ">=22"
+    },
+    "keywords": [
+     "site generator",
+     "ssg",
+     "digital-garden",
+     "markdown",
+     "blog",
+     "quartz"
+    ],
+    "bin": {
+     "quartz": "./quartz/bootstrap-cli.mjs"
+    },
+    "dependencies": {
+     "@clack/prompts": "^1.8.0",
+     "@floating-ui/dom": "^1.7.4",
+     "@myriaddreamin/rehype-typst": "^0.7.0",
+     "@napi-rs/simple-git": "1.1.0",
+     "@quartz-community/alias-redirects": "^1.0.0",
+     "@quartz-community/article-title": "^1.0.0",
+     "@quartz-community/backlinks": "^1.0.0",
+     "@quartz-community/bases-page": "^1.0.0",
+     "@quartz-community/breadcrumbs": "^1.0.0",
+     "@quartz-community/canvas-page": "^1.0.0",
+     "@quartz-community/citations": "^1.0.0",
+     "@quartz-community/cname": "^1.0.0",
+     "@quartz-community/comments": "^1.0.0",
+     "@quartz-community/content-index": "^1.0.0",
+     "@quartz-community/content-meta": "^1.0.0",
+     "@quartz-community/content-page": "^1.0.0",
+     "@quartz-community/crawl-links": "^1.0.0",
+     "@quartz-community/created-modified-date": "^1.0.0",
+     "@quartz-community/darkmode": "^1.0.0",
+     "@quartz-community/description": "^1.0.0",
+     "@quartz-community/encrypted-pages": "^1.0.0",
+     "@quartz-community/explicit-publish": "^1.0.0",
+     "@quartz-community/explorer": "^1.0.0",
+     "@quartz-community/favicon": "^1.0.0",
+     "@quartz-community/folder-page": "^1.0.0",
+     "@quartz-community/footer": "^1.0.0",
+     "@quartz-community/github-flavored-markdown": "^1.0.0",
+     "@quartz-community/graph": "^1.0.0",
+     "@quartz-community/hard-line-breaks": "^1.0.0",
+     "@quartz-community/latex": "^1.0.0",
+     "@quartz-community/note-properties": "^1.0.0",
+     "@quartz-community/obsidian-flavored-markdown": "^1.0.0",
+     "@quartz-community/obsidian-plugin-excalidraw": "^1.0.0",
+     "@quartz-community/og-image": "^1.0.0",
+     "@quartz-community/ox-hugo": "^1.0.0",
+     "@quartz-community/page-title": "^1.0.0",
+     "@quartz-community/quartz-fonts": "^1.0.0",
+     "@quartz-community/reader-mode": "^1.0.0",
+     "@quartz-community/recent-notes": "^1.0.0",
+     "@quartz-community/remove-draft": "^1.0.0",
+     "@quartz-community/roam": "^1.0.0",
+     "@quartz-community/search": "^1.0.0",
+     "@quartz-community/spacer": "^1.0.0",
+     "@quartz-community/stacked-pages": "^1.0.0",
+     "@quartz-community/syntax-highlighting": "^1.0.1",
+     "@quartz-community/table-of-contents": "^1.0.0",
+     "@quartz-community/tag-list": "^1.0.0",
+     "@quartz-community/tag-page": "^1.0.0",
+     "@quartz-community/unlisted-pages": "^1.0.0",
+     "@quartz-themes/core": "^2.0.0",
+     "@quartz-themes/cupertino": "^1.0.1",
+     "@quartz-themes/default": "^1.0.1",
+     "@quartz-themes/hidden-grotto": "^1.0.1",
+     "@quartz-themes/its-theme": "^1.0.1",
+     "@quartz-themes/minimal": "^1.0.1",
+     "@quartz-themes/origami": "^1.0.1",
+     "@quartz-themes/ultra-lobster": "^1.0.1",
+     "@quartz-themes/velocity": "^1.0.1",
+     "ansi-truncate": "^1.4.0",
+     "async-mutex": "^0.5.0",
+     "chokidar": "^5.0.0",
+     "esbuild-sass-plugin": "^3.6.0",
+     "github-slugger": "^2.0.0",
+     "globby": "^16.1.0",
+     "hast-util-from-html": "^2.0.0",
+     "hast-util-to-jsx-runtime": "^2.3.6",
+     "isomorphic-git": "^1.36.3",
+     "lightningcss": "^1.31.1",
+     "micromorph": "^0.4.5",
+     "minimatch": "^10.1.1",
+     "preact": "^10.28.2",
+     "preact-render-to-string": "^6.6.5",
+     "pretty-bytes": "^7.1.0",
+     "pretty-time": "^1.1.0",
+     "remark-parse": "^11.0.0",
+     "remark-rehype": "^11.1.2",
+     "rfdc": "^1.4.1",
+     "serve-handler": "^6.1.6",
+     "sharp": "^0.35.4",
+     "source-map-support": "^0.5.21",
+     "to-vfile": "^8.0.0",
+     "unified": "^11.0.5",
+     "unist-util-visit": "^5.1.0",
+     "vfile": "^6.0.3",
+     "workerpool": "^10.0.1",
+     "ws": "^8.19.0",
+     "yaml": "^2.8.2",
+     "yargs": "^18.0.0"
+    },
+    "devDependencies": {
+     "@quartz-community/types": "^1.0.0",
+     "@quartz-community/utils": "^1.0.1",
+     "@types/hast": "^3.0.4",
+     "@types/node": "^26.5.1",
+     "@types/pretty-time": "^1.1.5",
+     "@types/source-map-support": "^0.5.10",
+     "@types/ws": "^8.18.1",
+     "@types/yargs": "^17.0.35",
+     "esbuild": "^0.28.2",
+     "prettier": "^3.8.1",
+     "tsx": "^4.21.0",
+     "typescript": "^5.9.3"
+    }
+   },
+   {
+    "name": "@jackyzha0/quartz",
+    "description": "🌱 publish your digital garden and notes as a website",
+    "private": true,
+    "version": "5.0.0",
+    "type": "module",
+    "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://quartz.jzhao.xyz",
+    "repository": {
+     "type": "git",
+     "url": "https://github.com/jackyzha0/quartz.git"
+    },
+    "scripts": {
+     "quartz": "./quartz/bootstrap-cli.mjs",
+     "docs": "npx quartz build --serve -d docs",
+     "check": "tsc --noEmit && npx prettier . --check",
+     "format": "npx prettier . --write",
+     "test": "tsx --test",
+     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
+     "prebuild": "npm run install-plugins"
+    },
+    "engines": {
+     "npm": ">=10.9.2",
+     "node": ">=22"
+    },
+    "keywords": [
+     "site generator",
+     "ssg",
+     "digital-garden",
+     "markdown",
+     "blog",
+     "quartz"
+    ],
+    "bin": {
+     "quartz": "./quartz/bootstrap-cli.mjs"
+    },
+    "dependencies": {
+     "@clack/prompts": "^1.8.0",
+     "@floating-ui/dom": "^1.7.4",
+     "@myriaddreamin/rehype-typst": "^0.7.0",
+     "@napi-rs/simple-git": "1.1.0",
+     "@quartz-community/alias-redirects": "^1.0.0",
+     "@quartz-community/article-title": "^1.0.0",
+     "@quartz-community/backlinks": "^1.0.0",
+     "@quartz-community/bases-page": "^1.0.0",
+     "@quartz-community/breadcrumbs": "^1.0.0",
+     "@quartz-community/canvas-page": "^1.0.0",
+     "@quartz-community/citations": "^1.0.0",
+     "@quartz-community/cname": "^1.0.0",
+     "@quartz-community/comments": "^1.0.0",
+     "@quartz-community/content-index": "^1.0.0",
+     "@quartz-community/content-meta": "^1.0.0",
+     "@quartz-community/content-page": "^1.0.0",
+     "@quartz-community/crawl-links": "^1.0.0",
+     "@quartz-community/created-modified-date": "^1.0.0",
+     "@quartz-community/darkmode": "^1.0.0",
+     "@quartz-community/description": "^1.0.0",
+     "@quartz-community/encrypted-pages": "^1.0.0",
+     "@quartz-community/explicit-publish": "^1.0.0",
+     "@quartz-community/explorer": "^1.0.0",
+     "@quartz-community/favicon": "^1.0.0",
+     "@quartz-community/folder-page": "^1.0.0",
+     "@quartz-community/footer": "^1.0.0",
+     "@quartz-community/github-flavored-markdown": "^1.0.0",
+     "@quartz-community/graph": "^1.0.0",
+     "@quartz-community/hard-line-breaks": "^1.0.0",
+     "@quartz-community/latex": "^1.0.0",
+     "@quartz-community/note-properties": "^1.0.0",
+     "@quartz-community/obsidian-flavored-markdown": "^1.0.0",
+     "@quartz-community/obsidian-plugin-excalidraw": "^1.0.0",
+     "@quartz-community/og-image": "^1.0.0",
+     "@quartz-community/ox-hugo": "^1.0.0",
+     "@quartz-community/page-title": "^1.0.0",
+     "@quartz-community/quartz-fonts": "^1.0.0",
+     "@quartz-community/reader-mode": "^1.0.0",
+     "@quartz-community/recent-notes": "^1.0.0",
+     "@quartz-community/remove-draft": "^1.0.0",
+     "@quartz-community/roam": "^1.0.0",
+     "@quartz-community/search": "^1.0.0",
+     "@quartz-community/spacer": "^1.0.0",
+     "@quartz-community/stacked-pages": "^1.0.0",
+     "@quartz-community/syntax-highlighting": "^1.0.1",
+     "@quartz-community/table-of-contents": "^1.0.0",
+     "@quartz-community/tag-list": "^1.0.0",
+     "@quartz-community/tag-page": "^1.0.0",
+     "@quartz-community/unlisted-pages": "^1.0.0",
+     "@quartz-themes/core": "^2.0.0",
+     "@quartz-themes/cupertino": "^1.0.1",
+     "@quartz-themes/default": "^1.0.1",
+     "@quartz-themes/hidden-grotto": "^1.0.1",
+     "@quartz-themes/its-theme": "^1.0.1",
+     "@quartz-themes/minimal": "^1.0.1",
+     "@quartz-themes/origami": "^1.0.1",
+     "@quartz-themes/ultra-lobster": "^1.0.1",
+     "@quartz-themes/velocity": "^1.0.1",
+     "ansi-truncate": "^1.4.0",
+     "async-mutex": "^0.5.0",
+     "chokidar": "^5.0.0",
+     "esbuild-sass-plugin": "^3.6.0",
+     "github-slugger": "^2.0.0",
+     "globby": "^16.1.0",
+     "hast-util-from-html": "^2.0.0",
+     "hast-util-to-jsx-runtime": "^2.3.6",
+     "isomorphic-git": "^1.36.3",
+     "lightningcss": "^1.31.1",
+     "micromorph": "^0.4.5",
+     "minimatch": "^10.1.1",
+     "preact": "^10.28.2",
+     "preact-render-to-string": "^6.6.5",
+     "pretty-bytes": "^7.1.0",
+     "pretty-time": "^1.1.0",
+     "remark-parse": "^11.0.0",
+     "remark-rehype": "^11.1.2",
+     "rfdc": "^1.4.1",
+     "serve-handler": "^6.1.6",
+     "sharp": "^0.35.4",
+     "source-map-support": "^0.5.21",
+     "to-vfile": "^8.0.0",
+     "unified": "^11.0.5",
+     "unist-util-visit": "^5.1.0",
+     "vfile": "^6.0.3",
+     "workerpool": "^10.0.1",
+     "ws": "^8.19.0",
+     "yaml": "^2.8.2",
+     "yargs": "^18.0.0"
+    },
+    "devDependencies": {
+     "@quartz-community/types": "^1.0.0",
+     "@quartz-community/utils": "^1.0.1",
+     "@types/hast": "^3.0.4",
+     "@types/node": "^26.5.1",
+     "@types/pretty-time": "^1.1.5",
+     "@types/source-map-support": "^0.5.10",
+     "@types/ws": "^8.18.1",
+     "@types/yargs": "^17.0.35",
+     "esbuild": "^0.28.2",
+     "prettier": "^3.8.1",
+     "tsx": "^4.21.0",
+     "typescript": "^5.9.3"
+    }
+   }
+  ],
+  "result": {
+   "reinstall": [],
+   "upstreamWins": [],
+   "unreproducible": []
+  }
+ },
+ {
+  "name": "commands for every section",
+  "fn": "reinstallCommands",
+  "args": [
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "args": [
+     "install",
+     "--save-prod",
+     "is-odd@^3.0.0",
+     "@quartz-themes/default@^2.0.0"
+    ]
+   },
+   {
+    "args": [
+     "install",
+     "--save-dev",
+     "kind-of@^6.0.0"
+    ]
+   },
+   {
+    "args": [
+     "install",
+     "--save-optional",
+     "left-pad@1.3.0"
+    ]
+   },
+   {
+    "args": [
+     "install",
+     "--save-peer",
+     "kind-of@^6.0.0"
+    ]
+   }
+  ]
+ },
+ {
+  "name": "commands for none",
+  "fn": "reinstallCommands",
+  "args": [
+   []
+  ],
+  "result": []
+ },
+ {
+  "name": "commands keep order",
+  "fn": "reinstallCommands",
+  "args": [
+   [
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    },
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "args": [
+     "install",
+     "--save-prod",
+     "@quartz-themes/default@^2.0.0",
+     "is-odd@^3.0.0"
+    ]
+   }
+  ]
+ },
+ {
+  "name": "missingFrom: all there",
+  "fn": "missingFrom",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.0",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "peerDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": []
+ },
+ {
+  "name": "absentFrom: all there",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.0",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "peerDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": []
+ },
+ {
+  "name": "outstandingPackages: all there ",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.0",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "peerDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": []
+ },
+ {
+  "name": "outstandingPackages: all there is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.0",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "peerDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": []
+ },
+ {
+  "name": "outstandingPackages: all there kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.0",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "peerDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": []
+ },
+ {
+  "name": "missingFrom: npm wrote its range",
+  "fn": "missingFrom",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.1",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.3"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: npm wrote its range",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.1",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.3"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: npm wrote its range ",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.1",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.3"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad"
+  ]
+ },
+ {
+  "name": "outstandingPackages: npm wrote its range is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.1",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.3"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "kind-of",
+   "left-pad"
+  ]
+ },
+ {
+  "name": "outstandingPackages: npm wrote its range kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.1",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.3"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad"
+  ]
+ },
+ {
+  "name": "missingFrom: none there",
+  "fn": "missingFrom",
+  "args": [
+   {
+    "dependencies": {}
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: none there",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "dependencies": {}
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: none there ",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {}
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: none there is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {}
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: none there kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {}
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "missingFrom: moved to dev",
+  "fn": "missingFrom",
+  "args": [
+   {
+    "devDependencies": {
+     "is-odd": "^3.0.0",
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: moved to dev",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "devDependencies": {
+     "is-odd": "^3.0.0",
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: moved to dev ",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "devDependencies": {
+     "is-odd": "^3.0.0",
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: moved to dev is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "devDependencies": {
+     "is-odd": "^3.0.0",
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: moved to dev kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "devDependencies": {
+     "is-odd": "^3.0.0",
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "missingFrom: dev there, peer gone",
+  "fn": "missingFrom",
+  "args": [
+   {
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: dev there, peer gone",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: dev there, peer gone ",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: dev there, peer gone is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: dev there, peer gone kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "missingFrom: kind-of moved to dependencies twice over",
+  "fn": "missingFrom",
+  "args": [
+   {
+    "dependencies": {
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: kind-of moved to dependencies twice over",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "dependencies": {
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: kind-of moved to dependencies twice over ",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: kind-of moved to dependencies twice over is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: kind-of moved to dependencies twice over kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "missingFrom: not an object",
+  "fn": "missingFrom",
+  "args": [
+   "x",
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: not an object",
+  "fn": "absentFrom",
+  "args": [
+   "x",
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: not an object ",
+  "fn": "outstandingPackages",
+  "args": [
+   "x",
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: not an object is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   "x",
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: not an object kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   "x",
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "missingFrom: null",
+  "fn": "missingFrom",
+  "args": [
+   null,
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: null",
+  "fn": "absentFrom",
+  "args": [
+   null,
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: null ",
+  "fn": "outstandingPackages",
+  "args": [
+   null,
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: null is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   null,
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: null kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   null,
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "missingFrom: unreadable",
+  "fn": "missingFrom",
+  "args": [
+   {
+    "$unreadable": true
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "peerDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "left-pad",
+    "section": "optionalDependencies",
+    "range": "1.3.0"
+   },
+   {
+    "name": "@quartz-themes/default",
+    "section": "dependencies",
+    "range": "^2.0.0"
+   }
+  ]
+ },
+ {
+  "name": "absentFrom: unreadable",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "$unreadable": true
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ]
+  ],
+  "result": []
+ },
+ {
+  "name": "outstandingPackages: unreadable ",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "$unreadable": true
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   []
+  ],
+  "result": [
+   "is-odd",
+   "kind-of",
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: unreadable is-odd+kind-of",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "$unreadable": true
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "is-odd",
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "left-pad",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "outstandingPackages: unreadable kind-of+left-pad+nobody",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "$unreadable": true
+   },
+   [
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "peerDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "left-pad",
+     "section": "optionalDependencies",
+     "range": "1.3.0"
+    },
+    {
+     "name": "@quartz-themes/default",
+     "section": "dependencies",
+     "range": "^2.0.0"
+    }
+   ],
+   [
+    "kind-of",
+    "left-pad",
+    "nobody"
+   ]
+  ],
+  "result": [
+   "is-odd",
+   "@quartz-themes/default"
+  ]
+ },
+ {
+  "name": "absentFrom: twice, one moved",
+  "fn": "absentFrom",
+  "args": [
+   {
+    "dependencies": {
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: twice, one moved",
+  "fn": "outstandingPackages",
+  "args": [
+   {
+    "dependencies": {
+     "kind-of": "^6.0.0"
+    }
+   },
+   [
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    }
+   ],
+   [
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "kind-of",
+   "is-odd"
+  ]
+ },
+ {
+  "name": "absentFrom: twice, none",
+  "fn": "absentFrom",
+  "args": [
+   {},
+   [
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    }
+   ]
+  ],
+  "result": [
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "kind-of",
+    "section": "devDependencies",
+    "range": "^6.0.0"
+   },
+   {
+    "name": "is-odd",
+    "section": "dependencies",
+    "range": "^3.0.0"
+   }
+  ]
+ },
+ {
+  "name": "outstandingPackages: twice, none",
+  "fn": "outstandingPackages",
+  "args": [
+   {},
+   [
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "kind-of",
+     "section": "devDependencies",
+     "range": "^6.0.0"
+    },
+    {
+     "name": "is-odd",
+     "section": "dependencies",
+     "range": "^3.0.0"
+    }
+   ],
+   [
+    "kind-of"
+   ]
+  ],
+  "result": [
+   "kind-of",
+   "is-odd"
+  ]
+ },
+ {
+  "name": "dependencyRange: present",
+  "fn": "dependencyRange",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.0",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "peerDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   "dependencies",
+   "is-odd"
+  ],
+  "result": "^3.0.0"
+ },
+ {
+  "name": "dependencyRange: absent",
+  "fn": "dependencyRange",
+  "args": [
+   {
+    "dependencies": {
+     "is-odd": "^3.0.0",
+     "@quartz-themes/default": "^2.0.0"
+    },
+    "devDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "peerDependencies": {
+     "kind-of": "^6.0.0"
+    },
+    "optionalDependencies": {
+     "left-pad": "1.3.0"
+    }
+   },
+   "devDependencies",
+   "is-odd"
+  ],
+  "result": null
+ },
+ {
+  "name": "dependencyRange: not a string",
+  "fn": "dependencyRange",
+  "args": [
+   {
+    "dependencies": {
+     "a": 1
+    }
+   },
+   "dependencies",
+   "a"
+  ],
+  "result": null
+ }
+]
