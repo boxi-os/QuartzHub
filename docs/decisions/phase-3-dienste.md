@@ -191,3 +191,19 @@ darüber; der Kommentar sagt jetzt „QuartzHub“, ein Projekt mit QuartzContro
 `gui-test` kommt byte-gleich zurück. `buildDirectory` ist `resolveBuildDir`; die sieben Fälle des
 Tests sind Nodes Antworten auf dieselben Eingaben, darunter `../site` neben dem Projekt und ein
 absoluter Pfad, der unverändert bleibt.
+
+### Content-Ordner, lesender Teil (`contentService.ts`, `contentSymlink.ts` → `ContentFolder`)
+
+`status` ist `getContentStatus`: über `lstat`, damit ein Link auf ein nicht eingehängtes Laufwerk
+ein Link bleibt und nicht als „kein Ordner“ gilt; ein relatives Ziel wird vom Ordner des Links aus
+aufgelöst; gezählt wird ohne Verstecktes und durch Links hindurch, ein Link auf einen schon
+besuchten Ordner wird abgeschnitten, ein hängender zählt nicht; `hasIndex` fragt nur oben und ohne
+Groß-/Kleinschreibung. `withSymlinkParked` ist `withContentSymlinkParked`: Link weg, Körper laufen
+lassen, was git dort angelegt hat weg, Link mit dem Ziel in seiner geschriebenen Form zurück, auch
+wenn der Körper scheitert.
+
+- Gegenproben: ohne den Schnitt bei besuchten Ordnern zählt der Test zu viel (die Rekursion endet
+  erst an `ELOOP`), ein relatives Ziel gegen das Arbeitsverzeichnis aufgelöst lässt den Test zum
+  `../vault` dreimal scheitern.
+- Noch nicht hier: Quelle wechseln (braucht Snapshot und Sicherung), Startseite anlegen und
+  Formular-Verwendungen (brauchen Config und das globby des Projekts). Sie kommen mit Punkt 3 und 7.
