@@ -4,24 +4,26 @@ import Testing
 
 @Suite struct ContentFolderTests {
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
-  var project: URL { scratch.url.appendingPathComponent("project") }
-  var content: URL { ContentFolder.path(project: project) }
+  var project: String { "\(scratch.path)/project" }
+  var content: String { ContentFolder.path(project: project) }
 
   @discardableResult
-  func file(_ relative: String, _ text: String = "x") throws -> URL {
-    let url = scratch.url.appendingPathComponent(relative)
-    try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try Data(text.utf8).write(to: url)
-    return url
+  func file(_ relative: String, _ text: String = "x") throws -> String {
+    let path = "\(scratch.path)/\(relative)"
+    try Posix.mkdirs(NodePath.dirname(path))
+    try Posix.write(path, Data(text.utf8))
+    return path
   }
 
   func link(_ relative: String, to target: String) throws {
-    let url = scratch.url.appendingPathComponent(relative)
-    try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try FileManager.default.createSymbolicLink(atPath: url.path, withDestinationPath: target)
+    let path = "\(scratch.path)/\(relative)"
+    try Posix.mkdirs(NodePath.dirname(path))
+    try Posix.symlink(target, path)
   }
+
+  func target(_ link: String) throws -> [UInt8] { Array(try Posix.readlink(link).utf8) }
 
   @Test func noContentFolder() throws {
     _ = try scratch.dir("project")
@@ -39,7 +41,7 @@ import Testing
     // A linked folder counts by what is in it, not as one file.
     try file("elsewhere/a.md")
     try file("elsewhere/b.md")
-    try link("project/content/Verlinkt", to: scratch.url.appendingPathComponent("elsewhere").path)
+    try link("project/content/Verlinkt", to: "\(scratch.path)/elsewhere")
     // A link back to an ancestor is cut, a dangling one counts as nothing.
     try link("project/content/Notizen/zurück", to: "..")
     try link("project/content/weg", to: "/nowhere/at/all")
@@ -52,7 +54,7 @@ import Testing
   @Test func theStartPageInAnyCase() throws {
     try file("project/content/Index.MD")
     #expect(try ContentFolder.status(project: project).hasIndex == true)
-    try FileManager.default.removeItem(at: content.appendingPathComponent("Index.MD"))
+    try Posix.unlink("\(content)/Index.MD")
     try file("project/content/sub/index.md")
     #expect(try ContentFolder.status(project: project).hasIndex == false, "only the top counts")
   }
@@ -68,6 +70,14 @@ import Testing
     #expect(status.hasIndex == false)
   }
 
+  @Test func aLinkTargetKeepsItsBytes() throws {
+    try file("G\u{E4}rten/eins.md")
+    try link("project/content", to: "../G\u{E4}rten")
+    let status = try ContentFolder.status(project: project)
+    #expect(status.symlinkTarget.map { Array($0.utf8) } == Array("../G\u{E4}rten".utf8))
+    #expect(status.fileCount == 1)
+  }
+
   @Test func aDanglingLinkIsStillALink() throws {
     // A vault on a drive that is not mounted.
     try link("project/content", to: "/Volumes/QH-not-mounted/vault")
@@ -78,37 +88,37 @@ import Testing
   }
 
   @Test func parkingTakesTheLinkAwayAndPutsItBack() async throws {
-    let note = try file("vault/note.md", "meine Notiz")
-    try link("project/content", to: "../vault")
+    let note = try file("G\u{E4}rten/note.md", "meine Notiz")
+    try link("project/content", to: "../G\u{E4}rten")
     let seen = try await ContentFolder.withSymlinkParked(project: project) { () -> Bool in
-      let free = (try? FileManager.default.destinationOfSymbolicLink(atPath: content.path)) == nil
-        && !FileManager.default.fileExists(atPath: content.path)
+      let free = Posix.kind(content) == nil
       // What git would do: check out a real content/ with a file of its own.
       try file("project/content/.gitkeep", "")
       return free
     }
     #expect(seen, "the link was still there while parked")
-    #expect(try FileManager.default.destinationOfSymbolicLink(atPath: content.path) == "../vault")
-    #expect(try String(contentsOf: note, encoding: .utf8) == "meine Notiz")
-    #expect(!FileManager.default.fileExists(atPath: scratch.url.appendingPathComponent("vault/.gitkeep").path))
+    // Back with the bytes it had: a decomposed target names another folder for Node.
+    #expect(try target(content) == Array("../G\u{E4}rten".utf8))
+    #expect(String(decoding: try Posix.read(note), as: UTF8.self) == "meine Notiz")
+    #expect(!Posix.exists("\(scratch.path)/G\u{E4}rten/.gitkeep"))
   }
 
   @Test func aFailingBodyStillGetsTheLinkBack() async throws {
     struct Boom: Error {}
     try file("vault/note.md")
-    try link("project/content", to: scratch.url.appendingPathComponent("vault").path)
+    try link("project/content", to: "\(scratch.path)/vault")
     await #expect(throws: Boom.self) {
       try await ContentFolder.withSymlinkParked(project: project) { throw Boom() }
     }
-    #expect(try FileManager.default.destinationOfSymbolicLink(atPath: content.path) == scratch.url.appendingPathComponent("vault").path)
+    #expect(try target(content) == Array("\(scratch.path)/vault".utf8))
   }
 
   @Test func aRealFolderIsNotParked() async throws {
     try file("project/content/note.md")
     let ran = try await ContentFolder.withSymlinkParked(project: project) {
-      FileManager.default.fileExists(atPath: content.appendingPathComponent("note.md").path)
+      Posix.exists("\(content)/note.md")
     }
     #expect(ran)
-    #expect(FileManager.default.fileExists(atPath: content.appendingPathComponent("note.md").path))
+    #expect(Posix.exists("\(content)/note.md"))
   }
 }

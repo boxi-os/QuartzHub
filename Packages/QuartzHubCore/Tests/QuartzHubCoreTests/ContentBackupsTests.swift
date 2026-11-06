@@ -47,9 +47,9 @@ import Testing
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps.json")))
     let steps = golden["steps"]!.arrayValue!
     #expect(steps.count == 23)
-    let scratch = try HostPathTests.Scratch()
-    let work = TemplatePackageTests.realpath(scratch.url.path)
-    let project = URL(fileURLWithPath: "\(work)/p")
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = TemplatePackageTests.realpath(scratch.path)
+    let project = "\(work)/p"
     let content = "\(work)/p/content"
     var now = SnapshotStore.date("2026-11-06T10:00:00Z")!  // the golden's first instant
     let snapshots = Mutex<[[String]]>([])
@@ -81,7 +81,7 @@ import Testing
         case "change":
           try await ContentFolder.changeSource(
             project: project, source: arg(0), strategy: ContentFolder.SourceStrategy(rawValue: arg(1))!,
-            snapshot: { p, kind, label in snapshots.withLock { $0.append([p.path.replacingOccurrences(of: work, with: "@W@", options: .literal), kind, label]) } },
+            snapshot: { p, kind, label in snapshots.withLock { $0.append([p.replacingOccurrences(of: work, with: "@W@", options: .literal), kind, label]) } },
             now: now, progress: { progress.append(($0, $1, $2.replacingOccurrences(of: work, with: "@W@", options: .literal))) })
         case "restore": try ContentBackups.restore(project: project, content: content, id: arg(0), now: now)
         case "delete": try ContentBackups.delete(project: project, id: arg(0))

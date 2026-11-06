@@ -31,7 +31,7 @@ public enum ContentBackups {
 
   /// A read path: listing never creates the folder (QuartzControl measured an empty
   /// content-backups/ and an edited .gitignore in every project merely opened).
-  static func root(_ project: URL) -> String { "\(project.path)/.quartz-gui/content-backups" }
+  static func root(_ project: String) -> String { "\(project)/.quartz-gui/content-backups" }
 
   /// "2026-08-22T10-00-00-000Z" → "2026-08-22T10:00:00.000Z"; anything else as it is.
   static func idToIso(_ id: String) -> String {
@@ -43,7 +43,7 @@ public enum ContentBackups {
   /// `snapshotContent`: the current content folder aside. Nothing there (a dangling link counts as
   /// nothing, `existsSync` follows it), nothing to do.
   @discardableResult
-  public static func moveAside(project: URL, content: String, now: Date) throws -> Entry? {
+  public static func moveAside(project: String, content: String, now: Date) throws -> Entry? {
     guard Posix.exists(content) else { return nil }
     let id = JSONStore.quarantineStamp(now)
     let base = try QuartzGuiDirectory(project: project).create("content-backups")
@@ -83,7 +83,7 @@ public enum ContentBackups {
 
   /// Newest first. Only folders named by a timestamp: a `.DS_Store` would be an entry without a
   /// date whose restore can only fail.
-  public static func list(project: URL) -> [Entry] {
+  public static func list(project: String) -> [Entry] {
     let root = root(project)
     guard let entries = Posix.entries(root) else { return [] }
     return entries.filter { $0.kind == .directory && JSText.test($0.name, idPattern) }.map { entry in
@@ -101,7 +101,7 @@ public enum ContentBackups {
   }
 
   /// The only copy there is; a name that is no timestamp is no entry and stays.
-  public static func delete(project: URL, id: String) throws {
+  public static func delete(project: String, id: String) throws {
     let dir = "\(root(project))/\(id)"
     guard JSText.test(id, idPattern), Posix.exists(dir) else { return }
     try FileManager.default.removeItem(atPath: dir)
@@ -109,7 +109,7 @@ public enum ContentBackups {
 
   /// The current folder goes aside first, so a restore can be undone too. A folder is copied, not
   /// moved: a rename emptied the entry, and its second restore failed.
-  public static func restore(project: URL, content: String, id: String, now: Date) throws {
+  public static func restore(project: String, content: String, id: String, now: Date) throws {
     let dir = "\(root(project))/\(id)"
     if Posix.exists(content) { try moveAside(project: project, content: content, now: now) }
     let marker = "\(dir)/symlink.json"

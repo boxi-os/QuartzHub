@@ -44,3 +44,11 @@ extension ProjectPrefsStore {
 extension ProjectPrefs {
   public func buildDirectory(project: URL) -> URL { URL(fileURLWithPath: buildDirectory(project: project.path)) }
 }
+
+extension ContentFolder {
+  public static func path(project: URL) -> URL { URL(fileURLWithPath: path(project: project.path)) }
+  public static func status(project: URL) throws -> Status { try status(project: project.path) }
+  public static func withSymlinkParked<T>(project: URL, _ body: () async throws -> T) async throws -> T {
+    try await withSymlinkParked(project: project.path, body)
+  }
+}

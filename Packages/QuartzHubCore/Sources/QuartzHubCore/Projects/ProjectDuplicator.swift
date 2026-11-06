@@ -104,7 +104,7 @@ public enum ProjectDuplicator {
 
     do {
       try manager.createDirectory(at: target, withIntermediateDirectories: true)
-      try TreeCopy.copy(from: source, to: target, verbatimSymlinks: true) { relative in
+      try TreeCopy.copy(from: source.path, to: target.path, verbatimSymlinks: true) { relative in
         relative.isEmpty || (!skip.contains(relative) && !skipPrefixes.contains { relative.hasPrefix($0) })
       }
       try await ProjectPaths.repointProjectPaths(from: source, to: target, runtime: environment.runtime)
@@ -123,7 +123,7 @@ public enum ProjectDuplicator {
         try manager.createSymbolicLink(atPath: content.path, withDestinationPath: FramePaths.resolve(absolute(to)))
       case .copy(let from):
         try manager.createDirectory(at: content, withIntermediateDirectories: true)
-        try TreeCopy.copy(from: URL(fileURLWithPath: FramePaths.resolve(absolute(from))), to: content, verbatimSymlinks: false)
+        try TreeCopy.copy(from: FramePaths.resolve(absolute(from)), to: content.path, verbatimSymlinks: false)
       case .blank:
         try manager.createDirectory(at: content, withIntermediateDirectories: true)
         let page = "---\ntitle: \(target.lastPathComponent)\n---\n\n\(L10n.t("main.duplicateBlankContent"))\n"

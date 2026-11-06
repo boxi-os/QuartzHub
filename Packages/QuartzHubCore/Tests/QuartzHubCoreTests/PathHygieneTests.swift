@@ -23,7 +23,7 @@ enum TestFolder {
   static let banned = [
     #"URL\(fileURLWithPath"#, #"URL\(filePath"#, #"\.appendingPathComponent\("#, #"\.appending\(path"#,
     #"\.deletingLastPathComponent"#, #"\.lastPathComponent"#, #"\.write\(to:"#, #"\.write\(toFile"#,
-    #"createDirectory\("#, #"createFile\("#, #"copyItem\("#, #"moveItem\("#, #"createSymbolicLink\("#,
+    #"createDirectory\("#, #"createFile\("#, #"\bcopyItem\("#, #"\bmoveItem\("#, #"createSymbolicLink\("#,
     #"resolvingSymlinksInPath"#, #"standardizedFileURL"#, #"fileSystemRepresentation"#,
     #"[:>\[(]\s*URL\b(?!\()"#, #"\bURL\?"#,
   ]
@@ -45,9 +45,6 @@ enum TestFolder {
     "QuartzHubCore/Migration/Coexistence.swift",
     "QuartzHubCore/Plugins/PluginCommands.swift",
     "QuartzHubCore/Plugins/PluginSchemaReader.swift",
-    "QuartzHubCore/Projects/ContentBackups.swift",
-    "QuartzHubCore/Projects/ContentFolder+Source.swift",
-    "QuartzHubCore/Projects/ContentFolder.swift",
     "QuartzHubCore/Projects/ProjectCreator.swift",
     "QuartzHubCore/Projects/ProjectDependencies.swift",
     "QuartzHubCore/Projects/ProjectDuplicator.swift",
@@ -56,7 +53,6 @@ enum TestFolder {
     "QuartzHubCore/Snapshots/SnapshotStore+Restore.swift",
     "QuartzHubCore/Snapshots/SnapshotStore.swift",
     "QuartzHubCore/Storage/URLBridges.swift",
-    "QuartzHubCore/Storage/TreeCopy.swift",
     "QuartzHubCore/Styles/FontFaces.swift",
     "QuartzHubCore/Styles/FontService.swift",
     "QuartzHubCore/Styles/ScssCheck.swift",
@@ -121,7 +117,7 @@ enum TestFolder {
     for sample in samples {
       #expect(pattern.firstMatch(in: sample, range: NSRange(sample.startIndex..., in: sample)) != nil, "\(sample)")
     }
-    for fine in ["URL(string: s)", "URLSession.shared", "URLRequest(url: u)", "let path: String"] {
+    for fine in ["URL(string: s)", "URLSession.shared", "URLRequest(url: u)", "let path: String", "fm.removeItem(atPath: p)"] {
       #expect(pattern.firstMatch(in: fine, range: NSRange(fine.startIndex..., in: fine)) == nil, "\(fine)")
     }
   }

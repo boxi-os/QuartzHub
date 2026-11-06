@@ -18,12 +18,7 @@ enum TreeCopy {
     var description: String { "cannot copy \(path): not a file, folder or link" }
   }
 
-  static func copy(from source: URL, to target: URL, verbatimSymlinks: Bool,
-                   filter: (String) -> Bool = { _ in true }) throws {
-    try copyEntry(source.path, target.path, relative: "", verbatimSymlinks: verbatimSymlinks, filter: filter)
-  }
-
-  /// Paths as strings, for a copy whose root names must not pass through `URL` (see `Posix`).
+  /// Paths as strings: no name passes through `URL` (see `Posix`).
   static func copy(from source: String, to target: String, verbatimSymlinks: Bool,
                    filter: (String) -> Bool = { _ in true }) throws {
     try copyEntry(source, target, relative: "", verbatimSymlinks: verbatimSymlinks, filter: filter)
@@ -52,7 +47,7 @@ enum TreeCopy {
       // U+0055 U+0308), which Node then reads as another name.
       var target = try Posix.readlink(from)
       if !verbatimSymlinks && !target.hasPrefix("/") {
-        target = FramePaths.resolve((from as NSString).deletingLastPathComponent + "/" + target)
+        target = FramePaths.resolve(NodePath.dirname(from) + "/" + target)
       }
       try Posix.symlink(target, to)
     case S_IFREG:
