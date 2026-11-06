@@ -1625,3 +1625,45 @@ gefangen.
   den echten Katalogtext.
 - **`GitHubAPI`** (`githubService.ts`): 33 Schritte mit jeder Anfrage samt Kopfzeilen und Rumpf.
   Ein Fehler unterwegs wirft Nodes Wortlaut.
+
+### 8b: SSH, SFTP und rsync
+
+- **Transport: das System-OpenSSH, SFTP selbst geschrieben (Nutzer, 2026-11-06, statt Citadel).**
+  Geprüft vor dem Einbinden: Citadel 0.12.1 hängt an einem `swift-nio-ssh`-Fork eines Dritten
+  (`Wellz26`), sein SFTP-Client ruft `lstat` nicht öffentlich auf, Keepalive und Agent fehlen; Apples
+  `swift-nio-ssh` 0.15 kennt weder RSA-Schlüssel noch eigene Schlüssel (also keinen Agent). Jetzt:
+  `ssh -s <host> sftp` als Transport (`ProcessRunner.launchPiped`), das SFTP-Protokoll v3 in
+  `SFTPChannel`, eine ssh-Anmeldung für SFTP und rsync (`SSHLogin`): alle Schlüsseltypen, der Agent,
+  Keepalive über `ServerAliveInterval`, der Pin als einziger bekannter Host. Keine neue Abhängigkeit.
+- **Die Anmeldung je Methode:** Agent mit `BatchMode`; Schlüsseldatei mit `-i` und nichts sonst
+  (vorher auf Lesbarkeit geprüft, sonst schiebt ssh die Schuld dem Server zu); ein als Text
+  gespeicherter Schlüssel in einer 0600-Datei für den einen Aufruf; ein Passwort über einen
+  Askpass-Helfer aus der Umgebung des Aufrufs, nie in argv. `~/.ssh/config` gilt wie bei
+  QuartzControls rsync.
+- **Host-Keys:** Vertrauen beim ersten Kontakt mit Fingerprint (ssh-keygens Form), ein Pin ohne
+  Schlüssel aus QuartzControls Altbestand bekommt ihn bei passendem Fingerprint, ein geänderter wird
+  abgewiesen. Ein voller Pin fragt den Server vorher nichts: Eine Probe ist ein abgelehnter Login, und
+  fail2ban zählt die (der Test zählt die Verbindungen im sshd-Protokoll).
+- **ssh2-sftp-client nachgebildet, wo sein Text in die Ausgabe geht** (`SFTPClientCompat`): `exists`
+  fragt `lstat`, ein Status 4 beim stat gilt wie 2 als „fehlt“, ein rekursives mkdir nennt einen Link
+  „not a directory“, die Fehler lauten „delete: Permission denied …“, „Error: mkdir: _mkdir: Bad path:
+  …“. Gefunden dabei in QuartzControl, übernommen: Ein erster Upload in einen Ordner unter einem
+  symbolischen Link scheitert so.
+- **rsync im C-Locale (Abweichung):** In einem UTF-8-Locale maskiert openrsync die Bytes 0x80 bis 0x9F
+  eines Namens; „Über“ (C3 9C) stand als „�\#234ber“ in Vorschau und Zusammenfassung, und ein
+  Ausschluss nach Pfad traf die Datei nicht. In C gibt es die Bytes roh aus (gemessen mit
+  `/usr/bin/rsync`). QuartzControls Anzeige hing vom Locale ab, mit dem es gestartet wurde.
+- **Gemessen in drei Schichten:** gegen das System-sshd dieses Rechners, das der Test selbst startet
+  (`LocalSSHD`: eigener Host-Key, eigene authorized_keys, freier Port, ein Wächter beendet es, wenn
+  der Testprozess stirbt); QuartzControls `sftp.ts` (mit ssh2) und `rsync.ts` gegen dasselbe sshd,
+  19 und 22 Läufe, Wort für Wort und mit jedem Ordner und jeder Datei samt Modus auf dem Server; und
+  auf `debian-vm` (`scripts/vm-golden.mjs`, `DebianVMTests` mit `QH_VM_TESTS=1`): rsync 3.5.0 als
+  Empfänger, sftp-server und ein internal-sftp ohne setstat, Konten, die nicht der lokale Nutzer sind,
+  13 Läufe gleich.
+- **Was nur openrsync als Empfänger zeigt** (ein Mac als Server, kein Hoster): Ein fehlender
+  Elternordner wird angelegt, ein fehlender Relay-Ordner heißt „(l)stat: No such file or directory“,
+  ein verweigertes Löschen kommt als rohe Zeilen. QuartzControl und QuartzHub verhalten sich dort
+  gleich.
+- **Nicht gemessen:** ein Passwort-Login gegen einen echten Server (debian-vm erlaubt über SSH keine
+  Passwörter, und das sshd der VM wird dafür nicht gelockert; lokal ist gemessen, dass ssh das
+  Passwort über den Helfer anbietet).

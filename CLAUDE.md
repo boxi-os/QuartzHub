@@ -54,7 +54,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
-- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets,inline-svg,themes,zip,locales,templates,builtin-template,snapshots,content,git,package-deps,core-update,plugin-updates,remote-path,web-url,connections,targets,deploy,git-branch,webhook,github,sftp,rsync}-golden.mjs` — dasselbe für
+- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets,inline-svg,themes,zip,locales,templates,builtin-template,snapshots,content,git,package-deps,core-update,plugin-updates,remote-path,web-url,connections,targets,deploy,git-branch,webhook,github,sftp,rsync}-golden.mjs` und `scripts/vm-golden.mjs <schlüssel>` (debian-vm, dazu `QH_VM_TESTS=1 QH_VM_KEY=<schlüssel>` für `DebianVMTests`) — dasselbe für
   `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies`, `PluginCommands`, `Marketplace`, die Build- und Server-Dienste, `LayoutFrames`, `StyleSheets`, `StyleFiles`, `ScssCheck`, `VariableGraph`, `SiteFonts`, `Snippets`, `InlineSvg` (dessen Skript in Chrome, über QuartzControls playwright-core), `FontFile` und `FontService`
   (`layout-frames` und `managed-styles` lesen Frames und Stylesheets von gui-test und Example, nur lesend)
 - `Runtime/node/bin/node scripts/option-schema-golden.mjs [QuartzControl] [gui-test]` — Plugin-Namen,
@@ -117,7 +117,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Schreiber nehmen ihren Snapshot als `SnapshotStore.Take`). Punkt 7 ist fertig: 7b `GitStatus`,
   `GitAuth`, `GitHubRemote`, `Sync`; 7c `PackageJsonDeps`, `CoreUpdate` (Stash-Name und
   Merge-Betreff sind QuartzControls Wortlaut, ein Format beider Apps), `PluginUpdates`. Danach der
-  NFD-Durchgang. Punkt 8 (Veröffentlichen) läuft: 8a fertig (`Connections` mit dem Schlüsselbund, `PublishTargets`, `DeployManifests`, `Deploy` mit Ordner, Git-Branch und Webhook, `GitHubAPI`); als Nächstes 8b (SSH).
+  NFD-Durchgang. Punkt 8 (Veröffentlichen) läuft: 8a fertig (`Connections` mit dem Schlüsselbund, `PublishTargets`, `DeployManifests`, `Deploy` mit Ordner, Git-Branch und Webhook, `GitHubAPI`); 8b fertig (SSH über das System-OpenSSH: `SSHLogin`, `HostKeyCheck`, `SFTPChannel`, `SFTPAdapter`, `RsyncAdapter`; lokal gegen ein vom Test gestartetes sshd, dazu debian-vm); als Nächstes 8c (FTP, Relay-Abfrage, quartz-forms).
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
   nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über

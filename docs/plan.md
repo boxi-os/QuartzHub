@@ -218,7 +218,9 @@ nach Abhängigkeit:
    - **Stand 2026-11-06:** in drei Teilen in einem Zug (Nutzer, 2026-11-06: Citadel für SFTP,
      `debian-vm` für 8b/8c). 8a fertig: `RemotePath`, `Connections` (Schlüsselbund), `WebURL`,
      `PublishTargets`, `DeployManifests`, `Deploy` mit Staging, Ordner, Git-Branch und Webhook,
-     `GitHubAPI`; das Ziel „Dokument“ kommt mit Punkt 9. Als Nächstes 8b.
+     `GitHubAPI`; das Ziel „Dokument“ kommt mit Punkt 9. 8b fertig: SSH über das System-OpenSSH mit eigenem SFTP-Client
+     (`SSHLogin`, `HostKeyCheck`, `SFTPChannel`, `SFTPAdapter`, `RsyncAdapter`), gegen QuartzControl lokal und auf debian-vm
+     gemessen. Als Nächstes 8c.
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:
      - SFTP über das System-OpenSSH (`ssh -s sftp`), SFTP-Protokoll selbst geschrieben (Nutzer, 2026-11-06,
