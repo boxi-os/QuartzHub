@@ -36,7 +36,7 @@ import Testing
 
   func mask(_ text: String) -> String {
     let real = ContentFolder.realPath(w.path) ?? w.path
-    return text.replacingOccurrences(of: real, with: "@W@").replacingOccurrences(of: w.path, with: "@W@")
+    return text.replacingOccurrences(of: real, with: "@W@", options: .literal).replacingOccurrences(of: w.path, with: "@W@", options: .literal)
   }
 
   var calls: [String] { ((try? String(contentsOf: log, encoding: .utf8)) ?? "").split(separator: "\n").map { mask(String($0)) } }

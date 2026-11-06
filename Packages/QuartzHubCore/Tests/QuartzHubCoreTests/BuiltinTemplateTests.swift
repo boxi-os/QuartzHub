@@ -68,7 +68,7 @@ import Testing
       net.withLock { $0 = Net(answer: setup["answer"] ?? .null) }
       let found = await template.find()
       let got: JSONValue = found.map { found in
-        .object(JSONObject([("path", .string(found.path.path.replacingOccurrences(of: work, with: "@W@"))), ("source", .string(found.source.rawValue)),
+        .object(JSONObject([("path", .string(found.path.path.replacingOccurrences(of: work, with: "@W@", options: .literal))), ("source", .string(found.source.rawValue)),
                             ("pages", .number(Double(found.pages)))]))
       } ?? .null
       #expect(got == step["result"], "\(name): \(JSJSON.compact(got))")

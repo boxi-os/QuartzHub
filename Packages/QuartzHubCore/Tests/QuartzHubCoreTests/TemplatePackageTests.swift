@@ -65,10 +65,10 @@ struct TemplatePackageTests {
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
       } else if let link = spec["link"]?.stringValue {
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try FileManager.default.createSymbolicLink(atPath: url.path, withDestinationPath: link.replacingOccurrences(of: "@W@", with: work))
+        try FileManager.default.createSymbolicLink(atPath: url.path, withDestinationPath: link.replacingOccurrences(of: "@W@", with: work, options: .literal))
       } else {
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        let data = if let text = spec["text"]?.stringValue { Data(text.replacingOccurrences(of: "@W@", with: work).utf8) }
+        let data = if let text = spec["text"]?.stringValue { Data(text.replacingOccurrences(of: "@W@", with: work, options: .literal).utf8) }
           else { Data(base64Encoded: blobs[spec["blob"]!.stringValue!]!.stringValue!)! }
         try data.write(to: url)
       }
@@ -80,7 +80,7 @@ struct TemplatePackageTests {
 
   static func masked(_ value: JSONValue, _ work: String) -> JSONValue {
     switch value {
-    case .string(let text): .string(text.replacingOccurrences(of: work, with: "@W@"))
+    case .string(let text): .string(text.replacingOccurrences(of: work, with: "@W@", options: .literal))
     case .array(let items): .array(items.map { masked($0, work) })
     case .object(let object): .object(JSONObject(object.keys.map { ($0, masked(object[$0]!, work)) }))
     default: value
@@ -111,7 +111,7 @@ struct TemplatePackageTests {
     let scratch = try HostPathTests.Scratch()
     // The golden's work folder was a realpath; links and config entries carry it.
     let work = Self.realpath(scratch.url.path)
-    let mask = { (text: String) in text.replacingOccurrences(of: work, with: "@W@") }
+    let mask = { (text: String) in text.replacingOccurrences(of: work, with: "@W@", options: .literal) }
     let initial = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("initial.json"))).objectValue!
     let blobs = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("blobs.json"))).objectValue!
     var roots: [String: URL] = [:]
@@ -172,7 +172,7 @@ struct TemplatePackageTests {
       func packagePath(_ value: JSONValue) -> URL {
         let text = value.stringValue!
         if text == "@BASIC@" { return Self.basic }
-        if text.hasPrefix("@W@") { return URL(fileURLWithPath: text.replacingOccurrences(of: "@W@", with: work)) }
+        if text.hasPrefix("@W@") { return URL(fileURLWithPath: text.replacingOccurrences(of: "@W@", with: work, options: .literal)) }
         return roots["packages"]!.appendingPathComponent(text)
       }
       var got: JSONValue = .null

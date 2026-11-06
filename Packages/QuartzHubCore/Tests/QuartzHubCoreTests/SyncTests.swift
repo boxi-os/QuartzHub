@@ -30,10 +30,10 @@ import Testing
 
       let expected = step["result"]!
       #expect(result.success == (expected["success"] == .bool(true)), "\(name)")
-      #expect(result.output.replacingOccurrences(of: golden.work, with: "@W@") == QC.render(expected["output"]!.stringValue!, mask: "@W@"),
+      #expect(result.output.replacingOccurrences(of: golden.work, with: "@W@", options: .literal) == QC.render(expected["output"]!.stringValue!, mask: "@W@"),
               "\(name)\n\(result.output)")
       let calls = (try? Posix.read(golden.path("npx-calls.log"))).map { String(decoding: $0, as: UTF8.self) } ?? ""
-      #expect(calls.replacingOccurrences(of: golden.work, with: "@W@") == step["calls"]!.stringValue!, "\(name)\n\(calls)")
+      #expect(calls.replacingOccurrences(of: golden.work, with: "@W@", options: .literal) == step["calls"]!.stringValue!, "\(name)\n\(calls)")
       let left: JSONValue = (try? Posix.read(golden.path("askpass-path"))).map { .bool(Posix.exists(String(decoding: $0, as: UTF8.self))) } ?? .null
       #expect(left == step["askpassLeft"], "\(name): helper")
       let shallow = await ProcessRunner.run(golden.environment.command("git", ["rev-parse", "--is-shallow-repository"], in: project))

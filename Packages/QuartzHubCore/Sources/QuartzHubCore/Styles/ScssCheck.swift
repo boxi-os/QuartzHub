@@ -246,14 +246,3 @@ public enum ScssCheck {
     return out
   }
 }
-
-extension NodePath {
-  /// `path.relative(from, to)` for absolute, normalised paths.
-  static func relative(_ from: String, _ to: String) -> String {
-    let a = JSText.split(normalize(from), "/").filter { !$0.isEmpty }
-    let b = JSText.split(normalize(to), "/").filter { !$0.isEmpty }
-    var common = 0
-    while common < a.count && common < b.count && a[common] == b[common] { common += 1 }
-    return (Array(repeating: "..", count: a.count - common) + b[common...]).joined(separator: "/")
-  }
-}

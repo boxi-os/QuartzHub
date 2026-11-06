@@ -41,7 +41,7 @@ import Testing
       let raw = step["args"]?.arrayValue ?? []
       let args = raw.map { arg -> JSONValue in
         guard case .string(let text) = arg else { return arg }
-        return .string(text.replacingOccurrences(of: "@OUT@", with: work.appendingPathComponent("outside").path).replacingOccurrences(of: "@P@", with: project.path))
+        return .string(text.replacingOccurrences(of: "@OUT@", with: work.appendingPathComponent("outside").path, options: .literal).replacingOccurrences(of: "@P@", with: project.path, options: .literal))
       }
       trashed.withLock { $0 = [] }
       var result: JSONValue
@@ -52,7 +52,7 @@ import Testing
       }
       let expected = FontServiceTests.rendered(step["result"] ?? .null)
       #expect(Self.masked(result, work.path) == expected, "\(call) \(JSJSON.compact(.array(raw)))")
-      #expect(JSONValue.array(trashed.withLock { $0 }.map { .string($0.replacingOccurrences(of: work.path, with: "@W@")) }) == step["trash"], "\(call) trash")
+      #expect(JSONValue.array(trashed.withLock { $0 }.map { .string($0.replacingOccurrences(of: work.path, with: "@W@", options: .literal)) }) == step["trash"], "\(call) trash")
       let after = Self.files(work)
       var changed = JSONObject()
       for path in Set(before.keys).union(after.keys).sorted() where before[path] != after[path] { changed[path] = after[path] ?? .null }
@@ -69,7 +69,7 @@ import Testing
       if let expected = entry["contained"] {
         #expect(PackagePaths.contained(dir, name).map { JSONValue.string($0) } ?? .null == expected, "contained \(dir) \(name)")
       } else {
-        let got = PackagePaths.writable(project.path, name).map { JSONValue.string($0.replacingOccurrences(of: work.path, with: "@W@")) } ?? .null
+        let got = PackagePaths.writable(project.path, name).map { JSONValue.string($0.replacingOccurrences(of: work.path, with: "@W@", options: .literal)) } ?? .null
         #expect(got == entry["writable"], "writable \(name)")
       }
     }
@@ -136,7 +136,7 @@ import Testing
 private extension JSONValue {
   func replacing(_ a: String, with b: String) -> JSONValue {
     switch self {
-    case .string(let text): .string(text.replacingOccurrences(of: a, with: b))
+    case .string(let text): .string(text.replacingOccurrences(of: a, with: b, options: .literal))
     case .array(let items): .array(items.map { $0.replacing(a, with: b) })
     case .object(let object):
       { var out = JSONObject(); for key in object.keys { out[key] = object[key]!.replacing(a, with: b) }; return .object(out) }()

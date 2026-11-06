@@ -207,7 +207,7 @@ public actor Marketplace {
 
   // MARK: plumbing
 
-  static func request(_ url: URL, accept: String, token: String?) -> URLRequest {
+  static func request(_ url: URL, accept: String, token: String?) -> URLRequest { // not a file path
     var request = URLRequest(url: url)
     request.setValue(accept, forHTTPHeaderField: "Accept")
     if let token, !token.isEmpty { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }

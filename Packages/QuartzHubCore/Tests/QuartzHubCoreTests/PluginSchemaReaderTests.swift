@@ -37,7 +37,7 @@ struct PluginSchemaReaderTests {
   }
 
   func check(project: URL, spec: JSONValue) async throws {
-    let masked = { (text: String) in text.replacingOccurrences(of: project.path, with: "@P@") }
+    let masked = { (text: String) in text.replacingOccurrences(of: project.path, with: "@P@", options: .literal) }
     let queries = spec["options"]!.arrayValue!
     let sources = try queries.map { try #require(PluginSource($0["source"]), "\(JSJSON.stringify($0["source"]!))") }
     let reader = PluginSchemaReader()
@@ -92,7 +92,7 @@ struct PluginSchemaReaderTests {
     try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project) { $0 }
     let expected = try String(contentsOf: Self.fixtures.appendingPathComponent("handmade/check.txt"), encoding: .utf8)
     let report = try await OptionSchemaCheck.run(project: project.path, runtime: HelperRuntime.runtime)
-    #expect(report.text.replacingOccurrences(of: project.path, with: "@P@") == expected)
+    #expect(report.text.replacingOccurrences(of: project.path, with: "@P@", options: .literal) == expected)
     #expect(report.unreadable == 4)
   }
 

@@ -38,7 +38,7 @@ struct ProjectPathsTests {
   }
 
   static func layOut(_ tree: JSONValue, at root: URL) throws {
-    let fill = { (text: String) in text.replacingOccurrences(of: "@A@", with: root.path) }
+    let fill = { (text: String) in text.replacingOccurrences(of: "@A@", with: root.path, options: .literal) }
     let manager = FileManager.default
     try manager.createDirectory(at: root, withIntermediateDirectories: true)
     for dir in tree["dirs"]?.arrayValue ?? [] {
@@ -57,7 +57,7 @@ struct ProjectPathsTests {
   }
 
   static func record(_ root: URL, a: String, b: String) -> JSONValue {
-    let mask = { (text: String) in text.replacingOccurrences(of: b, with: "@B@").replacingOccurrences(of: a, with: "@A@") }
+    let mask = { (text: String) in text.replacingOccurrences(of: b, with: "@B@", options: .literal).replacingOccurrences(of: a, with: "@A@", options: .literal) }
     func read(_ path: String) -> JSONValue {
       guard let data = try? Data(contentsOf: root.appendingPathComponent(path)) else { return .null }
       return .string(mask(String(decoding: data, as: UTF8.self)))

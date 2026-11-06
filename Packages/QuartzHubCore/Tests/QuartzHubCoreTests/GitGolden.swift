@@ -21,7 +21,7 @@ final class GitGolden: @unchecked Sendable {
     scratch = try HostPathTests.Scratch()
     work = TemplatePackageTests.realpath(scratch.url.path)
     try SnapshotStoreTests.Harness.write("\(work)/gitconfig", "")
-    try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(Self.file["npx"]).replacingOccurrences(of: "@W@", with: work))
+    try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(Self.file["npx"]).replacingOccurrences(of: "@W@", with: work, options: .literal))
     chmod("\(work)/bin/npx", 0o755)
     environment = ToolEnvironment(
       base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_CONFIG_GLOBAL": "\(work)/gitconfig", "GIT_CONFIG_NOSYSTEM": "1",
@@ -32,7 +32,7 @@ final class GitGolden: @unchecked Sendable {
 
   func path(_ relative: String) -> String { relative.isEmpty ? work : "\(work)/\(relative)" }
   func url(_ relative: String) -> URL { URL(fileURLWithPath: path(relative)) }
-  func sub(_ text: String) -> String { text.replacingOccurrences(of: "@W@", with: work) }
+  func sub(_ text: String) -> String { text.replacingOccurrences(of: "@W@", with: work, options: .literal) }
 
   func act(_ action: JSONValue) async throws {
     let path = action["path"]?.stringValue.map(self.path)

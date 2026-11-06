@@ -95,7 +95,7 @@ import Testing
     for step in golden["steps"]?.arrayValue ?? [] {
       let call = step["call"]!.stringValue!
       let args = (step["args"]?.arrayValue ?? []).map { arg -> JSONValue in
-        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: project.appendingPathComponent("in").path)) }
+        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: project.appendingPathComponent("in").path, options: .literal)) }
         return arg
       }
       box.lock.withLock { $0.requests = [] }

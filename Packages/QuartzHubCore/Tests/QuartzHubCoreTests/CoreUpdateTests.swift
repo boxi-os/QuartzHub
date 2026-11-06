@@ -26,7 +26,7 @@ import Testing
       try Posix.write("\(work)/npm-stub.cjs", try Posix.read(CoreUpdateTests.fixtures.appendingPathComponent("npm-stub.cjs").path))
       let node = RuntimeLocation.repository.nodeBin.appendingPathComponent("node").path
       try SnapshotStoreTests.Harness.write("\(work)/bin/npm", "#!/bin/sh\nexec '\(node)' '\(work)/npm-stub.cjs' \"$@\"\n")
-      try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(CoreUpdateTests.file["npx"]).replacingOccurrences(of: "@W@", with: work))
+      try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(CoreUpdateTests.file["npx"]).replacingOccurrences(of: "@W@", with: work, options: .literal))
       chmod("\(work)/bin/npm", 0o755)
       chmod("\(work)/bin/npx", 0o755)
       let when = "2026-11-06T12:00:00+01:00"
@@ -39,7 +39,7 @@ import Testing
     }
 
     func path(_ relative: String) -> String { relative.isEmpty ? work : "\(work)/\(relative)" }
-    func sub(_ text: String) -> String { text.replacingOccurrences(of: "@W@", with: work) }
+    func sub(_ text: String) -> String { text.replacingOccurrences(of: "@W@", with: work, options: .literal) }
 
     func service() -> CoreUpdate {
       CoreUpdate(environment: environment, snapshot: { [self] _, kind, label in
@@ -155,7 +155,7 @@ import Testing
       let npm = (harness.text(harness.path("npm-calls.log")).stringValue ?? "").components(separatedBy: "\n").filter { !$0.isEmpty }
         .map { try! JSJSON.parse(Data($0.utf8)) }
       #expect(JSONValue.array(npm) == step["npm"], "\(name): npm")
-      #expect((harness.text(harness.path("npx-calls.log")).stringValue ?? "").replacingOccurrences(of: harness.work, with: "@W@") == step["npx"]!.stringValue!,
+      #expect((harness.text(harness.path("npx-calls.log")).stringValue ?? "").replacingOccurrences(of: harness.work, with: "@W@", options: .literal) == step["npx"]!.stringValue!,
               "\(name): npx")
       #expect(JSONValue.array(harness.snapshots.withLock { $0 }.map { .array($0.map(JSONValue.string)) }) == step["snapshots"], "\(name): snapshots")
       let state = await harness.state(dir)

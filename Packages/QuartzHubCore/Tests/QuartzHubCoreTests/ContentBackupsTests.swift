@@ -21,13 +21,13 @@ import Testing
         var info = stat()
         lstat(full, &info)
         switch info.st_mode & S_IFMT {
-        case S_IFLNK: files.append((path, .string("link:\(((try? Posix.readlink(full)) ?? "").replacingOccurrences(of: work, with: "@W@"))")))
+        case S_IFLNK: files.append((path, .string("link:\(((try? Posix.readlink(full)) ?? "").replacingOccurrences(of: work, with: "@W@", options: .literal))")))
         case S_IFDIR:
           files.append(("\(path)/", .string("dir \(String(info.st_mode & 0o777, radix: 8))")))
           walk(full, path)
         default:
           // As text with the folder masked: symlink.json names it.
-          let text = String(decoding: (try? Posix.read(full)) ?? Data(), as: UTF8.self).replacingOccurrences(of: work, with: "@W@")
+          let text = String(decoding: (try? Posix.read(full)) ?? Data(), as: UTF8.self).replacingOccurrences(of: work, with: "@W@", options: .literal)
           files.append((path, .string("\(String(info.st_mode & 0o777, radix: 8)) \(SnapshotStoreTests.Harness.sha(Data(text.utf8)))")))
         }
       }
@@ -64,7 +64,7 @@ import Testing
         case "remove": try? FileManager.default.removeItem(atPath: path!)
         case "symlink":
           try Posix.mkdirs((path! as NSString).deletingLastPathComponent)
-          try Posix.symlink(action["target"]!.stringValue!.replacingOccurrences(of: "@W@", with: work), path!)
+          try Posix.symlink(action["target"]!.stringValue!.replacingOccurrences(of: "@W@", with: work, options: .literal), path!)
         case "clock": now = SnapshotStore.date(action["at"]!.stringValue!)!
         default: Issue.record("unknown action")
         }
@@ -72,7 +72,7 @@ import Testing
       snapshots.withLock { $0 = [] }
       var progress: [(Int, Int, String)] = []
       let args = step["args"]!.arrayValue!
-      let arg = { (i: Int) in args[i].stringValue!.replacingOccurrences(of: "@W@", with: work) }
+      let arg = { (i: Int) in args[i].stringValue!.replacingOccurrences(of: "@W@", with: work, options: .literal) }
       var result: JSONValue = .null
       var failure: Error?
       do {
@@ -81,8 +81,8 @@ import Testing
         case "change":
           try await ContentFolder.changeSource(
             project: project, source: arg(0), strategy: ContentFolder.SourceStrategy(rawValue: arg(1))!,
-            snapshot: { p, kind, label in snapshots.withLock { $0.append([p.path.replacingOccurrences(of: work, with: "@W@"), kind, label]) } },
-            now: now, progress: { progress.append(($0, $1, $2.replacingOccurrences(of: work, with: "@W@"))) })
+            snapshot: { p, kind, label in snapshots.withLock { $0.append([p.path.replacingOccurrences(of: work, with: "@W@", options: .literal), kind, label]) } },
+            now: now, progress: { progress.append(($0, $1, $2.replacingOccurrences(of: work, with: "@W@", options: .literal))) })
         case "restore": try ContentBackups.restore(project: project, content: content, id: arg(0), now: now)
         case "delete": try ContentBackups.delete(project: project, id: arg(0))
         default: Issue.record("unknown op")
@@ -96,7 +96,7 @@ import Testing
         if case .string(let code) = expected["code"] {
           #expect((failure as? NodeFileError).map { "\($0)".contains("Error: \(code):") } == true, "\(name): \(String(describing: failure))")
         } else if let message = expected["message"]?.stringValue, message.hasPrefix("{\"key\"") {
-          #expect(failure.map { "\($0)" } == QC.render(message, mask: "@W@").replacingOccurrences(of: "@W@", with: work), "\(name): \(String(describing: failure))")
+          #expect(failure.map { "\($0)" } == QC.render(message, mask: "@W@").replacingOccurrences(of: "@W@", with: work, options: .literal), "\(name): \(String(describing: failure))")
         } else {
           #expect(failure != nil, "\(name)")
         }
@@ -133,7 +133,7 @@ extension JSONValue {
   /// Every string with the work folder as "@W@".
   func masked(_ work: String) -> JSONValue {
     switch self {
-    case .string(let text): .string(text.replacingOccurrences(of: work, with: "@W@"))
+    case .string(let text): .string(text.replacingOccurrences(of: work, with: "@W@", options: .literal))
     case .array(let items): .array(items.map { $0.masked(work) })
     case .object(let object): .object(JSONObject(object.keys.map { ($0, object[$0]!.masked(work)) }))
     default: self

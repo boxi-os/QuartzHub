@@ -45,17 +45,17 @@ import Testing
       store = SnapshotStore(
         environment: environment,
         npm: { [box] project in
-          box.calls.withLock { $0.append(["npm", "install", project.path.replacingOccurrences(of: work, with: "@W@")]) }
+          box.calls.withLock { $0.append(["npm", "install", project.path.replacingOccurrences(of: work, with: "@W@", options: .literal)]) }
           return PluginCommands.Result(success: true, output: "npm stub")
         },
-        repoint: { [box] project in box.calls.withLock { $0.append(["repoint", project.path.replacingOccurrences(of: work, with: "@W@")]) } },
+        repoint: { [box] project in box.calls.withLock { $0.append(["repoint", project.path.replacingOccurrences(of: work, with: "@W@", options: .literal)]) } },
         clock: clock)
     }
 
     /// A path as a string: `URL.path` hands a name back decomposed as well.
     func path(_ relative: String) -> String { "\(work)/\(relative)" }
     func url(_ relative: String) -> URL { URL(fileURLWithPath: path(relative)) }
-    func mask(_ text: String) -> String { text.replacingOccurrences(of: work, with: "@W@") }
+    func mask(_ text: String) -> String { text.replacingOccurrences(of: work, with: "@W@", options: .literal) }
 
     @discardableResult
     func git(_ arguments: [String], in dir: String, env: [String: String] = [:]) async throws -> String {
@@ -100,7 +100,7 @@ import Testing
         try manager.setAttributes([.posixPermissions: Int(action["mode"]!.stringValue!, radix: 8)!], ofItemAtPath: path!)
       case "symlink":
         Self.mkdirs((path! as NSString).deletingLastPathComponent)
-        symlink(action["target"]!.stringValue!.replacingOccurrences(of: "@W@", with: work), path!)
+        symlink(action["target"]!.stringValue!.replacingOccurrences(of: "@W@", with: work, options: .literal), path!)
       case "git":
         let when = action["when"]?.stringValue ?? "2026-11-01T00:00:00Z"
         try await git(action["args"]!.arrayValue!.map { $0.stringValue! }, in: path!, env: [

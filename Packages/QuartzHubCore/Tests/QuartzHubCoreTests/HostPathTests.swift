@@ -7,10 +7,14 @@ import Testing
 @Suite struct HostPathTests {
   /// A scratch folder with executable scripts in it.
   final class Scratch {
-    let url = FileManager.default.temporaryDirectory.appendingPathComponent("qh-hostpath-\(UUID().uuidString)")
+    /// With the bytes on disk; `url.path` is the same folder decomposed, as Foundation hands it on.
+    let path: String
+    var url: URL { URL(fileURLWithPath: path) }
 
-    init() throws { try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true) }
-    deinit { try? FileManager.default.removeItem(at: url) }
+    /// `umlaut`: a name with a composed "ä" and "Ü" (`TestFolder`), for the tests of services that
+    /// take string paths; the others follow as their service moves (NFD pass, until it is the only kind).
+    init(umlaut: Bool = false) throws { path = TestFolder.make("qh-scratch", umlaut: umlaut) }
+    deinit { try? FileManager.default.removeItem(atPath: path) }
 
     @discardableResult
     func script(_ relative: String, _ body: String) throws -> String {

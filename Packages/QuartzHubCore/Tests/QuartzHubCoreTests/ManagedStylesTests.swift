@@ -169,7 +169,7 @@ import Testing
 
   static func mask(_ value: JSONValue, _ root: String) -> JSONValue {
     switch value {
-    case .string(let text): return .string(text.replacingOccurrences(of: root, with: "@P@"))
+    case .string(let text): return .string(text.replacingOccurrences(of: root, with: "@P@", options: .literal))
     case .array(let items): return .array(items.map { mask($0, root) })
     default: return value
     }

@@ -53,7 +53,7 @@ import Testing
     try FileManager.default.createSymbolicLink(atPath: link, withDestinationPath: real)
     #expect(ProjectLock.key(link) == ProjectLock.key(real + "/."))
     // /var is a symlink to /private/var: the temporary folder has two spellings by itself.
-    #expect(ProjectLock.key(real) == ProjectLock.key(real.replacingOccurrences(of: "/private/var/", with: "/var/")))
+    #expect(ProjectLock.key(real) == ProjectLock.key(real.replacingOccurrences(of: "/private/var/", with: "/var/", options: .literal)))
 
     let lock = ProjectLock(name: "test")
     let journal = Journal()

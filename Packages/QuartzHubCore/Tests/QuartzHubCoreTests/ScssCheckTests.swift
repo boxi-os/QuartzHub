@@ -61,7 +61,7 @@ struct ScssCheckTests {
     #expect(cases.count >= 20)
     for entry in cases {
       let name = entry["name"]!.stringValue!
-      let project = scratch.url.appendingPathComponent(name.replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: ":", with: ""))
+      let project = scratch.url.appendingPathComponent(name.replacingOccurrences(of: " ", with: "-", options: .literal).replacingOccurrences(of: ":", with: "", options: .literal))
       let styles = StyleSheets.stylesDirectory(project)
       try FileManager.default.createDirectory(at: styles, withIntermediateDirectories: true)
       let tree = entry["tree"]?.objectValue ?? JSONObject()

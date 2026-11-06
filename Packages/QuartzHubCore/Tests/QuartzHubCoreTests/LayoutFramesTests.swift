@@ -216,7 +216,7 @@ import Testing
       guard FileManager.default.fileExists(atPath: full.path, isDirectory: &isDirectory), !isDirectory.boolValue else { continue }
       if !keepTemporary && relative.contains(".tmp-") { continue }
       let text = (try? String(contentsOf: full, encoding: .utf8)) ?? "<binary>"
-      result[normalizeName(relative)] = QC.mask(QC.mask(text, base.replacingOccurrences(of: "/.quartz-gui", with: "")), mask)
+      result[normalizeName(relative)] = QC.mask(QC.mask(text, base.replacingOccurrences(of: "/.quartz-gui", with: "", options: .literal)), mask)
     }
     return result
   }
@@ -284,6 +284,6 @@ enum QC {
   }
 
   static func mask(_ text: String, _ path: String) -> String {
-    path.isEmpty ? text : text.replacingOccurrences(of: path, with: "@P@")
+    path.isEmpty ? text : text.replacingOccurrences(of: path, with: "@P@", options: .literal)
   }
 }

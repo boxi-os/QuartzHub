@@ -40,7 +40,7 @@ struct ProjectDuplicatorTests {
     let dir = Self.fixtures.appendingPathComponent(name)
     let spec = try JSJSON.parse(Data(contentsOf: dir.appendingPathComponent("case.json")))
     let expected = try JSJSON.parse(Data(contentsOf: dir.appendingPathComponent("expected.json")))
-    let fill = { (text: String) in text.replacingOccurrences(of: "@W@", with: w.path) }
+    let fill = { (text: String) in text.replacingOccurrences(of: "@W@", with: w.path, options: .literal) }
 
     try Self.layOut(spec["source"]!, at: w.appendingPathComponent("Original"), fill)
     try Self.layOut(spec["vault"]!, at: w.appendingPathComponent("Vault"), fill)
@@ -90,7 +90,7 @@ struct ProjectDuplicatorTests {
 
   func mask(_ text: String) -> String {
     let real = ContentFolder.realPath(w.path) ?? w.path
-    return text.replacingOccurrences(of: real, with: "@W@").replacingOccurrences(of: w.path, with: "@W@")
+    return text.replacingOccurrences(of: real, with: "@W@", options: .literal).replacingOccurrences(of: w.path, with: "@W@", options: .literal)
   }
 
   static func layOut(_ tree: JSONValue, at root: URL, _ fill: (String) -> String) throws {

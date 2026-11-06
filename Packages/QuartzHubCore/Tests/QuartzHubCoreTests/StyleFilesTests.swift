@@ -89,7 +89,7 @@ import Testing
     for step in golden["steps"]?.arrayValue ?? [] {
       let call = step["call"]!.stringValue!
       var args = (step["args"]?.arrayValue ?? []).map { arg -> JSONValue in
-        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: project.appendingPathComponent("in").path)) }
+        if case .string(let text) = arg { return .string(text.replacingOccurrences(of: "@IN@", with: project.appendingPathComponent("in").path, options: .literal)) }
         return arg
       }
       if args.first == .string("@ORDER+nav-darkmode") {
@@ -122,7 +122,7 @@ import Testing
 
   static func masked(_ value: JSONValue, _ project: String) -> JSONValue {
     switch value {
-    case .string(let text): return .string(text.replacingOccurrences(of: project, with: "@P@"))
+    case .string(let text): return .string(text.replacingOccurrences(of: project, with: "@P@", options: .literal))
     case .array(let items): return .array(items.map { masked($0, project) })
     case .object(let object):
       var out = JSONObject()

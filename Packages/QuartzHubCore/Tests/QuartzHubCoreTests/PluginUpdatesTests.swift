@@ -26,7 +26,7 @@ import Testing
   @Test func replaysQuartzControlsSteps() async throws {
     let golden = try GitGolden()
     let work = golden.work
-    try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(Self.file["npx"]).replacingOccurrences(of: "@W@", with: work))
+    try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(Self.file["npx"]).replacingOccurrences(of: "@W@", with: work, options: .literal))
     chmod("\(work)/bin/npx", 0o755)
     let calls = Calls()
     let core = CoreUpdate(environment: golden.environment, snapshot: { _, _, _ in nil }, templateRepository: "/nowhere")
@@ -63,7 +63,7 @@ import Testing
       }
       #expect(result.masked(work) == expected, "\(name)\n\(JSJSON.compact(result.masked(work)))\n\(JSJSON.compact(expected))")
       let npx = (try? Posix.read("\(work)/npx-calls.log")).map { String(decoding: $0, as: UTF8.self) } ?? ""
-      #expect(npx.replacingOccurrences(of: work, with: "@W@") == step["npx"]!.stringValue!, "\(name): npx")
+      #expect(npx.replacingOccurrences(of: work, with: "@W@", options: .literal) == step["npx"]!.stringValue!, "\(name): npx")
       #expect(JSONValue.array(calls.snapshots.withLock { $0 }.map { .array($0.map(JSONValue.string)) }) == step["snapshots"], "\(name): snapshots")
     }
   }

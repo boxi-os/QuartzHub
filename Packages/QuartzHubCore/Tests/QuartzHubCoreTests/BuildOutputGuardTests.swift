@@ -57,7 +57,7 @@ import Testing
       let name = item["name"]!.stringValue!
       let w = try Self.workspace()
       let tree = item["tree"]!
-      let fill = { (text: String) in text.replacingOccurrences(of: "@W@", with: w.path) }
+      let fill = { (text: String) in text.replacingOccurrences(of: "@W@", with: w.path, options: .literal) }
       try ProjectDuplicatorTests.layOut(spec["project"]!, at: w, fill)
       try ProjectDuplicatorTests.layOut(tree, at: w, fill)
       let verdict = BuildOutputGuard.assess(project: w.appendingPathComponent(item["project"]!.stringValue!).path,
