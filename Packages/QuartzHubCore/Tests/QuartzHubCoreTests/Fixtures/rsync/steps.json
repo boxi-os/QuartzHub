@@ -1,0 +1,1230 @@
+{
+ "steps": [
+  {
+   "name": "preview of an empty folder",
+   "call": "preview",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [
+    {
+     "write": [
+      "@W@/build/index.html",
+      "<h1>Start</h1>"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/Über/ärger.html",
+      "ä"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/x.css",
+      "x{}"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/geheim.html",
+      "g"
+     ]
+    },
+    {
+     "mkdir": "@H@/site"
+    }
+   ],
+   "result": {
+    "ok": [
+     {
+      "path": "geheim.html",
+      "status": "added"
+     },
+     {
+      "path": "index.html",
+      "status": "added"
+     },
+     {
+      "path": "Über/ärger.html",
+      "status": "added"
+     },
+     {
+      "path": "x.css",
+      "status": "added"
+     }
+    ]
+   },
+   "events": [],
+   "tree": {
+    "H/site/": "755"
+   }
+  },
+  {
+   "name": "first upload",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "excludes": [
+     "geheim.html"
+    ]
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ index.html\n↑ x.css\n↑ Über/ärger.html\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "index.html"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "x.css"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "Über/ärger.html"
+    }
+   ],
+   "tree": {
+    "H/site/": "755",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{}",
+    "H/site/Über/": "755",
+    "H/site/Über/ärger.html": "644 ä"
+   }
+  },
+  {
+   "name": "nothing to do",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "excludes": [
+     "geheim.html"
+    ]
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"deployNothingToDo\",\"args\":{}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/site/": "755",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{}",
+    "H/site/Über/": "755",
+    "H/site/Über/ärger.html": "644 ä"
+   }
+  },
+  {
+   "name": "a change, a removal, an exclusion",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "excludes": [
+     "neu.html",
+     "geheim.html"
+    ]
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/x.css",
+      "x{color:red}"
+     ]
+    },
+    {
+     "rm": "@W@/build/Über"
+    },
+    {
+     "write": [
+      "@W@/build/neu.html",
+      "n"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/unter/neu.html",
+      "u"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "✗ Über/ärger.html\n✗ Über/\n↑ x.css\n↑ unter/neu.html\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 4,
+     "currentFile": "Über/ärger.html"
+    },
+    {
+     "processed": 2,
+     "total": 4,
+     "currentFile": "Über/"
+    },
+    {
+     "processed": 3,
+     "total": 4,
+     "currentFile": "x.css"
+    },
+    {
+     "processed": 4,
+     "total": 4,
+     "currentFile": "unter/neu.html"
+    }
+   ],
+   "tree": {
+    "H/site/": "755",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a file deleted on the server comes back",
+   "call": "preview",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "excludes": [
+     "neu.html",
+     "geheim.html"
+    ]
+   },
+   "setup": [
+    {
+     "rm": "@H@/site/x.css"
+    }
+   ],
+   "result": {
+    "ok": [
+     {
+      "path": "geheim.html",
+      "status": "added"
+     },
+     {
+      "path": "neu.html",
+      "status": "added"
+     },
+     {
+      "path": "x.css",
+      "status": "added"
+     }
+    ]
+   },
+   "events": [],
+   "tree": {
+    "H/site/": "755",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u"
+   }
+  },
+  {
+   "name": "without deletion",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": false
+   },
+   "options": {
+    "excludes": [
+     "neu.html"
+    ]
+   },
+   "setup": [
+    {
+     "write": [
+      "@H@/site/extra.html",
+      "e"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ geheim.html\n↑ x.css\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 2,
+     "currentFile": "geheim.html"
+    },
+    {
+     "processed": 2,
+     "total": 2,
+     "currentFile": "x.css"
+    }
+   ],
+   "tree": {
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "the parent is missing",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/fehlt/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ geheim.html\n↑ index.html\n↑ neu.html\n↑ x.css\n↑ unter/neu.html\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 5,
+     "currentFile": "geheim.html"
+    },
+    {
+     "processed": 2,
+     "total": 5,
+     "currentFile": "index.html"
+    },
+    {
+     "processed": 3,
+     "total": 5,
+     "currentFile": "neu.html"
+    },
+    {
+     "processed": 4,
+     "total": 5,
+     "currentFile": "x.css"
+    },
+    {
+     "processed": 5,
+     "total": 5,
+     "currentFile": "unter/neu.html"
+    }
+   ],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a path with a space",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/mit leer",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"rsyncPathWithSpace\",\"args\":{}}"
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a path with a shell character",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/neu!",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"rsyncPathWithSpecial\",\"args\":{\"char\":\"!\"}}"
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a path that starts with \"-\"",
+   "call": "preview",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "-strich",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [],
+   "result": {
+    "ok": [
+     {
+      "path": "geheim.html",
+      "status": "changed"
+     },
+     {
+      "path": "index.html",
+      "status": "changed"
+     },
+     {
+      "path": "neu.html",
+      "status": "changed"
+     },
+     {
+      "path": "unter/neu.html",
+      "status": "changed"
+     },
+     {
+      "path": "x.css",
+      "status": "changed"
+     }
+    ]
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a changed host key",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "connection": {
+     "hostKey": {
+      "fingerprint": "SHA256:anders",
+      "blob": "AAAAC3NzaC1lZDI1NTE5AAAAIOYSnVIJ8WzgwbFPdqq3K1LUpRVNXDvvx5u5umIQPgqa",
+      "type": "ssh-ed25519"
+     }
+    }
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"rsyncHostKeyMismatch\",\"args\":{\"host\":\"127.0.0.1\",\"expected\":\"SHA256:anders\",\"received\":\"@FP@\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a password connection",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "connection": {
+     "authMethod": "password"
+    }
+   },
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"rsyncPasswordAuth\",\"args\":{}}"
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a pin without its key",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "connection": {
+     "hostKey": {
+      "fingerprint": "SHA256:LrxYK7+rmn0uEno/ycaaCswuSAfojKHNkC5Pw7ACbIs",
+      "blob": "",
+      "type": ""
+     }
+    }
+   },
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"rsyncNoPinnedHostKey\",\"args\":{}}"
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "a key the server does not know",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "connection": {
+     "keyPath": "@W@/stranger"
+    }
+   },
+   "setup": [
+    {
+     "keygen": "@W@/stranger"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"rsyncKeyRejected\",\"args\":{\"user\":\"boxi\",\"host\":\"127.0.0.1\",\"identity\":\"@W@/stranger\"}}\n\nboxi@127.0.0.1: Permission denied (publickey,password).\r\nrsync(PID): error: unexpected end of file"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}"
+   }
+  },
+  {
+   "name": "relay upload",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "rsync",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ]
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/relay/send.php",
+      "<?php // send"
+     ]
+    },
+    {
+     "write": [
+      "@W@/relay/config.php",
+      "<?php // secret"
+     ]
+    },
+    {
+     "write": [
+      "@W@/relay/config.generated.php",
+      "<?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n"
+     ]
+    },
+    {
+     "write": [
+      "@W@/relay/counters/.htaccess",
+      "Deny"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/relay/config.php",
+      "640"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/relay/counters",
+      "750"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/relay",
+      "751"
+     ]
+    },
+    {
+     "mkdir": "@H@/web"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayDirUnchecked\",\"args\":{\"path\":\"@H@/web/forms\",\"reason\":\"rsync(PID): error: @H@/web/forms: (l)stat: No such file or directory\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755"
+   }
+  },
+  {
+   "name": "relay upload into a missing folder",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/neu/forms",
+    "transfer": "rsync",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/neu",
+     "@H@/web/neu/forms"
+    ]
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayDirUnchecked\",\"args\":{\"path\":\"@H@/web/neu\",\"reason\":\"rsync(PID): error: @H@/web/neu: (l)stat: No such file or directory\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755"
+   }
+  },
+  {
+   "name": "relay folder is a link",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/link",
+    "transfer": "rsync",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/link"
+    ]
+   },
+   "setup": [
+    {
+     "symlink": [
+      "@H@/web/forms",
+      "@H@/web/link"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayDirSymlink\",\"args\":{\"path\":\"@H@/web/link\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755",
+    "H/web/link": "link @H@/web/forms"
+   }
+  },
+  {
+   "name": "remove a foreign relay",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "fedcba9876543210"
+   },
+   "setup": [
+    {
+     "mkdir": "@W@/empty"
+    },
+    {
+     "write": [
+      "@H@/web/forms/send.php",
+      "<?php // send"
+     ]
+    },
+    {
+     "write": [
+      "@H@/web/forms/config.php",
+      "<?php // secret"
+     ]
+    },
+    {
+     "write": [
+      "@H@/web/forms/config.generated.php",
+      "<?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n"
+     ]
+    },
+    {
+     "write": [
+      "@H@/web/forms/counters/7",
+      "1"
+     ]
+    },
+    {
+     "write": [
+      "@H@/web/forms/config.generated.php",
+      "<?php\nreturn [\n  'generation' => 'fedcba9876543211',\n];\n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayRemoveForeign\",\"args\":{\"path\":\"@H@/web/forms\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755",
+    "H/web/forms/": "755",
+    "H/web/forms/config.generated.php": "644 <?php\nreturn [\n  'generation' => 'fedcba9876543211',\n];\n",
+    "H/web/forms/config.php": "644 <?php // secret",
+    "H/web/forms/counters/": "755",
+    "H/web/forms/counters/7": "644 1",
+    "H/web/forms/send.php": "644 <?php // send",
+    "H/web/link": "link @H@/web/forms"
+   }
+  },
+  {
+   "name": "removal refused",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "mkdir": "@W@/empty"
+    },
+    {
+     "write": [
+      "@H@/web/forms/send.php",
+      "<?php // send"
+     ]
+    },
+    {
+     "write": [
+      "@H@/web/forms/config.php",
+      "<?php // secret"
+     ]
+    },
+    {
+     "write": [
+      "@H@/web/forms/config.generated.php",
+      "<?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n"
+     ]
+    },
+    {
+     "write": [
+      "@H@/web/forms/counters/7",
+      "1"
+     ]
+    },
+    {
+     "chmod": [
+      "@H@/web/forms",
+      "555"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "*deleting send.php\nrsync(PID): error: ./send.php: unlinkat: Permission denied\nrsync(PID): error: ./config.php: unlinkat: Permission denied\nrsync(PID): error: ./config.generated.php: unlinkat: Permission denied\n*deleting config.php\n*deleting config.generated.php"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "send.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    }
+   ],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755",
+    "H/web/forms/": "755",
+    "H/web/forms/config.generated.php": "644 <?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n",
+    "H/web/forms/config.php": "644 <?php // secret",
+    "H/web/forms/counters/": "755",
+    "H/web/forms/counters/7": "644 1",
+    "H/web/forms/send.php": "644 <?php // send",
+    "H/web/link": "link @H@/web/forms"
+   }
+  },
+  {
+   "name": "remove our own",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "chmod": [
+      "@H@/web/forms",
+      "755"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "✗ send.php\n✗ config.php\n✗ config.generated.php\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "send.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    }
+   ],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755",
+    "H/web/forms/": "755",
+    "H/web/forms/counters/": "755",
+    "H/web/forms/counters/7": "644 1",
+    "H/web/link": "link @H@/web/forms"
+   }
+  },
+  {
+   "name": "remove again",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayRemoveUnverified\",\"args\":{\"path\":\"@H@/web/forms\",\"reason\":\"rsync(PID): error: '@H@/web/forms/config.generated.php': (l)stat: No such file or directory\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755",
+    "H/web/forms/": "755",
+    "H/web/forms/counters/": "755",
+    "H/web/forms/counters/7": "644 1",
+    "H/web/link": "link @H@/web/forms"
+   }
+  },
+  {
+   "name": "remove where there is no folder",
+   "call": "run",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/nichts",
+    "transfer": "rsync",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/nichts"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayDirUnchecked\",\"args\":{\"path\":\"@H@/web/nichts\",\"reason\":\"rsync(PID): error: @H@/web/nichts: (l)stat: No such file or directory\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/fehlt/": "755",
+    "H/fehlt/site/": "755",
+    "H/fehlt/site/geheim.html": "644 g",
+    "H/fehlt/site/index.html": "644 <h1>Start</h1>",
+    "H/fehlt/site/neu.html": "644 n",
+    "H/fehlt/site/unter/": "755",
+    "H/fehlt/site/unter/neu.html": "644 u",
+    "H/fehlt/site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/extra.html": "644 e",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/unter/": "755",
+    "H/site/unter/neu.html": "644 u",
+    "H/site/x.css": "644 x{color:red}",
+    "H/web/": "755",
+    "H/web/forms/": "755",
+    "H/web/forms/counters/": "755",
+    "H/web/forms/counters/7": "644 1",
+    "H/web/link": "link @H@/web/forms"
+   }
+  }
+ ]
+}
