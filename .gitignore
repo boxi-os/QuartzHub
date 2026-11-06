@@ -3,7 +3,7 @@ QuartzHub.xcodeproj/
 
 # Build output
 .build/
-build/
+/build/
 DerivedData/
 *.xcresult
 
