@@ -1,0 +1,1411 @@
+// content - put together by QuartzControl from the stylesheets named in the sections below.
+// Until 1.1 each of them was a file of its own; a comment that names one of them means that section.
+
+// ============================================================================= meta-title-and-date
+// Until 1.1 its own stylesheet, meta-title-and-date.scss.
+
+// The article's own h1 and the line of dates and reading time under it.
+//
+// One file because they are read as one block: the gap between them belongs to neither alone, and
+// setting it from two files meant deciding it twice.
+
+.article-title {
+  margin-block: 0 var(--tpl-space-xs);
+  font-size: var(--tpl-text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  // A heading is scanned rather than read line by line, so its lines are balanced rather than
+  // filled - a title that breaks after four words looks like an accident.
+  text-wrap: balance;
+}
+
+// At the narrow end the 2.25rem title is most of the screen; it steps down rather than wrapping
+// to five lines.
+@media (max-width: 720px) {
+  .article-title {
+    font-size: var(--tpl-text-2xl);
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+// Content meta — dates and reading time under the title.
+
+.content-meta {
+  margin-block: 0;
+  color: var(--gray);
+  font-size: var(--tpl-text-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--tpl-space-2xs) var(--tpl-space-xs);
+
+  // The plugin joins its parts with a separator span; give it the faint colour so the values read
+  // as the content and the punctuation recedes.
+  > span:not(:last-child)::after {
+    content: "·";
+    margin-inline-start: var(--tpl-space-xs);
+    color: var(--tpl-rule-strong);
+  }
+}
+
+// ============================================================================================ base
+// Until 1.1 part of base.scss.
+
+/* ---------------------------------------------------------------- typographic rhythm */
+
+body {
+  font-family: var(--bodyFont);
+  font-size: var(--tpl-text-base);
+  line-height: var(--tpl-leading-normal);
+  color: var(--darkgray);
+  background-color: var(--light);
+  // Enable the variable font's real optical work instead of the browser's synthesis.
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+// The one rule that makes both leading tokens do anything at all.
+//
+// Quartz's own base.scss hard-codes a leading in four places:
+//
+//     tbody, li, p            { line-height: 1.6rem }   // 25.6px
+//     a.internal              { line-height: 1.4rem }   // 22.4px
+//     <table wrapper> > *     { line-height: 2rem }     // 32px, so thead
+//
+// A paragraph, a list item and a table body therefore carry their own leading, and an inherited
+// one - which is all a rule on `body` or on a frame area ever produces - cannot reach them. Every
+// token this template set was landing on the elements *between* the text and the page, and the
+// text itself was 25.6px everywhere. Measured on the built site: an explorer row 14px on 25.6px
+// (ratio 1.83), the date under a recent note 12.5px on 25.6px (2.05), a footer paragraph the same;
+// and `--tpl-leading-normal` was equally dead on the article, where its 1.65 was quietly rendering
+// as Quartz's 1.6rem. Both numbers had been decorative since the day they were written.
+//
+// `inherit` is the whole fix, and it is one line: it hands those three elements back to whatever
+// their context says. Unlayered, so it beats `@layer quartz-base` whatever the specificity - the
+// rule this template rests on everywhere. Anything that genuinely wants its own leading still says
+// so and still wins, because a rule naming a class beats a rule naming an element (the code block's
+// 1.55, the breadcrumb separator's 1, mermaid's `normal`).
+// Measured before this rule, on one built page: an explorer row 14px on 25.6px (ratio 1.83), the
+// date under a recent note 12.5px on 25.6px (2.05), a footer paragraph the same, a table whose
+// header rows were 32px while its body rows were 22.4px, and an internal link 22.4px inside a
+// 25.6px paragraph.
+p,
+li,
+tbody,
+thead,
+tfoot,
+a.internal {
+  line-height: inherit;
+}
+
+// Small type gets a tighter leading than the article does.
+//
+// A body ratio is measured for a 1rem line running across six columns. The same number at 0.875rem
+// in a three-column sidebar puts over 20px between two lines that are 14px tall, and a three-line
+// paragraph stops reading as a paragraph - which is precisely how the note in the sidebar looked.
+// The three areas that are made of small type say so once, here, instead of every component in
+// them repeating it.
+//
+// The article keeps --tpl-leading-normal; anything inside it that drops to --tpl-text-sm and wants
+// the tighter step asks for it at the point where it changes size.
+.qgframe-area-left,
+.qgframe-area-right,
+.qgframe-area-footer {
+  line-height: var(--tpl-leading-snug);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--headerFont);
+  color: var(--dark);
+  line-height: var(--tpl-leading-tight);
+  // A heading's space belongs above it, not below: the gap tells you what the heading owns. 40px
+  // over 12px, and the 12 has to stay well under the 24 that separates two blocks - the moment the
+  // two are close, a heading stops belonging to the text under it and starts floating between two
+  // paragraphs. Measured: 8px was the previous value and read as attached rather than as a lead-in.
+  margin-block: var(--tpl-space-xl) var(--tpl-space-sm);
+  font-weight: 600;
+  letter-spacing: -0.011em;
+}
+
+h1 { font-size: var(--tpl-text-3xl); }
+h2 { font-size: var(--tpl-text-2xl); }
+h3 { font-size: var(--tpl-text-xl); }
+h4 { font-size: var(--tpl-text-lg); }
+// The two deepest levels stop growing and take on weight and case instead — six sizes in one
+// document is noise, and at h5/h6 a size difference of 1px is not a signal anyone can read.
+h5 {
+  font-size: var(--tpl-text-base);
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-caps);
+  font-weight: 700;
+}
+h6 {
+  font-size: var(--tpl-text-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-label);
+  font-weight: 700;
+  color: var(--gray);
+}
+
+// ==================================================================================== body-content
+// Until 1.1 its own stylesheet, body-content.scss.
+
+// Article body — everything that comes out of a Markdown file.
+
+article {
+  // Anchors quartz adds to headings: present for the pointer, never in the way of the text.
+  a[data-no-popover],
+  .internal.broken {
+    color: var(--gray);
+  }
+
+  // The gap between one block and the next, and it is one number for every kind of block.
+  //
+  // Measured before this: a paragraph was followed by 16px while a blockquote, a figure, a callout
+  // and a code block were followed by 24px. At a 25.6px line the 16 is 0.63 of a line - too little
+  // to end a paragraph with, so two of them read as one, and inconsistent with the four block types
+  // that already had it right. 24px is 0.94 of a line: the blank line a reader expects, and no
+  // more. The scale stays three-valued and says what it means:
+  //
+  //     40px (--tpl-space-xl)  before a heading   - the heading belongs to what follows it
+  //     24px (--tpl-space-lg)  between two blocks - one blank line
+  //      8px (--tpl-space-xs)  heading to its text, and between two list items
+  p {
+    margin-block: 0 var(--tpl-space-lg);
+  }
+
+  /* ------------------------------------------------------------------------- links */
+
+  a {
+    color: var(--secondary);
+    // A colour alone is not a link affordance for someone who cannot separate these two hues.
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: var(--tpl-underline-offset);
+    text-decoration-color: color-mix(in srgb, var(--secondary) 40%, transparent);
+    transition: color var(--tpl-motion), text-decoration-color var(--tpl-motion);
+
+    &:hover {
+      color: var(--tertiary);
+      text-decoration-color: currentColor;
+    }
+
+    // External links get a mark rather than only a different colour.
+    &.external::after {
+      content: "↗";
+      display: inline-block;
+      margin-inline-start: 0.15em;
+      font-size: 0.85em;
+      text-decoration: none;
+      color: var(--gray);
+    }
+
+    // A wikilink to a page that does not exist should look unfinished, not broken.
+    //
+    // Measured: this build does not emit the class — a link to a missing page came out as
+    // `internal internal-link` like any other. `.broken` is in quartz's own base.scss, so some
+    // configuration does produce it; the rule stays as the one that will apply when it does,
+    // rather than being deleted and rediscovered later.
+    &.internal.broken {
+      text-decoration-style: dotted;
+    }
+  }
+
+  /* ------------------------------------------------------------------------- lists */
+
+  ul,
+  ol {
+    padding-inline-start: var(--tpl-space-lg);
+    margin-block: 0 var(--tpl-space-lg);
+  }
+
+  // 8px between two items, and the reason it is not more: this margin collapses with the list's
+  // own, so whatever stands here is also the smallest gap a list can have above and below it. At
+  // 8px the items are separated - four was not enough to see at a 25.6px line - and the 24px the
+  // block before it sets still wins the collapse.
+  li {
+    margin-block: var(--tpl-space-xs);
+
+    &::marker {
+      color: var(--gray);
+    }
+  }
+
+  // Nested lists tighten rather than repeat the full gap.
+  li > ul,
+  li > ol {
+    margin-block: var(--tpl-space-2xs);
+  }
+
+  /* ------------------------------------------------------------------- task lists */
+
+  // Six states, not two. Obsidian lets any character stand in the brackets - `[/]` in Arbeit,
+  // `[-]` verworfen, `[>]` verschoben, `[?]` fraglich - and until 2026-09-06 quartz dropped all
+  // but `[ ]` and `[x]`, so this template said so on its own tasks page and left it at that
+  // (BEFUNDE 18). The plugin writes `data-task="<zeichen>"` on the `li` now; measured in this
+  // site's build, all six arrive. So they get drawn.
+  //
+  // One system, two colours. The box is always the same outlined square, the mark inside it is a
+  // masked glyph, and the colour says which half of the six a state belongs to: accent for the
+  // two that are still going somewhere (erledigt, in Arbeit), muted for the three that are not
+  // (verworfen, verschoben, fraglich). A reader who does not know the characters still sees two
+  // groups; a reader who does gets the exact one.
+  //
+  // The native checkbox stays the box rather than being hidden behind a pseudo-element: it is
+  // what the markup offers, it is focusable, and quartz leaves it enabled. `appearance: none`
+  // takes its painting away, nothing else.
+  input[type="checkbox"] {
+    appearance: none;
+    // `em` on a form control means the control's own font, and WebKit gives inputs a smaller one:
+    // measured 12x12 against 14x14 in Chrome and Firefox from the same rule. One line makes the
+    // box the same size in all three.
+    font: inherit;
+    margin-inline-end: var(--tpl-space-xs);
+    inline-size: 1.1em;
+    block-size: 1.1em;
+    flex: none;
+    vertical-align: -0.2em;
+    // The whole glyph - box and mark - comes from the mask; the element paints nothing of its own.
+    // See base.scss for why the box is not a `border`.
+    background-color: var(--gray);
+    mask-image: var(--icon-task-open);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+  }
+
+  // Driven by the character the author typed, not by `:checked` - a page states what its author
+  // wrote, and clicking a box on a built site changes nothing but the pixel. The one exception is
+  // the open state, where a reader's tick means something to them.
+  li[data-task="x"] > input[type="checkbox"],
+  li[data-task=" "] > input[type="checkbox"]:checked {
+    mask-image: var(--icon-task-done);
+    background-color: var(--secondary);
+  }
+
+  li[data-task="/"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-doing);
+    background-color: var(--secondary);
+  }
+
+  li[data-task="-"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-cancelled);
+  }
+
+  li[data-task=">"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-forwarded);
+  }
+
+  li[data-task="?"] > input[type="checkbox"] {
+    mask-image: var(--icon-task-question);
+  }
+
+  // Done and cancelled are both finished with; the difference is whether it happened. Same
+  // treatment for the line, and the box above is what tells them apart.
+  li[data-task="x"],
+  li[data-task="-"],
+  li[data-task=" "]:has(> input[type="checkbox"]:checked) {
+    color: var(--gray);
+    text-decoration: line-through;
+    text-decoration-color: color-mix(in srgb, var(--gray) 50%, transparent);
+  }
+
+  // And the other three have to be *un*struck, which is not obvious and was measured: the markdown
+  // parser calls every non-space character checked, so `[/]`, `[>]` and `[?]` arrive with
+  // `checked` on the input and `is-checked` on the item - and quartz's own
+  // `li:has(> input:checked) { text-decoration: line-through; color: var(--gray) }` then strikes
+  // four of the six states. In Arbeit, verschoben und fraglich sind nicht erledigt; sie sind noch
+  // offen, und ein durchgestrichener offener Punkt sagt das Gegenteil.
+  li[data-task="/"],
+  li[data-task=">"],
+  li[data-task="?"] {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ul:has(> li > input[type="checkbox"]) {
+    list-style: none;
+    padding-inline-start: var(--tpl-space-xs);
+  }
+
+  /* -------------------------------------------------------------------- quotations */
+
+  blockquote {
+    margin-block: var(--tpl-space-lg);
+    margin-inline: 0;
+    padding: var(--tpl-space-xs) var(--tpl-space-md);
+    border-inline-start: var(--tpl-accent-bar) solid var(--secondary);
+    background: var(--tpl-surface-tint);
+    border-start-end-radius: var(--tpl-radius-md);
+    border-end-end-radius: var(--tpl-radius-md);
+    color: var(--darkgray);
+
+    > :last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  /* ------------------------------------------------------------------------ tables */
+
+  // Quartz already wraps every content table in a .table-container, so the scrolling belongs
+  // there. Putting `display: block; overflow-x: auto` on the <table> itself - the obvious first
+  // attempt - destroys the table layout: measured against the note-properties table, whose keys
+  // and values then rendered on top of each other. The container is also the only correct place
+  // for it, because the table has to keep `display: table` to lay out at all.
+  //
+  // Scoped to the container rather than to `article table`, which would also catch the
+  // note-properties and layout-box tables that quartz does not wrap.
+  .table-container {
+    overflow-x: auto;
+    margin-block: var(--tpl-space-lg);
+    // The wrapper is the block; the table inside it may be wider than the column.
+    max-width: none;
+  }
+
+  .table-container > table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--tpl-text-sm);
+    // Overriding quartz's own 1rem margin + 1.5rem padding on this element (base.scss), which
+    // would otherwise indent every table inside its own scroll box.
+    margin: 0;
+    padding: 0;
+  }
+
+  .table-container th,
+  .table-container td,
+  th,
+  td {
+    padding: var(--tpl-space-xs) var(--tpl-space-sm);
+    border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  thead th {
+    font-family: var(--headerFont);
+    font-weight: 600;
+    color: var(--dark);
+    border-block-end: 2px solid var(--tpl-rule-strong);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td {
+    border-block-end: none;
+  }
+
+  /* ------------------------------------------------------------------------- rules */
+
+  hr {
+    border: none;
+    border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+    margin-block: var(--tpl-space-xl);
+  }
+
+  /* -------------------------------------------------------------------- highlights */
+
+  mark {
+    background: var(--textHighlight);
+    color: var(--darkgray);
+    padding-inline: 0.15em;
+    border-radius: var(--tpl-radius-sm);
+  }
+
+  // Obsidian comments (%%...%%) are stripped at build time; this catches the case where a theme
+  // renders them instead of removing them.
+  .comment {
+    display: none;
+  }
+
+  /* -------------------------------------------------------------------- footnotes */
+
+  .footnotes {
+    margin-block-start: var(--tpl-space-xl);
+    padding-block-start: var(--tpl-space-md);
+    border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+    font-size: var(--tpl-text-sm);
+    color: var(--gray);
+
+    li:target {
+      background: var(--tpl-surface-tint);
+      border-radius: var(--tpl-radius-sm);
+    }
+  }
+
+  .data-footnote-backref {
+    text-decoration: none;
+  }
+
+  sup a {
+    text-decoration: none;
+    padding-inline: 0.1em;
+  }
+}
+
+// ======================================================================================= body-code
+// Until 1.1 its own stylesheet, body-code.scss.
+
+// Code — inline, blocks, the language label and the copy button.
+//
+// `keepBackground: false` is set on the syntax-highlighting plugin (plugins.mjs), so shiki emits
+// token colours but no background of its own: the block's surface is this template's, in both
+// modes, and the two themes (github-light / github-dark) only have to agree with it once.
+
+article {
+  code {
+    font-family: var(--codeFont);
+    // The mono face runs large next to Inter at the same nominal size.
+    font-size: 0.9em;
+    font-variant-ligatures: none;
+  }
+
+  // Inline code: a tint, not a box. Enough to separate it from prose, not enough to interrupt a
+  // sentence.
+  :not(pre) > code {
+    background: var(--tpl-surface);
+    color: var(--dark);
+    padding: 0.1em 0.35em;
+    border-radius: var(--tpl-radius-sm);
+    // Long identifiers must be allowed to break rather than widen the column.
+    overflow-wrap: anywhere;
+  }
+
+  a > code {
+    color: inherit;
+  }
+}
+
+// The block that a code block hangs in.
+//
+// `pre` is the scroller (`overflow-x: auto` below), and an absolutely positioned child of a
+// scroller scrolls away with the content - which is exactly what the copy button did: on a wide
+// block it walked off to the left and out of sight, the one direction a copy button must not go.
+// The fix is to take the containing block off `pre` and give it to whatever holds it, which does
+// not scroll. `sticky` was tried first and does not stick horizontally here in any form - with a
+// float, without one, with an explicit inline size (measured in Blink at 1440px).
+//
+// The parent is named through `:has` rather than assumed: six of the seven blocks on the code page
+// sit in a `<figure>`, the seventh in a plain `<div>`, and a rule that only knew about `figure`
+// would have left that one behind.
+:is(figure, div, li, blockquote, td):has(> pre) {
+  position: relative;
+}
+
+pre {
+  // Static, so the button's containing block is the element above - see the rule just before this.
+  position: static;
+  margin-block: var(--tpl-space-lg);
+  padding: var(--tpl-space-md);
+  padding-block-start: var(--tpl-space-lg);
+  // A surface of its own, lighter than --tpl-surface in light mode: a block is a large area, and
+  // the tint that is right for a line of inline code makes a twenty-line block a grey slab. In
+  // dark mode the token stays on --lightgray - there, lifting the surface would push it towards
+  // the text instead of away from it. The border is --tpl-rule, which is what --tpl-surface used
+  // to be, so the block now has an edge instead of dissolving into one.
+  background: var(--tpl-surface-code);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  overflow-x: auto;
+  // Wrapping a shell command costs more than scrolling it, so a block scrolls rather than breaks.
+  max-width: none;
+  line-height: 1.55;
+  tab-size: 2;
+
+  > code {
+    background: none;
+    padding: 0;
+    display: block;
+    // A block wide enough to scroll must scroll as a whole, not lose its last line's indent.
+    min-width: max-content;
+  }
+
+  .line {
+    display: inline-block;
+    width: 100%;
+  }
+
+  // shiki's line highlight, restated so it reads on both grounds.
+  .line-highlight {
+    background: var(--tpl-surface-tint);
+    box-shadow: inset var(--tpl-accent-bar) 0 0 var(--secondary);
+  }
+}
+
+// The language, from the attribute shiki writes. `::before` rather than markup so it can never
+// end up in a copied selection.
+//
+// Positioned against the block around `pre`, like the copy button and for the same reason - it
+// would otherwise scroll out of the left edge on a wide block.
+pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  inset-block-start: var(--tpl-space-2xs);
+  inset-inline-start: var(--tpl-space-md);
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-xs);
+  letter-spacing: var(--tpl-tracking-caps);
+  text-transform: uppercase;
+  color: var(--gray);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------- copy button */
+
+// Just the icon. No box, no border, no surface.
+//
+// The selector is `pre .clipboard-button` and not `.clipboard-button`, and that is the whole
+// finding: quartz ships this button's styling in a *resource* stylesheet
+// (`static/resource-style-….css`), which is **not** inside `@layer quartz-base` and is linked
+// *after* index.css. So the rule everything else in this template relies on - "custom.scss is
+// unlayered, therefore it wins" - does not hold here. Same specificity, later in the document,
+// and it wins instead:
+//
+//     .clipboard-button { float: right; border: 1px solid; border-color: var(--dark);
+//                         background-color: var(--light); margin: .3rem; padding: .4rem }
+//
+// Measured on the built page: with `border: none` and `background: transparent` written here, the
+// button still reported a 1px border and --light behind it. One descendant in the selector settles
+// it, and `pre` is where this button always is.
+//
+// It stays `absolute`; what changed is what it is absolute *to* - see the `:has(> pre)` rule at
+// the top of this file for why `pre` is no longer the containing block.
+pre .clipboard-button {
+  position: absolute;
+  inset-block-start: var(--tpl-space-2xs);
+  inset-inline-end: var(--tpl-space-2xs);
+  display: grid;
+  place-items: center;
+  // 44px is the smallest comfortable pointer target; the icon inside stays small.
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+  // Every one of these undoes something from the rule quoted above.
+  float: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  appearance: none;
+  color: var(--gray);
+  cursor: pointer;
+  // Hidden until the block is hovered or something inside it has focus — but never hidden from a
+  // keyboard: `opacity` rather than `display`, and focus-within brings it back.
+  opacity: 0;
+  transition: opacity var(--tpl-motion), color var(--tpl-motion);
+
+  > svg {
+    width: 1rem;
+    height: 1rem;
+    // The resource stylesheet fills the glyph with --light and drops the contrast; on a surface
+    // this light that leaves a white smudge. currentColor is what a lucide icon expects.
+    fill: none;
+    filter: none;
+    stroke: currentColor;
+  }
+
+  // The state is the colour of the icon, because there is nothing else left to change.
+  &:hover {
+    color: var(--dark);
+  }
+
+  &:focus-visible {
+    opacity: 1;
+  }
+}
+
+pre:hover .clipboard-button,
+pre:focus-within .clipboard-button {
+  opacity: 1;
+}
+
+// Coarse pointers have no hover, so the button would never appear.
+@media (hover: none) {
+  pre .clipboard-button {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------- syntax colours, corrected */
+
+// Five token colours of github-light / github-dark do not reach 4.5:1 on this template's code
+// surface. Measured over the whole built site - every `--shiki-light` / `--shiki-dark` value in
+// all 333 pages, counted and rated against #F1EFE9 and --lightgray:
+//
+//     hell    #24292E  1179x  12.76      dunkel  #E1E4E8  1179x  10.34
+//             #005CC5   260x   5.47              #79B8FF   260x   6.35
+//             #22863A   206x   4.02  <--         #85E89D   206x   8.81
+//             #032F62   148x  11.51              #9ECBFF   148x   7.81
+//             #D73A49   112x   3.98  <--         #F97583   112x   4.96
+//             #E36209    82x   3.04  <--         #FFAB70    82x   7.10
+//             #6F42C1    48x   5.66              #B392F0    48x   5.20
+//             #6A737D     4x   4.19  <--         #6A737D     4x   2.74  <--
+//             #B31D28     2x   5.85              #FDAEB7     2x   7.48
+//
+// Each correction keeps the hue and the saturation and moves only the lightness, so github-light
+// still reads as github-light - the same thing body-callouts.scss does with quartz' callout
+// colours. The new values are checked on every run by `--check-contrast`, which reads them out of
+// this file.
+//
+// `!important` is not a shortcut here, it is the only lever: shiki writes the colour as an inline
+// custom property on every single span (`style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"`),
+// and an inline declaration beats any author rule that is not important. Overriding the variable
+// rather than `color` means quartz' own light/dark switch keeps doing the switching.
+//
+// This is the one place where a colour is pinned that this template did not choose. A language
+// whose tokens produce a tenth colour would arrive unmeasured; the audit above is repeatable by
+// grepping `--shiki-light:` out of `public/`.
+
+/* --- QuartzControl:syntax:start --- */
+pre span[style*="--shiki-light:#22863A"] { --shiki-light: #1F7A35 !important; }  // 4.02 -> 4.72
+pre span[style*="--shiki-light:#D73A49"] { --shiki-light: #CA2938 !important; }  // 3.98 -> 4.70
+pre span[style*="--shiki-light:#E36209"] { --shiki-light: #B04C07 !important; }  // 3.04 -> 4.71
+pre span[style*="--shiki-light:#6A737D"] { --shiki-light: #636B74 !important; }  // 4.19 -> 4.71
+pre span[style*="--shiki-dark:#6A737D"] { --shiki-dark: #949CA4 !important; }    // 2.74 -> 4.72
+/* --- QuartzControl:syntax:end --- */
+
+/* ------------------------------------------------------------------- block title */
+
+// A `title=` after the language produces a `<figcaption>` above the block (rehype-pretty-code).
+// Unstyled it looks like a stray line of body text sitting on top of a grey box.
+figcaption[data-rehype-pretty-code-title] {
+  // The caption and its block are one object: the caption keeps the block's top margin and the
+  // block gives up its own, rather than the two being pulled together with a negative margin.
+  margin-block: var(--tpl-space-lg) 0;
+  padding: var(--tpl-space-2xs) var(--tpl-space-md);
+  background: var(--tpl-surface);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-block-end: none;
+  border-start-start-radius: var(--tpl-radius-md);
+  border-start-end-radius: var(--tpl-radius-md);
+  font-family: var(--codeFont);
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+  // The filename is the point; it stays on one line and truncates rather than wrapping.
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// The block under a title joins it: square top corners, no doubled border.
+figcaption[data-rehype-pretty-code-title] + pre {
+  margin-block-start: 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+
+  // The language label would repeat what the title already says.
+  &::before {
+    content: none;
+  }
+}
+
+/* ------------------------------------------------------------- definition list */
+
+// Not markdown - the only way to write one is HTML (see besonderes/html). Styled so that the one
+// place using it does not fall back to browser defaults.
+article dl {
+  margin-block: var(--tpl-space-md);
+}
+
+article dt {
+  font-family: var(--headerFont);
+  font-weight: 600;
+  color: var(--dark);
+}
+
+article dd {
+  margin-inline-start: 0;
+  padding-inline-start: var(--tpl-space-md);
+  border-inline-start: var(--tpl-rule-width) solid var(--tpl-rule);
+  margin-block-end: var(--tpl-space-xs);
+  color: var(--darkgray);
+}
+
+// ======================================================================================= body-math
+// Until 1.1 its own stylesheet, body-math.scss.
+
+// KaTeX. The plugin ships its own stylesheet; these are the three things it cannot know about —
+// the surrounding colour, the overflow behaviour and the size relationship to body text.
+//
+// `.katex` and `.katex-display` are the only two classes on the page. `.math-display`, which an
+// earlier version of this file also styled, is emitted by nothing — measured on the maths page:
+// 4 × `.katex-display`, 0 × `.math-display`.
+
+.katex {
+  // KaTeX sets its own font; only the size has to agree with the paragraph around it.
+  font-size: 1.05em;
+  color: var(--darkgray);
+}
+
+// Display maths is a block, and a long expression has to scroll rather than widen the column.
+.katex-display {
+  margin-block: var(--tpl-space-lg);
+  padding-block: var(--tpl-space-2xs);
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // Scrolling needs something to grab; a hairline says the block continues.
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+}
+
+// An equation number, where one is set, must not be the thing that makes the row scroll.
+.katex-display > .katex > .katex-html > .tag {
+  position: relative;
+  inset-inline-start: 0;
+}
+
+// ==================================================================================== body-mermaid
+// Until 1.1 its own stylesheet, body-mermaid.scss.
+
+// Mermaid — fourteen diagram kinds, one palette.
+//
+// The starting point is better than it looks: quartz already hands mermaid nine of this template's
+// CSS variables as `themeVariables` (--light as primaryColor, --darkgray as lineColor and so on,
+// see the mermaid initialiser in quartz's client bundle). Everything that mermaid derives from
+// those follows the palette by itself.
+//
+// It does not cover everything, and the gaps are the reason this file is long:
+//
+//   * Mermaid computes *section* colours (mindmap, timeline, journey, gantt) from primaryColor.
+//     With a near-white ground it derives near-black: measured `rgb(2, 4, 4)` and `rgb(0, 0, 0)`
+//     as node fills on the mindmap and the timeline — black boxes with black text in them.
+//   * Pie, sankey, xychart and quadrant bring their own palettes, untouched by themeVariables.
+//   * Every diagram is laid out to its own natural width and then capped by an inline `max-width`
+//     that mermaid writes onto the svg. Measured: 294px to 594px inside a 900px column.
+//
+// So this file sets a series of section colours from the template's own tokens, restates the four
+// self-coloured kinds, and lets every diagram use the width it has. Colours are set on the `fill`
+// and `stroke` *properties*, which beat the presentation attributes mermaid writes into the markup.
+
+/* ------------------------------------------------------------------ the frame around it */
+
+// The markup is `<pre><button class="expand-button">…<code class="mermaid">`, so `.mermaid` is the
+// *code element*, not the box. Everything body-code.scss does to a code block therefore applies
+// here too - including `pre > code { min-width: max-content }`, which was holding every diagram at
+// 432px inside a 690px column. A diagram is a figure, not code, so the code treatment is undone.
+pre:has(> code.mermaid) {
+  padding: var(--tpl-space-md);
+  padding-block-start: var(--tpl-space-md);
+  // No plate under the drawing. A code block gets a surface because its content is a block of
+  // text that has to separate itself from the prose; a diagram separates itself by being a
+  // drawing, and a tinted plate behind it only adds a second edge inside the first. The hairline
+  // stays and does the whole job.
+  background: none;
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  margin-block: var(--tpl-space-lg);
+  max-width: none;
+  overflow-x: auto;
+  line-height: normal;
+
+  // No language label on a diagram - `::before` would print "mermaid" over the drawing.
+  &::before {
+    content: none;
+  }
+}
+
+code.mermaid {
+  display: block;
+  // The one that mattered: max-content made the svg as narrow as its own layout.
+  min-width: 0;
+  width: 100%;
+  background: none;
+  padding: 0;
+  text-align: center;
+}
+
+// Mermaid writes `max-width: <computed>px` inline on the svg, which caps a diagram at whatever
+// width its own layout happened to produce - measured between 294px and 700px. Overriding it lets
+// a diagram use the column. `width: 100%` on top of that scales the viewBox up, which is what
+// makes a 500px quadrant chart readable in a 690px column.
+code.mermaid > svg {
+  max-width: 100% !important;
+  width: 100%;
+  height: auto;
+}
+
+/* ------------------------------------------------------------------------ typography */
+
+// The initialiser sets `fontFamily` to --codeFont for everything. A monospace face is right for
+// node labels in a technical diagram and wrong for a title, so the two are separated here.
+.mermaid svg {
+  font-family: var(--bodyFont);
+}
+
+.mermaid .nodeLabel,
+.mermaid .edgeLabel,
+.mermaid .label text,
+.mermaid text.actor,
+.mermaid .messageText,
+.mermaid .taskText,
+.mermaid .entityLabel,
+.mermaid .nodeLabel p {
+  font-family: var(--bodyFont) !important;
+  font-size: 14px !important;
+}
+
+.mermaid .titleText,
+.mermaid .pieTitleText,
+.mermaid .chart-title,
+.mermaid .title {
+  font-family: var(--headerFont) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  fill: var(--dark) !important;
+}
+
+/* --------------------------------------------------------------- section colour series
+   Mindmap, timeline, journey and gantt all colour their sections by index. Mermaid derives those
+   from primaryColor, which on a near-white ground produces near-black. The series below is built
+   from this template's own accent, stepping through it rather than around the colour wheel — four
+   distinguishable tints that all sit on the same ground and all carry legible text. */
+
+.mermaid {
+  --mm-1: color-mix(in srgb, var(--secondary) 16%, var(--light));
+  --mm-2: color-mix(in srgb, var(--secondary) 32%, var(--light));
+  --mm-3: color-mix(in srgb, var(--tertiary) 24%, var(--light));
+  --mm-4: color-mix(in srgb, var(--gray) 22%, var(--light));
+  --mm-edge: var(--tpl-rule-strong);
+}
+
+// The black boxes. `.node-bkg` covers mindmap and timeline nodes; both were measured at rgb(2,4,4).
+.mermaid .node-bkg,
+.mermaid .mindmap-node .node-bkg,
+.mermaid .timeline-node .node-bkg,
+// Mermaid draws its own plate inside the svg for some kinds (journey, gantt). With the box behind
+// it now unpainted, that plate would be the only tinted rectangle on the page - so it goes too and
+// the hairline of the box is the only edge.
+.mermaid rect.background {
+  fill: none !important;
+  stroke: none !important;
+}
+
+.mermaid .section-0 .node-bkg,
+.mermaid g.section-0 rect { fill: var(--mm-1) !important; }
+.mermaid .section-1 .node-bkg,
+.mermaid g.section-1 rect { fill: var(--mm-2) !important; }
+.mermaid .section-2 .node-bkg,
+.mermaid g.section-2 rect { fill: var(--mm-3) !important; }
+.mermaid .section-3 .node-bkg,
+.mermaid g.section-3 rect { fill: var(--mm-4) !important; }
+
+// Text inside those nodes, whichever tint it landed on.
+.mermaid .mindmap-node text,
+.mermaid .timeline-node text,
+.mermaid .text-inner-tspan,
+.mermaid .text-outer-tspan {
+  fill: var(--darkgray) !important;
+}
+
+.mermaid .mindmap-edges .edge,
+.mermaid .lineWrapper line {
+  stroke: var(--mm-edge) !important;
+}
+
+/* ------------------------------------------------------------------------ flowchart */
+
+// Mermaid 11 fills a <rect> node from `secondaryColor` and every other shape from `primaryColor`,
+// but takes the label colour from `primaryTextColor` for all of them. On this palette that put
+// --darkgray on the accent navy: measured 1.47:1 in light and 1.31:1 in dark, on every rectangular
+// node of every flowchart. In a flowchart the *shape* carries the meaning, not the fill, so all
+// four get the same ground and the accent stays where it reads - on the edge.
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node polygon,
+.mermaid .node path {
+  // `!important` like everywhere else in this file: mermaid writes its own <style> into each svg,
+  // and its selectors carry the svg's generated id, so they outrank anything written from outside.
+  fill: var(--light) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .edgePath .path,
+.mermaid .flowchart-link {
+  stroke: var(--darkgray);
+}
+
+// The label on an edge sits on the line; it needs its own ground to stay readable.
+.mermaid .edgeLabel,
+.mermaid .edgeLabel rect,
+.mermaid .labelBkg {
+  fill: var(--light) !important;
+  background-color: var(--light) !important;
+  color: var(--darkgray) !important;
+}
+
+.mermaid .cluster rect {
+  fill: var(--tpl-surface-tint) !important;
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+/* ------------------------------------------------------------------------- sequence */
+
+.mermaid .actor {
+  fill: var(--mm-1) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid text.actor > tspan {
+  fill: var(--dark) !important;
+}
+
+.mermaid .messageLine0,
+.mermaid .messageLine1 {
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .note {
+  fill: var(--tpl-surface-tint) !important;
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .activation0,
+.mermaid .activation1,
+.mermaid .activation2 {
+  fill: var(--mm-2) !important;
+  stroke: var(--tertiary) !important;
+}
+
+/* --------------------------------------------------------------------- class and ER */
+
+.mermaid .classGroup rect,
+.mermaid .entityBox {
+  fill: var(--light) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .attributeBoxOdd {
+  fill: var(--light) !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .attributeBoxEven {
+  fill: var(--tpl-surface-tint) !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+// The relationship label sits in a filled box on the line. Measured: green text on a green box —
+// the box took the accent and the text kept it too.
+.mermaid .relationshipLabelBox {
+  fill: var(--light) !important;
+  opacity: 1 !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .relationshipLabel,
+.mermaid .entityLabel {
+  fill: var(--darkgray) !important;
+}
+
+.mermaid .relationshipLine {
+  stroke: var(--darkgray) !important;
+}
+
+/* ---------------------------------------------------------------------- state chart */
+
+.mermaid .statediagram-state rect,
+.mermaid .statediagram-cluster rect {
+  fill: var(--mm-1) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .statediagram-state .divider {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid circle.state-start,
+.mermaid .node circle.state-start {
+  fill: var(--darkgray) !important;
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .state-end circle,
+.mermaid .node circle.state-end {
+  fill: var(--light) !important;
+  stroke: var(--darkgray) !important;
+}
+
+/* --------------------------------------------------------------------------- gantt */
+
+.mermaid .section0,
+.mermaid .section2 { fill: var(--mm-1) !important; opacity: 1 !important; }
+.mermaid .section1,
+.mermaid .section3 { fill: var(--tpl-surface-tint) !important; opacity: 1 !important; }
+
+.mermaid .task0,
+.mermaid .task1,
+.mermaid .task2,
+.mermaid .task3 {
+  fill: var(--mm-2) !important;
+  stroke: var(--tertiary) !important;
+}
+
+// The three states a task can carry. `crit` is the only place in this template where a red is
+// used for meaning, so it takes the danger colour from the callouts rather than a new one.
+.mermaid .done0, .mermaid .done1, .mermaid .done2, .mermaid .done3 {
+  fill: var(--mm-4) !important;
+  stroke: var(--gray) !important;
+}
+
+.mermaid .active0, .mermaid .active1, .mermaid .active2, .mermaid .active3 {
+  fill: var(--secondary) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .crit0, .mermaid .crit1, .mermaid .crit2, .mermaid .crit3 {
+  fill: #B02020 !important;
+  stroke: #B02020 !important;
+}
+
+:root[saved-theme="dark"] .mermaid .crit0,
+:root[saved-theme="dark"] .mermaid .crit1,
+:root[saved-theme="dark"] .mermaid .crit2,
+:root[saved-theme="dark"] .mermaid .crit3 {
+  fill: #FF9C93 !important;
+  stroke: #FF9C93 !important;
+}
+
+.mermaid .taskText,
+.mermaid .taskTextOutsideRight,
+.mermaid .taskTextOutsideLeft,
+.mermaid .taskText0, .mermaid .taskText1, .mermaid .taskText2, .mermaid .taskText3 {
+  fill: var(--darkgray) !important;
+}
+
+// Text that sits *on* the active bar needs the inverse, because that bar is the accent colour.
+.mermaid .activeText0, .mermaid .activeText1, .mermaid .activeText2, .mermaid .activeText3 {
+  fill: var(--light) !important;
+}
+
+.mermaid .grid .tick line {
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .grid path {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+/* --------------------------------------------------------------------------- journey */
+
+.mermaid .journey-section,
+.mermaid .section-type-0 rect,
+.mermaid .section-type-1 rect,
+.mermaid .section-type-2 rect { fill: var(--mm-1) !important; }
+
+.mermaid .task-type-0 rect { fill: var(--mm-1) !important; stroke: var(--tertiary) !important; }
+.mermaid .task-type-1 rect { fill: var(--mm-2) !important; stroke: var(--tertiary) !important; }
+.mermaid .task-type-2 rect { fill: var(--mm-3) !important; stroke: var(--tertiary) !important; }
+
+// The little faces rating each step. They stay neutral rather than picking up a tint.
+.mermaid .face {
+  fill: var(--light) !important;
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .mouth,
+.mermaid .face circle,
+.mermaid .face path {
+  stroke: var(--darkgray) !important;
+}
+
+.mermaid .task-line {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+/* -------------------------------------------------------------------------- gitGraph */
+
+// Measured black: the branch label background and the commit circles came out at rgb(2, 4, 4).
+.mermaid .commit,
+.mermaid circle.commit {
+  fill: var(--secondary) !important;
+  stroke: var(--tertiary) !important;
+}
+
+.mermaid .commit-label,
+.mermaid .branch-label {
+  fill: var(--darkgray) !important;
+}
+
+.mermaid .branchLabelBkg,
+.mermaid .commit-label-bkg {
+  fill: var(--light) !important;
+  stroke: var(--tpl-rule) !important;
+}
+
+.mermaid .branch {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .arrow {
+  stroke: var(--darkgray) !important;
+}
+
+/* ------------------------------------------------------------------------------ pie */
+
+// Pie brings its own twelve-colour palette. Four slices in two barely different greens - which is
+// what the theme variables produced - cannot be told apart, so the series is restated.
+.mermaid .pieCircle:nth-of-type(1) { fill: var(--secondary) !important; }
+.mermaid .pieCircle:nth-of-type(2) { fill: var(--mm-3) !important; }
+.mermaid .pieCircle:nth-of-type(3) { fill: var(--mm-2) !important; }
+.mermaid .pieCircle:nth-of-type(4) { fill: var(--mm-4) !important; }
+.mermaid .pieCircle:nth-of-type(5) { fill: var(--mm-1) !important; }
+
+.mermaid .pieCircle {
+  stroke: var(--light) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .pieOuterCircle {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .slice {
+  fill: var(--darkgray) !important;
+  font-size: 12px !important;
+}
+
+// The swatch beside each legend entry is a *different element* from the slice it names, and
+// mermaid fills it from its own `pie1..pieN` theme variables rather than from the series above.
+// Measured on the built page: the first swatch came out `--light` in light mode and near black in
+// dark - the page's own ground, so invisible in both - while the slice it belonged to was navy.
+// Same series, same order; the rows are one `g.legend` each, so the count is over the groups.
+.mermaid g.legend:nth-of-type(1) rect { fill: var(--secondary) !important; }
+.mermaid g.legend:nth-of-type(2) rect { fill: var(--mm-3) !important; }
+.mermaid g.legend:nth-of-type(3) rect { fill: var(--mm-2) !important; }
+.mermaid g.legend:nth-of-type(4) rect { fill: var(--mm-4) !important; }
+.mermaid g.legend:nth-of-type(5) rect { fill: var(--mm-1) !important; }
+
+.mermaid g.legend rect {
+  stroke: var(--mm-edge) !important;
+  stroke-width: 1px !important;
+}
+
+// The legend text, which mermaid leaves at its own default size.
+.mermaid .legend text {
+  fill: var(--darkgray) !important;
+  font-size: 13px !important;
+}
+
+/* -------------------------------------------------------------------------- quadrant */
+
+.mermaid .quadrant {
+  opacity: 1 !important;
+}
+
+.mermaid .quadrants rect:nth-of-type(1) { fill: var(--mm-1) !important; }
+.mermaid .quadrants rect:nth-of-type(2) { fill: var(--tpl-surface-tint) !important; }
+.mermaid .quadrants rect:nth-of-type(3) { fill: var(--tpl-surface-tint) !important; }
+.mermaid .quadrants rect:nth-of-type(4) { fill: var(--mm-1) !important; }
+
+.mermaid .quadrants .border,
+.mermaid .border line {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .data-point circle,
+.mermaid .data-points circle {
+  fill: var(--secondary) !important;
+  stroke: var(--light) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .labels text,
+.mermaid .quadrants text {
+  fill: var(--darkgray) !important;
+  font-size: 12px !important;
+}
+
+/* ---------------------------------------------------------------------------- sankey */
+
+// Sankey's own palette is a rainbow; four tints of the accent carry the same information without
+// asserting a meaning the numbers do not have.
+//
+// Two things had to be fixed here at once, both measured on 2026-09-05:
+//
+//   • A *flowchart* builds the same `g.nodes > g.node > rect` as sankey does, so `.mermaid .nodes
+//     rect` painted every rectangular flowchart node in the accent while its label kept
+//     `primaryTextColor`: 1.47:1 in light, 1.31:1 in dark, on four pages. Structure cannot tell the
+//     two apart - `aria-roledescription` can, and mermaid writes it on every diagram it draws.
+//   • The series never stepped. `:nth-of-type` counts among siblings, and every `rect` is the only
+//     one inside its own `g.node`, so *every* node matched `4n + 1` and the four tints rendered as
+//     one. The count belongs on the `g.node` elements, which really are siblings.
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n + 1) rect { fill: var(--secondary) !important; }
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n + 2) rect { fill: var(--mm-3) !important; }
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n + 3) rect { fill: var(--mm-2) !important; }
+.mermaid svg[aria-roledescription="sankey"] .nodes .node:nth-of-type(4n) rect { fill: var(--mm-4) !important; }
+
+.mermaid .links path,
+.mermaid .link path {
+  fill: var(--secondary) !important;
+  opacity: 0.22 !important;
+}
+
+.mermaid .node-labels text {
+  fill: var(--darkgray) !important;
+  font-size: 12px !important;
+}
+
+/* --------------------------------------------------------------------------- xychart */
+
+.mermaid .bar-plot-0 rect,
+.mermaid [class^="bar-plot"] rect {
+  fill: var(--mm-2) !important;
+}
+
+.mermaid .line-plot-1 path,
+.mermaid [class^="line-plot"] path {
+  stroke: var(--secondary) !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+}
+
+.mermaid .axis-line,
+.mermaid .axisl-line {
+  stroke: var(--tpl-rule-strong) !important;
+}
+
+.mermaid .ticks text,
+.mermaid .bottom-axis text,
+.mermaid .left-axis text {
+  fill: var(--gray) !important;
+  font-size: 11px !important;
+}
+
+.mermaid .plot rect.background,
+.mermaid .main > rect.background {
+  fill: transparent !important;
+}
+
+/* ---------------------------------------------------------------------------- errors */
+
+// When a diagram fails to parse, mermaid draws a bomb. Left visible on purpose - a silently blank
+// figure is worse - but set in this template's colours so it reads as a message, not as damage.
+.mermaid .error-icon {
+  fill: var(--gray) !important;
+}
+
+.mermaid .error-text {
+  fill: var(--darkgray) !important;
+  font-family: var(--bodyFont) !important;
+}
+
+/* -------------------------------------------------------------------- expand control */
+
+.mermaid .expand-button {
+  border-radius: var(--tpl-radius-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule-strong);
+  background: var(--light);
+  color: var(--darkgray);
+  min-width: 32px;
+  min-height: 32px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--tpl-surface);
+  }
+}
+
+// ====================================================================================== body-media
+// Until 1.1 its own stylesheet, body-media.scss.
+
+// Images, video, audio and embeds.
+
+article {
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--tpl-radius-md);
+    // An image with a white background on a warm ground looks like a hole without this.
+    border: var(--tpl-rule-width) solid var(--tpl-rule);
+  }
+
+  // An image the author sized explicitly (`![[x.png|300]]`) keeps that size; the rule above only
+  // stops it exceeding the column.
+  img[width] {
+    width: auto;
+  }
+
+  // The audio player is the browser's own. Nothing here restyles the control itself: a rebuilt
+  // player loses its keyboard handling, its media-key support and its screen-reader labels, and
+  // gains nothing this template needs.
+  audio {
+    display: block;
+    width: 100%;
+    margin-block: var(--tpl-space-md);
+    // Chrome's player has its own rounded shell; matching the radius stops the two from fighting.
+    border-radius: var(--tpl-radius-md);
+  }
+
+  // A video is a figure like an image, so it gets the same edges — and keeps its own proportions
+  // rather than being forced into a ratio it does not have.
+  video {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-block: var(--tpl-space-md);
+    background: var(--tpl-surface);
+  }
+
+  // An embed with no intrinsic size: YouTube, a map, anything in an iframe. Without a ratio it
+  // collapses to zero height inside a grid cell — which is every page in this template.
+  iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: var(--tpl-rule-width) solid var(--tpl-rule);
+    border-radius: var(--tpl-radius-md);
+    max-width: none;
+  }
+
+  // A PDF is the exception: quartz turns `![[x.pdf]]` into `<iframe class="pdf">`, and a document
+  // is taller than it is wide. 16/9 would show two centimetres of the first page.
+  // `:not([height])` matters: this rule is for the iframe quartz generates from `![[x.pdf]]`, which
+  // carries no dimensions. An iframe someone wrote by hand with `height="500"` said what it wanted,
+  // and a ratio here would silently overrule it.
+  iframe.pdf:not([height]) {
+    aspect-ratio: 1 / 1.2;
+    min-height: 28rem;
+  }
+
+  iframe.pdf,
+  iframe[src$=".pdf"] {
+    background: var(--tpl-surface);
+  }
+
+  @media (max-width: 720px) {
+    // On a phone a document viewer inside a scrolling page is unusable; it gets a fixed, modest
+    // height so the page stays scrollable past it.
+    iframe.pdf:not([height]) {
+      aspect-ratio: auto;
+      height: 22rem;
+      min-height: 0;
+    }
+  }
+
+  figure {
+    margin-inline: 0;
+    margin-block: var(--tpl-space-lg);
+  }
+
+  figcaption {
+    font-size: var(--tpl-text-sm);
+    color: var(--gray);
+    margin-block-start: var(--tpl-space-2xs);
+  }
+
+  // A transcluded note is another page inside this one; the inset says where it starts and ends.
+  .transclude {
+    margin-block: var(--tpl-space-lg);
+    padding: var(--tpl-space-xs) var(--tpl-space-md);
+    border-inline-start: 2px dashed var(--tpl-rule-strong);
+    background: var(--tpl-surface-tint);
+    border-radius: 0 var(--tpl-radius-md) var(--tpl-radius-md) 0;
+
+    > :first-child { margin-block-start: 0; }
+    > :last-child { margin-block-end: 0; }
+  }
+
+  .external-embed {
+    border-radius: var(--tpl-radius-md);
+  }
+}

@@ -1,0 +1,715 @@
+// layout - put together by QuartzControl from the stylesheets named in the sections below.
+// Until 1.1 each of them was a file of its own; a comment that names one of them means that section.
+
+// ============================================================================================ base
+// Until 1.1 part of base.scss.
+
+/* ------------------------------------------------------------------ the sticky header */
+
+// The header stays at the top of the window. It does not change size while it does - and that is a
+// decision from 2026-09-09, not an omission.
+//
+// It used to shrink, swap the name it shows and carry a progress line, all three driven by
+// `animation-timeline` - CSS bound to the scroll position rather than to the clock. Chromium and
+// WebKit do that; Firefox does not, has not for years, and nothing suggests it will. The three
+// effects were guarded with `@supports` and simply did not happen there, which meant the template's
+// most visible element was one thing in two engines and another in the third.
+//
+// What replaces them is not a smaller effect but a different mechanism: the header is one of *two*
+// layers, and the other one scrolls away. `beforeBody` - breadcrumb, tags, the h1, the date - is
+// the page's own title block, and it leaves with the text. The bar stays, and since it now carries
+// the chapter name (plugins.mjs, `layoutBoxPageName`) it says where you are the whole time instead
+// of exchanging one name for another halfway down. `position: sticky` is the entire technique, and
+// it behaves identically in every engine this site was measured in.
+//
+// The height is still not written anywhere: it is 44px of control plus this padding twice plus the
+// rule. Two custom properties rather than one height, because the controls may not shrink below
+// 44px and the right column reads --tpl-header-h to stick below the bar rather than under it.
+:root {
+  --tpl-header-pad: var(--tpl-space-sm);
+  --tpl-header-title: var(--tpl-text-xl);
+  --tpl-header-h: calc(var(--tpl-target) + 2 * var(--tpl-header-pad) + var(--tpl-rule-width));
+}
+
+// The app bar is tighter than the desktop one, and the padding is changed *here* rather than in
+// nav-header.scss, where it used to be written as a second `padding-block`. That was one place too
+// many: --tpl-header-h kept computing from 12px while the bar was built from 8, so everything that
+// positions itself against the bar was 8px out on a phone - the drawer trigger sat 13px from the
+// top of a 61px bar instead of 8.5 (measured at 390px), and every jump target reserved 8px too
+// much. One declaration, and the bar, the trigger and the scroll margins all follow it.
+@media (max-width: 900px) {
+  :root {
+    --tpl-header-pad: var(--tpl-space-xs);
+  }
+
+  // The left area holds nothing that takes space on a phone - see frames.mjs, where its row is `0`
+  // rather than `auto`. What a zero row does not remove is the grid's own gap on either side of it,
+  // and two gaps around an empty row are 64px of nothing between the bar and the first line of the
+  // page. The area gives up its height, and the block below it takes one gap back.
+  //
+  // 2rem is the frame's `rowGap`, written here as the number it is: this is the one place that has
+  // to know it, and a token would suggest it could be changed independently of the frame.
+  .qgframe-area-left {
+    height: 0;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .qgframe-area-before-body {
+    margin-block-start: -2rem;
+  }
+}
+
+// The two panels that scroll on their own: the folder tree and the right column. Stated here as
+// one rule rather than twice in the two component files, and not as a `%placeholder` - each
+// stylesheet is a separate Sass module (`@use "./custom/<name>"`, see style-order.mjs), and a
+// placeholder does not cross a module boundary, so an `@extend` in nav-explorer.scss would fail
+// to compile rather than quietly do nothing.
+//
+// Below the mobile breakpoint neither one scrolls: the tree becomes a full-height drawer and the
+// right column is laid out under the article.
+//
+// **The number is written out here and in four other stylesheets, and it has to match the project's
+// mobile breakpoint** (frames.mjs `BREAKPOINT_WIDTHS`, `.quartz-gui/layout-breakpoints.json`). A
+// media query cannot read a custom property, and SCSS variables do not cross the module boundary
+// between these files, so there is no way to say it once. When the breakpoint moves, grep for the
+// old number: base.scss, nav-header.scss, nav-explorer.scss and nav-language-switcher.scss carry
+// it, and page-bases.scss carries the tablet one.
+//
+// The two halves of this rule stop at different widths, and that is not an oversight: the tree is a
+// panel in a column from 901px up, but the right column *is* a column only from 1201px - below that
+// the frame lays its area out under the article (frames.mjs), where a scrollport with a mask and a
+// height cap is a box that scrolls inside a page that scrolls. That is why the tablet number is in
+// this file now as well.
+@media (min-width: 901px) {
+  // Kein `overscroll-behavior: contain` an einem Kasten, der in der Seite steht — nicht hier, nicht
+  // an den Spalten, nicht am Bases-Board. Chrome gibt das Rad von einem Rollcontainer mit
+  // `contain` nie an die Seite weiter, auch wenn er gar nicht überläuft: Über einer kurzen
+  // Ordnerliste stand die Seite still. Gemessen am 2026-09-30, siehe `.qgframe-area-left` unten.
+  // `contain` bleibt nur, wo ein Kasten *über* der Seite liegt: die Schublade (nav-explorer.scss)
+  // und Quartz' Link-Vorschau.
+  ul.explorer-ul {
+    overflow-y: auto;
+    overscroll-behavior: auto;
+    mask-image: var(--tpl-fade-mask);
+    -webkit-mask-image: var(--tpl-fade-mask);
+
+    // The padding is what makes the fade honest, and it is exactly as deep as the fade. At the top
+    // of the list the first row then sits below the gradient instead of inside it, and at the
+    // bottom the last row sits above it: both ends are read at full strength, and only what is
+    // actually passing through goes soft.
+    //
+    // This replaces a scroll-driven version that turned each end on and off with the scroll
+    // position. That was cleverer and worse: it needed `@property`, two keyframes and a
+    // `@supports` guard, it only worked in Chromium, and it still faded the first line whenever
+    // the list was scrolled at all. One length of padding does the whole job in every browser.
+    padding-block: var(--tpl-fade);
+  }
+
+  // The right column, from the tablet width up, where it is a column. Same three declarations; the
+  // top padding is taken away again in the desktop block below, where the heading covers that edge.
+  @media (min-width: 1201px) {
+    .qgframe-area-right {
+      // Der Roller braucht keinen Schalter: Steht `--tpl-col-right-height` auf `none`, läuft
+      // nichts über, und dann rollt auch nichts.
+      // Beschnitten wird trotzdem, an der Polsterkante - warum das den Fokusring trifft und wie die
+      // Kante nach außen rückt, steht bei `.qgframe-area-left` weiter unten.
+      // Kein `overscroll-behavior: contain`, siehe `.qgframe-area-left` weiter unten.
+      overflow-y: auto;
+      mask-image: var(--tpl-col-right-mask);
+      -webkit-mask-image: var(--tpl-col-right-mask);
+      padding-block: var(--tpl-fade);
+    }
+  }
+
+  // Which element scrolls the tree is not the same in every browser, and that had to be settled
+  // before anything could be attached to it. Quartz gives the inner list `max-height: 100%`:
+  //
+  //   * Chrome resolves the percentage against `.explorer-content` (540px), so the *list* becomes
+  //     the scroll container and the box around it never scrolls.
+  //   * Firefox does not resolve it - the parent's height is auto with a max - so the list grows
+  //     to its full 688px and the *box* scrolls instead.
+  //
+  // The first answer to that was to cap `.explorer-content` and let the list give up its own cap,
+  // so the box scrolled in both. It settled the browser difference and broke something else: the
+  // plugin saves and restores the tree's scroll position across a page change, and the element it
+  // reads is the *list*
+  //
+  //     prenav: sessionStorage.setItem("explorerScrollTop", document.querySelector(".explorer-ul").scrollTop)
+  //     render: let l = sessionStorage.getItem("explorerScrollTop"); if (l) n.scrollTop = parseInt(l, 10)
+  //             else n.querySelector(".active")?.scrollIntoView({ behavior: "smooth" })
+  //
+  // With the box scrolling, that read 0 every time - and because `"0"` is a truthy string, the
+  // else branch never ran either, so neither the saved position nor the current page was scrolled
+  // to. Measured: click a file four folders down, and the tree came back at the top on every
+  // navigation. So the list is the scroller again, and the browser difference is settled the other
+  // way instead: an absolute `max-height` on the list itself, which Firefox resolves as readily as
+  // Chrome. `.explorer-content` keeps `overflow: visible` and is only the box the fold acts on.
+  ul.explorer-ul {
+    max-height: 60vh;
+  }
+
+  .explorer-content {
+    overflow: visible;
+  }
+}
+
+/* ----------------------------------------------- the scrollbar of a box, on demand */
+
+// A box that scrolls shows its bar while the pointer is in it, and not otherwise.
+//
+// What is *not* possible, since it was the first idea: there is no CSS for "while scrolling". The
+// operating system does that - macOS' overlay scrollbars fade on their own - and a stylesheet has
+// no event to hang it on. `:hover` is the closest thing that is not a script, and it is close
+// enough: a bar you cannot see is one you were not reaching for.
+//
+// The *width* stays `thin` at all times and only the **colour** changes. The obvious version -
+// `scrollbar-width: none` at rest, `thin` on hover - was written first and measured, and it fails
+// in two different ways at once:
+//
+//   Chrome    the content narrowed from 300px to 289px on hover, so the whole panel reflowed
+//             under the pointer. `scrollbar-gutter: stable` does not save it: the gutter it
+//             reserves is *the width of the scrollbar*, and with `scrollbar-width: none` that
+//             width is zero.
+//   Firefox   nothing happened at all - the computed value stayed `none` through the hover.
+//             Gecko settles a scroll container's scrollbar width when it builds the box and does
+//             not restyle it for a hover.
+//   WebKit    worked, being the only one of the three with an overlay bar that costs no width.
+//
+// A colour has neither problem: the gutter is the same at rest and on hover, so nothing moves, and
+// a repaint is something all three do. `transparent transparent` is thumb and track.
+//
+// `:focus-within` alongside `:hover`, because tabbing into a list is also a reason to see how long
+// it is.
+//
+// The list is every box in this build that was *measured* scrolling on its own - the tree, the
+// mobile drawer, the right column, the backlinks box (quartz caps that one, not this template),
+// the search results and a board column. Two deliberate absences. The page's own scrollbar is the
+// one bar that says how long the document is, and nobody should have to find it first. And the
+// horizontal scrollers - code blocks, wide tables, KaTeX displays, the board - keep their bar
+// because sideways scrolling is the thing nobody expects, so its only sign has to be visible.
+.qgframe-area-right,
+ul.explorer-ul,
+.explorer-content,
+.backlinks,
+.results-container,
+.bases-board-column-body {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &:hover,
+  &:focus-within {
+    scrollbar-color: var(--tpl-rule-control) transparent;
+  }
+}
+
+/* ------------------------------------------------- one line for every panel heading */
+
+// Both side columns begin with a panel, and a panel begins with a heading - but two of those
+// headings are also *controls* (the explorer's and the table of contents', which fold their panel)
+// and therefore 44px tall, while the rest are plain `<h3>`s. Measured at 1440px on a page with no
+// outline: "Explorer" sat at y=134 and "Graphansicht" at 121, because the button centres its text
+// in 44px and the heading does not.
+//
+// So every panel heading gets the same line box, whether or not it is a button. The three that are
+// not are named here rather than in their own files because the point of the rule is that they
+// agree with each other; three separate copies of one number is how they stop agreeing. Their
+// typography stays where it belongs, in aside-*.scss.
+.backlinks > :is(h1, h2, h3),
+.graph > :is(h1, h2, h3),
+.recent-notes > :is(h1, h2, h3) {
+  display: flex;
+  align-items: center;
+  min-height: var(--tpl-target);
+  margin-block: 0;
+}
+
+/* ---------------------------------------------- the two boxes that sit under the text */
+
+// Backlinks and "zuletzt bearbeitet" moved out of the side columns and under the article, where
+// they stand side by side in the open rather than at the end of a column. In a column the edge of
+// the page did the framing; out here nothing did, and the two ran into the article above them and
+// into each other.
+//
+// So they get the box the graph already has (aside-graph.scss) - same hairline, same radius, same
+// tint. Three panels of the same site that are the same kind of thing look the same.
+//
+// The heading's 44px line box (above) is a control's height and is right in a column of controls;
+// inside a bordered box it is a bald patch over the first entry. Here the two boxes say their own,
+// smaller, and they say it together - which is the whole reason this rule is in base.scss and not
+// twice in the aside files.
+.backlinks,
+.recent-notes {
+  // The box fills the item the group wraps it in rather than shrinking to its content. Since
+  // 2026-09-10 that item is a grid wrapper (rule further down), whose only child stretches in both
+  // axes on its own; this says the same thing for the case where the wrapper is a flex box, which
+  // it was until then. Measured on a tag page, where the backlinks box is gone and this one has the
+  // row to itself: 276px of box in 672px of row, with the border drawn around the 276.
+  flex: 1 1 auto;
+  padding: var(--tpl-space-sm) var(--tpl-space-md);
+  background: var(--tpl-surface-tint);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+}
+
+.backlinks > :is(h1, h2, h3),
+.recent-notes > :is(h1, h2, h3) {
+  min-height: 0;
+  margin-block: 0 var(--tpl-space-xs);
+}
+
+/* ------------------------------------------------------------- jumping under the header */
+
+// The header stays at the top of the window, so anything jumped to - a heading from the table of
+// contents, a footnote, a `#anchor` from outside - would land behind it. Every target keeps the
+// bar's height free above itself.
+//
+// It used to be `--tpl-target + --tpl-space-md` = 60px, described as "the bar in its small state",
+// and it was short on both counts. The bar is 61px small and 69px at rest - and in Firefox it
+// never shrinks at all, because the shrinking runs on a scroll timeline it does not have. Below it
+// sits the 24px fade that dissolves the page under the bar. So a heading needed 85 to 93px of
+// clearance and was given 60: it arrived under the bar, already dissolving.
+//
+// Written from `--tpl-header-h` rather than from the two tokens it is made of, so it follows the
+// bar instead of restating it, plus the fade and one step of air.
+:target,
+article :is(h1, h2, h3, h4, h5, h6)[id],
+article [id^="user-content-fn"],
+.footnotes li[id] {
+  scroll-margin-block-start: calc(var(--tpl-header-h) + var(--tpl-page-fade) + var(--tpl-space-xs));
+}
+
+/* ------------------------------------------------------------------------ the frame */
+
+// The authored frames set their own box; these are the rules inside an area that quartz does not
+// cover because it never had a grid there.
+.qgframe-area {
+  // Areas stack their components with the same rhythm on every breakpoint.
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-space-lg);
+}
+
+// Two areas that do not want that rhythm.
+//
+// The header block - breadcrumb, tags, title, date - is one unit, not four stacked components, and
+// 24px between each of them pulled it apart: the date drifted away from the title it belongs to
+// and the tags away from both. Every one of those components already carries its own margins, and
+// those are the right distances. Only the breadcrumb needs its own, because it is the one line
+// that is *not* part of the title block - it says where the page sits, and then the page starts.
+.qgframe-area-before-body {
+  gap: 0;
+}
+
+.qgframe-area-before-body .breadcrumb-container {
+  margin-block-end: var(--tpl-space-md);
+}
+
+// The footer and the colophon under it are one closing block, so they sit closer than two
+// components of a column would.
+.qgframe-area-footer {
+  gap: var(--tpl-space-sm);
+}
+
+// A flex group whose components all rendered nothing still occupies a row of its area.
+//
+// Quartz builds the group wrapper and one item wrapper per component before it knows whether the
+// component returns anything, and backlinks returns `null` on a page nothing links to
+// (`hideWhenEmpty`). The empty item is zero-high and still collects the group's gap; the group
+// itself, if every one of its components is empty, still collects the area's. Measured on the
+// start page: 24px of nothing under the properties.
+//
+// `:empty` does not reach either of them - both *have* a child, it is the child that is empty - so
+// the test is "contains no element at all", one level down for the item and two for the group.
+.flex-component > div:not(:has(*)),
+.qgframe-area > .flex-component:not(:has(> div > *)) {
+  display: none;
+}
+
+// The two boxes under the text are one pair, so they are one height.
+//
+// `align: 'stretch'` in the group's options (plugins.mjs) stretches the *wrapper* quartz puts
+// around each component - and a wrapper is a block, so the card inside it keeps its content height
+// and the shorter of the two ends in mid-air with the group's grey ending under it. Until
+// 2026-09-10 that was invisible for the wrong reason: a rule meant for the header made every group
+// wrapper on the site a centred flex box, so the short card was centred in the tall one instead of
+// filling it (nav-header.scss). With that rule where it belongs, this is what says the two cards
+// are the same size: a grid wrapper stretches its only child by default, in both axes.
+.qgframe-area-custom-8 > .flex-component > * {
+  display: grid;
+}
+
+// No reading measure here.
+//
+// An earlier version capped prose at 68 characters with `max-width` on every block-level element
+// of the article. That is one way to keep lines readable; it is not this template's way any more.
+// The column width is decided by the frame - twelve columns of 98.33px, the content on six of them
+// plus their gutters, so 690px, about 72 characters at 1rem - which keeps the decision in one
+// place instead of two that can disagree.
+//
+// The consequence for anyone adding rules here: do not reintroduce a per-element max-width. If a
+// column is too wide to read comfortably, the frame is what to change.
+
+/* ------------------------------------------------------------------ the right column */
+
+// The apparatus stays put while the article moves.
+//
+// A table of contents that scrolls away with the text is a list of places you can no longer get
+// to, so from tablet up the right area is sticky and scrolls on its own. Three things are needed
+// together and it does nothing without all three: `align-self: start` (a grid item stretches to
+// its row by default, and a full-height item has nothing to stick *to*), a `top` that matches the
+// frame's own inset, and a max-height so a long outline scrolls inside the column instead of
+// running past the bottom of the window.
+//
+// The fade at both ends comes from the rule further up; the components inside give up their own
+// height caps in aside-toc.scss, because the scrolling now happens one level out.
+// The fade padding is also why the two side columns did not start at the same height. The shared
+// rule above gives a scrolling panel --tpl-fade of padding at each end so its first and last line
+// clear the gradient; the left column has no such padding, because there the padding sits on the
+// tree inside it. Measured at 1440px: "Explorer" at y=113, "Inhaltsverzeichnis" at y=133 - exactly
+// the fade. Here the top padding goes away entirely rather than being compensated, because the top
+// of this column no longer fades (see the headings below), and the two columns then begin on the
+// same line by themselves.
+// 1201, not 901: below the desktop width the frame moves this area under the article, where it is
+// a block the page scrolls past, not a column that stands still beside one. Until 2026-09-10 the
+// rules below started at 901 and a tablet got a full-width band under the text that was sticky, had
+// a `max-height` of nearly a screen and scrolled inside itself - measured at 1000px, a 580px-wide
+// box with its own scrollport. What a tablet gets instead is the block right after this one.
+@media (min-width: 1201px) {
+  // Ob diese Spalte stehen bleibt, entscheiden drei Variablen (variables.mjs, `tpl-col-right-*`).
+  // Hier stehen keine Werte mehr, sondern nur, wo sie hingehören.
+  .qgframe-area-right {
+    --col-ring-reach: calc(var(--tpl-focus-width) + var(--tpl-focus-offset));
+    position: var(--tpl-col-right-position);
+    // Below the header, not under it. --tpl-header-h is the bar's height, computed from the same
+    // two lengths the bar itself uses, so this offset can never disagree with it. Ohne
+    // `position: sticky` ist die Zeile wirkungslos und braucht deshalb keinen eigenen Schalter.
+    // Die Ring-Reichweite zieht `top` ab, weil die Kante um sie nach außen rückt (unten).
+    top: calc(var(--tpl-header-h) + var(--tpl-space-lg) - var(--col-ring-reach));
+    align-self: start;
+    max-height: var(--tpl-col-right-height);
+    // Dieselbe Antwort wie bei `.qgframe-area-left` weiter unten: Die Spalte rollt, also
+    // beschneidet sie an ihrer Polsterkante, und die Einträge des Inhaltsverzeichnisses stehen
+    // bündig daran - gemessen verloren 4 von 5 fokussierbaren Elementen links und rechts ihren
+    // Ring, und der Knopf „Inhaltsverzeichnis“ ganz oben auch oben. Die Kante rückt um die
+    // Reichweite des Rings nach außen, der Inhalt bleibt stehen.
+    margin-block-start: calc(-1 * var(--col-ring-reach));
+    margin-inline: calc(-1 * var(--col-ring-reach));
+    padding-inline: var(--col-ring-reach);
+    // Only the lower edge fades, and only the lower edge is padded for it: the upper one is covered
+    // by a heading that stays put. Oben steht nur die Reichweite des Rings - die Überschrift ist
+    // ein Knopf.
+    //
+    // Eine Maske beschneidet auch ein `position: fixed` in ihrem Stapelkontext. Was das für die
+    // Vollansicht des Graphen heißt und wie es zurückgenommen wird, steht in aside-graph.scss.
+    mask-image: var(--tpl-col-right-mask);
+    -webkit-mask-image: var(--tpl-col-right-mask);
+    padding-block: var(--col-ring-reach) var(--tpl-fade);
+  }
+
+  // Scrolling *inside* the column used to take everything with it - the panel's own heading
+  // included, up to the line under the header. Measured: with the pointer over the outline, the
+  // words "INHALTSVERZEICHNIS" travelled to 10px below the bar and dissolved there, and what was
+  // left was a list of headings with nothing saying what the list was.
+  //
+  // The left column never had that problem: the explorer's heading is a sibling of the tree, not a
+  // row inside it, so the tree scrolls and the word "Explorer" stays. This gives the right column
+  // the same behaviour with the means available - each panel heading sticks to the top of the
+  // scrollport, and the next one pushes it out as it arrives.
+  //
+  // The opaque ground is what makes it work rather than decoration: a sticky heading with a
+  // transparent background has the list sliding through its letters. It is also why the top of
+  // this column no longer needs a fade - nothing can appear above a heading any more.
+  .qgframe-area-right :is(.toc-header, .backlinks > h3, .graph > h3) {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--light);
+
+    // And a short wash under it, because an opaque edge alone cuts a row in half: the outline's
+    // rows are 30px and the heading is 44, so whatever is passing under it is sliced through the
+    // middle of its letters and reads as a strikethrough. Measured on "Struktur und Rhythmus" at
+    // scroll 174 of the column. The gradient dissolves the same row instead - the same move the
+    // panel makes at its lower edge, in the one place a mask on the scroller cannot reach.
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      inset-block-start: 100%;
+      height: var(--tpl-fade);
+      background: linear-gradient(to bottom, var(--light), transparent);
+      pointer-events: none;
+    }
+  }
+}
+
+/* ------------------------------------------- the right column at tablet: two boxes, not a stack */
+
+// Between 901 and 1200 the frame puts `right` under the article, full width (frames.mjs). Stacked,
+// its two panels are an outline and a graph that each take the whole measure - 580px of table of
+// contents at 1000px, and a 310px square below it. They are the same kind of thing as the two boxes
+// under the text, so they are laid out the same way: one flex row that wraps, `18rem` of basis
+// each, top-aligned.
+//
+// The graph is wrapped in `.desktop-only`, which is `display: contents` above the mobile width -
+// the wrapper has no box, so the flex properties have to name `.graph` itself rather than a child
+// of the area.
+@media (min-width: 901px) and (max-width: 1200px) {
+  .qgframe-area-right {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--tpl-space-lg);
+  }
+
+  // 12rem, not the 18 the two boxes under the text use: this row is narrower than the text block,
+  // because the left column keeps its 300px here. Measured at the bottom of the band, 901px, the
+  // area is 481px wide - two 18rem boxes plus the gap need 608 and would wrap back into a stack,
+  // which is the thing this block exists to prevent. At 12rem they need 408 and stand side by side
+  // across the whole band; wrapping stays possible for a case narrower than this one.
+  .qgframe-area-right > .toc,
+  .qgframe-area-right .graph {
+    flex: 1 1 12rem;
+    min-width: 0;
+  }
+
+  // And both get the box the pair under the text has - same tint, same hairline, same radius, the
+  // heading inside it - because here they are the same kind of thing as that pair: two panels
+  // standing side by side under an article. In the column at desktop they are not, and there they
+  // keep the bare column treatment.
+  //
+  // Equal height for the same reason it holds below the text (`.backlinks`, `.recent-notes`): two
+  // bordered boxes of different heights beside each other read as one of them having failed to
+  // load. The flex default does it, which is why there is no `align-items` in the rule above.
+  .qgframe-area-right > .toc,
+  .qgframe-area-right .graph {
+    padding: var(--tpl-space-sm) var(--tpl-space-md);
+    background: var(--tpl-surface-tint);
+    border: var(--tpl-rule-width) solid var(--tpl-rule);
+    border-radius: var(--tpl-radius-md);
+  }
+
+  // The graph brings a well of its own (aside-graph.scss) - the same tint inside the same hairline.
+  // Inside the box above that is a box in a box, so here it is only the clip that keeps the drawing
+  // inside the rounded corner.
+  .qgframe-area-right .graph-outer {
+    background: transparent;
+    border: none;
+  }
+}
+
+/* ------------------------------------------- the two boxes under the text are two, above a phone */
+
+// One rule for the whole range above the mobile width, and that is the point of it.
+//
+// The pair sizes itself by a `basis: 18rem` (plugins.mjs), which means "two columns while the line
+// is at least 600px" - and the line is not the window. Measured: side by side from about 1380px of
+// window, stacked from 1366 down. So the two boxes stood in one column exactly where the pair right
+// below them - the outline and the graph - had just been put into two, and they went back to two of
+// their own accord further down, at the tablet width, where the row is narrower still. Nobody reads
+// a breakpoint table; what one sees is a stack that changes its mind twice.
+//
+// So: two columns above the mobile width, one below it. `display` is the one property quartz' group
+// does *not* write inline (Flex.tsx writes flex-direction, flex-wrap and gap), which is why this
+// can be said at all - an inline `flex-basis` is otherwise unbeatable without `!important`. The
+// inline `gap` carries over into the grid unchanged; the other two go quiet. Same handle as the
+// header's brand group, which nav-header.scss explains at length.
+//
+// **Unter 901px entscheidet seit dem 2026-09-20 nicht mehr die Basis, sondern dieselbe Regel.**
+//
+// Vorher stand hier, das sei dort richtig: „ein Telefon bekommt eine Spalte, ein breites Fenster
+// im Mobilband zwei". Gemessen an der gebauten Seite trägt der Satz nicht, weil die Fläche im
+// Mobil-Layout *breiter* ist als die Textspalte am Schreibtisch — sie läuft über die ganze
+// Seite. Bei 900px Fenster ist sie 828px breit, die Basis von 18rem reicht also für zwei Spalten
+// zu 402px; erst bei rund 615px Fenster rutschen sie untereinander. Zwischen 900 und 615 steht
+// also ein zweispaltiges Paar in einer Ansicht, in der alles andere schon einspaltig ist: die
+// Seitenleisten liegen unter dem Artikel, die Navigation ist eine Schublade. Das ist genau der
+// Fehler, den der Absatz oben beschreibt, nur eine Bandbreite weiter unten.
+//
+// Also: zwei Spalten über der Mobilbreite, eine darunter — und beides über denselben Hebel.
+// `display` bleibt die Eigenschaft, die Flex.tsx *nicht* inline schreibt, ein `!important` gegen
+// die inline `flex-basis` braucht es damit nach wie vor nicht.
+.qgframe-area-custom-8 > .flex-component {
+  display: grid;
+}
+
+// Dieselbe zweite Hälfte wie unten, und aus demselben Grund: `justify-self: center` steht auf
+// jedem Wrapper und lässt das Kind in einer Rasterzelle auf seinen Inhalt schrumpfen.
+.qgframe-area-custom-8 > .flex-component > * {
+  width: 100%;
+}
+
+@media (min-width: 901px) {
+  // `grid-auto-flow`, not a `grid-template-columns: 1fr 1fr`: the number of columns has to be the
+  // number of boxes that are actually there. On a page nothing links to, the backlinks component
+  // renders `null` and the rule further up takes its wrapper out of the flow - with two fixed
+  // columns that would leave "zuletzt bearbeitet" at half the width with an empty half beside it,
+  // which is the exact thing the one-area decision in frames.mjs was made to avoid. Auto columns
+  // count what is left: one box fills the row, two share it.
+  //
+  // Nur die Fließrichtung: `display: grid` und die Breite der Kinder stehen jetzt über dem
+  // ganzen Bereich (siehe oben), weil beide Bänder sie brauchen.
+  .qgframe-area-custom-8 > .flex-component {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------- die linke Spalte, wenn sie stehen bleiben soll */
+
+// Dieselben drei Variablen wie rechts, dieselbe Mechanik — und eine andere Breite, an der sie
+// greift. Gemessen am 2026-09-21: Links ist ab **901px** eine Spalte neben dem Artikel (300px bei
+// x=36), rechts erst ab 1201px; dazwischen liegt der rechte Bereich unter dem Text. Unterhalb von
+// 901 sind beide volle Bänder unter dem Artikel, wo Stehenbleiben nichts bedeutet.
+//
+// In der Vorgabe sind die drei Schalter aus (`static` / `none` / `none`). Das heißt **nicht**,
+// dass diese Regel dann nichts tut, und hier stand bis zum 35. Review genau das: `overflow-y`,
+// `align-self` und das Polster hängen an keinem Schalter. Gemessen an der gebauten Website:
+// `overflow: auto/auto`, `align-self: start`, 14px Polster unten, auch bei `static`. Die Spalte
+// ist damit ein Rollcontainer, der nie rollt — und ein Rollcontainer beschneidet an seiner
+// Polsterkante. Die Zeilen des Akkordeons stehen bündig an dieser Kante, also verlor jeder
+// Fokusring links und rechts, und beim ersten Eintrag auch oben, seine äußeren 4px.
+//
+// `overflow` bedingt zu setzen geht mit einer Custom Property nicht, und der Roller muss bleiben,
+// wenn jemand die Spalte klebrig macht. Also rückt die Kante statt des Inhalts: Die Spalte wächst
+// um die Reichweite des Rings (Breite + Versatz) nach außen und polstert dieselbe Strecke wieder
+// ein. Der Inhalt steht, wo er stand (gemessen: erstes Kind vorher und nachher bei 20..320), die
+// Beschneidung liegt 4px weiter draußen, und `top` zieht die Strecke ab, damit eine klebende
+// Spalte ihren Inhalt an derselben Stelle hält. `align-self` und das untere Polster bleiben
+// wirksam; beides ist in der Vorgabe unsichtbar, weil die Spalte keinen eigenen Grund hat.
+//
+// Ein Wort zur Höhe, weil es die Entscheidung trägt: Der Example hat hier 1637px mit offenem
+// Kapitel und 2555px auf der Startseite, bei 900px Fensterhöhe. „Bleibt stehen" heißt dort
+// zwingend „rollt in sich selbst" — für zwei Drittel des Inhalts gibt es keinen anderen Weg. Das
+// Basis-Template kommt auf 696px und stünde einfach still.
+@media (min-width: 901px) {
+  .qgframe-area-left {
+    --col-ring-reach: calc(var(--tpl-focus-width) + var(--tpl-focus-offset));
+    position: var(--tpl-col-left-position);
+    top: calc(var(--tpl-header-h) + var(--tpl-space-lg) - var(--col-ring-reach));
+    align-self: start;
+    margin-block-start: calc(-1 * var(--col-ring-reach));
+    margin-inline: calc(-1 * var(--col-ring-reach));
+    padding-inline: var(--col-ring-reach);
+    max-height: var(--tpl-col-left-height);
+    // Wie rechts: ohne Deckel läuft nichts über, also rollt ohne ihn auch nichts.
+    //
+    // Hier stand bis 1.0.1 `overscroll-behavior: contain`, und das ist nicht „wirkt erst, wenn die
+    // Spalte rollt“: Chrome gibt das Rad von einem Rollcontainer mit `contain` nie an die Seite
+    // weiter, auch wenn er gar nicht überläuft. Gemessen am 2026-09-30 in gui-test, 1400x800:
+    // Spalte 447px ohne Überlauf, vier Raddrehungen über der Navigation, Seite bei 0 — mit `auto`
+    // bei 1600, rechts genauso (139px ohne Überlauf, 0 gegen 1200). Ohne `contain` rollt eine
+    // Spalte mit Deckel erst sich selbst und am Ende die Seite weiter, wie jeder andere Kasten.
+    overflow-y: auto;
+    mask-image: var(--tpl-col-left-mask);
+    -webkit-mask-image: var(--tpl-col-left-mask);
+    padding-block: var(--col-ring-reach) var(--tpl-fade);
+  }
+
+  // Wer nur die Position auf `sticky` stellt, bekommt Deckel und Kante mit. Gemessen am
+  // 2026-09-30 in gui-test, das genau das getan hatte: Die aufgeklappte Navigation war 829px
+  // hoch, ihre Unterkante stand bei 946px in einem Fenster von 800 — eine Spalte ohne Deckel
+  // läuft nicht über, rollt also nicht, und was unter dem Fensterrand liegt, erreicht man nie.
+  // Ein halber Zustand, der wie ein Fehler aussieht, und der naheliegende Handgriff führt hinein.
+  //
+  // Die Style-Query fragt den Elternknoten, der die Variablen von `:root` erbt. Sie greift nur,
+  // solange Höhe bzw. Maske auf ihrer Vorgabe `none` stehen: Wer eine eigene Höhe setzt, behält
+  // sie. Die Werte sind die der rechten Spalte. Gemessen in Chrome, WebKit und Firefox 155; eine
+  // ältere Engine ohne Style-Queries für Custom Properties überspringt den Block und verhält sich
+  // wie vorher — dort braucht es weiter alle drei Variablen.
+  @container style(--tpl-col-left-position: sticky) and style(--tpl-col-left-height: none) {
+    .qgframe-area-left {
+      max-height: calc(100dvh - var(--tpl-header-h) - 2 * var(--tpl-space-lg));
+    }
+  }
+
+  @container style(--tpl-col-left-position: sticky) and style(--tpl-col-left-mask: none) {
+    .qgframe-area-left {
+      mask-image: var(--tpl-fade-mask-end);
+      -webkit-mask-image: var(--tpl-fade-mask-end);
+    }
+  }
+}
+
+/* ------------------------------------------------ the footer paints over what the column leaves */
+
+// A sticky grid item ought to be clamped to its grid area - `right` spans rows 2 to 5 and the
+// footer is row 6 - and Chromium does not clamp it. Measured at 1416x713 on a short article: the
+// column's box ended 72px past the footer's hairline, so the line ran through the graph and the
+// graph sat on top of the footer. Shortening the area to a single row changed the number by one
+// pixel and not the behaviour, which is what says the area is not what the constraint is read
+// from; there is no property that moves it back.
+//
+// So the answer is the painting order. The footer is a band of the page ground, drawn above, and
+// the column ends exactly at the footer's line instead of crossing it. `z-index: 1` is below the
+// header's 80 and below the drawer's 100, so nothing else changes place.
+.qgframe-area-footer {
+  position: relative;
+  z-index: 1;
+  background: var(--light);
+}
+
+// ===================================================================================== site-footer
+// Until 1.1 its own stylesheet, site-footer.scss.
+
+// Everything under the article: the footer's links row, the colophon layout-box below it, and the
+// comment thread that would follow if the giscus plugin were switched on.
+//
+// One file because they are one region and one documentation page - and because all three take the
+// same hairline and the same top margin from the text above them, which is a single decision.
+
+footer {
+  margin-block-start: var(--tpl-space-xl);
+  padding-block-start: var(--tpl-space-md);
+  border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+  color: var(--gray);
+  font-size: var(--tpl-text-sm);
+  text-align: center;
+
+  p {
+    margin-block: 0 var(--tpl-space-xs);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--tpl-space-xs) var(--tpl-space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    color: var(--gray);
+    text-decoration: none;
+    // Footer links are small and often the last thing anyone tries to hit on a phone.
+    display: inline-block;
+    padding-block: var(--tpl-space-2xs);
+
+    &:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+      text-underline-offset: var(--tpl-underline-offset);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+// Comments (giscus).
+//
+// The plugin is off in this template - it needs a repository the importing site does not have -
+// but the styling travels with it, so switching it on in the app does not land an unstyled iframe
+// at the bottom of every page.
+
+.giscus,
+.giscus-frame {
+  margin-block-start: var(--tpl-space-xl);
+  padding-block-start: var(--tpl-space-md);
+  border-block-start: var(--tpl-rule-width) solid var(--tpl-rule);
+  width: 100%;
+  border-radius: var(--tpl-radius-md);
+}

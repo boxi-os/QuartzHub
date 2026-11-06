@@ -1034,3 +1034,23 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
   eine Spur mit Klammern, kaputte variables.scss). 34 Antworten, alle gleich.
 - Gegenproben (13, jede lässt einen Test scheitern; zwei waren erst ungefangen und bekamen ihren
   Fall: der Fehler außerhalb von quartz/styles, die Spur mit Klammern).
+
+### Variablen-Graph und Variablen-Katalog (`variableGraphService.ts`, `shared/cssVariables.ts` → `VariableGraph`, `CssVariables`)
+
+- Die Tabelle der Variablen-Seite: jede Variable mit hellem und dunklem Wert, Herkunft (Theme,
+  Build, eigenes Stylesheet) und wer sie referenziert. Quellen: das `theme.json` eines
+  installierten Themes, das CSS des letzten Builds, die geladenen Stylesheets des Projekts; was
+  ungeschichtet steht, gewinnt über jede Schicht. Gelesen mit einem Klammerzähler, der Strings und
+  Kommentare kennt, wie in QuartzControl; die Tabelle hält QuartzControls Schlüsselreihenfolge.
+- Der Katalog (Quartz' Variablen aus `joinStyles()`, `hexToHsl` mit Quartz' Rundung, die
+  Vorgaben je Modus, die Callout-Farben, „darf so in ein Stylesheet“) ist ein reiner Port.
+- **Gemessen gegen QuartzControls Code:** `scripts/variable-graph-golden.mjs` nimmt die
+  Stylesheets und das Build-CSS von gui-test (26 Dateien) und das Theme `minimal` (nur gelesen,
+  in die Fixtures kopiert) und dazu erfundenes CSS: Klammern in Strings und Kommentaren, `@layer`,
+  `@media`, `@supports` in `@layer`, Mehrfach-Selektoren, Regeln mit Bereich, Minifiziertes ohne
+  letztes Semikolon, Data-URLs mit `;`, numerische Namen, umbrochene Werte, ein offener String,
+  eine überzählige Klammer mit zwei Regeln danach, ein ungeschichteter heller Wert über einem
+  geschichteten dunklen, kaputte und leere Theme-Dateien, ein eigener Ausgabeordner, mehr als 50
+  Build-Dateien. Elf Graphen (bis 1141 Variablen) und der Katalog, alles gleich.
+- Gegenproben (18, jede lässt einen Test scheitern; zwei waren erst ungefangen und bekamen ihren
+  Fall: der dunkle Rückfall auf den hellen Wert, der Abbruch nach der überzähligen Klammer).

@@ -1,0 +1,727 @@
+// components-note - put together by QuartzControl from the stylesheets named in the sections below.
+// Until 1.1 each of them was a file of its own; a comment that names one of them means that section.
+
+// ============================================================================ meta-note-properties
+// Until 1.1 its own stylesheet, meta-note-properties.scss.
+
+// Note properties — the frontmatter table under the title.
+//
+// The component emits a full set of classes (note-properties-row/key/value plus a type class per
+// value), which is enough to style it as a definition list rather than a table of strings.
+
+.note-properties {
+  margin-block: var(--tpl-space-md);
+  font-size: var(--tpl-text-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+  overflow: hidden;
+}
+
+.note-properties-header,
+.note-properties-title {
+  padding: var(--tpl-space-2xs) var(--tpl-space-sm);
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-label);
+  color: var(--gray);
+  margin: 0;
+  // No rule under this line. It is a label on a tinted box, not a table header over columns, and
+  // a second horizontal line so close to the box's own edge reads as a seam.
+  border-block-end: none;
+}
+
+.note-properties-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  display: table;
+}
+
+.note-properties-row {
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+
+  &:last-child {
+    border-block-end: none;
+  }
+}
+
+.note-properties-key {
+  padding: var(--tpl-space-2xs) var(--tpl-space-sm);
+  color: var(--gray);
+  font-weight: 600;
+  white-space: nowrap;
+  vertical-align: top;
+  border: none;
+}
+
+// `width: 100%` on the value cell, not `width: 1%` on the key cell. Both are ways of saying "the
+// key column is as wide as its content", and only this one works here: measured, the key cell went
+// to 7.94px - exactly 1% of the table - and the label rendered on top of the value. Letting the
+// value claim all the width leaves the key its content width without asking for a percentage.
+.note-properties-value {
+  padding: var(--tpl-space-2xs) var(--tpl-space-sm);
+  color: var(--darkgray);
+  border: none;
+  width: 100%;
+}
+
+// Value types. A boolean reads as a word, not as a checkbox that cannot be clicked.
+//
+// Only visible when the property is listed in the plugin's `includedProperties` (plugins.mjs);
+// with the default three fields there is no boolean on any page.
+.note-properties-boolean.is-true { color: var(--tpl-positive); }
+.note-properties-boolean.is-false { color: var(--gray); }
+
+.note-properties-number {
+  font-family: var(--codeFont);
+  font-variant-numeric: tabular-nums;
+}
+
+.note-properties-list,
+.note-properties-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tpl-space-2xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.note-properties-empty {
+  color: var(--gray);
+  font-style: italic;
+}
+
+.note-properties-count {
+  color: var(--gray);
+  font-size: var(--tpl-text-xs);
+}
+
+.note-properties-separator {
+  color: var(--tpl-rule-strong);
+}
+
+// =================================================================================== meta-tag-list
+// Until 1.1 its own stylesheet, meta-tag-list.scss.
+
+// Tags — the list under the title, and every inline tag in the body.
+//
+// One rule set for `.tag-link` wherever it appears: the tag list, note properties, recent notes
+// and inside a paragraph. A tag that looks different in four places is four things to learn.
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tpl-space-2xs);
+  list-style: none;
+  margin-block: var(--tpl-space-xs);
+  padding: 0;
+}
+
+a.tag-link,
+.tag-link {
+  display: inline-flex;
+  align-items: center;
+  // Just enough padding to read as a token; a tag is not a button.
+  padding: 0.1em 0.5em;
+  border-radius: 999px;
+  background: var(--tag-background);
+  color: var(--tag-color);
+  // Dotted already at rest, invisibly: the style has to match the hover state or the pill's edge
+  // changes shape under the pointer as well as colour.
+  border: var(--tpl-rule-width) dotted transparent;
+  font-size: var(--tpl-text-xs);
+  font-family: var(--font-interface);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+  // The lucide `tag` glyph instead of a hash, drawn the way every other icon in this template is:
+  // a box wearing the shape as a mask, coloured by `currentColor`. So it follows the pill's own
+  // colour into the hover state and into dark mode without a second copy, which a glyph in a font
+  // or a `background-image` would both need.
+  //
+  // Sized in `em`, not in --tpl-icon-sm: a tag appears at four sizes on this site (the list under
+  // a title, a properties row, a recent-notes entry, running text) and the mark has to follow the
+  // text it sits in rather than stay one absolute size.
+  &::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 0.95em;
+    height: 0.95em;
+    // The mark's own margin rather than a `gap` on the pill: `gap` would also apply in running
+    // text, where the padding is gone and the two belong closer together.
+    margin-inline-end: 0.3em;
+    background-color: currentColor;
+    mask-image: var(--icon-tag);
+    -webkit-mask-image: var(--icon-tag);
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-position: center;
+    -webkit-mask-position: center;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    opacity: 0.75;
+  }
+
+  // The accent used to draw this ring, and on a 20px pill a full-strength navy outline is a lot
+  // of statement for "the pointer is here" - the background already says it. The control tone
+  // says the same thing at a third of the weight.
+  &:hover {
+    background: var(--tag-background-hover);
+    border-color: var(--tpl-rule-control);
+    text-decoration: none;
+  }
+}
+
+// In running text a tag must not break the line's rhythm, so it loses the pill and keeps only the
+// colour - a paragraph full of pills is unreadable.
+article p a.tag-link {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+
+  &:hover {
+    background: none;
+    text-decoration: underline;
+    text-underline-offset: var(--tpl-underline-offset);
+  }
+}
+
+// ======================================================================================= aside-toc
+// Until 1.1 its own stylesheet, aside-toc.scss.
+
+// Table of contents.
+//
+// Unlike the explorer, this component *does* label its depth: every entry carries a `.depth-N`
+// class, flat in one list. The numbering is relative to the shallowest heading on the page, not to
+// the tag: on a normal page h2 is `depth-0`, so h6 lands on `depth-4` (measured). `depth-5` and
+// `depth-6` only occur where a document starts at h1; they are styled so that case is not a hole.
+//
+// Note that the plugin stops at `maxDepth: 3` by default — three levels — which is why
+// plugins.mjs raises it to 6. Without that, everything below is unreachable.
+//
+// The indent step is the same --tpl-indent the explorer uses, so the two structures line up with
+// each other in the two sidebars.
+
+// The outline shows all of itself.
+//
+// Quartz caps this component three times over - `flex: 0 0.5 auto` with `overflow-y: hidden` on
+// the component, `max-height: calc(100% - 2rem)` on the list, and `div:has(> .overflow)` in its
+// base stylesheet - which between them turn a long outline into a short scrollable stub inside a
+// column that was itself scrolling. All three go. The scrolling happens once, one level out, on
+// the sticky right column (base.scss), so what you see is the whole outline as far as the window
+// is tall and no second scrollbar - with a soft edge at the bottom, and at the top this component's
+// own heading, which base.scss pins to the top of the column while the list runs under it.
+.toc {
+  font-size: var(--tpl-text-sm);
+  min-width: 0;
+  flex: 0 0 auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tpl-space-xs);
+  width: 100%;
+  min-height: var(--tpl-target);
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  h1, h2, h3 {
+    margin: 0;
+    font-family: var(--headerFont);
+    font-size: var(--tpl-text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tpl-tracking-label);
+    color: var(--gray);
+    font-weight: 700;
+  }
+
+  .fold {
+    color: var(--gray);
+    transition: transform var(--tpl-motion);
+  }
+
+  &.collapsed .fold {
+    transform: rotate(-90deg);
+  }
+}
+
+// `.toc-content` IS the <ul> - not a wrapper around one. The first version of this file styled
+// `.toc-content ul`, which matches nothing on any page, so the rail the whole outline hangs from
+// was never drawn. Written flat here for that reason.
+//
+// **One class in the selector, and that is a fix.** The list used to be written as
+// `.toc-content, ul.toc-content.overflow { … a { … } }` - the second spelling being quartz' own,
+// added to beat its `max-height` twice over. What it also did was give every declaration in the
+// block the specificity of *that* selector: `ul.toc-content.overflow a` is (0,2,2), which outranks
+// `.toc-content a.in-view` and every `.toc-content .depth-N > a` in this file at (0,2,1). So the
+// read/unread colour step and all five indent steps were dead - measured at 1600px on a scrolled
+// page: every entry `rgb(95,95,95)`, `--gray`, in-view or not, and a freshly injected copy of the
+// same rule changed nothing while an `outline` in the same injected rule did.
+//
+// The two caps quartz puts on the list are the only thing that needed the other spelling, and they
+// get it below - three declarations rather than the whole block.
+.toc-content {
+  list-style: none;
+  margin-block: var(--tpl-space-xs) 0;
+  margin-inline: 0;
+  padding: 0;
+  max-height: none;
+  overflow: visible;
+  // The line the whole outline hangs from.
+  border-inline-start: var(--tpl-rule-width) solid var(--tpl-rule);
+
+  // Quartz indents the *list item*, 1rem per level, from its own layer. This file indents the
+  // *link* instead, one --tpl-indent per level (further down), and the two together are two
+  // indents: measured, 29.6px per level instead of 13.6. Worse than the arithmetic, the rail is
+  // drawn on the link, so every level started its border further right and the line that says how
+  // far one has read became a staircase of segments. One indent, and it is this file's.
+  li {
+    margin: 0;
+    padding-inline-start: 0;
+  }
+
+  a {
+    display: block;
+    // Quartz dims a not-yet-read entry to `opacity: 0.35`, which at this size on this ground
+    // measures below 3:1 - the outline's lower half was barely there. The state is worth keeping;
+    // the way it was expressed was not. Opacity goes and the state is said in two measured steps
+    // of the palette instead - see the two rules at the end of this file.
+    opacity: 1;
+    color: var(--gray);
+    text-decoration: none;
+    padding-block: var(--tpl-space-3xs);
+    padding-inline-start: var(--tpl-space-xs);
+    border-inline-start: 2px solid transparent;
+    margin-inline-start: -1px;
+    transition: color var(--tpl-motion), border-color var(--tpl-motion);
+    overflow-wrap: break-word;
+
+    &:hover {
+      color: var(--dark);
+      border-inline-start-color: var(--tpl-rule-strong);
+    }
+  }
+
+  &.collapsed {
+    display: none;
+  }
+}
+
+// Quartz caps the list itself, in its own layer and with two classes. Unlayered already beats a
+// layer whatever the specificity, so this is the belt to that braces - and it is three declarations
+// on the element the caps are on, not a second spelling of every rule in this file.
+ul.toc-content.overflow {
+  max-height: none;
+  overflow: visible;
+}
+
+/* ------------------------------------------------------- one step per heading level */
+
+// depth-0 is the document's top level (usually h2, since h1 is the page title). Each step adds one
+// --tpl-indent and gives up a little weight and size; by depth-4 — h6 on a normal page — the entry
+// is a detail.
+.toc-content .depth-0 > a { padding-inline-start: var(--tpl-space-xs); font-weight: 600; color: var(--darkgray); }
+.toc-content .depth-1 > a { padding-inline-start: calc(var(--tpl-space-xs) + var(--tpl-indent)); }
+.toc-content .depth-2 > a { padding-inline-start: calc(var(--tpl-space-xs) + var(--tpl-indent) * 2); }
+.toc-content .depth-3 > a { padding-inline-start: calc(var(--tpl-space-xs) + var(--tpl-indent) * 3); font-size: var(--tpl-text-xs); }
+.toc-content .depth-4 > a { padding-inline-start: calc(var(--tpl-space-xs) + var(--tpl-indent) * 4); font-size: var(--tpl-text-xs); }
+// The last two levels stop stepping — five indents in three columns leaves no room for a word.
+// They are marked instead, so the outline stays complete and still readable.
+.toc-content .depth-5 > a,
+.toc-content .depth-6 > a {
+  padding-inline-start: calc(var(--tpl-space-xs) + var(--tpl-indent) * 4);
+  font-size: var(--tpl-text-xs);
+  opacity: 1;
+
+  &::before {
+    content: "·";
+    margin-inline-end: 0.35em;
+    color: var(--gray);
+  }
+}
+
+.toc-content .depth-6 > a::before {
+  content: "··";
+}
+
+/* --------------------------------------------------------------- the current section */
+
+/* --------------------------------------------------------------- how far, and where */
+
+// Two states, and the difference between them is what the outline is *for*.
+//
+// Quartz' observer does not mark the current heading. It adds `.in-view` to every entry whose
+// heading is above the bottom of the viewport and removes it from the rest - a cumulative "read
+// this far" mark, not a "you are here". Read the source before styling it (postscript.js): the
+// test is `boundingClientRect.y < rootBounds.height`, not intersection.
+//
+// It used to say that loudly and in the wrong register: colour, weight *and* the rail all went on
+// `.in-view` at once, so on a long page half the outline was accent-coloured and bold - and half of
+// an outline being emphasised emphasises nothing. Quartz' own answer is quieter: its default only
+// steps the opacity, 0.35 to 0.75, so the read part is simply darker. That is the grey-value change
+// one sees on a stock Quartz site. The text follows that; the rail does the other job, below.
+//
+// Here it is two steps of the palette rather than opacity - `--gray` to `--darkgray`, both
+// measured - because 0.35 of the body colour lands under 3:1 and the lower half of the outline was
+// barely there.
+.toc-content a.in-view {
+  color: var(--darkgray);
+  // And the rail, which is what makes the cumulative mark useful rather than merely quiet: the
+  // read part of the outline carries an accent line, the rest carries the hairline the list hangs
+  // from, and the boundary between the two is how far down the page one is. A progress bar drawn
+  // by the entries themselves - they stack without gaps, so their 2px borders make one line.
+  //
+  // The earlier version of this file put colour *and* weight *and* the rail on `.in-view` at once
+  // and the note here said that marked nothing; that was true of the three together. The rail
+  // alone is a position on a scale, and a scale is allowed to be half full.
+  border-inline-start-color: var(--secondary);
+}
+
+// And the current section: the *last* entry carrying the mark. Since the mark is cumulative from
+// the top, that is simply the marked entry with no marked entry after it - which is what the
+// selector says, and it says it in one line instead of two. `:has` is in every engine that runs the
+// observer (Firefox since 121), so this never disagrees with the class it depends on.
+//
+// The two-selector version it replaces asked for "the one whose successor is unmarked" plus
+// "the last child", and the second half never matched anything: quartz appends its own
+// `li.overflow-end` sentinel after the entries, so `li:last-child` is that sentinel. At the bottom
+// of a page, where every entry is marked, nothing was marked as current. Measured on a scrolled
+// page: all four entries `--darkgray`, none in the accent colour.
+//
+// It is the text that says it, because the rail above now runs the whole read length: the end of
+// the accent line is where you are, and the one entry printed in the accent colour says which
+// heading that is. Weight stays out of it entirely - the entries are 13px, a jump to 600 reflows
+// the column on every scroll.
+.toc-content li:not(:has(~ li > a.in-view)) > a.in-view {
+  color: var(--secondary);
+}
+
+.toc .overflow-end {
+  height: var(--tpl-space-md);
+}
+
+// ================================================================================= aside-backlinks
+// Until 1.1 its own stylesheet, aside-backlinks.scss.
+
+// Backlinks — what points here.
+
+.backlinks {
+  min-width: 0;
+
+  h1, h2, h3 {
+    margin-block: 0 var(--tpl-space-xs);
+    font-family: var(--headerFont);
+    font-size: var(--tpl-text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tpl-tracking-label);
+    color: var(--gray);
+    font-weight: 700;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--tpl-text-sm);
+  }
+
+  // Das Plugin gibt der Liste `overflow-y: auto` und `overscroll-behavior: contain`. Gemessen am
+  // 2026-09-30 in gui-test: 313px Inhalt in 306px — das Rad rollte über der Liste 7px und blieb
+  // dann stehen, die Seite nicht. Begründung bei `ul.explorer-ul` in base.scss.
+  > ul {
+    overscroll-behavior: auto;
+  }
+
+  li {
+    margin-block: 0;
+    border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+
+    &:last-child {
+      border-block-end: none;
+    }
+  }
+
+  // 2xs, the same step "zuletzt bearbeitet" uses for its entries. The two boxes stand side by side
+  // under the article now, so a row of one that is taller than a row of the other is simply
+  // visible.
+  a {
+    padding-block: var(--tpl-space-2xs);
+    color: var(--darkgray);
+    text-decoration: none;
+    // Two lines, then ellipsis: a backlink list of full titles is a wall of text in a 260px column.
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    &:hover {
+      color: var(--secondary);
+    }
+
+    // The mark that says where this goes. Behind the title rather than in front of it, so the
+    // titles keep one starting edge and the column still reads as a list.
+    //
+    // `currentColor` is why it turns with the link on hover, and it is masked like every other
+    // icon here: only a mask's alpha survives, so the source is drawn in black and painted from
+    // the property.
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 0.7em;
+      height: 0.7em;
+      margin-inline-start: 0.35em;
+      background-color: currentColor;
+      mask-image: var(--icon-arrow-up-right);
+      -webkit-mask-image: var(--icon-arrow-up-right);
+      mask-size: contain;
+      -webkit-mask-size: contain;
+      mask-position: center;
+      -webkit-mask-position: center;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      opacity: 0.6;
+    }
+  }
+
+  // "No backlinks found" - the component's empty state, which should look like an answer rather
+  // than a failure.
+  li:only-child:not(:has(a)),
+  > p {
+    color: var(--gray);
+    font-size: var(--tpl-text-sm);
+    font-style: italic;
+    margin: 0;
+  }
+}
+
+// ===================================================================================== aside-graph
+// Until 1.1 its own stylesheet, aside-graph.scss.
+
+// Graph.
+//
+// The graph draws itself in canvas/SVG with colours it reads from CSS variables at runtime, so
+// this file styles the box around it and leaves the drawing alone.
+
+.graph {
+  min-width: 0;
+
+  h1, h2, h3 {
+    margin-block: 0 var(--tpl-space-xs);
+    font-family: var(--headerFont);
+    font-size: var(--tpl-text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tpl-tracking-label);
+    color: var(--gray);
+    font-weight: 700;
+  }
+}
+
+.graph-outer {
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+  overflow: hidden;
+}
+
+.graph-container {
+  // A square well: the local graph is round, and a letterboxed container wastes the sidebar.
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+.global-graph-icon {
+  display: grid;
+  place-items: center;
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+  margin-inline-start: auto;
+  color: var(--gray);
+  cursor: pointer;
+  border-radius: var(--tpl-radius-sm);
+
+  &:hover {
+    color: var(--dark);
+    background: var(--tpl-surface);
+  }
+}
+
+.global-graph-outer {
+  background: color-mix(in srgb, var(--light) 70%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.global-graph-container {
+  background: var(--light);
+  border: var(--tpl-rule-width) solid var(--tpl-rule-control);
+  border-radius: var(--tpl-radius-lg);
+  box-shadow: var(--tpl-shadow);
+}
+
+/* ----------------------------------------------------- die Vollansicht darf hinaus */
+
+// Der Knopf „Global Graph" öffnet ein Overlay über die ganze Seite — und bis zum 2026-09-20 tat
+// er das nicht: Die Vollansicht stand als schmaler Streifen in der rechten Spalte, rund 120 px
+// breit, und der Rest der Seite war weiter bedienbar.
+//
+// Die Ursache ist **keine** z-index-Frage, auch wenn sie danach aussieht. Gemessen an der
+// gebauten Seite: `.global-graph-outer` ist `position: fixed; left: 0; top: 0; width: 100vw; height: 100%;
+// z-index: 9999` (so schreibt es das Graph-Plugin), und sein
+// Rechteck ist auch wirklich das ganze Fenster (1440×1000 @ 0,0 bei 1440×1000 Fenster). Es war
+// also richtig positioniert und nur **beschnitten**: `.qgframe-area-right` trägt eine
+// `mask-image` für die weiche Unterkante der Spalte (base.scss), und eine Maske beschneidet
+// alles, was in ihrem Stapelkontext gemalt wird — ein `position: fixed` darin eingeschlossen.
+//
+// Gegenprobe, drei Läufe mit eingespeistem CSS: nur die Maske aus → `elementFromPoint` in der
+// Bildschirmmitte liefert das `<canvas>` des Graphen statt eines `<li>` der Seite. Sticky und
+// `max-height` zusätzlich abzuräumen ändert daran nichts mehr; deshalb bleibt beides stehen, und
+// die Spalte verliert weder ihre Haftung noch ihre Höhe.
+//
+// `:has()` auf `.qgframe-area` statt auf `-right`, weil der Graph in jeder Spalte stehen darf —
+// das Layout-Board der App verschiebt ihn mit einem Zug. Die Spezifität (0,3,0) schlägt die
+// Maskenregeln beider Spalten (base.scss, rechts zwei, links eine), die Reihenfolge der Dateien
+// spielt also keine Rolle.
+//
+// **Die zweite Zeile ist die, nach der es aussah.** Die Spalte ist `position: sticky` und damit
+// ein Stapelkontext, auch ohne z-index; die 9999 des Overlays gelten also nur *innerhalb* der
+// Spalte, und nach außen zählt, wo die Spalte selbst steht. Gemessen mit abgeräumter Maske: Der
+// Kopfbereich lag weiter darüber — scharf statt abgedunkelt, und das Suchfeld war durch den
+// Schleier hindurch anklickbar (`elementFromPoint(1095, 54)` → `button.search-button`).
+//
+// Die Leiter dieser Vorlage, damit die Zahl nicht geraten ist:
+//
+//     80   die Leiste am Schreibtisch (nav-header.scss)
+//     90   die Leiste am Telefon
+//     98   der Burger der Navigation (nav-navigations.scss)
+//     99   der Schleier der Explorer-Schublade und der der Navigation (`--quartz-nav-offcanvas-z` - 1)
+//    100   „Zum Inhalt springen" (base.scss), beide Schubladen
+//    101   der Auslöser der Explorer-Schublade (nav-explorer.scss)
+//    110   diese Regel
+//    120   die Leiste, solange die Suche offen ist (nav-search.scss)
+//
+// Nach der Änderung: `elementFromPoint` liefert an allen vier gemessenen Stellen
+// `div.global-graph-outer`.
+//
+// Die Suche steht darüber, aber nicht mit ihren 999: Hier stand bis zum 35. Review, Quartz'
+// Suchfenster liege mit 999 ohnehin über allem. Es liegt *in* der Leiste, und die ist `sticky`
+// mit eigenem z-index, also ein Stapelkontext - die 999 zählen nur darin, nach außen zählt die 80.
+// Gemessen: Graph offen, Cmd+K, `.search-container.active` gesetzt, und `elementFromPoint`
+// lieferte am Suchfeld wie in der Bildmitte das `<canvas>` des Graphen. Wer tippte, tippte in ein
+// Feld, das er nicht sah. Die Zahl in der Leiter ist deshalb die der Leiste, nicht die der Suche.
+//
+// Die Sperre bleibt trotzdem stehen, statt sie aufzulösen: `position: sticky` und `max-height`
+// tragen die Spalte, und gemessen ändert ihr Abräumen am Overlay nichts mehr.
+.qgframe-area:has(.global-graph-outer.active) {
+  mask-image: none;
+  -webkit-mask-image: none;
+  z-index: 110;
+}
+
+// ============================================================================== aside-recent-notes
+// Until 1.1 its own stylesheet, aside-recent-notes.scss.
+
+// Recent notes.
+//
+// The box is meant to be a glance, not a second listing page. Measured before this pass: one entry
+// was 113px tall - an uppercase, letter-spaced title, a date on its own line and a row of tag
+// pills - so five entries filled 700px of a sidebar that also holds the tree and a note box.
+//
+// Two of those three lines were an accident. `.recent-notes h1, h2, h3` was meant for the box's
+// own heading, but every entry title is an <h3> as well, so all five were being set as small caps.
+// Hence the `>` below: the heading rule now names the box's own child and nothing deeper.
+
+.recent-notes {
+  min-width: 0;
+
+  > h1, > h2, > h3 {
+    margin-block: 0 var(--tpl-space-xs);
+    font-family: var(--headerFont);
+    font-size: var(--tpl-text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tpl-tracking-label);
+    color: var(--gray);
+    font-weight: 700;
+  }
+}
+
+.recent-ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.recent-li {
+  // Quartz gives every `li` a 1rem margin above and below. The backlinks box resets it and this one
+  // did not, so each of the five entries carried 32px nobody had asked for - measured at 1600px,
+  // 160px of the box's 408, which is why it stood a head taller than the box beside it and why the
+  // gap under the heading read as an indent. The row's own rhythm is the padding below.
+  margin-block: 0;
+  padding-block: var(--tpl-space-2xs);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  font-size: var(--tpl-text-sm);
+  line-height: var(--tpl-leading-snug);
+
+  &:last-child {
+    border-block-end: none;
+  }
+
+  // The entry title. An <h3> in the markup, but a link in a list here - it gives up the heading
+  // scale and the small caps it inherited and takes the size of the bar around it.
+  .desc {
+    margin: 0;
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      font-family: var(--bodyFont);
+      font-size: var(--tpl-text-sm);
+      font-weight: 600;
+      line-height: var(--tpl-leading-snug);
+      letter-spacing: normal;
+      text-transform: none;
+      color: var(--darkgray);
+    }
+  }
+
+  a.internal {
+    color: var(--darkgray);
+    text-decoration: none;
+    font-weight: 600;
+    // A long note name wraps to two lines and stops; the bar is three columns wide and a fourth
+    // line of one title costs an entire other entry.
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+
+  // The date sits under the title in the smallest size there is. It answers "how recent", which is
+  // the only question this box exists to answer.
+  .meta {
+    display: block;
+    color: var(--gray);
+    font-size: var(--tpl-text-xs);
+    margin: 0;
+  }
+
+  // Neither belongs in a glance. The description repeats what the title says at half the
+  // legibility, and a row of tag pills is taller than the entry it labels - both are one click
+  // away on the page itself.
+  .desc > p,
+  .tags {
+    display: none;
+  }
+}

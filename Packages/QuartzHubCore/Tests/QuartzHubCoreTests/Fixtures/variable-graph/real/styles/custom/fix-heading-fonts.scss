@@ -1,0 +1,16 @@
+// Überschriften folgen nicht dem Theme
+//
+// Das Plugin @quartz-community/quartz-fonts setzt "h1,…,h6 { font-family: … }" ungelayert.
+// Ungelayert schlägt jedes @layer — also auch das aktive Theme —, und weil die Datei nach
+// custom.scss geladen wird, gewinnt sie auch gegen eine gleich spezifische Regel von dir.
+// "body h1" ist eine Stufe spezifischer und gewinnt deshalb unabhängig von der Reihenfolge.
+// 
+// Die Verweise auf die Variablen sorgen dafür, dass der Variablen-Tab wieder die Kontrolle hat.
+// Angelegt von QuartzControl — frei bearbeitbar.
+
+body h1 { font-family: var(--h1-font, var(--headerFont)); }
+body h2 { font-family: var(--h2-font, var(--headerFont)); }
+body h3 { font-family: var(--h3-font, var(--headerFont)); }
+body h4 { font-family: var(--h4-font, var(--headerFont)); }
+body h5 { font-family: var(--h5-font, var(--headerFont)); }
+body h6 { font-family: var(--h6-font, var(--headerFont)); }

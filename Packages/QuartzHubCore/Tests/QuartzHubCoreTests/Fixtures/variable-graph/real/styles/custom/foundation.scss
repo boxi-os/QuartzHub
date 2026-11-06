@@ -1,0 +1,287 @@
+// foundation - put together by QuartzControl from the stylesheets named in the sections below.
+// Until 1.1 each of them was a file of its own; a comment that names one of them means that section.
+
+// ============================================================================================ base
+// Until 1.1 part of base.scss.
+
+// Base — the rules everything else assumes.
+//
+// Reads only tokens from the `css-vars` block (variables.mjs); no literal colour and no literal
+// length appears below. That is what makes the whole look adjustable from the app's Variables tab
+// afterwards instead of only by editing SCSS.
+
+/* --------------------------------------------------------------------- box model */
+
+// Quartz sets no global box-sizing, so `width: 100%` plus padding overflows its container -
+// measured on the canvas page, where the call-to-action box came out 1492px wide in a 1440px body
+// and pushed the whole page sideways. Every component in this template that fills its width and
+// has padding would hit the same thing; one rule is cheaper than finding them one at a time.
+//
+// `inherit` on the universal selector rather than `border-box` directly: a component that needs
+// the content box for its own reasons can opt out for itself and its children.
+html {
+  box-sizing: border-box;
+
+  // Quartz sets `html { width: 100vw; overflow-x: hidden }`, and `100vw` includes a classic
+  // scrollbar while the content box does not. On a machine whose scrollbars always show, the
+  // document is therefore as wide as the window and the visible area is 17px narrower - so the
+  // centred content column is centred in the wrong box. Measured in Safari 26.6.2 at a 1500px
+  // window: 30px of margin on the left, 13px on the right, the whole page 17px off centre.
+  // Invisible under Playwright and in the app's own preview, because both use overlay scrollbars.
+  //
+  // `auto` rather than `100%`: it is the initial value, so the block simply fills the initial
+  // containing block, which is the viewport *minus* the scrollbar - the box the column should be
+  // centred in. Quartz's `overflow-x: hidden` stays and keeps doing its job; it is also the reason
+  // the 100vw never produced a sideways scrollbar, only the offset.
+  width: auto;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* ---------------------------------------------------------------------------- icons */
+
+// Lucide, inlined as masks.
+//
+// Three components draw a disclosure triangle of their own - the explorer (both the tree heading
+// and every folder), the table of contents, and any <details> this template styles - and each drew
+// a different one: two hand-rolled `polyline` arrows from the plugins plus a CSS border triangle in
+// the layout box. They are all the same gesture and now all the same glyph.
+//
+// The technique is `mask-image` with `background-color: currentColor`, not `background-image`: a
+// mask takes the element's own colour, so one icon works in both themes, follows :hover, and turns
+// accent-coloured on the active row without a second copy. The SVGs are stroked in black because
+// only the alpha channel survives a mask - the black is never seen.
+//
+// These live here rather than in variables.mjs on purpose. A 400-character data URI in the app's
+// Variables tab is not something anybody edits; the sizes and colours that ARE worth editing are
+// tokens, and this is the one place where the value is code.
+:root {
+  --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  --icon-folder: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E");
+  --icon-folder-open: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E");
+  --icon-file: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3C/svg%3E");
+  --icon-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'/%3E%3Cpath d='m6 6 12 12'/%3E%3C/svg%3E");
+  // The six task states Obsidian writes in the brackets, each drawn as one glyph: the box *and*
+  // the mark inside it. Until 2026-09-06 there was no point in having them - quartz kept only
+  // `[ ]` and `[x]` and dropped the character (BEFUNDE 18). It writes `data-task="<zeichen>"` on
+  // the `li` now, so all six arrive; measured in this site's own build.
+  //
+  // Why the box is part of the SVG rather than a `border` on the checkbox: a `mask-image` clips
+  // everything the element paints, its border included. The first draft drew a bordered square and
+  // masked a mark into it, and the border was simply gone - measured, not guessed. One glyph per
+  // state has no such seam, and the empty box is then just the state with no mark in it.
+  --icon-task-open: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3C/svg%3E");
+  --icon-task-done: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3Cpath d='m8 12.4 2.6 2.6L16.2 9'/%3E%3C/svg%3E");
+  --icon-task-doing: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3Cpath d='M15.5 8.5 8.5 15.5'/%3E%3C/svg%3E");
+  --icon-task-cancelled: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3Cpath d='M8 12h8'/%3E%3C/svg%3E");
+  --icon-task-forwarded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3Cpath d='m10.6 8.4 3.6 3.6-3.6 3.6'/%3E%3C/svg%3E");
+  --icon-task-question: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3Cpath d='M10.3 9.7a1.9 1.9 0 0 1 3.6.7c0 1.3-1.9 1.7-1.9 1.7'/%3E%3Cpath d='M12 15.6h.01'/%3E%3C/svg%3E");
+
+  // lucide `tag`. The dot is `fill`ed rather than stroked and that is not cosmetic: only the alpha
+  // channel of a mask survives, so an unfilled 0.5-radius circle would leave a hole where the eye
+  // of the label belongs.
+  --icon-tag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z'/%3E%3Ccircle cx='7.5' cy='7.5' r='1' fill='black' stroke='none'/%3E%3C/svg%3E");
+
+  // lucide `arrow-up-right`. Behind a backlink, where it says "this goes somewhere" without
+  // spending a word on it.
+  --icon-arrow-up-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7h10v10'/%3E%3Cpath d='M7 17 17 7'/%3E%3C/svg%3E");
+
+  // The soft edge on a panel that scrolls. Fixed to the panel, not to its content, so the fade
+  // stays at the top and bottom edges while the content moves under it.
+  //
+  // Not a token in variables.mjs, and the reason written here until 2026-09-06 was wrong: it said
+  // an override may not contain a comma. That rule is real but belongs to *frame* values
+  // (`cssTrackValue` / `cssGapValue`, schemas.ts); `cssVariableOverride` forbids only braces, a
+  // semicolon, a backslash and comment markers, and --tpl-shadow has carried three commas through
+  // the app the whole time. The honest reason is the one above the icons: a four-line gradient is
+  // not something anyone edits in a text field, and the number inside it that IS worth editing is
+  // --tpl-fade, which is a token - the same one the panels use as their padding, so the gradient
+  // and the space it needs can never drift apart.
+  --tpl-fade-mask: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--tpl-fade),
+    black calc(100% - var(--tpl-fade)),
+    transparent 100%
+  );
+
+  // The same fade with only its lower half. The right column needs this one rather than the
+  // two-ended mask above: its panel headings stay put while their contents scroll under them
+  // (see "the right column"), so a top fade would leave a permanently half-dissolved heading.
+  // Nothing ever appears above a heading there, so there is nothing at the top edge to fade.
+  //
+  // In the light `:root` and not in the dark block, which is where it was written and where it did
+  // not belong: a mask carries only alpha, so `black` here means "opaque" in both schemes and
+  // there is nothing scheme-dependent about it. Measured before the move - in light mode the
+  // custom property was empty, `mask-image: var(--tpl-fade-mask-end)` was therefore invalid, and
+  // the right column computed `mask-image: none`. The soft lower edge existed in dark mode only.
+  --tpl-fade-mask-end: linear-gradient(
+    to bottom,
+    black 0,
+    black calc(100% - var(--tpl-fade)),
+    transparent 100%
+  );
+
+}
+
+/* ------------------------------------------------------------------ disclosure icons */
+
+// Every "this opens" arrow on the site, drawn once.
+//
+// Four components had four different ones: the explorer's tree heading and its folders each drew a
+// `polyline` chevron, the table of contents drew a third copy of the same polyline, the callout
+// plugin ships its own SVG, and the layout box built a triangle out of two CSS borders. They are
+// all the same gesture, so they are now all the same lucide chevron, at the same size, in the same
+// colour, rotating the same way.
+//
+// The SVG elements stay in the document instead of being hidden. One of them has to: the explorer's
+// `.folder-icon` is the click target its inline script binds the fold handler to, and both carry
+// the rotation that says which way the fold goes. So the drawn path goes and the element itself
+// becomes a box wearing the chevron as a mask.
+//
+// The callout's fold marker is not an SVG at all but an empty <div> with a background, so it takes
+// the same glyph a different way - see body-callouts.scss.
+.fold,
+.folder-icon {
+  background-color: currentColor;
+  mask-image: var(--icon-chevron);
+  -webkit-mask-image: var(--icon-chevron);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-origin: content-box;
+  -webkit-mask-origin: content-box;
+
+  > polyline,
+  > path,
+  > line {
+    display: none;
+  }
+}
+
+.fold {
+  width: var(--tpl-icon-sm);
+  height: var(--tpl-icon-sm);
+  flex: 0 0 auto;
+}
+
+// A <details> the browser marks itself, so this is the one disclosure on the site that needs no
+// script - and the one that has to be styled globally rather than per component, because a
+// <details> can also come straight out of a note. Same chevron, same size, same rotation as the
+// three scripted ones above.
+summary {
+  display: flex;
+  align-items: center;
+  gap: var(--tpl-space-xs);
+  cursor: pointer;
+  // Both are needed: `list-style` removes the marker in Chromium and Firefox, the pseudo-element
+  // does it in older WebKit.
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::before {
+    content: "";
+    flex: 0 0 auto;
+    width: var(--tpl-icon-sm);
+    height: var(--tpl-icon-sm);
+    background-color: currentColor;
+    mask-image: var(--icon-chevron);
+    -webkit-mask-image: var(--icon-chevron);
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    // Shut points right, open points down - the same convention as the folder tree.
+    transform: rotate(-90deg);
+    transition: transform var(--tpl-motion);
+  }
+}
+
+details[open] > summary::before {
+  transform: rotate(0deg);
+}
+
+// Quartz fades the bottom of an overflowing list itself, by putting a one-ended mask on the <ul>
+// when a sentinel scrolls out of view (`gradient-active`, base.scss:650 in quartz). Two masks on
+// two nested elements fighting over the same edge is one too many, and the outer one is the one
+// that also covers the top - so the inner one goes.
+ul.overflow.gradient-active,
+ol.overflow.gradient-active {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+/* ---------------------------------------------------------------------------- focus */
+
+// One rule for everything focusable, and `:focus-visible` so a mouse click does not draw a ring
+// the pointer already explains. `outline: none` appears nowhere in this template.
+:focus-visible {
+  outline: var(--tpl-focus-width) solid var(--tpl-focus-color);
+  outline-offset: var(--tpl-focus-offset);
+  border-radius: var(--tpl-radius-sm);
+}
+
+// The ring has to be visible on a tinted or filled surface too, where an outline of the accent
+// colour can sit on top of the accent colour.
+.callout :focus-visible,
+.layout-box :focus-visible,
+[data-callout] :focus-visible {
+  outline-color: var(--dark);
+}
+
+/* ------------------------------------------------------------------- skip navigation */
+
+// Kept, and deliberately unused.
+//
+// Quartz renders no skip link — measured, `.skip-to-content` matches nothing on any page — and a
+// stylesheet cannot add one, because the element has to exist in the markup to be focusable. So
+// this is not a rule that works today; it is the styling that will apply the moment a skip link
+// arrives, either from quartz or from a layout-box instance carrying the anchor.
+//
+// It matters on this template more than on most: the header comes first in every frame and the
+// explorer follows it, so reaching the article by keyboard costs one tab per tree item.
+.skip-to-content {
+  position: absolute;
+  left: var(--tpl-space-xs);
+  top: var(--tpl-space-xs);
+  z-index: 100;
+  padding: var(--tpl-space-xs) var(--tpl-space-sm);
+  background: var(--light);
+  color: var(--dark);
+  border: var(--tpl-rule-width) solid var(--tpl-rule-strong);
+  border-radius: var(--tpl-radius-md);
+  transform: translateY(-200%);
+
+  &:focus {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------- motion */
+
+// Every transition in this template goes through --tpl-motion, so honouring the OS setting is one
+// rule rather than thirty.
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --tpl-motion: 0s;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

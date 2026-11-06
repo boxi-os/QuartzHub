@@ -1,0 +1,254 @@
+// plugin-layout-box - put together by QuartzControl from the stylesheets named in the sections below.
+// Until 1.1 each of them was a file of its own; a comment that names one of them means that section.
+
+// =============================================================================== plugin-layout-box
+// Until 1.1 its own stylesheet, plugin-layout-box.scss.
+
+// quartz-layout-box — every shape the plugin can take.
+//
+// The plugin ships deliberately colourless styles (width, image swapping, a dashed placeholder),
+// which is the right call for a component plugin: it leaves the look to the site. This file is
+// that look, one block per capability, so nothing the plugin offers is left unstyled:
+//
+//   .layout-box            the container, in either form
+//   .layout-box-title      an <h3>, or a <summary> when `collapsible` is set
+//   .layout-box-content    the snippet, HTML or rendered Markdown
+//   .layout-box-missing    the dev-server placeholder for a snippet file that is not there
+//   .img-light/.img-dark   the theme-dependent image pair
+//
+// plus the five `className` variants this template's instances declare (plugins.mjs). Each
+// variant is one instance in one position, so the position's needs decide the treatment: a box in
+// the header is a masthead, the same component after the body is a call to action.
+
+.layout-box {
+  min-width: 0;
+
+  > :first-child { margin-block-start: 0; }
+  > :last-child { margin-block-end: 0; }
+}
+
+.layout-box-content {
+  font-size: var(--tpl-text-sm);
+  color: var(--darkgray);
+  line-height: var(--tpl-leading-snug);
+
+  // The article's rhythm at small-type scale: 12px against a 22.4px line is 0.54 of a line, where
+  // the article uses 0.94 of its own. A sidebar box is meant to be read at a glance and stays
+  // tighter than the page - but 8px was 0.36, and two paragraphs at that distance are one.
+  p { margin-block: 0 var(--tpl-space-sm); }
+  p:last-child { margin-block-end: 0; }
+
+  a {
+    color: var(--secondary);
+    text-decoration: underline;
+    text-underline-offset: var(--tpl-underline-offset);
+
+    &:hover { color: var(--tertiary); }
+  }
+
+  // Markdown snippets bring lists; they are rendered by the plugin's own pipeline, outside
+  // <article>, so 40-content.scss does not reach them.
+  ul, ol {
+    margin-block: 0 var(--tpl-space-sm);
+    padding-inline-start: var(--tpl-space-md);
+  }
+
+  // 4px, not 2: two pixels between two items is a rounding error, not a separation. Half the
+  // article's step, because everything in this box is.
+  li { margin-block: var(--tpl-space-2xs); }
+
+  code {
+    font-family: var(--codeFont);
+    font-size: 0.9em;
+    background: var(--tpl-surface);
+    padding: 0.1em 0.3em;
+    border-radius: var(--tpl-radius-sm);
+  }
+}
+
+.layout-box-title {
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-label);
+  color: var(--gray);
+  font-weight: 700;
+  margin-block: 0 var(--tpl-space-xs);
+}
+
+/* ------------------------------------------------------------------- collapsible form */
+
+// `collapsible: true` renders <details>/<summary>. The marker, the chevron and its rotation all
+// come from the one `summary` rule in base.scss now - this box used to build its own triangle out
+// of two CSS borders, which was a fourth drawing of the site's one disclosure arrow. What is left
+// here is the part that is about this box and not about disclosure: a summary that is 17px tall is
+// not a usable control.
+details.layout-box > summary.layout-box-title {
+  min-height: 32px;
+}
+
+/* --------------------------------------------------------------- the missing-file state */
+
+// Only ever rendered by `quartz build --serve`. Styled rather than left to the plugin's default
+// because an unstyled warning in a designed sidebar reads as a broken page instead of a message
+// to the person editing it.
+.layout-box-missing {
+  padding: var(--tpl-space-xs);
+  border: var(--tpl-rule-width) dashed var(--tpl-rule-strong);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+  color: var(--gray);
+  font-size: var(--tpl-text-xs);
+
+  code {
+    font-family: var(--codeFont);
+    color: var(--darkgray);
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ------------------------------------------------------- variant: the masthead (header) */
+
+.layout-box-mark {
+  // The plugin's own `.layout-box { width: 100% }` applies here too, and in a flex row that made
+  // the mark 1376px wide and pushed the site title onto a second line. `flex` does not undo a
+  // declared width, so the width has to be undone explicitly.
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.site-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tpl-space-xs);
+  text-decoration: none;
+  // The whole mark is one link, so it needs one target and one ring around both halves.
+  border-radius: var(--tpl-radius-md);
+  padding: var(--tpl-space-3xs);
+  margin: calc(var(--tpl-space-3xs) * -1);
+
+  // Nothing here may set `display` on an svg. Quartz emits component CSS inside
+  // `@layer quartz-base` and appends custom.scss unlayered, and an unlayered declaration beats
+  // every layered one regardless of specificity (docs/decisions/styles-and-fonts.md, finding 6) -
+  // a plain `svg { display: block }` in this file silently switched both marks on, measured, side
+  // by side. Since 2026-09-05 the plugin sets `display` on both .img-light and .img-dark itself
+  // and owns the swap; the restatement that used to stand here is gone, because a second copy of
+  // a rule only drifts.
+  svg {
+    flex: 0 0 auto;
+    border-radius: var(--tpl-radius-sm);
+  }
+
+  // Dasselbe für ein Bild. Seit dem 2026-09-24 ist die Marke in allen Vorlagen das Projektbild
+  // (`quartz/static/icon.png`, `icon-dark.png`), das die App unter „Konfiguration → Projektbild“
+  // ersetzt; bis dahin stand sie im Example als Inline-SVG in der Konfiguration. Die Regel für das
+  // SVG oben bleibt für jeden, der seine Marke so einsetzt, und ist sonst wirkungslos statt falsch.
+  //
+  // `display` steht auch hier nicht: Der Umschalter des Plugins hängt an den Klassen
+  // `.img-light`/`.img-dark` und nicht am Element, er trägt ein `<img>` also genauso wie ein
+  // `<svg>`. Eine Wiederholung hier schaltete beide ein, gemessen am 2026-09-05 für das SVG.
+  //
+  // `margin: 0`, weil Quartz' base.scss jedem `<img>` der Website `margin: 1rem 0` gibt - richtig im
+  // Artikel, im Kopf aber machte es aus der 26-px-Marke einen 58 px hohen Kasten und den Kopf 32 px
+  // höher als mit dem Inline-SVG (gemessen am 2026-09-24, dem Tag, an dem die Marke ein Bild wurde).
+  img {
+    flex: 0 0 auto;
+    margin: 0;
+    border-radius: var(--tpl-radius-sm);
+  }
+
+  // The link's accessible name. page-title already prints the site title right next to this, so
+  // showing it again would say everything twice - but `display: none` was the wrong way to stop
+  // that: the anchor contains nothing else but an SVG with an empty alt, so hiding this span left
+  // the link with no accessible name at all. Visually hidden, still announced.
+  .site-mark-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* -------------------------------------------------- variant: the sidebar note (left) */
+
+// The one instance that loads from a file, and the only Markdown snippet.
+.layout-box-note {
+  padding: var(--tpl-space-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+
+  > summary.layout-box-title {
+    margin-block-end: 0;
+  }
+
+  &[open] > summary.layout-box-title {
+    margin-block-end: var(--tpl-space-xs);
+  }
+}
+
+/* ------------------------------------------------ variant: the narrow-screen hint (left) */
+
+// `display: mobile-only`, its own frontmatterKey. Quiet by design: it explains the layout, it is
+// not part of the content.
+.layout-box-hint {
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+  padding-inline-start: var(--tpl-space-xs);
+  border-inline-start: 2px solid var(--tpl-rule);
+
+  .layout-box-content {
+    font-size: inherit;
+    color: inherit;
+  }
+}
+
+/* ------------------------------------------------------ variant: call to action (afterBody) */
+
+// Full column width, below the article. The one box that is allowed to be a surface.
+.layout-box-cta {
+  margin-block-start: var(--tpl-space-xl);
+  padding: var(--tpl-space-md) var(--tpl-space-lg);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-inline-start: var(--tpl-accent-bar) solid var(--secondary);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+
+  .layout-box-title {
+    color: var(--secondary);
+    margin-block-end: var(--tpl-space-2xs);
+  }
+
+  .layout-box-content {
+    font-size: var(--tpl-text-base);
+  }
+}
+
+/* ------------------------------------------------------- variant: colophon (footer) */
+
+.layout-box-colophon {
+  text-align: center;
+  color: var(--gray);
+
+  .layout-box-content {
+    font-size: var(--tpl-text-xs);
+  }
+
+  code {
+    background: none;
+    color: var(--gray);
+  }
+}
+
+/* --------------------------------------------------------------------- narrow screens */
+
+@media (max-width: 720px) {
+  .layout-box-cta {
+    padding: var(--tpl-space-sm) var(--tpl-space-md);
+  }
+}

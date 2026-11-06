@@ -1,0 +1,842 @@
+// pages - put together by QuartzControl from the stylesheets named in the sections below.
+// Until 1.1 each of them was a file of its own; a comment that names one of them means that section.
+
+// ==================================================================================== page-listing
+// Until 1.1 its own stylesheet, page-listing.scss.
+
+// Folder and tag listing pages.
+//
+// One file because a tag page *is* a folder page with a different title - it reuses the same markup
+// and the second file only ever held the two rules that differ. Splitting it suggested two page
+// types where there is one listing with two headings.
+
+.page-listing {
+  // The list is a new thing on the page, not the next paragraph of the one above it - it gets the
+  // distance a section gets, not the one between two blocks of text.
+  margin-block-start: var(--tpl-space-xl);
+
+  // The count line above the list.
+  > p:first-child {
+    margin-block: 0 var(--tpl-space-sm);
+    color: var(--gray);
+    font-size: var(--tpl-text-sm);
+  }
+}
+
+ul.section-ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li.section-li {
+  padding-block: var(--tpl-space-sm);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+
+  &:last-child {
+    border-block-end: none;
+  }
+}
+
+// Date, title, tags. The date column is fixed so the titles line up down the page; the title takes
+// what is left and the tags sit at the end.
+//
+// Everything below is scoped under `.page-listing`, and that is not tidiness: the recent-notes
+// component reuses these very class names — `.section`, `.meta`, `.desc`, `.tags` — inside a 240px
+// sidebar. Unscoped, this three-column grid landed there too and stacked the date on top of the
+// title. Measured on the built page.
+// `minmax(0, auto)` on the tag column, and `start` rather than `baseline`.
+//
+// Both are about what happens when the column gets narrow. An `auto` track takes its minimum from
+// its content, and the pills inside carry `white-space: nowrap` - so the widest single tag name
+// set the floor, and everything it needed came out of the title column, which has `min-width: 0`
+// and gives way without limit. A row could end up with two characters of title beside three tags.
+// With `minmax(0, auto)` the tag column yields too and its pills wrap, which is what
+// `flex-wrap: wrap` on `.tags` was there for all along.
+//
+// And once they wrap, `baseline` is wrong: it aligns the *first* line of the pill block with the
+// date and the title, so a second row of pills pushes the whole cell up and the row stops looking
+// like a row. `start` keeps the three cells hanging from the same top edge.
+.page-listing .section {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) minmax(0, auto);
+  gap: var(--tpl-space-xs) var(--tpl-space-md);
+  align-items: start;
+}
+
+.page-listing .section .meta {
+  margin: 0;
+  color: var(--gray);
+  font-size: var(--tpl-text-sm);
+  // Tabular figures so the dates form a column rather than a ragged edge.
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.page-listing .section .desc {
+  min-width: 0;
+
+  h3 {
+    margin: 0;
+    font-size: var(--tpl-text-base);
+    font-weight: 600;
+
+    a {
+      color: var(--dark);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--secondary);
+        text-decoration: underline;
+        text-underline-offset: var(--tpl-underline-offset);
+      }
+    }
+  }
+
+  // If a page has a description, it follows the title inside the same cell.
+  p {
+    margin: var(--tpl-space-3xs) 0 0;
+    color: var(--gray);
+    font-size: var(--tpl-text-sm);
+  }
+}
+
+.page-listing .section .tags {
+  margin: 0;
+  justify-content: flex-end;
+  // The grid track can shrink now; without this the flex item inside it still could not.
+  min-width: 0;
+}
+
+// One column below the tablet breakpoint: a 7.5rem date column plus a title plus tags does not
+// fit in 390px, and the date is the part that can move.
+@media (max-width: 720px) {
+  .page-listing .section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-listing .section .tags {
+    justify-content: flex-start;
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+// Tag pages.
+//
+// A tag page reuses the folder-page markup (see page-folder.scss), so almost everything is already
+// covered. What is left is the little that differs: the page title is the bare tag name, and the
+// count line says "with this tag" rather than "in this folder".
+//
+// An earlier version of this file styled `.tag-listing-header`, `.tag-index` and
+// `article > h1 > a.tag-link`. None of the three is emitted by anything — the tag's name arrives
+// The tag name as a page title. The slug attribute sits on <body>, not on .page - measured.
+//
+// A mark in front says what kind of page this is without needing a heading above it, and it is the
+// same lucide `tag` the pills carry (meta-tag-list.scss) rather than a "#": the two say the same
+// thing on the same site, and a page that hands out labelled pills should not name itself with a
+// character. Decoration, so it stays out of the accessibility tree.
+//
+// Masked rather than drawn, because only a mask's alpha survives - the glyph is painted in
+// `currentColor` and follows the heading.
+body[data-slug^="tags/"] .article-title::before {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-inline-end: 0.3em;
+  background-color: var(--gray);
+  mask-image: var(--icon-tag);
+  -webkit-mask-image: var(--icon-tag);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+// Every tag link on a tag page points at a sibling tag; the current one is not linked, so no
+// "current" styling is needed here.
+
+// ====================================================================================== page-bases
+// Until 1.1 its own stylesheet, page-bases.scss.
+
+// Bases — the page type that turns a `.base` query into a table, cards or a list.
+//
+// The plugin emits its own markup with its own class names, none of which overlap with the folder
+// and tag listings (page-folder.scss). Read off a real build:
+//
+//   .bases-page > .bases-view-tabs > button[data-view-index]      one per view, .is-active
+//                > .bases-view-container > .bases-view[data-view-type]
+//                    table:  .bases-table-wrapper > .bases-view-meta + table.bases-table
+//                    cards:  .bases-cards-wrapper > .bases-view-meta + .bases-cards > a.bases-card
+//                    list:   .bases-list-wrapper  > .bases-view-meta + .bases-list-group
+//                    board:  .bases-board-wrapper > .bases-view-meta + .bases-board > .bases-board-column
+//                    gallery:.bases-gallery-wrapper > .bases-view-meta + .bases-gallery > .bases-gallery-item
+//
+// The plugin ships no colours of its own, so everything below is this template's — same tokens,
+// same rhythm as the rest of the site.
+
+.bases-page {
+  margin-block-start: var(--tpl-space-md);
+}
+
+/* ------------------------------------------------------------------- the view tabs */
+
+// A base can hold several views of the same data. The switcher is a real tablist, so it gets a
+// real control's treatment rather than a row of links.
+.bases-view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tpl-space-2xs);
+  margin-block-end: var(--tpl-space-sm);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  padding-block-end: var(--tpl-space-2xs);
+
+  button {
+    min-height: var(--tpl-target);
+    padding-inline: var(--tpl-space-sm);
+    background: none;
+    border: var(--tpl-rule-width) solid transparent;
+    border-radius: var(--tpl-radius-md);
+    font-family: var(--font-interface);
+    font-size: var(--tpl-text-sm);
+    color: var(--gray);
+    cursor: pointer;
+    transition: color var(--tpl-motion), background-color var(--tpl-motion), border-color var(--tpl-motion);
+
+    &:hover {
+      color: var(--dark);
+      background: var(--tpl-surface);
+    }
+
+    // Colour *and* weight *and* a border: the selected view is a state, and a state never rests on
+    // colour alone in this template.
+    &.is-active {
+      color: var(--secondary);
+      font-weight: 600;
+      background: var(--tpl-surface-tint);
+      border-color: color-mix(in srgb, var(--secondary) 35%, transparent);
+    }
+  }
+}
+
+// The row count above every view. The plugin writes it in English ("Showing 45 of 45 entries") and
+// offers no way to translate it, so it is set quiet rather than removed - a wrong-language line
+// that shouts is worse than one that recedes.
+.bases-view-meta {
+  margin-block-end: var(--tpl-space-xs);
+  color: var(--gray);
+  font-size: var(--tpl-text-xs);
+}
+
+/* ----------------------------------------------------------------------- table view */
+
+.bases-table-wrapper {
+  overflow-x: auto;
+}
+
+table.bases-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--tpl-text-sm);
+
+  th,
+  td {
+    text-align: start;
+    vertical-align: top;
+    padding: var(--tpl-space-xs) var(--tpl-space-sm);
+    border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  }
+
+  th {
+    border-block-end: 2px solid var(--tpl-rule-strong);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td {
+    border-block-end: none;
+  }
+
+  // Zebra striping would fight the hairlines; a hover row is enough to follow a line across.
+  tbody tr:hover {
+    background: var(--tpl-surface-tint);
+  }
+
+  a {
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+      text-underline-offset: var(--tpl-underline-offset);
+    }
+  }
+}
+
+.bases-table-header {
+  font-family: var(--headerFont);
+  font-weight: 600;
+  color: var(--ink, var(--dark));
+}
+
+// The sort indicator sits in the header next to the label; it is a hint, not a word.
+.bases-table-header-sort {
+  margin-inline-start: var(--tpl-space-2xs);
+  color: var(--gray);
+}
+
+th[data-sortable="true"] {
+  cursor: pointer;
+
+  &:hover .bases-table-header {
+    color: var(--secondary);
+  }
+}
+
+/* ----------------------------------------------------------------------- cards view */
+
+.bases-cards {
+  display: grid;
+  // Cards find their own column count; nothing stretches across dead space.
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--tpl-space-sm);
+}
+
+a.bases-card {
+  display: block;
+  padding: var(--tpl-space-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--light);
+  text-decoration: none;
+  transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--tpl-rule-control);
+    background: var(--tpl-surface-tint);
+  }
+}
+
+// A cover fills the card, edge to edge - the card's own padding would otherwise frame the picture
+// in a 12px strip of card ground, which reads as a mistake rather than as a margin. The negative
+// inset is exactly the padding above it, and the top corners are rounded by one hairline less than
+// the card so the two curves sit concentric rather than crossing.
+.bases-card-image {
+  margin: calc(var(--tpl-space-sm) * -1) calc(var(--tpl-space-sm) * -1) var(--tpl-space-sm);
+  border-start-start-radius: calc(var(--tpl-radius-md) - var(--tpl-rule-width));
+  border-start-end-radius: calc(var(--tpl-radius-md) - var(--tpl-rule-width));
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--tpl-surface);
+
+  // `margin: 0` is not belt and braces: body-media.scss gives every `<img>` on the site 16px of
+  // vertical margin, which is right in an article and is a 16px band of card ground above a cover.
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: cover;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+.bases-card-title {
+  display: block;
+  font-family: var(--headerFont);
+  font-weight: 600;
+  color: var(--dark);
+  margin-block-end: var(--tpl-space-2xs);
+}
+
+.bases-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-space-3xs);
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+}
+
+.bases-card-label {
+  color: var(--gray);
+  margin-inline-end: var(--tpl-space-2xs);
+}
+
+/* ------------------------------------------------------------------------ list view */
+
+.bases-list-group + .bases-list-group {
+  margin-block-start: var(--tpl-space-lg);
+}
+
+// The group heading a `groupBy` produces.
+.bases-list-group > :first-child:not(.bases-list-group-list) {
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-label);
+  color: var(--gray);
+  font-weight: 700;
+  margin-block-end: var(--tpl-space-xs);
+}
+
+.bases-list-item {
+  padding-block: var(--tpl-space-2xs);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  font-size: var(--tpl-text-sm);
+
+  &:last-child {
+    border-block-end: none;
+  }
+}
+
+.bases-list-item-properties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tpl-space-2xs) var(--tpl-space-xs);
+  align-items: baseline;
+}
+
+// The first property is the title; everything after it is detail.
+.bases-list-property:not(:first-child) {
+  color: var(--gray);
+  font-size: var(--tpl-text-xs);
+}
+
+// The plugin prints a literal "-" as the bullet. It is punctuation, so it recedes.
+.list-bullet {
+  color: var(--tpl-rule-strong);
+  margin-inline-end: var(--tpl-space-3xs);
+}
+
+.bases-rendered-value a {
+  color: var(--dark);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+    text-underline-offset: var(--tpl-underline-offset);
+  }
+}
+
+/* ----------------------------------------------------------------------- board view */
+
+// A `groupBy` turns the base into columns, one per value — a kanban over whatever field was
+// chosen. The columns scroll sideways as a block; each column scrolls on its own vertically.
+.bases-board-wrapper {
+  overflow-x: auto;
+}
+
+.bases-board {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tpl-space-sm);
+  // Columns keep a usable width instead of shrinking to fit; the board scrolls instead.
+  min-width: max-content;
+}
+
+.bases-board-column {
+  flex: 0 0 15rem;
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--tpl-surface-tint);
+  overflow: hidden;
+}
+
+.bases-board-column-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--tpl-space-xs);
+  padding: var(--tpl-space-xs) var(--tpl-space-sm);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  background: var(--light);
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tpl-tracking-caps);
+  color: var(--gray);
+
+  // The group's value can be a whole path; it truncates rather than wrapping the header.
+  > span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// The count is a fact about the column, not a label — it gets figures that line up.
+.bases-board-count {
+  flex: 0 0 auto;
+  font-family: var(--codeFont);
+  font-variant-numeric: tabular-nums;
+  color: var(--gray);
+}
+
+.bases-board-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-space-2xs);
+  padding: var(--tpl-space-xs);
+  // A column with forty cards scrolls on its own rather than stretching the page.
+  max-height: 32rem;
+  overflow-y: auto;
+  // Kein `contain`: Eine Spalte mit drei Karten läuft nicht über und hielt das Rad trotzdem fest
+  // (Chrome, gemessen am 2026-09-30) — Begründung bei `ul.explorer-ul` in base.scss.
+}
+
+.bases-board-card {
+  padding: var(--tpl-space-xs) var(--tpl-space-sm);
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-sm);
+  background: var(--light);
+  font-size: var(--tpl-text-sm);
+  transition: border-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--tpl-rule-control);
+  }
+
+  a {
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+}
+
+/* --------------------------------------------------------------------- gallery view */
+
+// The plugin writes `grid-template-columns` as an inline style (three columns), which no
+// stylesheet can outrank without `!important`. Rather than fight it at every width, the column
+// count is restated per breakpoint — three columns at 1728px are right, at 390px they are not.
+.bases-gallery {
+  display: grid;
+  gap: var(--tpl-space-sm);
+}
+
+@media (max-width: 1200px) {
+  .bases-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .bases-gallery {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+.bases-gallery-item {
+  // Two rows, picture then caption - see the note at .bases-gallery-title for why the caption is
+  // not the overlay the plugin makes of it.
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  background: var(--light);
+  overflow: hidden;
+  transition: border-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--tpl-rule-control);
+  }
+}
+
+.bases-gallery-image {
+  aspect-ratio: 3 / 2;
+  background: var(--tpl-surface);
+  border-block-end: var(--tpl-rule-width) solid var(--tpl-rule);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: cover;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+// Entries without an image get a placeholder. It is a state, not a failure, so it says so quietly
+// with a mark rather than staying an empty grey box.
+.bases-gallery-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--tpl-rule-strong);
+
+  &::before {
+    content: "▨";
+    font-size: 1.75rem;
+  }
+}
+
+// The plugin lays the title *over* the bottom of the picture: `position: absolute; inset: auto 0
+// 0` on the title and `overflow: hidden` on the tile. That works while every entry shows the grey
+// placeholder and stops working the moment they have covers - the label is `--dark`, which in
+// light mode is near-black, and a cover can be any colour. Measured with the fourteen covers in
+// place: a two-line title also ran out of the bottom of the tile and was clipped mid-word, because
+// an absolutely positioned title takes no part in the tile's height.
+//
+// So it goes back into the flow. The tile is then image plus caption, the way the cards view of
+// the same data already reads, the caption sits on the card's own ground in the site's own ink,
+// and a title of any length simply makes its tile taller.
+.bases-gallery-title {
+  position: static;
+  padding: var(--tpl-space-xs) var(--tpl-space-sm);
+  font-family: var(--headerFont);
+  font-weight: 600;
+  font-size: var(--tpl-text-sm);
+  line-height: var(--tpl-leading-snug);
+
+  a {
+    color: var(--dark);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+}
+
+// Any further property under the title is detail.
+.bases-gallery-item .bases-card-meta,
+.bases-gallery-meta {
+  padding: 0 var(--tpl-space-sm) var(--tpl-space-xs);
+  font-size: var(--tpl-text-xs);
+  color: var(--gray);
+}
+
+// ===================================================================================== page-canvas
+// Until 1.1 its own stylesheet, page-canvas.scss.
+
+// Canvas and Excalidraw — the two page types that are a picture.
+//
+// Both plugins bring their own complete styling for the drawing itself, including dark-mode
+// palettes they compute. That is the right split: the colours inside a drawing belong to the
+// drawing, and a stylesheet that fights them recolours half of it and leaves the rest.
+//
+// What this file does own is everything *around* the drawing, and since 2026-09-06 that includes
+// the one thing neither plugin can supply: a height. Both page types now use the site's own
+// `drawing` frame (frames.mjs, layout.mjs) instead of the frame their plugin ships, so they have
+// the same header, breadcrumb and footer as every other page - and the drawing sits in a grid row
+// rather than under them.
+//
+// A grid row does not give it a height. `.canvas-page`, `.canvas-container` and
+// `.excalidraw-container` are all `height: 100%`, the grid's own height is `auto`, and `1fr` in an
+// auto-height grid is the content's height - so the percentage resolved against nothing and the
+// box collapsed. Measured on the built canvas page before the frame change: a 406px container
+// holding a 1456 x 807 drawing, with the footer painted across the middle of it. The height below
+// is therefore stated, once, for both.
+
+/* -------------------------------------------------------- the drawing's own height */
+
+// Tall enough to be a drawing rather than a strip, short enough that the page it belongs to is
+// still visibly a page: the header stays above it and the footer is one scroll away. `dvh` and not
+// `vh` because on a phone the two differ by the browser chrome, and 78vh there is a drawing that
+// starts under the address bar and ends under the tab strip.
+.canvas-page,
+.excalidraw-page {
+  block-size: clamp(320px, 72dvh, 900px);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  // A drawing in a page is a figure and wants an edge, which under the plugins' own full-screen
+  // frames it did not: there, the drawing *was* the page. The canvas draws its own dotted ground so
+  // its extent is visible either way; the excalidraw stage is plain and had no boundary at all.
+  border: var(--tpl-rule-width) solid var(--tpl-rule);
+  border-radius: var(--tpl-radius-md);
+  overflow: hidden;
+}
+
+// The plugins pin their controls to the *window* (`position: fixed`), which under their own
+// full-screen frames was the same thing as pinning them to the drawing. It is not the same thing
+// here: fixed controls float over the header, the breadcrumb and the footer, and stay on screen
+// while the drawing scrolls away underneath them. Both containers already establish a positioning
+// context, so absolute is all it takes to hand them back to the picture they belong to.
+.canvas-container,
+.excalidraw-container,
+.excalidraw-stage {
+  position: relative;
+}
+
+.canvas-controls,
+.excalidraw-controls,
+.canvas-sidebar-toggle,
+.excalidraw-sidebar-toggle {
+  position: absolute;
+}
+
+/* --------------------------------------------------------------------------- canvas */
+
+// The controls float over the drawing. They are buttons, so they get this template's target size
+// and the same edge every other control uses — measured against `gray`, not `lightgray`.
+.canvas-controls button,
+.canvas-sidebar-toggle,
+.canvas-fullscreen-toggle {
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+  display: grid;
+  place-items: center;
+  border: var(--tpl-rule-width) dotted var(--tpl-rule-control);
+  border-radius: var(--tpl-radius-md);
+  background: var(--light);
+  color: var(--darkgray);
+  cursor: pointer;
+  transition: border-color var(--tpl-motion), background-color var(--tpl-motion);
+
+  &:hover {
+    border-color: var(--secondary);
+    background: var(--tpl-surface-tint);
+  }
+}
+
+// A node that points at a note. The label is the note's name and doubles as the link.
+.canvas-file-label,
+.canvas-file-link {
+  font-family: var(--headerFont);
+  font-size: var(--tpl-text-sm);
+  font-weight: 600;
+  color: var(--dark);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--secondary);
+  }
+}
+
+// Text nodes carry markdown; give it the body face rather than the browser default.
+.canvas-embed-content {
+  font-family: var(--bodyFont);
+  font-size: var(--tpl-text-sm);
+  color: var(--darkgray);
+}
+
+/* ---------------------------------------------------------------------- excalidraw */
+
+// Nothing. The plugin renders the drawing as SVG with its own palette - all 65 Excalidraw colours
+// have a pre-computed dark-mode equivalent - and its own frame. Every rule this template could add
+// would either duplicate that or fight it.
+//
+// Except one: its controls are buttons like any other, and this template's rule about target size
+// applies to them too.
+.excalidraw-controls button,
+.excalidraw-zoom-in,
+.excalidraw-zoom-out,
+.excalidraw-zoom-reset {
+  min-width: var(--tpl-target);
+  min-height: var(--tpl-target);
+}
+
+// ==================================================================================== page-popover
+// Until 1.1 its own stylesheet, page-popover.scss.
+
+// Link popovers — the preview that opens on hover over an internal link.
+//
+// Real depth, for the reason stated in nav-search.scss: it is transient and floats above
+// everything, so it gets the shadow and a solid ground: a translucent popover over body text is
+// unreadable.
+
+.popover {
+  > .popover-inner {
+    background: var(--light);
+    border: var(--tpl-rule-width) dotted var(--tpl-rule-control);
+    border-radius: var(--tpl-radius-lg);
+    box-shadow: var(--tpl-shadow);
+    padding: var(--tpl-space-sm) var(--tpl-space-md);
+    font-size: var(--tpl-text-sm);
+    color: var(--darkgray);
+    // A preview is a preview: enough to decide whether to follow the link.
+    max-height: 20rem;
+    overflow: hidden;
+
+    h1, h2, h3, h4, h5, h6 {
+      margin-block: 0 var(--tpl-space-2xs);
+      font-size: var(--tpl-text-lg);
+    }
+
+    p {
+      margin-block: 0 var(--tpl-space-xs);
+    }
+
+    // Inside a preview, the apparatus of a page is noise.
+    .callout,
+    .tags,
+    pre {
+      display: none;
+    }
+  }
+
+  // The fade at the cut, so a clipped preview looks cut rather than broken.
+  > .popover-inner::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    height: var(--tpl-space-lg);
+    background: linear-gradient(to bottom, transparent, var(--light));
+    pointer-events: none;
+  }
+}
+
+// A popover is pointer-only by nature; nothing here may be the sole route to information.
+@media (hover: none) {
+  .popover {
+    display: none;
+  }
+}
+
+// ======================================================================================== page-404
+// Until 1.1 its own stylesheet, page-404.scss.
+
+// The 404 page.
+//
+// Uses the `focus` frame, which since 2026-09-04 is the same twelve-column grid as every other page
+// type: the error sits in the same six columns the article text sits in, with both side columns
+// reserved and empty. That is deliberate - a 404 that puts its text somewhere the site never puts
+// text reads as a different site rather than as a missing page.
+//
+// The vertical room the page wants is set here and not in the frame. A frame's `paddingBlock` also
+// moves the header, and a site whose logo sits sixty pixels lower on the error page looks broken
+// rather than calm.
+
+article:has(> h1:only-child),
+.page:has([data-slug="404"]) article {
+  text-align: center;
+}
+
+// Quartz renders the 404 as a plain h1 + p. Give it room rather than leaving it at the top of an
+// empty column.
+.page[data-frame="focus"] article {
+  padding-block: var(--tpl-space-2xl) var(--tpl-space-xl);
+
+  h1 {
+    font-size: var(--tpl-text-3xl);
+    margin-block-end: var(--tpl-space-md);
+  }
+
+  p {
+    color: var(--gray);
+    max-width: none;
+  }
+
+  a {
+    color: var(--secondary);
+  }
+}
