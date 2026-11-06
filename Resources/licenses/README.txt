@@ -13,3 +13,4 @@ Mitgeliefert und unverändert:
 Gebündelt in den Helfern (Contents/Resources/helpers):
 
 - yaml (ISC), TypeScript (Apache-2.0); ihre Lizenztexte stehen am Ende der jeweiligen .cjs-Datei.
+- basic-ftp (MIT, in ftp-session.cjs): basic-ftp-LICENSE.txt.

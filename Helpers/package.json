@@ -1,7 +1,7 @@
 {
   "name": "quartzhub-helpers",
   "private": true,
-  "description": "JS helpers QuartzHub runs as short child processes: YAML roundtrip with comments, plugin options from .d.ts, compiling with the project's own Sass. Same versions as QuartzControl 1.3.0, so both apps read and write alike; sass is only the tests' stand-in for a project's.",
+  "description": "JS helpers QuartzHub runs as short child processes: YAML roundtrip with comments, plugin options from .d.ts, compiling with the project's own Sass, FTP sessions with QuartzControl's basic-ftp. Same versions as QuartzControl 1.3.0, so both apps read and write alike; sass is only the tests' stand-in for a project's.",
   "license": "GPL-3.0-or-later",
   "type": "module",
   "devDependencies": {
@@ -10,5 +10,8 @@
     "sass": "1.104.1",
     "typescript": "5.9.3",
     "yaml": "2.9.0"
+  },
+  "dependencies": {
+    "basic-ftp": "6.2.0"
   }
 }

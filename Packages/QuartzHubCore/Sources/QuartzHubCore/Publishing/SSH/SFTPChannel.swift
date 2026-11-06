@@ -78,6 +78,8 @@ public final class SFTPChannel: @unchecked Sendable {
   private init(process: LaunchedProcess, input: Int32, output: Int32, errors: Int32) {
     self.process = process
     self.input = input
+    // A write into the pipe after ssh ended raises SIGPIPE, which ends the app; an error instead.
+    _ = fcntl(input, F_SETNOSIGPIPE, 1)
     let reader = Thread { [self] in readReplies(output) }
     reader.name = "SFTPChannel read"
     reader.start()
