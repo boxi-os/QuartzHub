@@ -213,9 +213,12 @@ nach Abhängigkeit:
      `CoreUpdate` (85 Golden-Schritte in 30 Szenen samt R1–R6, ohne Abweichung im Verhalten),
      `PluginUpdates`. **Punkt 7 fertig.** Danach der NFD-Durchgang (Weg A, Pfade als Text):
      fertig; was er an echten Fehlern fand, steht in `decisions/phase-3-dienste.md` (letzter
-     Abschnitt). Offen: zwei Netzläufe (Push mit Token, echtes Core-Update mit npm, vom Nutzer auf später gelegt),
-     dann Punkt 8.
+     Abschnitt). Offen: zwei Netzläufe (Push mit Token, echtes Core-Update mit npm, vom Nutzer auf später gelegt).
 8. **Veröffentlichen:**
+   - **Stand 2026-11-06:** in drei Teilen in einem Zug (Nutzer, 2026-11-06: Citadel für SFTP,
+     `debian-vm` für 8b/8c). 8a fertig: `RemotePath`, `Connections` (Schlüsselbund), `WebURL`,
+     `PublishTargets`, `DeployManifests`, `Deploy` mit Staging, Ordner, Git-Branch und Webhook,
+     `GitHubAPI`; das Ziel „Dokument“ kommt mit Punkt 9. Als Nächstes 8b.
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:
      - SFTP über SwiftNIO SSH (Citadel); Modus 0644, Keepalive ~60 s, Host-Keys

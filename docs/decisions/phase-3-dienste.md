@@ -1566,3 +1566,62 @@ QuartzControls Wortlaut (Nutzer, 2026-11-06). Danach der Durchgang zu NFD (siehe
   grün): `createUnlocked` prüft das Ergebnis von `update-ref` nicht. Der temporäre Ordner hält
   17.365 Einträge, die meisten Reste früherer Testläufe (zip, qh-store, qh-migration).
 
+
+## Punkt 8: Veröffentlichen
+
+Entscheidung des Nutzers (2026-11-06): drei Teile in einem Zug, 8a ohne Netz, 8b SSH (SFTP über
+Citadel, rsync über das System), 8c FTP/FTPS (eigener Client auf Network.framework), Relay-Abfrage
+und `formsService`; `debian-vm` darf für 8b und 8c benutzt werden. Das Ziel „Dokument“ kommt mit
+dem Export (Punkt 9). Echte Läufe gegen GitHub und einen Hoster später, je einzeln zu fragen.
+
+### 8a: Zugänge, Ziele, Manifeste, Ordner, Branch, Webhook, GitHub
+
+Jeder Baustein ist gegen QuartzControls eigenen Code gemessen (`scripts/*-golden.mjs`), in
+Ordnern mit Umlauten, Ausgaben nach Bytes; wo der Golden-Lauf `mainT` durch seine Attrappe ersetzt,
+setzt der Test den Katalogtext ein (`GoldenText.localize`). Gegenproben je Baustein, alle
+Überlebenden entweder gleichwertig (im Commit genannt) oder durch einen neuen Golden-Schritt
+gefangen.
+
+- **`RemotePath`** (`shared/remotePath.ts`): die Regeln für Pfade, rsync-Zeichen, den Relay-Ordner
+  und „~“. 437 Fälle; `$` ohne m-Flag wird `\z`, `\s` JavaScripts Menge.
+- **`Connections`** (`connectionsService.ts`): `connections.json` in QuartzControls Form, statt
+  `encryptedSecret` steht `secretInKeychain: true` an derselben Stelle (die Form der Übernahme aus
+  Phase 2); je Geheimnis ein Schlüsselbund-Eintrag hinter `SecretStore`, damit kein Test den
+  Schlüsselbund des Nutzers anfasst. Die Relay-Geheimnisse mit Fingerabdruck (HMAC) daneben.
+  Abweichungen: Ein Lesen schreibt nichts (QuartzControl schrieb beim ersten Lesen `[]`); kein
+  Altbestand von vor QuartzControls erstem Release; ein SSH- oder FTP-Zugang braucht einen Host
+  (QuartzControl scheiterte dort mit einem TypeError). Das zod-Schema der IPC-Grenze ist jetzt
+  `SaveConnectionInput.problem`, gegen zod gemessen.
+- **Ein Token, der sich nicht lesen lässt, ist ein Satz.** `GitAuth.Token` wirft jetzt: Ein Push
+  scheitert mit dem Satz (QuartzControls `gitAuthForOrigin` ließ den Fehler durch), die
+  Marktplätze bleiben anonym (`rateLimitToken`). Der Theme-Marktplatz schickt den Token jetzt mit.
+  Die Schlüsselbund-Sätze nennen QuartzHub; „Versuche es erneut“ statt „Beende und starte neu“, weil
+  ein Eintrag je Geheimnis bei jedem Zugriff neu fragt (gelesen, nicht gemessen: das hieße den
+  Dialog klicken).
+- **`WebURL`**: Nodes WHATWG-`URL` für die Spezial-Schemata, so weit ein Webhook sie braucht. Ein
+  Host, den WHATWG erst dekodieren oder abbilden würde (Prozent, IDNA, IPv6, IPv4 in anderer
+  Schreibung), ist `.unsupported` und wird beim Speichern abgewiesen, statt geraten. 93 Eingaben.
+- **`PublishTargets`, `DeployManifests`** (`publishTargetsService.ts`, `deploy/manifest.ts`):
+  unbekannte Schlüssel eines Ziels bleiben (vorn, wie QuartzControls Spread), ein Ziel, das woanders
+  hinzeigt, vergisst sein Manifest. **Manifest-Pfade werden nach Bytes verglichen**: Ein
+  Swift-Dictionary hält „ä“ in zwei Schreibweisen für einen Schlüssel. QuartzControl schrieb die
+  Schlüssel in der Reihenfolge, in der seine 32 parallelen Hashes fertig wurden; QuartzHub in der
+  Reihenfolge des Durchgangs; der Test vergleicht Manifeste als Mengen.
+- **`Deploy`, `DeployStaging`, `FolderAdapter`, `RelayGuard`** (`deploy/index.ts`, `staging.ts`,
+  `folder.ts`, `relayGuard.ts`), dazu `directoryUpload` (`runDirectoryUpload`). 61 Schritte mit dem
+  ganzen Arbeitsordner samt Rechten danach. Wo QuartzControl aus einem Lauf heraus warf (kein
+  Ziel, kein Adapter, Geheimnis), antwortet QuartzHub mit einem gescheiterten Lauf und demselben
+  Satz. Registriert ist, was es gibt; ein Ziel ohne Adapter sagt das, wie in QuartzControl für einen
+  unbekannten Typ.
+- **`GitBranchAdapter`** (`deploy/gitBranch.ts`): gegen ein lokales Bare-Repo mit demselben git,
+  derselben Identität und Zeit, also dieselben Hashes. Gefunden beim Port: QuartzControl legt für
+  den Worktree `.quartz-gui/` samt `.gitignore`-Zeile an; der erste Entwurf tat das nicht, der
+  Golden-Zustand mit `.gitignore` hat es gezeigt. Der Lease wird mit einer `pushurl` gemessen, die
+  auf ein anderes Repo zeigt als der Fetch.
+- **`WebhookAdapter`** (`deploy/webhook.ts`): zwei Dinge, die URLSession nicht liefert. Der
+  Statustext ist der aus RFC 9110 (Node gab den des Servers; bei HTTP/1.1 mit Standardtexten
+  gleich, bei HTTP/2 hatte Node keinen). Ein Fehler unterwegs heißt „TypeError: fetch failed“ wie
+  Nodes `String(err)`. Der Schwärzungstext zählt zu den 2000 Zeichen, also nimmt das Golden für ihn
+  den echten Katalogtext.
+- **`GitHubAPI`** (`githubService.ts`): 33 Schritte mit jeder Anfrage samt Kopfzeilen und Rumpf.
+  Ein Fehler unterwegs wirft Nodes Wortlaut.

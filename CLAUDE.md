@@ -117,7 +117,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Schreiber nehmen ihren Snapshot als `SnapshotStore.Take`). Punkt 7 ist fertig: 7b `GitStatus`,
   `GitAuth`, `GitHubRemote`, `Sync`; 7c `PackageJsonDeps`, `CoreUpdate` (Stash-Name und
   Merge-Betreff sind QuartzControls Wortlaut, ein Format beider Apps), `PluginUpdates`. Danach der
-  NFD-Durchgang. Als Nächstes Punkt 8.
+  NFD-Durchgang. Punkt 8 (Veröffentlichen) läuft: 8a fertig (`Connections` mit dem Schlüsselbund, `PublishTargets`, `DeployManifests`, `Deploy` mit Ordner, Git-Branch und Webhook, `GitHubAPI`); als Nächstes 8b (SSH).
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
   nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über
