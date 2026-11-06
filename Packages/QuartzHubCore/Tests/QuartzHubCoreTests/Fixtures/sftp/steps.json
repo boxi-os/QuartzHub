@@ -1,0 +1,1418 @@
+{
+ "steps": [
+  {
+   "name": "first upload",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "excludes": [
+     "geheim.html"
+    ]
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/index.html",
+      "<h1>Start</h1>"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/Über/ärger.html",
+      "ä"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/x.css",
+      "x{}"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build/geheim.html",
+      "g"
+     ]
+    },
+    {
+     "mkdir": "@H@/site"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ index.html\n↑ Über/ärger.html\n↑ x.css\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "index.html"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "Über/ärger.html"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "x.css"
+    }
+   ],
+   "tree": {
+    "H/site/": "755",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{}",
+    "H/site/Über/": "755",
+    "H/site/Über/ärger.html": "644 ä",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"x.css\": \"aa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"Über/ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}"
+   }
+  },
+  {
+   "name": "nothing to do",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ geheim.html\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 1,
+     "currentFile": "geheim.html"
+    }
+   ],
+   "tree": {
+    "H/site/": "755",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{}",
+    "H/site/Über/": "755",
+    "H/site/Über/ärger.html": "644 ä",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"x.css\": \"aa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816\",\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"Über/ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}"
+   }
+  },
+  {
+   "name": "a change, a removal, an exclusion",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "excludes": [
+     "neu.html"
+    ]
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build/x.css",
+      "x{color:red}"
+     ]
+    },
+    {
+     "rm": "@W@/build/Über"
+    },
+    {
+     "write": [
+      "@W@/build/neu.html",
+      "n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ x.css\n✗ Über/ärger.html\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 2,
+     "currentFile": "x.css"
+    },
+    {
+     "processed": 2,
+     "total": 2,
+     "currentFile": "Über/ärger.html"
+    }
+   ],
+   "tree": {
+    "H/site/": "755",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{color:red}",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}"
+   }
+  },
+  {
+   "name": "the parent is missing",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/fehlt/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "t2"
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"deployParentMissing\",\"args\":{\"path\":\"@H@/fehlt\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/site/": "755",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{color:red}",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}"
+   }
+  },
+  {
+   "name": "the login directory of another account",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "~jemand/x",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "t3"
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"deployTildeOtherAccount\",\"args\":{\"path\":\"~jemand/x\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/site/": "755",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{color:red}",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}"
+   }
+  },
+  {
+   "name": "\"~\" is the login directory",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "~/home-site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "t4"
+   },
+   "setup": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ geheim.html\n↑ index.html\n↑ neu.html\n↑ x.css\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 4,
+     "currentFile": "geheim.html"
+    },
+    {
+     "processed": 2,
+     "total": 4,
+     "currentFile": "index.html"
+    },
+    {
+     "processed": 3,
+     "total": 4,
+     "currentFile": "neu.html"
+    },
+    {
+     "processed": 4,
+     "total": 4,
+     "currentFile": "x.css"
+    }
+   ],
+   "tree": {
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/x.css": "644 x{color:red}",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}"
+   }
+  },
+  {
+   "name": "a deletion refused and a folder in its place",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [
+    {
+     "rm": "@W@/build/x.css"
+    },
+    {
+     "rm": "@W@/build/neu.html"
+    },
+    {
+     "rm": "@W@/build/geheim.html"
+    },
+    {
+     "write": [
+      "@H@/site/neu.html",
+      "n"
+     ]
+    },
+    {
+     "chmod": [
+      "@H@/site",
+      "555"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"deployDeleteRefused\",\"args\":{\"path\":\"geheim.html\",\"reason\":\"delete: Permission denied @H@/site/geheim.html\"}}{\"key\":\"deployDeleteRefused\",\"args\":{\"path\":\"x.css\",\"reason\":\"delete: Permission denied @H@/site/x.css\"}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 2,
+     "currentFile": "geheim.html"
+    },
+    {
+     "processed": 2,
+     "total": 2,
+     "currentFile": "x.css"
+    }
+   ],
+   "tree": {
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "555",
+    "H/site/geheim.html": "644 g",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css": "644 x{color:red}",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}"
+   }
+  },
+  {
+   "name": "a folder where a file was",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [
+    {
+     "chmod": [
+      "@H@/site",
+      "755"
+     ]
+    },
+    {
+     "rm": "@H@/site/x.css"
+    },
+    {
+     "mkdir": "@H@/site/x.css/inhalt"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "✗ geheim.html\n{\"key\":\"deployDeleteRefused\",\"args\":{\"path\":\"x.css\",\"reason\":\"{\\\"key\\\":\\\"deleteIsFolder\\\",\\\"args\\\":{}}\"}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 2,
+     "currentFile": "geheim.html"
+    },
+    {
+     "processed": 2,
+     "total": 2,
+     "currentFile": "x.css"
+    }
+   ],
+   "tree": {
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}"
+   }
+  },
+  {
+   "name": "a file where a folder must go",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {},
+   "setup": [
+    {
+     "write": [
+      "@W@/build/a/b.html",
+      "b"
+     ]
+    },
+    {
+     "write": [
+      "@H@/site/a",
+      "datei"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "\nError: mkdir: _mkdir: Bad path: @H@/site/a already exists as a file"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}"
+   }
+  },
+  {
+   "name": "the one-time pass to 0644",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/alt",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "t5",
+    "build": "@W@/build-alt"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/build-alt/index.html",
+      "i"
+     ]
+    },
+    {
+     "mkdir": "@H@/alt"
+    },
+    {
+     "write": [
+      "@H@/alt/old.html",
+      "o"
+     ]
+    },
+    {
+     "chmod": [
+      "@H@/alt/old.html",
+      "666"
+     ]
+    },
+    {
+     "write": [
+      "@H@/alt/private.html",
+      "p"
+     ]
+    },
+    {
+     "chmod": [
+      "@H@/alt/private.html",
+      "600"
+     ]
+    },
+    {
+     "write": [
+      "@W@/outside.html",
+      "secret"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/outside.html",
+      "666"
+     ]
+    },
+    {
+     "symlink": [
+      "@W@/outside.html",
+      "@H@/alt/link.html"
+     ]
+    },
+    {
+     "mkdir": "@H@/alt/dir.html"
+    },
+    {
+     "chmod": [
+      "@H@/alt/dir.html",
+      "777"
+     ]
+    },
+    {
+     "mkdir": "@H@/alt/dir2.html"
+    },
+    {
+     "chmod": [
+      "@H@/alt/dir2.html",
+      "666"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build-alt/dir2.html",
+      "e"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build-alt/old.html",
+      "o"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build-alt/private.html",
+      "p"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build-alt/link.html",
+      "l"
+     ]
+    },
+    {
+     "write": [
+      "@W@/build-alt/dir.html",
+      "d"
+     ]
+    },
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-t5.json",
+      "{\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\"\n}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ index.html\n{\"key\":\"sftpModesSettled\",\"args\":{\"count\":1,\"total\":5}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 6,
+     "currentFile": "index.html"
+    },
+    {
+     "processed": 2,
+     "total": 6,
+     "currentFile": "{\"key\":\"sftpModesProgress\",\"args\":{\"path\":\"private.html\"}}"
+    },
+    {
+     "processed": 3,
+     "total": 6,
+     "currentFile": "{\"key\":\"sftpModesProgress\",\"args\":{\"path\":\"link.html\"}}"
+    },
+    {
+     "processed": 4,
+     "total": 6,
+     "currentFile": "{\"key\":\"sftpModesProgress\",\"args\":{\"path\":\"dir.html\"}}"
+    },
+    {
+     "processed": 5,
+     "total": 6,
+     "currentFile": "{\"key\":\"sftpModesProgress\",\"args\":{\"path\":\"dir2.html\"}}"
+    },
+    {
+     "processed": 6,
+     "total": 6,
+     "currentFile": "{\"key\":\"sftpModesProgress\",\"args\":{\"path\":\"old.html\"}}"
+    }
+   ],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "600 p",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "the pass runs once",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/alt",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "t5",
+    "build": "@W@/build-alt"
+   },
+   "setup": [
+    {
+     "chmod": [
+      "@H@/alt/private.html",
+      "666"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": ""
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "a site below a linked folder",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/verlinkt/site",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "t7",
+    "build": "@W@/build-alt"
+   },
+   "setup": [
+    {
+     "mkdir": "@H@/echt"
+    },
+    {
+     "symlink": [
+      "@H@/echt",
+      "@H@/verlinkt"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "\nError: mkdir: _mkdir: Bad path: @H@/verlinkt not a directory"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "relay upload",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "sftp",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ]
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/relay/send.php",
+      "<?php // send"
+     ]
+    },
+    {
+     "write": [
+      "@W@/relay/config.php",
+      "<?php // secret"
+     ]
+    },
+    {
+     "write": [
+      "@W@/relay/config.generated.php",
+      "<?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n"
+     ]
+    },
+    {
+     "write": [
+      "@W@/relay/counters/.htaccess",
+      "Deny"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/relay/config.php",
+      "640"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/relay/counters",
+      "750"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/relay",
+      "751"
+     ]
+    },
+    {
+     "mkdir": "@H@/web"
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ config.generated.php\n↑ config.php\n↑ counters/.htaccess\n↑ send.php\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 4,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 4,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 4,
+     "currentFile": "counters/.htaccess"
+    },
+    {
+     "processed": 4,
+     "total": 4,
+     "currentFile": "send.php"
+    }
+   ],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "H/web/": "755",
+    "H/web/forms/": "751",
+    "H/web/forms/config.generated.php": "644 <?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n",
+    "H/web/forms/config.php": "640 <?php // secret",
+    "H/web/forms/counters/": "750",
+    "H/web/forms/counters/.htaccess": "644 Deny",
+    "H/web/forms/send.php": "644 <?php // send",
+    "gui/deploy-manifest-relay-t6.json": "644 {\n  \"config.generated.php\": \"f1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0\",\n  \"config.php\": \"a8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c\",\n  \"send.php\": \"a5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e\",\n  \"counters/.htaccess\": \"05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753\"\n}",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "relay upload over a folder that went 0700",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "sftp",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ]
+   },
+   "setup": [
+    {
+     "chmod": [
+      "@H@/web/forms",
+      "700"
+     ]
+    },
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-t6.json",
+      "{}\n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ config.generated.php\n↑ config.php\n↑ counters/.htaccess\n↑ send.php\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 4,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 4,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 4,
+     "currentFile": "counters/.htaccess"
+    },
+    {
+     "processed": 4,
+     "total": 4,
+     "currentFile": "send.php"
+    }
+   ],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "H/web/": "755",
+    "H/web/forms/": "751",
+    "H/web/forms/config.generated.php": "644 <?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n",
+    "H/web/forms/config.php": "640 <?php // secret",
+    "H/web/forms/counters/": "750",
+    "H/web/forms/counters/.htaccess": "644 Deny",
+    "H/web/forms/send.php": "644 <?php // send",
+    "gui/deploy-manifest-relay-t6.json": "644 {\n  \"config.generated.php\": \"f1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0\",\n  \"config.php\": \"a8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c\",\n  \"send.php\": \"a5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e\",\n  \"counters/.htaccess\": \"05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753\"\n}",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "relay folder is a link",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/link",
+    "transfer": "sftp",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/link"
+    ]
+   },
+   "setup": [
+    {
+     "symlink": [
+      "@H@/web/forms",
+      "@H@/web/link"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayDirSymlink\",\"args\":{\"path\":\"@H@/web/link\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "H/web/": "755",
+    "H/web/forms/": "751",
+    "H/web/forms/config.generated.php": "644 <?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n",
+    "H/web/forms/config.php": "640 <?php // secret",
+    "H/web/forms/counters/": "750",
+    "H/web/forms/counters/.htaccess": "644 Deny",
+    "H/web/forms/send.php": "644 <?php // send",
+    "H/web/link": "link @H@/web/forms",
+    "gui/deploy-manifest-relay-t6.json": "644 {\n  \"config.generated.php\": \"f1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0\",\n  \"config.php\": \"a8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c\",\n  \"send.php\": \"a5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e\",\n  \"counters/.htaccess\": \"05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753\"\n}",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "remove a foreign relay",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "fedcba9876543210"
+   },
+   "setup": [
+    {
+     "mkdir": "@W@/empty"
+    },
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-t6.json",
+      "{\n  \"send.php\": \"remove\",\n  \"config.php\": \"remove\",\n  \"config.generated.php\": \"remove\"\n}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayRemoveForeign\",\"args\":{\"path\":\"@H@/web/forms\"}}"
+    }
+   },
+   "events": [],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "H/web/": "755",
+    "H/web/forms/": "751",
+    "H/web/forms/config.generated.php": "644 <?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n",
+    "H/web/forms/config.php": "640 <?php // secret",
+    "H/web/forms/counters/": "750",
+    "H/web/forms/counters/.htaccess": "644 Deny",
+    "H/web/forms/send.php": "644 <?php // send",
+    "H/web/link": "link @H@/web/forms",
+    "gui/deploy-manifest-relay-t6.json": "644 {\n  \"send.php\": \"remove\",\n  \"config.php\": \"remove\",\n  \"config.generated.php\": \"remove\"\n}",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "removal refused",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-t6.json",
+      "{\n  \"send.php\": \"remove\",\n  \"config.php\": \"remove\",\n  \"config.generated.php\": \"remove\"\n}"
+     ]
+    },
+    {
+     "chmod": [
+      "@H@/web/forms",
+      "555"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayRemoveRefused\",\"args\":{\"path\":\"config.generated.php\",\"reason\":\"delete: Permission denied @H@/web/forms/config.generated.php\"}}{\"key\":\"relayRemoveRefused\",\"args\":{\"path\":\"config.php\",\"reason\":\"delete: Permission denied @H@/web/forms/config.php\"}}{\"key\":\"relayRemoveRefused\",\"args\":{\"path\":\"send.php\",\"reason\":\"delete: Permission denied @H@/web/forms/send.php\"}}{\"key\":\"relayRemoveRefusedRest\",\"args\":{}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "send.php"
+    }
+   ],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "H/web/": "755",
+    "H/web/forms/": "555",
+    "H/web/forms/config.generated.php": "644 <?php\nreturn [\n  'generation' => '0123456789abcdef',\n];\n",
+    "H/web/forms/config.php": "640 <?php // secret",
+    "H/web/forms/counters/": "750",
+    "H/web/forms/counters/.htaccess": "644 Deny",
+    "H/web/forms/send.php": "644 <?php // send",
+    "H/web/link": "link @H@/web/forms",
+    "gui/deploy-manifest-relay-t6.json": "644 {\n  \"send.php\": \"remove\",\n  \"config.php\": \"remove\",\n  \"config.generated.php\": \"remove\"\n}",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "remove our own",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-t6.json",
+      "{\n  \"send.php\": \"remove\",\n  \"config.php\": \"remove\",\n  \"config.generated.php\": \"remove\"\n}"
+     ]
+    },
+    {
+     "chmod": [
+      "@H@/web/forms",
+      "755"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "✗ config.generated.php\n✗ config.php\n✗ send.php\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "send.php"
+    }
+   ],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "H/web/": "755",
+    "H/web/forms/": "755",
+    "H/web/forms/counters/": "750",
+    "H/web/forms/counters/.htaccess": "644 Deny",
+    "H/web/link": "link @H@/web/forms",
+    "gui/deploy-manifest-relay-t6.json": "644 {}",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  },
+  {
+   "name": "remove again",
+   "destination": {
+    "type": "sftp",
+    "remotePath": "@H@/web/forms",
+    "transfer": "sftp",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-t6",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@H@/web/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-t6.json",
+      "{\n  \"send.php\": \"remove\",\n  \"config.php\": \"remove\",\n  \"config.generated.php\": \"remove\"\n}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"relayRemoveGone\",\"args\":{\"path\":\"@H@/web/forms\"}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "send.php"
+    }
+   ],
+   "tree": {
+    "H/alt/": "755",
+    "H/alt/dir.html/": "777",
+    "H/alt/dir2.html/": "666",
+    "H/alt/index.html": "644 i",
+    "H/alt/link.html": "link @W@/outside.html",
+    "H/alt/old.html": "644 o",
+    "H/alt/private.html": "666 p",
+    "H/echt/": "755",
+    "H/home-site/": "755",
+    "H/home-site/geheim.html": "644 g",
+    "H/home-site/index.html": "644 <h1>Start</h1>",
+    "H/home-site/neu.html": "644 n",
+    "H/home-site/x.css": "644 x{color:red}",
+    "H/site/": "755",
+    "H/site/a": "644 datei",
+    "H/site/index.html": "644 <h1>Start</h1>",
+    "H/site/neu.html": "644 n",
+    "H/site/x.css/": "755",
+    "H/site/x.css/inhalt/": "755",
+    "H/site/Über/": "755",
+    "H/verlinkt": "link @H@/echt",
+    "H/web/": "755",
+    "H/web/forms/": "755",
+    "H/web/forms/counters/": "750",
+    "H/web/forms/counters/.htaccess": "644 Deny",
+    "H/web/link": "link @H@/web/forms",
+    "gui/deploy-manifest-relay-t6.json": "644 {}",
+    "gui/deploy-manifest-t1.json": "644 {\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t1.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:37.912Z\"\n}",
+    "gui/deploy-manifest-t4.json": "644 {\n  \"geheim.html\": \"cd0aa9856147b6c5b4ff2b7dfee5da20aa38253099ef1b4a64aced233c9afe29\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\",\n  \"x.css\": \"960729dbade65596e3c92f20ab14106c70d4d30872a6d48619e9041e13640300\"\n}",
+    "gui/deploy-manifest-t4.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.128Z\"\n}",
+    "gui/deploy-manifest-t5.json": "644 {\n  \"dir.html\": \"18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4\",\n  \"dir2.html\": \"3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea\",\n  \"index.html\": \"de7d1b721a1e0632b7cf04edf5032c8ecffa9f9a08492152b926f1a5a7e765d7\",\n  \"link.html\": \"acac86c0e609ca906f632b0e2dacccb2b77d22b0621f20ebece1a4835b93f6f0\",\n  \"old.html\": \"65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2\",\n  \"private.html\": \"148de9c5a7a44d19e56cd9ae1a554bf67847afb0c58f6e12fa29ac7ddfca9940\"\n}",
+    "gui/deploy-manifest-t5.modes.json": "644 {\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T23:08:38.299Z\"\n}"
+   }
+  }
+ ]
+}
