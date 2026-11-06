@@ -107,7 +107,11 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   `RunningServersStore`, `OrphanedServers`, dazu in der App die Fragen beim Start und beim
   Beenden (`App/Shell/ServerLifecycle.swift`); was vor dem Build noch fehlt (Frames, Stile,
   Schriften), kommt mit Punkt 5. Echte Quartz-Läufe: `QH_QUARTZ_TESTS=1`; UI-Test der Fragen:
-  `TEST_RUNNER_QH_SERVER_PROJECT=<Kopie von gui-test>`. Als Nächstes Punkt 5, Stile und Layout.
+  `TEST_RUNNER_QH_SERVER_PROJECT=<Kopie von gui-test>`. Punkt 5 (Stile und Layout) ist fertig:
+  Frames, verwaltete Blöcke, Schriften, Stylesheet-Dateien, SCSS-Prüfung (Helfer `sass-check`),
+  Variablen-Graph, Snippets, SVG-Bereiniger (`qh-check inline-svg`), Themes; offen bis Punkt 7
+  die Schritte, die einen Snapshot brauchen, bis Punkt 8 der GitHub-Token. Als Nächstes Punkt 6,
+  Vorlagen und Übersetzungen.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

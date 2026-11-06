@@ -4,7 +4,7 @@
 > abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`); Phase 3 läuft, Punkt 1
 > (Grundlagen) fertig am 2026-11-06 (`decisions/phase-3-dienste.md`), Punkt 2 (Projekte) bis auf
 > die Teile, die die Config brauchen; Punkt 3 (Konfiguration und Plugins) läuft, die Config ist
-> fertig, ebenso die Plugin-Befehle, das Options-Schema und der Marktplatz; Punkt 4 (Build und Server) fertig; als Nächstes Punkt 5 (Stile und Layout). Abweichungen vom ursprünglichen Plan, mit Messung in
+> fertig, ebenso die Plugin-Befehle, das Options-Schema und der Marktplatz; Punkt 4 (Build und Server) fertig; Punkt 5 (Stile und Layout) fertig; als Nächstes Punkt 6 (Vorlagen und Übersetzungen). Abweichungen vom ursprünglichen Plan, mit Messung in
 > `decisions/phase-1-geruest.md`:
 >
 > - Bundle-ID `io.github.boxios.quartzhub` (ohne Unterstrich: in `CFBundleIdentifier` nicht erlaubt)
@@ -176,6 +176,17 @@ nach Abhängigkeit:
      `shared/gridFrameCss.ts`, `shared/cssVariables.ts`, `layoutFrameService`, `snippetService`
    - SVG-Bereiniger (`inlineSvg.ts`; Gegenprobe im HTML-Parser von WebKit)
    - Theme-Marktplatz, Presets, Style Settings
+   - **Stand 2026-11-06: fertig**, in drei Teilen in einem Zug (Nutzer, 2026-11-06). 5a, was der
+     Build braucht: Frames (`LayoutFrames`, `GridFrameCss`, `GroupLayouts`), verwaltete Blöcke und
+     Ladereihenfolge (`StyleSheets`), Schriften (`FontFile`, `FontService`); die Vorbereitung vor
+     Build und Start hat jetzt vier Schritte. 5b, die Stile-Seite: Stylesheet-Dateien und
+     „Zusammenlegen“, SCSS-Prüfung mit dem Sass des Projekts über den Helfer `sass-check`,
+     Variablen-Graph, Schriften der Website. 5c: Snippets, SVG-Bereiniger auf libxml2 mit
+     `qh-check inline-svg` in WebKit (Variante A), Theme-Presets, Style-Settings-Schema,
+     Theme-Marktplatz. Jeder Dienst gegen QuartzControls eigenen Code gemessen
+     (`scripts/*-golden.mjs`, der Bereiniger in Chrome). Offen: Umstellen und Zusammenlegen lehnen
+     ohne Snapshot ab bis Punkt 7; der GitHub-Token für den Theme-Marktplatz kommt mit Punkt 8;
+     echte Netzläufe (Google Fonts, Theme-Marktplatz, Anlegen) fragt der Nutzer einzeln frei.
 6. **Vorlagen und Übersetzungen:** `templatePackage/*` (`.qtpl`). Zip selbst geschrieben wie
    `zipArchive.ts`, Deflate über Apples Compression-Framework, Grenzen und `containedPath`.
    Dazu `localizationService`.
