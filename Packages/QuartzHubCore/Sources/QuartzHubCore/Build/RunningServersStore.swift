@@ -23,6 +23,11 @@ public final class RunningServersStore: Sendable {
     self.profile = profile
   }
 
+  /// What the file holds, without emptying it.
+  public func peek() -> JSONMap<TrackedServer> {
+    serial.withLock { _ in JSONMap(JSONStore.read(profile.runningServers, orEmpty: .object)) }
+  }
+
   public func record(projectId: String, server: TrackedServer) throws {
     try change { map in
       map[projectId] = server

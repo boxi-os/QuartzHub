@@ -705,3 +705,57 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
   Die beiden zum Anhängen hingen anfangs, statt zu scheitern (der erste Build wartete auf eine
   Freigabe, die der Test erst nach der Erwartung gab); der Test gibt jetzt nach spätestens 3 s
   frei.
+
+### Dev-Server (`buildService.ts`, zweiter Teil → `BuildService`, `ServerPorts`, `ServerLogFiles`, `LogTail`)
+
+- **Start:** sofort `starting` (sonst bot die Seite während des Wartens wieder „Starten“ an, und
+  zwei Klicks starteten zwei Server). Läuft ein Build nach `public/`, wartet der Start auf ihn und
+  sagt es (`serverWaitsForBuild`); „Stoppen“ während des Wartens sagt den Start ab. Dann die
+  Vorbereitung, dann in einer Warteschlange für die Ports: Läuft für dieses Projekt ein Server,
+  den QuartzHub nicht gestartet hat (Terminal, QuartzControl, ein Rest nach Absturz), wird
+  abgelehnt (`serverAlreadyRunningOutside`, auf „QuartzHub“ umgestellt), ein zweiter würde
+  denselben `public/` leeren. Fehlende Pakete sind ein Fehler mit Satz, bis `npm install` sie
+  holt (`forgetDependencyErrors`). Mit Remote-Dev-Host wird ein belegter Port abgelehnt statt
+  verlegt (der Tunnel reicht genau diese Ports weiter). Sonst rückt ein belegter Port auf den
+  nächsten freien, die Konsole sagt wohin; die Ports der eigenen anderen Server zählen ohne
+  Nachfrage als belegt.
+- **Frei** heißt: Bind auf die Wildcard-Adresse (Dual-Stack, `SO_REUSEADDR` wie Node) gelingt
+  *und* auf 127.0.0.1 und ::1 antwortet niemand. Gemessen: Ein Listener nur auf 127.0.0.1 ließ
+  den Wildcard-Bind zu und wäre ohne die zweite Frage als frei durchgegangen.
+- **Ausgabe in Dateien** unter `.quartz-gui/logs/`, je Lauf ein Paar mit der PID im Namen
+  (erst unter `tmp-<ms>`, nach dem Spawn umbenannt), getailt alle 200 ms über einen eigenen
+  Deskriptor und `UTF8Stream`. Vor dem Öffnen werden die Dateien beendeter Läufe entfernt, die
+  eines noch laufenden Servers bleiben (PID lebt und ist ein Quartz-Server). Lässt sich nichts
+  schreiben, läuft der Server ohne Konsole und sagt das (`serverLogUnavailable`).
+- **„läuft“** erst, wenn der Seitenport antwortet *und* Quartz' Zeile „Started a Quartz server
+  listening at http://localhost:<port>“ kam, oder ohne die Zeile, sobald auch der WebSocket-Port
+  offen ist; nach 5 s ohne beides sagt die Konsole, worauf gewartet wird (`serverWaitsForWsPort`,
+  auf „QuartzHub“ umgestellt). Keine Frist: Ein erster Build kann Minuten dauern.
+- **Ende:** Stirbt der Server von selbst, bleibt `error` mit seinem Ende stehen (Exit-Code oder
+  Signal). Eingetragen in `running-servers.json` beim Spawn, entfernt beim Ende, nur der Eintrag
+  dieses Prozesses. **Stoppen** schickt SIGTERM an die Prozessgruppe und SIGKILL an den Rest nach
+  `stopGrace` (5 s); QuartzControl schickte nur SIGTERM über `tree-kill`. **Neustart** wartet bis
+  zu 3 s, bis beide Ports frei sind, und startet mit denselben Optionen.
+- **Build und Server teilen sich `public/`:** „Jetzt bauen“ nach `public/` wird abgelehnt,
+  solange der Server dorthin schreibt oder sein Start darauf wartet (`buildDirServerRunning`);
+  in einen anderen Ordner geht es.
+- **Gegen einen nachgestellten Server** (`Fixtures/fake-quartz-server.py`, Python, beantwortet
+  HTTP und hält den WebSocket-Port; über eine Datei: stirbt, ohne Zeile, ohne Zeile und
+  WebSocket): Start, „läuft“, Eintrag in `running-servers.json`, Logdatei mit PID, Konsole,
+  Aktivität `serve`, Stopp samt Prozess und Eintrag; belegter Port rückt, zweites Projekt nimmt
+  andere Ports, auch gleichzeitig; Tunnel lehnt ab; fehlende Pakete; ein fremder Server desselben
+  Projekts (über den echten Scan gefunden) wird genannt; Build und Server nacheinander auf
+  `public/`; Absage eines wartenden Starts; Tod mit Exit 2; ohne `npx`; ohne Logdatei; ohne
+  Zeile; nur der Seitenport (bleibt `starting`, Satz nach 5 s); Aufräumen der Logdateien; zwei
+  Klicks ein Server; Neustart mit denselben Ports.
+- **Gegen das echte Quartz** (`QH_QUARTZ_TESTS=1`): `quartz build --serve` einer APFS-Kopie von
+  gui-test, „läuft“ nach 14,0 s, die Seite trägt das Generator-Meta; `stop` beendet npx und das
+  node-Kind darunter, der Port ist danach frei.
+- Gegenproben (11, jede lässt einen Test scheitern): der Seitenport allein gilt als „läuft“,
+  keine Warteschlange für die Ports, ein wartender Start zählt nicht für `public/`, kein Warten
+  auf den Build, kein Abbruch-Check nach dem Warten, keine Prüfung auf einen fremden Server
+  desselben Projekts, keine Tunnel-Regel, ein Ende von selbst liest sich als „gestoppt“, kein
+  Eintrag in `running-servers.json`, Logdateien nie aufgeräumt, der WebSocket-Port darf auf den
+  Seitenport fallen. Zwei davon (Abbruch-Check, WebSocket-Port) fing anfangs kein Test; der Test
+  der Absage zählt jetzt die Vorbereitung, ein neuer Test lässt die Seite auf den erbetenen
+  WebSocket-Port rücken.

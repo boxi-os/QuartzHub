@@ -28287,13 +28287,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für dieses Projekt läuft schon ein Server, der nicht aus QuartzControl gestartet wurde (Port {{port}}, Prozess {{pid}}). Ein zweiter würde in denselben Ausgabeordner bauen. Die Karte „Laufende Server auf diesem Rechner“ zeigt ihn und kann ihn beenden."
+            "value" : "Für dieses Projekt läuft schon ein Server, der nicht aus QuartzHub gestartet wurde (Port {{port}}, Prozess {{pid}}). Ein zweiter würde in denselben Ausgabeordner bauen. Die Karte „Laufende Server auf diesem Rechner“ zeigt ihn und kann ihn beenden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A server for this project is already running that was not started from QuartzControl (port {{port}}, process {{pid}}). A second one would build into the same output folder. The card “Servers running on this machine” shows it and can stop it."
+            "value" : "A server for this project is already running that was not started from QuartzHub (port {{port}}, process {{pid}}). A second one would build into the same output folder. The card “Servers running on this machine” shows it and can stop it."
           }
         }
       }
@@ -28367,13 +28367,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Port {{port}} antwortet, der WebSocket-Port {{wsPort}} noch nicht. QuartzControl wartet auf ihn oder auf die Zeile „Started a Quartz server“, bevor der Server als gestartet gilt."
+            "value" : "Port {{port}} antwortet, der WebSocket-Port {{wsPort}} noch nicht. QuartzHub wartet auf ihn oder auf die Zeile „Started a Quartz server“, bevor der Server als gestartet gilt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Port {{port}} answers, the websocket port {{wsPort}} does not yet. QuartzControl waits for it or for the line “Started a Quartz server” before the server counts as started."
+            "value" : "Port {{port}} answers, the websocket port {{wsPort}} does not yet. QuartzHub waits for it or for the line “Started a Quartz server” before the server counts as started."
           }
         }
       }

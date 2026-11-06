@@ -179,6 +179,15 @@ public enum ServerScan {
     return StopResult(stopped: system.signalTree(pid, rows))
   }
 
+  /// A pid read back from somewhere is a dev server only if it lives and its command line still
+  /// has "quartz" and "--serve" (QuartzControl's `isAlive` + `looksLikeQuartzServer`): the system
+  /// hands numbers out again. The tracked pid is npx's, whose title npm rewrites to the arguments
+  /// QuartzHub passed; QuartzHub's own path says "QuartzHub", capital Q.
+  public static func isQuartzServer(_ pid: Int32) -> Bool {
+    guard pid > 0, kill(pid, 0) == 0, let command = Coexistence.commandLine(pid) else { return false }
+    return command.contains("quartz") && command.contains("--serve")
+  }
+
   // MARK: process table
 
   struct Failure: Error {
@@ -382,31 +391,7 @@ public enum ServerScan {
 enum LiveProbes {
   /// A TCP connect to 127.0.0.1, at most 1.5 s.
   @Sendable static func tcp(_ port: Int) async -> Bool {
-    await withCheckedContinuation { continuation in
-      DispatchQueue.global().async { continuation.resume(returning: connects(port, timeoutMs: 1500)) }
-    }
-  }
-
-  static func connects(_ port: Int, timeoutMs: Int32) -> Bool {
-    let fd = socket(AF_INET, SOCK_STREAM, 0)
-    guard fd >= 0 else { return false }
-    defer { close(fd) }
-    _ = fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK)
-    var address = sockaddr_in()
-    address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
-    address.sin_family = sa_family_t(AF_INET)
-    address.sin_port = in_port_t(UInt16(port).bigEndian)
-    address.sin_addr.s_addr = inet_addr("127.0.0.1")
-    let started = withUnsafePointer(to: &address) {
-      $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { connect(fd, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) }
-    }
-    if started == 0 { return true }
-    guard errno == EINPROGRESS else { return false }
-    var poller = pollfd(fd: fd, events: Int16(POLLOUT), revents: 0)
-    guard poll(&poller, 1, timeoutMs) == 1 else { return false }
-    var error: Int32 = 0
-    var length = socklen_t(MemoryLayout<Int32>.size)
-    return getsockopt(fd, SOL_SOCKET, SO_ERROR, &error, &length) == 0 && error == 0
+    await ServerPorts.answers(host: "127.0.0.1", port: port, timeoutMs: 1500)
   }
 
   /// GET / on 127.0.0.1, 1.5 s, no redirect followed, at most 64 KiB read.
