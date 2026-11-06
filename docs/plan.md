@@ -4,7 +4,7 @@
 > abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`); Phase 3 läuft, Punkt 1
 > (Grundlagen) fertig am 2026-11-06 (`decisions/phase-3-dienste.md`), Punkt 2 (Projekte) bis auf
 > die Teile, die die Config brauchen; Punkt 3 (Konfiguration und Plugins) läuft, die Config ist
-> fertig, ebenso die Plugin-Befehle, das Options-Schema und der Marktplatz; Punkt 4 (Build und Server) fertig; Punkt 5 (Stile und Layout) fertig; als Nächstes Punkt 6 (Vorlagen und Übersetzungen). Abweichungen vom ursprünglichen Plan, mit Messung in
+> fertig, ebenso die Plugin-Befehle, das Options-Schema und der Marktplatz; Punkt 4 (Build und Server) fertig; Punkt 5 (Stile und Layout) fertig; Punkt 6 (Vorlagen und Übersetzungen) fertig; als Nächstes Punkt 7 (Git, Snapshots, Updates). Abweichungen vom ursprünglichen Plan, mit Messung in
 > `decisions/phase-1-geruest.md`:
 >
 > - Bundle-ID `io.github.boxios.quartzhub` (ohne Unterstrich: in `CFBundleIdentifier` nicht erlaubt)
@@ -190,6 +190,15 @@ nach Abhängigkeit:
 6. **Vorlagen und Übersetzungen:** `templatePackage/*` (`.qtpl`). Zip selbst geschrieben wie
    `zipArchive.ts`, Deflate über Apples Compression-Framework, Grenzen und `containedPath`.
    Dazu `localizationService`.
+   - **Stand 2026-11-06: fertig**, in drei Teilen in einem Zug (Nutzer, 2026-11-06). 6a `ZipArchive`
+     (Deflate über Compression, CRC-32 selbst; gegen QuartzControls `readZip`/`createZip` und drei
+     fremde Leser). 6b `LocaleFiles` mit dem Helfer `locale-edit` (TypeScript 5.9.3 wie dort); ein
+     Code, der kein Sprachcode ist, liest und schreibt hier nichts (QuartzControls Import ließ ihn
+     durch). 6c `TemplatePackage` (alle zwölf Bausteine, Export, Dry-Run, Import, das Format vor 1)
+     und `BuiltinTemplate` (`qc-basic.qtpl` aus 1.3.0 in `Resources/templates/`, dieselbe Adresse).
+     Jeder Dienst gegen QuartzControls eigenen Code gemessen (`scripts/*-golden.mjs`). Offen: Der
+     Import lehnt bis Punkt 7 ab (Snapshot vorher, wie dort); echte Netzläufe (Abruf der Vorlage,
+     Import mit echtem `npm install`) fragt der Nutzer einzeln frei.
 7. **Git, Snapshots, Updates:** `snapshotService` (eigenes Git-Repo), `gitStatusService`,
    `syncService`, `backupService`, `updateService` (Core-Update). **Vorher die Langfassung in
    `conventions-full.md` lesen.**
