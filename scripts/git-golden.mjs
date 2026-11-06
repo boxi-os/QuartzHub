@@ -137,7 +137,7 @@ async function step(name, setup, op, args = []) {
           // The token's own variable is QuartzControl's name; only that one carries it.
           keys: Object.keys(answer.env).map((k) => (globalThis.__token && answer.env[k] === globalThis.__token ? '<token>' : k)).sort(),
           prompt: answer.env.GIT_TERMINAL_PROMPT ?? null,
-          askpass: script ? { mode: (statSync(script).mode & 0o777).toString(8), user: ask("Username for 'https://github.com': "), pass: ask("Password for 'https://x-access-token@github.com': "), other: ask('Anything else? ') } : null
+          askpass: script ? { mode: (statSync(script).mode & 0o777).toString(8), user: ask("Username for 'https://github.com': "), pass: ask("Password for 'https://x-access-token@github.com': "), lower: ask('username: '), other: ask('Anything else? ') } : null
         }
         await answer.cleanup()
         record.removedAfterCleanup = script ? !existsSync(dirname(script)) : null

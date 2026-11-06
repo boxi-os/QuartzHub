@@ -11334,6 +11334,7 @@
      "mode": "700",
      "user": "x-access-token",
      "pass": "ghp_secret\"$`\\token",
+     "lower": "x-access-token",
      "other": "ghp_secret\"$`\\token"
     }
    },
@@ -11386,6 +11387,7 @@
      "mode": "700",
      "user": "x-access-token",
      "pass": "ghp_x",
+     "lower": "x-access-token",
      "other": "ghp_x"
     }
    },
@@ -11438,6 +11440,7 @@
      "mode": "700",
      "user": "x-access-token",
      "pass": "ghp_x",
+     "lower": "x-access-token",
      "other": "ghp_x"
     }
    },
