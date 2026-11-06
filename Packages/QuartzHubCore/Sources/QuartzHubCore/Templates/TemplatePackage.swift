@@ -1422,13 +1422,13 @@ public struct TemplatePackage: Sendable {
   // MARK: - presets
 
   func collectPresets(_ project: URL) -> Collected? {
-    let list = ThemePresets.list(project: project)
+    let list = ThemePresets.list(project: project.path)
     guard !list.isEmpty else { return nil }
     return Collected(payload: .object(JSONObject([("presets", .array(list))])), stats: JSONObject([("presets", .number(Double(list.count)))]))
   }
 
   func planPresets(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
-    let existing = ThemePresets.list(project: run.project).compactMap { $0["id"] }
+    let existing = ThemePresets.list(project: run.project.path).compactMap { $0["id"] }
     var plan = PartPlan(id: "presets")
     for preset in try Self.list(payload["presets"], "presets") {
       if let id = preset["id"], existing.contains(id) { plan.conflicts.append(preset["name"] ?? .null) } else { plan.additions.append(preset["name"] ?? .null) }
@@ -1437,13 +1437,13 @@ public struct TemplatePackage: Sendable {
   }
 
   func applyPresets(_ payload: JSONValue, _ run: Run) throws {
-    let existing = ThemePresets.list(project: run.project).compactMap { $0["id"] }
+    let existing = ThemePresets.list(project: run.project.path).compactMap { $0["id"] }
     for preset in try Self.list(payload["presets"], "presets") {
       if let id = preset["id"], existing.contains(id), run.strategy == .projectWins {
         run.warn("presetSkipped:\(preset["name"].map(JS.string) ?? "undefined")")
         continue
       }
-      try ThemePresets.save(preset, project: run.project)
+      try ThemePresets.save(preset, project: run.project.path)
     }
   }
 

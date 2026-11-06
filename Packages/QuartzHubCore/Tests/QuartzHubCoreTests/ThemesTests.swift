@@ -56,9 +56,11 @@ struct ThemesTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/themes")
 
   final class Scratch {
-    let url = FileManager.default.temporaryDirectory.appendingPathComponent("qh-themes-\(UUID().uuidString)")
-    init() throws { try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true) }
-    deinit { try? FileManager.default.removeItem(at: url) }
+    /// With a composed "ä" and "Ü"; `url` for the test's own file work only.
+    let path = TestFolder.make("qh-themes")
+    var url: URL { URL(fileURLWithPath: path) }
+    init() throws {}
+    deinit { try? FileManager.default.removeItem(atPath: path) }
   }
 
   /// What the scripted `npm` does: the next `npm search` answers this, every call is noted.
@@ -124,7 +126,8 @@ struct ThemesTests {
 
   @Test func replaysQuartzControlsSteps() async throws {
     let scratch = try Scratch()
-    let project = scratch.url.appendingPathComponent("project")
+    let projectPath = "\(scratch.path)/project"
+    let project = URL(fileURLWithPath: projectPath)
     let profile = scratch.url.appendingPathComponent("userData")
     let local = project.appendingPathComponent("node_modules/@quartz-themes/tokyo-night")
     try FileManager.default.createDirectory(at: local, withIntermediateDirectories: true)
@@ -139,7 +142,7 @@ struct ThemesTests {
       for key in net.keys { state.net[key] = net[key] }
     }
     let npm = FakeNpm()
-    let settings = StyleSettingsSchema(profile: ProfileDirectory(profile), configuration: ThemeNet.configuration, readYaml: StyleSettingsSchema.helperYaml(runtime: HelperRuntime.runtime))
+    let settings = StyleSettingsSchema(profile: ProfileDirectory("\(scratch.path)/userData"), configuration: ThemeNet.configuration, readYaml: StyleSettingsSchema.helperYaml(runtime: HelperRuntime.runtime))
     let market = ThemeMarketplace(search: npm.search, install: npm.install, configuration: ThemeNet.configuration)
 
     guard case .array(let steps) = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps.json"))) else { Issue.record("steps.json ist keine Liste"); return }
@@ -153,9 +156,9 @@ struct ThemesTests {
       var got: JSONValue = .null
       do {
         switch (service, call) {
-        case ("presets", "listPresets"): got = .array(ThemePresets.list(project: project))
-        case ("presets", "savePreset"): try ThemePresets.save(args[0], project: project)
-        case ("presets", "deletePreset"): try ThemePresets.delete(id: args[0].stringValue!, project: project)
+        case ("presets", "listPresets"): got = .array(ThemePresets.list(project: projectPath))
+        case ("presets", "savePreset"): try ThemePresets.save(args[0], project: projectPath)
+        case ("presets", "deletePreset"): try ThemePresets.delete(id: args[0].stringValue!, project: projectPath)
         case ("presets", "writeRaw"):
           try FileManager.default.createDirectory(at: project.appendingPathComponent(".quartz-gui"), withIntermediateDirectories: true)
           try args[0].stringValue!.write(to: project.appendingPathComponent(".quartz-gui/theme-presets.json"), atomically: true, encoding: .utf8)
@@ -168,9 +171,9 @@ struct ThemesTests {
         case ("settings", "registryDown"): ThemeNet.state.withLock { $0.net[registry] = Self.object([("fail", .bool(true))]) }
         case ("market", "npm"): npm.state.withLock { $0.search = args[0] }
         case ("market", "listThemes"): got = Self.json(await market.list())
-        case ("market", "getThemeDetail"): got = Self.json(try await market.detail(themeId: args[0].stringValue!, project: project))
+        case ("market", "getThemeDetail"): got = Self.json(try await market.detail(themeId: args[0].stringValue!, project: projectPath))
         case ("market", "installTheme"):
-          let result = try await market.install(themeId: args[0].stringValue!, project: project)
+          let result = try await market.install(themeId: args[0].stringValue!, project: projectPath)
           got = Self.object([("success", .bool(result.success)), ("output", .string(result.output))])
         case ("market", "invalidateCache"): await market.invalidate()
         default: Issue.record("\(label): unbekannter Schritt")
@@ -201,7 +204,7 @@ struct ThemesTests {
     let npm = FakeNpm()
     let market = ThemeMarketplace(search: npm.search, install: npm.install, configuration: ThemeNet.configuration)
     for id in ["../core", "Tokyo", "", "-x", "a b", String(repeating: "a", count: 129)] {
-      await #expect(throws: StyleSettingsSchema.InvalidThemeId.self) { try await market.install(themeId: id, project: URL(fileURLWithPath: "/nonexistent")) }
+      await #expect(throws: StyleSettingsSchema.InvalidThemeId.self) { try await market.install(themeId: id, project: "/nonexistent") }
     }
     #expect(npm.state.withLock { $0.commands }.isEmpty)
   }

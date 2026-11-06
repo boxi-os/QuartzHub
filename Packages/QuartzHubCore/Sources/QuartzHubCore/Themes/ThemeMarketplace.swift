@@ -30,7 +30,7 @@ public actor ThemeMarketplace {
   /// to the end within its 30 s (npm has none of its own) or did not start.
   public typealias Search = @Sendable () async -> String?
   /// `npm install` in the project.
-  public typealias Install = @Sendable (_ arguments: [String], _ project: URL) async -> PluginCommands.Result
+  public typealias Install = @Sendable (_ arguments: [String], _ project: String) async -> PluginCommands.Result
 
   public static func npmSearch(environment: @escaping @Sendable () async -> ToolEnvironment) -> Search {
     {
@@ -134,9 +134,9 @@ public actor ThemeMarketplace {
 
   /// A theme's modes, variations, Style Settings ids and fonts: the installed theme.json first, then
   /// jsDelivr. A network failure is not cached; an answer without the file is, for an hour.
-  public func detail(themeId: String, project: URL) async throws -> ThemeDetail? {
+  public func detail(themeId: String, project: String) async throws -> ThemeDetail? {
     try StyleSettingsSchema.check(themeId)
-    if let local = PluginSchemaReader.localThemeDetail(project: project.path, themeId: themeId) { return local }
+    if let local = PluginSchemaReader.localThemeDetail(project: project, themeId: themeId) { return local }
     if let cached = details[themeId], now().timeIntervalSince(cached.at) < Self.detailLifetime { return cached.detail }
     guard let (data, response) = try? await session.data(from: URL(string: "https://cdn.jsdelivr.net/npm/@quartz-themes/\(themeId)/theme.json")!),
           let http = response as? HTTPURLResponse else { return nil }
@@ -159,7 +159,7 @@ public actor ThemeMarketplace {
 
   /// The theme and `@quartz-themes/core` (a no-op when core is there), since a theme alone does
   /// nothing without the transformer that reads it.
-  public func install(themeId: String, project: URL) async throws -> PluginCommands.Result {
+  public func install(themeId: String, project: String) async throws -> PluginCommands.Result {
     try StyleSettingsSchema.check(themeId)
     return await install(["install", "@quartz-themes/core", "@quartz-themes/\(themeId)"], project)
   }

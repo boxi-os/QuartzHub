@@ -29,7 +29,7 @@ public actor StyleSettingsSchema {
   }
 
   let session: URLSession
-  let directory: URL
+  let directory: String
   let readYaml: ReadYaml
   let now: @Sendable () -> Date
   private var registry: (at: Date, entries: [JSONValue])?
@@ -43,7 +43,7 @@ public actor StyleSettingsSchema {
     configuration.timeoutIntervalForRequest = seconds
     configuration.timeoutIntervalForResource = seconds
     session = URLSession(configuration: configuration)
-    directory = URL(fileURLWithPath: profile.file("theme-docs"))
+    directory = profile.file("theme-docs")
     self.readYaml = readYaml
     self.now = now
   }
@@ -55,8 +55,8 @@ public actor StyleSettingsSchema {
     guard (1...128).contains(JSText.length(themeId)), JSText.test(themeId, #"\A[a-z0-9][a-z0-9._-]*\z"#) else { throw InvalidThemeId(id: themeId) }
   }
 
-  func cacheDirectory() -> URL {
-    try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+  func cacheDirectory() -> String {
+    try? Posix.mkdirs(directory)
     return directory
   }
 
@@ -80,14 +80,14 @@ public actor StyleSettingsSchema {
   /// The registry, a day in memory; offline is a normal state, so the copy on disk answers then.
   func loadRegistry() async -> [JSONValue] {
     if let registry, now().timeIntervalSince(registry.at) < Self.registryLifetime { return registry.entries }
-    let copy = cacheDirectory().appendingPathComponent("community-css-themes.json")
+    let copy = "\(cacheDirectory())/community-css-themes.json"
     if let answer = await get(Self.registryURL), (200..<300).contains(answer.status),
        case .array(let entries)? = try? JSJSON.parse(answer.body), !entries.isEmpty {
       registry = (now(), entries)
       try? JSONStore.writeAtomic(Data(JSJSON.compact(.array(entries)).utf8), to: copy)
       return entries
     }
-    if let data = try? Data(contentsOf: copy), case .array(let entries)? = try? JSJSON.parse(data) {
+    if let data = try? Posix.read(copy), case .array(let entries)? = try? JSJSON.parse(data) {
       registry = (now(), entries)
       return entries
     }
@@ -171,8 +171,8 @@ public actor StyleSettingsSchema {
   /// The labelled schema of a theme's Style Settings, or `.null` when there is none to be had.
   public func schema(themeId: String) async throws -> JSONValue {
     try Self.check(themeId)
-    let file = cacheDirectory().appendingPathComponent("\(themeId).json")
-    if let data = try? Data(contentsOf: file), let cached = try? JSJSON.parse(data) { return cached }
+    let file = "\(cacheDirectory())/\(themeId).json"
+    if let data = try? Posix.read(file), let cached = try? JSJSON.parse(data) { return cached }
     let schema = await build(themeId)
     try? JSONStore.writeAtomic(Data(JSJSON.compact(schema).utf8), to: file)
     return schema
@@ -201,8 +201,8 @@ public actor StyleSettingsSchema {
   /// Size and number of the cached answers, for the Settings page; creates nothing.
   public func cacheStats() -> (entries: Int, bytes: Int) {
     var entries = 0, bytes = 0
-    for entry in LayoutFrames.directoryEntriesWithKind(directory.path) {
-      guard let size = try? FileManager.default.attributesOfItem(atPath: directory.appendingPathComponent(entry.name).path)[.size] as? Int,
+    for entry in LayoutFrames.directoryEntriesWithKind(directory) {
+      guard let size = try? FileManager.default.attributesOfItem(atPath: "\(directory)/\(entry.name)")[.size] as? Int,
             entry.kind == .file || entry.kind == .link, size > 0 else { continue }
       entries += 1
       bytes += size
@@ -214,8 +214,8 @@ public actor StyleSettingsSchema {
   public func clearCache() -> Int {
     registry = nil
     var removed = 0
-    for entry in LayoutFrames.directoryEntriesWithKind(directory.path) where JSText.endsWith(entry.name, ".json") {
-      if (try? FileManager.default.removeItem(at: directory.appendingPathComponent(entry.name))) != nil { removed += 1 }
+    for entry in LayoutFrames.directoryEntriesWithKind(directory) where JSText.endsWith(entry.name, ".json") {
+      if (try? FileManager.default.removeItem(atPath: "\(directory)/\(entry.name)")) != nil { removed += 1 }
     }
     return removed
   }
@@ -224,6 +224,6 @@ public actor StyleSettingsSchema {
   public func clearCache(themeId: String) throws {
     try Self.check(themeId)
     registry = nil
-    try? Data().write(to: cacheDirectory().appendingPathComponent("\(themeId).json"))
+    try? Posix.write("\(cacheDirectory())/\(themeId).json", Data())
   }
 }
