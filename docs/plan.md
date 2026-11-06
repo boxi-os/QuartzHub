@@ -221,7 +221,9 @@ nach Abhängigkeit:
      `GitHubAPI`; das Ziel „Dokument“ kommt mit Punkt 9. Als Nächstes 8b.
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:
-     - SFTP über SwiftNIO SSH (Citadel); Modus 0644, Keepalive ~60 s, Host-Keys
+     - SFTP über das System-OpenSSH (`ssh -s sftp`), SFTP-Protokoll selbst geschrieben (Nutzer, 2026-11-06,
+       statt Citadel: dessen swift-nio-ssh-Fork, kein lstat, kein Keepalive, kein Agent); Modus 0644,
+       Keepalive ~60 s, Host-Keys als known_hosts wie bei rsync
      - FTP/FTPS als eigener Client auf Network.framework (es gibt keine gepflegte Swift-Bibliothek)
      - rsync über `/usr/bin/rsync`. **Unter macOS 15 ist das openrsync**: Flags und Modi neu
        messen (`shared/rsyncSupport.ts`)
