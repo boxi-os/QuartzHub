@@ -1,0 +1,553 @@
+{
+  "project": {
+    "home/proj/quartz.config.yaml": "plugins: []\n",
+    "home/proj/content/index.md": "# Start\n",
+    "home/proj/content/sub/a.md": "a\n",
+    "home/proj/quartz/static/x.css": "",
+    "home/proj/.git/HEAD": "ref: refs/heads/main\n",
+    "home/proj/.quartz-gui/logs/build.log": "",
+    "home/proj/.quartz-cache/x": "",
+    "home/proj/node_modules/x/package.json": "{}",
+    "home/notes/a.md": "mine\n",
+    "home/notes/b.md": "mine\n",
+    "elsewhere/proj/quartz.config.yaml": ""
+  },
+  "assess": [
+    {
+      "name": "default-missing",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": null,
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "default-empty",
+      "tree": {
+        "home/proj/public": {
+          "dir": 493
+        }
+      },
+      "project": "home/proj",
+      "outputDir": null,
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "empty-string-is-default",
+      "tree": {
+        "home/proj/public/index.html": "",
+        "home/proj/public/static/x.css": ""
+      },
+      "project": "home/proj",
+      "outputDir": "",
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "default-built",
+      "tree": {
+        "home/proj/public/index.html": "",
+        "home/proj/public/static/x.css": ""
+      },
+      "project": "home/proj",
+      "outputDir": null,
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "index-only",
+      "tree": {
+        "home/proj/public/index.html": ""
+      },
+      "project": "home/proj",
+      "outputDir": null,
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 1
+      }
+    },
+    {
+      "name": "index-and-404",
+      "tree": {
+        "home/proj/public/index.html": "",
+        "home/proj/public/404.html": ""
+      },
+      "project": "home/proj",
+      "outputDir": null,
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "index-and-feed",
+      "tree": {
+        "home/proj/public/index.html": "",
+        "home/proj/public/index.xml": ""
+      },
+      "project": "home/proj",
+      "outputDir": null,
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "index-and-sitemap",
+      "tree": {
+        "home/proj/public/index.html": "",
+        "home/proj/public/sitemap.xml": ""
+      },
+      "project": "home/proj",
+      "outputDir": null,
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "notes",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "../notes",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 2
+      }
+    },
+    {
+      "name": "a-file",
+      "tree": {
+        "home/proj/out.txt": "x"
+      },
+      "project": "home/proj",
+      "outputDir": "out.txt",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 1
+      }
+    },
+    {
+      "name": "dist-new",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "dist",
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "the-project",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": ".",
+      "expected": {
+        "kind": "refused",
+        "reason": "project"
+      }
+    },
+    {
+      "name": "the-project-slash",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "./",
+      "expected": {
+        "kind": "refused",
+        "reason": "project"
+      }
+    },
+    {
+      "name": "the-project-absolute",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "@W@/home/proj",
+      "expected": {
+        "kind": "refused",
+        "reason": "project"
+      }
+    },
+    {
+      "name": "parent-is-home",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "..",
+      "expected": {
+        "kind": "refused",
+        "reason": "containsProject"
+      }
+    },
+    {
+      "name": "root",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "/",
+      "expected": {
+        "kind": "refused",
+        "reason": "containsProject"
+      }
+    },
+    {
+      "name": "home",
+      "tree": {},
+      "project": "elsewhere/proj",
+      "outputDir": "@W@/home",
+      "expected": {
+        "kind": "refused",
+        "reason": "home"
+      }
+    },
+    {
+      "name": "home-slash",
+      "tree": {},
+      "project": "elsewhere/proj",
+      "outputDir": "@W@/home/",
+      "expected": {
+        "kind": "refused",
+        "reason": "home"
+      }
+    },
+    {
+      "name": "beside-home",
+      "tree": {},
+      "project": "elsewhere/proj",
+      "outputDir": "@W@/home/notes",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 2
+      }
+    },
+    {
+      "name": "protected content",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "content",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": "content"
+      }
+    },
+    {
+      "name": "protected content/sub",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "content/sub",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": "content"
+      }
+    },
+    {
+      "name": "protected ./content/../content",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "./content/../content",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": "content"
+      }
+    },
+    {
+      "name": "protected quartz",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "quartz",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": "quartz"
+      }
+    },
+    {
+      "name": "protected quartz/static",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "quartz/static",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": "quartz"
+      }
+    },
+    {
+      "name": "protected .git",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": ".git",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": ".git"
+      }
+    },
+    {
+      "name": "protected .quartz-gui",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": ".quartz-gui",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": ".quartz-gui"
+      }
+    },
+    {
+      "name": "protected .quartz-gui/logs",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": ".quartz-gui/logs",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": ".quartz-gui"
+      }
+    },
+    {
+      "name": "protected .quartz-cache",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": ".quartz-cache",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": ".quartz-cache"
+      }
+    },
+    {
+      "name": "protected node_modules",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "node_modules",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": "node_modules"
+      }
+    },
+    {
+      "name": "protected node_modules/x",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "node_modules/x",
+      "expected": {
+        "kind": "refused",
+        "reason": "protected",
+        "detail": "node_modules"
+      }
+    },
+    {
+      "name": "not-protected contents",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "contents",
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "not-protected content-old",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "content-old",
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "not-protected .quartz-gui-x",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": ".quartz-gui-x",
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "not-protected quartz2",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "quartz2",
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "sibling-prefix",
+      "tree": {
+        "home/proj-old/x.md": ""
+      },
+      "project": "home/proj",
+      "outputDir": "../proj-old",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 1
+      }
+    },
+    {
+      "name": "unreadable",
+      "tree": {
+        "home/proj/locked": {
+          "dir": 0
+        }
+      },
+      "project": "home/proj",
+      "outputDir": "locked",
+      "expected": {
+        "kind": "ok"
+      }
+    },
+    {
+      "name": "case Content",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "Content",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 2
+      }
+    },
+    {
+      "name": "case NODE_MODULES/x",
+      "tree": {},
+      "project": "home/proj",
+      "outputDir": "NODE_MODULES/x",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 1
+      }
+    },
+    {
+      "name": "case HOME",
+      "tree": {},
+      "project": "elsewhere/proj",
+      "outputDir": "@W@/HOME",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 2
+      }
+    },
+    {
+      "name": "link to content",
+      "tree": {
+        "home/proj/site": {
+          "link": "@W@/home/proj/content"
+        }
+      },
+      "project": "home/proj",
+      "outputDir": "site",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 2
+      }
+    },
+    {
+      "name": "below a link to content",
+      "tree": {
+        "home/proj/site": {
+          "link": "@W@/home/proj/content"
+        }
+      },
+      "project": "home/proj",
+      "outputDir": "site/sub",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 1
+      }
+    },
+    {
+      "name": "link to home",
+      "tree": {
+        "elsewhere/proj/out": {
+          "link": "@W@/home"
+        }
+      },
+      "project": "elsewhere/proj",
+      "outputDir": "out",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 2
+      }
+    },
+    {
+      "name": "link to the project",
+      "tree": {
+        "home/alias": {
+          "link": "@W@/home/proj"
+        }
+      },
+      "project": "home/proj",
+      "outputDir": "../alias",
+      "expected": {
+        "kind": "confirm",
+        "entryCount": 7
+      }
+    },
+    {
+      "name": "case PUBLIC built",
+      "tree": {
+        "home/proj/public/index.html": "",
+        "home/proj/public/static/x.css": ""
+      },
+      "project": "home/proj",
+      "outputDir": "PUBLIC",
+      "expected": {
+        "kind": "ok"
+      }
+    }
+  ],
+  "looks": [
+    {
+      "name": "none",
+      "tree": {},
+      "expected": false
+    },
+    {
+      "name": "index-only",
+      "tree": {
+        "index.html": ""
+      },
+      "expected": false
+    },
+    {
+      "name": "static-only",
+      "tree": {
+        "static": {
+          "dir": 493
+        }
+      },
+      "expected": false
+    },
+    {
+      "name": "index-static",
+      "tree": {
+        "index.html": "",
+        "static": {
+          "dir": 493
+        }
+      },
+      "expected": true
+    },
+    {
+      "name": "index-dir",
+      "tree": {
+        "index.html": {
+          "dir": 493
+        },
+        "404.html": ""
+      },
+      "expected": true
+    },
+    {
+      "name": "Index-case",
+      "tree": {
+        "INDEX.html": "",
+        "404.html": ""
+      },
+      "expected": false
+    }
+  ]
+}

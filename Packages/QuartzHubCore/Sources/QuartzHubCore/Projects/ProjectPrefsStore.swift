@@ -34,8 +34,6 @@ extension ProjectPrefs {
   /// would put "/export" under the project), a relative one joined and normalized as `path.join`
   /// does ("../site" is next to the project).
   public func buildDirectory(project: URL) -> URL {
-    if outputDir.isEmpty { return project.appendingPathComponent("public", isDirectory: true) }
-    if outputDir.hasPrefix("/") { return URL(fileURLWithPath: outputDir, isDirectory: true) }
-    return project.appendingPathComponent(outputDir, isDirectory: true).standardized
+    URL(fileURLWithPath: BuildOutputGuard.buildDirectory(project: project.path, outputDir: outputDir), isDirectory: true)
   }
 }

@@ -601,3 +601,32 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
   desselben Projekts stehen; dort hielt nur die Map in `forgetServer` diese Regel.
 - Gegenproben (4, jede lässt einen Test scheitern): `takeAll` schreibt nur, wenn etwas da war;
   `remove` übergeht die PID; ohne Sperre; Unlesbares wird nicht beiseitegelegt.
+
+### Ausgabeordner prüfen (`buildOutputGuard.ts` → `BuildOutputGuard`)
+
+- `quartz build --output` beginnt mit `rm(output, { recursive: true, force: true })`
+  (`quartz/build.ts:79`, gelesen in gui-test). Abgelehnt werden das Projekt, ein Ordner, der es
+  enthält, das Home und alles in `content`, `quartz`, `.git`, `.quartz-gui`, `.quartz-cache`,
+  `node_modules`; ein Ordner mit etwas anderem als einem Build wird erst nach Rückfrage geleert.
+- **Gemessen gegen QuartzControls Code:** `scripts/build-output-golden.mjs` legt 44 Fälle unter
+  einem frischen Ordner an (HOME gestellt) und zeichnet `assessOutputDir` auf, dazu sechs Fälle
+  von `looksLikeQuartzBuild`: fehlt, leer, `""`, gebaut, nur `index.html`, mit `404.html`/
+  `index.xml`/`sitemap.xml`, Notizen, eine Datei, `.`/`./`/absolut, `..`, `/`, Home mit und ohne
+  Schrägstrich, elf geschützte Pfade, vier ähnliche, die es nicht sind (`contents`,
+  `content-old`, `.quartz-gui-x`, `quartz2`), ein Nachbar mit gleichem Anfang, ein unlesbarer
+  Ordner. Gleich in jedem Fall bis auf die sieben unten.
+- **Abweichung, gemessen:** QuartzControl verglich die Pfade als Text. Unter APFS ist „Content“
+  aber `content`, und ein Pfad durch einen Symlink erreicht dessen Ziel. Dort fragte es nur
+  „2 Einträge?“, und Quartz' `rm` hätte nach einem Ja die Notizen gelöscht: gemessen mit Node 24,
+  `rm("CONTENT/sub")` entfernte `content/sub`, `rm` auf einen Link nur den Link. QuartzHub prüft
+  die Ablehnungen auch am echten Pfad (`realpath` des längsten vorhandenen Teils, der Rest
+  angehängt) und lehnt in sieben Fällen ab, wo QuartzControl fragte: `Content`,
+  `NODE_MODULES/x`, das Home in anderer Schreibweise, ein Link auf `content`, ein Pfad unter so
+  einem Link, ein Link aufs Home, ein Link aufs Projekt. Dazu ein neuer Ordner hinter einem Link
+  auf `content` (dort schriebe der Build die Website in die Notizen).
+- Ein unlesbarer Ordner ist weiter „ok“: Quartz' `rm` kann ihn ebenso wenig auflisten, der Build
+  endet mit dessen Fehler, bevor etwas weg ist.
+- `ProjectPrefs.buildDirectory` nimmt jetzt dieselbe Funktion (`BuildOutputGuard.buildDirectory`).
+- Gegenproben (6, jede lässt einen Test scheitern): nur der geschriebene Pfad, Präfix ohne „/“,
+  `index.html` allein als Build, Home vor „enthält das Projekt“, kein Gang hinauf zum vorhandenen
+  Teil, eine Datei als „ok“.
