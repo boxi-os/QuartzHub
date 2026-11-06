@@ -41,3 +41,25 @@ dann SIGTERM und nach 2 s SIGKILL; nie eine Shell.
   den Enkel trotzdem traf; daher der Test mit dem Enkel ohne Pipes.
 - Nicht übernommen: `needsShell` (nur Windows). Ein Streaming für Builds und Server kommt mit
   `buildService`.
+
+### PATH (`environmentService.ts` → `HostPath`)
+
+`HostPath.resolve` ist `ensureToolPath`: Findet der geerbte PATH ein git, das antwortet, bleibt er;
+sonst kommt der PATH der Login-Shell dazu (`$SHELL -ilc`, Marke `__QH_PATH__`, Frist 5 s), dann die
+üblichen Orte. Anders als QuartzControl ändert das nicht die Umgebung von QuartzHub selbst, sondern
+ist ein Wert, aus dem die Umgebung der Kindprozesse entsteht (nächster Abschnitt).
+
+- **Das erste git im PATH entscheidet, wie in QuartzControl.** Ist es der Stub `/usr/bin/git` (kein
+  `xcode-select -p`), zählt auch ein späteres git nicht, weil Kindprozesse `git` beim Namen rufen
+  und sonst den Installer-Dialog bekämen; dann nimmt die git-Laufzeit das mitgelieferte und stellt
+  es nach vorn. Mein erster Test hatte das Gegenteil erwartet.
+- Die üblichen Orte ohne die Linux-Pfade (Snap, Flatpak), dafür mit Nix
+  (`/nix/var/nix/profiles/default/bin`, `~/.nix-profile/bin`): QuartzControls Kommentar nennt Nix,
+  seine Liste nicht.
+- **Gegenproben:** `known` erst nach der Schleife wachsen lassen (doppelte Ordner), Stub nicht
+  prüfen, Marke ignorieren, `skipping` ignorieren, keine Login-Shell: jede lässt einen Test
+  scheitern. „Marke ignorieren“ ließ auch den Test mit der echten Login-Shell scheitern: Die Shell
+  dieses Rechners gibt vor dem PATH etwas aus.
+- Nicht gemessen: welchen PATH QuartzHub aus dem Finder erbt; das misst die App, sobald sie die
+  Umgebung zeigt. Der Stub-Fall ist wie in QuartzControl nur mit einem nachgebauten `xcode-select`
+  geprüft, nicht auf einem Mac ohne Kommandozeilenwerkzeuge.
