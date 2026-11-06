@@ -1,0 +1,3561 @@
+[
+ {
+  "name": "json-not-object",
+  "op": "json",
+  "schema": "x",
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "schema is not an object"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-array",
+  "op": "json",
+  "schema": [],
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "schema is not an object"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-empty",
+  "op": "json",
+  "schema": {},
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "schema describes no properties"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-object-without-properties",
+  "op": "json",
+  "schema": {
+   "type": "object"
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "schema describes no properties"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-root-array",
+  "op": "json",
+  "schema": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "options are a array, not an object"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-root-enum",
+  "op": "json",
+  "schema": {
+   "enum": [
+    "a"
+   ]
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "options are a enum, not an object"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-root-note",
+  "op": "json",
+  "schema": {
+   "type": "object",
+   "properties": 5,
+   "allOf": []
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "schema describes no properties"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-root-record",
+  "op": "json",
+  "schema": {
+   "additionalProperties": {
+    "type": "string"
+   }
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "options are a record, not an object"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-root-ref",
+  "op": "json",
+  "schema": {
+   "$ref": "#/$defs/o",
+   "$defs": {
+    "o": {
+     "type": "object",
+     "properties": {
+      "a": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [
+    {
+     "key": "a",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "json-everything",
+  "op": "json",
+  "schema": {
+   "type": "object",
+   "$defs": {
+    "title": {
+     "type": "string",
+     "title": "Title from $defs",
+     "description": "shared",
+     "x-quartz-widget": "markdown"
+    },
+    "a b": {
+     "type": "boolean"
+    },
+    "loop": {
+     "type": "object",
+     "properties": {
+      "child": {
+       "$ref": "#/$defs/loop"
+      },
+      "n": {
+       "type": "number"
+      }
+     }
+    },
+    "hop": {
+     "$ref": "#/$defs/title"
+    },
+    "asEnum": {
+     "enum": [
+      1,
+      2
+     ]
+    }
+   },
+   "definitions": {
+    "old": {
+     "type": "integer",
+     "minimum": 0
+    }
+   },
+   "properties": {
+    "2": {
+     "type": "string"
+    },
+    "10": {
+     "type": "string"
+    },
+    "b": {
+     "type": "boolean",
+     "default": true,
+     "title": "B",
+     "description": "switch"
+    },
+    "s": {
+     "type": "string",
+     "title": 5,
+     "description": null,
+     "default": null
+    },
+    "n": {
+     "type": "number",
+     "minimum": 1,
+     "maximum": 9.5,
+     "default": 3
+    },
+    "int": {
+     "type": "integer",
+     "minimum": "0"
+    },
+    "e": {
+     "enum": [
+      "x",
+      1,
+      true
+     ]
+    },
+    "eMixed": {
+     "enum": [
+      "x",
+      {
+       "no": 1
+      }
+     ]
+    },
+    "eEmpty": {
+     "enum": []
+    },
+    "flat": {
+     "type": "enum",
+     "values": [
+      "a",
+      "b"
+     ]
+    },
+    "flatNoValues": {
+     "type": "enum"
+    },
+    "c": {
+     "const": "only"
+    },
+    "cNull": {
+     "const": null,
+     "type": "string"
+    },
+    "one": {
+     "oneOf": [
+      {
+       "const": "a"
+      },
+      {
+       "const": "b"
+      },
+      {
+       "enum": [
+        "b",
+        "c"
+       ]
+      }
+     ]
+    },
+    "any": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "number"
+      },
+      {
+       "type": "string"
+      }
+     ]
+    },
+    "anyOne": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "string"
+      }
+     ]
+    },
+    "anyNone": {
+     "anyOf": []
+    },
+    "both": {
+     "oneOf": [
+      {
+       "type": "string"
+      }
+     ],
+     "anyOf": [
+      {
+       "type": "number"
+      }
+     ]
+    },
+    "nested": {
+     "anyOf": [
+      {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "boolean"
+        }
+       ]
+      },
+      {
+       "type": "number"
+      }
+     ]
+    },
+    "nullable": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "multi": {
+     "type": [
+      "string",
+      "number",
+      "null"
+     ],
+     "minimum": 2
+    },
+    "onlyNull": {
+     "type": [
+      "null"
+     ]
+    },
+    "twice": {
+     "type": [
+      "string",
+      "string"
+     ]
+    },
+    "odd": {
+     "type": [
+      "string",
+      5
+     ]
+    },
+    "weird": {
+     "type": 5
+    },
+    "weird2": {
+     "type": [
+      [
+       "a",
+       "b"
+      ]
+     ]
+    },
+    "weird3": {
+     "type": {}
+    },
+    "weird4": {
+     "type": [
+      null
+     ]
+    },
+    "weird5": {
+     "type": 1e+21
+    },
+    "unknown": {
+     "type": "color"
+    },
+    "arr": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "tuple": {
+     "type": "array",
+     "items": [
+      {
+       "type": "string"
+      }
+     ]
+    },
+    "arrBare": {
+     "type": "array"
+    },
+    "arrNull": {
+     "type": "array",
+     "items": null
+    },
+    "arrDeep": {
+     "type": "array",
+     "items": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "x": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    },
+    "obj": {
+     "type": "object",
+     "properties": {
+      "x": {
+       "type": "string"
+      },
+      "y": {
+       "type": "object",
+       "properties": {
+        "z": {
+         "type": "boolean"
+        }
+       }
+      }
+     }
+    },
+    "objEmpty": {
+     "type": "object"
+    },
+    "objPropsArray": {
+     "type": "object",
+     "properties": [
+      "x"
+     ]
+    },
+    "rec": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "recTrue": {
+     "type": "object",
+     "additionalProperties": true
+    },
+    "recFalse": {
+     "type": "object",
+     "additionalProperties": false
+    },
+    "recNum": {
+     "type": "object",
+     "additionalProperties": 5
+    },
+    "recLang": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "x-quartz-keys": "languages"
+    },
+    "recBadKeys": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     },
+     "x-quartz-keys": "pages"
+    },
+    "keysOnObject": {
+     "type": "object",
+     "properties": {
+      "a": {
+       "type": "string"
+      }
+     },
+     "x-quartz-keys": "pages"
+    },
+    "objRest": {
+     "type": "object",
+     "properties": {
+      "a": {
+       "type": "string"
+      }
+     },
+     "additionalProperties": {
+      "type": "number"
+     }
+    },
+    "anything": {},
+    "yes": true,
+    "no": false,
+    "nothing": null,
+    "text": "string",
+    "noted": {
+     "x-quartz-note": "why not"
+    },
+    "notedNum": {
+     "x-quartz-note": 5
+    },
+    "described": {
+     "description": "only words",
+     "title": "t",
+     "default": 1
+    },
+    "allOf": {
+     "allOf": [
+      {
+       "type": "string"
+      }
+     ]
+    },
+    "not": {
+     "not": {
+      "type": "string"
+     }
+    },
+    "if": {
+     "if": {
+      "type": "string"
+     },
+     "then": {}
+    },
+    "pattern": {
+     "patternProperties": {
+      "^x": {
+       "type": "string"
+      }
+     }
+    },
+    "noType": {
+     "minLength": 2
+    },
+    "ref": {
+     "$ref": "#/$defs/title"
+    },
+    "refBeside": {
+     "$ref": "#/$defs/title",
+     "title": "Beside wins",
+     "x-quartz-widget": "html"
+    },
+    "refOld": {
+     "$ref": "#/definitions/old"
+    },
+    "refSpace": {
+     "$ref": "#/$defs/a%20b"
+    },
+    "refMissing": {
+     "$ref": "#/$defs/none"
+    },
+    "refOther": {
+     "$ref": "#/properties/b"
+    },
+    "refRemote": {
+     "$ref": "https://example.com/s.json"
+    },
+    "refNum": {
+     "$ref": 5
+    },
+    "refHop": {
+     "$ref": "#/$defs/hop"
+    },
+    "loop": {
+     "$ref": "#/$defs/loop"
+    },
+    "refEnum": {
+     "$ref": "#/$defs/asEnum"
+    },
+    "deep": {
+     "type": "object",
+     "properties": {
+      "d": {
+       "type": "object",
+       "properties": {
+        "d": {
+         "type": "object",
+         "properties": {
+          "d": {
+           "type": "object",
+           "properties": {
+            "d": {
+             "type": "object",
+             "properties": {
+              "d": {
+               "type": "object",
+               "properties": {
+                "d": {
+                 "type": "object",
+                 "properties": {
+                  "d": {
+                   "type": "object",
+                   "properties": {
+                    "d": {
+                     "type": "object",
+                     "properties": {
+                      "d": {
+                       "type": "object",
+                       "properties": {
+                        "d": {
+                         "type": "object",
+                         "properties": {
+                          "d": {
+                           "type": "object",
+                           "properties": {
+                            "d": {
+                             "type": "object",
+                             "properties": {
+                              "d": {
+                               "type": "object",
+                               "properties": {
+                                "d": {
+                                 "type": "object",
+                                 "properties": {
+                                  "d": {
+                                   "type": "object",
+                                   "properties": {
+                                    "d": {
+                                     "type": "object",
+                                     "properties": {
+                                      "d": {
+                                       "type": "object",
+                                       "properties": {
+                                        "d": {
+                                         "type": "string"
+                                        }
+                                       }
+                                      }
+                                     }
+                                    }
+                                   }
+                                  }
+                                 }
+                                }
+                               }
+                              }
+                             }
+                            }
+                           }
+                          }
+                         }
+                        }
+                       }
+                      }
+                     }
+                    }
+                   }
+                  }
+                 }
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    "whenOk": {
+     "type": "string",
+     "x-quartz-when": {
+      "b": true,
+      "obj.x": [
+       "a",
+       1
+      ],
+      "n": 3
+     }
+    },
+    "whenEmpty": {
+     "type": "string",
+     "x-quartz-when": {}
+    },
+    "whenBad": {
+     "type": "string",
+     "x-quartz-when": {
+      "b": {
+       "x": 1
+      }
+     }
+    },
+    "whenBadList": {
+     "type": "string",
+     "x-quartz-when": {
+      "b": [
+       true,
+       null
+      ]
+     }
+    },
+    "whenArray": {
+     "type": "string",
+     "x-quartz-when": [
+      "b"
+     ]
+    },
+    "whenNull": {
+     "type": "string",
+     "x-quartz-when": null
+    },
+    "grouped": {
+     "type": "string",
+     "x-quartz-group": "G",
+     "x-quartz-order": 2,
+     "x-quartz-advanced": true
+    },
+    "groupedBad": {
+     "type": "string",
+     "x-quartz-group": 1,
+     "x-quartz-order": "2",
+     "x-quartz-advanced": "yes"
+    },
+    "snippet": {
+     "type": "string",
+     "x-quartz-widget": "snippetFile",
+     "x-quartz-dir-option": "dir"
+    },
+    "snippetBare": {
+     "type": "string",
+     "x-quartz-widget": "snippetFile",
+     "x-quartz-dir-option": 3
+    },
+    "glob": {
+     "type": "string",
+     "x-quartz-widget": "glob"
+    },
+    "widgetUnknown": {
+     "type": "string",
+     "x-quartz-widget": "color"
+    },
+    "widgetNum": {
+     "type": "string",
+     "x-quartz-widget": 7
+    },
+    "unknownKeyword": {
+     "type": "string",
+     "x-quartz-colour": "red",
+     "x-quartz-hint": 1
+    },
+    "l10n": {
+     "enum": [
+      "a",
+      "b"
+     ],
+     "x-quartz-l10n": {
+      "de": {
+       "title": "Titel",
+       "description": "Text",
+       "group": "Gruppe",
+       "enum": {
+        "a": "A",
+        "b": 2,
+        "c": "C"
+       }
+      },
+      "en": {
+       "title": 3,
+       "enum": []
+      },
+      "fr": "non",
+      "it": {}
+     }
+    },
+    "l10nBad": {
+     "type": "string",
+     "x-quartz-l10n": "de"
+    },
+    "defaultsObj": {
+     "type": "object",
+     "properties": {
+      "a": {
+       "type": "string",
+       "default": "x"
+      }
+     },
+     "default": {
+      "a": "y",
+      "z": 1
+     }
+    }
+   }
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [
+    {
+     "key": "2",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "10",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "b",
+     "node": {
+      "kind": "boolean"
+     },
+     "title": "B",
+     "description": "switch",
+     "hasDefault": true,
+     "default": true,
+     "origin": "schema"
+    },
+    {
+     "key": "s",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": true,
+     "default": null,
+     "origin": "schema"
+    },
+    {
+     "key": "n",
+     "node": {
+      "kind": "number",
+      "minimum": 1,
+      "maximum": 9.5
+     },
+     "hasDefault": true,
+     "default": 3,
+     "origin": "schema"
+    },
+    {
+     "key": "int",
+     "node": {
+      "kind": "number",
+      "integer": true
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "e",
+     "node": {
+      "kind": "enum",
+      "values": [
+       "x",
+       1,
+       true
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "eMixed",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "eEmpty",
+     "node": {
+      "kind": "enum",
+      "values": []
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "flat",
+     "node": {
+      "kind": "enum",
+      "values": [
+       "a",
+       "b"
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "flatNoValues",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "c",
+     "node": {
+      "kind": "enum",
+      "values": [
+       "only"
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "cNull",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "one",
+     "node": {
+      "kind": "enum",
+      "values": [
+       "a",
+       "b",
+       "c"
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "any",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "number"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "anyOne",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "anyNone",
+     "node": {
+      "kind": "union",
+      "variants": []
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "both",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "nested",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "boolean"
+       },
+       {
+        "kind": "number"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "nullable",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "multi",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "number",
+        "minimum": 2
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "onlyNull",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "twice",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "odd",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "json"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "weird",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "weird2",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "weird3",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "weird4",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "weird5",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "unknown",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "arr",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "string"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "tuple",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "arrBare",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "json"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "arrNull",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "json"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "arrDeep",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "array",
+       "items": {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "x",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       }
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "obj",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "x",
+        "node": {
+         "kind": "string"
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       },
+       {
+        "key": "y",
+        "node": {
+         "kind": "object",
+         "fields": [
+          {
+           "key": "z",
+           "node": {
+            "kind": "boolean"
+           },
+           "hasDefault": false,
+           "origin": "schema"
+          }
+         ]
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "objEmpty",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "objPropsArray",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "rec",
+     "node": {
+      "kind": "record",
+      "value": {
+       "kind": "string"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "recTrue",
+     "node": {
+      "kind": "record",
+      "value": {
+       "kind": "json"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "recFalse",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "recNum",
+     "node": {
+      "kind": "record",
+      "value": {
+       "kind": "json"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "recLang",
+     "node": {
+      "kind": "record",
+      "value": {
+       "kind": "string"
+      },
+      "keys": "languages"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "recBadKeys",
+     "node": {
+      "kind": "record",
+      "value": {
+       "kind": "string"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "keysOnObject",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "a",
+        "node": {
+         "kind": "string"
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "objRest",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "a",
+        "node": {
+         "kind": "string"
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       }
+      ],
+      "rest": {
+       "kind": "number"
+      }
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "anything",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "yes",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "no",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "nothing",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "text",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "noted",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "notedNum",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "described",
+     "node": {
+      "kind": "json"
+     },
+     "title": "t",
+     "description": "only words",
+     "hasDefault": true,
+     "default": 1,
+     "origin": "schema"
+    },
+    {
+     "key": "allOf",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "not",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "if",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "pattern",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "noType",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "ref",
+     "node": {
+      "kind": "string"
+     },
+     "title": "Title from $defs",
+     "description": "shared",
+     "hasDefault": false,
+     "widget": {
+      "kind": "markdown"
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "refBeside",
+     "node": {
+      "kind": "string"
+     },
+     "title": "Beside wins",
+     "description": "shared",
+     "hasDefault": false,
+     "widget": {
+      "kind": "html"
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "refOld",
+     "node": {
+      "kind": "number",
+      "integer": true,
+      "minimum": 0
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "refSpace",
+     "node": {
+      "kind": "boolean"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "refMissing",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "refOther",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "refRemote",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "refNum",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "refHop",
+     "node": {
+      "kind": "string"
+     },
+     "title": "Title from $defs",
+     "description": "shared",
+     "hasDefault": false,
+     "widget": {
+      "kind": "markdown"
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "loop",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "child",
+        "node": {
+         "kind": "json"
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       },
+       {
+        "key": "n",
+        "node": {
+         "kind": "number"
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "refEnum",
+     "node": {
+      "kind": "enum",
+      "values": [
+       1,
+       2
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "deep",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "d",
+        "node": {
+         "kind": "object",
+         "fields": [
+          {
+           "key": "d",
+           "node": {
+            "kind": "object",
+            "fields": [
+             {
+              "key": "d",
+              "node": {
+               "kind": "object",
+               "fields": [
+                {
+                 "key": "d",
+                 "node": {
+                  "kind": "object",
+                  "fields": [
+                   {
+                    "key": "d",
+                    "node": {
+                     "kind": "object",
+                     "fields": [
+                      {
+                       "key": "d",
+                       "node": {
+                        "kind": "object",
+                        "fields": [
+                         {
+                          "key": "d",
+                          "node": {
+                           "kind": "object",
+                           "fields": [
+                            {
+                             "key": "d",
+                             "node": {
+                              "kind": "object",
+                              "fields": [
+                               {
+                                "key": "d",
+                                "node": {
+                                 "kind": "object",
+                                 "fields": [
+                                  {
+                                   "key": "d",
+                                   "node": {
+                                    "kind": "object",
+                                    "fields": [
+                                     {
+                                      "key": "d",
+                                      "node": {
+                                       "kind": "object",
+                                       "fields": [
+                                        {
+                                         "key": "d",
+                                         "node": {
+                                          "kind": "object",
+                                          "fields": [
+                                           {
+                                            "key": "d",
+                                            "node": {
+                                             "kind": "object",
+                                             "fields": [
+                                              {
+                                               "key": "d",
+                                               "node": {
+                                                "kind": "object",
+                                                "fields": [
+                                                 {
+                                                  "key": "d",
+                                                  "node": {
+                                                   "kind": "object",
+                                                   "fields": [
+                                                    {
+                                                     "key": "d",
+                                                     "node": {
+                                                      "kind": "json"
+                                                     },
+                                                     "hasDefault": false,
+                                                     "origin": "schema"
+                                                    }
+                                                   ]
+                                                  },
+                                                  "hasDefault": false,
+                                                  "origin": "schema"
+                                                 }
+                                                ]
+                                               },
+                                               "hasDefault": false,
+                                               "origin": "schema"
+                                              }
+                                             ]
+                                            },
+                                            "hasDefault": false,
+                                            "origin": "schema"
+                                           }
+                                          ]
+                                         },
+                                         "hasDefault": false,
+                                         "origin": "schema"
+                                        }
+                                       ]
+                                      },
+                                      "hasDefault": false,
+                                      "origin": "schema"
+                                     }
+                                    ]
+                                   },
+                                   "hasDefault": false,
+                                   "origin": "schema"
+                                  }
+                                 ]
+                                },
+                                "hasDefault": false,
+                                "origin": "schema"
+                               }
+                              ]
+                             },
+                             "hasDefault": false,
+                             "origin": "schema"
+                            }
+                           ]
+                          },
+                          "hasDefault": false,
+                          "origin": "schema"
+                         }
+                        ]
+                       },
+                       "hasDefault": false,
+                       "origin": "schema"
+                      }
+                     ]
+                    },
+                    "hasDefault": false,
+                    "origin": "schema"
+                   }
+                  ]
+                 },
+                 "hasDefault": false,
+                 "origin": "schema"
+                }
+               ]
+              },
+              "hasDefault": false,
+              "origin": "schema"
+             }
+            ]
+           },
+           "hasDefault": false,
+           "origin": "schema"
+          }
+         ]
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "whenOk",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "when": {
+      "b": true,
+      "obj.x": [
+       "a",
+       1
+      ],
+      "n": 3
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "whenEmpty",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "when": {},
+     "origin": "schema"
+    },
+    {
+     "key": "whenBad",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "whenBadList",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "whenArray",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "whenNull",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "grouped",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "group": "G",
+     "order": 2,
+     "advanced": true,
+     "origin": "schema"
+    },
+    {
+     "key": "groupedBad",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "snippet",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "widget": {
+      "kind": "snippetFile",
+      "dirOption": "dir"
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "snippetBare",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "widget": {
+      "kind": "snippetFile"
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "glob",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "widget": {
+      "kind": "glob"
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "widgetUnknown",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "widgetNum",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "unknownKeyword",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "l10n",
+     "node": {
+      "kind": "enum",
+      "values": [
+       "a",
+       "b"
+      ]
+     },
+     "hasDefault": false,
+     "l10n": {
+      "de": {
+       "title": "Titel",
+       "description": "Text",
+       "group": "Gruppe",
+       "enum": {
+        "a": "A",
+        "c": "C"
+       }
+      },
+      "en": {},
+      "it": {}
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "l10nBad",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "defaultsObj",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "a",
+        "node": {
+         "kind": "string"
+        },
+        "hasDefault": true,
+        "default": "x",
+        "origin": "schema"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": {
+      "a": "y",
+      "z": 1
+     },
+     "origin": "schema"
+    }
+   ],
+   "notes": [
+    {
+     "path": [
+      "eMixed"
+     ],
+     "reason": "enum with non-scalar values"
+    },
+    {
+     "path": [
+      "flatNoValues"
+     ],
+     "reason": "unknown type enum"
+    },
+    {
+     "path": [
+      "onlyNull"
+     ],
+     "reason": "no type"
+    },
+    {
+     "path": [
+      "odd"
+     ],
+     "reason": "unknown type 5"
+    },
+    {
+     "path": [
+      "weird"
+     ],
+     "reason": "unknown type 5"
+    },
+    {
+     "path": [
+      "weird2"
+     ],
+     "reason": "unknown type a,b"
+    },
+    {
+     "path": [
+      "weird3"
+     ],
+     "reason": "unknown type [object Object]"
+    },
+    {
+     "path": [
+      "weird4"
+     ],
+     "reason": "unknown type null"
+    },
+    {
+     "path": [
+      "weird5"
+     ],
+     "reason": "unknown type 1e+21"
+    },
+    {
+     "path": [
+      "unknown"
+     ],
+     "reason": "unknown type color"
+    },
+    {
+     "path": [
+      "tuple"
+     ],
+     "reason": "tuple arrays are not supported"
+    },
+    {
+     "path": [
+      "arrNull",
+      "[]"
+     ],
+     "reason": "not a schema object"
+    },
+    {
+     "path": [
+      "recNum",
+      "*"
+     ],
+     "reason": "not a schema object"
+    },
+    {
+     "path": [
+      "recBadKeys"
+     ],
+     "reason": "unknown x-quartz-keys \"pages\""
+    },
+    {
+     "path": [
+      "no"
+     ],
+     "reason": "not a schema object"
+    },
+    {
+     "path": [
+      "nothing"
+     ],
+     "reason": "not a schema object"
+    },
+    {
+     "path": [
+      "text"
+     ],
+     "reason": "not a schema object"
+    },
+    {
+     "path": [
+      "noted"
+     ],
+     "reason": "why not"
+    },
+    {
+     "path": [
+      "allOf"
+     ],
+     "reason": "allOf is not supported"
+    },
+    {
+     "path": [
+      "not"
+     ],
+     "reason": "not is not supported"
+    },
+    {
+     "path": [
+      "if"
+     ],
+     "reason": "if is not supported"
+    },
+    {
+     "path": [
+      "pattern"
+     ],
+     "reason": "patternProperties is not supported"
+    },
+    {
+     "path": [
+      "noType"
+     ],
+     "reason": "no type"
+    },
+    {
+     "path": [
+      "refMissing"
+     ],
+     "reason": "unresolvable $ref #/$defs/none"
+    },
+    {
+     "path": [
+      "refOther"
+     ],
+     "reason": "unresolvable $ref #/properties/b"
+    },
+    {
+     "path": [
+      "refRemote"
+     ],
+     "reason": "unresolvable $ref https://example.com/s.json"
+    },
+    {
+     "path": [
+      "refNum"
+     ],
+     "reason": "no type"
+    },
+    {
+     "path": [
+      "loop",
+      "child"
+     ],
+     "reason": "refers to itself (#/$defs/loop)"
+    },
+    {
+     "path": [
+      "deep",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d",
+      "d"
+     ],
+     "reason": "nested too deeply"
+    },
+    {
+     "path": [
+      "whenBad"
+     ],
+     "reason": "x-quartz-when is not a map of values"
+    },
+    {
+     "path": [
+      "whenBadList"
+     ],
+     "reason": "x-quartz-when is not a map of values"
+    },
+    {
+     "path": [
+      "whenArray"
+     ],
+     "reason": "x-quartz-when is not a map of values"
+    },
+    {
+     "path": [
+      "whenNull"
+     ],
+     "reason": "x-quartz-when is not a map of values"
+    },
+    {
+     "path": [
+      "widgetUnknown"
+     ],
+     "reason": "unknown x-quartz-widget \"color\", edited as plain text"
+    },
+    {
+     "path": [
+      "widgetNum"
+     ],
+     "reason": "unknown x-quartz-widget 7, edited as plain text"
+    },
+    {
+     "path": [
+      "unknownKeyword"
+     ],
+     "reason": "unknown keyword x-quartz-colour"
+    },
+    {
+     "path": [
+      "unknownKeyword"
+     ],
+     "reason": "unknown keyword x-quartz-hint"
+    }
+   ]
+  }
+ },
+ {
+  "name": "json-ref-bad-escape",
+  "op": "json",
+  "schema": {
+   "type": "object",
+   "$defs": {
+    "x": {}
+   },
+   "properties": {
+    "a": {
+     "$ref": "#/$defs/%E0%A4%A"
+    }
+   }
+  },
+  "throws": "URIError"
+ },
+ {
+  "name": "json-ref-alias-loop",
+  "op": "json",
+  "schema": {
+   "type": "object",
+   "$defs": {
+    "a": {
+     "$ref": "#/$defs/a"
+    }
+   },
+   "properties": {
+    "a": {
+     "$ref": "#/$defs/a"
+    }
+   }
+  },
+  "throws": "RangeError"
+ },
+ {
+  "name": "json-dts-source",
+  "op": "json",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "a": {
+     "type": "string"
+    }
+   }
+  },
+  "source": "dts",
+  "expected": {
+   "source": "dts",
+   "fields": [
+    {
+     "key": "a",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "flat-not-object",
+  "op": "flat",
+  "schema": [
+   "a"
+  ],
+  "expected": {
+   "source": "optionSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "optionSchema is not an object"
+    }
+   ]
+  }
+ },
+ {
+  "name": "flat-empty",
+  "op": "flat",
+  "schema": {},
+  "expected": {
+   "source": "optionSchema",
+   "fields": [],
+   "notes": [
+    {
+     "path": [],
+     "reason": "schema describes no properties"
+    }
+   ]
+  }
+ },
+ {
+  "name": "flat-community",
+  "op": "flat",
+  "schema": {
+   "mode": {
+    "type": "enum",
+    "values": [
+     "a",
+     "b"
+    ],
+    "default": "a"
+   },
+   "size": {
+    "type": "number"
+   },
+   "ref": {
+    "$ref": "#/$defs/x"
+   }
+  },
+  "expected": {
+   "source": "optionSchema",
+   "fields": [
+    {
+     "key": "mode",
+     "node": {
+      "kind": "enum",
+      "values": [
+       "a",
+       "b"
+      ]
+     },
+     "hasDefault": true,
+     "default": "a",
+     "origin": "schema"
+    },
+    {
+     "key": "size",
+     "node": {
+      "kind": "number"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "ref",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    }
+   ],
+   "notes": [
+    {
+     "path": [
+      "ref"
+     ],
+     "reason": "unresolvable $ref #/$defs/x"
+    }
+   ]
+  }
+ },
+ {
+  "name": "defaults-merge",
+  "op": "defaults",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "s": {
+     "type": "string"
+    },
+    "withDefault": {
+     "type": "string",
+     "default": "schema"
+    },
+    "obj": {
+     "type": "object",
+     "properties": {
+      "a": {
+       "type": "string"
+      },
+      "b": {
+       "type": "number"
+      }
+     }
+    },
+    "e": {
+     "enum": [
+      "a",
+      "b"
+     ]
+    },
+    "u": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "number"
+      }
+     ]
+    },
+    "j": {}
+   }
+  },
+  "defaults": {
+   "0": "index key",
+   "s": 5,
+   "withDefault": "defaults",
+   "obj": {
+    "a": "x",
+    "c": true,
+    "d": {
+     "e": [
+      1,
+      2
+     ]
+    }
+   },
+   "e": "c",
+   "u": true,
+   "j": {
+    "any": 1
+   },
+   "bool": false,
+   "num": 1.5,
+   "str": "x",
+   "strs": [
+    "a",
+    "b"
+   ],
+   "nums": [
+    1,
+    2
+   ],
+   "mixed": [
+    1,
+    "a"
+   ],
+   "none": [],
+   "emptyObj": {},
+   "nul": null,
+   "deepObj": {
+    "a": {
+     "b": {
+      "c": "d"
+     }
+    }
+   }
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [
+    {
+     "key": "s",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "number"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": 5,
+     "origin": "schema"
+    },
+    {
+     "key": "withDefault",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": true,
+     "default": "schema",
+     "origin": "schema"
+    },
+    {
+     "key": "obj",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "a",
+        "node": {
+         "kind": "string"
+        },
+        "hasDefault": true,
+        "default": "x",
+        "origin": "schema"
+       },
+       {
+        "key": "b",
+        "node": {
+         "kind": "number"
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       },
+       {
+        "key": "c",
+        "node": {
+         "kind": "boolean"
+        },
+        "hasDefault": true,
+        "default": true,
+        "origin": "defaults"
+       },
+       {
+        "key": "d",
+        "node": {
+         "kind": "object",
+         "fields": [
+          {
+           "key": "e",
+           "node": {
+            "kind": "array",
+            "items": {
+             "kind": "number"
+            }
+           },
+           "hasDefault": true,
+           "default": [
+            1,
+            2
+           ],
+           "origin": "defaults"
+          }
+         ]
+        },
+        "hasDefault": true,
+        "default": {
+         "e": [
+          1,
+          2
+         ]
+        },
+        "origin": "defaults"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": {
+      "a": "x",
+      "c": true,
+      "d": {
+       "e": [
+        1,
+        2
+       ]
+      }
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "e",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "enum",
+        "values": [
+         "a",
+         "b"
+        ]
+       },
+       {
+        "kind": "string"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": "c",
+     "origin": "schema"
+    },
+    {
+     "key": "u",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "number"
+       },
+       {
+        "kind": "boolean"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": true,
+     "origin": "schema"
+    },
+    {
+     "key": "j",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": true,
+     "default": {
+      "any": 1
+     },
+     "origin": "schema"
+    },
+    {
+     "key": "0",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": true,
+     "default": "index key",
+     "origin": "defaults"
+    },
+    {
+     "key": "bool",
+     "node": {
+      "kind": "boolean"
+     },
+     "hasDefault": true,
+     "default": false,
+     "origin": "defaults"
+    },
+    {
+     "key": "num",
+     "node": {
+      "kind": "number"
+     },
+     "hasDefault": true,
+     "default": 1.5,
+     "origin": "defaults"
+    },
+    {
+     "key": "str",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": true,
+     "default": "x",
+     "origin": "defaults"
+    },
+    {
+     "key": "strs",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "string"
+      }
+     },
+     "hasDefault": true,
+     "default": [
+      "a",
+      "b"
+     ],
+     "origin": "defaults"
+    },
+    {
+     "key": "nums",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "number"
+      }
+     },
+     "hasDefault": true,
+     "default": [
+      1,
+      2
+     ],
+     "origin": "defaults"
+    },
+    {
+     "key": "mixed",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "json"
+      }
+     },
+     "hasDefault": true,
+     "default": [
+      1,
+      "a"
+     ],
+     "origin": "defaults"
+    },
+    {
+     "key": "none",
+     "node": {
+      "kind": "array",
+      "items": {
+       "kind": "json"
+      }
+     },
+     "hasDefault": true,
+     "default": [],
+     "origin": "defaults"
+    },
+    {
+     "key": "emptyObj",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": true,
+     "default": {},
+     "origin": "defaults"
+    },
+    {
+     "key": "nul",
+     "node": {
+      "kind": "json"
+     },
+     "hasDefault": true,
+     "default": null,
+     "origin": "defaults"
+    },
+    {
+     "key": "deepObj",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "a",
+        "node": {
+         "kind": "object",
+         "fields": [
+          {
+           "key": "b",
+           "node": {
+            "kind": "object",
+            "fields": [
+             {
+              "key": "c",
+              "node": {
+               "kind": "string"
+              },
+              "hasDefault": true,
+              "default": "d",
+              "origin": "defaults"
+             }
+            ]
+           },
+           "hasDefault": true,
+           "default": {
+            "c": "d"
+           },
+           "origin": "defaults"
+          }
+         ]
+        },
+        "hasDefault": true,
+        "default": {
+         "b": {
+          "c": "d"
+         }
+        },
+        "origin": "defaults"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": {
+      "a": {
+       "b": {
+        "c": "d"
+       }
+      }
+     },
+     "origin": "defaults"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "defaults-not-object",
+  "op": "defaults",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "a": {
+     "type": "string"
+    }
+   }
+  },
+  "defaults": [
+   "x"
+  ],
+  "expected": {
+   "source": "configSchema",
+   "fields": [
+    {
+     "key": "a",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "defaults-object-becomes-union",
+  "op": "defaults",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "o": {
+     "type": "object",
+     "properties": {
+      "a": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "defaults": {
+   "o": "flat"
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [
+    {
+     "key": "o",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "object",
+        "fields": [
+         {
+          "key": "a",
+          "node": {
+           "kind": "string"
+          },
+          "hasDefault": false,
+          "origin": "schema"
+         }
+        ]
+       },
+       {
+        "kind": "string"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": "flat",
+     "origin": "schema"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "from-defaults",
+  "op": "fromDefaults",
+  "defaults": {
+   "a": 1,
+   "b": {
+    "c": "x"
+   }
+  },
+  "expected": {
+   "source": "defaults",
+   "fields": [
+    {
+     "key": "a",
+     "node": {
+      "kind": "number"
+     },
+     "hasDefault": true,
+     "default": 1,
+     "origin": "defaults"
+    },
+    {
+     "key": "b",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "c",
+        "node": {
+         "kind": "string"
+        },
+        "hasDefault": true,
+        "default": "x",
+        "origin": "defaults"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": {
+      "c": "x"
+     },
+     "origin": "defaults"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "from-defaults-empty",
+  "op": "fromDefaults",
+  "defaults": {},
+  "expected": null
+ },
+ {
+  "name": "from-defaults-not-object",
+  "op": "fromDefaults",
+  "defaults": "x",
+  "expected": null
+ },
+ {
+  "name": "present-keys",
+  "op": "present",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "a": {
+     "type": "string"
+    },
+    "o": {
+     "type": "object",
+     "properties": {
+      "x": {
+       "type": "boolean"
+      }
+     }
+    },
+    "n": {
+     "type": "number",
+     "default": 1
+    }
+   }
+  },
+  "defaults": {
+   "d": "from defaults"
+  },
+  "values": {
+   "a": [
+    "not",
+    "a",
+    "string"
+   ],
+   "o": {
+    "x": true,
+    "y": {
+     "deep": 1
+    }
+   },
+   "n": 2,
+   "d": 3,
+   "set": "by user",
+   "obj": {
+    "k": "v"
+   }
+  },
+  "expected": {
+   "source": "configSchema",
+   "fields": [
+    {
+     "key": "a",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "array",
+        "items": {
+         "kind": "string"
+        }
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "o",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "x",
+        "node": {
+         "kind": "boolean"
+        },
+        "hasDefault": false,
+        "origin": "schema"
+       },
+       {
+        "key": "y",
+        "node": {
+         "kind": "object",
+         "fields": [
+          {
+           "key": "deep",
+           "node": {
+            "kind": "number"
+           },
+           "hasDefault": true,
+           "default": 1,
+           "origin": "defaults"
+          }
+         ]
+        },
+        "hasDefault": false,
+        "origin": "config"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    },
+    {
+     "key": "n",
+     "node": {
+      "kind": "number"
+     },
+     "hasDefault": true,
+     "default": 1,
+     "origin": "schema"
+    },
+    {
+     "key": "d",
+     "node": {
+      "kind": "union",
+      "variants": [
+       {
+        "kind": "string"
+       },
+       {
+        "kind": "number"
+       }
+      ]
+     },
+     "hasDefault": true,
+     "default": "from defaults",
+     "origin": "defaults"
+    },
+    {
+     "key": "set",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "config"
+    },
+    {
+     "key": "obj",
+     "node": {
+      "kind": "object",
+      "fields": [
+       {
+        "key": "k",
+        "node": {
+         "kind": "string"
+        },
+        "hasDefault": true,
+        "default": "v",
+        "origin": "defaults"
+       }
+      ]
+     },
+     "hasDefault": false,
+     "origin": "config"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "present-not-object",
+  "op": "present",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "a": {
+     "type": "string"
+    }
+   }
+  },
+  "values": "x",
+  "expected": {
+   "source": "configSchema",
+   "fields": [
+    {
+     "key": "a",
+     "node": {
+      "kind": "string"
+     },
+     "hasDefault": false,
+     "origin": "schema"
+    }
+   ],
+   "notes": []
+  }
+ },
+ {
+  "name": "conditions",
+  "op": "conditions",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "variant": {
+     "enum": [
+      "tree",
+      "tabs"
+     ],
+     "default": "tree"
+    },
+    "box": {
+     "type": "object",
+     "properties": {
+      "mode": {
+       "type": "string",
+       "default": "inner"
+      },
+      "plain": {
+       "type": "string"
+      }
+     },
+     "default": {
+      "mode": "outer",
+      "other": "o"
+     }
+    },
+    "n": {
+     "type": "number"
+    },
+    "flag": {
+     "type": "boolean",
+     "default": false
+    }
+   }
+  },
+  "checks": [
+   {
+    "when": null,
+    "values": {}
+   },
+   {
+    "when": {
+     "variant": "tree"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "variant": "tabs"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "variant": [
+      "tabs",
+      "tree"
+     ]
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "variant": "tabs"
+    },
+    "values": {
+     "variant": "tabs"
+    }
+   },
+   {
+    "when": {
+     "box.mode": "inner"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "box.mode": "outer"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "box.other": "o"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "box.mode": "x"
+    },
+    "values": {
+     "box": {
+      "mode": "x"
+     }
+    }
+   },
+   {
+    "when": {
+     "box.plain": "p"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "n": 1
+    },
+    "values": {
+     "n": 1
+    }
+   },
+   {
+    "when": {
+     "n": 1
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "flag": false
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "flag": false,
+     "variant": "tabs"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "missing": "x"
+    },
+    "values": {}
+   },
+   {
+    "when": {
+     "variant": "tree"
+    },
+    "values": "not an object"
+   },
+   {
+    "when": {
+     "box": "x"
+    },
+    "values": {
+     "box": {
+      "mode": "x"
+     }
+    }
+   },
+   {
+    "when": {
+     "": "x"
+    },
+    "values": {
+     "": "x"
+    }
+   },
+   {
+    "when": {
+     "a.b": 1
+    },
+    "values": {
+     "a": {
+      "b": 1
+     }
+    }
+   },
+   {
+    "when": {
+     "a.b": 1
+    },
+    "values": {
+     "a": 5
+    }
+   },
+   {
+    "when": {},
+    "values": {}
+   }
+  ],
+  "expected": [
+   true,
+   true,
+   false,
+   true,
+   true,
+   true,
+   false,
+   true,
+   true,
+   false,
+   true,
+   false,
+   true,
+   false,
+   false,
+   true,
+   false,
+   true,
+   true,
+   false,
+   true
+  ]
+ },
+ {
+  "name": "paths",
+  "op": "paths",
+  "checks": [
+   {
+    "obj": {
+     "a": 1,
+     "b": 2
+    },
+    "path": [
+     "a"
+    ],
+    "value": 3
+   },
+   {
+    "obj": {
+     "a": 1,
+     "b": 2
+    },
+    "path": [
+     "c"
+    ],
+    "value": 3
+   },
+   {
+    "obj": {
+     "a": 1,
+     "b": 2
+    },
+    "path": [
+     "a"
+    ]
+   },
+   {
+    "obj": {
+     "a": 1
+    },
+    "path": [],
+    "value": 3
+   },
+   {
+    "obj": {
+     "byLang": {
+      "en": {
+       "title": "x"
+      }
+     },
+     "z": 1
+    },
+    "path": [
+     "byLang",
+     "en",
+     "title"
+    ]
+   },
+   {
+    "obj": {
+     "byLang": {
+      "en": {
+       "title": "x",
+       "d": 1
+      }
+     }
+    },
+    "path": [
+     "byLang",
+     "en",
+     "title"
+    ]
+   },
+   {
+    "obj": {
+     "a": "flat"
+    },
+    "path": [
+     "a",
+     "b"
+    ],
+    "value": 1
+   },
+   {
+    "obj": {
+     "a": "flat"
+    },
+    "path": [
+     "a",
+     "b"
+    ]
+   },
+   {
+    "obj": {
+     "a": {},
+     "b": 1
+    },
+    "path": [
+     "b"
+    ]
+   },
+   {
+    "obj": {
+     "1": "x",
+     "a": 1
+    },
+    "path": [
+     "0"
+    ],
+    "value": "y"
+   },
+   {
+    "obj": {
+     "a": {
+      "b": 1
+     }
+    },
+    "path": [
+     "a",
+     "c",
+     "d"
+    ],
+    "value": [
+     1
+    ]
+   }
+  ],
+  "gets": [
+   {
+    "obj": {
+     "a": {
+      "b": {
+       "c": 1
+      }
+     }
+    },
+    "path": [
+     "a",
+     "b",
+     "c"
+    ]
+   },
+   {
+    "obj": {
+     "a": {
+      "b": [
+       1
+      ]
+     }
+    },
+    "path": [
+     "a",
+     "b",
+     "0"
+    ]
+   },
+   {
+    "obj": {
+     "a": 1
+    },
+    "path": []
+   },
+   {
+    "obj": "x",
+    "path": [
+     "a"
+    ]
+   },
+   {
+    "obj": {
+     "a": null
+    },
+    "path": [
+     "a"
+    ]
+   }
+  ],
+  "prunes": [
+   {
+    "a": {},
+    "b": {
+     "c": {},
+     "d": 1
+    },
+    "e": [
+     {}
+    ],
+    "f": {
+     "g": {
+      "h": {}
+     }
+    },
+    "i": null
+   }
+  ],
+  "expected": {
+   "sets": [
+    {
+     "a": 3,
+     "b": 2
+    },
+    {
+     "a": 1,
+     "b": 2,
+     "c": 3
+    },
+    {
+     "b": 2
+    },
+    {
+     "a": 1
+    },
+    {
+     "z": 1
+    },
+    {
+     "byLang": {
+      "en": {
+       "d": 1
+      }
+     }
+    },
+    {
+     "a": {
+      "b": 1
+     }
+    },
+    {},
+    {
+     "a": {}
+    },
+    {
+     "0": "y",
+     "1": "x",
+     "a": 1
+    },
+    {
+     "a": {
+      "b": 1,
+      "c": {
+       "d": [
+        1
+       ]
+      }
+     }
+    }
+   ],
+   "gets": [
+    {
+     "value": 1
+    },
+    {
+     "absent": true
+    },
+    {
+     "value": {
+      "a": 1
+     }
+    },
+    {
+     "absent": true
+    },
+    {
+     "value": null
+    }
+   ],
+   "prunes": [
+    {
+     "b": {
+      "d": 1
+     },
+     "e": [
+      {}
+     ],
+     "i": null
+    }
+   ]
+  }
+ }
+]

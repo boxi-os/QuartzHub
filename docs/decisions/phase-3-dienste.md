@@ -395,3 +395,45 @@ weil die CLI sie für eingebaute Plugins stillschweigend nicht ausführt.
   gemessen.
 - Gegenproben: Farben nicht entfernt, Namen doppelt, `forget` auch bei unvollständigem npm, kein
   Anhängen, Ausgabe nicht getrimmt: jede lässt einen Test scheitern.
+
+### Quartz' Plugin-Name (`shared/quartzPluginName.ts` → `PluginSource`)
+
+`PluginSource` ist eine `source` in der Form, die QuartzControls Kanal `plugin.optionSchema`
+annahm (zod: Text ohne führendes `-`, 1 bis 2048 Zeichen, oder ein Objekt mit `repo` und
+optional `name`/`subdir`/`ref`); was zod abwies, wird gar keine `PluginSource`. `quartzName` ist
+Quartz' `extractPluginName`, also der Name, unter dem `.quartz/plugins/<name>` liegt und gegen den
+`exclude` vergleicht. Das ist nicht `PluginEntry.derivedName`: Eine npm-Quelle mit Scope bleibt ganz.
+
+- **Gemessen gegen QuartzControls Code**, `scripts/option-schema-golden.mjs`, 41 Quellen: alle
+  vier Formen, Schrägstriche am Ende, `#ref`, `.git`, `git+` mitten im Text, ein Zeilenumbruch am
+  Ende, Windows-Pfade, Objekte mit und ohne Namen. `PluginSourceTests` gibt dieselben Namen.
+- Die regulären Ausdrücke laufen über Unicode-Skalare (`matchingSemantics(.unicodeScalar)`), wie
+  JavaScript eine Zeichenkette sieht; Swifts `$` passt wie in JavaScript nur am Ende (gemessen mit
+  `"https://h/b\n"`).
+- Gegenproben: nur ein Schrägstrich am Ende entfernt, `git+` nur am Anfang gestrichen: jede lässt
+  einen Fall scheitern.
+
+### Options-Schema: Normalisierer (`shared/pluginOptionSchema.ts` → `OptionSchema`)
+
+Ein Normalisierer für JSON Schema, auf den configSchema, optionSchema, die `.d.ts`-Übersetzung und
+die Vorgaben gebracht werden; dazu `applyDefaults`, `withPresentKeys`, `evaluate` (`x-quartz-when`)
+und die Pfad-Helfer der Formulare. Unlesbares wird ein JSON-Feld mit Notiz, nie still weggelassen.
+
+- **Gemessen gegen QuartzControls Code**, `scripts/option-schema-golden.mjs`, 26 Fälle, einer mit
+  rund 100 Eigenschaften über jeden Zweig (`$ref` mit `$defs`/`definitions`/Escape, Zyklen,
+  Tiefe über 16, jeder `x-quartz-*`-Schlüssel gültig und ungültig, Typlisten, `type: 5`), dazu
+  Vorgaben, Werte aus der Config, 21 Bedingungen und die Pfad-Helfer. `OptionSchemaTests`
+  vergleicht Byte für Byte.
+- **Verglichen wird die kanonische Form** (`scripts/lib/option-schema-canon.mjs`): die Schlüssel
+  eines Feldes in fester Reihenfolge. QuartzControl baut ein Feld je nach Weg in anderer Reihenfolge
+  (ein Schema-Feld anders als ein abgeleitetes, ein Spread hängt `default` hinten an), und niemand
+  liest sie; Swift hat ein Struct. Werte des Plugins (`default`, `when`) behalten ihre Reihenfolge.
+- **Wo QuartzControl warf, antwortet QuartzHub mit einer Notiz:** Ein `$ref` mit kaputtem
+  `%`-Escape warf einen URIError (jetzt „unresolvable $ref“), ein `$ref`, dessen Ziel wieder er
+  selbst ist, lief in `annotationsOf` bis zum RangeError (jetzt „refers to itself“). Beide Fälle
+  stehen in den Fixtures mit `throws`.
+- Schlüssel sind eigene Schlüssel: QuartzControls `key in values` fand auch `constructor` auf jedem
+  Objekt.
+- Gegenproben: keine Duplikate entfernt, abgeleitete verschachtelte Felder mit falscher Herkunft,
+  Annotation neben dem `$ref` verliert, Bedingung ohne Vorgabe, leere Elternobjekte bleiben,
+  Verschachtelung nur unter der Config: jede lässt Fälle scheitern.
