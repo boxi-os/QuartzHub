@@ -81,7 +81,9 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   unter `docs/formats/`; JSON wie Node (`JSONStore`, `JSJSON`, gegen Node gemessen); Sichten auf die
   JSON-Dateien mit 13 Golden Files; Übernahme beim ersten Start (Dialog, Geheimnisse in den
   Schlüsselbund), gemessen am echten Profil und gegen Electron.
-- **Als Nächstes Phase 3:** die Kern-Dienste, je Dienst mit seinen Formaten (`docs/plan.md`).
+- **Phase 3 (Kern-Dienste) läuft.** Punkt 1, Grundlagen, fertig am 2026-11-06: Prozessstarter,
+  PATH, Node-/git-Laufzeit und Umgebung der Kindprozesse, Log-Puffer, Sperren je Projekt
+  (`docs/decisions/phase-3-dienste.md`). Als Nächstes Punkt 2, Projekte.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

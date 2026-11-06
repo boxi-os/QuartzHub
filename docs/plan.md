@@ -1,7 +1,8 @@
 # Plan: QuartzHub, die native Nachfolgerin von QuartzControl
 
 > Übernommen aus `~/.claude/plans/` am 2026-11-06, ab hier gepflegt. Stand: **Phase 0 bis 2
-> abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`), als Nächstes Phase 3. Abweichungen vom ursprünglichen Plan, mit Messung in
+> abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`); Phase 3 läuft, Punkt 1
+> (Grundlagen) fertig am 2026-11-06 (`decisions/phase-3-dienste.md`), als Nächstes Punkt 2 (Projekte). Abweichungen vom ursprünglichen Plan, mit Messung in
 > `decisions/phase-1-geruest.md`:
 >
 > - Bundle-ID `io.github.boxios.quartzhub` (ohne Unterstrich: in `CFBundleIdentifier` nicht erlaubt)
@@ -129,6 +130,9 @@ nach Abhängigkeit:
      git-Laufzeit (`gitRuntime.ts`)
    - PATH (`environmentService.ts`), Logs in Dateien mit Tail (`logBuffer.ts`)
    - Sperren als Actors je `realpath` (`styleLock.ts`, `projectLock.ts`), i18n für den Kern
+   - **Stand 2026-11-06: fertig.** `ProcessRunner` (posix_spawn, Prozessgruppe), `HostPath`,
+     `ToolEnvironment`/`GitRuntime`/`EnvironmentReport` (keine Shims), `LogBuffer`, `ProjectLock`;
+     i18n für den Kern gab es seit Phase 1 (`L10n`). Das Tailen der Logs kommt mit `buildService`.
 2. **Projekte:** `projectStore`, `projectOverviewService`, `projectPrefsService`, `projectPaths`
    (repoint), `duplicateService`, `createService`, `contentService`/`contentSymlink`,
    `projectIconService` (ImageIO statt `nativeImage`)
