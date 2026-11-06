@@ -88,6 +88,31 @@ import Testing
     #expect(info.st_mode & 0o777 == 0o700)
   }
 
+  /// A stored token that cannot be read fails the push with its sentence instead of sending it
+  /// without (QuartzControl's gitAuthForOrigin let getGithubToken's error through).
+  @Test func aTokenThatCannotBeReadFailsThePush() async throws {
+    let golden = try GitGolden()
+    let project = golden.url("p")
+    try Posix.mkdirs(project)
+    _ = await ProcessRunner.run(golden.environment.command("git", ["init", "-q"], in: project))
+    _ = await ProcessRunner.run(golden.environment.command("git", ["remote", "add", "origin", "https://github.com/o/r.git"], in: project))
+    let secrets = MemorySecrets()
+    let root = TestFolder.make("qh-gitauth-token")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let connections = Connections(profile: ProfileDirectory(root), secrets: secrets)
+    try connections.save(SaveConnectionInput(kind: .github, name: "GitHub", secret: "ghp_x"))
+    secrets.fail(with: .denied)
+    await #expect(throws: PublishFailure(L10n.t("main.secretStorageUnreadableMac"))) {
+      try await GitAuth.forOrigin(project: project, environment: golden.environment, token: connections.gitToken)
+    }
+    #expect(await connections.rateLimitToken() == nil)
+    secrets.fail(with: nil)
+    let auth = try await GitAuth.forOrigin(project: project, environment: golden.environment, token: connections.gitToken)
+    defer { auth.cleanup() }
+    #expect(auth.variables["QH_GIT_TOKEN"] == "ghp_x")
+    #expect(await connections.rateLimitToken() == "ghp_x")
+  }
+
   /// The token is asked for only when the origin would get it.
   @Test func theTokenIsNotAskedForOtherHosts() async throws {
     let golden = try GitGolden()

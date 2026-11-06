@@ -15,9 +15,10 @@ import Foundation
 /// The token's variable is `QH_GIT_TOKEN` (QuartzControl: `QC_GIT_TOKEN`); the helper is QuartzHub's
 /// own, so the name is no format.
 public struct GitAuth: Sendable {
-  /// QuartzHub's GitHub token, or nil. The connections come with point 8; until then the caller
-  /// hands it over.
-  public typealias Token = @Sendable () async -> String?
+  /// QuartzHub's GitHub token, or nil (`Connections.gitToken`). It throws when a token is stored
+  /// and cannot be read: the push then fails with that sentence, as QuartzControl's did, rather
+  /// than going out without it.
+  public typealias Token = @Sendable () async throws -> String?
 
   /// For the command that pushes, on top of its environment.
   public var variables: [String: String]
@@ -31,13 +32,13 @@ public struct GitAuth: Sendable {
     try? FileManager.default.removeItem(atPath: directory)
   }
 
-  /// Throws only when the helper cannot be written; QuartzControl's call failed then as well,
-  /// rather than pushing without the token.
+  /// Throws when the helper cannot be written or the token cannot be read; QuartzControl's call
+  /// failed then as well, rather than pushing without the token.
   public static func forOrigin(project: String, environment: ToolEnvironment, token: Token) async throws -> GitAuth {
     let origin = await ProcessRunner.run(environment.command("git", ["remote", "get-url", "origin"], in: project))
     guard origin.success, GitHubRemote.parse(origin.stdout) != nil else { return .none }
     guard JSText.test(JS.trim(origin.stdout), #"\Ahttps?://"#) else { return .none }
-    guard let token = await token(), !token.isEmpty else { return .none }
+    guard let token = try await token(), !token.isEmpty else { return .none }
 
     var template = Array("\(NSTemporaryDirectory())qh-git-XXXXXX".utf8CString)
     guard let made = mkdtemp(&template) else { throw Posix.error("mkdtemp", String(cString: template)) }

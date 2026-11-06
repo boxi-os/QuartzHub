@@ -200,6 +200,20 @@ struct ThemesTests {
     }
   }
 
+  /// The token from the connections raises the rate limit of the organisation's repo list; one
+  /// that cannot be read leaves it anonymous.
+  @Test func theRepoListCarriesTheToken() async throws {
+    let npm = FakeNpm()
+    let page = "https://api.github.com/orgs/quartz-themes/repos?per_page=100&page=1"
+    for (token, expected) in [("ghp_t", JSONValue.string("Bearer ghp_t")), (nil, .null)] as [(String?, JSONValue)] {
+      ThemeNet.state.withLock { $0 = ThemeNet.State(); $0.net[page] = Self.object([("json", .array([]))]) }
+      let market = ThemeMarketplace(search: npm.search, install: npm.install, configuration: ThemeNet.configuration, token: { token })
+      _ = await market.githubMetadata()
+      let requests = ThemeNet.state.withLock { $0.requests }
+      #expect(requests.count == 1 && requests[0][safe: "authorization"] == expected, "\(requests)")
+    }
+  }
+
   @Test func refusesThemeIdsThatAreNoPackageName() async throws {
     let npm = FakeNpm()
     let market = ThemeMarketplace(search: npm.search, install: npm.install, configuration: ThemeNet.configuration)

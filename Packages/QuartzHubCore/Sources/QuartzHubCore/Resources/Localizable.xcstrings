@@ -24168,6 +24168,23 @@
         }
       }
     },
+    "main.connectionInvalid" : {
+      "comment" : "Connections.save refuses an input the form should not have let through; field is the input's key (name, host, port, …).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zugang konnte nicht gespeichert werden: Das Feld „{{field}}“ ist ungültig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The connection could not be saved: the field “{{field}}” is not valid."
+          }
+        }
+      }
+    },
     "main.contentSourceInsideTarget" : {
       "comment" : "Content folder",
       "localizations" : {
@@ -26773,6 +26790,23 @@
         }
       }
     },
+    "main.keychainFailed" : {
+      "comment" : "status is the OSStatus number.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Schlüsselbund hat mit dem Fehler {{status}} geantwortet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Keychain answered with error {{status}}."
+          }
+        }
+      }
+    },
     "main.licensesMissingDetail" : {
       "localizations" : {
         "de" : {
@@ -28201,6 +28235,22 @@
         }
       }
     },
+    "main.secretMissingInKeychain" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die gespeicherten Zugangsdaten fehlen im Schlüsselbund, etwa weil der Eintrag dort gelöscht wurde. Gib sie unter Einstellungen → Zugänge neu ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The stored credentials are missing from the Keychain, for example because the item was deleted there. Enter them again under Settings → Connections."
+          }
+        }
+      }
+    },
     "main.secretStorageUnavailable" : {
       "comment" : "Credentials Sagt den Grund *und* den Weg: Ohne den zweiten Satz weiß der Nutzer, dass es nicht geht, aber nicht, was er dagegen tun kann - und tun kann er etwas, das ist der ganze Grund, warum diese Antwort von „verschlüsselt\" getrennt gemeldet wird.",
       "localizations" : {
@@ -28223,13 +28273,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Zugangsdaten können nicht gespeichert werden: macOS hat dieser Fassung von QuartzControl den Zugriff auf den Schlüsselbund verweigert. Beende QuartzControl, starte es neu und wähle im Dialog „Immer erlauben“."
+            "value" : "Die Zugangsdaten konnten nicht gespeichert werden: macOS hat QuartzHub den Zugriff auf den Schlüsselbund verweigert. Versuche es erneut und wähle im Dialog „Immer erlauben“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Credentials cannot be stored: macOS denied this version of QuartzControl access to the Keychain. Quit QuartzControl, start it again and choose “Always Allow” in the dialog."
+            "value" : "The credentials could not be stored: macOS denied QuartzHub access to the Keychain. Try again and choose “Always Allow” in the dialog."
           }
         }
       }
@@ -28255,13 +28305,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die gespeicherten Zugangsdaten können nicht gelesen werden: macOS hat dieser Fassung von QuartzControl den Zugriff auf den Schlüsselbund verweigert. Beende QuartzControl, starte es neu und wähle im Dialog „Immer erlauben“. Die Zugangsdaten sind dann wieder da."
+            "value" : "Die gespeicherten Zugangsdaten konnten nicht gelesen werden: macOS hat QuartzHub den Zugriff auf den Schlüsselbund verweigert. Versuche es erneut und wähle im Dialog „Immer erlauben“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The stored credentials cannot be read: macOS denied this version of QuartzControl access to the Keychain. Quit QuartzControl, start it again and choose “Always Allow” in the dialog. The credentials will then be back."
+            "value" : "The stored credentials could not be read: macOS denied QuartzHub access to the Keychain. Try again and choose “Always Allow” in the dialog."
           }
         }
       }

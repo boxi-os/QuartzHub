@@ -5,7 +5,8 @@ import Foundation
 /// only list there is; the `quartz-themes` GitHub organisation adds stars and topics (sparse), and
 /// jsDelivr the details of a theme not yet installed (an installed one answers from its theme.json).
 ///
-/// Not yet: the GitHub token from the access store (point 8), which only raises the rate limit.
+/// The GitHub token (`Connections.rateLimitToken`) only raises the rate limit; without one, or with
+/// one that cannot be read, the listing is anonymous.
 public actor ThemeMarketplace {
   public struct Listing: Equatable, Sendable {
     public var id: String
@@ -61,8 +62,12 @@ public actor ThemeMarketplace {
   private var github: (at: Date, byName: [String: (stars: Int, topics: [String], description: String?)])?
   private var details: [String: (at: Date, detail: ThemeDetail?)] = [:]
 
+  let token: @Sendable () async -> String?
+
   public init(search: @escaping Search, install: @escaping Install, configuration: URLSessionConfiguration = .ephemeral,
-              timeout: Duration = .seconds(20), now: @escaping @Sendable () -> Date = Date.init) {
+              timeout: Duration = .seconds(20), now: @escaping @Sendable () -> Date = Date.init,
+              token: @escaping @Sendable () async -> String? = { nil }) {
+    self.token = token
     let configuration = configuration.copy() as! URLSessionConfiguration
     configuration.urlCache = nil
     configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -90,9 +95,11 @@ public actor ThemeMarketplace {
   /// failure stays.
   func githubMetadata() async -> [String: (stars: Int, topics: [String], description: String?)] {
     var byName: [String: (stars: Int, topics: [String], description: String?)] = [:]
+    let token = await token()
     for page in 1...5 {
       var request = URLRequest(url: URL(string: "https://api.github.com/orgs/quartz-themes/repos?per_page=100&page=\(page)")!)
       request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+      if let token, !token.isEmpty { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
       guard let (data, response) = try? await session.data(for: request), let http = response as? HTTPURLResponse,
             (200..<300).contains(http.statusCode), case .array(let repos)? = try? JSJSON.parse(data), !repos.isEmpty else { break }
       for repo in repos {
