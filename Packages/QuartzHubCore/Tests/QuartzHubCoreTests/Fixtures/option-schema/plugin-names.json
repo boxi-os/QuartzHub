@@ -1,0 +1,181 @@
+[
+ {
+  "source": "@quartz-community/explorer",
+  "name": "@quartz-community/explorer"
+ },
+ {
+  "source": "explorer",
+  "name": "explorer"
+ },
+ {
+  "source": "a/b",
+  "name": "a/b"
+ },
+ {
+  "source": "@scope/x/",
+  "name": "@scope/x/"
+ },
+ {
+  "source": "",
+  "name": ""
+ },
+ {
+  "source": "-x",
+  "name": "-x"
+ },
+ {
+  "source": "github:boxi-os/quartz-forms",
+  "name": "quartz-forms"
+ },
+ {
+  "source": "github:a/b#main",
+  "name": "b"
+ },
+ {
+  "source": "github:a/b/",
+  "name": ""
+ },
+ {
+  "source": "github:",
+  "name": ""
+ },
+ {
+  "source": "github:a/b/c#x#y",
+  "name": "c"
+ },
+ {
+  "source": "git+https://github.com/a/b.git",
+  "name": "b"
+ },
+ {
+  "source": "git+https://github.com/a/b.git#v1",
+  "name": "b"
+ },
+ {
+  "source": "git+ssh://git@github.com:a/b",
+  "name": "b"
+ },
+ {
+  "source": "https://github.com/a/b",
+  "name": "b"
+ },
+ {
+  "source": "https://github.com/a/b.git/",
+  "name": "https://github.com/a/b.git/"
+ },
+ {
+  "source": "https://x",
+  "name": "x"
+ },
+ {
+  "source": "https://",
+  "name": "https://"
+ },
+ {
+  "source": "https://h/a.b.git",
+  "name": "a.b"
+ },
+ {
+  "source": "https://h/a/git+b",
+  "name": "b"
+ },
+ {
+  "source": "https://h/b\n",
+  "name": "b\n"
+ },
+ {
+  "source": "git+https://h/b.gitx",
+  "name": "b.gitx"
+ },
+ {
+  "source": "/abs/path/frame-a",
+  "name": "frame-a"
+ },
+ {
+  "source": "/abs/path/frame-a/",
+  "name": "frame-a"
+ },
+ {
+  "source": "/abs/path/frame-a//",
+  "name": "frame-a"
+ },
+ {
+  "source": "/",
+  "name": ""
+ },
+ {
+  "source": "./rel",
+  "name": "rel"
+ },
+ {
+  "source": "../up/x",
+  "name": "x"
+ },
+ {
+  "source": "..",
+  "name": ".."
+ },
+ {
+  "source": ".",
+  "name": "."
+ },
+ {
+  "source": "C:\\Users\\x\\plugins\\baz",
+  "name": "C:\\Users\\x\\plugins\\baz"
+ },
+ {
+  "source": "c:/x/y",
+  "name": "y"
+ },
+ {
+  "source": "C:x",
+  "name": "C:x"
+ },
+ {
+  "source": "Ä/ü",
+  "name": "Ä/ü"
+ },
+ {
+  "source": "name with space",
+  "name": "name with space"
+ },
+ {
+  "source": {
+   "repo": "github:a/b"
+  },
+  "name": "b"
+ },
+ {
+  "source": {
+   "repo": "github:a/b",
+   "name": "own"
+  },
+  "name": "own"
+ },
+ {
+  "source": {
+   "repo": "/abs/frame",
+   "name": ""
+  },
+  "name": "frame"
+ },
+ {
+  "source": {
+   "repo": "https://h/r.git"
+  },
+  "name": "r"
+ },
+ {
+  "source": {
+   "repo": "@scope/pkg"
+  },
+  "name": "@scope/pkg"
+ },
+ {
+  "source": {
+   "repo": "../x",
+   "name": "../../y"
+  },
+  "name": "../../y"
+ }
+]

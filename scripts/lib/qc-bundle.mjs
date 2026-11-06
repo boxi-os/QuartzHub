@@ -23,6 +23,8 @@ export async function loadQuartzControl(control, entry, stubs = commonStubs) {
       entryPoints: [join(control, entry)],
       // CommonJS: yaml's ESM build requires "process" dynamically, which an ESM bundle refuses.
       bundle: true, platform: 'node', format: 'cjs', outfile, logLevel: 'warning', absWorkingDir: control,
+      // QuartzControl's own alias (electron.vite.config.ts), for services that import from shared/.
+      alias: { '@shared': join(control, 'shared') },
       plugins: [{
         name: 'stand-ins',
         setup(b) {
