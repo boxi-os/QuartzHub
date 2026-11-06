@@ -55,7 +55,7 @@ public struct GitStatus: Sendable, Equatable {
   /// answered (QuartzControl's forty-sixth review). Generous: a large content folder takes seconds.
   public static let timeout: Duration = .seconds(30)
 
-  public static func read(project: URL, environment: ToolEnvironment, timeout: Duration = timeout) async -> GitStatus {
+  public static func read(project: String, environment: ToolEnvironment, timeout: Duration = timeout) async -> GitStatus {
     // The sentence matched here is translated by a German git; only the messages change, not the
     // porcelain.
     let command = environment.command("git", ["status", "--porcelain=v2", "--branch", "-z"], in: project, timeout: timeout)
@@ -166,7 +166,7 @@ public struct GitStatus: Sendable, Equatable {
 
   /// `--git-path`, not `<project>/.git/<name>`: in a linked worktree the git directory is not
   /// `.git` (the Pages deploy makes one).
-  static func inProgress(_ project: URL, _ environment: ToolEnvironment) async -> Operation? {
+  static func inProgress(_ project: String, _ environment: ToolEnvironment) async -> Operation? {
     let markers: [(Operation, [String])] = [
       (.merge, ["MERGE_HEAD"]), (.rebase, ["rebase-merge", "rebase-apply"]), (.cherryPick, ["CHERRY_PICK_HEAD"]), (.revert, ["REVERT_HEAD"])
     ]
@@ -176,14 +176,14 @@ public struct GitStatus: Sendable, Equatable {
         guard result.success else { continue }
         let path = JS.trim(result.stdout)
         if path.isEmpty { continue }
-        if Posix.exists(path.hasPrefix("/") ? path : FramePaths.resolve(project.path + "/" + path)) { return operation }
+        if Posix.exists(path.hasPrefix("/") ? path : FramePaths.resolve(project + "/" + path)) { return operation }
       }
     }
     return nil
   }
 
   /// NUL-separated, so no subject can contain the separator.
-  static func lastCommit(_ project: URL, _ environment: ToolEnvironment) async -> Commit? {
+  static func lastCommit(_ project: String, _ environment: ToolEnvironment) async -> Commit? {
     let result = await ProcessRunner.run(environment.command("git", ["log", "-1", "--format=%H%x00%h%x00%an%x00%aI%x00%s"], in: project))
     guard result.success else { return nil }
     let fields = result.stdout.components(separatedBy: "\0")

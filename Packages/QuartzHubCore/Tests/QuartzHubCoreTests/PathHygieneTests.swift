@@ -43,15 +43,9 @@ enum TestFolder {
   static let pending: Set<String> = [
     "QuartzHubCore/Checks/I18nCheck.swift",
     "QuartzHubCore/Checks/OptionSchemaCheck.swift",
-    "QuartzHubCore/Git/GitAuth.swift",
-    "QuartzHubCore/Git/GitStatus.swift",
-    "QuartzHubCore/Git/Sync.swift",
     "QuartzHubCore/L10n/StringCatalog.swift",
     "QuartzHubCore/Migration/Coexistence.swift",
     "QuartzHubCore/Storage/URLBridges.swift",
-    "QuartzHubCore/Updates/CoreUpdate+Abort.swift",
-    "QuartzHubCore/Updates/CoreUpdate+Note.swift",
-    "QuartzHubCore/Updates/CoreUpdate.swift",
     "qh-check/InlineSvgRun.swift",
     "qh-check/main.swift"
   ]

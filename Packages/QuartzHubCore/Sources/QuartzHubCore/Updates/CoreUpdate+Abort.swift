@@ -2,14 +2,14 @@ import Foundation
 
 /// Cancelling a merge the core update left standing, and the sentences for git's refusals.
 extension CoreUpdate {
-  public func abort(project: URL) async throws -> AbortResult {
+  public func abort(project: String) async throws -> AbortResult {
     let busy = L10n.t("main.updateAlreadyRunning")
     return try await whileHolding(project, busy: { AbortResult(success: false, output: busy, sentences: [busy]) }) {
       try await ContentFolder.withSymlinkParked(project: project) { await self.abortParked(project) }
     }
   }
 
-  func abortParked(_ project: URL) async -> AbortResult {
+  func abortParked(_ project: String) async -> AbortResult {
     let losing = await stagedOutsideMerge(project)
     let uncheckedAfter = losing.unchecked ? [L10n.t("main.updateAbortStagedUnchecked")] : []
     let uncheckedBlocked = losing.unchecked ? [L10n.t("main.updateAbortStagedUncheckedBlocked")] : []
@@ -66,7 +66,7 @@ extension CoreUpdate {
 
   /// What `merge --abort` (`reset --merge`) takes away: a file staged that is not the merge's, or
   /// the merge's with something staged on top. `unchecked`: a file whose question had no answer.
-  func stagedOutsideMerge(_ project: URL) async -> (files: [String], onTop: [String], unchecked: Bool) {
+  func stagedOutsideMerge(_ project: String) async -> (files: [String], onTop: [String], unchecked: Bool) {
     let staged = await diffNames(project, "--cached", "--no-renames", "HEAD")
     if staged.isEmpty { return ([], [], false) }
     let conflicted = Set(await diffNames(project, "--diff-filter=U"))
@@ -80,7 +80,7 @@ extension CoreUpdate {
   static let oidPattern = #"\A[0-9a-f]{40}(?:[0-9a-f]{24})?\z"#
 
   /// Mode and object of each path, from `ls-files -s -z` or `ls-tree -z`.
-  func entries(_ project: URL, _ arguments: [String], _ paths: [String], pick: ([String]) -> String) async -> [String: String]? {
+  func entries(_ project: String, _ arguments: [String], _ paths: [String], pick: ([String]) -> String) async -> [String: String]? {
     let result = await git(project, arguments + ["--"] + paths)
     guard result.success else { return nil }
     var map: [String: String] = [:]
@@ -91,7 +91,7 @@ extension CoreUpdate {
     return map
   }
 
-  func stagedOnTopOfMerge(_ project: URL, _ files: [String]) async -> (onTop: [String], unchecked: [String]) {
+  func stagedOnTopOfMerge(_ project: String, _ files: [String]) async -> (onTop: [String], unchecked: [String]) {
     if files.isEmpty { return ([], []) }
     func field(_ fields: [String], _ i: Int) -> String { i < fields.count ? fields[i] : "undefined" }
     let index = await entries(project, ["ls-files", "-s", "-z"], files) { "\(field($0, 0)) \(field($0, 1))" }
@@ -110,7 +110,7 @@ extension CoreUpdate {
 
   /// Without `merge-tree --write-tree`: each file merged by hand with `merge-file` and compared
   /// with what is staged; a file that cannot be asked stays unchecked.
-  func plainThreeWayMatches(_ project: URL, _ files: [String], _ index: [String: String]?) async -> [String] {
+  func plainThreeWayMatches(_ project: String, _ files: [String], _ index: [String: String]?) async -> [String] {
     guard let index else { return files }
     func oid(_ text: String) -> String? { JSText.split(text, "\n").map(JS.trim).first { JSText.test($0, Self.oidPattern) } }
     let base = await git(project, ["merge-base", "HEAD", "MERGE_HEAD"])
@@ -123,9 +123,9 @@ extension CoreUpdate {
     guard let ours = await trees("HEAD"), let theirs = await trees("MERGE_HEAD"), let ancestors = await trees(baseRev) else { return files }
     var template = Array("\(NSTemporaryDirectory())quartzhub-merge-XXXXXX".utf8CString)
     guard let made = mkdtemp(&template) else { return files }
-    let dir = URL(fileURLWithPath: String(cString: made))
-    defer { try? FileManager.default.removeItem(at: dir) }
-    let env = ["GIT_DIR": project.appendingPathComponent(".git").path]
+    let dir = String(cString: made)
+    defer { try? FileManager.default.removeItem(atPath: dir) }
+    let env = ["GIT_DIR": "\(project)/.git"]
     var unchecked: [String] = []
     for file in files {
       let sides = [ours[file], ancestors[file], theirs[file]]
@@ -153,17 +153,17 @@ extension CoreUpdate {
   }
 
   /// What git refuses the abort over: staged, changed again since, not unmerged, not declared.
-  func editedSinceMergeStopped(_ project: URL) async -> [String] {
+  func editedSinceMergeStopped(_ project: String) async -> [String] {
     let unmerged = Set(await diffNames(project, "--diff-filter=U"))
     let staged = Set(await diffNames(project, "--cached"))
     let declared = Set(await intentToAdd(project))
     return (await diffNames(project, "--diff-filter=d")).filter { staged.contains($0) && !unmerged.contains($0) && !declared.contains($0) }
   }
 
-  func intentToAdd(_ project: URL) async -> [String] { await diffNames(project, "--diff-filter=A") }
+  func intentToAdd(_ project: String) async -> [String] { await diffNames(project, "--diff-filter=A") }
 
   /// A file HEAD has, taken out of the index and still in the folder: the reset would write over it.
-  func untrackedInTheWay(_ project: URL) async -> [String] {
+  func untrackedInTheWay(_ project: String) async -> [String] {
     let gone = await diffNames(project, "--cached", "--no-renames", "--diff-filter=D", "HEAD")
     if gone.isEmpty { return [] }
     let result = await git(project, ["ls-files", "--others", "-z", "--"] + gone)

@@ -18,8 +18,8 @@ final class GitGolden: @unchecked Sendable {
   let token = Mutex<String?>(nil)
 
   init() throws {
-    scratch = try HostPathTests.Scratch()
-    work = TemplatePackageTests.realpath(scratch.url.path)
+    scratch = try HostPathTests.Scratch(umlaut: true)
+    work = TemplatePackageTests.realpath(scratch.path)
     try SnapshotStoreTests.Harness.write("\(work)/gitconfig", "")
     try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(Self.file["npx"]).replacingOccurrences(of: "@W@", with: work, options: .literal))
     chmod("\(work)/bin/npx", 0o755)
@@ -31,7 +31,8 @@ final class GitGolden: @unchecked Sendable {
   }
 
   func path(_ relative: String) -> String { relative.isEmpty ? work : "\(work)/\(relative)" }
-  func url(_ relative: String) -> URL { URL(fileURLWithPath: path(relative)) }
+  /// The project as the services take it: a string with the bytes of the disk.
+  func url(_ relative: String) -> String { path(relative) }
   func sub(_ text: String) -> String { text.replacingOccurrences(of: "@W@", with: work, options: .literal) }
 
   func act(_ action: JSONValue) async throws {
@@ -51,7 +52,7 @@ final class GitGolden: @unchecked Sendable {
       try Posix.symlink(sub(action["target"]!.stringValue!), path!)
     case "git":
       let when = action["when"]?.stringValue ?? "2026-11-01T10:00:00+01:00"
-      let command = environment.command("git", action["args"]!.arrayValue!.map { sub($0.stringValue!) }, in: URL(fileURLWithPath: path!))
+      let command = environment.command("git", action["args"]!.arrayValue!.map { sub($0.stringValue!) }, in: path!)
         .adding(["GIT_AUTHOR_NAME": "Jörg Prüfer", "GIT_AUTHOR_EMAIL": "test@example.com", "GIT_COMMITTER_NAME": "Jörg Prüfer",
                  "GIT_COMMITTER_EMAIL": "test@example.com", "GIT_AUTHOR_DATE": when, "GIT_COMMITTER_DATE": when])
       let result = await ProcessRunner.run(command)

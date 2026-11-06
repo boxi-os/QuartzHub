@@ -133,13 +133,13 @@ import Testing
       let project = URL(fileURLWithPath: harness.path(dir))
       var result: JSONValue = .null
       switch step["op"]!.stringValue! {
-      case "update": result = Self.json(try await service.run(project: project))
+      case "update": result = Self.json(try await service.run(project: project.path))
       case "abort":
-        let answer = try await service.abort(project: project)
+        let answer = try await service.abort(project: project.path)
         result = .object(JSONObject([("success", .bool(answer.success)), ("output", .string(answer.output)),
                                      ("sentences", .array(answer.sentences.map(JSONValue.string)))]))
-      case "status": result = Self.json(await service.status(project: project, resolveInstalled: step["args"]?["resolveInstalled"] == .bool(true)))
-      case "noteSucceeded": try service.noteInstallSucceeded(project: project)
+      case "status": result = Self.json(await service.status(project: project.path, resolveInstalled: step["args"]?["resolveInstalled"] == .bool(true)))
+      case "noteSucceeded": try service.noteInstallSucceeded(project: project.path)
       case "none": break
       default: Issue.record("unknown op")
       }
@@ -194,15 +194,15 @@ import Testing
     let project = URL(fileURLWithPath: harness.path("p"))
     try Posix.mkdirs(project.path)
     _ = await harness.git(["init", "-q"], project.path)
-    let first = Task { try await service.run(project: project) }
+    let first = Task { try await service.run(project: project.path) }
     while !flags.started.withLock({ $0 }) { try await Task.sleep(for: .milliseconds(10)) }
-    let second = try await service.run(project: project)
-    let abort = try await service.abort(project: project)
+    let second = try await service.run(project: project.path)
+    let abort = try await service.abort(project: project.path)
     flags.release.withLock { $0 = true }
     _ = try await first.value
     #expect(second == CoreUpdate.Result(success: false, output: L10n.t("main.updateAlreadyRunning")))
     #expect(abort.sentences == [L10n.t("main.updateAlreadyRunning")])
-    #expect(try await service.abort(project: project).sentences != [L10n.t("main.updateAlreadyRunning")])
+    #expect(try await service.abort(project: project.path).sentences != [L10n.t("main.updateAlreadyRunning")])
   }
 
   @Test func deadlines() {

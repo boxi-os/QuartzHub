@@ -40,7 +40,7 @@ public enum Sync {
     public init() {}
   }
 
-  public static func run(project: URL, direction: Direction = .both, options: Options = Options(), environment: ToolEnvironment,
+  public static func run(project: String, direction: Direction = .both, options: Options = Options(), environment: ToolEnvironment,
                          token: GitAuth.Token, templateRepository: String = ProjectCreator.templateRepository,
                          deadlines: Deadlines = Deadlines()) async -> Result {
     var arguments = ["quartz", "sync"]
@@ -68,7 +68,7 @@ public enum Sync {
   }
 
   /// One `rev-parse` for every project that is not shallow.
-  static func completeHistory(_ project: URL, _ environment: ToolEnvironment, _ templateRepository: String,
+  static func completeHistory(_ project: String, _ environment: ToolEnvironment, _ templateRepository: String,
                               _ timeout: Duration) async -> String {
     let shallow = await ProcessRunner.run(environment.command("git", ["rev-parse", "--is-shallow-repository"], in: project))
     guard shallow.success, JS.trim(shallow.stdout) == "true" else { return "" }

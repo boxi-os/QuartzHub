@@ -59,7 +59,7 @@ import Testing
                                                          source: .inherited, added: []),
                                       nodeMode: .system, runtime: .repository, git: nil, bundledGitFailure: nil)
     let started = ContinuousClock.now
-    let status = await GitStatus.read(project: scratch.url, environment: environment, timeout: .milliseconds(300))
+    let status = await GitStatus.read(project: scratch.url.path, environment: environment, timeout: .milliseconds(300))
     #expect(ContinuousClock.now - started < .seconds(10))
     #expect(status.isRepo == false)
     #expect(status.readError == L10n.t("main.commandTimeout", ["ms": "300", "command": "git status"]))
@@ -83,7 +83,7 @@ import Testing
       else echo 'fatal: Kein Git-Repository (oder irgendeines der Elternverzeichnisse): .git' >&2; fi
       exit 128
       """)
-    let status = await GitStatus.read(project: scratch.url, environment: environment)
+    let status = await GitStatus.read(project: scratch.url.path, environment: environment)
     #expect(status == GitStatus())
   }
 
@@ -95,7 +95,7 @@ import Testing
         *) exit 1 ;;
       esac
       """)
-    let status = await GitStatus.read(project: scratch.url, environment: environment)
+    let status = await GitStatus.read(project: scratch.url.path, environment: environment)
     #expect(status.isRepo)
     #expect(status.branch == "main", "\(status)")
     #expect(status.changes == [GitStatus.Change(path: "a.md", staged: false, unstaged: true, status: .untracked)])

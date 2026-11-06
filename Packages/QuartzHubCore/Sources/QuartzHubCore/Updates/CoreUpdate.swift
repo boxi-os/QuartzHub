@@ -74,8 +74,8 @@ public final class CoreUpdate: Sendable {
   // MARK: git
 
   @discardableResult
-  func git(_ project: URL?, _ arguments: [String], env: [String: String] = [:], timeout: Duration? = nil,
-           in directory: URL? = nil) async -> CommandResult {
+  func git(_ project: String?, _ arguments: [String], env: [String: String] = [:], timeout: Duration? = nil,
+           in directory: String? = nil) async -> CommandResult {
     let command = environment.command("git", arguments, in: directory ?? project, timeout: timeout).adding(env)
     var result = await ProcessRunner.run(command)
     // What is shown carries the deadline's sentence, as QuartzControl's runCommand put it there.
@@ -90,8 +90,8 @@ public final class CoreUpdate: Sendable {
 
   // MARK: The lock
 
-  func whileHolding<T>(_ project: URL, busy: () -> T, _ body: () async throws -> T) async rethrows -> T {
-    let key = ContentFolder.realPath(project.path) ?? FramePaths.resolve(project.path)
+  func whileHolding<T>(_ project: String, busy: () -> T, _ body: () async throws -> T) async rethrows -> T {
+    let key = ContentFolder.realPath(project) ?? FramePaths.resolve(project)
     guard running.withLock({ $0.insert(key).inserted }) else { return busy() }
     defer { _ = running.withLock { $0.remove(key) } }
     return try await body()
@@ -100,7 +100,7 @@ public final class CoreUpdate: Sendable {
   // MARK: Status
 
   /// Asked first: "an earlier run still owes something" is true whatever the network says.
-  public func status(project: URL, resolveInstalled: Bool = false) async -> Status {
+  public func status(project: String, resolveInstalled: Bool = false) async -> Status {
     let outstanding = await outstandingInstall(project)
     let head = await git(project, ["rev-parse", "HEAD"])
     let latest = await lsRemoteHead(templateRepository) ?? ""
@@ -133,7 +133,7 @@ public final class CoreUpdate: Sendable {
   func lsRemoteHead(_ url: String) async -> String? { await lsRemote(url, "HEAD").first?.commit }
 
   /// Contained in the history, not equal to HEAD: after the first own commit HEAD is a merge.
-  func historyContains(_ project: URL, _ commit: String) async -> Bool {
+  func historyContains(_ project: String, _ commit: String) async -> Bool {
     guard await git(project, ["cat-file", "-e", "\(commit)^{commit}"]).success else { return false }
     return await git(project, ["merge-base", "--is-ancestor", commit, "HEAD"]).success
   }
@@ -141,7 +141,7 @@ public final class CoreUpdate: Sendable {
   /// The newest upstream commit the project contains: the merge base with upstream's HEAD, which
   /// needs that commit as a local object. Fetched only when the caller asks (the overview reads
   /// this status and must cost nothing to open), into FETCH_HEAD and no ref.
-  func installedUpstream(_ project: URL, _ latest: String, allowFetch: Bool) async -> (commit: String, missing: Int?) {
+  func installedUpstream(_ project: String, _ latest: String, allowFetch: Bool) async -> (commit: String, missing: Int?) {
     var known = await git(project, ["cat-file", "-e", "\(latest)^{commit}"]).success
     if !known && allowFetch {
       await git(project, ["fetch", "--no-tags", "--quiet", templateRepository, "HEAD"], timeout: deadlines.fetch)
@@ -163,7 +163,7 @@ public final class CoreUpdate: Sendable {
   /// What an earlier run left owing, in the names the user reads; `unfinished` when its npm did
   /// not get through, which no hand-written line answers. The note is never ended here: a read
   /// path does not write into `.quartz-gui/`.
-  func outstandingInstall(_ project: URL) async -> (packages: [String], unfinished: Bool) {
+  func outstandingInstall(_ project: String) async -> (packages: [String], unfinished: Bool) {
     let pending = readPendingInstall(project)
     let unfinished = !pending.head.isEmpty && pending.installFailed
     if pending.head.isEmpty || pending.reinstall.isEmpty { return ([], unfinished) }
@@ -173,7 +173,7 @@ public final class CoreUpdate: Sendable {
 
   // MARK: The run
 
-  public func run(project: URL) async throws -> Result {
+  public func run(project: String) async throws -> Result {
     try await whileHolding(project, busy: { Result(success: false, output: L10n.t("main.updateAlreadyRunning")) }) {
       let before = await stashEntry(project) != nil ? await stashRef(project) : nil
       let result = try await runFrom(project)
@@ -186,11 +186,11 @@ public final class CoreUpdate: Sendable {
     }
   }
 
-  func runFrom(_ project: URL) async throws -> Result {
+  func runFrom(_ project: String) async throws -> Result {
     if await mergeInProgress(project) {
       return Result(success: false, output: L10n.t("main.updateMergeUnfinished"), conflicts: await conflictedFiles(project))
     }
-    let snapshotId = try await snapshot(project.path, "coreUpdate", "")
+    let snapshotId = try await snapshot(project, "coreUpdate", "")
 
     if !(await git(project, ["remote", "get-url", "quartz-upstream"])).success {
       let added = await git(project, ["remote", "add", "quartz-upstream", templateRepository])
@@ -207,7 +207,7 @@ public final class CoreUpdate: Sendable {
   }
 
   // swiftlint:disable:next function_body_length
-  func merge(_ project: URL, mergeCommit: String, snapshotId: String?) async throws -> Result {
+  func merge(_ project: String, mergeCommit: String, snapshotId: String?) async throws -> Result {
     let plan = await planPackageFiles(project)
     let pending = readPendingInstall(project)
     let noteOverruled = await listTakenInHand(project, pending)
@@ -348,19 +348,19 @@ public final class CoreUpdate: Sendable {
     return "\n\n\(L10n.t("main.updatePackagesPending", ["packages": Self.labels(plan.localEdits.reinstall)]))"
   }
 
-  func headSubject(_ project: URL) async -> String {
+  func headSubject(_ project: String) async -> String {
     let subject = await git(project, ["log", "-1", "--format=%s"])
     return subject.success ? trimmedStdout(subject) : ""
   }
 
   /// Whether HEAD stands in a remote-tracking ref: what can be asked without the network. Not
   /// knowing is not permission.
-  func headIsPushed(_ project: URL) async -> Bool {
+  func headIsPushed(_ project: String) async -> Bool {
     let contains = await git(project, ["branch", "-r", "--contains", "HEAD"])
     return !contains.success || !trimmedStdout(contains).isEmpty
   }
 
-  func mergeInProgress(_ project: URL) async -> Bool {
+  func mergeInProgress(_ project: String) async -> Bool {
     await git(project, ["rev-parse", "-q", "--verify", "MERGE_HEAD"]).success
   }
 
@@ -377,7 +377,7 @@ public final class CoreUpdate: Sendable {
   }
 
   /// Worked out before the merge: afterwards the working tree no longer holds "ours".
-  func planPackageFiles(_ project: URL) async -> PackagePlan {
+  func planPackageFiles(_ project: String) async -> PackagePlan {
     let handsOff = PackagePlan(changes: .init(), localEdits: .init(), reproducible: false)
     let mergeBase = await git(project, ["merge-base", "HEAD", "FETCH_HEAD"])
     guard mergeBase.success else { return handsOff }
@@ -392,27 +392,27 @@ public final class CoreUpdate: Sendable {
                        reproducible: changes.unreproducible.isEmpty && localEdits.unreproducible.isEmpty)
   }
 
-  func jsonAt(_ project: URL, _ revision: String, _ file: String) async -> JSONValue? {
+  func jsonAt(_ project: String, _ revision: String, _ file: String) async -> JSONValue? {
     let shown = await git(project, ["show", "\(revision):\(file)"])
     guard shown.success else { return nil }
     return try? JSJSON.parse(Data(shown.stdout.utf8))
   }
 
-  func readPackageJson(_ project: URL) -> PackageJsonDeps.Read {
-    guard let data = try? Data(contentsOf: project.appendingPathComponent("package.json")),
+  func readPackageJson(_ project: String) -> PackageJsonDeps.Read {
+    guard let data = try? Posix.read("\(project)/package.json"),
           let value = try? JSJSON.parse(Data(String(decoding: data, as: UTF8.self).utf8)) else { return .unreadable }
     return .parsed(value)
   }
 
   /// Which of the two files git tracks: `git checkout -- a b` is all or nothing.
-  func trackedNpmOwnedFiles(_ project: URL) async -> [String] {
+  func trackedNpmOwnedFiles(_ project: String) async -> [String] {
     let listed = await git(project, ["ls-files", "--"] + Self.npmOwnedFiles)
     return listed.success ? lines(listed.stdout) : []
   }
 
   /// HEAD, the index and the working tree all different: the stash would carry what the plan
   /// cannot name. Could not look is not "all clear".
-  func stagedApartFromWorkingTree(_ project: URL, _ tracked: [String]) async -> Bool {
+  func stagedApartFromWorkingTree(_ project: String, _ tracked: [String]) async -> Bool {
     let staged = await git(project, ["diff", "--name-only", "--cached", "HEAD", "--"] + tracked)
     let unstaged = await git(project, ["diff", "--name-only", "--"] + tracked)
     guard staged.success, unstaged.success else { return true }
@@ -431,7 +431,7 @@ public final class CoreUpdate: Sendable {
 
   /// Where each name stands in package.json now, across all sections; only ever compared with
   /// itself, before and after npm.
-  func packageLines(_ project: URL, _ entries: [PackageJsonDeps.Addition]) -> [String: String]? {
+  func packageLines(_ project: String, _ entries: [PackageJsonDeps.Addition]) -> [String: String]? {
     guard case .parsed(let pkg) = readPackageJson(project) else { return nil }
     var map: [String: String] = [:]
     for entry in entries {
@@ -442,21 +442,21 @@ public final class CoreUpdate: Sendable {
     return map
   }
 
-  func diffNames(_ project: URL, _ arguments: String...) async -> [String] {
+  func diffNames(_ project: String, _ arguments: String...) async -> [String] {
     await diffNames(project, arguments)
   }
 
-  func diffNames(_ project: URL, _ arguments: [String]) async -> [String] {
+  func diffNames(_ project: String, _ arguments: [String]) async -> [String] {
     let result = await git(project, ["diff", "--name-only", "-z"] + arguments)
     return result.success ? records(result.stdout) : []
   }
 
-  func conflictedFiles(_ project: URL) async -> [String] { await diffNames(project, "--diff-filter=U") }
+  func conflictedFiles(_ project: String) async -> [String] { await diffNames(project, "--diff-filter=U") }
 
   // MARK: Plugins' snapshot
 
   /// `noteInstallSucceeded`: the project's own `npm install` got through after a failed run.
-  public func noteInstallSucceeded(project: URL) throws {
+  public func noteInstallSucceeded(project: String) throws {
     let pending = readPendingInstall(project)
     guard !pending.head.isEmpty, pending.installFailed else { return }
     try markInstallPending(project, head: pending.head, reinstall: pending.reinstall, filesAtHead: pending.filesAtHead,

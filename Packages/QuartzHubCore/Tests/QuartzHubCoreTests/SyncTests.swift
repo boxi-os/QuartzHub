@@ -52,7 +52,7 @@ import Testing
     let golden = try GitGolden()
     try SnapshotStoreTests.Harness.write(golden.path("bin/npx"), "#!/bin/sh\nprintf '%s' \"$GIT_ASKPASS\" > '\(golden.path("askpass-path"))'\nsleep 30\n")
     let project = golden.url("p")
-    try Posix.mkdirs(project.path)
+    try Posix.mkdirs(project)
     _ = await ProcessRunner.run(golden.environment.command("git", ["init", "-q"], in: project))
     _ = await ProcessRunner.run(golden.environment.command("git", ["remote", "add", "origin", "https://github.com/o/r"], in: project))
     var deadlines = Sync.Deadlines()
@@ -116,17 +116,17 @@ import Testing
     try #require(JS.trim(await git(["remote", "get-url", "origin"]).stdout) == bare.path)
 
     try SnapshotStoreTests.Harness.write("\(copy.path)/content/qh-sync-test.md", "# Sync\n")
-    let pushed = await Sync.run(project: copy, direction: .push, options: .init(commit: true, message: "  QuartzHub sync test  "),
+    let pushed = await Sync.run(project: copy.path, direction: .push, options: .init(commit: true, message: "  QuartzHub sync test  "),
                                 environment: environment, token: { nil })
     #expect(pushed.success, "\(pushed.output)")
     #expect(JS.trim(await git(["log", "-1", "--format=%s", "v5"], in: bare).stdout) == "QuartzHub sync test")
     #expect(await git(["cat-file", "-e", "v5:content/qh-sync-test.md"], in: bare).success)
 
-    let both = await Sync.run(project: copy, direction: .both, options: .init(commit: false), environment: environment, token: { nil })
+    let both = await Sync.run(project: copy.path, direction: .both, options: .init(commit: false), environment: environment, token: { nil })
     #expect(both.success, "\(both.output)")
 
     try #require(await git(["remote", "set-url", "origin", "\(work)/nothing-here"]).success)
-    let pulled = await Sync.run(project: copy, direction: .pull, options: .init(commit: false), environment: environment, token: { nil })
+    let pulled = await Sync.run(project: copy.path, direction: .pull, options: .init(commit: false), environment: environment, token: { nil })
     #expect(!pulled.success)
     #expect(pulled.output.contains("An error occurred while pulling"), "\(pulled.output)")
     #expect(Posix.exists("\(copy.path)/content/qh-sync-test.md"))

@@ -33,7 +33,7 @@ public struct GitAuth: Sendable {
 
   /// Throws only when the helper cannot be written; QuartzControl's call failed then as well,
   /// rather than pushing without the token.
-  public static func forOrigin(project: URL, environment: ToolEnvironment, token: Token) async throws -> GitAuth {
+  public static func forOrigin(project: String, environment: ToolEnvironment, token: Token) async throws -> GitAuth {
     let origin = await ProcessRunner.run(environment.command("git", ["remote", "get-url", "origin"], in: project))
     guard origin.success, GitHubRemote.parse(origin.stdout) != nil else { return .none }
     guard JSText.test(JS.trim(origin.stdout), #"\Ahttps?://"#) else { return .none }

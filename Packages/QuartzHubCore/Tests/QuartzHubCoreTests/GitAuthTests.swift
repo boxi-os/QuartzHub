@@ -74,14 +74,14 @@ import Testing
   @Test func theTokenIsOnlyInTheEnvironment() async throws {
     let golden = try GitGolden()
     let project = golden.url("p")
-    try Posix.mkdirs(project.path)
+    try Posix.mkdirs(project)
     _ = await ProcessRunner.run(golden.environment.command("git", ["init", "-q"], in: project))
     _ = await ProcessRunner.run(golden.environment.command("git", ["remote", "add", "origin", "https://github.com/o/r.git"], in: project))
     let auth = try await GitAuth.forOrigin(project: project, environment: golden.environment, token: { "ghp_needle" })
     defer { auth.cleanup() }
     let script = try #require(auth.variables["GIT_ASKPASS"])
     #expect(!String(decoding: try Posix.read(script), as: UTF8.self).contains("ghp_needle"))
-    #expect(!String(decoding: try Posix.read("\(project.path)/.git/config"), as: UTF8.self).contains("ghp_needle"))
+    #expect(!String(decoding: try Posix.read("\(project)/.git/config"), as: UTF8.self).contains("ghp_needle"))
     #expect(script.hasPrefix(NSTemporaryDirectory()))
     var info = stat()
     stat((script as NSString).deletingLastPathComponent, &info)
@@ -92,7 +92,7 @@ import Testing
   @Test func theTokenIsNotAskedForOtherHosts() async throws {
     let golden = try GitGolden()
     let project = golden.url("p")
-    try Posix.mkdirs(project.path)
+    try Posix.mkdirs(project)
     _ = await ProcessRunner.run(golden.environment.command("git", ["init", "-q"], in: project))
     _ = await ProcessRunner.run(golden.environment.command("git", ["remote", "add", "origin", "https://gitlab.com/o/r.git"], in: project))
     let asked = Mutex(false)

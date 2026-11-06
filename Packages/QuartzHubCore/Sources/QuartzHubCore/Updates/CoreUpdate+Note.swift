@@ -21,10 +21,10 @@ extension CoreUpdate {
 
   static let noteFile = "core-update.json"
 
-  func noteURL(_ project: URL) -> URL { URL(fileURLWithPath: QuartzGuiDirectory(project: project).file(Self.noteFile)) }
+  func noteURL(_ project: String) -> String { QuartzGuiDirectory(project: project).file(Self.noteFile) }
 
   /// Read checked, not cast: it lies in the user's project and becomes `npm install name@range`.
-  func readPendingInstall(_ project: URL) -> PendingInstall {
+  func readPendingInstall(_ project: String) -> PendingInstall {
     let raw = JSONStore.read(noteURL(project), orEmpty: .object)
     var pending = PendingInstall()
     if let head = raw["installPendingFor"]?.stringValue, JSText.test(head, #"\A[0-9a-f]{40}(?:[0-9a-f]{24})?\z"#) {
@@ -45,7 +45,7 @@ extension CoreUpdate {
     return pending
   }
 
-  func markInstallPending(_ project: URL, head: String, reinstall: [PackageJsonDeps.Addition], filesAtHead: Bool,
+  func markInstallPending(_ project: String, head: String, reinstall: [PackageJsonDeps.Addition], filesAtHead: Bool,
                           installFailed: Bool = false, putBack: [String] = []) throws {
     let kept = PackageJsonDeps.unique(putBack).filter { name in reinstall.contains { $0.name == name } }
     try writeNote(project, .object(JSONObject([
@@ -56,12 +56,12 @@ extension CoreUpdate {
     ])))
   }
 
-  func clearInstallPending(_ project: URL) throws {
+  func clearInstallPending(_ project: String) throws {
     try writeNote(project, .object(JSONObject([("installPendingFor", .string("")), ("reinstall", .array([])), ("filesAtHead", .bool(false)),
                                                ("installFailed", .bool(false)), ("putBack", .array([]))])))
   }
 
-  func writeNote(_ project: URL, _ value: JSONValue) throws {
+  func writeNote(_ project: String, _ value: JSONValue) throws {
     let dir = try QuartzGuiDirectory(project: project).create()
     try JSONStore.write(value, to: "\(dir)/\(Self.noteFile)")
   }
@@ -70,7 +70,7 @@ extension CoreUpdate {
   /// since its head whose diff touches a line with one of the names (`-G`, in quotes, because a
   /// bare name hits every line that contains it). The app's own amend and a merge commit show no
   /// diff here; a name its npm wrote back is skipped.
-  func listTakenInHand(_ project: URL, _ pending: PendingInstall) async -> NoteVerdict {
+  func listTakenInHand(_ project: String, _ pending: PendingInstall) async -> NoteVerdict {
     if pending.head.isEmpty || pending.reinstall.isEmpty { return .stands }
     for entry in pending.reinstall where !pending.putBack.contains(entry.name) {
       let needle = "\"\(JSText.replaceAll(entry.name, #"[\\.*+?^${}()|\[\]]"#, template: #"\\$0"#))\""
@@ -83,7 +83,7 @@ extension CoreUpdate {
 
   /// The sentence about a list a run let go, with the reason it measured; only for what is
   /// actually gone from package.json.
-  func droppedNote(_ project: URL, _ verdict: NoteVerdict, _ pending: PendingInstall) async -> String {
+  func droppedNote(_ project: String, _ verdict: NoteVerdict, _ pending: PendingInstall) async -> String {
     if verdict == .stands || pending.reinstall.isEmpty { return "" }
     let gone = PackageJsonDeps.absentFrom(readPackageJson(project), pending.reinstall)
     if gone.isEmpty { return "" }
@@ -102,26 +102,26 @@ extension CoreUpdate {
 
   func stashMessage(_ mergeCommit: String) -> String { "\(Self.stashName) \(mergeCommit)" }
 
-  func stashRef(_ project: URL) async -> String? {
+  func stashRef(_ project: String) async -> String? {
     let ref = await git(project, ["rev-parse", "--verify", "--quiet", "refs/stash"])
     let sha = ref.success ? trimmedStdout(ref) : ""
     return sha.isEmpty ? nil : sha
   }
 
   /// The commit a stash entry was made on: what `git stash pop` merges its diff against.
-  func stashBase(_ project: URL, _ entry: String = "refs/stash") async -> String {
+  func stashBase(_ project: String, _ entry: String = "refs/stash") async -> String {
     let base = await git(project, ["rev-parse", "\(entry)^"])
     return base.success ? trimmedStdout(base) : ""
   }
 
-  func topStashSubject(_ project: URL) async -> String {
+  func topStashSubject(_ project: String) async -> String {
     let subject = await git(project, ["log", "-1", "--format=%s", "refs/stash"])
     return subject.success ? trimmedStdout(subject) : ""
   }
 
   /// Where an entry of the app's stands in `git stash list`, as the `stash@{n}` a command needs;
   /// `from` skips the entry this run wrote itself, always the newest.
-  func stashEntry(_ project: URL, from: Int = 0) async -> String? {
+  func stashEntry(_ project: String, from: Int = 0) async -> String? {
     let list = await git(project, ["stash", "list", "--format=%s"])
     guard list.success else { return nil }
     let lines = JSText.split(list.stdout, "\n")
@@ -131,7 +131,7 @@ extension CoreUpdate {
     return nil
   }
 
-  func holdNpmOwnedFiles(_ project: URL, _ tracked: [String], _ mergeCommit: String) async -> HeldFiles {
+  func holdNpmOwnedFiles(_ project: String, _ tracked: [String], _ mergeCommit: String) async -> HeldFiles {
     let before = await stashRef(project)
     let pushed = await git(project, ["stash", "push", "-m", stashMessage(mergeCommit), "--"] + tracked)
     let after = await stashRef(project)
@@ -141,13 +141,13 @@ extension CoreUpdate {
   }
 
   /// Only the entry this run wrote, and only while it is still the newest.
-  func releaseNpmOwnedFiles(_ project: URL, _ held: HeldFiles) async -> Bool {
+  func releaseNpmOwnedFiles(_ project: String, _ held: HeldFiles) async -> Bool {
     guard case .held(let sha) = held else { return true }
     guard await stashRef(project) == sha else { return false }
     return await git(project, ["stash", "pop", "--index"]).success
   }
 
-  func dropNpmOwnedFiles(_ project: URL, _ held: HeldFiles) async {
+  func dropNpmOwnedFiles(_ project: String, _ held: HeldFiles) async {
     guard case .held(let sha) = held, await stashRef(project) == sha else { return }
     await git(project, ["stash", "drop"])
   }
@@ -160,7 +160,7 @@ extension CoreUpdate {
   }
 
   /// After an abort: the app's entry goes back only when it is the newest and was made on HEAD.
-  func popCoreUpdateStash(_ project: URL) async -> StashPop {
+  func popCoreUpdateStash(_ project: String) async -> StashPop {
     let subject = await topStashSubject(project)
     let head = trimmedStdout(await git(project, ["rev-parse", "HEAD"]))
     let base = await stashBase(project)
@@ -183,7 +183,7 @@ extension CoreUpdate {
     return StashPop(success: true, sentences: [note], restored: restored, git: popped.output)
   }
 
-  func stashTouchesChangedFiles(_ project: URL, _ entry: String) async -> Bool {
+  func stashTouchesChangedFiles(_ project: String, _ entry: String) async -> Bool {
     let shown = await git(project, ["stash", "show", "--name-only", "-z", entry])
     guard shown.success else { return true }
     let changed = Set(await diffNames(project, "HEAD"))
@@ -199,7 +199,7 @@ extension CoreUpdate {
   /// Whether the abort button would carry the app's stash back: first whether it runs at all
   /// (git refuses over any file staged and changed again since), then whether a file of the stash
   /// would be in the way, unstaged and not in conflict.
-  func abortOutcomeForStash(_ project: URL) async -> StashAfterAbort {
+  func abortOutcomeForStash(_ project: String) async -> StashAfterAbort {
     if !(await editedSinceMergeStopped(project)).isEmpty { return .abortRefused }
     let stashed = await git(project, ["stash", "show", "--name-only", "-z", "refs/stash"])
     guard stashed.success else { return .occupied(files: []) }
@@ -211,7 +211,7 @@ extension CoreUpdate {
   }
 
   /// What a run says about an entry of the app's it found before it began.
-  func leftoverStashNote(_ project: URL, before: String?) async -> String {
+  func leftoverStashNote(_ project: String, before: String?) async -> String {
     let mine = await stashRef(project) != before
     guard let entry = await stashEntry(project, from: mine ? 1 : 0) else { return "" }
     let leftover = L10n.t("main.updateStashLeftover", ["entry": entry])
