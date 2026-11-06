@@ -82,9 +82,9 @@ public struct SnapshotStore: Sendable {
   }
 
   /// `npm install` in the project, after a restore that moved package.json or its lockfile.
-  public typealias Npm = @Sendable (_ project: URL) async -> PluginCommands.Result
+  public typealias Npm = @Sendable (_ project: String) async -> PluginCommands.Result
   /// `repointAuthoredFrames`, after a restore that touched the config or the lockfile.
-  public typealias Repoint = @Sendable (_ project: URL) async throws -> Void
+  public typealias Repoint = @Sendable (_ project: String) async throws -> Void
 
   public struct Clock: Sendable {
     public var now: @Sendable () -> Date
@@ -128,7 +128,7 @@ public struct SnapshotStore: Sendable {
   public typealias Take = @Sendable (_ project: String, _ kind: String, _ label: String) async throws -> String?
 
   public var take: Take {
-    { project, kind, label in try await create(project: URL(fileURLWithPath: project), kind: kind, label: label)?.id }
+    { project, kind, label in try await create(project: project, kind: kind, label: label)?.id }
   }
 
   public static func live(environment: ToolEnvironment) -> SnapshotStore {
@@ -142,69 +142,69 @@ public struct SnapshotStore: Sendable {
       repoint: { project in try await ProjectPaths.repointAuthoredFrames(project: project, runtime: environment.runtime) })
   }
 
-  static func store(_ project: URL) -> URL {
-    QuartzGuiDirectory(project: project).url.appendingPathComponent(storeDirectory, isDirectory: true)
+  static func store(_ project: String) -> String {
+    "\(QuartzGuiDirectory(project: project).path)/\(storeDirectory)"
   }
 
   // MARK: - git
 
   /// One operation's view of the store: its own index file, a copy of the store's.
   final class Operation: @unchecked Sendable {
-    let project: URL
-    let store: URL
-    let index: URL
+    let project: String
+    let store: String
+    let index: String
 
-    init(project: URL) {
+    init(project: String) {
       self.project = project
       store = SnapshotStore.store(project)
-      index = store.appendingPathComponent("qh-index-\(UUID().uuidString)")
+      index = "\(store)/qh-index-\(UUID().uuidString)"
     }
   }
 
   @discardableResult
   func git(_ op: Operation, _ arguments: [String], env: [String: String] = [:], input: Data? = nil) async -> CommandResult {
-    var command = environment.command("git", ["--git-dir", op.store.path, "--work-tree", op.project.path] + arguments,
+    var command = environment.command("git", ["--git-dir", op.store, "--work-tree", op.project] + arguments,
                                       in: op.project, input: input)
-    command = command.adding(env.merging(["GIT_INDEX_FILE": op.index.path]) { _, new in new })
+    command = command.adding(env.merging(["GIT_INDEX_FILE": op.index]) { _, new in new })
     return await ProcessRunner.run(command)
   }
 
   /// git in the project's own repository (its HEAD, a reset), never with the store's index.
-  func projectGit(_ project: URL, _ arguments: [String]) async -> (CommandResult, Command) {
+  func projectGit(_ project: String, _ arguments: [String]) async -> (CommandResult, Command) {
     let command = environment.command("git", arguments, in: project)
     return (await ProcessRunner.run(command), command)
   }
 
   /// Runs `body` with an index of its own and puts it back afterwards (see the type).
-  func withIndex<T>(_ project: URL, _ body: (Operation) async throws -> T) async throws -> T {
+  func withIndex<T>(_ project: String, _ body: (Operation) async throws -> T) async throws -> T {
     let op = Operation(project: project)
     let manager = FileManager.default
-    let shared = op.store.appendingPathComponent("index")
+    let shared = "\(op.store)/index"
     Self.removeStaleIndexes(op.store, now: clock.now())
-    if manager.fileExists(atPath: shared.path) { try? manager.copyItem(at: shared, to: op.index) }
+    if manager.fileExists(atPath: shared) { try? Posix.copyFile(shared, op.index) }
     defer {
-      if manager.fileExists(atPath: op.index.path) {
-        let lock = op.store.appendingPathComponent("index.lock").path
+      if manager.fileExists(atPath: op.index) {
+        let lock = "\(op.store)/index.lock"
         let fd = open(lock, O_CREAT | O_EXCL | O_WRONLY, 0o644)
         if fd >= 0 {
           close(fd)
-          rename(op.index.path, shared.path)
+          rename(op.index, shared)
           unlink(lock)
         }
-        try? manager.removeItem(at: op.index)
+        try? manager.removeItem(atPath: op.index)
       }
     }
     return try await body(op)
   }
 
   /// What a run that ended without its `defer` (a crash) left behind, after an hour.
-  static func removeStaleIndexes(_ store: URL, now: Date) {
-    guard let names = try? FileManager.default.contentsOfDirectory(atPath: store.path) else { return }
+  static func removeStaleIndexes(_ store: String, now: Date) {
+    guard let names = try? FileManager.default.contentsOfDirectory(atPath: store) else { return }
     for name in names where name.hasPrefix("qh-index-") {
-      let path = store.appendingPathComponent(name)
-      if let modified = try? FileManager.default.attributesOfItem(atPath: path.path)[.modificationDate] as? Date,
+      let path = "\(store)/\(name)"
+      if let modified = try? FileManager.default.attributesOfItem(atPath: path)[.modificationDate] as? Date,
          now.timeIntervalSince(modified) > 60 * 60 {
-        try? FileManager.default.removeItem(at: path)
+        try? FileManager.default.removeItem(atPath: path)
       }
     }
   }
@@ -218,21 +218,21 @@ public struct SnapshotStore: Sendable {
     return !name.hasPrefix("deploy-manifest-")
   }
 
-  func writeExcludes(_ project: URL, _ settings: Settings) throws {
+  func writeExcludes(_ project: String, _ settings: Settings) throws {
     var lines = Self.baseExcludes
     if !settings.includeContent { lines.append("/content/") }
-    let info = Self.store(project).appendingPathComponent("info", isDirectory: true)
-    try FileManager.default.createDirectory(at: info, withIntermediateDirectories: true)
-    try Data((lines.joined(separator: "\n") + "\n").utf8).write(to: info.appendingPathComponent("exclude"))
+    let info = "\(Self.store(project))/info"
+    try Posix.mkdirs(info)
+    try Posix.write("\(info)/exclude", Data((lines.joined(separator: "\n") + "\n").utf8))
   }
 
   func ensureStore(_ op: Operation) async throws -> Settings {
-    if !FileManager.default.fileExists(atPath: op.store.appendingPathComponent("HEAD").path) {
+    if !FileManager.default.fileExists(atPath: "\(op.store)/HEAD") {
       try QuartzGuiDirectory(project: op.project).create()
-      _ = await ProcessRunner.run(environment.command("git", ["init", "--bare", "--quiet", op.store.path]))
+      _ = await ProcessRunner.run(environment.command("git", ["init", "--bare", "--quiet", op.store]))
       // A bare repository refuses a work tree; everything else about "bare" is what is wanted.
       for (key, value) in [("core.bare", "false"), ("user.name", "QuartzHub"), ("user.email", "snapshots@quartzhub.local")] {
-        _ = await ProcessRunner.run(environment.command("git", ["--git-dir", op.store.path, "config", key, value]))
+        _ = await ProcessRunner.run(environment.command("git", ["--git-dir", op.store, "config", key, value]))
       }
     }
     let settings = settings(project: op.project)
@@ -246,7 +246,7 @@ public struct SnapshotStore: Sendable {
   func stage(_ op: Operation, _ settings: Settings) async throws {
     let added = await git(op, ["add", "-A"])
     guard added.success else { throw Failure(message: "\(L10n.t("main.snapshotStageFailed"))\n\(added.output)") }
-    let names = try FileManager.default.contentsOfDirectory(atPath: QuartzGuiDirectory(project: op.project).url.path)
+    let names = try FileManager.default.contentsOfDirectory(atPath: QuartzGuiDirectory(project: op.project).path)
     let entries = names.filter(Self.isSnapshotWorthy).map { ".quartz-gui/\($0)" }
     if !entries.isEmpty { await git(op, ["add", "-f", "--"] + entries) }
     if !settings.includeContent {
@@ -258,10 +258,10 @@ public struct SnapshotStore: Sendable {
 
   /// A symlinked content folder is never included: git does not follow links, so a snapshot would
   /// hold the link and not one note, and a comparison would report nothing after a note changed.
-  public func settings(project: URL) -> Settings {
+  public func settings(project: String) -> Settings {
     var info = stat()
     let content = ContentFolder.path(project: project)
-    let contentExists = lstat(content.path, &info) == 0
+    let contentExists = lstat(content, &info) == 0
     let contentIsSymlink = contentExists && (info.st_mode & S_IFMT) == S_IFLNK
     var stored: JSONValue?
     if let data = try? Posix.read(QuartzGuiDirectory(project: project).file(Self.settingsFile)),
@@ -279,8 +279,8 @@ public struct SnapshotStore: Sendable {
     return Settings(includeContent: includeContent, contentExists: contentExists, contentIsSymlink: contentIsSymlink)
   }
 
-  public func saveSettings(project: URL, includeContent: Bool) async throws -> Settings {
-    try await Self.lock.run(project.path) {
+  public func saveSettings(project: String, includeContent: Bool) async throws -> Settings {
+    try await Self.lock.run(project) {
       let isLink = settings(project: project).contentIsSymlink
       let dir = try QuartzGuiDirectory(project: project).create()
       // JSON.stringify(…, null, 2), no newline at the end.
@@ -298,8 +298,8 @@ public struct SnapshotStore: Sendable {
     "\(JS.isoString(clock.now()).replacingOccurrences(of: ":", with: "-").replacingOccurrences(of: ".", with: "-"))-\(clock.tail())"
   }
 
-  public func create(project: URL, kind: String, label: String = "") async throws -> Snapshot? {
-    try await Self.lock.run(project.path) {
+  public func create(project: String, kind: String, label: String = "") async throws -> Snapshot? {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in try await createUnlocked(op, kind: kind, label: label) }
     }
   }
@@ -347,12 +347,12 @@ public struct SnapshotStore: Sendable {
   }
 
   /// Newest first. Reads refs only, outside the lock (as in QuartzControl).
-  public func list(project: URL) async -> [Snapshot] {
+  public func list(project: String) async -> [Snapshot] {
     await listUnlocked(Operation(project: project))
   }
 
   func listUnlocked(_ op: Operation) async -> [Snapshot] {
-    guard FileManager.default.fileExists(atPath: op.store.appendingPathComponent("HEAD").path) else { return [] }
+    guard FileManager.default.fileExists(atPath: "\(op.store)/HEAD") else { return [] }
     let format = "%(refname) %(objectname) %(creatordate:iso-strict) %(subject)"
     let result = await git(op, ["for-each-ref", "--format=\(format)", Self.refPrefix])
     guard result.success else { return [] }

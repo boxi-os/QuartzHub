@@ -73,7 +73,7 @@ public struct TemplatePackage: Sendable {
         let result = await ProcessRunner.run(environment.command("git", ["rev-parse", "--short", "HEAD"], in: project, timeout: .seconds(30)))
         return result.success ? JS.trim(result.output) : nil
       },
-      snapshot: { project, kind, label in _ = try await snapshots.create(project: URL(fileURLWithPath: project), kind: kind, label: label) },
+      snapshot: { project, kind, label in _ = try await snapshots.create(project: project, kind: kind, label: label) },
       app: ("QuartzHub", appVersion))
   }
 

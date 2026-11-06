@@ -1,0 +1,10 @@
+/node_modules/
+/public/
+/prof/
+/.quartz/
+/.quartz-cache/
+/.turbo/
+/.git/
+/.quartz-gui/
+/tsconfig.tsbuildinfo
+.DS_Store

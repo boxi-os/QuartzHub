@@ -4,8 +4,8 @@ extension SnapshotStore {
   // MARK: - Comparing
 
   /// Against the project as it is now, which needs the current state in the index first.
-  public func diff(project: URL, id: String) async throws -> [FileChange] {
-    try await Self.lock.run(project.path) {
+  public func diff(project: String, id: String) async throws -> [FileChange] {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in try await diffUnlocked(op, id) }
     }
   }
@@ -38,8 +38,8 @@ extension SnapshotStore {
     a.compare(b, options: [], range: nil, locale: Locale(identifier: "de")) == .orderedAscending
   }
 
-  public func fileDiff(project: URL, id: String, path: String) async throws -> String {
-    try await Self.lock.run(project.path) {
+  public func fileDiff(project: String, id: String, path: String) async throws -> String {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in
         let commit = try await commitFor(op, id)
         try await stage(op, try await ensureStore(op))
@@ -54,8 +54,8 @@ extension SnapshotStore {
   /// these files; without it the whole snapshot (for an imported one, the file it holds), which
   /// also removes what the snapshot does not have. `resetProjectHead` also moves the project's own
   /// branch back to the commit the snapshot recorded.
-  public func restore(project: URL, id: String, paths: [String]? = nil, resetProjectHead: Bool = false) async throws -> PluginCommands.Result {
-    try await Self.lock.run(project.path) {
+  public func restore(project: String, id: String, paths: [String]? = nil, resetProjectHead: Bool = false) async throws -> PluginCommands.Result {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in try await restoreUnlocked(op, id, paths: paths, resetProjectHead: resetProjectHead) }
     }
   }
@@ -106,7 +106,7 @@ extension SnapshotStore {
         guard checkout.success else { return PluginCommands.Result(success: false, output: checkout.output) }
         output.append(checkout.output)
       }
-      for doomed in toDelete { try Self.removeFile(project.appendingPathComponent(doomed)) }
+      for doomed in toDelete { try Self.removeFile("\(project)/\(doomed)") }
       for batch in Self.batches(toDelete) { await git(op, ["rm", "--cached", "--quiet", "--"] + batch) }
       return nil
     }
@@ -135,15 +135,15 @@ extension SnapshotStore {
   }
 
   /// `fs.rm(path, { force: true })`: a missing file is fine, a folder is not.
-  static func removeFile(_ url: URL) throws {
+  static func removeFile(_ url: String) throws {
     var info = stat()
-    guard lstat(url.path, &info) == 0 else { return }
-    if (info.st_mode & S_IFMT) == S_IFDIR { throw NodeFileError(code: EISDIR, syscall: "rm", path: url.path) }
-    if unlink(url.path) != 0, errno != ENOENT { throw NodeFileError(code: errno, syscall: "rm", path: url.path) }
+    guard lstat(url, &info) == 0 else { return }
+    if (info.st_mode & S_IFMT) == S_IFDIR { throw NodeFileError(code: EISDIR, syscall: "rm", path: url) }
+    if unlink(url) != 0, errno != ENOENT { throw NodeFileError(code: errno, syscall: "rm", path: url) }
   }
 
-  public func delete(project: URL, id: String) async throws {
-    try await Self.lock.run(project.path) {
+  public func delete(project: String, id: String) async throws {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in
         await git(op, ["update-ref", "-d", "\(Self.refPrefix)\(id)"])
         // The commit is unreachable now; without a prune its objects stay for good.
@@ -152,11 +152,11 @@ extension SnapshotStore {
     }
   }
 
-  public func export(project: URL, id: String, to target: URL) async throws {
-    try await Self.lock.run(project.path) {
+  public func export(project: String, id: String, to target: String) async throws {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in
         let commit = try await commitFor(op, id)
-        let result = await git(op, ["archive", "--format=zip", "--prefix=\(id)/", "-o", target.path, commit])
+        let result = await git(op, ["archive", "--format=zip", "--prefix=\(id)/", "-o", target, commit])
         guard result.success else { throw Failure(message: result.output) }
       }
     }
@@ -167,29 +167,29 @@ extension SnapshotStore {
   /// The config backups of old (`.quartz-gui/backups/<timestamp>.yaml`) as snapshots of that one
   /// file, oldest first, each with its own date. The rename claims the work before it starts:
   /// only one caller wins it, and a crash after it leaves the files intact under `.migrated`.
-  public func migrateConfigBackups(project: URL) async throws -> Int {
-    try await Self.lock.run(project.path) {
+  public func migrateConfigBackups(project: String) async throws -> Int {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in try await migrateUnlocked(op) }
     }
   }
 
   func migrateUnlocked(_ op: Operation) async throws -> Int {
-    let legacy = QuartzGuiDirectory(project: op.project).url.appendingPathComponent("backups")
-    let claimed = URL(fileURLWithPath: legacy.path + ".migrated")
-    guard rename(legacy.path, claimed.path) == 0 else { return 0 }
+    let legacy = "\(QuartzGuiDirectory(project: op.project).path)/backups"
+    let claimed = legacy + ".migrated"
+    guard rename(legacy, claimed) == 0 else { return 0 }
     _ = try await ensureStore(op)
 
     let pattern = #"^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z\.yaml\z"#
-    let files = (try FileManager.default.contentsOfDirectory(atPath: claimed.path)).filter { JSText.test($0, pattern) }.sorted()
+    let files = (try FileManager.default.contentsOfDirectory(atPath: claimed)).filter { JSText.test($0, pattern) }.sorted()
     var imported = 0
     for file in files {
       let id = String(file.dropLast(".yaml".count))
       let hash = await ProcessRunner.run(environment.command(
-        "git", ["--git-dir", op.store.path, "hash-object", "-w", claimed.appendingPathComponent(file).path], in: op.project))
+        "git", ["--git-dir", op.store, "hash-object", "-w", "\(claimed)/\(file)"], in: op.project))
       let blob = JS.trim(hash.stdout)
       if blob.isEmpty { continue }
       let made = await ProcessRunner.run(environment.command(
-        "git", ["--git-dir", op.store.path, "mktree"], in: op.project, input: Data("100644 blob \(blob)\tquartz.config.yaml\n".utf8)))
+        "git", ["--git-dir", op.store, "mktree"], in: op.project, input: Data("100644 blob \(blob)\tquartz.config.yaml\n".utf8)))
       let tree = JS.trim(made.stdout)
       if tree.isEmpty { continue }
       // The backup's own time, so the list keeps the history it imports.
@@ -215,8 +215,8 @@ extension SnapshotStore {
 
   /// Automatic snapshots thinned to a resolution that falls with age: all of the last day, one per
   /// day for a week, one per week up to eight, then one per month. Manual ones are never touched.
-  public func pruneAutomatic(project: URL) async throws -> Int {
-    try await Self.lock.run(project.path) {
+  public func pruneAutomatic(project: String) async throws -> Int {
+    try await Self.lock.run(project) {
       try await withIndex(project) { op in await pruneUnlocked(op) }
     }
   }

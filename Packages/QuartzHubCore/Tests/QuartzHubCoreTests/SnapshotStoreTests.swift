@@ -30,9 +30,9 @@ import Testing
 
     /// The store's own prune expiry, so its default is what the tests see.
     init() throws {
-      scratch = try HostPathTests.Scratch()
-      work = TemplatePackageTests.realpath(scratch.url.path)
-      try Data().write(to: URL(fileURLWithPath: work).appendingPathComponent("gitconfig"))
+      scratch = try HostPathTests.Scratch(umlaut: true)
+      work = TemplatePackageTests.realpath(scratch.path)
+      try Posix.write("\(work)/gitconfig", Data())
       environment = ToolEnvironment(
         base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_CONFIG_GLOBAL": "\(work)/gitconfig", "GIT_CONFIG_NOSYSTEM": "1"],
         hostPath: HostPath(entries: ["/usr/bin", "/bin"], source: .inherited, added: []), nodeMode: .system,
@@ -45,21 +45,22 @@ import Testing
       store = SnapshotStore(
         environment: environment,
         npm: { [box] project in
-          box.calls.withLock { $0.append(["npm", "install", project.path.replacingOccurrences(of: work, with: "@W@", options: .literal)]) }
+          box.calls.withLock { $0.append(["npm", "install", project.replacingOccurrences(of: work, with: "@W@", options: .literal)]) }
           return PluginCommands.Result(success: true, output: "npm stub")
         },
-        repoint: { [box] project in box.calls.withLock { $0.append(["repoint", project.path.replacingOccurrences(of: work, with: "@W@", options: .literal)]) } },
+        repoint: { [box] project in box.calls.withLock { $0.append(["repoint", project.replacingOccurrences(of: work, with: "@W@", options: .literal)]) } },
         clock: clock)
     }
 
     /// A path as a string: `URL.path` hands a name back decomposed as well.
     func path(_ relative: String) -> String { "\(work)/\(relative)" }
-    func url(_ relative: String) -> URL { URL(fileURLWithPath: path(relative)) }
+    /// The project as the store takes it: a string with the bytes of the disk.
+    func url(_ relative: String) -> String { path(relative) }
     func mask(_ text: String) -> String { text.replacingOccurrences(of: work, with: "@W@", options: .literal) }
 
     @discardableResult
     func git(_ arguments: [String], in dir: String, env: [String: String] = [:]) async throws -> String {
-      let result = await ProcessRunner.run(environment.command("git", arguments, in: URL(fileURLWithPath: dir)).adding(env))
+      let result = await ProcessRunner.run(environment.command("git", arguments, in: dir).adding(env))
       guard result.success else { throw SnapshotStore.Failure(message: "git \(arguments): \(result.output)") }
       return result.stdout
     }
@@ -146,7 +147,7 @@ import Testing
             walk(full, path)
           default:
             let mode = info.st_mode & 0o777
-            let content = mode & 0o400 != 0 ? Self.sha((try? Data(contentsOf: URL(fileURLWithPath: full))) ?? Data()) : "unreadable"
+            let content = mode & 0o400 != 0 ? Self.sha((try? Posix.read(full)) ?? Data()) : "unreadable"
             files.append((path, .string("\(String(mode, radix: 8)) \(content)")))
           }
         }
@@ -221,10 +222,10 @@ import Testing
       case "prune": return .number(Double(try await store.pruneAutomatic(project: project)))
       case "export":
         let target = url("exports/\(string(0)).zip")
-        try FileManager.default.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try Posix.mkdirs(NodePath.dirname(target))
         try await store.export(project: project, id: string(0), to: target)
-        defer { try? FileManager.default.removeItem(at: target) }
-        let files = try ZipArchive.read(contentsOf: target.path)
+        defer { try? FileManager.default.removeItem(atPath: target) }
+        let files = try ZipArchive.read(contentsOf: target)
         return .object(JSONObject(files.names.sorted(by: Self.utf16Order).map { ($0, .string(Self.sha(files[$0]!))) }))
       default:
         Issue.record("unknown op \(op)")
@@ -310,7 +311,7 @@ import Testing
   // MARK: - Both apps on one store
 
   /// A project of a few files with a commit, for the tests below.
-  static func project(_ h: Harness) async throws -> URL {
+  static func project(_ h: Harness) async throws -> String {
     try Harness.write(h.path("p/quartz.config.yaml"), "configuration:\n  pageTitle: Eins\n")
     try Harness.write(h.path("p/content/Über.md"), "Über\n")
     try Harness.write(h.path("p/.gitignore"), ".quartz-gui/\n")
@@ -320,10 +321,10 @@ import Testing
   }
 
   /// QuartzControl's snapshotService.ts as a command (`qc-snapshots.cjs`), in the same environment.
-  static func quartzControl(_ h: Harness, _ op: String, _ project: URL, _ args: [JSONValue] = []) async -> JSONValue {
+  static func quartzControl(_ h: Harness, _ op: String, _ project: String, _ args: [JSONValue] = []) async -> JSONValue {
     let node = "\(RuntimeLocation.repository.nodeBin)/node"
     let script = fixtures.appendingPathComponent("qc-snapshots.cjs").path
-    let result = await ProcessRunner.run(h.environment.command(node, [script, op, project.path, JSJSON.compact(.array(args))]))
+    let result = await ProcessRunner.run(h.environment.command(node, [script, op, project, JSJSON.compact(.array(args))]))
     return (try? JSJSON.parse(Data(result.stdout.utf8))) ?? .object(JSONObject([("error", .string(result.output))]))
   }
 
@@ -400,16 +401,16 @@ import Testing
     let p = try await Self.project(h)
     _ = try await h.store.create(project: p, kind: "manual", label: "eins")
     let store = h.path("p/.quartz-gui/snapshots.git")
-    let index = try Data(contentsOf: URL(fileURLWithPath: "\(store)/index"))
-    try Data("held".utf8).write(to: URL(fileURLWithPath: "\(store)/index.lock"))
+    let index = try Posix.read("\(store)/index")
+    try Posix.write("\(store)/index.lock", Data("held".utf8))
     try Harness.write(h.path("p/neu.md"), "neu\n")
     let second = try await h.store.create(project: p, kind: "manual", label: "zwei")
     #expect(second != nil)
-    #expect(try Data(contentsOf: URL(fileURLWithPath: "\(store)/index")) == index)
+    #expect(try Posix.read("\(store)/index") == index)
     #expect(try String(contentsOfFile: "\(store)/index.lock", encoding: .utf8) == "held")
     try FileManager.default.removeItem(atPath: "\(store)/index.lock")
     _ = try await h.store.create(project: p, kind: "manual", label: "drei")
-    #expect(try Data(contentsOf: URL(fileURLWithPath: "\(store)/index")) != index, "written back once the lock is free")
+    #expect(try Posix.read("\(store)/index") != index, "written back once the lock is free")
     let leftovers = try FileManager.default.contentsOfDirectory(atPath: store).filter { $0.hasPrefix("qh-index-") }
     #expect(leftovers.isEmpty, "\(leftovers)")
   }
@@ -422,7 +423,7 @@ import Testing
     _ = try await h.store.create(project: p, kind: "manual", label: "eins")
     let store = h.path("p/.quartz-gui/snapshots.git")
     for (name, age) in [("qh-index-alt", 2 * 3600.0), ("qh-index-jung", 600.0)] {
-      try Data("x".utf8).write(to: URL(fileURLWithPath: "\(store)/\(name)"))
+      try Posix.write("\(store)/\(name)", Data("x".utf8))
       try FileManager.default.setAttributes([.modificationDate: Date().addingTimeInterval(-age)], ofItemAtPath: "\(store)/\(name)")
     }
     _ = await h.store.list(project: p)
@@ -483,10 +484,10 @@ import Testing
     let h = try Harness()
     h.box.now.withLock { $0 = Date() }
     let p = try await Self.project(h)
-    let id = try await h.store.take(p.path, "pluginChange", "github:a/b")
+    let id = try await h.store.take(p, "pluginChange", "github:a/b")
     let newest = await h.store.list(project: p).first
     #expect(id != nil && newest?.id == id && newest?.kind == "pluginChange" && newest?.label == "github:a/b")
-    #expect(try await h.store.take(p.path, "pluginChange", "noch einmal") == nil, "nothing changed")
+    #expect(try await h.store.take(p, "pluginChange", "noch einmal") == nil, "nothing changed")
   }
 }
 

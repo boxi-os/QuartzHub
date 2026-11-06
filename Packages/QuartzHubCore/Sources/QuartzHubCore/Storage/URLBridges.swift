@@ -27,12 +27,10 @@ extension ToolEnvironment {
 
 extension QuartzGuiDirectory {
   public init(project: URL) { self.init(project: project.path) }
-  public var url: URL { URL(fileURLWithPath: path) }
 }
 
 extension ProfileDirectory {
   public init(_ url: URL) { self.init(url.path) }
-  public var url: URL { URL(fileURLWithPath: path) }
 }
 
 extension ProjectPrefsStore {

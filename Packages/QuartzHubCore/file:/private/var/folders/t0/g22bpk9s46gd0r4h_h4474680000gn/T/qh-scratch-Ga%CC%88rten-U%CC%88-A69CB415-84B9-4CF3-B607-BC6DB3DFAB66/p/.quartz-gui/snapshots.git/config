@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	ignorecase = true
+	precomposeunicode = true
+[user]
+	name = QuartzHub
+	email = snapshots@quartzhub.local

@@ -1,7 +1,7 @@
 import Foundation
 
 /// The one place that creates `<project>/.quartz-gui/`, a port of `quartzGuiDir` in
-/// `electron/main/services/projectDirs.ts`. Readers use `QuartzGuiDirectory.url`/`file(_:)` and
+/// `electron/main/services/projectDirs.ts`. Readers use `QuartzGuiDirectory.path`/`file(_:)` and
 /// never this: "Ein Lesepfad legt nie `.quartz-gui/` an."
 ///
 /// Creating the folder also puts `.quartz-gui/` into the project's `.gitignore`, because the folder
