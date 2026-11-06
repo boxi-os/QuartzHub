@@ -207,7 +207,9 @@ nach Abhängigkeit:
      geteilt und in beide Richtungen gemessen, Aufräumen nach zehn Minuten), `ContentBackups` und
      `ContentFolder.changeSource`, die sechs wartenden Schreiber angeschlossen. Nebenbefund:
      Foundation legt Namen zerlegt (NFD) an; die neuen Schreiber gehen über `Posix`, die übrigen
-     Dienste warten auf die Entscheidung des Nutzers. Als Nächstes 7b.
+     stellt ein eigener Durchgang nach Punkt 7 um (Nutzer, 2026-11-06). 7b fertig: `GitStatus`,
+     `GitAuth` mit `GitHubRemote`, `Sync` (das echte `quartz sync` gegen ein lokales Bare-Repo
+     gemessen; der Push zu GitHub mit Token steht als Netzlauf aus). Als Nächstes 7c.
 8. **Veröffentlichen:**
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:

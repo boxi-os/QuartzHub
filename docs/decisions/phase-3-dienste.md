@@ -1340,8 +1340,9 @@ In drei Teilen in einem Zug (Nutzer, 2026-11-06): 7a der Snapshot-Speicher und w
   speichert dank `core.precomposeunicode` NFC. Quartz liest die Namen aber mit Node: Eine Seite,
   die QuartzHub angelegt hat, bekäme einen anderen Slug als dieselbe Seite aus QuartzControl.
   Aufgefallen ist es am Test (die Golden-Liste kam in anderer Reihenfolge an). Die neuen Schreiber
-  dieses Punkts arbeiten mit Zeichenketten und POSIX (`Posix`); die übrigen Dienste sind noch
-  nicht umgestellt (Entscheidung des Nutzers steht aus).
+  dieses Punkts arbeiten mit Zeichenketten und POSIX (`Posix`). Die übrigen Dienste stellt ein
+  eigener Durchgang nach Punkt 7 um (Nutzer, 2026-11-06): die Golden-Tests der Punkte 2 bis 6
+  vergleichen dann nach Bytes und bekommen Fälle mit Umlauten, und was auffällt, geht über `Posix`.
 - **Gegenproben:** 50, alle gefangen. Vier erst mit einem eigenen Fall: die Sortierung des
   Vergleichs (`localeCompare` gegen Bytes: `content/B.md` und `content/a.md`), die Tagesstufe der
   Ausdünnung (zwei Snapshots, gut sechs Tage alt, an zwei Tagen einer Woche), ein Ref von Hand
@@ -1398,3 +1399,57 @@ wie QuartzControl:
   bleibt).
 - **Content-Quelle wechseln**: siehe oben.
 - Gegenproben: 15, alle gefangen.
+
+### Git-Status, Anmeldung und Sync (`gitStatusService.ts`, `gitAuth.ts`, `syncService.ts` → `GitStatus`, `GitAuth`, `GitHubRemote`, `Sync`)
+
+- **Gemessen gegen QuartzControls Code mit echtem git:** `scripts/git-golden.mjs` lässt die drei
+  Dienste und `parseGithubRemote` mit ihrem echten `runCommand` laufen. Attrappen sind der Token
+  (`connectionsService`), Quartz' Vorlagen-Repository (ein lokales, damit ein flacher Klon ohne
+  Netz vervollständigt wird) und `npx`: ein Skript auf PATH, das argv, Ordner,
+  `GIT_TERMINAL_PROMPT` und die Antworten des `GIT_ASKPASS`-Helfers auf beide Fragen von git
+  aufschreibt und mit Ausgabe und Exit-Code des Schritts antwortet. 55 Schritte, Identität und
+  Datum gepinnt, also dieselben Hashes auf beiden Seiten.
+  - Status (19): kein Repository, ein kaputter Index, ein Repository ohne Commit, jede Art von
+    Änderung (Pfade mit Leerzeichen, Anführungszeichen, Zeilenumbruch, Umlauten), Kopien, eine
+    Umbenennung aus „? orig.md“ (liest sich wie ein Datensatz), ein Upstream voraus und zurück und
+    einer, der weg ist, detached, Merge, Rebase, Cherry-Pick und Revert mit Konflikt, ein
+    verknüpfter Worktree, die Kappung bei 500 und ein Konflikt hinter 500 Änderungen.
+  - Anmeldung (12): https, http, www, ssh, `ssh://`, ein anderer Host, einer, der nur so aussieht,
+    `HTTPS://`, kein Token, ein leerer, kein origin, kein Repository.
+  - Sync (23): jede Richtung, mit und ohne Commit und Nachricht, Fehler in Prosa und per Exit-Code,
+    der Token für origin auf GitHub, flache Klone aus quartz-upstream, aus der Vorlage und gar nicht.
+  - `parseGithubRemote` über 110 Remotes.
+- **Abweichung 1, der Host von `parseGithubRemote`.** QuartzControl las die URL-Form mit Nodes
+  WHATWG-`URL`. Portiert ist davon, was die Antwort ändert: Tabs und Zeilenumbrüche fallen weg, der
+  Backslash zählt bei den Spezial-Schemata als Schrägstrich, nach `https:` beliebig viele
+  Schrägstriche, der Nutzerteil bis zum letzten „@“, der Port geprüft, der Host bei den
+  Spezial-Schemata klein geschrieben und sonst wie geschrieben (`ssh://git@GitHub.com/…` ist
+  nichts), Punkt-Segmente aufgelöst und der Pfad prozentkodiert wie in Node 24 (auch `^`). Ein Host
+  mit „%“ oder einem Zeichen außerhalb von ASCII ist hier nichts: WHATWG dekodiert und bildet ihn
+  vorher ab (IDNA), `https://ｇithub.com/o/r` und `https://github%2Ecom/o/r` bekamen dort den Token.
+  Die zwei Fälle stehen im Test mit Namen.
+- **Abweichung 2, Fristen.** QuartzControl setzte für `git fetch --unshallow` und `quartz sync`
+  keine; beide sprechen mit einem anderen Rechner. Hier zehn und dreißig Minuten, großzügig wie bei
+  den Plugin-Befehlen (Test `aSyncThatHangsEnds`: der Satz der Frist, und der Helfer ist weg).
+- **Abweichung 3, klein:** Maschinenantworten (`rev-parse`, `remote get-url`) aus stdout, wo
+  QuartzControl beide Ströme las; die Variable des Tokens heißt `QH_GIT_TOKEN`; ein Projektordner,
+  den es nicht gibt, ist ein Lesefehler mit „ENOTDIR <Ordner>“, wo Node „spawn git ENOENT“ sagte,
+  als fehle git.
+- **Der echte Lauf:** `theRealQuartzSyncsACopyOfGuiTest` (mit `QH_QUARTZ_TESTS=1`) lässt das echte
+  `quartz sync` einer Kopie von gui-test gegen ein Bare-Repository im Scratch-Ordner laufen
+  (origin vorher für fetch und push umgestellt und geprüft): ein Push mit Nachricht, Pull und Push,
+  ein Pull von einem origin, das es nicht gibt (Quartz sagt es in Prosa, Exit 0; hier ein
+  Fehler). Der Push zu GitHub mit dem Token ist ein Netzlauf und steht aus.
+- **Der Token bis Punkt 8:** Die Zugänge kommen mit Punkt 8; bis dahin reicht der Aufrufer ihn als
+  `GitAuth.Token` herein. Gefragt wird er erst, wenn origin ihn bekäme (Test
+  `theTokenIsNotAskedForOtherHosts`).
+- **Gegenproben:** Status 32, davon 31 gefangen. Fünf erst mit einem eigenen Fall: Kopien (git
+  meldet sie bei Dateien von einer Zeile nicht, jetzt 50), die Umbenennung aus „? orig.md“, der
+  Konflikt hinter 500 Änderungen (Kappen vor dem Sortieren), zwei git-Attrappen für die englischen
+  Textvariablen und „nur stdout“. Gleichwertig: ein leeres origin (git antwortet dann mit dem
+  Namen des Remotes). Anmeldung und `parseGithubRemote` 38, davon 35; gleichwertig `$` statt `\z`
+  im scp-Muster (ein Zeilenende am Schluss nimmt `trim`), das leere Segment nach „..“ am Ende, und
+  die Sperre für Hosts mit „%“ oder Nicht-ASCII, die deshalb wieder heraus ist (ein solcher Host
+  ist nie wörtlich github.com). Sync 22, davon 21; gleichwertig ein leeres quartz-upstream. Die
+  Frist von `git fetch` fragt ein eigener Test (ein git, das beim Holen hängt).
+- **Preis:** Fixture 230 KB, der Golden-Test eines Dienstes läuft 3 bis 5 s.
