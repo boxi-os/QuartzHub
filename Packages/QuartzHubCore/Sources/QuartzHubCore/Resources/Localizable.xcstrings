@@ -27369,6 +27369,23 @@
         }
       }
     },
+    "main.publishTargetInvalid" : {
+      "comment" : "PublishTargets.save refuses an input the form should not have let through; field is the input's key.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Ziel konnte nicht gespeichert werden: Das Feld „{{field}}“ ist ungültig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The target could not be saved: the field “{{field}}” is not valid."
+          }
+        }
+      }
+    },
     "main.quartzMeasuresFailed" : {
       "localizations" : {
         "de" : {

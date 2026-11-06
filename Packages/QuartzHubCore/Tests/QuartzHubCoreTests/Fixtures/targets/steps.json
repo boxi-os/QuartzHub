@@ -1,0 +1,2153 @@
+{
+ "steps": [
+  {
+   "name": "list without a file",
+   "op": "targets:list",
+   "args": [],
+   "setup": [],
+   "result": {
+    "ok": []
+   },
+   "files": {}
+  },
+  {
+   "name": "save sftp",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": []
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "save folder",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ]
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000002",
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ]
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "save branch without excludes",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Pages",
+     "destination": {
+      "type": "git-branch",
+      "branch": "gh-pages",
+      "provider": "github"
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000003",
+     "name": "Pages",
+     "destination": {
+      "type": "git-branch",
+      "branch": "gh-pages",
+      "provider": "github"
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "save document (no documents of its own)",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Buch",
+     "destination": {
+      "type": "document",
+      "path": "/Users/x/Bücher",
+      "bookId": "buch",
+      "formats": [
+       "pdf",
+       "epub"
+      ]
+     },
+     "withDocuments": [
+      "00000000-0000-4000-8000-000000000009"
+     ]
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000004",
+     "name": "Buch",
+     "destination": {
+      "type": "document",
+      "path": "/Users/x/Bücher",
+      "bookId": "buch",
+      "formats": [
+       "pdf",
+       "epub"
+      ]
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "save webhook (no documents)",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Hook",
+     "connectionId": "22222222-2222-4222-8222-222222222222",
+     "destination": {
+      "type": "webhook"
+     },
+     "withDocuments": [
+      "00000000-0000-4000-8000-000000000004"
+     ]
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000005",
+     "name": "Hook",
+     "connectionId": "22222222-2222-4222-8222-222222222222",
+     "destination": {
+      "type": "webhook"
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "save folder with documents",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Mit Buch",
+     "destination": {
+      "type": "folder",
+      "path": "/srv/www",
+      "deleteRemoved": true
+     },
+     "withDocuments": [
+      "00000000-0000-4000-8000-000000000004"
+     ]
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000006",
+     "name": "Mit Buch",
+     "destination": {
+      "type": "folder",
+      "path": "/srv/www",
+      "deleteRemoved": true
+     },
+     "excludes": [],
+     "withDocuments": [
+      "00000000-0000-4000-8000-000000000004"
+     ]
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": [],\n    \"withDocuments\": [\n      \"00000000-0000-4000-8000-000000000004\"\n    ]\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "save folder with an empty documents list",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Mit Buch",
+     "destination": {
+      "type": "folder",
+      "path": "/srv/www",
+      "deleteRemoved": true
+     },
+     "withDocuments": [],
+     "id": "00000000-0000-4000-8000-000000000006"
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000006",
+     "name": "Mit Buch",
+     "destination": {
+      "type": "folder",
+      "path": "/srv/www",
+      "deleteRemoved": true
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "rename keeps the manifest",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Neu",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": [],
+     "id": "00000000-0000-4000-8000-000000000001"
+    }
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000001.json",
+      "{\n  \"index.html\": \"abc\"\n}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Neu",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000001.json": "{\n  \"index.html\": \"abc\"\n}",
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Neu\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "rsync keeps the manifest",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "rsync",
+      "deleteRemoved": true
+     },
+     "excludes": [],
+     "id": "00000000-0000-4000-8000-000000000001"
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "rsync",
+      "deleteRemoved": true
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000001.json": "{\n  \"index.html\": \"abc\"\n}",
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"rsync\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "deletion off keeps the manifest",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "sftp",
+      "deleteRemoved": false
+     },
+     "excludes": [],
+     "id": "00000000-0000-4000-8000-000000000001"
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs",
+      "transfer": "sftp",
+      "deleteRemoved": false
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000001.json": "{\n  \"index.html\": \"abc\"\n}",
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "another path forgets it",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs/blog",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": [],
+     "id": "00000000-0000-4000-8000-000000000001"
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Webspace",
+     "connectionId": "11111111-1111-4111-8111-111111111111",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs/blog",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"11111111-1111-4111-8111-111111111111\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "another connection forgets it",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Webspace",
+     "connectionId": "22222222-2222-4222-8222-222222222222",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs/blog",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": [],
+     "id": "00000000-0000-4000-8000-000000000001"
+    }
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000001.json",
+      "{\n  \"index.html\": \"abc\"\n}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Webspace",
+     "connectionId": "22222222-2222-4222-8222-222222222222",
+     "destination": {
+      "type": "sftp",
+      "remotePath": "httpdocs/blog",
+      "transfer": "sftp",
+      "deleteRemoved": true
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"github\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "another provider forgets it",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Pages",
+     "destination": {
+      "type": "git-branch",
+      "branch": "gh-pages",
+      "provider": "codeberg"
+     },
+     "id": "00000000-0000-4000-8000-000000000003"
+    }
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000003.json",
+      "{\n  \"index.html\": \"abc\"\n}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000003",
+     "name": "Pages",
+     "destination": {
+      "type": "git-branch",
+      "branch": "gh-pages",
+      "provider": "codeberg"
+     },
+     "excludes": []
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "folder moved forgets it",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site2",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ],
+     "id": "00000000-0000-4000-8000-000000000002"
+    }
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000002.json",
+      "{\n  \"index.html\": \"abc\"\n}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000002",
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site2",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ]
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site2\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "an edit without excludes keeps them",
+   "op": "targets:save",
+   "args": [
+    {
+     "id": "00000000-0000-4000-8000-000000000002",
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site",
+      "deleteRemoved": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000002",
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ]
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "an unknown id is a new target",
+   "op": "targets:save",
+   "args": [
+    {
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ],
+     "id": "00000000-0000-4000-8000-000000000077"
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000007",
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ]
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000007\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "get",
+   "op": "targets:get",
+   "args": [
+    "00000000-0000-4000-8000-000000000002"
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "id": "00000000-0000-4000-8000-000000000002",
+     "name": "Ordner Ü",
+     "destination": {
+      "type": "folder",
+      "path": "/Volumes/Share/site",
+      "deleteRemoved": false
+     },
+     "excludes": [
+      "a.html"
+     ]
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000007\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "get none",
+   "op": "targets:get",
+   "args": [
+    "00000000-0000-4000-8000-000000000099"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000007\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "using a connection",
+   "op": "targets:using",
+   "args": [
+    "22222222-2222-4222-8222-222222222222"
+   ],
+   "setup": [],
+   "result": {
+    "ok": [
+     {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Webspace",
+      "connectionId": "22222222-2222-4222-8222-222222222222",
+      "destination": {
+       "type": "sftp",
+       "remotePath": "httpdocs/blog",
+       "transfer": "sftp",
+       "deleteRemoved": true
+      },
+      "excludes": []
+     },
+     {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "name": "Hook",
+      "connectionId": "22222222-2222-4222-8222-222222222222",
+      "destination": {
+       "type": "webhook"
+      },
+      "excludes": []
+     }
+    ]
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000005\",\n    \"name\": \"Hook\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"webhook\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000007\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "delete",
+   "op": "targets:delete",
+   "args": [
+    "00000000-0000-4000-8000-000000000005"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Webspace\",\n    \"connectionId\": \"22222222-2222-4222-8222-222222222222\",\n    \"destination\": {\n      \"type\": \"sftp\",\n      \"remotePath\": \"httpdocs/blog\",\n      \"transfer\": \"sftp\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000002\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000003\",\n    \"name\": \"Pages\",\n    \"destination\": {\n      \"type\": \"git-branch\",\n      \"branch\": \"gh-pages\",\n      \"provider\": \"codeberg\"\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000004\",\n    \"name\": \"Buch\",\n    \"destination\": {\n      \"type\": \"document\",\n      \"path\": \"/Users/x/Bücher\",\n      \"bookId\": \"buch\",\n      \"formats\": [\n        \"pdf\",\n        \"epub\"\n      ]\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000006\",\n    \"name\": \"Mit Buch\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/srv/www\",\n      \"deleteRemoved\": true\n    },\n    \"excludes\": []\n  },\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000007\",\n    \"name\": \"Ordner Ü\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/Volumes/Share/site\",\n      \"deleteRemoved\": false\n    },\n    \"excludes\": [\n      \"a.html\"\n    ]\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "an entry a later version wrote",
+   "op": "targets:save",
+   "args": [
+    {
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Alt 2",
+     "destination": {
+      "type": "folder",
+      "path": "/a",
+      "deleteRemoved": false
+     }
+    }
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/publish-targets.json",
+      "[\n  {\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Alt\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/a\",\n      \"deleteRemoved\": false\n    },\n    \"later\": {\n      \"x\": 1\n    },\n    \"connectionId\": null\n  }\n]"
+     ]
+    },
+    {
+     "rm": ".quartz-gui/deploy-manifest-00000000-0000-4000-8000-000000000001.json"
+    }
+   ],
+   "result": {
+    "ok": {
+     "later": {
+      "x": 1
+     },
+     "id": "00000000-0000-4000-8000-000000000001",
+     "name": "Alt 2",
+     "destination": {
+      "type": "folder",
+      "path": "/a",
+      "deleteRemoved": false
+     }
+    }
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json": "[\n  {\n    \"later\": {\n      \"x\": 1\n    },\n    \"id\": \"00000000-0000-4000-8000-000000000001\",\n    \"name\": \"Alt 2\",\n    \"destination\": {\n      \"type\": \"folder\",\n      \"path\": \"/a\",\n      \"deleteRemoved\": false\n    }\n  }\n]",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "a file of the wrong shape",
+   "op": "targets:list",
+   "args": [],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/publish-targets.json",
+      "{\"a\":1}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": []
+   },
+   "files": {
+    ".quartz-gui/publish-targets.json.corrupt-*": "{\"a\":1}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "read without a file",
+   "op": "manifest:read",
+   "args": [
+    "tgt"
+   ],
+   "setup": [],
+   "result": {
+    "ok": {}
+   },
+   "files": {
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "the legacy manifest goes to the first who asks",
+   "op": "manifest:read",
+   "args": [
+    "tgt"
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest.json",
+      "{\"index.html\":\"old\"}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "index.html": "old"
+    }
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-tgt.json": "{\"index.html\":\"old\"}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "and not to the second",
+   "op": "manifest:read",
+   "args": [
+    "other"
+   ],
+   "setup": [],
+   "result": {
+    "ok": {}
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-tgt.json": "{\"index.html\":\"old\"}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "a broken manifest takes the legacy one",
+   "op": "manifest:read",
+   "args": [
+    "other"
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest-other.json",
+      "{\"x\":"
+     ]
+    },
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest.json",
+      "{\"a.html\":\"1\"}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "a.html": "1"
+    }
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\"index.html\":\"old\"}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "diff against nothing",
+   "op": "manifest:diff",
+   "args": [
+    "tgt",
+    "public"
+   ],
+   "setup": [
+    {
+     "rm": ".quartz-gui/deploy-manifest-tgt.json"
+    },
+    {
+     "write": [
+      "public/index.html",
+      "<h1>Start</h1>"
+     ]
+    },
+    {
+     "write": [
+      "public/Gärten/Über uns.html",
+      "über"
+     ]
+    },
+    {
+     "write": [
+      "public/b.css",
+      "b{}"
+     ]
+    },
+    {
+     "write": [
+      "public/sub/deep/x.txt",
+      "x"
+     ]
+    },
+    {
+     "write": [
+      "public/Zebra.html",
+      "z"
+     ]
+    },
+    {
+     "write": [
+      "public/ärger.html",
+      "ä"
+     ]
+    },
+    {
+     "write": [
+      "public/a.html",
+      "a"
+     ]
+    }
+   ],
+   "result": {
+    "ok": [
+     {
+      "path": "a.html",
+      "status": "added"
+     },
+     {
+      "path": "ärger.html",
+      "status": "added"
+     },
+     {
+      "path": "b.css",
+      "status": "added"
+     },
+     {
+      "path": "Gärten/Über uns.html",
+      "status": "added"
+     },
+     {
+      "path": "index.html",
+      "status": "added"
+     },
+     {
+      "path": "sub/deep/x.txt",
+      "status": "added"
+     },
+     {
+      "path": "Zebra.html",
+      "status": "added"
+     }
+    ]
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "commit all",
+   "op": "manifest:commit",
+   "args": [
+    "tgt",
+    "public",
+    []
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"a.html\": \"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb\",\n  \"b.css\": \"ef2a875407aca2dd75a7a1dccc3b202918a9bc8e543e0b3def3f34ccd5e56a7b\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"sub/deep/x.txt\": \"2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "diff after a change",
+   "op": "manifest:diff",
+   "args": [
+    "tgt",
+    "public"
+   ],
+   "setup": [
+    {
+     "write": [
+      "public/b.css",
+      "b{color:red}"
+     ]
+    },
+    {
+     "rm": "public/sub"
+    },
+    {
+     "write": [
+      "public/neu.html",
+      "n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": [
+     {
+      "path": "b.css",
+      "status": "changed"
+     },
+     {
+      "path": "neu.html",
+      "status": "added"
+     },
+     {
+      "path": "sub/deep/x.txt",
+      "status": "removed"
+     }
+    ]
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"a.html\": \"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb\",\n  \"b.css\": \"ef2a875407aca2dd75a7a1dccc3b202918a9bc8e543e0b3def3f34ccd5e56a7b\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"sub/deep/x.txt\": \"2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "commit with exclusions",
+   "op": "manifest:commit",
+   "args": [
+    "tgt",
+    "public",
+    [
+     "b.css",
+     "neu.html",
+     "sub/deep/x.txt"
+    ]
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"a.html\": \"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb\",\n  \"b.css\": \"ef2a875407aca2dd75a7a1dccc3b202918a9bc8e543e0b3def3f34ccd5e56a7b\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"sub/deep/x.txt\": \"2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "diff keeps the excluded",
+   "op": "manifest:diff",
+   "args": [
+    "tgt",
+    "public"
+   ],
+   "setup": [],
+   "result": {
+    "ok": [
+     {
+      "path": "b.css",
+      "status": "changed"
+     },
+     {
+      "path": "neu.html",
+      "status": "added"
+     },
+     {
+      "path": "sub/deep/x.txt",
+      "status": "removed"
+     }
+    ]
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"a.html\": \"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb\",\n  \"b.css\": \"ef2a875407aca2dd75a7a1dccc3b202918a9bc8e543e0b3def3f34ccd5e56a7b\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"sub/deep/x.txt\": \"2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "commit removes a removal not excluded",
+   "op": "manifest:commit",
+   "args": [
+    "tgt",
+    "public",
+    []
+   ],
+   "setup": [
+    {
+     "rm": "public/a.html"
+    }
+   ],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"b.css\": \"ca9219a5e5a1ebb2e1deae3a8e98c65bb542009a6612a7057bc0e5e41dab5d05\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "diff of an empty build",
+   "op": "manifest:diff",
+   "args": [
+    "other",
+    "empty"
+   ],
+   "setup": [
+    {
+     "write": [
+      "empty/.keep",
+      ""
+     ]
+    },
+    {
+     "rm": "empty/.keep"
+    }
+   ],
+   "result": {
+    "ok": [
+     {
+      "path": "a.html",
+      "status": "removed"
+     }
+    ]
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"b.css\": \"ca9219a5e5a1ebb2e1deae3a8e98c65bb542009a6612a7057bc0e5e41dab5d05\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "diff of a missing build",
+   "op": "manifest:diff",
+   "args": [
+    "other",
+    "missing"
+   ],
+   "setup": [],
+   "result": {
+    "error": "ENOENT: no such file or directory, scandir '@P@/missing'"
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"b.css\": \"ca9219a5e5a1ebb2e1deae3a8e98c65bb542009a6612a7057bc0e5e41dab5d05\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "modes not settled",
+   "op": "manifest:modesSettled",
+   "args": [
+    "tgt"
+   ],
+   "setup": [],
+   "result": {
+    "ok": false
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"b.css\": \"ca9219a5e5a1ebb2e1deae3a8e98c65bb542009a6612a7057bc0e5e41dab5d05\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "settle modes",
+   "op": "manifest:settleModes",
+   "args": [
+    "tgt"
+   ],
+   "setup": [
+    {
+     "clock": "2026-11-06T11:00:00.000Z"
+    }
+   ],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"b.css\": \"ca9219a5e5a1ebb2e1deae3a8e98c65bb542009a6612a7057bc0e5e41dab5d05\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.modes.json": "{\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T11:00:00.000Z\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "modes settled",
+   "op": "manifest:modesSettled",
+   "args": [
+    "tgt"
+   ],
+   "setup": [],
+   "result": {
+    "ok": true
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"b51c854170449c382397a108bc58403e78fb72c80a1b2b0674b30ea3b88a19f0\",\n  \"Zebra.html\": \"594e519ae499312b29433b7dd8a97ff068defcba9755b6d5d00e84c524d67b06\",\n  \"index.html\": \"37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880\",\n  \"ärger.html\": \"33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc\",\n  \"b.css\": \"ca9219a5e5a1ebb2e1deae3a8e98c65bb542009a6612a7057bc0e5e41dab5d05\",\n  \"neu.html\": \"1b16b1df538ba12dc3f97edbb85caa7050d46c148134290feba80f8236c83db9\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.modes.json": "{\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T11:00:00.000Z\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "reanchor clears the hashes",
+   "op": "manifest:reanchor",
+   "args": [
+    "tgt"
+   ],
+   "setup": [
+    {
+     "clock": "2026-11-06T12:00:00.000Z"
+    }
+   ],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\n  \"Gärten/Über uns.html\": \"\",\n  \"Zebra.html\": \"\",\n  \"index.html\": \"\",\n  \"ärger.html\": \"\",\n  \"b.css\": \"\",\n  \"neu.html\": \"\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.modes.json": "{\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T11:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "reanchor once only",
+   "op": "manifest:reanchor",
+   "args": [
+    "tgt"
+   ],
+   "setup": [
+    {
+     "write": [
+      ".quartz-gui/deploy-manifest-tgt.json",
+      "{\"q\":\"1\"}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\"q\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.modes.json": "{\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T11:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "reanchor without a manifest",
+   "op": "manifest:reanchor",
+   "args": [
+    "none"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-none.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.json": "{\"q\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.modes.json": "{\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T11:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "forget",
+   "op": "manifest:forget",
+   "args": [
+    "tgt"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-none.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.modes.json": "{\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T11:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  },
+  {
+   "name": "forget none",
+   "op": "manifest:forget",
+   "args": [
+    "none"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    ".quartz-gui/deploy-manifest-none.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-other.json": "{\"a.html\":\"1\"}",
+    ".quartz-gui/deploy-manifest-tgt.modes.json": "{\n  \"mode\": \"0644\",\n  \"at\": \"2026-11-06T11:00:00.000Z\"\n}",
+    ".quartz-gui/deploy-manifest-tgt.tilde.json": "{\n  \"at\": \"2026-11-06T12:00:00.000Z\"\n}",
+    ".gitignore": "\n# {\"key\":\"gitignoreComment\",\"args\":{}}\n.quartz-gui/\n"
+   }
+  }
+ ],
+ "partitions": [
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [],
+    true
+   ],
+   "result": {
+    "toUpload": [
+     "a",
+     "b",
+     "e"
+    ],
+    "toDelete": [
+     "c",
+     "d"
+    ],
+    "manifestExcludes": []
+   }
+  },
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [],
+    false
+   ],
+   "result": {
+    "toUpload": [
+     "a",
+     "b",
+     "e"
+    ],
+    "toDelete": [],
+    "manifestExcludes": [
+     "c",
+     "d"
+    ]
+   }
+  },
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [
+     "a"
+    ],
+    true
+   ],
+   "result": {
+    "toUpload": [
+     "b",
+     "e"
+    ],
+    "toDelete": [
+     "c",
+     "d"
+    ],
+    "manifestExcludes": [
+     "a"
+    ]
+   }
+  },
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [
+     "a"
+    ],
+    false
+   ],
+   "result": {
+    "toUpload": [
+     "b",
+     "e"
+    ],
+    "toDelete": [],
+    "manifestExcludes": [
+     "a",
+     "c",
+     "d"
+    ]
+   }
+  },
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [
+     "c"
+    ],
+    true
+   ],
+   "result": {
+    "toUpload": [
+     "a",
+     "b",
+     "e"
+    ],
+    "toDelete": [
+     "d"
+    ],
+    "manifestExcludes": [
+     "c"
+    ]
+   }
+  },
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [
+     "c"
+    ],
+    false
+   ],
+   "result": {
+    "toUpload": [
+     "a",
+     "b",
+     "e"
+    ],
+    "toDelete": [],
+    "manifestExcludes": [
+     "c",
+     "d"
+    ]
+   }
+  },
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [
+     "a",
+     "d",
+     "x"
+    ],
+    true
+   ],
+   "result": {
+    "toUpload": [
+     "b",
+     "e"
+    ],
+    "toDelete": [
+     "c"
+    ],
+    "manifestExcludes": [
+     "a",
+     "d",
+     "x"
+    ]
+   }
+  },
+  {
+   "args": [
+    [
+     {
+      "path": "a",
+      "status": "added"
+     },
+     {
+      "path": "b",
+      "status": "changed"
+     },
+     {
+      "path": "c",
+      "status": "removed"
+     },
+     {
+      "path": "d",
+      "status": "removed"
+     },
+     {
+      "path": "e",
+      "status": "changed"
+     }
+    ],
+    [
+     "a",
+     "d",
+     "x"
+    ],
+    false
+   ],
+   "result": {
+    "toUpload": [
+     "b",
+     "e"
+    ],
+    "toDelete": [],
+    "manifestExcludes": [
+     "a",
+     "d",
+     "x",
+     "c"
+    ]
+   }
+  }
+ ],
+ "rules": [
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "httpdocs",
+     "transfer": "sftp",
+     "deleteRemoved": true
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "/",
+     "transfer": "sftp",
+     "deleteRemoved": true
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "/",
+     "transfer": "rsync",
+     "deleteRemoved": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "~",
+     "transfer": "sftp",
+     "deleteRemoved": true
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "a/../b",
+     "transfer": "sftp",
+     "deleteRemoved": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": " ",
+     "transfer": "sftp",
+     "deleteRemoved": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "x",
+     "transfer": "scp",
+     "deleteRemoved": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "x",
+     "transfer": "sftp"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "sftp",
+     "remotePath": "x",
+     "transfer": "sftp",
+     "deleteRemoved": "yes"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "ftp",
+     "remotePath": "www",
+     "deleteRemoved": true
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "ftp",
+     "remotePath": ".",
+     "deleteRemoved": true
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "ftp",
+     "remotePath": ".",
+     "deleteRemoved": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "ftp",
+     "remotePath": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "deleteRemoved": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "folder",
+     "path": "/srv/www",
+     "deleteRemoved": true
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "folder",
+     "path": "srv/www",
+     "deleteRemoved": true
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "folder",
+     "path": "",
+     "deleteRemoved": true
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook",
+     "extra": 1
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "github"
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "pages",
+     "provider": "codeberg"
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "gh-pages",
+     "provider": "bitbucket"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "-x",
+     "provider": "github"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "a..b",
+     "provider": "github"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "x.lock",
+     "provider": "github"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "feature/x_y-1.2",
+     "provider": "gitlab"
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "git-branch",
+     "branch": "ä",
+     "provider": "github"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "document",
+     "path": "/b",
+     "bookId": "buch-1",
+     "formats": [
+      "pdf"
+     ]
+    }
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "document",
+     "path": "/b",
+     "bookId": "Buch",
+     "formats": [
+      "pdf"
+     ]
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "document",
+     "path": "/b",
+     "bookId": "buch",
+     "formats": []
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "document",
+     "path": "/b",
+     "bookId": "buch",
+     "formats": [
+      "pdf",
+      "epub",
+      "html",
+      "pdf"
+     ]
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "document",
+     "path": "/b",
+     "bookId": "buch",
+     "formats": [
+      "docx"
+     ]
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "ssh"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {}
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "",
+    "destination": {
+     "type": "webhook"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "destination": {
+     "type": "webhook"
+    }
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "connectionId": "11111111-1111-4111-8111-111111111111"
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "connectionId": "not-a-uuid"
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "connectionId": "11111111-1111-9111-8111-111111111111"
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "excludes": [
+     "a",
+     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    ]
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "withDocuments": [
+     "11111111-1111-4111-8111-111111111111",
+     "22222222-2222-4222-8222-222222222222"
+    ]
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "withDocuments": [
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111",
+     "11111111-1111-4111-8111-111111111111"
+    ]
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "withDocuments": [
+     "x"
+    ]
+   },
+   "valid": false
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "connectionId": "00000000-0000-0000-0000-000000000000"
+   },
+   "valid": true
+  },
+  {
+   "input": {
+    "name": "T",
+    "destination": {
+     "type": "webhook"
+    },
+    "connectionId": "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"
+   },
+   "valid": false
+  }
+ ]
+}

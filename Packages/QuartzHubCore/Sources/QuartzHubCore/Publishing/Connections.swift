@@ -7,6 +7,13 @@ public struct PublishFailure: Error, Equatable, CustomStringConvertible {
   public let message: String
   public init(_ message: String) { self.message = message }
   public var description: String { message }
+
+  /// `err.message` of what QuartzControl threw: a sentence, or a file error without "Error: ".
+  public static func message(of error: Error) -> String {
+    if let failure = error as? PublishFailure { return failure.message }
+    let text = String(describing: error)
+    return JSText.startsWith(text, "Error: ") ? JSText.slice(text, 7) : text
+  }
 }
 
 /// A server's host key as the connection trusts it (`PinnedHostKey`): the fingerprint as
