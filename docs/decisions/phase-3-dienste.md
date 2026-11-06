@@ -1128,3 +1128,34 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
 - Gegenproben: am Golden 10 (eine erst ungefangen, `href` neben `xlink:href`, bekam ihren Fall);
   an der WebKit-Prüfung fünf Lücken im Bereiniger (Ereignis-Attribute, `javascript:`-Links,
   ungeschützter Text, Animationen auf `href`, fremde `url()`), jede gemeldet.
+
+### Themes: Presets, Style-Settings-Schema, Marktplatz (`themePresetsService.ts`, `styleSettingsSchemaService.ts`, `themeMarketplaceService.ts` → `ThemePresets`, `StyleSettingsSchema`, `ThemeMarketplace`)
+
+- **Gemessen gegen QuartzControls Code:** `scripts/themes-golden.mjs` lädt die drei Dienste mit
+  gespieltem Netz (Obsidians Theme-Registry, `theme.css`/`obsidian.css` auf
+  raw.githubusercontent.com, GitHubs Repo-Liste der Organisation, jsDelivr), gespieltem `npm search`
+  und `npm install` und einem `userData` im Temp-Ordner. Je Schritt sind Antwort, Anfragen (URL,
+  `Accept`, `Authorization`), Befehle und geänderte Dateien festgehalten (56 Schritte). Der
+  Swift-Test antwortet aus derselben Netz-Datei, nach URL (`ThemeNet`, ein URLProtocol), und
+  vergleicht alles davon, JSON mit Schlüsselreihenfolge.
+- **Presets** liegen im Projekt (`.quartz-gui/theme-presets.json`), über `JSONStore`: ein Preset
+  mit derselben Id wird an seinem Platz ersetzt, eine kaputte Datei beiseitegelegt.
+- **Style Settings:** Das YAML im `@settings`-Kommentar liest der Helfer (`yaml-edit read`), also
+  dasselbe `yaml` wie dort; ein Block, der nicht lesbar ist, kostet das Theme nicht seine anderen.
+  Die Registry hält einen Tag im Speicher und liegt als Kopie im Profil (`theme-docs/`), die
+  antwortet, wenn das Netz fehlt. `repo` muss `owner/name` sein (es geht in einen URL-Pfad), eine
+  Antwort über 16 MiB wird nicht gelesen. Die Antwort wird je Theme gecacht, auch „keins“.
+  Wie in QuartzControl bleibt „keins“ auch dann im Cache, wenn die Registry nicht erreichbar war
+  und ihre Kopie geleert ist (letzter Schritt des Goldens), bis jemand den Cache leert; übernommen,
+  nicht behoben (Wartung, nicht kritisch).
+- **Marktplatz:** `npm search` mit 30 s Frist (npm hat keine eigene); ohne Antwort die sieben
+  bekannten Themes mit `unavailable`, und das wird nie gecacht. Wie dort zählt die Ausgabe auch
+  bei einem Exit-Code ungleich 0, und ein Eintrag ohne Namen kostet die ganze Antwort. GitHub
+  ergänzt Sterne und Topics (höchstens fünf Seiten, ohne Token bis Punkt 8). Details kommen erst
+  aus dem installierten `theme.json`, dann von jsDelivr; ein Netzfehler wird nicht gecacht, eine
+  Antwort ohne Datei eine Stunde lang. Die Theme-Id (`[a-z0-9][a-z0-9._-]*`, höchstens 128) prüft
+  dort das IPC-Schema, hier der Dienst selbst, in `schema`, `detail` und `install`: Es gibt keine
+  IPC-Grenze mehr, an der das geschähe.
+- Gegenproben (21, jede lässt den Test scheitern). Fünf waren erst ungefangen und bekamen ihren
+  Fall: die Registry von der Platte, ein Registry-Eintrag ohne Autor, ein 404 von jsDelivr zweimal
+  (gecacht), eine Antwort `null` zweimal (nicht gecacht), ein npm-Eintrag ohne Namen.

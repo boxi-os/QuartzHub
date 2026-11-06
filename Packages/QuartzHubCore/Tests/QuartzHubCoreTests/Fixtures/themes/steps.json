@@ -1,0 +1,1521 @@
+[
+  {
+    "service": "presets",
+    "call": "listPresets",
+    "args": [],
+    "result": [],
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "presets",
+    "call": "savePreset",
+    "args": [
+      {
+        "id": "p1",
+        "name": "Dunkel",
+        "createdAt": "2026-11-06T10:00:00.000Z",
+        "baseThemeId": "tokyo-night",
+        "options": {
+          "a": 1
+        }
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "project/.quartz-gui/theme-presets.json": "[\n  {\n    \"id\": \"p1\",\n    \"name\": \"Dunkel\",\n    \"createdAt\": \"2026-11-06T10:00:00.000Z\",\n    \"baseThemeId\": \"tokyo-night\",\n    \"options\": {\n      \"a\": 1\n    }\n  }\n]"
+    }
+  },
+  {
+    "service": "presets",
+    "call": "savePreset",
+    "args": [
+      {
+        "id": "p2",
+        "name": "Hell",
+        "createdAt": "2026-11-06T11:00:00.000Z",
+        "options": {}
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "project/.quartz-gui/theme-presets.json": "[\n  {\n    \"id\": \"p1\",\n    \"name\": \"Dunkel\",\n    \"createdAt\": \"2026-11-06T10:00:00.000Z\",\n    \"baseThemeId\": \"tokyo-night\",\n    \"options\": {\n      \"a\": 1\n    }\n  },\n  {\n    \"id\": \"p2\",\n    \"name\": \"Hell\",\n    \"createdAt\": \"2026-11-06T11:00:00.000Z\",\n    \"options\": {}\n  }\n]"
+    }
+  },
+  {
+    "service": "presets",
+    "call": "savePreset",
+    "args": [
+      {
+        "id": "p1",
+        "name": "Dunkel neu",
+        "createdAt": "2026-11-06T12:00:00.000Z",
+        "options": {
+          "b": [
+            1,
+            2
+          ]
+        }
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "project/.quartz-gui/theme-presets.json": "[\n  {\n    \"id\": \"p1\",\n    \"name\": \"Dunkel neu\",\n    \"createdAt\": \"2026-11-06T12:00:00.000Z\",\n    \"options\": {\n      \"b\": [\n        1,\n        2\n      ]\n    }\n  },\n  {\n    \"id\": \"p2\",\n    \"name\": \"Hell\",\n    \"createdAt\": \"2026-11-06T11:00:00.000Z\",\n    \"options\": {}\n  }\n]"
+    }
+  },
+  {
+    "service": "presets",
+    "call": "deletePreset",
+    "args": [
+      "p2"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "project/.quartz-gui/theme-presets.json": "[\n  {\n    \"id\": \"p1\",\n    \"name\": \"Dunkel neu\",\n    \"createdAt\": \"2026-11-06T12:00:00.000Z\",\n    \"options\": {\n      \"b\": [\n        1,\n        2\n      ]\n    }\n  }\n]"
+    }
+  },
+  {
+    "service": "presets",
+    "call": "deletePreset",
+    "args": [
+      "nie-da"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "presets",
+    "call": "listPresets",
+    "args": [],
+    "result": [
+      {
+        "id": "p1",
+        "name": "Dunkel neu",
+        "createdAt": "2026-11-06T12:00:00.000Z",
+        "options": {
+          "b": [
+            1,
+            2
+          ]
+        }
+      }
+    ],
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "presets",
+    "call": "writeRaw",
+    "args": [
+      "{ kaputt"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "project/.quartz-gui/theme-presets.json": "{ kaputt"
+    }
+  },
+  {
+    "service": "presets",
+    "call": "listPresets",
+    "args": [],
+    "result": [],
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "project/.quartz-gui/theme-presets.json": null,
+      "project/.quartz-gui/theme-presets.json.corrupt-*": "{ kaputt"
+    }
+  },
+  {
+    "service": "presets",
+    "call": "savePreset",
+    "args": [
+      {
+        "id": "p3",
+        "name": "Nach dem Bruch",
+        "options": {}
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "project/.quartz-gui/theme-presets.json": "[\n  {\n    \"id\": \"p3\",\n    \"name\": \"Nach dem Bruch\",\n    \"options\": {}\n  }\n]"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": {
+      "ids": [
+        "tokyo-night-appearance",
+        "tokyo-night-editor"
+      ],
+      "themeName": "Tokyo Night",
+      "author": "tcmmichaelb139",
+      "repo": "tcmmichaelb139/obsidian-tokyonight",
+      "screenshotUrl": "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/images/shot.png",
+      "fields": [
+        {
+          "id": "heading-a",
+          "blockId": "tokyo-night-appearance",
+          "title": "Colours",
+          "kind": "heading",
+          "level": 2,
+          "collapsed": true
+        },
+        {
+          "id": "accent",
+          "blockId": "tokyo-night-appearance",
+          "title": "Accent",
+          "kind": "variable-themed-color",
+          "description": "The colour of links",
+          "format": "hex",
+          "defaultLight": "#3d59a1",
+          "defaultDark": "#7aa2f7"
+        },
+        {
+          "id": "width",
+          "blockId": "tokyo-night-appearance",
+          "title": "Line width",
+          "kind": "variable-number-slider",
+          "min": 400,
+          "max": 1200,
+          "step": 10,
+          "default": "700"
+        },
+        {
+          "id": "font",
+          "blockId": "tokyo-night-appearance",
+          "title": "font",
+          "kind": "variable-select",
+          "options": [
+            {
+              "label": "Inter",
+              "value": "Inter"
+            },
+            {
+              "label": "Serif",
+              "value": "Georgia"
+            }
+          ],
+          "default": "Inter"
+        },
+        {
+          "id": "toggle",
+          "blockId": "tokyo-night-appearance",
+          "title": "Toggle",
+          "kind": "class-toggle",
+          "default": true
+        },
+        {
+          "id": "weird",
+          "blockId": "tokyo-night-appearance",
+          "title": "weird",
+          "kind": "unsupported"
+        },
+        {
+          "id": "12",
+          "blockId": "tokyo-night-appearance",
+          "title": "12",
+          "kind": "variable-number",
+          "default": "3"
+        },
+        {
+          "id": "editor-a",
+          "blockId": "tokyo-night-editor",
+          "title": "Editor",
+          "kind": "class-select",
+          "options": [
+            {
+              "label": "a",
+              "value": "a"
+            },
+            {
+              "label": "b",
+              "value": "b"
+            }
+          ]
+        }
+      ]
+    },
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json",
+        "authorization": null,
+        "accept": null
+      },
+      {
+        "url": "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/community-css-themes.json": "[{\"name\":\"Tokyo Night\",\"author\":\"tcmmichaelb139\",\"repo\":\"tcmmichaelb139/obsidian-tokyonight\",\"screenshot\":\"images/shot.png\"},{\"name\":\"80's Neon\",\"author\":\"someone\",\"repo\":\"someone/neon\"},{\"name\":\"Café Élégant\",\"author\":\"x\",\"repo\":\"x/cafe\"},{\"name\":\"Evil\",\"author\":\"e\",\"repo\":\"../../evil\"},{\"name\":\"No Settings\",\"author\":\"n\",\"repo\":\"n/none\"},{\"name\":\"Obsidian Only\",\"author\":\"o\",\"repo\":\"o/only\"},{\"name\":\"Huge\",\"author\":\"h\",\"repo\":\"h/huge\"},{\"name\":\"Anon\",\"repo\":\"a/anon\"}]",
+      "theme-docs/tokyo-night.json": "{\"ids\":[\"tokyo-night-appearance\",\"tokyo-night-editor\"],\"themeName\":\"Tokyo Night\",\"author\":\"tcmmichaelb139\",\"repo\":\"tcmmichaelb139/obsidian-tokyonight\",\"screenshotUrl\":\"https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/images/shot.png\",\"fields\":[{\"id\":\"heading-a\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Colours\",\"kind\":\"heading\",\"level\":2,\"collapsed\":true},{\"id\":\"accent\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Accent\",\"kind\":\"variable-themed-color\",\"description\":\"The colour of links\",\"format\":\"hex\",\"defaultLight\":\"#3d59a1\",\"defaultDark\":\"#7aa2f7\"},{\"id\":\"width\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Line width\",\"kind\":\"variable-number-slider\",\"min\":400,\"max\":1200,\"step\":10,\"default\":\"700\"},{\"id\":\"font\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"font\",\"kind\":\"variable-select\",\"options\":[{\"label\":\"Inter\",\"value\":\"Inter\"},{\"label\":\"Serif\",\"value\":\"Georgia\"}],\"default\":\"Inter\"},{\"id\":\"toggle\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Toggle\",\"kind\":\"class-toggle\",\"default\":true},{\"id\":\"weird\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"weird\",\"kind\":\"unsupported\"},{\"id\":\"12\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"12\",\"kind\":\"variable-number\",\"default\":\"3\"},{\"id\":\"editor-a\",\"blockId\":\"tokyo-night-editor\",\"title\":\"Editor\",\"kind\":\"class-select\",\"options\":[{\"label\":\"a\",\"value\":\"a\"},{\"label\":\"b\",\"value\":\"b\"}]}]}"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": {
+      "ids": [
+        "tokyo-night-appearance",
+        "tokyo-night-editor"
+      ],
+      "themeName": "Tokyo Night",
+      "author": "tcmmichaelb139",
+      "repo": "tcmmichaelb139/obsidian-tokyonight",
+      "screenshotUrl": "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/images/shot.png",
+      "fields": [
+        {
+          "id": "heading-a",
+          "blockId": "tokyo-night-appearance",
+          "title": "Colours",
+          "kind": "heading",
+          "level": 2,
+          "collapsed": true
+        },
+        {
+          "id": "accent",
+          "blockId": "tokyo-night-appearance",
+          "title": "Accent",
+          "kind": "variable-themed-color",
+          "description": "The colour of links",
+          "format": "hex",
+          "defaultLight": "#3d59a1",
+          "defaultDark": "#7aa2f7"
+        },
+        {
+          "id": "width",
+          "blockId": "tokyo-night-appearance",
+          "title": "Line width",
+          "kind": "variable-number-slider",
+          "min": 400,
+          "max": 1200,
+          "step": 10,
+          "default": "700"
+        },
+        {
+          "id": "font",
+          "blockId": "tokyo-night-appearance",
+          "title": "font",
+          "kind": "variable-select",
+          "options": [
+            {
+              "label": "Inter",
+              "value": "Inter"
+            },
+            {
+              "label": "Serif",
+              "value": "Georgia"
+            }
+          ],
+          "default": "Inter"
+        },
+        {
+          "id": "toggle",
+          "blockId": "tokyo-night-appearance",
+          "title": "Toggle",
+          "kind": "class-toggle",
+          "default": true
+        },
+        {
+          "id": "weird",
+          "blockId": "tokyo-night-appearance",
+          "title": "weird",
+          "kind": "unsupported"
+        },
+        {
+          "id": "12",
+          "blockId": "tokyo-night-appearance",
+          "title": "12",
+          "kind": "variable-number",
+          "default": "3"
+        },
+        {
+          "id": "editor-a",
+          "blockId": "tokyo-night-editor",
+          "title": "Editor",
+          "kind": "class-select",
+          "options": [
+            {
+              "label": "a",
+              "value": "a"
+            },
+            {
+              "label": "b",
+              "value": "b"
+            }
+          ]
+        }
+      ]
+    },
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "80s-neon.variant"
+    ],
+    "result": {
+      "ids": [
+        "neon"
+      ],
+      "themeName": "80's Neon",
+      "author": "someone",
+      "repo": "someone/neon",
+      "fields": [
+        {
+          "id": "glow",
+          "blockId": "neon",
+          "title": "glow",
+          "kind": "class-toggle"
+        }
+      ]
+    },
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/someone/neon/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/80s-neon.variant.json": "{\"ids\":[\"neon\"],\"themeName\":\"80's Neon\",\"author\":\"someone\",\"repo\":\"someone/neon\",\"fields\":[{\"id\":\"glow\",\"blockId\":\"neon\",\"title\":\"glow\",\"kind\":\"class-toggle\"}]}"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "cafe-elegant"
+    ],
+    "result": {
+      "ids": [
+        "cafe"
+      ],
+      "themeName": "Café Élégant",
+      "author": "x",
+      "repo": "x/cafe",
+      "fields": []
+    },
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/x/cafe/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      },
+      {
+        "url": "https://raw.githubusercontent.com/x/cafe/HEAD/obsidian.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/cafe-elegant.json": "{\"ids\":[\"cafe\"],\"themeName\":\"Café Élégant\",\"author\":\"x\",\"repo\":\"x/cafe\",\"fields\":[]}"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "evil"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "theme-docs/evil.json": "null"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "no-settings"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/n/none/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/no-settings.json": "null"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "obsidian-only"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/o/only/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/obsidian-only.json": "null"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "huge"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/h/huge/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/huge.json": "null"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "not-in-registry"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "theme-docs/not-in-registry.json": "null"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "anon"
+    ],
+    "result": {
+      "ids": [
+        "anon"
+      ],
+      "themeName": "Anon",
+      "repo": "a/anon",
+      "fields": [
+        {
+          "id": "t",
+          "blockId": "anon",
+          "title": "t",
+          "kind": "class-toggle"
+        }
+      ]
+    },
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/a/anon/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/anon.json": "{\"ids\":[\"anon\"],\"themeName\":\"Anon\",\"repo\":\"a/anon\",\"fields\":[{\"id\":\"t\",\"blockId\":\"anon\",\"title\":\"t\",\"kind\":\"class-toggle\"}]}"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "themeDocsCacheStats",
+    "args": [],
+    "result": {
+      "entries": 10,
+      "bytes": 2233
+    },
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "settings",
+    "call": "clearStyleSettingsSchemaCache",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "theme-docs/tokyo-night.json": ""
+    }
+  },
+  {
+    "service": "settings",
+    "call": "themeDocsCacheStats",
+    "args": [],
+    "result": {
+      "entries": 9,
+      "bytes": 866
+    },
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": {
+      "ids": [
+        "tokyo-night-appearance",
+        "tokyo-night-editor"
+      ],
+      "themeName": "Tokyo Night",
+      "author": "tcmmichaelb139",
+      "repo": "tcmmichaelb139/obsidian-tokyonight",
+      "screenshotUrl": "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/images/shot.png",
+      "fields": [
+        {
+          "id": "heading-a",
+          "blockId": "tokyo-night-appearance",
+          "title": "Colours",
+          "kind": "heading",
+          "level": 2,
+          "collapsed": true
+        },
+        {
+          "id": "accent",
+          "blockId": "tokyo-night-appearance",
+          "title": "Accent",
+          "kind": "variable-themed-color",
+          "description": "The colour of links",
+          "format": "hex",
+          "defaultLight": "#3d59a1",
+          "defaultDark": "#7aa2f7"
+        },
+        {
+          "id": "width",
+          "blockId": "tokyo-night-appearance",
+          "title": "Line width",
+          "kind": "variable-number-slider",
+          "min": 400,
+          "max": 1200,
+          "step": 10,
+          "default": "700"
+        },
+        {
+          "id": "font",
+          "blockId": "tokyo-night-appearance",
+          "title": "font",
+          "kind": "variable-select",
+          "options": [
+            {
+              "label": "Inter",
+              "value": "Inter"
+            },
+            {
+              "label": "Serif",
+              "value": "Georgia"
+            }
+          ],
+          "default": "Inter"
+        },
+        {
+          "id": "toggle",
+          "blockId": "tokyo-night-appearance",
+          "title": "Toggle",
+          "kind": "class-toggle",
+          "default": true
+        },
+        {
+          "id": "weird",
+          "blockId": "tokyo-night-appearance",
+          "title": "weird",
+          "kind": "unsupported"
+        },
+        {
+          "id": "12",
+          "blockId": "tokyo-night-appearance",
+          "title": "12",
+          "kind": "variable-number",
+          "default": "3"
+        },
+        {
+          "id": "editor-a",
+          "blockId": "tokyo-night-editor",
+          "title": "Editor",
+          "kind": "class-select",
+          "options": [
+            {
+              "label": "a",
+              "value": "a"
+            },
+            {
+              "label": "b",
+              "value": "b"
+            }
+          ]
+        }
+      ]
+    },
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json",
+        "authorization": null,
+        "accept": null
+      },
+      {
+        "url": "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/tokyo-night.json": "{\"ids\":[\"tokyo-night-appearance\",\"tokyo-night-editor\"],\"themeName\":\"Tokyo Night\",\"author\":\"tcmmichaelb139\",\"repo\":\"tcmmichaelb139/obsidian-tokyonight\",\"screenshotUrl\":\"https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/images/shot.png\",\"fields\":[{\"id\":\"heading-a\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Colours\",\"kind\":\"heading\",\"level\":2,\"collapsed\":true},{\"id\":\"accent\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Accent\",\"kind\":\"variable-themed-color\",\"description\":\"The colour of links\",\"format\":\"hex\",\"defaultLight\":\"#3d59a1\",\"defaultDark\":\"#7aa2f7\"},{\"id\":\"width\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Line width\",\"kind\":\"variable-number-slider\",\"min\":400,\"max\":1200,\"step\":10,\"default\":\"700\"},{\"id\":\"font\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"font\",\"kind\":\"variable-select\",\"options\":[{\"label\":\"Inter\",\"value\":\"Inter\"},{\"label\":\"Serif\",\"value\":\"Georgia\"}],\"default\":\"Inter\"},{\"id\":\"toggle\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Toggle\",\"kind\":\"class-toggle\",\"default\":true},{\"id\":\"weird\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"weird\",\"kind\":\"unsupported\"},{\"id\":\"12\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"12\",\"kind\":\"variable-number\",\"default\":\"3\"},{\"id\":\"editor-a\",\"blockId\":\"tokyo-night-editor\",\"title\":\"Editor\",\"kind\":\"class-select\",\"options\":[{\"label\":\"a\",\"value\":\"a\"},{\"label\":\"b\",\"value\":\"b\"}]}]}"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "registryDown",
+    "args": [],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "settings",
+    "call": "clearStyleSettingsSchemaCache",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "theme-docs/tokyo-night.json": ""
+    }
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": {
+      "ids": [
+        "tokyo-night-appearance",
+        "tokyo-night-editor"
+      ],
+      "themeName": "Tokyo Night",
+      "author": "tcmmichaelb139",
+      "repo": "tcmmichaelb139/obsidian-tokyonight",
+      "screenshotUrl": "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/images/shot.png",
+      "fields": [
+        {
+          "id": "heading-a",
+          "blockId": "tokyo-night-appearance",
+          "title": "Colours",
+          "kind": "heading",
+          "level": 2,
+          "collapsed": true
+        },
+        {
+          "id": "accent",
+          "blockId": "tokyo-night-appearance",
+          "title": "Accent",
+          "kind": "variable-themed-color",
+          "description": "The colour of links",
+          "format": "hex",
+          "defaultLight": "#3d59a1",
+          "defaultDark": "#7aa2f7"
+        },
+        {
+          "id": "width",
+          "blockId": "tokyo-night-appearance",
+          "title": "Line width",
+          "kind": "variable-number-slider",
+          "min": 400,
+          "max": 1200,
+          "step": 10,
+          "default": "700"
+        },
+        {
+          "id": "font",
+          "blockId": "tokyo-night-appearance",
+          "title": "font",
+          "kind": "variable-select",
+          "options": [
+            {
+              "label": "Inter",
+              "value": "Inter"
+            },
+            {
+              "label": "Serif",
+              "value": "Georgia"
+            }
+          ],
+          "default": "Inter"
+        },
+        {
+          "id": "toggle",
+          "blockId": "tokyo-night-appearance",
+          "title": "Toggle",
+          "kind": "class-toggle",
+          "default": true
+        },
+        {
+          "id": "weird",
+          "blockId": "tokyo-night-appearance",
+          "title": "weird",
+          "kind": "unsupported"
+        },
+        {
+          "id": "12",
+          "blockId": "tokyo-night-appearance",
+          "title": "12",
+          "kind": "variable-number",
+          "default": "3"
+        },
+        {
+          "id": "editor-a",
+          "blockId": "tokyo-night-editor",
+          "title": "Editor",
+          "kind": "class-select",
+          "options": [
+            {
+              "label": "a",
+              "value": "a"
+            },
+            {
+              "label": "b",
+              "value": "b"
+            }
+          ]
+        }
+      ]
+    },
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json",
+        "authorization": null,
+        "accept": null
+      },
+      {
+        "url": "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/theme.css",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/tokyo-night.json": "{\"ids\":[\"tokyo-night-appearance\",\"tokyo-night-editor\"],\"themeName\":\"Tokyo Night\",\"author\":\"tcmmichaelb139\",\"repo\":\"tcmmichaelb139/obsidian-tokyonight\",\"screenshotUrl\":\"https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/images/shot.png\",\"fields\":[{\"id\":\"heading-a\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Colours\",\"kind\":\"heading\",\"level\":2,\"collapsed\":true},{\"id\":\"accent\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Accent\",\"kind\":\"variable-themed-color\",\"description\":\"The colour of links\",\"format\":\"hex\",\"defaultLight\":\"#3d59a1\",\"defaultDark\":\"#7aa2f7\"},{\"id\":\"width\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Line width\",\"kind\":\"variable-number-slider\",\"min\":400,\"max\":1200,\"step\":10,\"default\":\"700\"},{\"id\":\"font\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"font\",\"kind\":\"variable-select\",\"options\":[{\"label\":\"Inter\",\"value\":\"Inter\"},{\"label\":\"Serif\",\"value\":\"Georgia\"}],\"default\":\"Inter\"},{\"id\":\"toggle\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"Toggle\",\"kind\":\"class-toggle\",\"default\":true},{\"id\":\"weird\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"weird\",\"kind\":\"unsupported\"},{\"id\":\"12\",\"blockId\":\"tokyo-night-appearance\",\"title\":\"12\",\"kind\":\"variable-number\",\"default\":\"3\"},{\"id\":\"editor-a\",\"blockId\":\"tokyo-night-editor\",\"title\":\"Editor\",\"kind\":\"class-select\",\"options\":[{\"label\":\"a\",\"value\":\"a\"},{\"label\":\"b\",\"value\":\"b\"}]}]}"
+    }
+  },
+  {
+    "service": "settings",
+    "call": "clearThemeDocsCache",
+    "args": [],
+    "result": 10,
+    "requests": [],
+    "commands": [],
+    "changed": {
+      "theme-docs/80s-neon.variant.json": null,
+      "theme-docs/anon.json": null,
+      "theme-docs/cafe-elegant.json": null,
+      "theme-docs/community-css-themes.json": null,
+      "theme-docs/evil.json": null,
+      "theme-docs/huge.json": null,
+      "theme-docs/no-settings.json": null,
+      "theme-docs/not-in-registry.json": null,
+      "theme-docs/obsidian-only.json": null,
+      "theme-docs/tokyo-night.json": null
+    }
+  },
+  {
+    "service": "settings",
+    "call": "themeDocsCacheStats",
+    "args": [],
+    "result": {
+      "entries": 0,
+      "bytes": 0
+    },
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "settings",
+    "call": "getStyleSettingsSchema",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {
+      "theme-docs/tokyo-night.json": "null"
+    }
+  },
+  {
+    "service": "market",
+    "call": "npm",
+    "args": [
+      {
+        "stdout": "[{\"name\":\"@quartz-themes/core\",\"description\":\"the transformer\"},{\"name\":\"@quartz-themes/tokyo-night\",\"description\":\"Tokyo Night\"},{\"name\":\"@quartz-themes/minimal\"},{\"name\":\"quartz-themes-fake\",\"description\":\"not ours\"},{\"name\":\"@quartz-themes/catppuccin\",\"description\":\"Catppuccin\"}]"
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "listThemes",
+    "args": [],
+    "result": {
+      "themes": [
+        {
+          "id": "tokyo-night",
+          "description": "Tokyo Night",
+          "stars": 3,
+          "topics": [
+            "obsidian",
+            "dark"
+          ],
+          "githubDescription": "Tokyo Night for Quartz"
+        },
+        {
+          "id": "minimal",
+          "stars": 0
+        },
+        {
+          "id": "catppuccin",
+          "description": "Catppuccin"
+        }
+      ],
+      "unavailable": false
+    },
+    "requests": [
+      {
+        "url": "https://api.github.com/orgs/quartz-themes/repos?per_page=100&page=1",
+        "authorization": null,
+        "accept": "application/vnd.github+json"
+      }
+    ],
+    "commands": [
+      [
+        "npm",
+        "search",
+        "@quartz-themes",
+        "--json",
+        "--searchlimit=250"
+      ]
+    ],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "listThemes",
+    "args": [],
+    "result": {
+      "themes": [
+        {
+          "id": "tokyo-night",
+          "description": "Tokyo Night",
+          "stars": 3,
+          "topics": [
+            "obsidian",
+            "dark"
+          ],
+          "githubDescription": "Tokyo Night for Quartz"
+        },
+        {
+          "id": "minimal",
+          "stars": 0
+        },
+        {
+          "id": "catppuccin",
+          "description": "Catppuccin"
+        }
+      ],
+      "unavailable": false
+    },
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "tokyo-night"
+    ],
+    "result": {
+      "modes": [
+        "dark"
+      ],
+      "variations": [],
+      "styleSettingsId": [
+        "tokyo-night-appearance"
+      ],
+      "fonts": [
+        "Inter"
+      ]
+    },
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "catppuccin"
+    ],
+    "result": {
+      "modes": [
+        "dark",
+        "light"
+      ],
+      "variations": [
+        "frappe",
+        "latte"
+      ],
+      "styleSettingsId": [
+        "catppuccin-style"
+      ],
+      "fonts": [
+        "Inter"
+      ]
+    },
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/catppuccin/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "catppuccin"
+    ],
+    "result": {
+      "modes": [
+        "dark",
+        "light"
+      ],
+      "variations": [
+        "frappe",
+        "latte"
+      ],
+      "styleSettingsId": [
+        "catppuccin-style"
+      ],
+      "fonts": [
+        "Inter"
+      ]
+    },
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "plain"
+    ],
+    "result": {
+      "modes": [],
+      "variations": [],
+      "styleSettingsId": [],
+      "fonts": []
+    },
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/plain/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "listid"
+    ],
+    "result": {
+      "modes": [],
+      "variations": [],
+      "styleSettingsId": [
+        "a",
+        "b"
+      ],
+      "fonts": []
+    },
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/listid/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "gone"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/gone/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "gone"
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "nullbody"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/nullbody/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "nullbody"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/nullbody/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "down"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/down/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "getThemeDetail",
+    "args": [
+      "down"
+    ],
+    "result": null,
+    "requests": [
+      {
+        "url": "https://cdn.jsdelivr.net/npm/@quartz-themes/down/theme.json",
+        "authorization": null,
+        "accept": null
+      }
+    ],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "installTheme",
+    "args": [
+      "catppuccin"
+    ],
+    "result": {
+      "success": true,
+      "output": "added 2 packages"
+    },
+    "requests": [],
+    "commands": [
+      [
+        "npm",
+        "install",
+        "@quartz-themes/core",
+        "@quartz-themes/catppuccin"
+      ]
+    ],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "invalidateCache",
+    "args": [],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "npm",
+    "args": [
+      {
+        "stdout": "not json"
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "listThemes",
+    "args": [],
+    "result": {
+      "themes": [
+        {
+          "id": "default"
+        },
+        {
+          "id": "tokyo-night"
+        },
+        {
+          "id": "catppuccin"
+        },
+        {
+          "id": "nord"
+        },
+        {
+          "id": "everforest"
+        },
+        {
+          "id": "minimal"
+        },
+        {
+          "id": "obsidian"
+        }
+      ],
+      "unavailable": true
+    },
+    "requests": [],
+    "commands": [
+      [
+        "npm",
+        "search",
+        "@quartz-themes",
+        "--json",
+        "--searchlimit=250"
+      ]
+    ],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "npm",
+    "args": [
+      {
+        "stdout": "[]"
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "listThemes",
+    "args": [],
+    "result": {
+      "themes": [
+        {
+          "id": "default"
+        },
+        {
+          "id": "tokyo-night"
+        },
+        {
+          "id": "catppuccin"
+        },
+        {
+          "id": "nord"
+        },
+        {
+          "id": "everforest"
+        },
+        {
+          "id": "minimal"
+        },
+        {
+          "id": "obsidian"
+        }
+      ],
+      "unavailable": true
+    },
+    "requests": [],
+    "commands": [
+      [
+        "npm",
+        "search",
+        "@quartz-themes",
+        "--json",
+        "--searchlimit=250"
+      ]
+    ],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "npm",
+    "args": [
+      {
+        "error": true
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "listThemes",
+    "args": [],
+    "result": {
+      "themes": [
+        {
+          "id": "default"
+        },
+        {
+          "id": "tokyo-night"
+        },
+        {
+          "id": "catppuccin"
+        },
+        {
+          "id": "nord"
+        },
+        {
+          "id": "everforest"
+        },
+        {
+          "id": "minimal"
+        },
+        {
+          "id": "obsidian"
+        }
+      ],
+      "unavailable": true
+    },
+    "requests": [],
+    "commands": [
+      [
+        "npm",
+        "search",
+        "@quartz-themes",
+        "--json",
+        "--searchlimit=250"
+      ]
+    ],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "npm",
+    "args": [
+      {
+        "stdout": "[{\"name\":\"@quartz-themes/core\"}]"
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "listThemes",
+    "args": [],
+    "result": {
+      "themes": [
+        {
+          "id": "default"
+        },
+        {
+          "id": "tokyo-night"
+        },
+        {
+          "id": "catppuccin"
+        },
+        {
+          "id": "nord"
+        },
+        {
+          "id": "everforest"
+        },
+        {
+          "id": "minimal"
+        },
+        {
+          "id": "obsidian"
+        }
+      ],
+      "unavailable": true
+    },
+    "requests": [],
+    "commands": [
+      [
+        "npm",
+        "search",
+        "@quartz-themes",
+        "--json",
+        "--searchlimit=250"
+      ]
+    ],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "npm",
+    "args": [
+      {
+        "stdout": "[{\"description\":\"no name\"},{\"name\":\"@quartz-themes/kept\"}]"
+      }
+    ],
+    "result": null,
+    "requests": [],
+    "commands": [],
+    "changed": {}
+  },
+  {
+    "service": "market",
+    "call": "listThemes",
+    "args": [],
+    "result": {
+      "themes": [
+        {
+          "id": "default"
+        },
+        {
+          "id": "tokyo-night"
+        },
+        {
+          "id": "catppuccin"
+        },
+        {
+          "id": "nord"
+        },
+        {
+          "id": "everforest"
+        },
+        {
+          "id": "minimal"
+        },
+        {
+          "id": "obsidian"
+        }
+      ],
+      "unavailable": true
+    },
+    "requests": [],
+    "commands": [
+      [
+        "npm",
+        "search",
+        "@quartz-themes",
+        "--json",
+        "--searchlimit=250"
+      ]
+    ],
+    "changed": {}
+  }
+]

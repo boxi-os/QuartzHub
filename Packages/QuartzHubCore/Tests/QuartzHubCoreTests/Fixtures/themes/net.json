@@ -1,0 +1,165 @@
+{
+  "net": {
+    "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json": {
+      "status": 200,
+      "json": [
+        {
+          "name": "Tokyo Night",
+          "author": "tcmmichaelb139",
+          "repo": "tcmmichaelb139/obsidian-tokyonight",
+          "screenshot": "images/shot.png"
+        },
+        {
+          "name": "80's Neon",
+          "author": "someone",
+          "repo": "someone/neon"
+        },
+        {
+          "name": "Café Élégant",
+          "author": "x",
+          "repo": "x/cafe"
+        },
+        {
+          "name": "Evil",
+          "author": "e",
+          "repo": "../../evil"
+        },
+        {
+          "name": "No Settings",
+          "author": "n",
+          "repo": "n/none"
+        },
+        {
+          "name": "Obsidian Only",
+          "author": "o",
+          "repo": "o/only"
+        },
+        {
+          "name": "Huge",
+          "author": "h",
+          "repo": "h/huge"
+        },
+        {
+          "name": "Anon",
+          "repo": "a/anon"
+        }
+      ],
+      "fail": false
+    },
+    "https://raw.githubusercontent.com/tcmmichaelb139/obsidian-tokyonight/HEAD/theme.css": {
+      "status": 200,
+      "text": "/* @settings\nname: Appearance\nid: tokyo-night-appearance\nsettings:\n  - id: heading-a\n    title: Colours\n    type: heading\n    level: 2\n    collapsed: true\n  - id: accent\n    title: Accent\n    description: The colour of links\n    type: variable-themed-color\n    format: hex\n    default-light: '#3d59a1'\n    default-dark: '#7aa2f7'\n  - id: width\n    title: Line width\n    type: variable-number-slider\n    default: 700\n    min: '400'\n    max: 1200\n    step: 10\n  - id: font\n    type: variable-select\n    default: Inter\n    options:\n      - Inter\n      - label: Serif\n        value: Georgia\n      - { label: Broken }\n      - 42\n  - id: toggle\n    title: Toggle\n    type: class-toggle\n    default: true\n  - id: weird\n    type: something-new\n  - title: no id\n    type: info-text\n  - id: 12\n    type: variable-number\n    level: x\n    default: 3\n*/\nbody { color: red; }\n/* @settings\nid: tokyo-night-editor\nsettings:\n  - id: editor-a\n    title: Editor\n    type: class-select\n    allowEmpty: false\n    options: [a, b]\n*/\n/* @settings\nid: broken\nsettings:\n  - id: [unclosed\n*/\n/* @settings\nname: no-settings-list\nsettings: nope\n*/"
+    },
+    "https://raw.githubusercontent.com/someone/neon/HEAD/theme.css": {
+      "status": 200,
+      "text": "/* @settings\nid: neon\nsettings:\n  - id: glow\n    type: class-toggle\n*/"
+    },
+    "https://raw.githubusercontent.com/x/cafe/HEAD/theme.css": {
+      "status": 404,
+      "text": "no"
+    },
+    "https://raw.githubusercontent.com/x/cafe/HEAD/obsidian.css": {
+      "status": 200,
+      "text": "/*@settings\nid: cafe\nsettings: []\n*/"
+    },
+    "https://raw.githubusercontent.com/n/none/HEAD/theme.css": {
+      "status": 200,
+      "text": "body {}"
+    },
+    "https://raw.githubusercontent.com/o/only/HEAD/theme.css": {
+      "fail": true
+    },
+    "https://raw.githubusercontent.com/o/only/HEAD/obsidian.css": {
+      "status": 200,
+      "text": "/* @settings\nid: only\nsettings:\n  - id: x\n    type: heading\n*/"
+    },
+    "https://raw.githubusercontent.com/a/anon/HEAD/theme.css": {
+      "status": 200,
+      "text": "/* @settings\nid: anon\nsettings:\n  - id: t\n    type: class-toggle\n*/"
+    },
+    "https://raw.githubusercontent.com/h/huge/HEAD/theme.css": {
+      "status": 200,
+      "headers": {
+        "content-length": "17825792"
+      },
+      "text": "/* @settings\nid: huge\nsettings: []\n*/"
+    },
+    "https://api.github.com/orgs/quartz-themes/repos?per_page=100&page=1": {
+      "status": 200,
+      "json": [
+        {
+          "name": "tokyo-night",
+          "stargazers_count": 3,
+          "topics": [
+            "obsidian",
+            "dark"
+          ],
+          "description": "Tokyo Night for Quartz"
+        },
+        {
+          "name": "minimal",
+          "stargazers_count": 0,
+          "topics": [],
+          "description": null
+        },
+        {
+          "name": "unlisted",
+          "stargazers_count": 9,
+          "topics": [
+            "x"
+          ],
+          "description": "not on npm"
+        }
+      ]
+    },
+    "https://cdn.jsdelivr.net/npm/@quartz-themes/catppuccin/theme.json": {
+      "status": 200,
+      "json": {
+        "meta": {
+          "styleSettingsId": "catppuccin-style",
+          "modes": [
+            "dark",
+            "light"
+          ],
+          "variations": [
+            "frappe",
+            "latte"
+          ],
+          "fonts": [
+            "Inter"
+          ]
+        }
+      }
+    },
+    "https://cdn.jsdelivr.net/npm/@quartz-themes/plain/theme.json": {
+      "status": 200,
+      "json": {
+        "meta": {}
+      }
+    },
+    "https://cdn.jsdelivr.net/npm/@quartz-themes/listid/theme.json": {
+      "status": 200,
+      "json": {
+        "meta": {
+          "styleSettingsId": [
+            "a",
+            "b"
+          ]
+        }
+      }
+    },
+    "https://cdn.jsdelivr.net/npm/@quartz-themes/gone/theme.json": {
+      "status": 404,
+      "text": "nope"
+    },
+    "https://cdn.jsdelivr.net/npm/@quartz-themes/down/theme.json": {
+      "fail": true
+    },
+    "https://cdn.jsdelivr.net/npm/@quartz-themes/nullbody/theme.json": {
+      "status": 200,
+      "json": null
+    }
+  },
+  "registry": "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json",
+  "npmOutput": "[{\"name\":\"@quartz-themes/core\",\"description\":\"the transformer\"},{\"name\":\"@quartz-themes/tokyo-night\",\"description\":\"Tokyo Night\"},{\"name\":\"@quartz-themes/minimal\"},{\"name\":\"quartz-themes-fake\",\"description\":\"not ours\"},{\"name\":\"@quartz-themes/catppuccin\",\"description\":\"Catppuccin\"}]"
+}
