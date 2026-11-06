@@ -99,8 +99,12 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   (`ConfigFile` über `yaml-edit`), dazu aus Punkt 2 `ProjectPaths` und Duplizieren, alle drei gegen
   QuartzControls eigenen Code gemessen (`scripts/*-golden.mjs`), dazu `ProjectDependencies` und
   `PluginCommands`, dann das Options-Schema (`PluginSource`, `OptionSchema`, `PluginSchemaReader`,
-  `qh-check option-schema`). Zuletzt der Marktplatz (`Marketplace`). Punkt 3 ist fertig; als Nächstes Punkt 4,
-  Build und Server.
+  `qh-check option-schema`). Zuletzt der Marktplatz (`Marketplace`). Punkt 3 ist fertig. Punkt 4 (Build und Server) ist
+  fertig: `BuildService` (Build und Dev-Server), `BuildOutputGuard`, `ServerScan`,
+  `RunningServersStore`, `OrphanedServers`, dazu in der App die Fragen beim Start und beim
+  Beenden (`App/Shell/ServerLifecycle.swift`); was vor dem Build noch fehlt (Frames, Stile,
+  Schriften), kommt mit Punkt 5. Echte Quartz-Läufe: `QH_QUARTZ_TESTS=1`; UI-Test der Fragen:
+  `TEST_RUNNER_QH_SERVER_PROJECT=<Kopie von gui-test>`. Als Nächstes Punkt 5, Stile und Layout.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

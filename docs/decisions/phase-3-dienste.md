@@ -777,3 +777,27 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
 - `SettingsFile.serversOnQuit` ist jetzt auch schreibbar (für „Nicht mehr fragen“).
 - Gegenproben (5, jede lässt einen Test scheitern): Datei nicht geleert, jede eingetragene PID
   zählt, kein zweiter Blick vor dem Signal, keine Frist beim Beenden, wartende Starts laufen weiter.
+
+### Die Fragen in der App (`index.ts` `promptForOrphanedServers`, `before-quit` → `App/Shell/ServerLifecycle.swift`)
+
+- `AppServices` hält einen `BuildService` für die ganze App (Umgebung einmal aufgelöst, die
+  Node-Einstellung beim Start gelesen), `AppDelegate` stellt die beiden Fragen.
+- **Beim Start**, nach dem Fenster: die verwaisten Server, je Zeile Projektname und Port. Erster
+  Knopf und Return ist „Weiterlaufen lassen“, der zweite „Beenden“. QuartzControl hatte „Beenden“
+  vorn (`defaultId: 0`); die Regel „die sichere Antwort zuerst“ gilt hier.
+- **Beim Beenden**, wenn Server laufen: `applicationShouldTerminate` antwortet `.terminateLater`
+  und fragt (oder nimmt die gespeicherte Antwort aus `serversOnQuit`): „Abbrechen“ (erster Knopf),
+  „Weiterlaufen lassen“, „Server beenden“, dazu „Nicht mehr fragen“, das die geklickte Antwort
+  speichert. Ein zweites Cmd+Q, während die Frage offen ist, öffnet keine zweite.
+- **Gemessen im UI-Test** (`UITests/ServerQuestionsTests.swift`, Debug-Argument
+  `-QHStartServerFor <projekt>`, echter `quartz build --serve` einer Kopie von gui-test, eigenes
+  Profil über `-QHProfileDir`): Cmd+Q zeigt die Frage mit „ui-gui-test — Port 8080“; Escape
+  schließt sie und die App bleibt (gemessen, nicht angenommen: Escape trifft „Abbrechen“);
+  „Weiterlaufen lassen“ beendet die App, der Server antwortet weiter; der nächste Start fragt nach
+  ihm, „Beenden“ beendet ihn, der Port ist danach zu, `running-servers.json` leer; der Start
+  danach fragt nicht mehr, und Cmd+Q beendet ohne Frage. macOS 27 stapelt die Knöpfe des NSAlert
+  untereinander und gibt ihnen eigene Kennungen (`action-button-1` …), daher sucht der Test sie
+  über die Beschriftung. Die UI-Automation verlangte einmal die Bestätigung des Nutzers.
+- Gegenproben (4, jede lässt den UI-Test scheitern): keine Frage beim Start, keine Frage beim
+  Beenden, „Weiterlaufen lassen“ stoppt die Server doch, „Beenden“ bei verwaisten Servern tut
+  nichts. Der Rauchtest (`SmokeTests`, drei Tests) läuft mit dem neuen Delegate weiter grün.

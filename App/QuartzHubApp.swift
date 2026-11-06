@@ -3,6 +3,9 @@ import SwiftUI
 
 @main
 struct QuartzHubApp: App {
+  /// The questions about dev servers at the start and at quit (Shell/ServerLifecycle.swift).
+  @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
   init() {
     // The language from QuartzHub's settings.json (QuartzControl's form, taken over on first
     // start). A UI test pins it with -QHLanguage de|en, so screenshots and checks do not depend on

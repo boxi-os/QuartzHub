@@ -4,7 +4,7 @@
 > abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`); Phase 3 läuft, Punkt 1
 > (Grundlagen) fertig am 2026-11-06 (`decisions/phase-3-dienste.md`), Punkt 2 (Projekte) bis auf
 > die Teile, die die Config brauchen; Punkt 3 (Konfiguration und Plugins) läuft, die Config ist
-> fertig, ebenso die Plugin-Befehle, das Options-Schema und der Marktplatz; als Nächstes Punkt 4 (Build und Server). Abweichungen vom ursprünglichen Plan, mit Messung in
+> fertig, ebenso die Plugin-Befehle, das Options-Schema und der Marktplatz; Punkt 4 (Build und Server) fertig; als Nächstes Punkt 5 (Stile und Layout). Abweichungen vom ursprünglichen Plan, mit Messung in
 > `decisions/phase-1-geruest.md`:
 >
 > - Bundle-ID `io.github.boxios.quartzhub` (ohne Unterstrich: in `CFBundleIdentifier` nicht erlaubt)
@@ -162,6 +162,13 @@ nach Abhängigkeit:
      vor dem Speichern (Punkt 7) und den Token aus den Zugängen (Punkt 8).
 4. **Build und Server:** `buildService`, `buildOutputGuard`, `serverDiscovery`,
    `runningServersStore`, Waisen-Erkennung beim Start und Frage beim Beenden (im Spike gefehlt)
+   - **Stand 2026-11-06: fertig.** `ProcessRunner` (Ausgabe während des Laufs, `launch` für den
+     Server), `RunningServersStore`, `BuildOutputGuard` (auch über den echten Pfad), `ServerScan`,
+     `BuildService` (Build und Dev-Server), `OrphanedServers`, `stopAllServers`; in der App die
+     Frage nach verwaisten Servern und die beim Beenden, im UI-Test mit echtem Quartz gemessen.
+     Die Vorbereitung vor Build und Start ist eine Liste von Schritten; Frames, Stile und
+     Google-Schriften trägt Punkt 5 dort ein (Nutzer, 2026-11-06). Offen: ATS für die HTTP-Probe
+     im App-Bundle, gemessen mit der ersten Seite, die den Scan zeigt.
 5. **Stile und Layout:**
    - `styleService` (sass aus dem Projekt als Kindprozess) und `fontService`/`fontFile`
      (Obergrenzen beim Entpacken)

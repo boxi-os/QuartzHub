@@ -1,0 +1,138 @@
+import AppKit
+import QuartzHubCore
+
+/// What the app holds for its whole life: the console buffer and the one `BuildService`, with the
+/// server record in QuartzHub's profile (`-QHProfileDir` moves it, as everything else).
+@MainActor
+final class AppServices {
+  static let shared = AppServices()
+
+  let logs = LogBuffer()
+  let store = RunningServersStore(profile: AppProfile.own)
+  let builds: BuildService
+
+  private init() {
+    let profile = AppProfile.own
+    // Resolved once (the login shell is asked for PATH) and then kept; the Node setting is read
+    // here, as a running server keeps the environment it was started with.
+    let environment = Task<ToolEnvironment, Never> {
+      var mode = ToolEnvironment.NodeMode.embedded
+      if case .ok(.object(let object)) = JSONStore.peek(profile.settings), SettingsFile(object: object).nodeRuntime == .system {
+        mode = .system
+      }
+      return await ToolEnvironment.resolve(nodeMode: mode)
+    }
+    builds = BuildService(logs: logs, environment: { await environment.value }, store: store)
+  }
+}
+
+/// The two questions about dev servers that only the app can ask (QuartzControl's
+/// `promptForOrphanedServers` and its `before-quit` handler, docs/decisions/phase-3-dienste.md):
+///
+/// - **At the start**, after the window: servers a previous run left behind (crash, force quit,
+///   "Weiterlaufen lassen"). The safe answer is the first button and Return: keep them
+///   (QuartzControl put "Beenden" there; conventions, "Ja/Nein-Bestätigungen": die sichere Antwort
+///   zuerst).
+/// - **At quit**, when servers run: "Abbrechen" (first, Return and Escape), "Weiterlaufen lassen",
+///   "Server beenden"; "Nicht mehr fragen" remembers the answer that was clicked, in
+///   `settings.json` (`serversOnQuit`), which also skips the question.
+@MainActor
+final class AppDelegate: NSObject, NSApplicationDelegate {
+  private var quitDecided = false
+  private var quitAsking = false
+
+  func applicationDidFinishLaunching(_ notification: Notification) {
+    #if DEBUG
+    // For the UI test of these questions: a dev server of the project at that path, started as
+    // the server page will start it.
+    if let path = UserDefaults.standard.string(forKey: "QHStartServerFor"),
+       let entry = try? ProjectStore(profile: AppProfile.own).add(path: path) {
+      Task { _ = await AppServices.shared.builds.startServer(projectId: entry.id, project: URL(fileURLWithPath: path)) }
+    }
+    #endif
+    // After the window: the question runs code that signals processes, and nothing of that is
+    // worth losing the window over.
+    DispatchQueue.main.async { self.askAboutOrphans() }
+  }
+
+  private func askAboutOrphans() {
+    let orphans = OrphanedServers.detect(store: AppServices.shared.store)
+    guard !orphans.isEmpty else { return }
+    let alert = NSAlert()
+    alert.alertStyle = .informational
+    alert.messageText = L10n.t("main.orphanTitle")
+    alert.informativeText = L10n.t("main.orphanMessage") + "\n" + entries(orphans.map { ($0.projectId, $0.port) })
+    alert.addButton(withTitle: L10n.t("main.orphanKeepRunning"))
+    alert.addButton(withTitle: L10n.t("main.orphanQuit"))
+    if alert.runModal() == .alertSecondButtonReturn { OrphanedServers.stop(orphans) }
+  }
+
+  func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+    if quitDecided { return .terminateNow }
+    // A second Cmd+Q while the question is up opens no second one.
+    if quitAsking { return .terminateCancel }
+    quitAsking = true
+    Task {
+      let quit = await settleRunningServers()
+      quitAsking = false
+      quitDecided = quit
+      sender.reply(toApplicationShouldTerminate: quit)
+    }
+    return .terminateLater
+  }
+
+  /// true: quit (with whatever had to happen to the servers done).
+  private func settleRunningServers() async -> Bool {
+    let builds = AppServices.shared.builds
+    let running = await builds.runningServerSummaries()
+    guard !running.isEmpty else { return true }
+    // Read now, not at the start: switching the question back on takes effect without a restart.
+    var decision = settings().serversOnQuit
+    if decision == .ask {
+      guard let answer = askAboutRunning(running) else { return false }
+      decision = answer
+    }
+    if decision == .stop { await builds.stopAllServers() }
+    return true
+  }
+
+  /// nil: cancelled, nothing decided, nothing remembered.
+  private func askAboutRunning(_ running: [(projectId: String, port: Int)]) -> SettingsFile.ServersOnQuit? {
+    let alert = NSAlert()
+    alert.alertStyle = .warning
+    alert.messageText = L10n.t("main.quitMessage")
+    alert.informativeText = entries(running) + "\n\n" + L10n.t("main.quitDetail")
+    alert.addButton(withTitle: L10n.t("main.confirmCancel"))
+    alert.addButton(withTitle: L10n.t("main.orphanKeepRunning"))
+    alert.addButton(withTitle: L10n.t("main.quitStopServers"))
+    alert.showsSuppressionButton = true
+    alert.suppressionButton?.title = L10n.t("main.quitDontAskAgain")
+    let answer: SettingsFile.ServersOnQuit
+    switch alert.runModal() {
+    case .alertSecondButtonReturn: answer = .keep
+    case .alertThirdButtonReturn: answer = .stop
+    default: return nil
+    }
+    // The answer clicked, not "never ask": ticked beside "Weiterlaufen lassen" it means something
+    // else than beside "Server beenden". Read-modify-write, the other settings stay.
+    if alert.suppressionButton?.state == .on {
+      var file = settings()
+      file.serversOnQuit = answer
+      try? FileManager.default.createDirectory(at: AppProfile.own.url, withIntermediateDirectories: true)
+      try? JSONStore.write(file.json, to: AppProfile.own.settings)
+    }
+    return answer
+  }
+
+  private func settings() -> SettingsFile {
+    SettingsFile(object: JSONStore.read(AppProfile.own.settings, orEmpty: .object).objectValue ?? JSONObject())
+  }
+
+  /// One line per server: the project's name (its id when the list does not know it) and port.
+  private func entries(_ servers: [(projectId: String, port: Int)]) -> String {
+    let store = ProjectStore(profile: AppProfile.own)
+    return servers.map { server in
+      L10n.t("main.orphanEntry", ["name": store.project(id: server.projectId)?.name ?? server.projectId, "port": String(server.port)])
+    }.joined(separator: "\n")
+  }
+}
