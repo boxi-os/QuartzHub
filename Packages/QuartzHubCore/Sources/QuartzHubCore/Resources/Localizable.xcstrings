@@ -44409,6 +44409,23 @@
         }
       }
     },
+    "styles.sassCheckBroken" : {
+      "comment" : "Styles page and Frames tab: the sass-check helper did not answer (a QuartzHub fault, not the project's)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die SCSS-Prüfung konnte nicht ausgeführt werden: {{reason}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The SCSS check could not be run: {{reason}}"
+          }
+        }
+      }
+    },
     "styles.scssStaleBy.fontImport" : {
       "localizations" : {
         "de" : {

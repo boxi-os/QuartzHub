@@ -1012,3 +1012,25 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
   `base`“). Ungefangen bleibt, dass das Ausweichen beim Umbenennen auch die eben geschriebenen
   Namen meidet: Kein Name der zwölf endet auf „-<Zahl>“, die Abfrage ist eine Vorsicht aus
   QuartzControl, die nie greift.
+
+### SCSS-Prüfung und Quartz' Maße (`checkStyles`, `checkStyleSource`, `readQuartzFrameMeasures` → `ScssCheck`, Helfer `sass-check`)
+
+- **Sass des Projekts im Kindprozess** (Nutzer, 2026-11-06): Der neue Helfer `sass-check` lädt
+  `sass` per `createRequire` aus dem Projekt und kompiliert, was er gefragt wird; die Bedeutung
+  (Diagnose, Maße, „nicht verfügbar“) entsteht in Swift. QuartzControl lud dasselbe Sass in seinen
+  Hauptprozess; hier läuft es in einem kurzen Prozess, der nichts zu schützen hat. Mehrere
+  Übersetzungen gehen in einem Aufruf (die Maße mit und ohne `.page`-Obergrenze). Frist 120 s.
+  Antwortet der Helfer selbst nicht, heißt es „Die SCSS-Prüfung konnte nicht ausgeführt werden“
+  (neu, `styles.sassCheckBroken`), getrennt von „Sass fehlt“ und „npm entpackt noch“.
+- **Ein Sass zum Messen:** `sass@1.104.1` (gui-tests Fassung) liegt als Entwicklungsabhängigkeit in
+  `Helpers/node_modules`; die Testprojekte verlinken `node_modules/sass` darauf. Es reist nicht
+  mit der App.
+- **Gemessen gegen QuartzControls Code:** `scripts/scss-check-golden.mjs` lässt QuartzControls
+  Funktionen mit demselben Sass auf 22 Projekten laufen (die Stylesheets von gui-test und Example,
+  Syntaxfehler, ein Fehler in einer geladenen Datei und in einer außerhalb von quartz/styles, eine
+  unbekannte Variable, beta.2s Block im eigenen, die fehlende `_quartzcontrol.scss`, kein Sass,
+  Sass halb entpackt, `.css`-Dateien, und für die Maße: keine variables.scss, keine base.scss,
+  keine, eine nicht auswertbare und eine Obergrenze in px, ein fehlendes Raster, Breakpoints in em,
+  eine Spur mit Klammern, kaputte variables.scss). 34 Antworten, alle gleich.
+- Gegenproben (13, jede lässt einen Test scheitern; zwei waren erst ungefangen und bekamen ihren
+  Fall: der Fehler außerhalb von quartz/styles, die Spur mit Klammern).
