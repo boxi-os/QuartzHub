@@ -73,6 +73,8 @@ public struct CommandResult: Sendable, Equatable {
   /// stdout alone, for parsing: a warning on stderr can land between the records (git with
   /// AppleDouble files in `.git/objects/pack`, measured on macOS by QuartzControl).
   public var stdout: String
+  /// stderr alone: `lsof` says "nothing matched" with exit 1 and an empty stderr.
+  public var stderr: String = ""
 
   public var success: Bool { termination == .exited(0) }
 
@@ -239,6 +241,7 @@ private struct Supervisor {
   private var answered = false
   private var output = Data()
   private var stdout = Data()
+  private var stderr = Data()
 
   init(command: Command, wake: Int32, onOutput: (@Sendable (ProcessRunner.OutputStream, String) -> Void)?,
        finish: @escaping (CommandResult) -> Void) {
@@ -254,7 +257,8 @@ private struct Supervisor {
     finish(CommandResult(
       termination: termination,
       output: String(decoding: output, as: UTF8.self),
-      stdout: String(decoding: stdout, as: UTF8.self)
+      stdout: String(decoding: stdout, as: UTF8.self),
+      stderr: String(decoding: stderr, as: UTF8.self)
     ))
   }
 
@@ -312,6 +316,7 @@ private struct Supervisor {
     let deliver = onOutput
     var pieces = (stdout: UTF8Stream(), stderr: UTF8Stream())
 
+    // `stream` is stdout or stderr alone, `output` both in the order they came.
     func read(_ fd: Int32, into stream: inout Data, alsoStdout: Bool, output: inout Data,
               pieces: inout UTF8Stream) -> Bool {
       var buffer = [UInt8](repeating: 0, count: 65536)
@@ -320,7 +325,7 @@ private struct Supervisor {
         let count = Darwin.read(fd, &buffer, buffer.count)
         if count > 0 {
           output.append(contentsOf: buffer[0..<count])
-          if alsoStdout { stream.append(contentsOf: buffer[0..<count]) }
+          stream.append(contentsOf: buffer[0..<count])
           if let deliver, case let text = pieces.feed(buffer[0..<count]), !text.isEmpty { deliver(kind, text) }
         } else if count == 0 {
           if let deliver, case let text = pieces.finish(), !text.isEmpty { deliver(kind, text) }
@@ -378,7 +383,7 @@ private struct Supervisor {
           let isOut = fd == out.read
           let more = isOut
             ? read(fd, into: &stdout, alsoStdout: true, output: &output, pieces: &pieces.stdout)
-            : read(fd, into: &stdout, alsoStdout: false, output: &output, pieces: &pieces.stderr)
+            : read(fd, into: &stderr, alsoStdout: false, output: &output, pieces: &pieces.stderr)
           if !more {
             open.remove(fd)
             if isOut { out.closeRead() } else { err.closeRead() }

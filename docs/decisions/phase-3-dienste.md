@@ -630,3 +630,41 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
 - Gegenproben (6, jede lässt einen Test scheitern): nur der geschriebene Pfad, Präfix ohne „/“,
   `index.html` allein als Build, Home vor „enthält das Projekt“, kein Gang hinauf zum vorhandenen
   Teil, eine Datei als „ok“.
+
+### Laufende Server finden (`serverDiscovery.ts` → `ServerScan`)
+
+- Findet Quartz-Dev-Server, wer sie auch gestartet hat: Prozesstabelle (`ps -ww -Ao
+  pid=,ppid=,etime=,command=`), die Ports aus den Argumenten oder, ohne `--port`, aus `lsof`, der
+  Ordner aus `lsof -d cwd`, dazu eine HTTP-Probe (Titel, `generator`-Meta) und TCP-Proben für die
+  Ports, nach denen gefragt wurde. „Kann nicht prüfen“ bleibt eine eigene Antwort: `unavailable`
+  ohne `ps`, `partial`, wenn für einen Kandidaten `lsof` fehlte oder scheiterte.
+- **Gemessen gegen QuartzControls Code:** `scripts/server-discovery-golden.mjs` lädt
+  `serverDiscovery.ts` mit nachgestellten `execFile` (ps, lsof), `net`, `http`, `tree-kill`,
+  `projectStore`, `buildService` und `Date.now` und zeichnet zwölf Szenarien auf: ein Server der
+  App über npx (zwei Prozesse, einer gelistet), einer aus dem Terminal ohne Flags (8080/3001 aus
+  `lsof`), ohne Flags auf anderem Port oder ohne Port (weggelassen), `lsof` fehlt oder meldet etwas
+  (`partial` mit Grund), die Nadeln (`QuartzProjekte` mit großem Q, `--serve=yes`, `--serves`,
+  `--SERVE --PORT`, `--port=`, Ports 0, 70000, 81370, doppelte Leerzeichen), `etime` in allen
+  Formen und unlesbar, ein Prozess als eigener Elternteil, ein Zyklus in der ppid-Kette (zwei
+  Einträge, wie dort), die HTTP-Probe (Groß geschriebene Tags, leerer Titel, Zeitablauf, Abbruch
+  nach dem Kopf, Titel erst nach 64 KiB, kein schließendes Tag, `<` im Titel), belegte Ports, `ps`
+  fehlt; dazu `killServer` für den eigenen Server, einen fremden, den Listener statt der Wurzel,
+  etwas ohne Nadeln, eine PID, die es nicht gibt, ein Signal, das scheitert. Gleich in jedem
+  Szenario, auch in der Zahl der `lsof`-Aufrufe (ein Server mit `--port` kostet keinen für Ports).
+- **Am echten System:** ein `sh` mit beiden Nadeln in der Kommandozeile, darunter `python3 -m
+  http.server` und ein `sleep`. Gefunden mit Port, Ordner (über `lsof`), Titel und Generator;
+  `stop` beendet die Shell und ihre Kinder (SIGTERM an den Baum aus der eben gelesenen Tabelle,
+  wie `tree-kill`). Die TCP-Probe gegen einen eigenen Listener, offen und geschlossen.
+- **Abweichung:** Ein Projekt wird auch über seinen echten Pfad erkannt (über einen Symlink
+  eingetragen, andere Schreibweise); dort nur über den Text des Pfads, `lsof` nennt aber den echten
+  Ordner.
+- **Offen:** Ob ATS im App-Bundle die HTTP-Probe auf `127.0.0.1` zulässt, ist nicht gemessen. Die
+  App ruft den Scan noch nicht auf. Gemessen wird das mit der ersten Oberfläche, die ihn zeigt
+  (oder mit der Vorschau, die dieselbe Frage hat).
+- Nebenbei gefunden, im eigenen Test: Ein `close` auf einen schon geschlossenen Deskriptor traf
+  die Pipe eines parallel laufenden Tests, der dann „abgebrochen“ meldete. Der Test schließt jetzt
+  einmal.
+- Gegenproben (10, jede lässt einen Test scheitern): Nadel ohne Kleinschreibung, `--serve` als
+  Teilwort, der erste statt des tiefsten Prozesses als Listener, 8080 ohne Bestätigung, `lsof`s
+  Exit 1 als Fehler, auch erklärte Ports geprüft, kein neuer Blick vor dem Signal, keine Grenze für
+  die Seite, Projekt nur über den Text, nur die Wurzel signalisiert.

@@ -21,6 +21,7 @@ import Testing
     #expect(!result.success)
     #expect(result.stdout == "one\nthree\n")
     #expect(result.output == "one\ntwo\nthree\n")
+    #expect(result.stderr == "two\n")
   }
 
   @Test func stdinIsClosedWithoutInput() async {
