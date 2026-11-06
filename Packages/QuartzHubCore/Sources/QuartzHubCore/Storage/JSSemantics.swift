@@ -76,6 +76,15 @@ extension JS {
   }
 
   /// `Math.round`: halves go up.
+  /// `a.localeCompare(b)`: ICU collation, as -1, 0 or 1.
+  static func localeCompare(_ a: String, _ b: String) -> Double {
+    switch a.compare(b, options: [], range: nil, locale: Locale(identifier: "de")) {
+    case .orderedAscending: -1
+    case .orderedSame: 0
+    case .orderedDescending: 1
+    }
+  }
+
   static func round(_ value: Double) -> Double { (value + 0.5).rounded(.down) }
 
   /// A TypeError as `String(error)` prints it.
