@@ -367,7 +367,7 @@ public enum ServerScan {
 
   /// Node's `error.message` of `execFile` for the failures a diagnostic shows.
   static func nodeMessage(_ command: Command, _ result: CommandResult) -> String {
-    let name = (command.executable as NSString).lastPathComponent
+    let name = NodePath.basename(command.executable)
     if case .couldNotStart(.notFound) = result.termination { return "spawn \(name) ENOENT" }
     return "Command failed: \(([name] + command.arguments).joined(separator: " "))\n\(result.stderr)"
   }

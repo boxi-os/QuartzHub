@@ -62,7 +62,7 @@ public final class RunningServersStore: Sendable {
     try serial.withLock { _ in
       var map = JSONMap<TrackedServer>(JSONStore.read(profile.runningServers, orEmpty: .object))
       guard body(&map) else { return }
-      try FileManager.default.createDirectory(at: profile.url, withIntermediateDirectories: true)
+      try Posix.mkdirs(profile.path)
       try JSONStore.write(map.json, to: profile.runningServers)
     }
   }

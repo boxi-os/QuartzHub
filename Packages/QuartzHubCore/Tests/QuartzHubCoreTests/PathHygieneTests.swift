@@ -31,8 +31,6 @@ enum TestFolder {
   /// Not yet moved to string paths; each service takes itself off when it is. Shrinks to nothing.
   static let pending: Set<String> = [
     "QuartzHubCore/Build/BuildService.swift",
-    "QuartzHubCore/Build/RunningServersStore.swift",
-    "QuartzHubCore/Build/ServerScan.swift",
     "QuartzHubCore/Checks/I18nCheck.swift",
     "QuartzHubCore/Checks/OptionSchemaCheck.swift",
     "QuartzHubCore/Git/GitAuth.swift",

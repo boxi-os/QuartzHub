@@ -9,14 +9,14 @@ import Testing
   static let fixture = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
     .appendingPathComponent("Fixtures/running-servers/scenarios.json")
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   func store(_ name: String) -> RunningServersStore {
-    RunningServersStore(profile: ProfileDirectory(scratch.url.appendingPathComponent(name).appendingPathComponent("Profile")))
+    RunningServersStore(profile: ProfileDirectory("\(scratch.path)/\(name)/Profil \u{DC}"))
   }
 
   static func quarantined(_ store: RunningServersStore) -> Int {
-    ((try? FileManager.default.contentsOfDirectory(atPath: store.profile.url.path)) ?? []).filter { $0.contains(".corrupt-") }.count
+    ((try? FileManager.default.contentsOfDirectory(atPath: store.profile.path)) ?? []).filter { $0.contains(".corrupt-") }.count
   }
 
   @Test func sameAsQuartzControl() throws {
@@ -26,7 +26,7 @@ import Testing
       let name = scenario["name"]!.stringValue!
       let store = store(name)
       if let text = scenario["file"]?.stringValue {
-        try FileManager.default.createDirectory(at: store.profile.url, withIntermediateDirectories: true)
+        try Posix.mkdirs(store.profile.path)
         try Posix.write(store.profile.runningServers, Data(text.utf8))
       }
       for (index, step) in scenario["steps"]!.arrayValue!.enumerated() {
@@ -44,6 +44,13 @@ import Testing
         #expect(Double(Self.quarantined(store)) == expected["quarantined"]?.numberValue, "\(name) step \(index)")
       }
     }
+  }
+
+  /// The profile folder the first write makes keeps the composed name.
+  @Test func theProfileFolderKeepsItsBytes() throws {
+    let store = store("bytes")
+    try store.record(projectId: "p", server: TrackedServer(object: JSONObject([("pid", .number(1)), ("port", .number(8080))])))
+    #expect(Posix.entries("\(scratch.path)/bytes")?.map { Array($0.name.utf8) } == [Array("Profil \u{DC}".utf8)])
   }
 
   @Test func theNewEntryIsInQuartzControlsOrder() {
