@@ -96,3 +96,12 @@ im Paket (`Contents/Resources`) oder im Repository.
   baute statt das von `resolve` zu nehmen.
 - Noch nicht in der App: Die Umgebung wird aufgelöst, sobald der erste Dienst sie braucht; die
   Einstellung `nodeRuntime` liest dann `SettingsFile`.
+
+### Log-Puffer (`logBuffer.ts` → `LogBuffer`)
+
+Wortgleich in der Sache: je Projekt und je Art (Server, Build) höchstens 999 Einträge, nur im
+Speicher, `history` gibt eine Kopie. In QuartzControl brauchte es ihn, weil ein geschlossenes
+Fenster den Renderer samt Store verlor; in QuartzHub leben Kern und Oberfläche in einem Prozess,
+der Puffer ist trotzdem die eine Stelle, die die Ausgabe hält, und die Konsole liest ihn. Das Tailen
+der Dateien unter `.quartz-gui/logs/` kommt mit `buildService`. Gegenprobe: ohne Kappung scheitert
+`capsPerProjectAndKind`.
