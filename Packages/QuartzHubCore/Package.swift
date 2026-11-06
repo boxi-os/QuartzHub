@@ -28,6 +28,8 @@ let package = Package(
     .testTarget(
       name: "QuartzHubCoreTests",
       dependencies: ["QuartzHubCore"],
+      // Golden files are read from the source tree by path (#filePath), not from a bundle.
+      exclude: ["Fixtures"],
       swiftSettings: [.swiftLanguageMode(.v6)]
     )
   ]

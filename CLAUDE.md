@@ -45,6 +45,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)
 - `scripts/package.sh` — Release-Bau, `.app` mit Runtime und Helfern, ad hoc signiert, DMG nach `build/package/`
+- `Runtime/node/bin/node scripts/golden-fixtures.mjs` — Golden Files der Kerntests neu aus `gui-test` und
+  `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `node scripts/import-strings.mjs <QuartzControl> [--check]` — der einmalige Textimport
   (2026-11-06). Seitdem ist der Katalog die Quelle; `--check` weicht ab, sobald ein neuer Text dazukam
 

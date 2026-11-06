@@ -1,0 +1,78 @@
+[
+  {
+    "id": "35bfe4aa-ca33-46cc-8b0e-9bbdc8e6e31d",
+    "name": "Ziel 1",
+    "connectionId": "e327a885-693f-48a0-9e37-d201a4dfa73c",
+    "destination": {
+      "type": "sftp",
+      "remotePath": "/srv/www/example/",
+      "transfer": "sftp",
+      "deleteRemoved": true
+    },
+    "excludes": []
+  },
+  {
+    "id": "d6c520c6-a7f6-40ef-a34c-262167ef1a32",
+    "name": "Ziel 2",
+    "connectionId": "c92748b5-ee9b-40b5-a23c-79817dacfa93",
+    "destination": {
+      "type": "webhook"
+    },
+    "excludes": []
+  },
+  {
+    "id": "4d4bf314-5cd7-41d8-9086-4057eafdb021",
+    "name": "Ziel 3",
+    "connectionId": "649c85e6-215e-447e-b284-d80cdef25d6c",
+    "destination": {
+      "type": "ftp",
+      "remotePath": "/srv/www/example/",
+      "deleteRemoved": true
+    },
+    "excludes": []
+  },
+  {
+    "id": "3c68bbc1-de85-40e6-bea7-a39cb3b4832e",
+    "name": "Ziel 4",
+    "destination": {
+      "type": "git-branch",
+      "branch": "gh-pages",
+      "provider": "github"
+    },
+    "excludes": []
+  },
+  {
+    "id": "80dbf25c-42c5-4bf5-ad1a-106c1097f5b4",
+    "name": "Ziel 5",
+    "destination": {
+      "type": "folder",
+      "path": "/Users/example/Export",
+      "deleteRemoved": true
+    },
+    "excludes": []
+  },
+  {
+    "id": "4095090c-62a6-4013-a06e-fb8873706c28",
+    "name": "Ziel 6",
+    "connectionId": "e327a885-693f-48a0-9e37-d201a4dfa73c",
+    "destination": {
+      "type": "sftp",
+      "remotePath": "/srv/www/example/",
+      "transfer": "sftp",
+      "deleteRemoved": true
+    },
+    "excludes": []
+  },
+  {
+    "id": "9d5a9220-6508-43c8-8bf1-5811108ac78b",
+    "name": "Ziel 7",
+    "connectionId": "e327a885-693f-48a0-9e37-d201a4dfa73c",
+    "destination": {
+      "type": "sftp",
+      "remotePath": "/srv/www/example/",
+      "transfer": "rsync",
+      "deleteRemoved": true
+    },
+    "excludes": []
+  }
+]

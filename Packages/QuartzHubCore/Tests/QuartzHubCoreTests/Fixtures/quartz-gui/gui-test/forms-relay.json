@@ -1,0 +1,23 @@
+{
+  "settings": {
+    "targetId": "35bfe4aa-ca33-46cc-8b0e-9bbdc8e6e31d",
+    "subdir": "forms",
+    "from": "relay@example.org",
+    "allowedOrigins": [
+      "https://example.org"
+    ],
+    "subjectPrefix": "",
+    "mailer": "mail",
+    "sendmailPath": "/usr/sbin/sendmail -t -i",
+    "counterDir": "",
+    "configReadable": false
+  },
+  "lastUpload": {
+    "at": "2026-10-25T18:04:53.039Z",
+    "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "targetId": "35bfe4aa-ca33-46cc-8b0e-9bbdc8e6e31d",
+    "location": "sftp|00000000-0000-4000-8000-000000000000|/srv/www/example|forms",
+    "configReadable": false,
+    "operator": "operator@host"
+  }
+}

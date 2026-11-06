@@ -1,0 +1,12 @@
+[
+  {
+    "id": "6d1f4c1b-5d8b-4e8e-bac2-9b8927f5cf85",
+    "name": "Ziel 1",
+    "destination": {
+      "type": "git-branch",
+      "branch": "gh-pages",
+      "provider": "github"
+    },
+    "excludes": []
+  }
+]

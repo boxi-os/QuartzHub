@@ -1,0 +1,34 @@
+[
+  {
+    "id": "tpl-minimal-lesbar-hell",
+    "name": "Example — hell",
+    "createdAt": "2026-09-04T00:00:00.000Z",
+    "baseThemeId": "minimal",
+    "options": {
+      "theme": "minimal",
+      "mode": "light",
+      "themeFonts": false,
+      "fonts": {
+        "header": "Noto Sans",
+        "body": "Noto Sans",
+        "code": "Noto Sans Mono"
+      }
+    }
+  },
+  {
+    "id": "tpl-minimal-lesbar-dunkel",
+    "name": "Example — dunkel",
+    "createdAt": "2026-09-04T00:00:00.000Z",
+    "baseThemeId": "minimal",
+    "options": {
+      "theme": "minimal",
+      "mode": "dark",
+      "themeFonts": false,
+      "fonts": {
+        "header": "Noto Sans",
+        "body": "Noto Sans",
+        "code": "Noto Sans Mono"
+      }
+    }
+  }
+]
