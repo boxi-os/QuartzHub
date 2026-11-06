@@ -321,7 +321,7 @@ import Testing
 
   /// QuartzControl's snapshotService.ts as a command (`qc-snapshots.cjs`), in the same environment.
   static func quartzControl(_ h: Harness, _ op: String, _ project: URL, _ args: [JSONValue] = []) async -> JSONValue {
-    let node = RuntimeLocation.repository.nodeBin.appendingPathComponent("node").path
+    let node = "\(RuntimeLocation.repository.nodeBin)/node"
     let script = fixtures.appendingPathComponent("qc-snapshots.cjs").path
     let result = await ProcessRunner.run(h.environment.command(node, [script, op, project.path, JSJSON.compact(.array(args))]))
     return (try? JSJSON.parse(Data(result.stdout.utf8))) ?? .object(JSONObject([("error", .string(result.output))]))

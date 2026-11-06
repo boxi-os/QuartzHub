@@ -8,7 +8,7 @@ import Testing
 enum HelperRuntime {
   static let runtime = RuntimeLocation.repository
   static let available = ToolEnvironmentTests.hasRuntime
-    && FileManager.default.fileExists(atPath: runtime.helpers.appendingPathComponent("yaml-edit.cjs").path)
+    && FileManager.default.fileExists(atPath: "\(runtime.helpers)/yaml-edit.cjs")
 }
 
 @Suite(.enabled(if: HelperRuntime.available, "Runtime/ oder Helpers/dist fehlt: scripts/fetch-runtime.sh, scripts/build-helpers.sh"))
@@ -211,7 +211,7 @@ struct ConfigFileTests {
   @Test func aHelperThatIsNotThereIsBrokenNotRefused() async throws {
     let project = try project("plugins: []\n")
     var runtime = Self.runtime
-    runtime.helpers = scratch.url
+    runtime.helpers = scratch.url.path
     await #expect {
       try await ConfigFile.read(project: project, runtime: runtime)
     } throws: { error in

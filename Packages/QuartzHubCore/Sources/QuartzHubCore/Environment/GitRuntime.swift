@@ -18,13 +18,13 @@ public struct GitRuntime: Sendable, Equatable {
   /// What the bundled git needs set; empty for the machine's.
   public var variables: [String: String]
 
-  var binDirectory: String { (path as NSString).deletingLastPathComponent }
+  var binDirectory: String { NodePath.dirname(path) }
 
   /// Answers "which git" once at start. `hostPath` must be resolved already: a git that only the
   /// login shell's PATH reaches is invisible before.
   public static func resolve(
     hostPath: HostPath,
-    bundle: URL,
+    bundle: String,
     base: [String: String],
     xcodeSelect: String = "/usr/bin/xcode-select"
   ) async -> (runtime: GitRuntime?, failure: BundledGitFailure?) {
@@ -38,14 +38,14 @@ public struct GitRuntime: Sendable, Equatable {
       }
     }
 
-    let path = bundle.appendingPathComponent("bin/git").path
+    let path = "\(bundle)/bin/git"
     guard FileManager.default.fileExists(atPath: path) else { return (nil, nil) }
     // Without these two git looks under "/" (measured in Phase 1: "templates not found in
     // //share/git-core/templates"; QuartzControl: "unable to find remote helper for 'https'").
     // Only the Linux bundle has its own certificates; macOS uses the system's.
     let variables = [
-      "GIT_EXEC_PATH": bundle.appendingPathComponent("libexec/git-core").path,
-      "GIT_TEMPLATE_DIR": bundle.appendingPathComponent("share/git-core/templates").path
+      "GIT_EXEC_PATH": "\(bundle)/libexec/git-core",
+      "GIT_TEMPLATE_DIR": "\(bundle)/share/git-core/templates"
     ]
     let environment = hostEnvironment.merging(variables) { _, new in new }
     let answer = await probe(path, environment: environment)
@@ -77,8 +77,8 @@ public struct GitRuntime: Sendable, Equatable {
 
   /// The helper without arguments complains about the missing URL (exit 1, QuartzControl measured)
   /// after the loader has loaded it completely; a missing library ends with 127 before that.
-  static func httpsHelperLoads(bundle: URL, environment: [String: String]) async -> Bool {
-    let helper = bundle.appendingPathComponent("libexec/git-core/git-remote-https").path
+  static func httpsHelperLoads(bundle: String, environment: [String: String]) async -> Bool {
+    let helper = "\(bundle)/libexec/git-core/git-remote-https"
     guard FileManager.default.fileExists(atPath: helper) else { return false }
     let answer = await ProcessRunner.run(Command(helper, environment: environment, timeout: .seconds(10)))
     switch answer.termination {

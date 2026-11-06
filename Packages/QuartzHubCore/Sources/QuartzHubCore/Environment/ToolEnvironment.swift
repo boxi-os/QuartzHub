@@ -6,40 +6,37 @@ import Foundation
 /// the tests find `Runtime/node`.
 public struct RuntimeLocation: Sendable, Equatable {
   /// The Node tree: `bin/node`, `bin/npm`, `bin/npx`, `lib/node_modules/npm`.
-  public var node: URL
+  public var node: String
   /// The git tree from dugite-native: `bin/git`, `libexec/git-core`, `share/git-core/templates`.
-  public var git: URL
-  public var helpers: URL
+  public var git: String
+  public var helpers: String
 
-  public init(node: URL, git: URL, helpers: URL) {
+  public init(node: String, git: String, helpers: String) {
     self.node = node
     self.git = git
     self.helpers = helpers
   }
 
   public static let current: RuntimeLocation = {
-    if let resources = Bundle.main.resourceURL,
-       FileManager.default.isExecutableFile(atPath: resources.appendingPathComponent("node/bin/node").path) {
-      return RuntimeLocation(node: resources.appendingPathComponent("node"), git: resources.appendingPathComponent("git"),
-                             helpers: resources.appendingPathComponent("helpers"))
+    if let resources = Bundle.main.resourceURL.map({ Posix.path($0) }),
+       FileManager.default.isExecutableFile(atPath: "\(resources)/node/bin/node") {
+      return RuntimeLocation(node: "\(resources)/node", git: "\(resources)/git", helpers: "\(resources)/helpers")
     }
     return repository
   }()
 
   /// The repository's copies, for development builds and tests.
   public static let repository: RuntimeLocation = {
-    var root = URL(fileURLWithPath: #filePath)
-    for _ in 0..<6 { root.deleteLastPathComponent() }
-    return RuntimeLocation(node: root.appendingPathComponent("Runtime/node"), git: root.appendingPathComponent("Runtime/git"),
-                           helpers: root.appendingPathComponent("Helpers/dist"))
+    var root = #filePath
+    for _ in 0..<6 { root = NodePath.dirname(root) }
+    return RuntimeLocation(node: "\(root)/Runtime/node", git: "\(root)/Runtime/git", helpers: "\(root)/Helpers/dist")
   }()
 
-  public var nodeBin: URL { node.appendingPathComponent("bin") }
+  public var nodeBin: String { "\(node)/bin" }
 
   /// The version of the npm that travels with Node, from its package.json.
   public var npmVersion: String? {
-    let url = node.appendingPathComponent("lib/node_modules/npm/package.json")
-    guard case .ok(let value) = JSONStore.peek(url) else { return nil }
+    guard case .ok(let value) = JSONStore.peek("\(node)/lib/node_modules/npm/package.json") else { return nil }
     return value["version"]?.stringValue
   }
 }
@@ -93,7 +90,7 @@ public struct ToolEnvironment: Sendable, Equatable {
   }
 
   /// The directory in front of PATH for Node, or nil when the machine's own is used.
-  public var nodeBinDirectory: String? { nodeMode == .embedded ? runtime.nodeBin.path : nil }
+  public var nodeBinDirectory: String? { nodeMode == .embedded ? runtime.nodeBin : nil }
 
   public var path: [String] {
     var entries: [String] = []
@@ -112,7 +109,7 @@ public struct ToolEnvironment: Sendable, Equatable {
   }
 
   /// A command in this environment.
-  public func command(_ executable: String, _ arguments: [String] = [], in directory: URL? = nil,
+  public func command(_ executable: String, _ arguments: [String] = [], in directory: String? = nil,
                       input: Data? = nil, timeout: Duration? = nil) -> Command {
     Command(executable, arguments, in: directory, environment: variables, input: input, timeout: timeout)
   }

@@ -24,7 +24,7 @@ import Testing
       try SnapshotStoreTests.Harness.write("\(work)/gitconfig", "")
       try Posix.mkdirs("\(work)/bin")
       try Posix.write("\(work)/npm-stub.cjs", try Posix.read(CoreUpdateTests.fixtures.appendingPathComponent("npm-stub.cjs").path))
-      let node = RuntimeLocation.repository.nodeBin.appendingPathComponent("node").path
+      let node = "\(RuntimeLocation.repository.nodeBin)/node"
       try SnapshotStoreTests.Harness.write("\(work)/bin/npm", "#!/bin/sh\nexec '\(node)' '\(work)/npm-stub.cjs' \"$@\"\n")
       try SnapshotStoreTests.Harness.write("\(work)/bin/npx", JS.string(CoreUpdateTests.file["npx"]).replacingOccurrences(of: "@W@", with: work, options: .literal))
       chmod("\(work)/bin/npm", 0o755)

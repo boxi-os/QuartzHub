@@ -103,11 +103,11 @@ struct PluginSchemaReaderTests {
     let helpers = scratch.url.appendingPathComponent("helpers")
     let log = scratch.url.appendingPathComponent("helper.log")
     try FileManager.default.createDirectory(at: helpers, withIntermediateDirectories: true)
-    let real = HelperRuntime.runtime.helpers.appendingPathComponent("dts-schema.cjs").path
+    let real = "\(HelperRuntime.runtime.helpers)/dts-schema.cjs"
     try "require('fs').appendFileSync(\(JSJSON.stringify(.string(log.path))), 'call\\n')\nrequire(\(JSJSON.stringify(.string(real))))\n"
       .write(to: helpers.appendingPathComponent("dts-schema.cjs"), atomically: true, encoding: .utf8)
     var runtime = HelperRuntime.runtime
-    runtime.helpers = helpers
+    runtime.helpers = helpers.path
     return (runtime, { ((try? String(contentsOf: log, encoding: .utf8)) ?? "").split(separator: "\n").count })
   }
 
@@ -145,7 +145,7 @@ struct PluginSchemaReaderTests {
     try plugin(project, "a", dts: "export interface AOptions { a: string }\n")
     try plugin(project, "local", dts: "", package: #"{"quartz":{"optionSchema":{"x":{"type":"string"}}}}"#)
     var broken = HelperRuntime.runtime
-    broken.helpers = scratch.url.appendingPathComponent("no-helpers")
+    broken.helpers = "\(scratch.path)/no-helpers"
     let reader = PluginSchemaReader()
     let results = await reader.optionSchemas(project: project, sources: [.string("github:x/a"), .string("github:x/local")], runtime: broken)
     #expect(results[0].schema == nil)

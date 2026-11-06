@@ -34,7 +34,7 @@ public actor ThemeMarketplace {
 
   public static func npmSearch(environment: @escaping @Sendable () async -> ToolEnvironment) -> Search {
     {
-      let command = await environment().command("npm", ["search", "@quartz-themes", "--json", "--searchlimit=250"], in: nil, timeout: .seconds(30))
+      let command = await environment().command("npm", ["search", "@quartz-themes", "--json", "--searchlimit=250"], timeout: .seconds(30))
       let result = await ProcessRunner.run(command)
       // QuartzControl read stdout at `close` whatever the exit code; only a deadline or a spawn
       // error answered nothing.

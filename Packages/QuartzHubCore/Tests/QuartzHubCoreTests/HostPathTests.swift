@@ -1,3 +1,4 @@
+import Darwin
 import Foundation
 import Testing
 @testable import QuartzHubCore
@@ -18,17 +19,16 @@ import Testing
 
     @discardableResult
     func script(_ relative: String, _ body: String) throws -> String {
-      let file = url.appendingPathComponent(relative)
-      try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try "#!/bin/sh\n\(body)\n".write(to: file, atomically: true, encoding: .utf8)
-      try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: file.path)
-      return file.path
+      let file = "\(path)/\(relative)"
+      try Posix.mkdirs(NodePath.dirname(file))
+      try Posix.write(file, Data("#!/bin/sh\n\(body)\n".utf8))
+      chmod(file, 0o755)
+      return file
     }
 
     func dir(_ relative: String) throws -> String {
-      let directory = url.appendingPathComponent(relative)
-      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-      return directory.path
+      try Posix.mkdirs("\(path)/\(relative)")
+      return "\(path)/\(relative)"
     }
   }
 

@@ -10,7 +10,7 @@ import Testing
 /// others with both strategies: the source's export, qc-basic.qtpl, a folder of the format before
 /// 1 and a hostile one. Each step's answer, the files it changed, the commands and the snapshots
 /// are compared. Here the packages imported are QuartzHub's own exports, so the round trip counts.
-@Suite(.serialized, .enabled(if: HelperRuntime.available && FileManager.default.fileExists(atPath: HelperRuntime.runtime.helpers.appendingPathComponent("locale-edit.cjs").path),
+@Suite(.serialized, .enabled(if: HelperRuntime.available && FileManager.default.fileExists(atPath: "\(HelperRuntime.runtime.helpers)/locale-edit.cjs"),
                              "Runtime/ oder Helpers/dist fehlt: scripts/fetch-runtime.sh, scripts/build-helpers.sh"))
 struct TemplatePackageTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/templates")

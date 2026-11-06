@@ -10,3 +10,17 @@ extension JSONStore {
   public static func write(_ value: JSONValue, to url: URL) throws { try write(value, to: url.path) }
   public static func writeAtomic(_ data: Data, to url: URL) throws { try writeAtomic(data, to: url.path) }
 }
+
+extension Command {
+  public init(_ executable: String, _ arguments: [String] = [], in directory: URL?,
+              environment: [String: String] = ProcessInfo.processInfo.environment, input: Data? = nil, timeout: Duration? = nil) {
+    self.init(executable, arguments, in: directory?.path, environment: environment, input: input, timeout: timeout)
+  }
+}
+
+extension ToolEnvironment {
+  public func command(_ executable: String, _ arguments: [String] = [], in directory: URL?,
+                      input: Data? = nil, timeout: Duration? = nil) -> Command {
+    command(executable, arguments, in: directory?.path, input: input, timeout: timeout)
+  }
+}

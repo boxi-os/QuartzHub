@@ -6,7 +6,7 @@ import Testing
 /// project with gui-test's de-DE and en-US and locale files of every odd shape, ran 51 steps
 /// (list, read, save, baseline, git's baseline, merge=ours) and recorded each answer, the changed
 /// files and git's `merge.ours.driver`. Needs Runtime/ and the helper `locale-edit`.
-@Suite(.enabled(if: HelperRuntime.available && FileManager.default.fileExists(atPath: HelperRuntime.runtime.helpers.appendingPathComponent("locale-edit.cjs").path),
+@Suite(.enabled(if: HelperRuntime.available && FileManager.default.fileExists(atPath: "\(HelperRuntime.runtime.helpers)/locale-edit.cjs"),
                 "Runtime/ oder Helpers/dist/locale-edit.cjs fehlt: scripts/fetch-runtime.sh, scripts/build-helpers.sh"))
 struct LocaleFilesTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/locales")

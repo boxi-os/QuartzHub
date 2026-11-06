@@ -11,7 +11,7 @@ enum ProjectSass {
   /// The stand-in for a project's sass: the one in Helpers/node_modules, gui-test's version.
   static let sass = root.appendingPathComponent("../../../../Helpers/node_modules/sass").standardizedFileURL
   static let available = HelperRuntime.available
-    && FileManager.default.fileExists(atPath: HelperRuntime.runtime.helpers.appendingPathComponent("sass-check.cjs").path)
+    && FileManager.default.fileExists(atPath: "\(HelperRuntime.runtime.helpers)/sass-check.cjs")
     && FileManager.default.fileExists(atPath: sass.appendingPathComponent("package.json").path)
 }
 

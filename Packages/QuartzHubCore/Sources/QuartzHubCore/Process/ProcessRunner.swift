@@ -10,7 +10,7 @@ public struct Command: Sendable {
   public var executable: String
   /// Never through a shell. Whatever comes from a project goes behind "--" (the caller's part).
   public var arguments: [String]
-  public var directory: URL?
+  public var directory: String?
   /// The whole environment of the child, not additions to QuartzHub's own.
   public var environment: [String: String]
   /// Written to stdin, which is then closed. Without input stdin is /dev/null, so an unexpected
@@ -25,7 +25,7 @@ public struct Command: Sendable {
   public init(
     _ executable: String,
     _ arguments: [String] = [],
-    in directory: URL? = nil,
+    in directory: String? = nil,
     environment: [String: String] = ProcessInfo.processInfo.environment,
     input: Data? = nil,
     timeout: Duration? = nil
@@ -89,7 +89,7 @@ public struct CommandResult: Sendable, Equatable {
     case .couldNotStart(let reason):
       let code = switch reason {
       case .notFound: "ENOENT"
-      case .directoryMissing: "ENOTDIR \(command.directory?.path ?? "")"
+      case .directoryMissing: "ENOTDIR \(command.directory ?? "")"
       case .argumentsTooLong: "E2BIG"
       case .other(let number): String(cString: strerror(number))
       }
@@ -176,7 +176,7 @@ public enum ProcessRunner {
     guard let path = resolve(command.executable, path: command.environment["PATH"]) else { return .failure(.notFound) }
     if let directory = command.directory {
       var isDirectory: ObjCBool = false
-      guard FileManager.default.fileExists(atPath: directory.path, isDirectory: &isDirectory), isDirectory.boolValue else {
+      guard FileManager.default.fileExists(atPath: directory, isDirectory: &isDirectory), isDirectory.boolValue else {
         return .failure(.directoryMissing)
       }
     }
@@ -440,7 +440,7 @@ private func spawnChild(_ command: Command, path: String, stdin: Int32?, stdout:
     }
   }
   if let directory = command.directory {
-    posix_spawn_file_actions_addchdir_np(&actions, directory.path)
+    posix_spawn_file_actions_addchdir_np(&actions, directory)
   }
 
   var all = sigset_t(), none = sigset_t()

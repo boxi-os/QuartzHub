@@ -136,7 +136,7 @@ import Testing
     #expect(entries.map(\.name) == files.names)
     for entry in entries { #expect(files[entry.name] == entry.data, "\(entry.name)") }
 
-    let node = RuntimeLocation.repository.nodeBin.appendingPathComponent("node").path
+    let node = "\(RuntimeLocation.repository.nodeBin)/node"
     let quartzControl = Self.run(node, [Self.fixtures.appendingPathComponent("read-zip.cjs").path, archive.path])
     #expect(quartzControl.status == 0)
     #expect(quartzControl.output.trimmingCharacters(in: .whitespacesAndNewlines) == JSJSON.compact(expected), "QuartzControls readZip")

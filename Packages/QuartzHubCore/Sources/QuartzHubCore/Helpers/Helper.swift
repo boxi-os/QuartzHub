@@ -29,8 +29,8 @@ public enum Helper {
     runtime: RuntimeLocation = .current,
     timeout: Duration = .seconds(30)
   ) async throws(Failure) -> JSONObject {
-    let script = runtime.helpers.appendingPathComponent("\(name).cjs")
-    let command = Command(runtime.nodeBin.appendingPathComponent("node").path, [script.path],
+    let script = "\(runtime.helpers)/\(name).cjs"
+    let command = Command("\(runtime.nodeBin)/node", [script],
                           environment: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin"],
                           input: Data(JSJSON.stringify(.object(request)).utf8), timeout: timeout)
     let result = await ProcessRunner.run(command)
