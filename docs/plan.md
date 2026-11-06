@@ -202,6 +202,12 @@ nach Abhängigkeit:
 7. **Git, Snapshots, Updates:** `snapshotService` (eigenes Git-Repo), `gitStatusService`,
    `syncService`, `backupService`, `updateService` (Core-Update). **Vorher die Langfassung in
    `conventions-full.md` lesen.**
+   - **Stand 2026-11-06:** in drei Teilen in einem Zug (Nutzer, 2026-11-06); `appUpdateService`
+     kommt mit Phase 5. 7a fertig: `SnapshotStore` (ein Index je Vorgang, mit QuartzControl
+     geteilt und in beide Richtungen gemessen, Aufräumen nach zehn Minuten), `ContentBackups` und
+     `ContentFolder.changeSource`, die sechs wartenden Schreiber angeschlossen. Nebenbefund:
+     Foundation legt Namen zerlegt (NFD) an; die neuen Schreiber gehen über `Posix`, die übrigen
+     Dienste warten auf die Entscheidung des Nutzers. Als Nächstes 7b.
 8. **Veröffentlichen:**
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:

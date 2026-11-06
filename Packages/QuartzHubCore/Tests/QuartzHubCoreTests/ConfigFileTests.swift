@@ -258,4 +258,37 @@ struct ConfigFileTests {
     #expect(FramePaths.ownFramePath(project: project, ".quartz-gui/authored-frames/frame-x") == nil, "relative")
     #expect(FramePaths.ownFramePath(project: project, "/Users/a/Original/frames/frame-x") == nil)
   }
+
+  // MARK: the snapshot before a save
+
+  @Test func aSaveTakesASnapshotFirstWhenTheFileHasContent() async throws {
+    let calls = SnapshotCalls()
+    let project = try project("configuration:\n  pageTitle: Alt\n")
+    var config = try await read(project)
+    config.configuration["pageTitle"] = .string("Neu")
+    try await ConfigFile.write(config, project: project, runtime: Self.runtime, snapshot: calls.take { (project: URL) throws in
+      // Before the write: the snapshot sees the old file.
+      #expect(try String(contentsOf: ConfigFile.path(project: project), encoding: .utf8).contains("Alt"))
+    })
+    #expect(calls.all == [["configChange", ""]])
+    #expect(try fileText(project).contains("Neu"))
+
+    // An empty or missing file is no state to go back to.
+    let empty = try self.project("", name: "leer")
+    try await ConfigFile.write(QuartzConfig(), project: empty, runtime: Self.runtime, snapshot: calls.take())
+    let missing = try self.project(nil, name: "fehlt")
+    try await ConfigFile.write(QuartzConfig(), project: missing, runtime: Self.runtime, snapshot: calls.take())
+    #expect(calls.all == [["configChange", ""]])
+  }
+
+  @Test func aSnapshotThatFailsStopsTheSave() async throws {
+    let project = try project("configuration:\n  pageTitle: Alt\n")
+    var config = try await read(project)
+    config.configuration["pageTitle"] = .string("Neu")
+    struct NoWayBack: Error {}
+    await #expect(throws: NoWayBack.self) {
+      try await ConfigFile.write(config, project: project, runtime: Self.runtime, snapshot: { _, _, _ in throw NoWayBack() })
+    }
+    #expect(try fileText(project) == "configuration:\n  pageTitle: Alt\n")
+  }
 }

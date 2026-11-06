@@ -239,20 +239,22 @@ public enum StyleSheets {
     return order.map { useLine(for: $0, taken: &taken) }.joined(separator: "\n")
   }
 
-  /// Moves a project's blocks to `_quartzcontrol.scss`; a moved project is left as it is.
-  /// QuartzControl took a snapshot first when asked (`snapshot: true`, the Styles page), as the way
-  /// back for a machine that stays on 1.0.x. The snapshot store comes with Phase 3 point 7: until
-  /// then a move with a snapshot is refused, not done without one.
-  public static func migrate(project: URL, snapshot: Bool) async throws -> Bool {
-    try await ProjectLock.styles.run(project.path) {
-      if isMoved(try readSources(project: project)) { return false }
-      if snapshot { throw SnapshotUnavailable() }
-      try writeManagedBlocksNow([:], move: true, project: project)
-      return true
-    }
+  public struct Migration: Equatable, Sendable {
+    public var moved: Bool
+    public var snapshotId: String?
   }
 
-  public struct SnapshotUnavailable: Error, Equatable {}
+  /// Moves a project's blocks to `_quartzcontrol.scss`; a moved project is left as it is. With
+  /// `snapshot` (the Styles page) one comes first, of the kind the thinning keeps: the way back
+  /// for a machine that stays on 1.0.x. Without, for a project just created.
+  public static func migrate(project: URL, snapshot: StyleFiles.Snapshot?) async throws -> Migration {
+    try await ProjectLock.styles.run(project.path) {
+      if isMoved(try readSources(project: project)) { return Migration(moved: false, snapshotId: nil) }
+      let id = try await snapshot?(project, "styleMigration") ?? nil
+      try writeManagedBlocksNow([:], move: true, project: project)
+      return Migration(moved: true, snapshotId: id)
+    }
+  }
 
   // MARK: the load order
 

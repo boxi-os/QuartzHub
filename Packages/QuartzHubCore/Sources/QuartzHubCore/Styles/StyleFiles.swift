@@ -213,16 +213,17 @@ public enum StyleFiles {
   }
 
   /// A snapshot of the project, of the kind the thinning keeps (`styleMigration`); answers its id.
+  /// One that fails stops the run before anything moves.
   public typealias Snapshot = @Sendable (_ project: URL, _ kind: String) async throws -> String?
 
-  /// Until the snapshot store exists (Phase 3 point 7) there is no way back, so no run.
-  public static let noSnapshotYet: Snapshot = { _, _ in throw StyleSheets.SnapshotUnavailable() }
+  /// `SnapshotStore.take` in this shape.
+  public static func snapshot(_ take: @escaping SnapshotStore.Take) -> Snapshot { { project, kind in try await take(project, kind, "") } }
 
   /// Puts the 31 together, asked for on the Styles page, never by a writer: it renames and removes
   /// files the user may have open. A snapshot first, as the way back. The order is read before
   /// anything moves, the new files are written before the order names them, the old ones go last,
   /// so every state in between builds.
-  public static func consolidate(project: URL, snapshot: Snapshot = noSnapshotYet) async throws -> Consolidated {
+  public static func consolidate(project: URL, snapshot: Snapshot) async throws -> Consolidated {
     try await ProjectLock.styles.run(project.path) {
       let order = try StyleSheets.currentOrder(project: project)
       let done = try consolidatedFiles(project)

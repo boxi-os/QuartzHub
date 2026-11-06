@@ -1376,3 +1376,25 @@ In drei Teilen in einem Zug (Nutzer, 2026-11-06): 7a der Snapshot-Speicher und w
   in Node). Vier bekamen erst ihren Fall: eine Datei mit dem Namen einer Sicherung, ein
   Nachbarordner `contentalt`, ein relativer Link im ersten beiseitegelegten Ordner (zurückgespielt
   wird er absolut) und ein Link mit Umlaut im Namen.
+
+### Was auf den Snapshot gewartet hat
+
+Sechs Stellen lehnten ab oder schrieben ohne Snapshot, bis der Speicher da war. Jetzt nehmen sie
+ihn als `SnapshotStore.Take` (Art und Bezeichnung, Antwort die ID) und rufen ihn vor dem Schreiben,
+wie QuartzControl:
+
+- **Config speichern** (`ConfigFile.write(…, snapshot:)`): `configChange`, nur wenn die Datei Inhalt
+  hat, vor dem Schloss der Config, nie darunter. Die Reparatur der Frame-Pfade und die Bausteine
+  der Vorlage schreiben ohne, wie dort (`snapshot: false`).
+- **Plugin hinzufügen und entfernen** (`PluginCommands.add/remove(…, snapshot:)`): `pluginChange`
+  mit Quelle oder Name als Bezeichnung. Ein Frame über die CLI (`LayoutFrames.Plugins.cli`) nimmt
+  einen, wenn der Frame ihn verlangt, der Vorlagen-Import nicht. Abweichung: Scheitert der
+  Snapshot, ist die Antwort ein Misserfolg mit seinem Satz; QuartzControl verwarf den Aufruf.
+- **Stile umstellen** (`StyleSheets.migrate(…, snapshot:)`, jetzt mit `snapshotId` wie dort) und
+  **Zusammenlegen** (`StyleFiles.consolidate`): `styleMigration`, unter dem Stile-Schloss.
+- **Vorlagen-Import** (`TemplatePackage.live(…, snapshots:)`): `styleChange` mit dem Namen der
+  Vorlage. Die alten Tests „lehnt ohne Snapshot ab“ prüfen jetzt, dass ein gescheiterter Snapshot
+  den Schreiber anhält, bevor er schreibt (beim Import: kein git, nur der Ordner des Speichers
+  bleibt).
+- **Content-Quelle wechseln**: siehe oben.
+- Gegenproben: 15, alle gefangen.

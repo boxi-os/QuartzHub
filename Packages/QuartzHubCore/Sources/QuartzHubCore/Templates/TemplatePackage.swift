@@ -8,15 +8,14 @@ import Foundation
 /// A package is no trust boundary: every name a payload lists goes through
 /// `PackagePaths.writable`, in `plan` as in `apply`, and the ZIP reader refuses unsafe entry names.
 ///
-/// The import takes a snapshot first, as the way back; until the snapshot store exists (Phase 3
-/// point 7) it refuses (`noSnapshotYet`). The manifest says who wrote it: here "QuartzHub".
+/// The import takes a snapshot first, as the way back; one that fails stops it before it writes.
+/// The manifest says who wrote it: here "QuartzHub".
 public struct TemplatePackage: Sendable {
   public enum Strategy: String, Sendable { case packageWins, projectWins }
   public enum TranslationScope: String, Sendable { case changed, all }
 
   /// `createSnapshot(project, kind, label)`.
   public typealias Snapshot = @Sendable (_ project: URL, _ kind: String, _ label: String) async throws -> Void
-  public static let noSnapshotYet: Snapshot = { _, _, _ in throw StyleSheets.SnapshotUnavailable() }
   /// `npm <arguments>` in the project.
   public typealias Npm = @Sendable (_ arguments: [String], _ project: URL) async -> PluginCommands.Result
   /// `quartz plugin add <source>` without a snapshot (`installPluginSource`).
@@ -45,7 +44,7 @@ public struct TemplatePackage: Sendable {
   let now: @Sendable () -> Date
 
   public init(runtime: RuntimeLocation = .current, locales: LocaleFiles, frames: LayoutFrames, fonts: FontService, npm: @escaping Npm,
-              addPlugin: @escaping AddPlugin, head: @escaping Head, snapshot: @escaping Snapshot = noSnapshotYet,
+              addPlugin: @escaping AddPlugin, head: @escaping Head, snapshot: @escaping Snapshot,
               app: (name: String, version: String), now: @escaping @Sendable () -> Date = { Date() }) {
     self.runtime = runtime
     self.locales = locales
@@ -60,8 +59,9 @@ public struct TemplatePackage: Sendable {
   }
 
   /// The commands of a real environment: npm with its 20-minute deadline, `quartz plugin add`
-  /// through the CLI, git for the source's commit.
-  public static func live(environment: ToolEnvironment, locales: LocaleFiles, frames: LayoutFrames, fonts: FontService, appVersion: String) -> TemplatePackage {
+  /// through the CLI, git for the source's commit, the project's snapshot store.
+  public static func live(environment: ToolEnvironment, locales: LocaleFiles, frames: LayoutFrames, fonts: FontService,
+                          snapshots: SnapshotStore, appVersion: String) -> TemplatePackage {
     TemplatePackage(
       runtime: environment.runtime, locales: locales, frames: frames, fonts: fonts,
       npm: { arguments, project in
@@ -73,6 +73,7 @@ public struct TemplatePackage: Sendable {
         let result = await ProcessRunner.run(environment.command("git", ["rev-parse", "--short", "HEAD"], in: project, timeout: .seconds(30)))
         return result.success ? JS.trim(result.output) : nil
       },
+      snapshot: { project, kind, label in _ = try await snapshots.create(project: project, kind: kind, label: label) },
       app: ("QuartzHub", appVersion))
   }
 

@@ -6,8 +6,10 @@ import Synchronization
 /// `@quartz-community/x` entry, so switching and options are config writes (`ConfigFile`), and an
 /// entry is addressed by index, never by name (plugins-and-config.md, "Two config-mutation paths").
 ///
-/// - **Not yet:** the snapshot before `add` and `remove` (`pluginChange`) comes with the snapshot
-///   store (Phase 3 point 7).
+/// - **A snapshot before `add` and `remove`** (`pluginChange`, the source or name as its label)
+///   when the caller hands one over; the template import adds without, it takes one for the whole
+///   import. A snapshot that fails stops the command; here that is a failed answer with its
+///   sentence, where QuartzControl rejected the call.
 /// - **Deadlines, which QuartzControl did not set**, generous as in `ProjectCreator`: `add` and
 ///   `install` clone from GitHub.
 public final class PluginCommands: Sendable {
@@ -31,14 +33,28 @@ public final class PluginCommands: Sendable {
 
   // MARK: add, remove, prune
 
-  /// `quartz plugin add <source>`, without a snapshot: the template import takes one for the whole
-  /// import, and a package with 48 plugins would otherwise leave 48 behind (`installPluginSource`).
-  public func add(source: String, project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines()) async -> Result {
-    await quartz(["plugin", "add", source], project, environment, deadlines.network)
+  /// `quartz plugin add <source>`: with `snapshot` QuartzControl's `addPlugin`, without it
+  /// `installPluginSource`, for the template import (48 plugins would leave 48 snapshots behind).
+  public func add(source: String, project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
+                  snapshot: SnapshotStore.Take? = nil) async -> Result {
+    if let failure = await Self.snapshotFirst(snapshot, project, source) { return failure }
+    return await quartz(["plugin", "add", source], project, environment, deadlines.network)
   }
 
-  public func remove(name: String, project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines()) async -> Result {
-    await quartz(["plugin", "remove", name], project, environment, deadlines.local)
+  public func remove(name: String, project: URL, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
+                     snapshot: SnapshotStore.Take? = nil) async -> Result {
+    if let failure = await Self.snapshotFirst(snapshot, project, name) { return failure }
+    return await quartz(["plugin", "remove", name], project, environment, deadlines.local)
+  }
+
+  static func snapshotFirst(_ snapshot: SnapshotStore.Take?, _ project: URL, _ label: String) async -> Result? {
+    guard let snapshot else { return nil }
+    do {
+      _ = try await snapshot(project, "pluginChange", label)
+      return nil
+    } catch {
+      return Result(success: false, output: "\(error)")
+    }
   }
 
   /// Drops the directories under `.quartz/plugins` that no config entry points at any more.

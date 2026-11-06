@@ -1,4 +1,5 @@
 import Foundation
+import Synchronization
 import Testing
 @testable import QuartzHubCore
 
@@ -98,6 +99,45 @@ import Testing
     #expect(PluginCommands.failedPlugins("  \u{1b}[31m✗\u{1b}[39m frame-a: x\n✗ b: y\n  ✗ frame-a: z\n  ✗ c no colon\n  ✓ d: fine\n")
       == ["frame-a", "b"])
     #expect(PluginCommands.failedPlugins("") == [])
+  }
+
+  // MARK: the snapshot before add and remove
+
+  @Test func addAndRemoveTakeASnapshotFirstWhenAsked() async throws {
+    let project = w.appendingPathComponent("P")
+    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: project) { $0 }
+    let environment = try environment(answers: .object(JSONObject()))
+    let calls = SnapshotCalls()
+    let commands = PluginCommands()
+    let log = log
+    // How many CLI calls each snapshot saw: it comes before its own command.
+    let seen = Mutex<[Int]>([])
+    let snapshot = calls.take { _ in
+      let lines = ((try? String(contentsOf: log, encoding: .utf8)) ?? "").split(separator: "\n").count
+      seen.withLock { $0.append(lines) }
+    }
+    #expect(await commands.add(source: "github:a/b", project: project, environment: environment, snapshot: snapshot).success)
+    #expect(await commands.remove(name: "b", project: project, environment: environment, snapshot: snapshot).success)
+    #expect(await commands.add(source: "github:c/d", project: project, environment: environment).success)
+    #expect(calls.all == [["pluginChange", "github:a/b"], ["pluginChange", "b"]])
+    #expect(self.calls.count == 3)
+
+    // A frame through the CLI: with a snapshot when the frame asks for one.
+    let frames = LayoutFrames.Plugins.cli(environment: { environment }, snapshot: snapshot)
+    _ = await frames.add("/frame/one", project, true)
+    _ = await frames.add("/frame/two", project, false)
+    #expect(calls.all.last == ["pluginChange", "/frame/one"] && calls.all.count == 3)
+    #expect(seen.withLock { $0 } == [0, 1, 3])
+  }
+
+  @Test func aSnapshotThatFailsStopsTheCommand() async throws {
+    let project = w.appendingPathComponent("P")
+    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: project) { $0 }
+    let environment = try environment(answers: .object(JSONObject()))
+    struct NoWayBack: Error, CustomStringConvertible { var description: String { "kein Weg zurück" } }
+    let result = await PluginCommands().add(source: "github:a/b", project: project, environment: environment, snapshot: { _, _, _ in throw NoWayBack() })
+    #expect(!result.success && result.output == "kein Weg zurück")
+    #expect(calls.isEmpty)
   }
 }
 

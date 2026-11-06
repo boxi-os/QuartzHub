@@ -54,7 +54,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von
   QuartzControls eigenem `configService.ts` (braucht `../QuartzControl` mit `node_modules`)
-- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets,inline-svg,themes,zip,locales,templates,builtin-template}-golden.mjs` — dasselbe für
+- `Runtime/node/bin/node scripts/{paths,duplicate,deps,plugins,marketplace,running-servers,build-output,server-discovery,build-activity,layout-frames,managed-styles,font-file,fonts,style-files,scss-check,variable-graph,site-fonts,snippets,inline-svg,themes,zip,locales,templates,builtin-template,snapshots,content}-golden.mjs` — dasselbe für
   `ProjectPaths`, `ProjectDuplicator`, `ProjectDependencies`, `PluginCommands`, `Marketplace`, die Build- und Server-Dienste, `LayoutFrames`, `StyleSheets`, `StyleFiles`, `ScssCheck`, `VariableGraph`, `SiteFonts`, `Snippets`, `InlineSvg` (dessen Skript in Chrome, über QuartzControls playwright-core), `FontFile` und `FontService`
   (`layout-frames` und `managed-styles` lesen Frames und Stylesheets von gui-test und Example, nur lesend)
 - `Runtime/node/bin/node scripts/option-schema-golden.mjs [QuartzControl] [gui-test]` — Plugin-Namen,
@@ -109,11 +109,14 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Schriften), kommt mit Punkt 5. Echte Quartz-Läufe: `QH_QUARTZ_TESTS=1`; UI-Test der Fragen:
   `TEST_RUNNER_QH_SERVER_PROJECT=<Kopie von gui-test>`. Punkt 5 (Stile und Layout) ist fertig:
   Frames, verwaltete Blöcke, Schriften, Stylesheet-Dateien, SCSS-Prüfung (Helfer `sass-check`),
-  Variablen-Graph, Snippets, SVG-Bereiniger (`qh-check inline-svg`), Themes; offen bis Punkt 7
-  die Schritte, die einen Snapshot brauchen, bis Punkt 8 der GitHub-Token. Punkt 6 (Vorlagen und
-  Übersetzungen) ist fertig: `ZipArchive`, `LocaleFiles` (Helfer `locale-edit`), `TemplatePackage`
-  (zwölf Bausteine), `BuiltinTemplate` (`Resources/templates/qc-basic.qtpl`); der Import lehnt bis
-  Punkt 7 ab (kein Snapshot). Als Nächstes Punkt 7, Git, Snapshots, Updates.
+  Variablen-Graph, Snippets, SVG-Bereiniger (`qh-check inline-svg`), Themes; bis Punkt 8 fehlt der
+  GitHub-Token. Punkt 6 (Vorlagen und Übersetzungen) ist fertig: `ZipArchive`, `LocaleFiles`
+  (Helfer `locale-edit`), `TemplatePackage` (zwölf Bausteine), `BuiltinTemplate`
+  (`Resources/templates/qc-basic.qtpl`). Punkt 7 läuft: 7a fertig (`SnapshotStore` mit einem Index
+  je Vorgang, mit QuartzControl geteilt; `ContentBackups`, `ContentFolder.changeSource`; die
+  Schreiber nehmen ihren Snapshot als `SnapshotStore.Take`). **Neue Schreiber legen Namen über
+  `Posix` an, nicht über Foundation:** Foundation zerlegt „Über“ auf dem Weg zur Platte (NFD), Node
+  nicht; Dateilisten in Tests nach UTF-8-Bytes vergleichen, nicht mit `==`. Als Nächstes 7b.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

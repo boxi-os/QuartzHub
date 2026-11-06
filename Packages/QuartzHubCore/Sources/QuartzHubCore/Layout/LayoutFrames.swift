@@ -25,8 +25,7 @@ public struct LayoutFrames: Sendable {
 
   /// The two CLI calls a frame needs, injectable for the tests. `snapshot` is QuartzControl's
   /// `addPlugin` (with one) against `installPluginSource` (without, for a template import that
-  /// takes one for the whole import); until the snapshot store exists (Phase 3 point 7) both add
-  /// without one.
+  /// takes one for the whole import).
   public struct Plugins: Sendable {
     public var add: @Sendable (_ source: String, _ project: URL, _ snapshot: Bool) async -> PluginCommands.Result
     public var remove: @Sendable (_ name: String, _ project: URL) async -> PluginCommands.Result
@@ -37,9 +36,11 @@ public struct LayoutFrames: Sendable {
       self.remove = remove
     }
 
-    public static func cli(environment: @escaping @Sendable () async -> ToolEnvironment) -> Plugins {
+    public static func cli(environment: @escaping @Sendable () async -> ToolEnvironment, snapshot: SnapshotStore.Take?) -> Plugins {
       Plugins(
-        add: { source, project, _ in await PluginCommands.shared.add(source: source, project: project, environment: environment()) },
+        add: { source, project, withSnapshot in
+          await PluginCommands.shared.add(source: source, project: project, environment: environment(), snapshot: withSnapshot ? snapshot : nil)
+        },
         remove: { name, project in await PluginCommands.shared.remove(name: name, project: project, environment: environment()) })
     }
   }

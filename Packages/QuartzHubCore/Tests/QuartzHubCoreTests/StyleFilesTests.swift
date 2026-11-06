@@ -189,7 +189,7 @@ import Testing
     #expect(throws: StyleFiles.InvalidName.self) { _ = try StyleFiles.references(plugin: "../x", project: project) }
   }
 
-  /// Without a snapshot store there is no way back, and the run is refused before anything moves.
+  /// A snapshot that fails leaves no way back, and the run stops before anything moves.
   @Test func noConsolidationWithoutASnapshot() async throws {
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps/consolidate-the-31.json")))
     let project = scratch.url.appendingPathComponent("nosnap")
@@ -201,7 +201,8 @@ import Testing
       try Data(try Self.text(tree[path]!).utf8).write(to: full)
     }
     let before = ManagedStylesTests.files(styles)
-    await #expect(throws: StyleSheets.SnapshotUnavailable.self) { _ = try await StyleFiles.consolidate(project: project) }
+    struct NoWayBack: Error {}
+    await #expect(throws: NoWayBack.self) { _ = try await StyleFiles.consolidate(project: project, snapshot: { _, _ in throw NoWayBack() }) }
     #expect(ManagedStylesTests.files(styles) == before)
   }
 }

@@ -476,4 +476,17 @@ import Testing
     #expect(SnapshotStore.batches(Array(repeating: "x", count: 2500)).map(\.count) == [1000, 1000, 500])
     #expect(SnapshotStore.batches([]).isEmpty)
   }
+
+  /// What the writers are handed: a snapshot of that kind and label, answered by its id; nil when
+  /// nothing changed.
+  @Test func takeIsCreateAnsweringTheId() async throws {
+    let h = try Harness()
+    h.box.now.withLock { $0 = Date() }
+    let p = try await Self.project(h)
+    let id = try await h.store.take(p, "pluginChange", "github:a/b")
+    let newest = await h.store.list(project: p).first
+    #expect(id != nil && newest?.id == id && newest?.kind == "pluginChange" && newest?.label == "github:a/b")
+    #expect(try await h.store.take(p, "pluginChange", "noch einmal") == nil, "nothing changed")
+  }
 }
+

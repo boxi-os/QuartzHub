@@ -154,8 +154,10 @@ import Testing
       try StyleSheets.writeManagedBlocksNow(changes, project: project)
       return .null
     case "migrateManagedStyles":
-      let moved = try await StyleSheets.migrate(project: project, snapshot: args[0]["snapshot"] == .bool(true))
-      return .object(JSONObject([("moved", .bool(moved)), ("snapshotId", .null)]))
+      // The golden asks without a snapshot (a project just created); with one is asked below.
+      #expect(args[0]["snapshot"] == .bool(false))
+      let migration = try await StyleSheets.migrate(project: project, snapshot: nil)
+      return .object(JSONObject([("moved", .bool(migration.moved)), ("snapshotId", migration.snapshotId.map { .string($0) } ?? .null)]))
     case "replaceCustomBody":
       try StyleSheets.replaceCustomBodyNow(args[0].stringValue!, project: project)
       return .null
@@ -183,5 +185,29 @@ import Testing
       result[relative] = (try? Data(contentsOf: full)).map { String(decoding: $0, as: UTF8.self) }
     }
     return result
+  }
+
+  /// From the Styles page the move takes a snapshot first, before the file is written, and answers
+  /// its id; one that fails leaves the project as it was. A moved project takes none.
+  @Test func theMoveWithASnapshot() async throws {
+    let scratch = try HostPathTests.Scratch()
+    let project = scratch.url.appendingPathComponent("p")
+    let custom = StyleSheets.customScss(project)
+    try FileManager.default.createDirectory(at: custom.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try Data("@use \"./base.scss\";\n".utf8).write(to: custom)
+    let managed = StyleSheets.managedScss(project)
+
+    struct NoWayBack: Error {}
+    await #expect(throws: NoWayBack.self) { _ = try await StyleSheets.migrate(project: project, snapshot: { _, _ in throw NoWayBack() }) }
+    #expect(!FileManager.default.fileExists(atPath: managed.path))
+
+    let calls = SnapshotCalls()
+    let take = calls.take { _ in #expect(!FileManager.default.fileExists(atPath: managed.path), "the snapshot comes first") }
+    let first = try await StyleSheets.migrate(project: project, snapshot: StyleFiles.snapshot(take))
+    #expect(first == StyleSheets.Migration(moved: true, snapshotId: "snap-styleMigration"))
+    #expect(FileManager.default.fileExists(atPath: managed.path))
+    let second = try await StyleSheets.migrate(project: project, snapshot: StyleFiles.snapshot(take))
+    #expect(second == StyleSheets.Migration(moved: false, snapshotId: nil))
+    #expect(calls.all == [["styleMigration", ""]])
   }
 }

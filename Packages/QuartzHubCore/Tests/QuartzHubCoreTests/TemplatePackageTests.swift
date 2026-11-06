@@ -237,15 +237,18 @@ struct TemplatePackageTests {
     return String(cString: resolved)
   }
 
-  /// Until the snapshot store exists the import refuses, before it writes anything.
-  @Test func anImportRefusesWithoutASnapshot() async throws {
+  /// The live import takes its snapshot from the store, and one that cannot be taken (no git
+  /// here) stops it before it writes anything: only the store's own folder is there afterwards.
+  @Test func anImportWhoseSnapshotFailsWritesNothing() async throws {
     let scratch = try HostPathTests.Scratch()
-    let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
+    var environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
+    environment.git = nil
+    environment.hostPath = HostPath(entries: ["/nonexistent"], source: .inherited, added: [])
     let templates = TemplatePackage.live(environment: environment, locales: LocaleFiles(environment: environment), frames: LayoutFrames(), fonts: FontService(),
-                                         appVersion: "0")
-    await #expect(throws: StyleSheets.SnapshotUnavailable.self) {
+                                         snapshots: .live(environment: environment), appVersion: "0")
+    await #expect(throws: SnapshotStore.Failure.self) {
       _ = try await templates.importPackage(project: scratch.url, package: Self.basic, parts: TemplatePackage.partIds, strategy: .packageWins)
     }
-    #expect(try FileManager.default.contentsOfDirectory(atPath: scratch.url.path).isEmpty)
+    #expect(try FileManager.default.contentsOfDirectory(atPath: scratch.url.path) == [".quartz-gui"])
   }
 }

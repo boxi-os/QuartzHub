@@ -12,8 +12,10 @@ import Foundation
 ///   QuartzControl stopped on a raw TypeError.
 /// - **A write asks the file again**, because it does not come through `read`: between the read and
 ///   the save the file can have become something else, a hand edit being the ordinary way there.
-/// - **Not yet:** the snapshot before a write (`configChange`) comes with the snapshot store
-///   (Phase 3 point 7). Until then nothing in the app writes the config.
+/// - **A snapshot before a save** (`configChange`, coalesced over 15 minutes), when the caller
+///   hands one over and the file has content. Before the lock, never under it: a restore holds
+///   the snapshot queue and takes the config lock at its end (QuartzControl's forty-third review,
+///   finding 2). The repair of frame paths and the template parts write without one.
 public enum ConfigFile {
   public static let fileName = "quartz.config.yaml"
 
@@ -109,7 +111,12 @@ public enum ConfigFile {
 
   /// `writeConfig`, under the config lock: a repair of the frame paths at the build door reads and
   /// writes in one go, and a save waits for it instead of landing in between.
-  public static func write(_ config: QuartzConfig, project: URL, runtime: RuntimeLocation = .current) async throws {
+  public static func write(_ config: QuartzConfig, project: URL, runtime: RuntimeLocation = .current,
+                           snapshot: SnapshotStore.Take? = nil) async throws {
+    var info = stat()
+    if let snapshot, stat(path(project: project).path, &info) == 0, info.st_size > 0 {
+      _ = try await snapshot(project, "configChange", "")
+    }
     try await ProjectLock.config.run(project.path) {
       try await writeNow(config, project: project, runtime: runtime)
     }

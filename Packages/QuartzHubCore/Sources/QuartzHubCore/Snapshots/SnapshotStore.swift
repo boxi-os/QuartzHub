@@ -123,6 +123,14 @@ public struct SnapshotStore: Sendable {
     self.pruneExpiry = pruneExpiry
   }
 
+  /// What a writer asks for before it writes: a snapshot of `kind`, its id, nil when it was skipped
+  /// because nothing changed. A failure stops the writer before it writes, as in QuartzControl.
+  public typealias Take = @Sendable (_ project: URL, _ kind: String, _ label: String) async throws -> String?
+
+  public var take: Take {
+    { project, kind, label in try await create(project: project, kind: kind, label: label)?.id }
+  }
+
   public static func live(environment: ToolEnvironment) -> SnapshotStore {
     SnapshotStore(
       environment: environment,
