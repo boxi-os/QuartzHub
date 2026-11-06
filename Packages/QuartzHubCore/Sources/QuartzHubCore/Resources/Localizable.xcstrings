@@ -29378,13 +29378,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aus einem früheren Update liegt in git noch ein zurückgelegter Stand mit eigenen Paketeinträgen ({{entry}} in „git stash list“). Er passt auf den jetzigen Stand, wird aber von QuartzControl nicht mehr eingetragen: „git stash show -p {{entry}}“ zeigt ihn an, „git stash pop {{entry}}“ trägt ihn ein."
+            "value" : "Aus einem früheren Update liegt in git noch ein zurückgelegter Stand mit eigenen Paketeinträgen ({{entry}} in „git stash list“). Er passt auf den jetzigen Stand, wird aber von QuartzHub nicht mehr eingetragen: „git stash show -p {{entry}}“ zeigt ihn an, „git stash pop {{entry}}“ trägt ihn ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "An earlier update left package entries of yours stashed in git ({{entry}} in “git stash list”). They fit the state the project is in now, but QuartzControl no longer puts them back: “git stash show -p {{entry}}” shows them, “git stash pop {{entry}}” puts them back."
+            "value" : "An earlier update left package entries of yours stashed in git ({{entry}} in “git stash list”). They fit the state the project is in now, but QuartzHub no longer puts them back: “git stash show -p {{entry}}” shows them, “git stash pop {{entry}}” puts them back."
           }
         }
       }
@@ -29395,13 +29395,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Neben den Einträgen, die der Abbruch zurückgebracht hat, liegt in git noch ein älterer zurückgelegter Stand mit eigenen Paketeinträgen ({{entry}} in „git stash list“). Er passt auf den jetzigen Stand, wird aber von QuartzControl nicht mehr eingetragen: „git stash show -p {{entry}}“ zeigt ihn an, „git stash pop {{entry}}“ trägt ihn ein."
+            "value" : "Neben den Einträgen, die der Abbruch zurückgebracht hat, liegt in git noch ein älterer zurückgelegter Stand mit eigenen Paketeinträgen ({{entry}} in „git stash list“). Er passt auf den jetzigen Stand, wird aber von QuartzHub nicht mehr eingetragen: „git stash show -p {{entry}}“ zeigt ihn an, „git stash pop {{entry}}“ trägt ihn ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Besides the entries cancelling put back, git still holds an older stash with package entries of yours ({{entry}} in “git stash list”). They fit the state the project is in now, but QuartzControl no longer puts them back: “git stash show -p {{entry}}” shows them, “git stash pop {{entry}}” puts them back."
+            "value" : "Besides the entries cancelling put back, git still holds an older stash with package entries of yours ({{entry}} in “git stash list”). They fit the state the project is in now, but QuartzHub no longer puts them back: “git stash show -p {{entry}}” shows them, “git stash pop {{entry}}” puts them back."
           }
         }
       }
