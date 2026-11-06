@@ -1,0 +1,320 @@
+[
+  {
+    "name": "sfnt static 300",
+    "file": "sfnt-static-300.bin",
+    "face": {
+      "weight": "300",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt italic by OS/2",
+    "file": "sfnt-italic-by-OS-2.bin",
+    "face": {
+      "weight": "400",
+      "italic": true
+    }
+  },
+  {
+    "name": "sfnt italic by head",
+    "file": "sfnt-italic-by-head.bin",
+    "face": {
+      "weight": "700",
+      "italic": true
+    }
+  },
+  {
+    "name": "sfnt variable 100-900",
+    "file": "sfnt-variable-100-900.bin",
+    "face": {
+      "weight": "100 900",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt variable fractional",
+    "file": "sfnt-variable-fractional.bin",
+    "face": {
+      "weight": "400 700",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt variable one value",
+    "file": "sfnt-variable-one-value.bin",
+    "face": {
+      "weight": "500",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt variable min 0",
+    "file": "sfnt-variable-min-0.bin",
+    "face": {
+      "weight": "450",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt variable max below min",
+    "file": "sfnt-variable-max-below-min.bin",
+    "face": {
+      "weight": "450",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt fvar truncated",
+    "file": "sfnt-fvar-truncated.bin",
+    "face": {
+      "weight": "600",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt fvar short",
+    "file": "sfnt-fvar-short.bin",
+    "face": {
+      "weight": "600",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt fvar wide axes",
+    "file": "sfnt-fvar-wide-axes.bin",
+    "face": {
+      "weight": "200 800",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt weight 0",
+    "file": "sfnt-weight-0.bin",
+    "face": null
+  },
+  {
+    "name": "sfnt weight 1001",
+    "file": "sfnt-weight-1001.bin",
+    "face": null
+  },
+  {
+    "name": "sfnt short OS/2",
+    "file": "sfnt-short-OS-2.bin",
+    "face": null
+  },
+  {
+    "name": "sfnt OS/2 without fsSelection",
+    "file": "sfnt-OS-2-without-fsSelection.bin",
+    "face": {
+      "weight": "500",
+      "italic": true
+    }
+  },
+  {
+    "name": "sfnt short head",
+    "file": "sfnt-short-head.bin",
+    "face": {
+      "weight": "400",
+      "italic": false
+    }
+  },
+  {
+    "name": "sfnt no OS/2",
+    "file": "sfnt-no-OS-2.bin",
+    "face": null
+  },
+  {
+    "name": "sfnt table past the end",
+    "file": "sfnt-table-past-the-end.bin",
+    "face": null
+  },
+  {
+    "name": "sfnt only a header",
+    "file": "sfnt-only-a-header.bin",
+    "face": null
+  },
+  {
+    "name": "empty",
+    "file": "empty.bin",
+    "face": null
+  },
+  {
+    "name": "three bytes",
+    "file": "three-bytes.bin",
+    "face": null
+  },
+  {
+    "name": "woff zlib",
+    "file": "woff-zlib.bin",
+    "face": {
+      "weight": "300 600",
+      "italic": true
+    }
+  },
+  {
+    "name": "woff stored",
+    "file": "woff-stored.bin",
+    "face": {
+      "weight": "300",
+      "italic": false
+    }
+  },
+  {
+    "name": "woff mixed",
+    "file": "woff-mixed.bin",
+    "face": {
+      "weight": "200",
+      "italic": true
+    }
+  },
+  {
+    "name": "woff corrupt zlib",
+    "file": "woff-corrupt-zlib.bin",
+    "face": null
+  },
+  {
+    "name": "woff bad checksum",
+    "file": "woff-bad-checksum.bin",
+    "face": null
+  },
+  {
+    "name": "woff bomb",
+    "file": "woff-bomb.bin",
+    "face": null
+  },
+  {
+    "name": "woff orig smaller than inflated",
+    "file": "woff-orig-smaller-than-inflated.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 plain",
+    "file": "woff2-plain.bin",
+    "face": {
+      "weight": "300",
+      "italic": false
+    }
+  },
+  {
+    "name": "woff2 unknown tags and fvar",
+    "file": "woff2-unknown-tags-and-fvar.bin",
+    "face": {
+      "weight": "250 750",
+      "italic": true
+    }
+  },
+  {
+    "name": "woff2 transformed glyf before OS/2",
+    "file": "woff2-transformed-glyf-before-OS-2.bin",
+    "face": {
+      "weight": "650",
+      "italic": false
+    }
+  },
+  {
+    "name": "woff2 transformed hmtx",
+    "file": "woff2-transformed-hmtx.bin",
+    "face": {
+      "weight": "333",
+      "italic": false
+    }
+  },
+  {
+    "name": "woff2 bomb",
+    "file": "woff2-bomb.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 bomb declared large",
+    "file": "woff2-bomb-declared-large.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 stream short",
+    "file": "woff2-stream-short.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 not brotli",
+    "file": "woff2-not-brotli.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 truncated directory",
+    "file": "woff2-truncated-directory.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 long base128",
+    "file": "woff2-long-base128.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 trailing bytes",
+    "file": "woff2-trailing-bytes.bin",
+    "face": {
+      "weight": "300",
+      "italic": false
+    }
+  },
+  {
+    "name": "woff bad zlib header",
+    "file": "woff-bad-zlib-header.bin",
+    "face": null
+  },
+  {
+    "name": "woff raw deflate",
+    "file": "woff-raw-deflate.bin",
+    "face": null
+  },
+  {
+    "name": "sfnt variable half",
+    "file": "sfnt-variable-half.bin",
+    "face": {
+      "weight": "101 701",
+      "italic": false
+    }
+  },
+  {
+    "name": "woff2 stream cut",
+    "file": "woff2-stream-cut.bin",
+    "face": null
+  },
+  {
+    "name": "woff2 base128 padded past five bytes",
+    "file": "woff2-base128-padded-past-five-bytes.bin",
+    "face": null
+  },
+  {
+    "name": "real noto-sans-latin-400-700.woff2",
+    "file": "noto-sans-latin-400-700.woff2",
+    "face": {
+      "weight": "100 900",
+      "italic": false
+    }
+  },
+  {
+    "name": "real noto-sans-latin-italic-400-700.woff2",
+    "file": "noto-sans-latin-italic-400-700.woff2",
+    "face": {
+      "weight": "100 900",
+      "italic": true
+    }
+  },
+  {
+    "name": "real noto-sans-mono-latin-400-700.woff2",
+    "file": "noto-sans-mono-latin-400-700.woff2",
+    "face": {
+      "weight": "100 900",
+      "italic": false
+    }
+  },
+  {
+    "name": "real o-0bIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjc5a3du3mhPy1Fig.woff2",
+    "file": "o-0bIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjc5a3du3mhPy1Fig.woff2",
+    "face": {
+      "weight": "100 900",
+      "italic": false
+    }
+  }
+]

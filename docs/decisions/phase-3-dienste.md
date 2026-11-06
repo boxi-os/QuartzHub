@@ -927,3 +927,22 @@ gefragt. Die Sperre der Stylesheets (`styleLock.ts`) gab es schon seit Punkt 1
 - Gegenproben (24, jede lässt einen Test scheitern; vier waren erst ungefangen und bekamen einen
   Fall: der Partial-Kandidat `_name.scss`, das Entfernen von Blockkommentaren bei den Kollisionen,
   die Klammertiefe bei einer schließenden Klammer vorweg, die Anführungszeichen der `@use`-Zeile).
+
+### Schriftdateien lesen (`fontFile.ts` → `FontFile`)
+
+- Gewicht und Schnitt aus OS/2, head und der `wght`-Achse von fvar, in sfnt, WOFF (zlib je
+  Tabelle) und WOFF2 (ein Brotli-Strom). Entpackt wird mit Apples Compression-Framework: Brotli
+  direkt, zlib als roher Deflate-Strom hinter dem geprüften Kopf, mit der Adler-32-Prüfsumme danach,
+  wie Node sie prüft. Die Obergrenze (64 MiB oder die kleinere Länge aus der Datei) beendet den
+  Decoder, bevor er mehr hält; eine Bombe von 80 MiB Nullen in 600 Bytes endet in Millisekunden
+  bei nil.
+- **Gemessen gegen QuartzControls Code:** `scripts/font-file-golden.mjs` baut Schriften in allen
+  drei Formaten (statisch, kursiv nach OS/2 oder nach head, variabel mit Achsen in jeder Lage,
+  Achse bei genau ,5, Gewicht 0 und 1001, zu kurze und falsch lange Tabellen, kaputter und fehlender
+  zlib-Kopf, falsche Prüfsumme, Bomben in WOFF und WOFF2, ein abgeschnittener Strom, Base128 mit
+  mehr als fünf Bytes, Daten hinter dem Strom) und liest vier echte WOFF2 von gui-test (Noto und
+  Google, SIL OFL). 48 Fälle, alle gleich.
+- Gegenproben (11, jede lässt einen Test scheitern; vier waren erst ungefangen und bekamen ihren
+  Fall: zlib-Kopf, Rundung bei ,5, abgeschnittener Strom, Base128-Länge). Der Zweig „Decoder
+  meldet OK ohne Fortschritt“ ist nur ein Schutz vor einer Endlosschleife: Ein abgeschnittener
+  Strom endet bei Apples Decoder im Fehlerstatus (gemessen über die Gegenprobe dieses Zweigs).
