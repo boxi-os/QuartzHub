@@ -49,8 +49,10 @@ const stubs = {
   'cpu-features': 'throw new Error("no native module here")',
   './crypto/build/Release/sshcrypto.node': 'throw new Error("no native module here")'
 }
-globalThis.__connections = { qchost: connection('qchost'), qcsftp: connection('qcsftp') }
+globalThis.__connections = { qchost: connection('qchost'), qcsftp: connection('qcsftp'),
+  ftp: { id: 'ftp', kind: 'ftp', name: 'ftp', host: HOST, port: 21, username: 'qchost', secure: false, hasSecret: true } }
 const { sftpAdapter } = await loadQuartzControl(control, 'electron/main/services/deploy/sftp.ts', stubs)
+const { ftpAdapter } = await loadQuartzControl(control, 'electron/main/services/deploy/ftp.ts', stubs)
 const { rsyncAdapter } = await loadQuartzControl(control, 'electron/main/services/deploy/rsync.ts', { ...stubs, './sftp': 'export const SSH_KEEPALIVE_MS = 15000; export const SSH_KEEPALIVE_COUNT = 3; export const SSH_SILENT_SECONDS = 60' })
 
 // The state on the host: what the test folders hold.
@@ -67,11 +69,11 @@ async function step(name, adapter, user, destination, options = {}, setup = [], 
     if (a.chmod) chmodSync(W(a.chmod[0]), parseInt(a.chmod[1], 8))
     if (a.mkdir) mkdirSync(W(a.mkdir), { recursive: true })
   }
-  for (const [account, command] of remote) ssh(account, W(command))
+  for (const [account, command] of remote) account === 'admin' ? admin(W(command)) : ssh(account, W(command))
   const events = []
   const target = { id: options.id ?? 't1', name: 'Web', connectionId: user, destination: JSON.parse(W(JSON.stringify(destination))), excludes: [] }
   const ctx = {
-    projectPath: project, target, buildDir: W(options.build ?? '@W@/build'), secret: null,
+    projectPath: project, target, buildDir: W(options.build ?? '@W@/build'), secret: adapter === 'ftp' ? process.env.QH_FTP_PW : null,
     ...(options.keepLocalModes ? { keepLocalModes: true } : {}),
     ...(options.relayFolders ? { relayFolders: options.relayFolders.map(W) } : {}),
     ...(options.onlyPaths ? { onlyPaths: options.onlyPaths } : {}),
@@ -80,7 +82,7 @@ async function step(name, adapter, user, destination, options = {}, setup = [], 
   }
   let result
   try {
-    result = { ok: await (adapter === 'rsync' ? rsyncAdapter : sftpAdapter).run(ctx, options.excludes ?? []) }
+    result = { ok: await (adapter === 'rsync' ? rsyncAdapter : adapter === 'ftp' ? ftpAdapter : sftpAdapter).run(ctx, options.excludes ?? []) }
   } catch (err) {
     result = { error: String(err.message ?? err) }
   }
@@ -118,6 +120,34 @@ await step('rsync: removing a relay the server keeps', 'rsync', 'qchost', rsync(
 await step('rsync: removing our own', 'rsync', 'qchost', rsync('@R@/rweb/neu/forms', true),
   remove('relay-c', ['@R@/rweb/neu', '@R@/rweb/neu/forms'], '0123456789abcdef'), [], [['qchost', 'chmod 755 @R@/rweb/neu/forms']])
 await step('rsync: removing again', 'rsync', 'qchost', rsync('@R@/rweb/neu/forms', true), remove('relay-c', ['@R@/rweb/neu', '@R@/rweb/neu/forms'], '0123456789abcdef'))
+
+const ftp = (remotePath, deleteRemoved = true) => ({ type: 'ftp', remotePath, deleteRemoved })
+await step('ftp: a site with umlauts', 'ftp', 'ftp', ftp('@R@/fsite'), { id: 'f1' }, [], [['qchost', 'mkdir -p @R@/fsite']])
+await step('ftp: nothing to do', 'ftp', 'ftp', ftp('@R@/fsite'), { id: 'f1' })
+await step('ftp: the parent is missing', 'ftp', 'ftp', ftp('@R@/fehlt/fsite'), { id: 'f2' })
+await step('ftp: "~" of another account', 'ftp', 'ftp', ftp('~qcsftp/x'), { id: 'f3' })
+await step('ftp: a relative path from the login directory', 'ftp', 'ftp', ftp('qh8b-site2'), { id: 'f4' })
+await step('ftp: a deletion refused and a folder in its place', 'ftp', 'ftp', ftp('@R@/fsite'), { id: 'f1', build: '@W@/fbuild' },
+  [{ write: ['@W@/fbuild/index.html', '<h1>Start</h1>'] }], [['qchost', 'rm @R@/fsite/x.css; mkdir @R@/fsite/x.css; touch @R@/fsite/x.css/inhalt; chmod 555 @R@/fsite/Über']])
+await step('ftp: the relay with its modes', 'ftp', 'ftp', ftp('@R@/fweb/forms', false), relay('relay-f', ['@R@/fweb/forms']), [],
+  [['qchost', 'chmod 755 @R@/fsite/Über; mkdir -p @R@/fweb']])
+const chmodOff = "sudo sed -i 's/^chmod_enable=YES/chmod_enable=NO/' /etc/vsftpd.conf && sudo systemctl restart vsftpd"
+const chmodOn = "sudo sed -i 's/^chmod_enable=NO/chmod_enable=YES/' /etc/vsftpd.conf && sudo systemctl restart vsftpd"
+await step('ftp: a server that refuses SITE CHMOD', 'ftp', 'ftp', ftp('@R@/fweb2/forms', false), relay('relay-h', ['@R@/fweb2/forms']), [],
+  [['qchost', 'mkdir -p @R@/fweb2'], ['admin', chmodOff]])
+await step('ftp: the relay folder is a link', 'ftp', 'ftp', ftp('@R@/fweb/link', false), relay('relay-g', ['@R@/fweb/link']), [],
+  [['admin', chmodOn], ['qchost', 'ln -s @R@/fweb/forms @R@/fweb/link']])
+await step('ftp: removing a foreign relay', 'ftp', 'ftp', ftp('@R@/fweb/forms', true), remove('relay-f', ['@R@/fweb/forms'], '0123456789abcdef'),
+  [{ write: ['@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json', JSON.stringify({ 'send.php': 'remove', 'config.php': 'remove', 'config.generated.php': 'remove' })] }],
+  [['qchost', "cp @R@/fweb/forms/config.generated.php /tmp/qh8c-generated; printf '<?php\\nreturn [\\n  \\x27generation\\x27 => \\x27fedcba9876543210\\x27,\\n];\\n' > @R@/fweb/forms/config.generated.php"]])
+await step('ftp: removing a relay the server keeps', 'ftp', 'ftp', ftp('@R@/fweb/forms', true), remove('relay-f', ['@R@/fweb/forms'], '0123456789abcdef'),
+  [{ write: ['@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json', JSON.stringify({ 'send.php': 'remove', 'config.php': 'remove', 'config.generated.php': 'remove' })] }],
+  [['qchost', 'cp /tmp/qh8c-generated @R@/fweb/forms/config.generated.php; rm /tmp/qh8c-generated; chmod 555 @R@/fweb/forms']])
+await step('ftp: removing our own', 'ftp', 'ftp', ftp('@R@/fweb/forms', true), remove('relay-f', ['@R@/fweb/forms'], '0123456789abcdef'),
+  [{ write: ['@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json', JSON.stringify({ 'send.php': 'remove', 'config.php': 'remove', 'config.generated.php': 'remove' })] }],
+  [['qchost', 'chmod 755 @R@/fweb/forms']])
+await step('ftp: removing again', 'ftp', 'ftp', ftp('@R@/fweb/forms', true), remove('relay-f', ['@R@/fweb/forms'], '0123456789abcdef'),
+  [{ write: ['@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json', JSON.stringify({ 'send.php': 'remove', 'config.php': 'remove', 'config.generated.php': 'remove' })] }])
 
 ssh('qchost', 'chmod -R u+w /srv/qc/www/qh8b 2>/dev/null; rm -rf /srv/qc/www/qh8b "$HOME/qh8b-site" "$HOME/qh8b-site2"')
 admin('sudo rm -rf /srv/qc/www/nochmod/qh8b')

@@ -6,7 +6,7 @@ import Testing
 /// Against QuartzControl's own SFTP and rsync adapters on a real Linux host (`scripts/vm-golden.mjs`):
 /// debian-vm with rsync 3.5.0 as the receiver, OpenSSH's sftp-server for qchost and internal-sftp
 /// without setstat for qcsftp, logins as accounts other than the local user. Only with
-/// `QH_VM_TESTS=1` and `QH_VM_KEY=<private key>` (comment qh-8b-test in both accounts), and never at
+/// `QH_VM_TESTS=1`, `QH_VM_KEY=<private key>` (comment qh-8b-test in both accounts) and `QH_FTP_PW`, and never at
 /// the same time as the golden script: both use the same folders on the host.
 @Suite(.serialized, .enabled(if: ProcessInfo.processInfo.environment["QH_VM_TESTS"] == "1", "QH_VM_TESTS=1 und QH_VM_KEY setzen"))
 struct DebianVMTests {
@@ -22,7 +22,7 @@ struct DebianVMTests {
   @Test func replaysQuartzControlsSteps() async throws {
     let key = try #require(ProcessInfo.processInfo.environment["QH_VM_KEY"])
     let steps = Self.golden["steps"]!.arrayValue!
-    #expect(steps.count == 13)
+    #expect(steps.count == 26)
     let work = TemplatePackageTests.realpath(TestFolder.make("qh-vm"))
     defer { try? FileManager.default.removeItem(atPath: work) }
     let W = { (text: String) in
@@ -60,10 +60,13 @@ struct DebianVMTests {
       .object(JSONObject([("id", .string(user)), ("kind", .string("ssh")), ("name", .string(user)), ("host", .string(Self.host)), ("port", .number(22)),
                           ("username", .string(user)), ("authMethod", .string("privateKey")), ("keyPath", .string(key)), ("hostKey", hostKey.json)]))
     }
-    try JSONStore.write(.array(entries), to: "\(profile)/connections.json")
+    let ftpEntry = JSONValue.object(JSONObject([("id", .string("ftp")), ("kind", .string("ftp")), ("name", .string("ftp")), ("host", .string(Self.host)),
+                                                ("port", .number(21)), ("username", .string("qchost")), ("secure", .bool(false))]))
+    try JSONStore.write(.array(entries + [ftpEntry]), to: "\(profile)/connections.json")
     let connections = Connections(profile: ProfileDirectory(profile), secrets: MemorySecrets())
     let sftp = SFTPAdapter(connections: connections, environment: environment, confirm: { _, _ in false }, configFile: "/dev/null")
     let rsync = RsyncAdapter(connections: connections, environment: environment, configFile: "/dev/null")
+    let ftp = FTPAdapter(connections: connections, runtime: HelperRuntime.runtime)
 
     for step in steps {
       let name = step["name"]!.stringValue!
@@ -76,13 +79,17 @@ struct DebianVMTests {
         if let change = action["chmod"]?.arrayValue { _ = chmod(W(change[0].stringValue!), mode_t(change[1].stringValue!, radix: 8)!) }
         if let dir = action["mkdir"]?.stringValue { try Posix.mkdirs(W(dir)) }
       }
-      for command in step["remote"]!.arrayValue! { _ = await ssh(command.arrayValue![0].stringValue!, W(command.arrayValue![1].stringValue!)) }
+      for command in step["remote"]!.arrayValue! {
+        let account = command.arrayValue![0].stringValue!, text = W(command.arrayValue![1].stringValue!)
+        _ = account == "admin" ? await admin(text) : await ssh(account, text)
+      }
       let options = step["options"]!
       let destination = try JSJSON.parse(Data(W(JSJSON.compact(step["destination"]!)).utf8)).objectValue!
       let target = PublishTarget(object: JSONObject([("id", .string(options["id"]?.stringValue ?? "t1")), ("name", .string("Web")),
                                                      ("connectionId", .string(step["user"]!.stringValue!)), ("destination", .object(destination)),
                                                      ("excludes", .array([]))]))
-      var context = DeployContext(project: project, target: target, buildDir: W(options["build"]?.stringValue ?? "@W@/build"))
+      var context = DeployContext(project: project, target: target, buildDir: W(options["build"]?.stringValue ?? "@W@/build"),
+                                  secret: step["adapter"] == .string("ftp") ? ProcessInfo.processInfo.environment["QH_FTP_PW"] : nil)
       context.keepLocalModes = options["keepLocalModes"] == .bool(true)
       context.relayFolders = options["relayFolders"]?.arrayValue?.map { W($0.stringValue!) }
       context.onlyPaths = options["onlyPaths"]?.arrayValue?.map { $0.stringValue! }
@@ -94,7 +101,8 @@ struct DebianVMTests {
                                         ("currentFile", file.map(JSONValue.string) ?? .null)])))
         }
       }
-      let adapter: any DeployAdapter = step["adapter"] == .string("rsync") ? rsync : sftp
+      let adapters: [String: any DeployAdapter] = ["rsync": rsync, "ftp": ftp, "sftp": sftp]
+      let adapter = adapters[step["adapter"]!.stringValue!]!
       let actual: JSONValue
       do {
         let result = try await adapter.run(context, excluding: [])

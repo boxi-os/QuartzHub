@@ -635,6 +635,581 @@
    },
    "events": [],
    "state": "d 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: a site with umlauts",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fsite",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "f1"
+   },
+   "setup": [],
+   "remote": [
+    [
+     "qchost",
+     "mkdir -p @R@/fsite"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ index.html\n↑ Über/ärger.html\n↑ x.css\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "index.html"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "Über/ärger.html"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "x.css"
+    }
+   ],
+   "state": "d 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fsite/x.css \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/fsite/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: nothing to do",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fsite",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "f1"
+   },
+   "setup": [],
+   "remote": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": ""
+    }
+   },
+   "events": [],
+   "state": "d 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fsite/x.css \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/fsite/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: the parent is missing",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fehlt/fsite",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "f2"
+   },
+   "setup": [],
+   "remote": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"deployParentMissing\",\"args\":{\"path\":\"@R@/fehlt\"}}"
+    }
+   },
+   "events": [],
+   "state": "d 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fsite/x.css \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/fsite/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: \"~\" of another account",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "~qcsftp/x",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "f3"
+   },
+   "setup": [],
+   "remote": [],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"deployTildeOtherAccount\",\"args\":{\"path\":\"~qcsftp/x\"}}"
+    }
+   },
+   "events": [],
+   "state": "d 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fsite/x.css \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/fsite/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: a relative path from the login directory",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "qh8b-site2",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "f4"
+   },
+   "setup": [],
+   "remote": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ index.html\n↑ Über/ärger.html\n↑ x.css\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "index.html"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "Über/ärger.html"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "x.css"
+    }
+   ],
+   "state": "d 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fsite/x.css \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/fsite/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: a deletion refused and a folder in its place",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fsite",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "f1",
+    "build": "@W@/fbuild"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/fbuild/index.html",
+      "<h1>Start</h1>"
+     ]
+    }
+   ],
+   "remote": [
+    [
+     "qchost",
+     "rm @R@/fsite/x.css; mkdir @R@/fsite/x.css; touch @R@/fsite/x.css/inhalt; chmod 555 @R@/fsite/Über"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"deployDeleteRefused\",\"args\":{\"path\":\"Über/ärger.html\",\"reason\":\"550 Delete operation failed\"}}{\"key\":\"deployDeleteRefused\",\"args\":{\"path\":\"x.css\",\"reason\":\"{\\\"key\\\":\\\"deleteIsFolder\\\",\\\"args\\\":{}}\"}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 2,
+     "currentFile": "Über/ärger.html"
+    },
+    {
+     "processed": 2,
+     "total": 2,
+     "currentFile": "x.css"
+    }
+   ],
+   "state": "d 555 @R@/fsite/Über \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: the relay with its modes",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fweb/forms",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-f",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@R@/fweb/forms"
+    ]
+   },
+   "setup": [],
+   "remote": [
+    [
+     "qchost",
+     "chmod 755 @R@/fsite/Über; mkdir -p @R@/fweb"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ config.generated.php\n↑ config.php\n↑ counters/.htaccess\n↑ send.php\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 4,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 4,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 4,
+     "currentFile": "counters/.htaccess"
+    },
+    {
+     "processed": 4,
+     "total": 4,
+     "currentFile": "send.php"
+    }
+   ],
+   "state": "d 750 @R@/fweb/forms/counters \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 751 @R@/fweb/forms \nd 755 @R@/fsite/Über \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/fweb \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/fweb/forms/config.php \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fweb/forms/config.generated.php \nf 644 @R@/fweb/forms/counters/.htaccess \nf 644 @R@/fweb/forms/send.php \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: a server that refuses SITE CHMOD",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fweb2/forms",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-h",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@R@/fweb2/forms"
+    ]
+   },
+   "setup": [],
+   "remote": [
+    [
+     "qchost",
+     "mkdir -p @R@/fweb2"
+    ],
+    [
+     "admin",
+     "sudo sed -i 's/^chmod_enable=YES/chmod_enable=NO/' /etc/vsftpd.conf && sudo systemctl restart vsftpd"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "↑ config.generated.php\n↑ config.php\n↑ counters/.htaccess\n↑ send.php\n{\"key\":\"modeNotSet\",\"args\":{\"mode\":\"751\",\"actual\":\"755\",\"path\":\"@R@/fweb2/forms\"}}\n{\"key\":\"modeNotSet\",\"args\":{\"mode\":\"640\",\"actual\":\"644\",\"path\":\"@R@/fweb2/forms/config.php\"}}\n{\"key\":\"modeNotSet\",\"args\":{\"mode\":\"750\",\"actual\":\"755\",\"path\":\"@R@/fweb2/forms/counters\"}}\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 4,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 4,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 4,
+     "currentFile": "counters/.htaccess"
+    },
+    {
+     "processed": 4,
+     "total": 4,
+     "currentFile": "send.php"
+    }
+   ],
+   "state": "d 750 @R@/fweb/forms/counters \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 751 @R@/fweb/forms \nd 755 @R@/fsite/Über \nd 755 @R@/fweb2/forms \nd 755 @R@/fweb2/forms/counters \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/fweb \nd 775 @R@/fweb2 \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/fweb/forms/config.php \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fweb2/forms/config.generated.php \nf 644 @R@/fweb2/forms/config.php \nf 644 @R@/fweb2/forms/counters/.htaccess \nf 644 @R@/fweb2/forms/send.php \nf 644 @R@/fweb/forms/config.generated.php \nf 644 @R@/fweb/forms/counters/.htaccess \nf 644 @R@/fweb/forms/send.php \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb2/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb2/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb2/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb2/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: the relay folder is a link",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fweb/link",
+    "deleteRemoved": false
+   },
+   "options": {
+    "id": "relay-g",
+    "build": "@W@/relay",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@R@/fweb/link"
+    ]
+   },
+   "setup": [],
+   "remote": [
+    [
+     "admin",
+     "sudo sed -i 's/^chmod_enable=NO/chmod_enable=YES/' /etc/vsftpd.conf && sudo systemctl restart vsftpd"
+    ],
+    [
+     "qchost",
+     "ln -s @R@/fweb/forms @R@/fweb/link"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayDirSymlink\",\"args\":{\"path\":\"@R@/fweb/link\"}}"
+    }
+   },
+   "events": [],
+   "state": "d 750 @R@/fweb/forms/counters \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 751 @R@/fweb/forms \nd 755 @R@/fsite/Über \nd 755 @R@/fweb2/forms \nd 755 @R@/fweb2/forms/counters \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/fweb \nd 775 @R@/fweb2 \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/fweb/forms/config.php \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fweb2/forms/config.generated.php \nf 644 @R@/fweb2/forms/config.php \nf 644 @R@/fweb2/forms/counters/.htaccess \nf 644 @R@/fweb2/forms/send.php \nf 644 @R@/fweb/forms/config.generated.php \nf 644 @R@/fweb/forms/counters/.htaccess \nf 644 @R@/fweb/forms/send.php \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/fweb/link @R@/fweb/forms\nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb2/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb2/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb2/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb2/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: removing a foreign relay",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fweb/forms",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-f",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@R@/fweb/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json",
+      "{\"send.php\":\"remove\",\"config.php\":\"remove\",\"config.generated.php\":\"remove\"}"
+     ]
+    }
+   ],
+   "remote": [
+    [
+     "qchost",
+     "cp @R@/fweb/forms/config.generated.php /tmp/qh8c-generated; printf '<?php\\nreturn [\\n  \\x27generation\\x27 => \\x27fedcba9876543210\\x27,\\n];\\n' > @R@/fweb/forms/config.generated.php"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayRemoveForeign\",\"args\":{\"path\":\"@R@/fweb/forms\"}}"
+    }
+   },
+   "events": [],
+   "state": "d 750 @R@/fweb/forms/counters \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 751 @R@/fweb/forms \nd 755 @R@/fsite/Über \nd 755 @R@/fweb2/forms \nd 755 @R@/fweb2/forms/counters \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/fweb \nd 775 @R@/fweb2 \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/fweb/forms/config.php \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fweb2/forms/config.generated.php \nf 644 @R@/fweb2/forms/config.php \nf 644 @R@/fweb2/forms/counters/.htaccess \nf 644 @R@/fweb2/forms/send.php \nf 644 @R@/fweb/forms/config.generated.php \nf 644 @R@/fweb/forms/counters/.htaccess \nf 644 @R@/fweb/forms/send.php \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/fweb/link @R@/fweb/forms\nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb2/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb2/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb2/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb2/forms/send.php\nc3fecf49aff5c2f65bc4606732f6c26cf9ec86aa59eca848d32597a95a6fe1c2  @R@/fweb/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: removing a relay the server keeps",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fweb/forms",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-f",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@R@/fweb/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json",
+      "{\"send.php\":\"remove\",\"config.php\":\"remove\",\"config.generated.php\":\"remove\"}"
+     ]
+    }
+   ],
+   "remote": [
+    [
+     "qchost",
+     "cp /tmp/qh8c-generated @R@/fweb/forms/config.generated.php; rm /tmp/qh8c-generated; chmod 555 @R@/fweb/forms"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": false,
+     "output": "{\"key\":\"relayRemoveRefused\",\"args\":{\"path\":\"config.generated.php\",\"reason\":\"550 Delete operation failed\"}}{\"key\":\"relayRemoveRefused\",\"args\":{\"path\":\"config.php\",\"reason\":\"550 Delete operation failed\"}}{\"key\":\"relayRemoveRefused\",\"args\":{\"path\":\"send.php\",\"reason\":\"550 Delete operation failed\"}}{\"key\":\"relayRemoveRefusedRest\",\"args\":{}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "send.php"
+    }
+   ],
+   "state": "d 555 @R@/fweb/forms \nd 750 @R@/fweb/forms/counters \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/fweb2/forms \nd 755 @R@/fweb2/forms/counters \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/fweb \nd 775 @R@/fweb2 \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/fweb/forms/config.php \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fweb2/forms/config.generated.php \nf 644 @R@/fweb2/forms/config.php \nf 644 @R@/fweb2/forms/counters/.htaccess \nf 644 @R@/fweb2/forms/send.php \nf 644 @R@/fweb/forms/config.generated.php \nf 644 @R@/fweb/forms/counters/.htaccess \nf 644 @R@/fweb/forms/send.php \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/fweb/link @R@/fweb/forms\nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb2/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb2/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb2/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb2/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: removing our own",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fweb/forms",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-f",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@R@/fweb/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json",
+      "{\"send.php\":\"remove\",\"config.php\":\"remove\",\"config.generated.php\":\"remove\"}"
+     ]
+    }
+   ],
+   "remote": [
+    [
+     "qchost",
+     "chmod 755 @R@/fweb/forms"
+    ]
+   ],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "✗ config.generated.php\n✗ config.php\n✗ send.php\n"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "send.php"
+    }
+   ],
+   "state": "d 750 @R@/fweb/forms/counters \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/fweb2/forms \nd 755 @R@/fweb2/forms/counters \nd 755 @R@/fweb/forms \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/fweb \nd 775 @R@/fweb2 \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fweb2/forms/config.generated.php \nf 644 @R@/fweb2/forms/config.php \nf 644 @R@/fweb2/forms/counters/.htaccess \nf 644 @R@/fweb2/forms/send.php \nf 644 @R@/fweb/forms/counters/.htaccess \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/fweb/link @R@/fweb/forms\nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb2/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb2/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb2/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb2/forms/send.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
+  },
+  {
+   "name": "ftp: removing again",
+   "adapter": "ftp",
+   "user": "ftp",
+   "destination": {
+    "type": "ftp",
+    "remotePath": "@R@/fweb/forms",
+    "deleteRemoved": true
+   },
+   "options": {
+    "id": "relay-f",
+    "build": "@W@/empty",
+    "keepLocalModes": true,
+    "relayFolders": [
+     "@R@/fweb/forms"
+    ],
+    "onlyPaths": [
+     "send.php",
+     "config.php",
+     "config.generated.php"
+    ],
+    "ownGeneration": "0123456789abcdef"
+   },
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz-gui/deploy-manifest-relay-f.json",
+      "{\"send.php\":\"remove\",\"config.php\":\"remove\",\"config.generated.php\":\"remove\"}"
+     ]
+    }
+   ],
+   "remote": [],
+   "result": {
+    "ok": {
+     "success": true,
+     "output": "{\"key\":\"relayRemoveGone\",\"args\":{\"path\":\"@R@/fweb/forms\"}}"
+    }
+   },
+   "events": [
+    {
+     "processed": 1,
+     "total": 3,
+     "currentFile": "config.generated.php"
+    },
+    {
+     "processed": 2,
+     "total": 3,
+     "currentFile": "config.php"
+    },
+    {
+     "processed": 3,
+     "total": 3,
+     "currentFile": "send.php"
+    }
+   ],
+   "state": "d 750 @R@/fweb/forms/counters \nd 750 @R@/rweb/neu/forms/counters \nd 750 @R@/web/forms/counters \nd 755 @R@/fsite/Über \nd 755 @R@/fweb2/forms \nd 755 @R@/fweb2/forms/counters \nd 755 @R@/fweb/forms \nd 755 @R@/rsite/Über \nd 755 @R@/rweb/neu/forms \nd 755 @R@/web/forms \nd 775 @R@ \nd 775 @R@/fsite \nd 775 @R@/fsite/x.css \nd 775 @R@/fweb \nd 775 @R@/fweb2 \nd 775 @R@/rsite \nd 775 @R@/rweb \nd 775 @R@/rweb/neu \nd 775 @R@/site \nd 775 @R@/site/Über \nd 775 @R@/web \nf 640 @R@/web/forms/config.php \nf 644 @R@/fsite/index.html \nf 644 @R@/fsite/Über/ärger.html \nf 644 @R@/fweb2/forms/config.generated.php \nf 644 @R@/fweb2/forms/config.php \nf 644 @R@/fweb2/forms/counters/.htaccess \nf 644 @R@/fweb2/forms/send.php \nf 644 @R@/fweb/forms/counters/.htaccess \nf 644 @R@/rsite/index.html \nf 644 @R@/rsite/Über/ärger.html \nf 644 @R@/rsite/x.css \nf 644 @R@/rweb/neu/forms/counters/.htaccess \nf 644 @R@/site/index.html \nf 644 @R@/site/Über/ärger.html \nf 644 @R@/site/x.css \nf 644 @R@/web/forms/config.generated.php \nf 644 @R@/web/forms/counters/.htaccess \nf 644 @R@/web/forms/send.php \nf 664 @R@/fsite/x.css/inhalt \nl 777 @R@/fweb/link @R@/fweb/forms\nl 777 @R@/rweb/link @R@/rweb/neu/forms\nd 775 @N@ \nd 775 @N@/forms \nd 775 @N@/forms/counters \nf 640 @N@/forms/config.php \nf 644 @N@/forms/config.generated.php \nf 644 @N@/forms/counters/.htaccess \nf 644 @N@/forms/send.php \nd 775 /home/qchost/qh8b-site \nd 775 /home/qchost/qh8b-site/Über \nf 644 /home/qchost/qh8b-site/index.html \nf 644 /home/qchost/qh8b-site/Über/ärger.html \nf 644 /home/qchost/qh8b-site/x.css \nd 755 /home/qchost/qh8b-site2 \nd 755 /home/qchost/qh8b-site2/Über \nf 644 /home/qchost/qh8b-site2/index.html \nf 644 /home/qchost/qh8b-site2/Über/ärger.html \nf 644 /home/qchost/qh8b-site2/x.css \n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/fsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/fsite/Über/ärger.html\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  @R@/fsite/x.css/inhalt\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/fweb2/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/fweb2/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb2/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/fweb2/forms/send.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/fweb/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/rsite/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/rsite/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/rsite/x.css\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/rweb/neu/forms/counters/.htaccess\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  @R@/site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  @R@/site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  @R@/site/x.css\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @R@/web/forms/config.generated.php\na8c825a245d52bebdc3517e22e0902316b46ae4e356e4fb261e87f54e8be091c  @R@/web/forms/config.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @R@/web/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @R@/web/forms/send.php\nf1998deb414722a25e1d9e40e42a23494c2745a84d731cfc6c1f922b8e0b43b0  @N@/forms/config.generated.php\n05a2d7332eb9d8bf164487c743a2e93c21b16bb2061a93e3ee2ceb508eadb753  @N@/forms/counters/.htaccess\na5588fb78cb47b1b578d3a2843349a71315be67faa684d867a4b5dedfcbce38e  @N@/forms/send.php\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site/x.css\n37a8d8a3667735fe6803d7949d9b1b6d707815c0ed238dea3a2eed105fd19880  /home/qchost/qh8b-site2/index.html\n33e6d73fee82904c8d7afb78de1154d1e8dc2a0edb08120e63df5b9385c2d9cc  /home/qchost/qh8b-site2/Über/ärger.html\naa21a031effa07d04c54b6038eca211f975e810c31c362937b18d9ced6528816  /home/qchost/qh8b-site2/x.css\nd 775 qcsftp @N@\nd 775 qcsftp @N@/forms\nd 775 qcsftp @N@/forms/counters\nf 640 qcsftp @N@/forms/config.php\nf 644 qcsftp @N@/forms/config.generated.php\nf 644 qcsftp @N@/forms/counters/.htaccess\nf 644 qcsftp @N@/forms/send.php\n"
   }
  ]
 }
