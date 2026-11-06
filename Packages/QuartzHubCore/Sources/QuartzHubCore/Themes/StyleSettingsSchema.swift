@@ -43,7 +43,7 @@ public actor StyleSettingsSchema {
     configuration.timeoutIntervalForRequest = seconds
     configuration.timeoutIntervalForResource = seconds
     session = URLSession(configuration: configuration)
-    directory = profile.file("theme-docs")
+    directory = URL(fileURLWithPath: profile.file("theme-docs"))
     self.readYaml = readYaml
     self.now = now
   }

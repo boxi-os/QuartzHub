@@ -13,7 +13,7 @@ public struct ProjectEntry: JSONView {
   public init(id: String, path: String, addedAt: String) {
     object = JSONObject([
       ("id", .string(id)),
-      ("name", .string((path as NSString).lastPathComponent)),
+      ("name", .string(NodePath.basename(path))),
       ("path", .string(path)),
       ("addedAt", .string(addedAt))
     ])
@@ -140,23 +140,19 @@ public struct JSONMap<Item: JSONView>: Equatable, Sendable {
 /// The profile files under one directory. QuartzControl's lives at
 /// `~/Library/Application Support/QuartzControl`; Electron's `--user-data-dir` moves it.
 public struct ProfileDirectory: Sendable {
-  public let url: URL
+  public let path: String
 
-  public init(_ url: URL) { self.url = url }
+  public init(_ path: String) { self.path = path }
 
-  public static var quartzControl: ProfileDirectory {
-    ProfileDirectory(URL.applicationSupportDirectory.appendingPathComponent("QuartzControl", isDirectory: true))
-  }
+  public static var quartzControl: ProfileDirectory { ProfileDirectory("\(Posix.path(URL.applicationSupportDirectory))/QuartzControl") } // path boundary
 
-  public static var quartzHub: ProfileDirectory {
-    ProfileDirectory(URL.applicationSupportDirectory.appendingPathComponent("QuartzHub", isDirectory: true))
-  }
+  public static var quartzHub: ProfileDirectory { ProfileDirectory("\(Posix.path(URL.applicationSupportDirectory))/QuartzHub") } // path boundary
 
-  public func file(_ name: String) -> URL { url.appendingPathComponent(name) }
+  public func file(_ name: String) -> String { "\(path)/\(name)" }
 
-  public var projects: URL { file("projects.json") }
-  public var settings: URL { file("settings.json") }
-  public var connections: URL { file("connections.json") }
-  public var relaySecrets: URL { file("relay-secrets.json") }
-  public var runningServers: URL { file("running-servers.json") }
+  public var projects: String { file("projects.json") }
+  public var settings: String { file("settings.json") }
+  public var connections: String { file("connections.json") }
+  public var relaySecrets: String { file("relay-secrets.json") }
+  public var runningServers: String { file("running-servers.json") }
 }

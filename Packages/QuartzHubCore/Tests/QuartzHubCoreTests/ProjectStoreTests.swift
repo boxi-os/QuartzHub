@@ -5,21 +5,31 @@ import Testing
 @Suite struct ProjectStoreTests {
   /// One per test, held by the suite instance Swift Testing makes for it.
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   /// A profile folder that does not exist yet: the first write creates it.
   func store() -> ProjectStore {
-    ProjectStore(profile: ProfileDirectory(scratch.url.appendingPathComponent("Profile")))
+    ProjectStore(profile: ProfileDirectory("\(scratch.path)/Profil \u{DC}"))
   }
 
   static func file(_ store: ProjectStore) throws -> [JSONValue] {
-    try #require(JSJSON.parse(Data(contentsOf: store.profile.projects)).arrayValue)
+    try #require(JSJSON.parse(Posix.read(store.profile.projects)).arrayValue)
+  }
+
+  /// The folder and the name keep the bytes they came with, and so does the profile folder.
+  @Test func aPathWithUmlautsKeepsItsBytes() throws {
+    let store = store()
+    let entry = try store.add(path: "/Users/x/G\u{E4}rten \u{DC}ber")
+    #expect(Array(entry.name.utf8) == Array("G\u{E4}rten \u{DC}ber".utf8))
+    let text = String(decoding: try Posix.read(store.profile.projects), as: UTF8.self)
+    #expect(Array(text.utf8).contains(0xC3) && !text.unicodeScalars.contains("\u{308}"), "\(text)")
+    #expect(Posix.entries(scratch.path)?.map { Array($0.name.utf8) } == [Array("Profil \u{DC}".utf8)])
   }
 
   @Test func addWritesQuartzControlsFormAndOnlyOnce() throws {
     let store = store()
     #expect(store.list().isEmpty)
-    #expect(!FileManager.default.fileExists(atPath: store.profile.url.path), "reading created the profile")
+    #expect(!Posix.exists(store.profile.path), "reading created the profile")
 
     let now = Date(timeIntervalSince1970: 1_793_000_000.123)
     let first = try store.add(path: "/Users/x/Quartz/Mein Garten", now: now)
@@ -50,8 +60,8 @@ import Testing
   @Test func relocateKeepsTheIdAndWhatItDoesNotKnow() throws {
     let store = store()
     // A file as QuartzControl leaves it, with a key a later version might add and a stray entry.
-    try FileManager.default.createDirectory(at: store.profile.url, withIntermediateDirectories: true)
-    try Data("""
+    try Posix.mkdirs(store.profile.path)
+    try Posix.write(store.profile.projects, Data("""
     [
       {
         "id": "6f1c1b54-0a51-4b8e-9d3a-6f2f6a1d2c11",
@@ -69,7 +79,7 @@ import Testing
         "addedAt": "2026-01-02T00:00:00.000Z"
       }
     ]
-    """.utf8).write(to: store.profile.projects)
+    """.utf8))
 
     let moved = try #require(try store.relocate(id: "6f1c1b54-0a51-4b8e-9d3a-6f2f6a1d2c11", to: "/q/neu"))
     #expect(moved.name == "neu" && moved.path == "/q/neu")
@@ -91,7 +101,7 @@ import Testing
   @Test func touchAndRemove() throws {
     let store = store()
     try store.touch(id: "nobody")
-    #expect(!FileManager.default.fileExists(atPath: store.profile.projects.path), "an unknown id wrote the file")
+    #expect(!Posix.exists(store.profile.projects), "an unknown id wrote the file")
 
     let a = try store.add(path: "/p/a"), b = try store.add(path: "/p/b")
     try store.touch(id: b.id, now: Date(timeIntervalSince1970: 0))
@@ -114,10 +124,10 @@ import Testing
 
   @Test func anUnreadableFileIsMovedAsideNotOverwritten() throws {
     let store = store()
-    try FileManager.default.createDirectory(at: store.profile.url, withIntermediateDirectories: true)
-    try Data("[{\"id\": ".utf8).write(to: store.profile.projects)
+    try Posix.mkdirs(store.profile.path)
+    try Posix.write(store.profile.projects, Data("[{\"id\": ".utf8))
     #expect(store.list().isEmpty)
-    let names = try FileManager.default.contentsOfDirectory(atPath: store.profile.url.path)
+    let names = try FileManager.default.contentsOfDirectory(atPath: store.profile.path)
     #expect(names.contains { $0.hasPrefix("projects.json.corrupt-") }, "\(names)")
   }
 }

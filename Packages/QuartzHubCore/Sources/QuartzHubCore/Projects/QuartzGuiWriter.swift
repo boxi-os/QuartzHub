@@ -15,9 +15,9 @@ extension QuartzGuiDirectory {
 
   /// `<project>/.quartz-gui[/sub…]`, created with every folder above it, and the ignore rule.
   @discardableResult
-  public func create(_ sub: String...) throws -> URL {
-    let dir = sub.reduce(url) { $0.appendingPathComponent($1, isDirectory: true) }
-    try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+  public func create(_ sub: String...) throws -> String {
+    let dir = ([path] + sub).joined(separator: "/")
+    try Posix.mkdirs(dir)
     try ensureIgnored()
     return dir
   }
@@ -26,9 +26,9 @@ extension QuartzGuiDirectory {
   /// that is not UTF-8 came back as U+FFFD. Here the existing bytes stay as they are and the block
   /// is appended; only the check reads them as text.
   func ensureIgnored() throws {
-    guard FileManager.default.fileExists(atPath: project.appendingPathComponent(".git").path) else { return }
-    let path = project.appendingPathComponent(".gitignore")
-    let existing = (try? Data(contentsOf: path)) ?? Data()
+    guard Posix.exists("\(project)/.git") else { return }
+    let path = "\(project)/.gitignore"
+    let existing = (try? Posix.read(path)) ?? Data()
     // JavaScript's trim() also takes the byte order mark, which a file saved by some editors
     // starts with.
     let blank = CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: "\u{FEFF}"))
@@ -43,6 +43,6 @@ extension QuartzGuiDirectory {
     // In the app's language: the line is written into the user's repository, and they read it.
     let block = "\(prefix)\n# \(L10n.t("main.gitignoreComment"))\n\(Self.ignoreLine)\n"
     // In place, as writeFileSync: a .gitignore that is a symlink stays one.
-    try (existing + Data(block.utf8)).write(to: path)
+    try Posix.write(path, existing + Data(block.utf8))
   }
 }

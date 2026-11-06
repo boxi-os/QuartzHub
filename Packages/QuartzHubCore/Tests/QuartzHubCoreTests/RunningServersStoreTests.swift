@@ -27,7 +27,7 @@ import Testing
       let store = store(name)
       if let text = scenario["file"]?.stringValue {
         try FileManager.default.createDirectory(at: store.profile.url, withIntermediateDirectories: true)
-        try text.write(to: store.profile.runningServers, atomically: true, encoding: .utf8)
+        try Posix.write(store.profile.runningServers, Data(text.utf8))
       }
       for (index, step) in scenario["steps"]!.arrayValue!.enumerated() {
         let id = step["id"]?.stringValue ?? ""
@@ -38,7 +38,7 @@ import Testing
         default: answer = try store.takeAll().json
         }
         let expected = step["expected"]!
-        let file = try? String(contentsOf: store.profile.runningServers, encoding: .utf8)
+        let file = (try? Posix.read(store.profile.runningServers)).map { String(decoding: $0, as: UTF8.self) }
         #expect(answer == expected["answer"], "\(name) step \(index)")
         #expect(file.map(JSONValue.string) ?? .null == expected["file"], "\(name) step \(index)")
         #expect(Double(Self.quarantined(store)) == expected["quarantined"]?.numberValue, "\(name) step \(index)")

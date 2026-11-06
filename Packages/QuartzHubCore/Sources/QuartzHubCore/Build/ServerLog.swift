@@ -12,9 +12,9 @@ import Synchronization
 /// next start under a server left running, and the two wrote past each other (QuartzControl
 /// measured 112 bytes, 90 of them NUL, the old server's lines in the new console).
 struct ServerLogFiles {
-  let directory: URL
-  private(set) var stdout: URL
-  private(set) var stderr: URL
+  let directory: String
+  private(set) var stdout: String
+  private(set) var stderr: String
   let stdoutFD: Int32
   let stderrFD: Int32
 
@@ -25,14 +25,14 @@ struct ServerLogFiles {
   /// Opens this run's two files under a temporary name (the pid does not exist yet), after removing
   /// the files of runs that are over. Throws when the project cannot be written to (read-only
   /// volume, a `.quartz-gui` of another user): the server then starts without a console and says so.
-  static func open(project: URL, now: Date = Date()) throws -> ServerLogFiles {
+  static func open(project: String, now: Date = Date()) throws -> ServerLogFiles {
     let directory = try QuartzGuiDirectory(project: project).create("logs")
     prune(directory)
     let names = names("tmp-\(Int(now.timeIntervalSince1970 * 1000))")
-    let stdout = directory.appendingPathComponent(names.stdout), stderr = directory.appendingPathComponent(names.stderr)
-    let out = Darwin.open(stdout.path, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o666)
+    let stdout = "\(directory)/\(names.stdout)", stderr = "\(directory)/\(names.stderr)"
+    let out = Darwin.open(stdout, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o666)
     guard out >= 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
-    let err = Darwin.open(stderr.path, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o666)
+    let err = Darwin.open(stderr, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o666)
     guard err >= 0 else {
       let code = errno
       close(out)
@@ -51,20 +51,20 @@ struct ServerLogFiles {
   /// neither descriptor; the tails start afterwards, on whatever name the files ended up with.
   mutating func adopt(_ pid: Int32) {
     let wanted = Self.names(String(pid))
-    let target = (directory.appendingPathComponent(wanted.stdout), directory.appendingPathComponent(wanted.stderr))
-    if rename(stdout.path, target.0.path) == 0 { stdout = target.0 }
-    if rename(stderr.path, target.1.path) == 0 { stderr = target.1 }
+    let target = ("\(directory)/\(wanted.stdout)", "\(directory)/\(wanted.stderr)")
+    if rename(stdout, target.0) == 0 { stdout = target.0 }
+    if rename(stderr, target.1) == 0 { stderr = target.1 }
   }
 
   /// Removes the files of runs that are over, and only those: a pid in a name is asked as every
   /// pid read back is asked (alive and still a quartz server), so the files of a server left
   /// running survive. The fixed pair of old and a `tmp-` pair whose spawn never got far go.
-  static func prune(_ directory: URL, isRunning: (Int32) -> Bool = ServerScan.isQuartzServer) {
-    guard let names = try? FileManager.default.contentsOfDirectory(atPath: directory.path) else { return }
+  static func prune(_ directory: String, isRunning: (Int32) -> Bool = ServerScan.isQuartzServer) {
+    guard let names = try? FileManager.default.contentsOfDirectory(atPath: directory) else { return }
     for name in names {
       guard let match = name.wholeMatch(of: /dev-server(?:-(tmp-[0-9]+|[0-9]+))?\.(?:out|err)\.log/) else { continue }
       if let owner = match.1, !owner.hasPrefix("tmp-"), let pid = Int32(owner), isRunning(pid) { continue }
-      unlink(directory.appendingPathComponent(name).path)
+      unlink("\(directory)/\(name)")
     }
   }
 }

@@ -78,6 +78,8 @@ public final class ProjectLock: Sendable {
       return String(cString: resolved)
     }
     let absolute = path.hasPrefix("/") ? path : FileManager.default.currentDirectoryPath + "/" + path
-    return URL(fileURLWithPath: absolute).standardizedFileURL.path
+    // `standardizedFileURL` without the URL: "." and ".." resolved, no trailing slash.
+    let normalized = NodePath.normalize(absolute)
+    return normalized.count > 1 && normalized.hasSuffix("/") ? String(normalized.dropLast()) : normalized
   }
 }

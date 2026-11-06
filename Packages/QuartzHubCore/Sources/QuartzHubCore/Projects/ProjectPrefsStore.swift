@@ -9,19 +9,19 @@ import Foundation
 /// later version adds survives this one; QuartzControl wrote the renderer's object whole, which
 /// held `outputDir` only.
 public enum ProjectPrefsStore {
-  public static func read(project: URL) -> ProjectPrefs {
+  public static func read(project: String) -> ProjectPrefs {
     let value = JSONStore.read(QuartzGuiDirectory(project: project).projectPrefs, orEmpty: .object)
     return ProjectPrefs(object: value.objectValue ?? JSONObject())
   }
 
-  public static func write(_ prefs: ProjectPrefs, project: URL) throws {
+  public static func write(_ prefs: ProjectPrefs, project: String) throws {
     let dir = QuartzGuiDirectory(project: project)
     try dir.create()
     try JSONStore.write(prefs.json, to: dir.projectPrefs)
   }
 
   /// Read, change, write: the usual way to set one field.
-  public static func update(project: URL, _ change: (inout ProjectPrefs) -> Void) throws {
+  public static func update(project: String, _ change: (inout ProjectPrefs) -> Void) throws {
     var prefs = read(project: project)
     change(&prefs)
     try write(prefs, project: project)
@@ -33,7 +33,7 @@ extension ProjectPrefs {
   /// `public/` for '', an absolute folder untouched (the export dialog gives one, and a plain join
   /// would put "/export" under the project), a relative one joined and normalized as `path.join`
   /// does ("../site" is next to the project).
-  public func buildDirectory(project: URL) -> URL {
-    URL(fileURLWithPath: BuildOutputGuard.buildDirectory(project: project.path, outputDir: outputDir), isDirectory: true)
+  public func buildDirectory(project: String) -> String {
+    BuildOutputGuard.buildDirectory(project: project, outputDir: outputDir)
   }
 }

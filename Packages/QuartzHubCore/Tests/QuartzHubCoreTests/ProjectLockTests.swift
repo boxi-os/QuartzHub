@@ -68,6 +68,13 @@ import Testing
     #expect(journal.all == ["real start", "real end", "link"])
   }
 
+  /// A folder that is not there (yet) is resolved by hand, as `standardizedFileURL` did, and
+  /// keeps the bytes of its name.
+  @Test func aMissingFolderIsResolvedByHand() {
+    #expect(ProjectLock.key("/nowhere/x/../y/") == "/nowhere/y")
+    #expect(Array(ProjectLock.key("/nowhere/G\u{E4}rten").utf8) == Array("/nowhere/G\u{E4}rten".utf8))
+  }
+
   @Test func otherProjectsDoNotWait() async throws {
     let lock = ProjectLock(name: "test")
     let journal = Journal()

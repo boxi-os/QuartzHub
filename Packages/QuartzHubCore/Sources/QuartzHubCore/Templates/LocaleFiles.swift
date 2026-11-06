@@ -146,7 +146,7 @@ public struct LocaleFiles: Sendable {
     guard FileManager.default.fileExists(atPath: source.path), !FileManager.default.fileExists(atPath: Self.baselineFile(project, code).path) else { return }
     let dir = try QuartzGuiDirectory(project: project).create(Self.baselineDirectory)
     // The bytes, as copyFileSync: a locale file that is a symlink is copied as what it points to.
-    try Data(contentsOf: source).write(to: dir.appendingPathComponent("\(code).ts"))
+    try Posix.write("\(dir)/\(code).ts", Data(contentsOf: source))
   }
 
   // MARK: - What the user changed

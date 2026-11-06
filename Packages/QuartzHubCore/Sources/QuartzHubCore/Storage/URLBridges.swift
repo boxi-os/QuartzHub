@@ -24,3 +24,23 @@ extension ToolEnvironment {
     command(executable, arguments, in: directory?.path, input: input, timeout: timeout)
   }
 }
+
+extension QuartzGuiDirectory {
+  public init(project: URL) { self.init(project: project.path) }
+  public var url: URL { URL(fileURLWithPath: path) }
+}
+
+extension ProfileDirectory {
+  public init(_ url: URL) { self.init(url.path) }
+  public var url: URL { URL(fileURLWithPath: path) }
+}
+
+extension ProjectPrefsStore {
+  public static func read(project: URL) -> ProjectPrefs { read(project: project.path) }
+  public static func write(_ prefs: ProjectPrefs, project: URL) throws { try write(prefs, project: project.path) }
+  public static func update(project: URL, _ change: (inout ProjectPrefs) -> Void) throws { try update(project: project.path, change) }
+}
+
+extension ProjectPrefs {
+  public func buildDirectory(project: URL) -> URL { URL(fileURLWithPath: buildDirectory(project: project.path)) }
+}

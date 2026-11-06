@@ -118,7 +118,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     if alert.suppressionButton?.state == .on {
       var file = settings()
       file.serversOnQuit = answer
-      try? FileManager.default.createDirectory(at: AppProfile.own.url, withIntermediateDirectories: true)
+      try? Posix.mkdirs(AppProfile.own.path)
       try? JSONStore.write(file.json, to: AppProfile.own.settings)
     }
     return answer

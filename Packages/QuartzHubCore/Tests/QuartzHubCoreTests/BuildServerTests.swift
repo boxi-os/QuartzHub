@@ -321,17 +321,17 @@ import Testing
   @Test func onlyTheLogsOfEndedRunsAreRemoved() async throws {
     let logs = try QuartzGuiDirectory(project: project).create("logs")
     for name in ["dev-server-999999.out.log", "dev-server-tmp-1.err.log", "dev-server.out.log", "notes.txt", "build.log"] {
-      try "".write(to: logs.appendingPathComponent(name), atomically: true, encoding: .utf8)
+      try Posix.write("\(logs)/\(name)", Data())
     }
     let servers = service(try environment())
     let (port, wsPort) = Self.freePorts()
     _ = await servers.startServer(projectId: "p", project: project, options: .init(port: port, wsPort: wsPort))
     let pid = try #require(await servers.serverStatus("p").pid)
-    let left = Set(try FileManager.default.contentsOfDirectory(atPath: logs.path))
+    let left = Set(try FileManager.default.contentsOfDirectory(atPath: logs))
     #expect(left == ["notes.txt", "build.log", "dev-server-\(pid).out.log", "dev-server-\(pid).err.log"])
     // A second start (after a restart) keeps the files of a server that still runs.
     ServerLogFiles.prune(logs)
-    #expect(Set(try FileManager.default.contentsOfDirectory(atPath: logs.path)) == left)
+    #expect(Set(try FileManager.default.contentsOfDirectory(atPath: logs)) == left)
     await servers.stopServer("p")
   }
 

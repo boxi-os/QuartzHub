@@ -7,21 +7,21 @@ import Foundation
 /// `<project>/.quartz-gui/`. Only locates; creating it (with the .gitignore line) belongs to the
 /// first writer, in Phase 3. "Ein Lesepfad legt nie .quartz-gui/ an."
 public struct QuartzGuiDirectory: Sendable {
-  public let project: URL
-  public init(project: URL) { self.project = project }
+  public let project: String
+  public init(project: String) { self.project = project }
 
-  public var url: URL { project.appendingPathComponent(".quartz-gui", isDirectory: true) }
-  public func file(_ name: String) -> URL { url.appendingPathComponent(name) }
+  public var path: String { "\(project)/.quartz-gui" }
+  public func file(_ name: String) -> String { "\(path)/\(name)" }
 
-  public var publishTargets: URL { file("publish-targets.json") }
-  public var projectPrefs: URL { file("project-prefs.json") }
-  public var layoutBreakpoints: URL { file("layout-breakpoints.json") }
-  public var themePresets: URL { file("theme-presets.json") }
-  public var formsRelay: URL { file("forms-relay.json") }
-  public var projectIcon: URL { file("project-icon.json") }
-  public var coreUpdate: URL { file("core-update.json") }
-  public var snapshotSettings: URL { file("snapshot-settings.json") }
-  public func deployManifest(_ key: String) -> URL { file("deploy-manifest-\(key).json") }
+  public var publishTargets: String { file("publish-targets.json") }
+  public var projectPrefs: String { file("project-prefs.json") }
+  public var layoutBreakpoints: String { file("layout-breakpoints.json") }
+  public var themePresets: String { file("theme-presets.json") }
+  public var formsRelay: String { file("forms-relay.json") }
+  public var projectIcon: String { file("project-icon.json") }
+  public var coreUpdate: String { file("core-update.json") }
+  public var snapshotSettings: String { file("snapshot-settings.json") }
+  public func deployManifest(_ key: String) -> String { file("deploy-manifest-\(key).json") }
 }
 
 /// One entry of `publish-targets.json` (`shared/ipc-contract.ts` `PublishTarget`).

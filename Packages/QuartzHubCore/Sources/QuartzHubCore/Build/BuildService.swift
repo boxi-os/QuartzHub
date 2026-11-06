@@ -472,7 +472,7 @@ public actor BuildService {
 
     var files: ServerLogFiles?
     do {
-      files = try ServerLogFiles.open(project: project)
+      files = try ServerLogFiles.open(project: project.path)
     } catch {
       // `warn`: a sentence about a run that goes on.
       log(.server, projectId, .warn, L10n.t("main.serverLogUnavailable", ["reason": String(describing: error)]) + "\n")
@@ -507,8 +507,8 @@ public actor BuildService {
     if let files {
       let (pieces, feed) = AsyncStream.makeStream(of: (LogLine.Stream, String).self)
       server.logFeed = feed
-      server.tails = [LogTail(path: files.stdout.path) { feed.yield((.stdout, $0)) },
-                      LogTail(path: files.stderr.path) { feed.yield((.stderr, $0)) }]
+      server.tails = [LogTail(path: files.stdout) { feed.yield((.stdout, $0)) },
+                      LogTail(path: files.stderr) { feed.yield((.stderr, $0)) }]
       Task {
         for await (stream, text) in pieces { self.serverSaid(projectId, server, stream, text) }
         self.flush(projectId, .server)

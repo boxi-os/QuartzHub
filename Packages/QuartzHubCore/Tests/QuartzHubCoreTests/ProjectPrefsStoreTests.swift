@@ -4,19 +4,19 @@ import Testing
 
 @Suite struct ProjectPrefsStoreTests {
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
-  var project: URL { scratch.url }
-  var file: URL { QuartzGuiDirectory(project: project).projectPrefs }
+  var project: String { scratch.path }
+  var file: String { QuartzGuiDirectory(project: project).projectPrefs }
 
   func put(_ text: String) throws {
-    try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try Data(text.utf8).write(to: file)
+    try Posix.mkdirs(NodePath.dirname(file))
+    try Posix.write(file, Data(text.utf8))
   }
 
   @Test func readingCreatesNothing() {
     #expect(ProjectPrefsStore.read(project: project).outputDir == "")
-    #expect(!FileManager.default.fileExists(atPath: QuartzGuiDirectory(project: project).url.path))
+    #expect(!Posix.exists(QuartzGuiDirectory(project: project).path))
   }
 
   @Test func theFixtureRoundTripsByteForByte() throws {
@@ -25,7 +25,7 @@ import Testing
     let bytes = try Data(contentsOf: fixture)
     try put(String(decoding: bytes, as: UTF8.self))
     try ProjectPrefsStore.write(ProjectPrefsStore.read(project: project), project: project)
-    #expect(try Data(contentsOf: file) == bytes)
+    #expect(try Posix.read(file) == bytes)
   }
 
   @Test func anOutputDirThatIsNoStringIsEmptyAndAListIsMovedAside() throws {
@@ -33,7 +33,7 @@ import Testing
     #expect(ProjectPrefsStore.read(project: project).outputDir == "")
     try put("[\"out\"]")
     #expect(ProjectPrefsStore.read(project: project).outputDir == "")
-    let names = try FileManager.default.contentsOfDirectory(atPath: file.deletingLastPathComponent().path)
+    let names = try FileManager.default.contentsOfDirectory(atPath: NodePath.dirname(file))
     #expect(names.contains { $0.hasPrefix("project-prefs.json.corrupt-") }, "\(names)")
   }
 
@@ -41,11 +41,11 @@ import Testing
     _ = try scratch.dir(".git")
     try put("{\n  \"later\": [1],\n  \"outputDir\": \"\"\n}")
     try ProjectPrefsStore.update(project: project) { $0.outputDir = "/Users/x/Export" }
-    #expect(try String(contentsOf: file, encoding: .utf8) == "{\n  \"later\": [\n    1\n  ],\n  \"outputDir\": \"/Users/x/Export\"\n}")
-    #expect(try String(contentsOf: project.appendingPathComponent(".gitignore"), encoding: .utf8).hasSuffix("\n.quartz-gui/\n"))
+    #expect(String(decoding: try Posix.read(file), as: UTF8.self) == "{\n  \"later\": [\n    1\n  ],\n  \"outputDir\": \"/Users/x/Export\"\n}")
+    #expect(String(decoding: try Posix.read("\(project)/.gitignore"), as: UTF8.self).hasSuffix("\n.quartz-gui/\n"))
   }
 
-  /// Node's `resolveBuildDir('/p/proj', outputDir)`, trailing slash dropped (URL does).
+  /// Node's `resolveBuildDir('/p/proj', outputDir)`, trailing slash dropped (`BuildOutputGuard.resolve`).
   @Test(arguments: [
     ("", "/p/proj/public"), ("out", "/p/proj/out"), ("../site", "/p/site"), ("./a/./b", "/p/proj/a/b"),
     ("out/", "/p/proj/out"), ("/abs/x", "/abs/x"), ("/abs/../y", "/abs/../y")
@@ -53,6 +53,6 @@ import Testing
   func buildDirectoryIsResolveBuildDir(outputDir: String, node: String) {
     var prefs = ProjectPrefs(object: JSONObject())
     prefs.outputDir = outputDir
-    #expect(prefs.buildDirectory(project: URL(fileURLWithPath: "/p/proj")).path == node)
+    #expect(prefs.buildDirectory(project: "/p/proj") == node)
   }
 }

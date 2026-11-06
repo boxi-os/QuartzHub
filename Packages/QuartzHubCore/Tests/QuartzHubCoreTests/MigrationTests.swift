@@ -42,20 +42,16 @@ import Testing
 }
 
 @Suite struct ProfileMigrationTests {
-  let root: URL = {
-    let url = FileManager.default.temporaryDirectory.appendingPathComponent("qh-migration-\(UUID().uuidString)")
-    try! FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-    return url
-  }()
-  var source: ProfileDirectory { ProfileDirectory(root.appendingPathComponent("QuartzControl")) }
-  var target: ProfileDirectory { ProfileDirectory(root.appendingPathComponent("QuartzHub")) }
+  let root = TestFolder.make("qh-migration")
+  var source: ProfileDirectory { ProfileDirectory("\(root)/QuartzControl") }
+  var target: ProfileDirectory { ProfileDirectory("\(root)/QuartzHub") }
   let key = ChromiumSafeStorage.key(password: "test-password")
 
   /// A QuartzControl profile in its writers' key order.
   func makeSource(extra: (ProfileDirectory) throws -> Void = { _ in }) throws {
-    try FileManager.default.createDirectory(at: source.url, withIntermediateDirectories: true)
-    let project = root.appendingPathComponent("site").path
-    try FileManager.default.createDirectory(atPath: project, withIntermediateDirectories: true)
+    try Posix.mkdirs(source.path)
+    let project = "\(root)/site"
+    try Posix.mkdirs(project)
     try JSONStore.write(try JSJSON.parse("""
       [{"id":"p1","name":"site","path":"\(project)","addedAt":"2026-10-01T00:00:00.000Z","lastOpenedAt":"2026-11-01T00:00:00.000Z"},
        {"id":"p2","name":"gone","path":"/nowhere/gone","addedAt":"2026-10-02T00:00:00.000Z"}]
@@ -74,22 +70,22 @@ import Testing
     try extra(source)
   }
 
-  func snapshot(_ dir: URL) throws -> [String: Data] {
+  func snapshot(_ dir: String) throws -> [String: Data] {
     var files: [String: Data] = [:]
-    for name in try FileManager.default.contentsOfDirectory(atPath: dir.path) {
-      files[name] = try Data(contentsOf: dir.appendingPathComponent(name))
+    for name in try FileManager.default.contentsOfDirectory(atPath: dir) {
+      files[name] = try Posix.read("\(dir)/\(name)")
     }
     return files
   }
 
   @Test func planReadsWithoutTouchingTheSource() throws {
     try makeSource { profile in
-      try Data("{broken".utf8).write(to: profile.file("running-servers.json"))
-      try Data("[]".utf8).write(to: profile.file("legacy-publish-targets.json"))
+      try Posix.write(profile.file("running-servers.json"), Data("{broken".utf8))
+      try Posix.write(profile.file("legacy-publish-targets.json"), Data("[]".utf8))
     }
-    let before = try snapshot(source.url)
+    let before = try snapshot(source.path)
     let plan = ProfileMigration.plan(source: source)
-    #expect(try snapshot(source.url) == before)  // nothing moved aside, nothing written
+    #expect(try snapshot(source.path) == before)  // nothing moved aside, nothing written
     #expect(plan.projects.map(\.id) == ["p1", "p2"])
     #expect(plan.missingProjectPaths == ["/nowhere/gone"])
     #expect(plan.connections.count == 3 && plan.secretCount == 3)
@@ -99,25 +95,25 @@ import Testing
 
   @Test func runMovesSecretsAndKeepsEverythingElse() throws {
     try makeSource()
-    let before = try snapshot(source.url)
+    let before = try snapshot(source.path)
     var stored: [String: String] = [:]
     let report = try ProfileMigration.run(ProfileMigration.plan(source: source), target: target, secretKey: key) { account, _, secret in
       stored[account] = secret
     }
-    #expect(try snapshot(source.url) == before)
+    #expect(try snapshot(source.path) == before)
     #expect(report.projects == 2 && report.connections == 3 && report.settings)
     #expect(report.secretsMoved == 2 && report.secretsLost == ["c3"])  // c3 was sealed with another key
     #expect(stored == ["connection:c1": "sftp-pass", "relay:p1": #"{"secret":"s","recipients":{"Ich":"a@example.org"}}"#])
 
     // Projects byte for byte as QuartzControl wrote them.
-    #expect(try Data(contentsOf: target.projects) == before["projects.json"])
-    let settings = try String(contentsOf: target.settings, encoding: .utf8)
+    #expect(try Posix.read(target.projects) == before["projects.json"])
+    let settings = String(decoding: try Posix.read(target.settings), as: UTF8.self)
     #expect(settings == "{\n  \"language\": \"de\",\n  \"theme\": \"dark\",\n  \"futureKey\": [\n    1\n  ]\n}")
-    let connections = JSONList<StoredConnection>(try JSJSON.parse(Data(contentsOf: target.connections))).items
+    let connections = JSONList<StoredConnection>(try JSJSON.parse(Posix.read(target.connections))).items
     #expect(connections.allSatisfy { $0.encryptedSecret == nil })
     #expect(connections.map { $0.object["secretInKeychain"] } == [.bool(true), nil, nil])
     #expect(connections[0].object.keys == ["id", "kind", "name", "host", "port", "username", "authMethod", "secretInKeychain"])
-    let relay = try JSJSON.parse(Data(contentsOf: target.relaySecrets))
+    let relay = try JSJSON.parse(Posix.read(target.relaySecrets))
     #expect(relay["p1"]?["encrypted"] == nil && relay["p1"]?["secretInKeychain"] == .bool(true))
     #expect(relay["p1"]?["fingerprint"] == .string("f"))
   }
@@ -142,10 +138,10 @@ import Testing
   }
 
   @Test func unreadableSourceFilesAreNamedNotMoved() throws {
-    try makeSource { profile in try Data("[1,".utf8).write(to: profile.connections) }
+    try makeSource { profile in try Posix.write(profile.connections, Data("[1,".utf8)) }
     let plan = ProfileMigration.plan(source: source)
     #expect(plan.unreadable == ["connections.json"] && plan.connections.isEmpty)
-    #expect(FileManager.default.fileExists(atPath: source.connections.path))
+    #expect(Posix.exists(source.connections))
   }
 
   @Test func foreignServersNeedALivePidAndAServeCommand() throws {
@@ -155,7 +151,7 @@ import Testing
         """), to: profile.runningServers)
     }
     let serve = Coexistence.foreignServers(profile: source) { _ in "npm exec quartz build --serve --port 8080" }
-    #expect(serve == [.init(projectId: "p1", projectPath: root.appendingPathComponent("site").path, pid: getpid(), port: 8080)])
+    #expect(serve == [.init(projectId: "p1", projectPath: "\(root)/site", pid: getpid(), port: 8080)])
     // The same live pid, but it is not a Quartz server any more: not counted.
     #expect(Coexistence.foreignServers(profile: source) { _ in "/usr/bin/something" }.isEmpty)
   }

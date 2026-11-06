@@ -70,7 +70,7 @@ public final class ProjectStore: Sendable {
       guard var entry = list.items.first(where: { $0.id == id }) else { return (nil, false) }
       if list.items.contains(where: { $0.id != id && $0.path == path }) { throw Failure.alreadyRegistered }
       entry.object["path"] = .string(path)
-      entry.object["name"] = .string((path as NSString).lastPathComponent)
+      entry.object["name"] = .string(NodePath.basename(path))
       list.upsert(entry, id: id)
       return (entry, true)
     }
@@ -98,7 +98,7 @@ public final class ProjectStore: Sendable {
       var list = read()
       let (result, changed) = try body(&list)
       if changed {
-        try FileManager.default.createDirectory(at: profile.url, withIntermediateDirectories: true)
+        try Posix.mkdirs(profile.path)
         try JSONStore.write(list.json, to: profile.projects)
       }
       return result

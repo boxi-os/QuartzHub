@@ -21,7 +21,7 @@ extension CoreUpdate {
 
   static let noteFile = "core-update.json"
 
-  func noteURL(_ project: URL) -> URL { QuartzGuiDirectory(project: project).file(Self.noteFile) }
+  func noteURL(_ project: URL) -> URL { URL(fileURLWithPath: QuartzGuiDirectory(project: project).file(Self.noteFile)) }
 
   /// Read checked, not cast: it lies in the user's project and becomes `npm install name@range`.
   func readPendingInstall(_ project: URL) -> PendingInstall {
@@ -63,7 +63,7 @@ extension CoreUpdate {
 
   func writeNote(_ project: URL, _ value: JSONValue) throws {
     let dir = try QuartzGuiDirectory(project: project).create()
-    try JSONStore.write(value, to: dir.appendingPathComponent(Self.noteFile))
+    try JSONStore.write(value, to: "\(dir)/\(Self.noteFile)")
   }
 
   /// Whether somebody other than this app has taken package.json in hand since the note: a commit

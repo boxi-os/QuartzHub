@@ -264,7 +264,7 @@ public struct SnapshotStore: Sendable {
     let contentExists = lstat(content.path, &info) == 0
     let contentIsSymlink = contentExists && (info.st_mode & S_IFMT) == S_IFLNK
     var stored: JSONValue?
-    if let data = try? Data(contentsOf: QuartzGuiDirectory(project: project).file(Self.settingsFile)),
+    if let data = try? Posix.read(QuartzGuiDirectory(project: project).file(Self.settingsFile)),
        let parsed = try? JSJSON.parse(data), case .object(let object) = parsed {
       stored = object["includeContent"]
     }
@@ -284,8 +284,7 @@ public struct SnapshotStore: Sendable {
       let isLink = settings(project: project).contentIsSymlink
       let dir = try QuartzGuiDirectory(project: project).create()
       // JSON.stringify(…, null, 2), no newline at the end.
-      try Data("{\n  \"includeContent\": \(isLink ? false : includeContent)\n}".utf8)
-        .write(to: dir.appendingPathComponent(Self.settingsFile))
+      try Posix.write("\(dir)/\(Self.settingsFile)", Data("{\n  \"includeContent\": \(isLink ? false : includeContent)\n}".utf8))
       let settings = settings(project: project)
       try writeExcludes(project, settings)
       return settings

@@ -184,7 +184,7 @@ struct ProjectDuplicatorTests {
     #expect(result.success)
     // markInstallPending's form: its five keys in its order, the passing entries as they were,
     // putBack deduplicated and filtered to what reinstall carries.
-    let written = try String(contentsOf: QuartzGuiDirectory(project: copy).coreUpdate, encoding: .utf8)
+    let written = String(decoding: try Posix.read(QuartzGuiDirectory(project: copy).coreUpdate), as: UTF8.self)
     #expect(written == """
       {
         "installPendingFor": "\(head)",
@@ -204,7 +204,7 @@ struct ProjectDuplicatorTests {
       }
       """)
     // The original's note is untouched, and a note without the flag is not rewritten.
-    #expect(try String(contentsOf: QuartzGuiDirectory(project: original).coreUpdate, encoding: .utf8) == note)
+    #expect(String(decoding: try Posix.read(QuartzGuiDirectory(project: original).coreUpdate), as: UTF8.self) == note)
     #expect(PendingInstall(object: JSONObject([("installPendingFor", .string(head)), ("installFailed", .bool(false))]))
       .afterInstallSucceeded() == nil)
   }

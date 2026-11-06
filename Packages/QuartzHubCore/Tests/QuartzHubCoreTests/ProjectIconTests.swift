@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
   var project: URL { scratch.url.appendingPathComponent("project") }
   var icon: URL { ProjectIcon.iconPath(project) }
   var dark: URL { ProjectIcon.darkIconPath(project) }
-  var marker: URL { QuartzGuiDirectory(project: project).projectIcon }
+  var marker: URL { URL(fileURLWithPath: QuartzGuiDirectory(project: project).projectIcon) }
   var original: URL { ProjectIcon.originalPath(project) }
 
   /// A picture of `width` × `height` in `type`, a different colour per seed so two are not equal.

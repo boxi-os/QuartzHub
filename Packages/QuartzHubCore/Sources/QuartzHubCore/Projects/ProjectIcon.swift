@@ -58,7 +58,7 @@ public enum ProjectIcon {
 
   static func iconPath(_ project: URL) -> URL { project.appendingPathComponent("quartz/static/icon.png") }
   static func darkIconPath(_ project: URL) -> URL { project.appendingPathComponent("quartz/static/icon-dark.png") }
-  static func originalPath(_ project: URL) -> URL { QuartzGuiDirectory(project: project).file("icon-original.png") }
+  static func originalPath(_ project: URL) -> URL { URL(fileURLWithPath: QuartzGuiDirectory(project: project).file("icon-original.png")) }
 
   // MARK: - Reading
 
@@ -191,7 +191,7 @@ public enum ProjectIcon {
   static func writeMarker(_ project: URL, custom: Bool, hasOriginal: Bool, customDark: Bool) throws {
     let dir = QuartzGuiDirectory(project: project)
     guard custom || customDark else {
-      if exists(dir.projectIcon) { try FileManager.default.removeItem(at: dir.projectIcon) }
+      if Posix.exists(dir.projectIcon) { try FileManager.default.removeItem(atPath: dir.projectIcon) }
       return
     }
     try dir.create()

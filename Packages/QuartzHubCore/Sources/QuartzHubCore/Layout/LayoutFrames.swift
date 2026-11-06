@@ -59,7 +59,7 @@ public struct LayoutFrames: Sendable {
   // MARK: where
 
   static func framesDirectory(_ project: URL) -> URL {
-    QuartzGuiDirectory(project: project).file("authored-frames")
+    URL(fileURLWithPath: QuartzGuiDirectory(project: project).file("authored-frames"))
   }
 
   /// A frame id becomes a directory name and the plugin name `quartz plugin add` derives, so it is a
@@ -108,7 +108,7 @@ public struct LayoutFrames: Sendable {
 
   /// The widths are baked into each frame's media queries, so every frame is rewritten with them.
   public func saveWidths(_ widths: Widths, project: URL) async throws {
-    let file = try QuartzGuiDirectory(project: project).create().appendingPathComponent("layout-breakpoints.json")
+    let file = "\(try QuartzGuiDirectory(project: project).create())/layout-breakpoints.json"
     try JSONStore.write(.object(JSONObject([("tablet", .number(widths.tablet)), ("mobile", .number(widths.mobile))])), to: file)
     try await ProjectLock.frames.run(project.path) {
       let groupLayouts = await readGroupLayouts(project, problems: nil)

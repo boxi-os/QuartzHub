@@ -97,7 +97,7 @@ public enum Posix {
   }
 
   /// `mkdir -p`.
-  static func mkdirs(_ path: String) throws {
+  public static func mkdirs(_ path: String) throws {
     var built = path.hasPrefix("/") ? "" : "."
     for part in path.split(separator: "/") {
       built += "/\(part)"

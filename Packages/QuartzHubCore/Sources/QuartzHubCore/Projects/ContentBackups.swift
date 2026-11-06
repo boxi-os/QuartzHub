@@ -47,7 +47,7 @@ public enum ContentBackups {
     guard Posix.exists(content) else { return nil }
     let id = JSONStore.quarantineStamp(now)
     let base = try QuartzGuiDirectory(project: project).create("content-backups")
-    let dir = "\(base.path)/\(id)"
+    let dir = "\(base)/\(id)"
     try Posix.mkdirs(dir)
     if Posix.kind(content) == .link {
       // Only the link is recorded; its target is left as it is.

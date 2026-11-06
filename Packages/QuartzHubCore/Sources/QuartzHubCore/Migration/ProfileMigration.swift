@@ -54,21 +54,21 @@ public enum ProfileMigration {
   /// Whether QuartzHub should offer the takeover: its own list is missing and QuartzControl's
   /// profile has one.
   public static func shouldOffer(source: ProfileDirectory = .quartzControl, target: ProfileDirectory = .quartzHub) -> Bool {
-    JSONStore.peek(target.projects) == .missing && FileManager.default.fileExists(atPath: source.projects.path)
+    JSONStore.peek(target.projects) == .missing && FileManager.default.fileExists(atPath: source.projects)
   }
 
   public static func plan(source: ProfileDirectory) -> Plan {
     var plan = Plan()
-    func load(_ url: URL) -> JSONValue? {
-      switch JSONStore.peek(url) {
+    func load(_ path: String) -> JSONValue? {
+      switch JSONStore.peek(path) {
       case .ok(let value): return value
       case .missing: return nil
-      case .unreadable: plan.unreadable.append(url.lastPathComponent); return nil
+      case .unreadable: plan.unreadable.append(NodePath.basename(path)); return nil
       }
     }
 
     if let value = load(source.projects) {
-      if value.arrayValue == nil { plan.unreadable.append(source.projects.lastPathComponent) }
+      if value.arrayValue == nil { plan.unreadable.append(NodePath.basename(source.projects)) }
       plan.projects = JSONList<ProjectEntry>(value).items
       plan.missingProjectPaths = plan.projects.map(\.path).filter { !FileManager.default.fileExists(atPath: $0) }
     }
@@ -78,16 +78,16 @@ public enum ProfileMigration {
         plan.settings = settings
         if settings.hasLegacyGithubToken { plan.legacy.append("settings.json: githubToken") }
       } else {
-        plan.unreadable.append(source.settings.lastPathComponent)
+        plan.unreadable.append(NodePath.basename(source.settings))
       }
     }
     if let value = load(source.connections) {
-      if value.arrayValue == nil { plan.unreadable.append(source.connections.lastPathComponent) }
+      if value.arrayValue == nil { plan.unreadable.append(NodePath.basename(source.connections)) }
       plan.connections = JSONList<StoredConnection>(value).items
     }
     if let value = load(source.relaySecrets) {
       guard let object = value.objectValue else {
-        plan.unreadable.append(source.relaySecrets.lastPathComponent)
+        plan.unreadable.append(NodePath.basename(source.relaySecrets))
         return plan
       }
       plan.relaySecrets = object.keys.compactMap { key in
@@ -95,7 +95,7 @@ public enum ProfileMigration {
       }
     }
     for name in ["deploy-secrets.json", "legacy-publish-targets.json"]
-    where FileManager.default.fileExists(atPath: source.file(name).path) {
+    where FileManager.default.fileExists(atPath: source.file(name)) {
       plan.legacy.append(name)
     }
     return plan
@@ -113,9 +113,9 @@ public enum ProfileMigration {
     guard JSONStore.peek(target.projects) == .missing else { throw .alreadyTakenOver }
     var report = Report()
     do {
-      try FileManager.default.createDirectory(at: target.url, withIntermediateDirectories: true)
+      try Posix.mkdirs(target.path)
     } catch {
-      throw .write(target.url.path)
+      throw .write(target.path)
     }
 
     func secret(_ encrypted: String?, account: String, label: String, id: String) -> Bool {
@@ -170,11 +170,11 @@ public enum ProfileMigration {
     return report
   }
 
-  private static func write(_ value: JSONValue, to url: URL) throws(Failure) {
+  private static func write(_ value: JSONValue, to path: String) throws(Failure) {
     do {
-      try JSONStore.write(value, to: url)
+      try JSONStore.write(value, to: path)
     } catch {
-      throw .write(url.lastPathComponent)
+      throw .write(NodePath.basename(path))
     }
   }
 
