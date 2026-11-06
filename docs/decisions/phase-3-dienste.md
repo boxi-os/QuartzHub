@@ -39,6 +39,12 @@ dann SIGTERM und nach 2 s SIGKILL; nie eine Shell.
   beim Ende des Prozesses, ohne SIGKILL, Abbruch überhört: Jede ließ mindestens einen Test
   scheitern. Die Gegenprobe „nur an die PID“ ließ zuerst alles grün, weil das SIGKILL an die Gruppe
   den Enkel trotzdem traf; daher der Test mit dem Enkel ohne Pipes.
+- **Ein Test darf keinen festen Deskriptor belegen.** Der erste `childInheritsNoDescriptors` legte
+  seinen Deskriptor mit `dup2` auf Nummer 77. Einmal scheiterte daraufhin im Gesamtlauf
+  `environmentIsExactlyTheGivenOne` nach 0,03 s, in neun weiteren Läufen und 400 parallelen Starts
+  nicht. Die wahrscheinliche Ursache: `dup2` ersetzt still, was dort liegt, auch die Pipe eines
+  parallel laufenden Tests. Bewiesen ist das nicht. Jetzt vergibt `F_DUPFD` die nächste freie
+  Nummer ab 200.
 - Nicht übernommen: `needsShell` (nur Windows). Ein Streaming für Builds und Server kommt mit
   `buildService`.
 

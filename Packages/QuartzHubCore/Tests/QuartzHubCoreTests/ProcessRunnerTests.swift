@@ -116,15 +116,18 @@ import Testing
   }
 
   @Test func childInheritsNoDescriptors() async {
-    // A descriptor of the app's without close-on-exec, at a number nothing else uses.
+    // A descriptor of the app's without close-on-exec, at a high number. F_DUPFD takes the lowest
+    // free one from 200 on; dup2 to a fixed number would silently replace a pipe of a test running
+    // in parallel (it did once: environmentIsExactlyTheGivenOne read nothing).
     let fd = open("/dev/null", O_RDONLY)
-    #expect(dup2(fd, 77) == 77)
+    let high = fcntl(fd, F_DUPFD, 200)
     close(fd)
-    defer { close(77) }
+    defer { close(high) }
+    #expect(high >= 200)
     let result = await ProcessRunner.run(Command("/bin/ls", ["/dev/fd"]))
     // 0, 1, 2 and what ls opens for the listing itself (3 and 4 on macOS 27).
     let listed = result.stdout.split(separator: "\n").compactMap { Int32($0) }
-    #expect(!listed.contains(77) && listed.allSatisfy { $0 < 10 }, "\(listed)")
+    #expect(!listed.contains(high) && listed.allSatisfy { $0 < 10 }, "\(listed)")
   }
 
   @Test func childRunsInItsOwnProcessGroup() async {
