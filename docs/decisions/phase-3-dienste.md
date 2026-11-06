@@ -161,3 +161,33 @@ und Relay-Geheimnisse hängen an ihr.
   Datei, wie sie ist (QuartzControls `removeProject` schrieb dieselben Bytes neu).
 - Was beim Hinzufügen und Umziehen sonst passiert (Frames umbiegen, Server stoppen,
   Relay-Geheimnisse löschen), gehört den Diensten, die es tun, und kommt mit ihnen.
+
+### `.quartz-gui/` anlegen (`projectDirs.ts` → `QuartzGuiDirectory.create`)
+
+Die eine Stelle, die den Ordner anlegt, und mit ihm die Zeile `.quartz-gui/` in der `.gitignore`
+des Projekts, nur in einem Repository (`.git` als Ordner oder als Datei eines Worktrees) und nur,
+wenn keine Zeile es schon sagt. Ob die Regel da ist, entscheidet die Regelzeile, nie der Kommentar
+darüber; der Kommentar sagt jetzt „QuartzHub“, ein Projekt mit QuartzControls Zeile behält sie.
+
+- **Gefunden beim Test, nicht in QuartzControl:** `split(separator: "\n")` trennt in Swift nicht
+  bei `\r\n`, denn das ist dort *ein* Zeichen. Eine `.gitignore` mit Windows-Zeilenenden wäre eine
+  einzige Zeile gewesen und hätte bei jedem Anlegen einen weiteren Block bekommen. Getrennt wird
+  über `components(separatedBy:)`, der Test hat die Zeile mit `\r`.
+- **Bytes statt Text:** QuartzControl las die Datei als UTF-8 und schrieb sie ganz zurück, ein
+  Byte, das kein UTF-8 ist, kam als U+FFFD wieder. Hier bleiben die Bytes, der Block wird
+  angehängt; gelesen als Text wird nur für die Prüfung. Eine `.gitignore`, die ein Symlink ist,
+  bleibt einer (geschrieben wird an Ort und Stelle wie mit `writeFileSync`).
+- JavaScripts `trim()` nimmt auch das BOM; die Prüfung tut es ebenso.
+- Ein Testfehler auf dem Weg: Ein `Scratch`, an `_` gebunden, wird sofort freigegeben und sein
+  Ordner gelöscht. Die Tests der Projektliste liefen trotzdem grün, weil das Schreiben den Ordner
+  neu anlegte (und ihn liegen ließ). Den Ordner hält jetzt die Suite selbst: Swift Testing legt je
+  Test eine eigene Instanz an.
+
+### Projekt-Einstellungen (`projectPrefsService.ts` → `ProjectPrefsStore`)
+
+`project-prefs.json` mit `outputDir`, gelesen ohne `.quartz-gui/` anzulegen, geschrieben über
+`create()`. Geschrieben wird in das gelesene Objekt, ein späterer Schlüssel bleibt also stehen
+(QuartzControl schrieb das Objekt des Renderers, das nur `outputDir` hatte). Die Golden-Datei aus
+`gui-test` kommt byte-gleich zurück. `buildDirectory` ist `resolveBuildDir`; die sieben Fälle des
+Tests sind Nodes Antworten auf dieselben Eingaben, darunter `../site` neben dem Projekt und ein
+absoluter Pfad, der unverändert bleibt.
