@@ -1,0 +1,3491 @@
+[
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "",
+   false
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "",
+   true
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   ""
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   ""
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   " ",
+   false
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   " ",
+   true
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   " "
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   " "
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "\t\n",
+   false
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "\t\n",
+   true
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "\t\n"
+  ],
+  "result": "\t"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "\t\n"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   " ",
+   false
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   " ",
+   true
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   " "
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   " "
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "　",
+   false
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "　",
+   true
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "　"
+  ],
+  "result": "　"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "　"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "﻿",
+   false
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "﻿",
+   true
+  ],
+  "result": "empty"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "﻿"
+  ],
+  "result": "﻿"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "﻿"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "/",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "/",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "/"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "/"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "//",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "//",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "//"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "//"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   ".",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   ".",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "."
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "./",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "./",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "./"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "./"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "/.",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "/.",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "/."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "/."
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   ".//./",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   ".//./",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   ".//./"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   ".//./"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "..",
+   false
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "..",
+   true
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   ".."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   ".."
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "../x",
+   false
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "../x",
+   true
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "../x"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "../x"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/..",
+   false
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/..",
+   true
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a/.."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a/.."
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/../b",
+   false
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/../b",
+   true
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a/../b"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a/../b"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/..b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/..b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a/..b"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a/..b"
+  ],
+  "result": "a/..b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/b..",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a/b..",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a/b.."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a/b.."
+  ],
+  "result": "a/b.."
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "...",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "...",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "..."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "..."
+  ],
+  "result": "..."
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "httpdocs",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "httpdocs",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "httpdocs"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "httpdocs"
+  ],
+  "result": "httpdocs"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "/var/www/site",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "/var/www/site",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "/var/www/site"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "/var/www/site"
+  ],
+  "result": "var/www/site"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "www/site/",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "www/site/",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "www/site/"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "www/site/"
+  ],
+  "result": "www/site"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   " www ",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   " www ",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   " www "
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   " www "
+  ],
+  "result": "www"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~"
+  ],
+  "result": "~"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~/"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~/"
+  ],
+  "result": "~"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~//",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~//",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~//"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~//"
+  ],
+  "result": "~"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/.",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/.",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~/."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~/."
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/x",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/x",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~/x"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~/x"
+  ],
+  "result": "~/x"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~qchost",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~qchost",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~qchost"
+  ],
+  "result": "~qchost"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~qchost/",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~qchost/",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~qchost/"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~qchost/"
+  ],
+  "result": "~qchost"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~qchost/blog",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~qchost/blog",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~qchost/blog"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~qchost/blog"
+  ],
+  "result": "~qchost/blog"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~other/x",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~other/x",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~other/x"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~other/x"
+  ],
+  "result": "~other/x"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~ab/c/",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~ab/c/",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~ab/c/"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~ab/c/"
+  ],
+  "result": "~ab/c"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "x/~",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "x/~",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "x/~"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "x/~"
+  ],
+  "result": "x/~"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/../x",
+   false
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/../x",
+   true
+  ],
+  "result": "traversal"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~/../x"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~/../x"
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~\n",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~\n",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~\n"
+  ],
+  "result": "\n"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~\n"
+  ],
+  "result": "~"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~\nfoo",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~\nfoo",
+   true
+  ],
+  "result": "whole-root"
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~\nfoo"
+  ],
+  "result": "\n"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~\nfoo"
+  ],
+  "result": "~\nfoo"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\n",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\n",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a\n"
+  ],
+  "result": "\n"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a\n"
+  ],
+  "result": "a"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a b"
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a b"
+  ],
+  "result": "a b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "neu!",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "neu!",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "neu!"
+  ],
+  "result": "!"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "neu!"
+  ],
+  "result": "neu!"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "fix58-v[a]",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "fix58-v[a]",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "fix58-v[a]"
+  ],
+  "result": "["
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "fix58-v[a]"
+  ],
+  "result": "fix58-v[a]"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "kontakt!",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "kontakt!",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "kontakt!"
+  ],
+  "result": "!"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "kontakt!"
+  ],
+  "result": "kontakt!"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "it's",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "it's",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "it's"
+  ],
+  "result": "'"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "it's"
+  ],
+  "result": "it's"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\"b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\"b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a\"b"
+  ],
+  "result": "\""
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a\"b"
+  ],
+  "result": "a\"b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\\b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\\b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a\\b"
+  ],
+  "result": "\\"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a\\b"
+  ],
+  "result": "a\\b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a$b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a$b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a$b"
+  ],
+  "result": "$"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a$b"
+  ],
+  "result": "a$b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a`b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a`b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a`b"
+  ],
+  "result": "`"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a`b"
+  ],
+  "result": "a`b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a;b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a;b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a;b"
+  ],
+  "result": ";"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a;b"
+  ],
+  "result": "a;b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a&b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a&b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a&b"
+  ],
+  "result": "&"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a&b"
+  ],
+  "result": "a&b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a|b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a|b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a|b"
+  ],
+  "result": "|"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a|b"
+  ],
+  "result": "a|b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a<b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a<b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a<b"
+  ],
+  "result": "<"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a<b"
+  ],
+  "result": "a<b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a>b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a>b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a>b"
+  ],
+  "result": ">"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a>b"
+  ],
+  "result": "a>b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a(b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a(b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a(b"
+  ],
+  "result": "("
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a(b"
+  ],
+  "result": "a(b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a)b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a)b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a)b"
+  ],
+  "result": ")"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a)b"
+  ],
+  "result": "a)b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a{b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a{b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a{b"
+  ],
+  "result": "{"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a{b"
+  ],
+  "result": "a{b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a}b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a}b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a}b"
+  ],
+  "result": "}"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a}b"
+  ],
+  "result": "a}b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a*b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a*b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a*b"
+  ],
+  "result": "*"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a*b"
+  ],
+  "result": "a*b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a?b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a?b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a?b"
+  ],
+  "result": "?"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a?b"
+  ],
+  "result": "a?b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a#b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a#b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a#b"
+  ],
+  "result": "#"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a#b"
+  ],
+  "result": "a#b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a b"
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a b"
+  ],
+  "result": "a b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "ab",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "ab",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "ab"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "ab"
+  ],
+  "result": "ab"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "Gärten/Ü",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "Gärten/Ü",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "Gärten/Ü"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "Gärten/Ü"
+  ],
+  "result": "Gärten/Ü"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "ü ",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "ü ",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "ü "
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "ü "
+  ],
+  "result": "ü"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/a b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "~/a b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "~/a b"
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "~/a b"
+  ],
+  "result": "~/a b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a b"
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a b"
+  ],
+  "result": "a b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a᠎b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a᠎b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a᠎b"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a᠎b"
+  ],
+  "result": "a᠎b"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a!b c",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a!b c",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a!b c"
+  ],
+  "result": " "
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a!b c"
+  ],
+  "result": "a!b c"
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\u0000b",
+   false
+  ],
+  "result": null
+ },
+ {
+  "fn": "remotePathProblem",
+  "args": [
+   "a\u0000b",
+   true
+  ],
+  "result": null
+ },
+ {
+  "fn": "rsyncUnsafeChar",
+  "args": [
+   "a\u0000b"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a\u0000b"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "relay"
+  ],
+  "result": "relay"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "/relay/"
+  ],
+  "result": "relay"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "//relay//"
+  ],
+  "result": "relay"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "forms/relay"
+  ],
+  "result": "forms/relay"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "forms//relay"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "forms/./relay"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "forms/../relay"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   " relay "
+  ],
+  "result": "relay"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "a/b/c/"
+  ],
+  "result": "a/b/c"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "relay\u0000"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "\nrelay\n"
+  ],
+  "result": "relay"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "relay/\n"
+  ],
+  "result": "relay"
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "/"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "//"
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   ".."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "x/."
+  ],
+  "result": null
+ },
+ {
+  "fn": "relaySubdir",
+  "args": [
+   "Kontakt-Ü"
+  ],
+  "result": "Kontakt-Ü"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//blog",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog/",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/blog",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other/blog",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "blog",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "/abs",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/abs"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": ""
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "x~",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "x~"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\n",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost\n",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\nqchost",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~ä/x",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/a b",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": "/home/qchost/a b"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qcsftp/x",
+   "/home/qchost",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//blog",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog/",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/blog",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other/blog",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "blog",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "/abs",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/abs"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": ""
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "x~",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "x~"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\n",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost\n",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\nqchost",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~ä/x",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/a b",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": "/home/qchost/a b"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qcsftp/x",
+   "/home/qchost/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~",
+   "/",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/",
+   "/",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//",
+   "/",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog",
+   "/",
+   "qchost"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//blog",
+   "/",
+   "qchost"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog/",
+   "/",
+   "qchost"
+  ],
+  "result": "/blog/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost",
+   "/",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/",
+   "/",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/blog",
+   "/",
+   "qchost"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other",
+   "/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other/blog",
+   "/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "blog",
+   "/",
+   "qchost"
+  ],
+  "result": "blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "/abs",
+   "/",
+   "qchost"
+  ],
+  "result": "/abs"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "",
+   "/",
+   "qchost"
+  ],
+  "result": ""
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "x~",
+   "/",
+   "qchost"
+  ],
+  "result": "x~"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\n",
+   "/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost\n",
+   "/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\nqchost",
+   "/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~ä/x",
+   "/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/a b",
+   "/",
+   "qchost"
+  ],
+  "result": "/a b"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qcsftp/x",
+   "/",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~",
+   "",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/",
+   "",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//",
+   "",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog",
+   "",
+   "qchost"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//blog",
+   "",
+   "qchost"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog/",
+   "",
+   "qchost"
+  ],
+  "result": "/blog/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost",
+   "",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/",
+   "",
+   "qchost"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/blog",
+   "",
+   "qchost"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other",
+   "",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other/blog",
+   "",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "blog",
+   "",
+   "qchost"
+  ],
+  "result": "blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "/abs",
+   "",
+   "qchost"
+  ],
+  "result": "/abs"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "",
+   "",
+   "qchost"
+  ],
+  "result": ""
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "x~",
+   "",
+   "qchost"
+  ],
+  "result": "x~"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\n",
+   "",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost\n",
+   "",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\nqchost",
+   "",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~ä/x",
+   "",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/a b",
+   "",
+   "qchost"
+  ],
+  "result": "/a b"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qcsftp/x",
+   "",
+   "qchost"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~",
+   "//",
+   "u"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/",
+   "//",
+   "u"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//",
+   "//",
+   "u"
+  ],
+  "result": "/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog",
+   "//",
+   "u"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//blog",
+   "//",
+   "u"
+  ],
+  "result": "/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog/",
+   "//",
+   "u"
+  ],
+  "result": "/blog/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/blog",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other/blog",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "blog",
+   "//",
+   "u"
+  ],
+  "result": "blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "/abs",
+   "//",
+   "u"
+  ],
+  "result": "/abs"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "",
+   "//",
+   "u"
+  ],
+  "result": ""
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "x~",
+   "//",
+   "u"
+  ],
+  "result": "x~"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\n",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost\n",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\nqchost",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~ä/x",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/a b",
+   "//",
+   "u"
+  ],
+  "result": "/a b"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qcsftp/x",
+   "//",
+   "u"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//blog",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog/",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www/blog/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/blog",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other/blog",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "blog",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "/abs",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/abs"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": ""
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "x~",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "x~"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\n",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost\n",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\nqchost",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~ä/x",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/a b",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www/a b"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qcsftp/x",
+   "/srv/qc/www",
+   "qcsftp"
+  ],
+  "result": "/srv/qc/www/x"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~//blog",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä/blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/blog/",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä/blog/"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost/blog",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~other/blog",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "blog",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "blog"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "/abs",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/abs"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "",
+   "/home/ä",
+   "ä"
+  ],
+  "result": ""
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "x~",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "x~"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\n",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qchost\n",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~\nqchost",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~ä/x",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä/x"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~/a b",
+   "/home/ä",
+   "ä"
+  ],
+  "result": "/home/ä/a b"
+ },
+ {
+  "fn": "fromLoginDir",
+  "args": [
+   "~qcsftp/x",
+   "/home/ä",
+   "ä"
+  ],
+  "result": null
+ }
+]
