@@ -13,9 +13,12 @@ import time
 
 here = os.environ["QH_FAKE_DIR"]
 args = sys.argv[1:]
+mode = open(os.path.join(here, "mode")).read().strip() if os.path.exists(os.path.join(here, "mode")) else ""
+# Before the call is noted: a test that waits for the note may signal at once.
+if mode == "stubborn":
+    signal.signal(signal.SIGTERM, signal.SIG_IGN)
 with open(os.path.join(here, "calls.log"), "a") as calls:
     calls.write(f"{os.getpid()} {' '.join(args)} @ {os.getcwd()}\n")
-mode = open(os.path.join(here, "mode")).read().strip() if os.path.exists(os.path.join(here, "mode")) else ""
 
 
 def say(text, stream=sys.stdout):
@@ -23,8 +26,6 @@ def say(text, stream=sys.stdout):
     stream.flush()
 
 
-if mode == "stubborn":
-    signal.signal(signal.SIGTERM, signal.SIG_IGN)
 say("Quartz v5.0.0")
 while os.path.exists(os.path.join(here, "hold")):
     time.sleep(0.02)

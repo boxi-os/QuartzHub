@@ -801,3 +801,25 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
 - Gegenproben (4, jede lässt den UI-Test scheitern): keine Frage beim Start, keine Frage beim
   Beenden, „Weiterlaufen lassen“ stoppt die Server doch, „Beenden“ bei verwaisten Servern tut
   nichts. Der Rauchtest (`SmokeTests`, drei Tests) läuft mit dem neuen Delegate weiter grün.
+
+### Wackelige Server-Tests (nach Punkt 4)
+
+- Beim Gesamtlauf nach dem App-Commit scheiterten zwei Prüfungen in `BuildServerTests`; in
+  Schleifen von 12 bis 20 Läufen der Server-Suiten (sie laufen parallel) waren es zunächst vier
+  verschiedene Tests. Behoben, je mit Ursache:
+  - Ports aus dem kurzlebigen Bereich des Systems: Ein Test, dessen Server auf „den nächsten
+    freien“ rückte, traf den Port, den ein anderer gerade bekommen hatte. Jetzt bekommt jeder
+    Aufruf einen eigenen Block von zehn Ports unterhalb davon.
+  - Der Test-Listener nahm nichts an: Nach einigen Proben war seine Warteschlange voll, die nächste
+    Probe lief in ihre Frist und las „frei“. Er nimmt jetzt an wie ein Server und wird mit
+    `shutdown` beendet.
+  - Der „sture“ Nachbau-Server bekam SIGTERM, bevor Python es ignorierte; er ignoriert es jetzt
+    vor der Zeile, auf die der Test wartet.
+- **Nicht erklärt:** Ein Port, der eben geschlossen oder geprüft wurde, liest sich unter der Last
+  der parallelen Tests gelegentlich kurz falsch (offen ohne Listener, `lsof` leer, eine
+  blockierende Verbindung im selben Moment scheitert; einmal belegt statt frei). Allein
+  nachgestellt in 1000 Durchgängen nie. Geprüft und verworfen: doppeltes `close` (keins gefunden),
+  `FileHandle.nullDevice` (hat keinen Deskriptor), EINTR oder Zeitablauf im `poll` (in zehn Läufen
+  nie). Die Tests warten dort bis zu 1 s bzw. prüfen nur, dass der WebSocket-Port weiter oben
+  liegt. Übrig: etwa ein Fehlschlag in 20 bis 30 Läufen der Server-Suiten. Im Betrieb hieße es,
+  dass ein Server einmal einen Port weiter rückt (und das sagt).
