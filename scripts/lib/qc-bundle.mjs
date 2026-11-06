@@ -3,7 +3,7 @@
 // `stubs` (an import specifier as it is written there → JavaScript source) are replaced. Loaded,
 // not copied: the rule "ein Prüfskript lädt die Logik, statt sie abzuschreiben".
 import { build } from '../../Helpers/node_modules/esbuild/lib/main.js'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { createRequire } from 'node:module'
@@ -14,7 +14,12 @@ export const commonStubs = {
   '../i18n': 'export function mainT(key, args) { return JSON.stringify({ key, args: args ?? {} }) }'
 }
 
-export async function loadQuartzControl(control, entry, stubs = commonStubs) {
+/**
+ * `expose`: names inside the entry file that it does not export, for a script that has to drive a
+ * function the service keeps to itself (buildService's `followQuartzOutput`). Appended as an
+ * export at bundle time; the file on disk stays as it is.
+ */
+export async function loadQuartzControl(control, entry, stubs = commonStubs, { expose = [] } = {}) {
   const work = mkdtempSync(join(tmpdir(), 'qh-qc-bundle-'))
   const outfile = join(work, 'bundle.cjs')
   const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -32,6 +37,12 @@ export async function loadQuartzControl(control, entry, stubs = commonStubs) {
             b.onResolve({ filter: new RegExp(`^${escape(specifier)}$`) }, () => ({ path: specifier, namespace: 'stub' }))
           }
           b.onLoad({ filter: /.*/, namespace: 'stub' }, (args) => ({ contents: stubs[args.path], loader: 'js' }))
+          if (expose.length) {
+            const target = join(control, entry)
+            b.onLoad({ filter: new RegExp(`^${escape(target)}$`) }, () => ({
+              contents: `${readFileSync(target, 'utf8')}\nexport { ${expose.join(', ')} }\n`, loader: 'ts'
+            }))
+          }
         }
       }]
     })

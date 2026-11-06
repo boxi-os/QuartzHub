@@ -668,3 +668,40 @@ Start (verwaiste Server) und beim Beenden kommen mit Punkt 4 in die App, nicht e
   Teilwort, der erste statt des tiefsten Prozesses als Listener, 8080 ohne Bestätigung, `lsof`s
   Exit 1 als Fehler, auch erklärte Ports geprüft, kein neuer Blick vor dem Signal, keine Grenze für
   die Seite, Projekt nur über den Text, nur die Wurzel signalisiert.
+
+### Build (`buildService.ts`, erster Teil → `BuildService`, `BuildActivityTracker`)
+
+- **Ein Actor für alle Projekte**, der hält, was läuft: Aktivität je Projekt (`build`, `serve`,
+  `rebuild` mit Phase), laufende Builds, Konsole (in `LogBuffer` und als Ereignis). „Jetzt bauen“
+  ein zweites Mal in denselben Ordner hängt sich an den laufenden Build; in einen anderen Ordner
+  wird abgelehnt, mit dem Satz `buildDirBusy`. Fehlen npm-Pakete, gibt es den Satz
+  `dependenciesMissing` und keinen Lauf. Vor dem Lauf die Vorbereitungsschritte (bis Punkt 5 nur
+  `repointAuthoredFrames`, siehe oben); was sie melden, steht in der Konsole vor Quartz' Ausgabe.
+  `assertOutputFree` (der Server schreibt in denselben Ordner) kommt mit dem Server.
+- **Gemessen gegen QuartzControls Code:** `scripts/build-activity-golden.mjs` lädt
+  `buildService.ts` und macht dabei `followQuartzOutput` und `setActivity` beim Bündeln sichtbar
+  (`qc-bundle.mjs` hat dafür `expose`; die Datei bleibt, wie sie ist). Zwölf Szenarien,
+  aufgezeichnet je Schritt die Aktivität und die gesendeten Ereignisse: der Build mit seinen
+  Phasen, der weiche und der harte Rebuild, ein gescheiterter Rebuild, der erste Build des
+  Servers, viele Zeilen in einem Stück, ein Rebuild ersetzt einen, ein Rebuild neben einem Build
+  (still), dieselbe Phase noch einmal (kein Ereignis), „Filtered out“ nur mit Zahl, Farbcodes.
+  Gleich in jedem Schritt bis auf zwei.
+- **Abweichung:** Eine Zeile wird gelesen, wenn sie ganz ist. QuartzControl prüfte jedes Stück
+  für sich; „Emitting files“ oder ein Farbcode, die über eine Lesegrenze fallen, bewegten dort
+  nichts. Das Ende einer Quelle liest den Rest ohne Zeilenumbruch.
+- **Gegen einen nachgestellten `npx`** (druckt Quartz' Zeilen, eine über zwei Schreibvorgänge
+  geteilt): Phasen `preparing` → `parsing` → `emitting` → keine, stdout und stderr getrennt und in
+  der Reihenfolge, ein Lauf für zwei gleichzeitige Aufrufe in denselben Ordner (`dist` und
+  `./dist/`), Ablehnung für einen anderen Ordner, während ein anderes Projekt baut, Exit-Code 3,
+  ein Signal ergibt keinen Code (wie Nodes `code: null`), `npx` fehlt (`spawn npx ENOENT` in
+  stderr), Vorbereitungsschritte in Reihenfolge vor der Ausgabe.
+- **Gegen das echte Quartz** (`QH_QUARTZ_TESTS=1`): `quartz build` einer APFS-Kopie von gui-test
+  (`cp -cR`, mit node_modules) unter der Node-Laufzeit aus `Runtime/`: gelungen in 13,7 s,
+  dieselben vier Phasen, `public/` ist danach ein Quartz-Build.
+- Gegenproben (10, jede lässt einen Test scheitern): jedes Stück für sich gelesen, Build-Ausgabe
+  bewegt jede Aktivität, ein Rebuild neben dem Build spricht, „Done rebuilding“ löscht jede
+  Aktivität, kein Ordnervergleich beim Anhängen, kein Anhängen, keine Prüfung der Pakete, nur der
+  erste Vorbereitungsschritt, ein Signal als Exit-Code, Aktivität bleibt nach dem Build stehen.
+  Die beiden zum Anhängen hingen anfangs, statt zu scheitern (der erste Build wartete auf eine
+  Freigabe, die der Test erst nach der Erwartung gab); der Test gibt jetzt nach spätestens 3 s
+  frei.

@@ -1,0 +1,711 @@
+[
+  {
+    "name": "one-off-build",
+    "steps": [
+      {
+        "feed": "build",
+        "text": "Parsing input files\n",
+        "expected": {
+          "activity": null,
+          "events": []
+        }
+      },
+      {
+        "set": {
+          "kind": "build",
+          "phase": "preparing"
+        },
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "preparing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "build",
+              "phase": "preparing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Quartz v5.0.0\n\nCleaned output directory `public` in 12ms\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "preparing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Parsing input files using 8 threads\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "build",
+              "phase": "parsing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Detected change, rebuilding...\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Parsed 40 Markdown files in 1s\nFiltered out 2 files\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "build",
+        "text": "\u001b[32mEmitting files\u001b[39m\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "emitting",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "build",
+              "phase": "emitting",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Done processing 40 files in 3s\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "emitting",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "clear": true,
+        "expected": {
+          "activity": null,
+          "events": [
+            null
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "soft-rebuild",
+    "steps": [
+      {
+        "feed": "server",
+        "text": "Parsing input files\n",
+        "expected": {
+          "activity": null,
+          "events": []
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Detected change, rebuilding...\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "parsing",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "parsing",
+              "startedAt": "new"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Filtered out 3 files\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "emitting",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "emitting",
+              "startedAt": "new"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Emitted 40 files to `public` in 20ms\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "emitting",
+            "startedAt": "new"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Done rebuilding in 312ms\n",
+        "expected": {
+          "activity": null,
+          "events": [
+            null
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Done rebuilding in 312ms\n",
+        "expected": {
+          "activity": null,
+          "events": []
+        }
+      }
+    ]
+  },
+  {
+    "name": "hard-rebuild",
+    "steps": [
+      {
+        "feed": "server",
+        "text": "Detected a source code change, doing a hard rebuild...\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "preparing",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "preparing",
+              "startedAt": "new"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Transpiled `quartz.ts` in 300ms\nParsing input files\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "parsing",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "parsing",
+              "startedAt": "new"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Emitting files\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "emitting",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "emitting",
+              "startedAt": "new"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Done processing 12 files in 2s\n",
+        "expected": {
+          "activity": null,
+          "events": [
+            null
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "failed-rebuild",
+    "steps": [
+      {
+        "feed": "server",
+        "text": "Rebuild failed: nothing to fail\n",
+        "expected": {
+          "activity": null,
+          "events": []
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Detected change, rebuilding...\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "parsing",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "parsing",
+              "startedAt": "new"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "\u001b[31mRebuild failed:\u001b[39m SyntaxError\n",
+        "expected": {
+          "activity": null,
+          "events": [
+            null
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "first-build-of-the-server",
+    "steps": [
+      {
+        "set": {
+          "kind": "serve",
+          "phase": "preparing"
+        },
+        "expected": {
+          "activity": {
+            "kind": "serve",
+            "phase": "preparing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "serve",
+              "phase": "preparing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Parsing input files\n",
+        "expected": {
+          "activity": {
+            "kind": "serve",
+            "phase": "preparing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Parsing input files\n",
+        "expected": {
+          "activity": {
+            "kind": "serve",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "serve",
+              "phase": "parsing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Done rebuilding in 1ms\n",
+        "expected": {
+          "activity": {
+            "kind": "serve",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Emitting files\n",
+        "expected": {
+          "activity": {
+            "kind": "serve",
+            "phase": "emitting",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "serve",
+              "phase": "emitting",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Done processing 40 files\n",
+        "expected": {
+          "activity": null,
+          "events": [
+            null
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "one-chunk-many-lines",
+    "steps": [
+      {
+        "feed": "server",
+        "text": "Detected change, rebuilding...\nFiltered out 2 files\nDone rebuilding in 5ms\nDetected a source code change\nParsing input files\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "parsing",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "parsing",
+              "startedAt": "new"
+            },
+            {
+              "kind": "rebuild",
+              "phase": "emitting",
+              "startedAt": "new"
+            },
+            null,
+            {
+              "kind": "rebuild",
+              "phase": "preparing",
+              "startedAt": "new"
+            },
+            {
+              "kind": "rebuild",
+              "phase": "parsing",
+              "startedAt": "new"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "a-new-rebuild-replaces-one",
+    "steps": [
+      {
+        "set": {
+          "kind": "rebuild",
+          "phase": "emitting"
+        },
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "emitting",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "emitting",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Detected change, rebuilding...\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "parsing",
+            "startedAt": "new"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "parsing",
+              "startedAt": "new"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "a-rebuild-beside-a-build",
+    "steps": [
+      {
+        "set": {
+          "kind": "build",
+          "phase": "parsing"
+        },
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "build",
+              "phase": "parsing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Detected change, rebuilding...\nDone rebuilding in 2ms\nDone processing\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Emitting files\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "emitting",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "build",
+              "phase": "emitting",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "same-phase-again",
+    "steps": [
+      {
+        "set": {
+          "kind": "build",
+          "phase": "parsing"
+        },
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "build",
+              "phase": "parsing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Parsing input files\nParsing input files\n",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      }
+    ]
+  },
+  {
+    "name": "filtered-out-needs-a-number",
+    "steps": [
+      {
+        "set": {
+          "kind": "rebuild",
+          "phase": "parsing"
+        },
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "parsing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Filtered out files\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "server",
+        "text": "Filtered out 0 files\n",
+        "expected": {
+          "activity": {
+            "kind": "rebuild",
+            "phase": "emitting",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "rebuild",
+              "phase": "emitting",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "a-line-in-two-chunks",
+    "steps": [
+      {
+        "set": {
+          "kind": "build",
+          "phase": "parsing"
+        },
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": [
+            {
+              "kind": "build",
+              "phase": "parsing",
+              "startedAt": "kept"
+            }
+          ]
+        }
+      },
+      {
+        "feed": "build",
+        "text": "Parsed 40 files\nEmitting fi",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      },
+      {
+        "feed": "build",
+        "text": "les\nDone",
+        "expected": {
+          "activity": {
+            "kind": "build",
+            "phase": "parsing",
+            "startedAt": "kept"
+          },
+          "events": []
+        }
+      }
+    ]
+  },
+  {
+    "name": "a-colour-code-in-two-chunks",
+    "steps": [
+      {
+        "feed": "server",
+        "text": "\u001b[33mDetected change, rebu",
+        "expected": {
+          "activity": null,
+          "events": []
+        }
+      },
+      {
+        "feed": "server",
+        "text": "ilding...\u001b[39m\n",
+        "expected": {
+          "activity": null,
+          "events": []
+        }
+      }
+    ]
+  }
+]
