@@ -41,6 +41,9 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `swift test --package-path Packages/QuartzHubCore` — nur die Kerntests, ohne Xcode-Projekt
 - `swift run --package-path Packages/QuartzHubCore qh-check i18n` — Schlüssel der Aufrufe gegen
   den Katalog, Parität de/en, Platzhalter. Exit 0 gut, 1 Befunde, 2 Aufruf falsch, 3 nicht alles geprüft
+- `swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]` —
+  wie viele Optionen je Plugin QuartzHub darstellen kann; dieselbe Tabelle wie QuartzControls
+  `check:option-schema` (nur lesend; Exit 3, wenn etwas nicht lesbar war)
 - `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)
@@ -95,7 +98,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Projektbild, Anlegen); was fehlt, steht im Plan. Punkt 3 läuft: Config lesen und schreiben
   (`ConfigFile` über `yaml-edit`), dazu aus Punkt 2 `ProjectPaths` und Duplizieren, alle drei gegen
   QuartzControls eigenen Code gemessen (`scripts/*-golden.mjs`), dazu `ProjectDependencies` und
-  `PluginCommands`. Als Nächstes `pluginSchemaService` mit `pluginOptionSchema`.
+  `PluginCommands`, dann das Options-Schema (`PluginSource`, `OptionSchema`, `PluginSchemaReader`,
+  `qh-check option-schema`). Als Nächstes `marketplaceService`.
 - QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
   QuartzControl-Repo, nicht hier.
 

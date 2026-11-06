@@ -84,6 +84,18 @@ struct PluginSchemaReaderTests {
     try await check(project: project, spec: spec)
   }
 
+  /// qh-check option-schema against QuartzControl's check:option-schema, which the golden script ran
+  /// over the same project: the same table, the same sentences, line for line.
+  @Test func theCheckSaysWhatQuartzControlsSays() async throws {
+    let spec = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("handmade/case.json")))
+    let project = scratch.url.appendingPathComponent("P")
+    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project) { $0 }
+    let expected = try String(contentsOf: Self.fixtures.appendingPathComponent("handmade/check.txt"), encoding: .utf8)
+    let report = try await OptionSchemaCheck.run(project: project.path, runtime: HelperRuntime.runtime)
+    #expect(report.text.replacingOccurrences(of: project.path, with: "@P@") == expected)
+    #expect(report.unreadable == 4)
+  }
+
   // MARK: beyond QuartzControl's answers
 
   /// A helper that notes each call in a log before it hands over to the real one.

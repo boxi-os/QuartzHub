@@ -1,0 +1,76 @@
+@P@/quartz.config.yaml
+
+Plugin                          Quelle        config  vorg.  optS. confS. Schema   alle   Feld   Text  unsi.
+dts-all                         dts                3      0      0      0     48     50     38     12      0
+dts-all#2 (aus)                 dts                0      0      0      0     48     48     36     12      0
+npm-plugin                      configSchema       2      2      0      1      1      3      3      0      0
+dts-outermost                   dts                1      0      0      0      2      3      3      0      0
+dts-cycle                       dts                0      0      0      0      2      2      2      0      0
+broken                          unlesbar           0      0      0      0      0      0      0      0      0
+plain (aus)                     optionSchema       0      0      1      0      1      1      1      0      0
+not-installed                   –                  1      0      0      0      0      1      1      0      0
+with-dts                        dts                0      0      0      0      1      1      1      0      0
+fallbacks                       defaults           0      1      0      0      0      1      1      0      0
+both-schemas                    configSchema       0      1      2      1      1      2      1      0      1
+dts-votes                       dts                1      0      0      0      1      1      1      0      0
+
+12 Plugins, 113 Optionen: 88 als Feld, 24 nur als Text, 1 unsichtbar.
+Gelesen aus: dts 6, configSchema 2, unlesbar 1, optionSchema 1, – 1, defaults 1.
+47 Stellen konnte der Leser nicht lesen oder nicht verstehen (als Text angeboten oder fürs Formular übergangen) — Liste unten.
+4 Einträge nicht lesbar (Eintrag ohne source oder package.json kaputt) — nicht gezählt.
+
+Unsichtbar oder nicht lesbar, je Plugin:
+  dts-all [.quartz/plugins/dts-all]
+    nicht lesbar: litNull — a null literal
+    nicht lesbar: partBare — Partial without an argument
+    nicht lesbar: pickBad — Pick with keys that are not string literals
+    nicht lesbar: fn — a function cannot be written in YAML
+    nicht lesbar: method — a function cannot be written in YAML
+    nicht lesbar: bothBad — an intersection of non-object types
+    nicht lesbar: undeclared — type Undeclared is not declared in the package
+    nicht lesbar: imported — type X is not declared in the package
+    nicht lesbar: self.litNull — a null literal
+    nicht lesbar: self.partBare — Partial without an argument
+    nicht lesbar: self.pickBad — Pick with keys that are not string literals
+    nicht lesbar: self.fn — a function cannot be written in YAML
+    nicht lesbar: self.method — a function cannot be written in YAML
+    nicht lesbar: self.bothBad — an intersection of non-object types
+    nicht lesbar: self.undeclared — type Undeclared is not declared in the package
+    nicht lesbar: self.imported — type X is not declared in the package
+    nicht lesbar: self.self — type AllOptions refers to itself
+    nicht lesbar: self.tuple — type syntax TupleType is not supported
+    nicht lesbar: self.noType — no type
+    nicht lesbar: self.deep.d.d.d — types nested too deeply
+    nicht lesbar: tuple — type syntax TupleType is not supported
+    nicht lesbar: noType — no type
+    nicht lesbar: deep.d.d.d.d — types nested too deeply
+  dts-all#2 [.quartz/plugins/dts-all]
+    nicht lesbar: litNull — a null literal
+    nicht lesbar: partBare — Partial without an argument
+    nicht lesbar: pickBad — Pick with keys that are not string literals
+    nicht lesbar: fn — a function cannot be written in YAML
+    nicht lesbar: method — a function cannot be written in YAML
+    nicht lesbar: bothBad — an intersection of non-object types
+    nicht lesbar: undeclared — type Undeclared is not declared in the package
+    nicht lesbar: imported — type X is not declared in the package
+    nicht lesbar: self.litNull — a null literal
+    nicht lesbar: self.partBare — Partial without an argument
+    nicht lesbar: self.pickBad — Pick with keys that are not string literals
+    nicht lesbar: self.fn — a function cannot be written in YAML
+    nicht lesbar: self.method — a function cannot be written in YAML
+    nicht lesbar: self.bothBad — an intersection of non-object types
+    nicht lesbar: self.undeclared — type Undeclared is not declared in the package
+    nicht lesbar: self.imported — type X is not declared in the package
+    nicht lesbar: self.self — type AllOptions refers to itself
+    nicht lesbar: self.tuple — type syntax TupleType is not supported
+    nicht lesbar: self.noType — no type
+    nicht lesbar: self.deep.d.d.d — types nested too deeply
+    nicht lesbar: tuple — type syntax TupleType is not supported
+    nicht lesbar: noType — no type
+    nicht lesbar: deep.d.d.d.d — types nested too deeply
+  dts-outermost [.quartz/plugins/dts-outermost]
+    Schema teilt keine Option mit Config und Vorgaben (falsches Interface?): languages, seo
+  dts-cycle [.quartz/plugins/dts-cycle]
+    nicht lesbar: a.b.a — type AOptions refers to itself
+  both-schemas [node_modules/both-schemas]
+    unsichtbar: b

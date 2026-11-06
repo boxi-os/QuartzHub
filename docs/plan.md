@@ -4,7 +4,7 @@
 > abgeschlossen** (Phase 2 am 2026-11-06, `decisions/phase-2-formate.md`); Phase 3 läuft, Punkt 1
 > (Grundlagen) fertig am 2026-11-06 (`decisions/phase-3-dienste.md`), Punkt 2 (Projekte) bis auf
 > die Teile, die die Config brauchen; Punkt 3 (Konfiguration und Plugins) läuft, die Config ist
-> fertig, ebenso die Plugin-Befehle; als Nächstes das Options-Schema. Abweichungen vom ursprünglichen Plan, mit Messung in
+> fertig, ebenso die Plugin-Befehle und das Options-Schema; als Nächstes der Marktplatz. Abweichungen vom ursprünglichen Plan, mit Messung in
 > `decisions/phase-1-geruest.md`:
 >
 > - Bundle-ID `io.github.boxios.quartzhub` (ohne Unterstrich: in `CFBundleIdentifier` nicht erlaubt)
@@ -154,8 +154,11 @@ nach Abhängigkeit:
      `configService.ts` in 17 Fällen byte-gleich), aus Punkt 2 nachgeholt `ProjectPaths` und
      `ProjectDuplicator` (ebenso gegen QuartzControls Code gemessen). Der Snapshot vor dem
      Speichern der Config kommt mit Punkt 7. Danach `ProjectDependencies` und `PluginCommands`
-     (`pluginService`), ebenso gemessen. Als Nächstes `pluginSchemaService` mit
-     `shared/pluginOptionSchema.ts`, dann `marketplaceService`.
+     (`pluginService`), ebenso gemessen. Dann das Options-Schema: `PluginSource`
+     (`quartzPluginName`), `OptionSchema` (`pluginOptionSchema.ts`), `PluginSchemaReader`
+     (`pluginSchemaService`, ein Helfer-Aufruf je Seite) und `qh-check option-schema`, das an acht
+     Projekten dieselbe Tabelle schreibt wie QuartzControls `check:option-schema`. Als Nächstes
+     `marketplaceService`.
 4. **Build und Server:** `buildService`, `buildOutputGuard`, `serverDiscovery`,
    `runningServersStore`, Waisen-Erkennung beim Start und Frage beim Beenden (im Spike gefehlt)
 5. **Stile und Layout:**

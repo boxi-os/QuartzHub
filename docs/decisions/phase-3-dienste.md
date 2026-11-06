@@ -481,3 +481,29 @@ und die theme.json eines Themes. Die `.d.ts` und die Einstiegsdateien liest der 
   als Text, Version aus dem falschen Feld, ein leeres configSchema gewinnt, `pageType` als Teilwort,
   ohne `exports`, Cache ohne `.d.ts`, eine Style-Settings-Id als Text, der falsche Satz: jede lässt
   Fälle scheitern.
+
+### `qh-check option-schema` (`scripts/check-option-schema.mjs` → `OptionSchemaCheck`)
+
+Wie viele Optionen je Plugin QuartzHub darstellen kann, gezählt gegen alles, was etwas über die
+Optionen weiß (Config, Vorgaben, optionSchema, configSchema, gewählte Quelle), eingeteilt in Feld,
+nur Text und unsichtbar. Dieselbe Tabelle und dieselben Sätze wie QuartzControls Skript, damit
+beide gegen dasselbe Projekt laufen und Zeile für Zeile verglichen werden können. Der Leser wird
+geladen, nicht nachgebaut, die Config wie im Skript als ganzer YAML-Wert gelesen (Einträge ohne
+`source` gezählt und übergangen).
+
+- **Gemessen an acht Projekten** (gui-test, Example, navigations-testprojekt,
+  quartz-plugins-handbuch, QuartzControl-Handbuch, QuartzControl-Web, testmitcss, brain-handbuch;
+  nur lesend, hinterland-history nicht): Die Tabelle ist jedes Mal byte-gleich mit
+  `npm run check:option-schema`. Die `--dump`-Ausgabe, das ganze Schema jedes Plugins samt den
+  Schlüsseln aus seiner Config, ist bei allen 475 Plugins in der kanonischen Form gleich. Der
+  Vergleich ist gegengeprüft: Mit einem geänderten `hasDefault` oder `kind` meldet er das Plugin.
+- Als Test im Repo: Das Golden-Skript lässt QuartzControls Skript über das handgemachte Projekt
+  laufen (mit Config: Doppel, ausgeschaltet, ohne `source`, kaputte package.json, falsches
+  Interface, ein unsichtbarer Schlüssel) und legt die Ausgabe nach `handmade/check.txt`.
+- **Exit-Code:** 0, wie QuartzControls Skript, auch bei unsichtbaren Optionen (das ist eine Zahl in
+  der Tabelle); 3, wenn ein Eintrag oder Paket nicht lesbar war.
+- Ein Aufruf des Helfers für das ganze Projekt (den YAML-Leser nicht gezählt): gui-test in 0,36 s,
+  QuartzControls Skript in 0,37 bis 0,41 s (gemessen je dreimal bzw. zweimal mit `time`).
+- Gegenproben: `enabled` als „wahr“ statt „nicht falsch“, ohne Falsches-Interface-Satz, ohne
+  Zählung kaputter package.json, Spaltenbreite, kein Unterschied Text/Feld: jede lässt den Test
+  scheitern.

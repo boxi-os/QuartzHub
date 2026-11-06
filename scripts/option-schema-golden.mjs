@@ -30,6 +30,7 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, 
 import { homedir, tmpdir } from 'node:os'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { spawnSync } from 'node:child_process'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const control = resolve(process.argv[2] ?? join(here, '..', '..', 'QuartzControl'))
@@ -423,6 +424,24 @@ const handmadeTree = {
   [`${NM}/quartz-array/package.json`]: JSON.stringify({ quartz: ['x'], version: '1' }),
   [`${NM}/versions/package.json`]: pkg({ version: 2 }, { version: '1.0.0' }),
   [`${NM}/fallbacks/package.json`]: pkg({ configSchema: { type: 'object' }, optionSchema: {}, defaultOptions: { d: true } }),
+  // For the check: configSchema wins, the optionSchema key it lacks is invisible.
+  [`${NM}/both-schemas/package.json`]: pkg({ configSchema: { type: 'object', properties: { a: { type: 'string' } } }, optionSchema: { a: { type: 'string' }, b: { type: 'number' } }, defaultOptions: { a: 'x' } }),
+  // The project's config, for QuartzControl's check:option-schema (handmade/check.txt).
+  'quartz.config.yaml': [
+    'configuration:', '  pageTitle: Check', 'plugins:',
+    '  - source: github:a/dts-all', '    enabled: true', '    options: { bool: true, unknownKey: 1, nested: { a: 1 } }',
+    '  - source: github:a/dts-all', '    enabled: false',
+    '  - source: "@scope/npm-plugin"', '    options: { a: x, extra: [1, 2] }',
+    '  - source: github:a/dts-outermost', '    options: { hreflang: true }',
+    '  - source: github:a/dts-cycle',
+    '  - source: broken',
+    '  - options: {}',
+    '  - just a string',
+    '  - source: plain', '    enabled: false',
+    '  - source: not-installed', '    options: { k: 1 }',
+    '  - source: with-dts', '  - source: fallbacks', '  - source: both-schemas',
+    '  - source: { repo: "github:x/y", name: dts-votes }', '    options: { v: "not a bool" }'
+  ].join('\n') + '\n',
   [`${NM}/fallback-to-optionschema/package.json`]: pkg({ configSchema: { type: 'object', properties: {} }, optionSchema: { o: { type: 'string' } }, defaultOptions: { o: 'x', p: 1 } }),
   [`${NM}/configschema-null/package.json`]: pkg({ configSchema: null, optionSchema: { o: { type: 'string' } } }),
   [`${NM}/nothing/package.json`]: pkg({ defaultOptions: {} }),
@@ -511,6 +530,10 @@ function runQueries(project, queries) {
   layOut(project, tree, w)
   const answers = runQueries(project, { options: optionQueries, frames: frameEntries, themes: themeQueries })
   write('handmade/case.json', { tree: handmadeTree, ...answers })
+  // QuartzControl's own check script over the same project, as it runs from its repository.
+  const check = spawnSync(process.execPath, [join(control, 'scripts', 'check-option-schema.mjs'), project], { cwd: control, encoding: 'utf-8' })
+  if (check.status !== 0) throw new Error(`check-option-schema.mjs: `)
+  writeFileSync(join(out, 'handmade', 'check.txt'), check.stdout.replaceAll(project, '@P@'))
   rmSync(w, { recursive: true, force: true })
 }
 

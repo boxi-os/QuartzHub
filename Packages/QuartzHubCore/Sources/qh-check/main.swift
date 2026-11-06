@@ -2,6 +2,7 @@
 // instead of copying it. Successor of QuartzControl's `npm run check:*` scripts.
 //
 //   swift run --package-path Packages/QuartzHubCore qh-check i18n [--root <repo>] [--unused]
+//   swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]
 //
 // Exit codes: 0 all good, 1 findings, 2 wrong call, 3 could not check everything.
 import Foundation
@@ -13,6 +14,9 @@ func usage() -> Never {
 
     i18n [--root <repo>] [--unused]   Schlüssel der Aufrufe gegen den Katalog, Parität de/en,
                                       Platzhalter; --unused listet ungenutzte Schlüssel
+    option-schema <projekt> [--plugin <name>] [--dump]
+                                      wie viele Optionen je Plugin QuartzHub darstellen kann
+                                      (Feld, nur Text, unsichtbar); --dump das Schema als JSON
   """)
   exit(2)
 }
@@ -83,6 +87,19 @@ case "i18n":
     exit(3)
   }
   print("\nAlles geprüft, keine Befunde.")
+case "option-schema":
+  // Report only, as QuartzControl's check:option-schema: an invisible option is a number in the
+  // table, not an exit code. What could not be read is (3).
+  let project = arguments.first { !$0.hasPrefix("--") && $0 != option("--plugin") }
+  guard let project else { usage() }
+  do {
+    let report = try await OptionSchemaCheck.run(project: project, only: option("--plugin"), dump: arguments.contains("--dump"))
+    print(report.text, terminator: "")
+    if report.unreadable > 0 { exit(3) }
+  } catch {
+    print(error.description)
+    exit(2)
+  }
 default:
   usage()
 }
