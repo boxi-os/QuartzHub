@@ -232,3 +232,24 @@ zurückbringt. ImageIO statt `nativeImage`:
   aus der Geschichte von `gui-test` (nur lesend) und die Blob-ID gegen `git hash-object`.
 - Gegenproben: Name statt Bytes, ohne Cache, das Original bei jeder Wahl neu verdrängt, ohne
   Ausrichtung: jede lässt einen Test scheitern.
+
+### Projekt anlegen (`createService.ts` → `ProjectCreator`)
+
+Dieselben Schritte wie in QuartzControl: `git clone` (voll, nicht `--depth 1`), `origin` weg,
+`npm install`, `npx quartz create` mit jeder Antwort als Flag (`-t -X -l -b`, `-s` bei einer
+Quelle), dann ein Aufwärm-Build. Erfolg ist die geschriebene `quartz.config.yaml`, nicht der
+Exit-Code des Assistenten. Die Sätze vor dem gescheiterten Schritt sind QuartzControls.
+
+- **Neu: Fristen.** QuartzControl gab keinem Schritt eine, ein Klon über eine stehende Verbindung
+  wartete für immer. Hier: Klon 15 min, `npm install` 20 min, Assistent 5 min, Build 10 min,
+  `git remote remove` 30 s. Großzügig gewählt, nicht gemessen; der Test hält, dass eine hängende
+  Installation an ihrer Frist endet und das sagt.
+- Die Quelle steht hinter `--` (`git clone -- <repo> <ziel>`), wie für Projektdaten üblich.
+- Getestet gegen ein lokales Upstream mit zwei Commits und Stellvertreter für `npm`/`npx`, die
+  ihre Argumente notieren. Gegenproben: mit `--depth 1` hat die Kopie einen Commit, ohne
+  `remote remove` ein `origin`, Erfolg nach Exit-Code meldet den Assistenten ohne Config als
+  gelungen: jede lässt einen Test scheitern.
+- **Nicht gemessen:** der echte Weg über GitHub, npm und den Assistenten mit dem mitgelieferten
+  Node. Der Test dafür steht bereit (`QH_NETWORK_TESTS=1 swift test --filter realQuartz`), lief
+  aber noch nicht: Er lädt Quartz und seine Pakete aus dem Netz und führt sie aus, und das
+  braucht die Freigabe des Nutzers.
