@@ -25,7 +25,7 @@ public enum ProjectCreator {
   public enum LinkResolution: String, Sendable { case absolute, shortest, relative }
 
   public struct Options: Sendable, Equatable {
-    public var targetDirectory: URL
+    public var targetDirectory: String
     public var template: Template = .default
     /// The content to take over, for `copy` and `symlink`.
     public var source: String?
@@ -34,7 +34,7 @@ public enum ProjectCreator {
     /// `-b` is asked whenever it is missing or empty; the config editor changes it later.
     public var baseUrl: String = ""
 
-    public init(targetDirectory: URL) { self.targetDirectory = targetDirectory }
+    public init(targetDirectory: String) { self.targetDirectory = targetDirectory }
 
     /// The wizard's arguments after `npx`, in QuartzControl's order.
     var wizardArguments: [String] {
@@ -70,17 +70,17 @@ public enum ProjectCreator {
     // git clone refuses a folder with something in it, with a sentence about a "destination path"
     // that names no field; the wizard builds this path from a parent and a typed name, so a
     // collision is a typo, and it gets a sentence with the path.
-    if let names = try? FileManager.default.contentsOfDirectory(atPath: target.path), !names.isEmpty {
-      return Result(success: false, output: L10n.t("main.createTargetExists", ["path": target.path]))
+    if let names = try? FileManager.default.contentsOfDirectory(atPath: target), !names.isEmpty {
+      return Result(success: false, output: L10n.t("main.createTargetExists", ["path": target]))
     }
 
-    func run(_ executable: String, _ arguments: [String], in directory: URL?, _ timeout: Duration) async -> (Bool, String) {
+    func run(_ executable: String, _ arguments: [String], in directory: String?, _ timeout: Duration) async -> (Bool, String) {
       let command = environment.command(executable, arguments, in: directory, timeout: timeout)
       let result = await ProcessRunner.run(command)
       return (result.success, result.report(for: command))
     }
 
-    let (cloned, cloneOutput) = await run("git", ["clone", "--", repository, target.path], in: nil, deadlines.clone)
+    let (cloned, cloneOutput) = await run("git", ["clone", "--", repository, target], in: nil, deadlines.clone)
     guard cloned else {
       return Result(success: false, output: "\(L10n.t("main.createCloneFailed"))\n\(cloneOutput)")
     }
@@ -92,7 +92,7 @@ public enum ProjectCreator {
     }
 
     let (created, createOutput) = await run("npx", options.wizardArguments, in: target, deadlines.wizard)
-    let configWritten = FileManager.default.fileExists(atPath: target.appendingPathComponent("quartz.config.yaml").path)
+    let configWritten = FileManager.default.fileExists(atPath: "\(target)/quartz.config.yaml")
 
     var warmup = ""
     if created && configWritten {

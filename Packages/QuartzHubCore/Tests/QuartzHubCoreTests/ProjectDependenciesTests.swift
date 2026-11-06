@@ -23,7 +23,7 @@ struct ProjectDependenciesTests {
     let spec = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("\(name)/case.json")))
     let w = "\(scratch.path)/w"
     let project = "\(w)/P"
-    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: URL(fileURLWithPath: project)) { $0.replacingOccurrences(of: "@W@", with: w, options: .literal) }
+    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project) { $0.replacingOccurrences(of: "@W@", with: w, options: .literal) }
 
     let strings = { (list: [String]?) in list.map { JSONValue.array($0.map(JSONValue.string)) } ?? .null }
     for (index, question) in (spec["ask"]?.arrayValue ?? []).enumerated() {

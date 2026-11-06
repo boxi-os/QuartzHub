@@ -58,8 +58,8 @@ import Testing
       let w = try Self.workspace()
       let tree = item["tree"]!
       let fill = { (text: String) in text.replacingOccurrences(of: "@W@", with: w.path, options: .literal) }
-      try ProjectDuplicatorTests.layOut(spec["project"]!, at: w, fill)
-      try ProjectDuplicatorTests.layOut(tree, at: w, fill)
+      try ProjectDuplicatorTests.layOut(spec["project"]!, at: w.path, fill)
+      try ProjectDuplicatorTests.layOut(tree, at: w.path, fill)
       let verdict = BuildOutputGuard.assess(project: w.appendingPathComponent(item["project"]!.stringValue!).path,
                                             outputDir: item["outputDir"]?.stringValue.map(fill),
                                             home: w.appendingPathComponent("home").path)
@@ -83,7 +83,7 @@ import Testing
     for item in cases {
       let w = try Self.workspace()
       defer { try? FileManager.default.removeItem(at: w) }
-      try ProjectDuplicatorTests.layOut(item["tree"]!, at: w.appendingPathComponent("d")) { $0 }
+      try ProjectDuplicatorTests.layOut(item["tree"]!, at: w.appendingPathComponent("d").path) { $0 }
       #expect(BuildOutputGuard.looksLikeQuartzBuild(w.appendingPathComponent("d").path) == item["expected"]?.boolValue,
               "\(item["name"]!.stringValue!)")
     }

@@ -49,7 +49,7 @@ import Testing
   func sameAsQuartzControl(_ name: String) async throws {
     let spec = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("\(name)/case.json")))
     let project = "\(w)/P"
-    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: URL(fileURLWithPath: project)) { $0 }
+    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project) { $0 }
     let environment = try environment(answers: spec["answers"]!)
     let run = spec["run"]!.arrayValue!.compactMap(\.stringValue)
     let commands = PluginCommands()
@@ -75,7 +75,7 @@ import Testing
 
   @Test func aSecondInstallJoinsTheRunningOne() async throws {
     let project = "\(w)/P"
-    try ProjectDuplicatorTests.layOut(.object(JSONObject([("package.json", .string("{\"dependencies\":{\"a\":\"1\"}}"))])), at: URL(fileURLWithPath: project)) { $0 }
+    try ProjectDuplicatorTests.layOut(.object(JSONObject([("package.json", .string("{\"dependencies\":{\"a\":\"1\"}}"))])), at: project) { $0 }
     let gate = "\(scratch.path)/gate"
     // npm waits until the test opens the gate, so both calls overlap for certain.
     let environment = try environment(answers: .object(JSONObject()),
@@ -105,7 +105,7 @@ import Testing
 
   @Test func addAndRemoveTakeASnapshotFirstWhenAsked() async throws {
     let project = "\(w)/P"
-    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: URL(fileURLWithPath: project)) { $0 }
+    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: project) { $0 }
     let environment = try environment(answers: .object(JSONObject()))
     let calls = SnapshotCalls()
     let commands = PluginCommands()
@@ -132,7 +132,7 @@ import Testing
 
   @Test func aSnapshotThatFailsStopsTheCommand() async throws {
     let project = "\(w)/P"
-    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: URL(fileURLWithPath: project)) { $0 }
+    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: project) { $0 }
     let environment = try environment(answers: .object(JSONObject()))
     struct NoWayBack: Error, CustomStringConvertible { var description: String { "kein Weg zurück" } }
     let result = await PluginCommands().add(source: "github:a/b", project: project, environment: environment, snapshot: { _, _, _ in throw NoWayBack() })

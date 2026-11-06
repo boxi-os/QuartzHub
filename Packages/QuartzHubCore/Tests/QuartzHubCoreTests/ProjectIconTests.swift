@@ -7,13 +7,14 @@ import UniformTypeIdentifiers
 
 @Suite(.serialized) struct ProjectIconTests {
   let scratch: HostPathTests.Scratch
-  init() throws { scratch = try HostPathTests.Scratch() }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
-  var project: URL { scratch.url.appendingPathComponent("project") }
-  var icon: URL { ProjectIcon.iconPath(project) }
-  var dark: URL { ProjectIcon.darkIconPath(project) }
+  var project: String { "\(scratch.path)/project" }
+  // URLs only to read and write the test's own pictures.
+  var icon: URL { URL(fileURLWithPath: ProjectIcon.iconPath(project)) }
+  var dark: URL { URL(fileURLWithPath: ProjectIcon.darkIconPath(project)) }
   var marker: URL { URL(fileURLWithPath: QuartzGuiDirectory(project: project).projectIcon) }
-  var original: URL { ProjectIcon.originalPath(project) }
+  var original: URL { URL(fileURLWithPath: ProjectIcon.originalPath(project)) }
 
   /// A picture of `width` × `height` in `type`, a different colour per seed so two are not equal.
   func image(_ name: String, _ width: Int, _ height: Int, _ type: UTType = .png, seed: CGFloat = 0.2) throws -> URL {
@@ -48,7 +49,7 @@ import UniformTypeIdentifiers
   @Test func aPNGThatFitsIsCopiedAndTheOriginalKept() throws {
     let shipped = try quartzProject()
     let chosen = try image("mine.png", 256, 128)
-    let info = try ProjectIcon.set(project: project, source: chosen)
+    let info = try ProjectIcon.set(project: project, source: chosen.path)
     #expect(try Data(contentsOf: icon) == Data(contentsOf: chosen))
     #expect(try Data(contentsOf: original) == shipped)
     #expect(try markerJSON() == "{\n  \"custom\": true,\n  \"hasOriginal\": true,\n  \"customDark\": false\n}")
@@ -56,7 +57,7 @@ import UniformTypeIdentifiers
     #expect(info.thumbnail != nil && !info.unrecorded)
 
     // A second choice replaces ours and leaves the original alone.
-    try ProjectIcon.set(project: project, source: try image("second.png", 64, 64, seed: 0.6))
+    try ProjectIcon.set(project: project, source: try image("second.png", 64, 64, seed: 0.6).path)
     #expect(try Data(contentsOf: original) == shipped)
 
     // "Entfernen" restores Quartz's, byte for byte, and forgets everything.
@@ -68,15 +69,15 @@ import UniformTypeIdentifiers
   }
 
   @Test func aJPEGOrAnOversizedPictureBecomesAPNGOf512() throws {
-    let info = try ProjectIcon.set(project: project, source: try image("photo.JPG", 1200, 600, .jpeg))
+    let info = try ProjectIcon.set(project: project, source: try image("photo.JPG", 1200, 600, .jpeg).path)
     #expect(try properties(icon) == (UTType.png.identifier, 512, 256))
     #expect(info.width == 512 && info.height == 256)
     // Nothing to keep: there was no icon.png before.
     #expect(try markerJSON().contains("\"hasOriginal\": false"))
-    try ProjectIcon.set(project: project, source: try image("big.png", 300, 2000))
+    try ProjectIcon.set(project: project, source: try image("big.png", 300, 2000).path)
     #expect(try properties(icon) == (UTType.png.identifier, 77, 512))
     // A small JPEG is not scaled up, only made a PNG.
-    try ProjectIcon.set(project: project, source: try image("small.jpeg", 40, 30, .jpeg))
+    try ProjectIcon.set(project: project, source: try image("small.jpeg", 40, 30, .jpeg).path)
     #expect(try properties(icon) == (UTType.png.identifier, 40, 30))
     // No original: "Entfernen" leaves the project without icon.png, as it came.
     try ProjectIcon.clear(project: project)
@@ -91,7 +92,7 @@ import UniformTypeIdentifiers
     let destination = try #require(CGImageDestinationCreateWithURL(rotated as CFURL, UTType.jpeg.identifier as CFString, 1, nil))
     CGImageDestinationAddImageFromSource(destination, source, 0, [kCGImagePropertyOrientation: 6] as CFDictionary)
     #expect(CGImageDestinationFinalize(destination))
-    try ProjectIcon.set(project: project, source: rotated)
+    try ProjectIcon.set(project: project, source: rotated.path)
     #expect(try properties(icon) == (UTType.png.identifier, 50, 100))
   }
 
@@ -99,24 +100,24 @@ import UniformTypeIdentifiers
     let jpeg = try image("photo.jpg", 100, 100, .jpeg)
     let disguised = scratch.url.appendingPathComponent("photo.png")
     try FileManager.default.copyItem(at: jpeg, to: disguised)
-    try ProjectIcon.set(project: project, source: disguised)
+    try ProjectIcon.set(project: project, source: disguised.path)
     #expect(try properties(icon).type == UTType.png.identifier)
   }
 
   @Test func refusedFilesLeaveTheIconAlone() throws {
     let shipped = try quartzProject()
     let gif = try image("anim.gif", 10, 10, .gif)
-    #expect(throws: ProjectIcon.Failure.unsupportedFormat) { try ProjectIcon.set(project: project, source: gif) }
+    #expect(throws: ProjectIcon.Failure.unsupportedFormat) { try ProjectIcon.set(project: project, source: gif.path) }
     let svg = scratch.url.appendingPathComponent("logo.svg")
     try Data("<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'/>".utf8).write(to: svg)
-    #expect(throws: ProjectIcon.Failure.unsupportedFormat) { try ProjectIcon.set(project: project, source: svg) }
+    #expect(throws: ProjectIcon.Failure.unsupportedFormat) { try ProjectIcon.set(project: project, source: svg.path) }
     // The right name, the wrong content: an SVG and a text file.
     let fakeSVG = scratch.url.appendingPathComponent("logo.png")
     try FileManager.default.copyItem(at: svg, to: fakeSVG)
-    #expect(throws: ProjectIcon.Failure.unreadable) { try ProjectIcon.set(project: project, source: fakeSVG) }
+    #expect(throws: ProjectIcon.Failure.unreadable) { try ProjectIcon.set(project: project, source: fakeSVG.path) }
     let text = scratch.url.appendingPathComponent("notes.jpg")
     try Data("not a picture".utf8).write(to: text)
-    #expect(throws: ProjectIcon.Failure.unreadable) { try ProjectIcon.set(project: project, source: text) }
+    #expect(throws: ProjectIcon.Failure.unreadable) { try ProjectIcon.set(project: project, source: text.path) }
     #expect(try Data(contentsOf: icon) == shipped)
     #expect(!FileManager.default.fileExists(atPath: marker.path))
     #expect(!FileManager.default.fileExists(atPath: original.path))
@@ -124,9 +125,9 @@ import UniformTypeIdentifiers
 
   @Test func theDarkPictureIsAChoiceOfItsOwn() throws {
     _ = try quartzProject()
-    try ProjectIcon.setDark(project: project, source: try image("dark.png", 64, 64, seed: 0.1))
+    try ProjectIcon.setDark(project: project, source: try image("dark.png", 64, 64, seed: 0.1).path)
     #expect(try markerJSON() == "{\n  \"custom\": false,\n  \"hasOriginal\": false,\n  \"customDark\": true\n}")
-    try ProjectIcon.set(project: project, source: try image("light.png", 64, 64))
+    try ProjectIcon.set(project: project, source: try image("light.png", 64, 64).path)
     try ProjectIcon.clear(project: project)
     // Clearing the light one keeps the dark one and says so.
     #expect(FileManager.default.fileExists(atPath: dark.path))
@@ -183,16 +184,16 @@ import UniformTypeIdentifiers
 
   @Test func thumbnailsAreCachedUntilTheFileChanges() throws {
     let big = try image("big.png", 1000, 500)
-    let thumb = try #require(ProjectIcon.thumbnail(big))
+    let thumb = try #require(ProjectIcon.thumbnail(big.path))
     let source = try #require(CGImageSourceCreateWithData(thumb as CFData, nil))
     #expect(ProjectIcon.pixelSize(source)! == (128, 64))
     let before = ProjectIcon.decodes.load(ordering: .relaxed)
-    #expect(ProjectIcon.thumbnail(big) == thumb)
+    #expect(ProjectIcon.thumbnail(big.path) == thumb)
     #expect(ProjectIcon.decodes.load(ordering: .relaxed) == before, "decoded again")
     // Another picture under the same name: other size, so decoded anew.
     try FileManager.default.removeItem(at: big)
     _ = try image("big.png", 40, 40)
-    let small = try #require(ProjectIcon.thumbnail(big))
+    let small = try #require(ProjectIcon.thumbnail(big.path))
     #expect(ProjectIcon.decodes.load(ordering: .relaxed) == before + 1)
     #expect(ProjectIcon.pixelSize(CGImageSourceCreateWithData(small as CFData, nil)!)! == (40, 40), "scaled up")
   }

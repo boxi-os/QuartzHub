@@ -56,13 +56,13 @@ public enum ProjectIcon {
   /// `ad6ce0d`), measured in QuartzControl on 2026-09-24. A blob id so `git hash-object` checks it.
   static let quartzIconBlob = "b6656a7a819cf41ba6502b9eddf4e580617bbaba"
 
-  static func iconPath(_ project: URL) -> URL { project.appendingPathComponent("quartz/static/icon.png") }
-  static func darkIconPath(_ project: URL) -> URL { project.appendingPathComponent("quartz/static/icon-dark.png") }
-  static func originalPath(_ project: URL) -> URL { URL(fileURLWithPath: QuartzGuiDirectory(project: project).file("icon-original.png")) }
+  static func iconPath(_ project: String) -> String { "\(project)/quartz/static/icon.png" }
+  static func darkIconPath(_ project: String) -> String { "\(project)/quartz/static/icon-dark.png" }
+  static func originalPath(_ project: String) -> String { QuartzGuiDirectory(project: project).file("icon-original.png") }
 
   // MARK: - Reading
 
-  public static func info(project: URL) -> Info {
+  public static func info(project: String) -> Info {
     let path = iconPath(project), dark = darkIconPath(project)
     let marker = readMarker(project)
     let size = pixelSize(path)
@@ -80,7 +80,7 @@ public enum ProjectIcon {
 
   /// What the project list shows, or nil when the project shows Quartz's own icon. A picture
   /// nobody recorded counts: a template's mark is what the site shows.
-  public static func customThumbnail(project: URL) -> Data? {
+  public static func customThumbnail(project: String) -> Data? {
     let marker = readMarker(project)
     guard marker.custom || hasUnrecordedIcon(project: project) else { return nil }
     return thumbnail(iconPath(project))
@@ -88,7 +88,7 @@ public enum ProjectIcon {
 
   /// The files under `quartz/static` that are the user's picture rather than a design, each only
   /// when it was recorded as chosen. A template import leaves these alone.
-  public static func userChosenStaticFiles(project: URL) -> Set<String> {
+  public static func userChosenStaticFiles(project: String) -> Set<String> {
     let marker = readMarker(project)
     var names: Set<String> = []
     if marker.custom { names.insert("icon.png") }
@@ -97,16 +97,16 @@ public enum ProjectIcon {
   }
 
   /// An `icon-dark.png` nobody recorded choosing: in practice a template's.
-  public static func hasUnrecordedDarkIcon(project: URL) -> Bool {
+  public static func hasUnrecordedDarkIcon(project: String) -> Bool {
     exists(darkIconPath(project)) && !readMarker(project).customDark
   }
 
   /// `icon.png` is neither Quartz's nor recorded. A project cloned through Git-Sync has the
   /// user's picture and no marker (`.quartz-gui/` is ignored); this cannot tell it from a picture an
   /// earlier template brought, so it protects nothing, it only lets the import's dry run name it.
-  public static func hasUnrecordedIcon(project: URL) -> Bool {
+  public static func hasUnrecordedIcon(project: String) -> Bool {
     if readMarker(project).custom { return false }
-    guard let data = try? Data(contentsOf: iconPath(project)) else { return false }
+    guard let data = try? Posix.read(iconPath(project)) else { return false }
     return gitBlobId(data) != quartzIconBlob
   }
 
@@ -116,7 +116,7 @@ public enum ProjectIcon {
   /// project came with; after that the file being replaced is one of ours, and keeping it would
   /// overwrite the original held for "Entfernen".
   @discardableResult
-  public static func set(project: URL, source: URL) throws -> Info {
+  public static func set(project: String, source: String) throws -> Info {
     let image = try PreparedImage(source)
     let target = iconPath(project)
     let marker = readMarker(project)
@@ -124,7 +124,7 @@ public enum ProjectIcon {
     if !marker.custom {
       if exists(target) {
         try QuartzGuiDirectory(project: project).create()
-        try JSONStore.writeAtomic(Data(contentsOf: target), to: originalPath(project))
+        try JSONStore.writeAtomic(Posix.read(target), to: originalPath(project))
         hasOriginal = true
       } else {
         hasOriginal = false
@@ -137,16 +137,16 @@ public enum ProjectIcon {
 
   /// Puts back what the project had before a picture was chosen: a restore, not a delete.
   @discardableResult
-  public static func clear(project: URL) throws -> Info {
+  public static func clear(project: String) throws -> Info {
     let marker = readMarker(project)
     let target = iconPath(project), original = originalPath(project)
     if marker.hasOriginal, exists(original) {
-      try FileManager.default.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
-      try JSONStore.writeAtomic(Data(contentsOf: original), to: target)
+      try Posix.mkdirs(NodePath.dirname(target))
+      try JSONStore.writeAtomic(Posix.read(original), to: target)
     } else if exists(target) {
-      try FileManager.default.removeItem(at: target)
+      try FileManager.default.removeItem(atPath: target)
     }
-    if exists(original) { try FileManager.default.removeItem(at: original) }
+    if exists(original) { try FileManager.default.removeItem(atPath: original) }
     // The dark picture is a choice of its own and outlives the light one.
     try writeMarker(project, custom: false, hasOriginal: false, customDark: marker.customDark)
     return info(project: project)
@@ -155,7 +155,7 @@ public enum ProjectIcon {
   /// The picture for the dark scheme, normalized like the light one. Only the header image uses
   /// it; Quartz ships no file of this name, so removing it is a plain delete.
   @discardableResult
-  public static func setDark(project: URL, source: URL) throws -> Info {
+  public static func setDark(project: String, source: String) throws -> Info {
     try PreparedImage(source).store(to: darkIconPath(project))
     let marker = readMarker(project)
     try writeMarker(project, custom: marker.custom, hasOriginal: marker.hasOriginal, customDark: true)
@@ -163,9 +163,9 @@ public enum ProjectIcon {
   }
 
   @discardableResult
-  public static func clearDark(project: URL) throws -> Info {
+  public static func clearDark(project: String) throws -> Info {
     let dark = darkIconPath(project)
-    if exists(dark) { try FileManager.default.removeItem(at: dark) }
+    if exists(dark) { try FileManager.default.removeItem(atPath: dark) }
     let marker = readMarker(project)
     try writeMarker(project, custom: marker.custom, hasOriginal: marker.hasOriginal, customDark: false)
     return info(project: project)
@@ -179,7 +179,7 @@ public enum ProjectIcon {
     var customDark: Bool
   }
 
-  static func readMarker(_ project: URL) -> Marker {
+  static func readMarker(_ project: String) -> Marker {
     let value = JSONStore.read(QuartzGuiDirectory(project: project).projectIcon, orEmpty: .object)
     let view = IconMarker(object: value.objectValue ?? JSONObject())
     return Marker(custom: view.custom, hasOriginal: view.hasOriginal,
@@ -188,7 +188,7 @@ public enum ProjectIcon {
 
   /// Whole, in QuartzControl's key order; nothing left to record removes the file, so a later
   /// read does not fall back to the guess for markers from before `customDark`.
-  static func writeMarker(_ project: URL, custom: Bool, hasOriginal: Bool, customDark: Bool) throws {
+  static func writeMarker(_ project: String, custom: Bool, hasOriginal: Bool, customDark: Bool) throws {
     let dir = QuartzGuiDirectory(project: project)
     guard custom || customDark else {
       if Posix.exists(dir.projectIcon) { try FileManager.default.removeItem(atPath: dir.projectIcon) }
@@ -205,14 +205,14 @@ public enum ProjectIcon {
   /// Checked now, written later: `set` moves the original aside in between, and only for a file
   /// that is known to be stored.
   struct PreparedImage {
-    let source: URL
+    let source: String
     let imageSource: CGImageSource
     let size: (width: Int, height: Int)
     let isPNG: Bool
 
-    init(_ source: URL) throws {
-      guard ProjectIcon.acceptedExtensions.contains(source.pathExtension.lowercased()) else { throw Failure.unsupportedFormat }
-      guard let imageSource = CGImageSourceCreateWithURL(source as CFURL, nil),
+    init(_ source: String) throws {
+      guard ProjectIcon.acceptedExtensions.contains(String(NodePath.extname(source).dropFirst()).lowercased()) else { throw Failure.unsupportedFormat }
+      guard let imageSource = CGImageSourceCreateWithData((try? Posix.read(source) as CFData) ?? Data() as CFData, nil),
             CGImageSourceGetCount(imageSource) > 0,
             let size = ProjectIcon.pixelSize(imageSource),
             CGImageSourceCreateImageAtIndex(imageSource, 0, nil) != nil else { throw Failure.unreadable }
@@ -224,12 +224,12 @@ public enum ProjectIcon {
       isPNG = (CGImageSourceGetType(imageSource) as String?) == UTType.png.identifier
     }
 
-    func store(to target: URL) throws {
-      try FileManager.default.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
+    func store(to target: String) throws {
+      try Posix.mkdirs(NodePath.dirname(target))
       let fits = size.width <= ProjectIcon.maxStoredEdge && size.height <= ProjectIcon.maxStoredEdge
       // Atomic: a running dev server watches quartz/static and must not read half a file.
       if isPNG && fits {
-        try JSONStore.writeAtomic(Data(contentsOf: source), to: target)
+        try JSONStore.writeAtomic(Posix.read(source), to: target)
         return
       }
       guard let png = ProjectIcon.scaledPNG(imageSource, edge: ProjectIcon.maxStoredEdge) else { throw Failure.unreadable }
@@ -262,8 +262,8 @@ public enum ProjectIcon {
     return (width, height)
   }
 
-  static func pixelSize(_ url: URL) -> (width: Int, height: Int)? {
-    guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+  static func pixelSize(_ url: String) -> (width: Int, height: Int)? {
+    guard let source = CGImageSourceCreateWithData((try? Posix.read(url) as CFData) ?? Data() as CFData, nil),
           CGImageSourceCreateImageAtIndex(source, 0, nil) != nil else { return nil }
     return pixelSize(source)
   }
@@ -280,16 +280,16 @@ public enum ProjectIcon {
   /// How often a thumbnail was decoded, for the cache test.
   static let decodes = Atomic<Int>(0)
 
-  static func thumbnail(_ url: URL) -> Data? {
+  static func thumbnail(_ url: String) -> Data? {
     var info = stat()
-    guard stat(url.path, &info) == 0 else { return nil }
-    if let hit = cache.withLock({ $0[url.path] }), hit.mtime.tv_sec == info.st_mtimespec.tv_sec,
+    guard stat(url, &info) == 0 else { return nil }
+    if let hit = cache.withLock({ $0[url] }), hit.mtime.tv_sec == info.st_mtimespec.tv_sec,
        hit.mtime.tv_nsec == info.st_mtimespec.tv_nsec, hit.size == info.st_size {
       return hit.png
     }
-    guard let source = CGImageSourceCreateWithURL(url as CFURL, nil), let png = scaledPNG(source, edge: thumbnailEdge) else { return nil }
+    guard let source = CGImageSourceCreateWithData((try? Posix.read(url) as CFData) ?? Data() as CFData, nil), let png = scaledPNG(source, edge: thumbnailEdge) else { return nil }
     decodes.add(1, ordering: .relaxed)
-    cache.withLock { $0[url.path] = CacheEntry(mtime: info.st_mtimespec, size: info.st_size, png: png) }
+    cache.withLock { $0[url] = CacheEntry(mtime: info.st_mtimespec, size: info.st_size, png: png) }
     return png
   }
 
@@ -300,5 +300,5 @@ public enum ProjectIcon {
     return hash.finalize().map { String(format: "%02x", $0) }.joined()
   }
 
-  static func exists(_ url: URL) -> Bool { FileManager.default.fileExists(atPath: url.path) }
+  static func exists(_ path: String) -> Bool { Posix.exists(path) }
 }

@@ -1013,10 +1013,10 @@ public struct TemplatePackage: Sendable {
   func planStatic(_ payload: JSONValue, _ run: Run) throws -> PartPlan {
     let dir = Self.staticDir(run.project)
     var plan = PartPlan(id: "static")
-    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project)
+    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project.path)
     var unrecorded: Set<String> = []
-    if ProjectIcon.hasUnrecordedIcon(project: run.project) { unrecorded.insert("icon.png") }
-    if ProjectIcon.hasUnrecordedDarkIcon(project: run.project) { unrecorded.insert("icon-dark.png") }
+    if ProjectIcon.hasUnrecordedIcon(project: run.project.path) { unrecorded.insert("icon.png") }
+    if ProjectIcon.hasUnrecordedDarkIcon(project: run.project.path) { unrecorded.insert("icon-dark.png") }
     for name in try Self.names(payload["files"], "files") {
       guard let target = PackagePaths.writable(dir, name) else {
         plan.notes.append("outside:\(name)")
@@ -1039,7 +1039,7 @@ public struct TemplatePackage: Sendable {
   func applyStatic(_ payload: JSONValue, _ run: Run) throws {
     let dir = Self.staticDir(run.project)
     // The project's own picture, chosen in the app, is theirs and not a design.
-    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project)
+    let usersOwn = ProjectIcon.userChosenStaticFiles(project: run.project.path)
     for name in try Self.names(payload["files"], "files") {
       guard let data = run.files["files/static/\(name)"] else { continue }
       guard let target = PackagePaths.writable(dir, name) else {

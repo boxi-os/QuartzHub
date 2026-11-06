@@ -15,18 +15,18 @@ struct ProjectDuplicatorTests {
   }
 
   let scratch: HostPathTests.Scratch
-  var w: URL { scratch.url.appendingPathComponent("w") }
-  var log: URL { scratch.url.appendingPathComponent("calls.log") }
-  init() throws { scratch = try HostPathTests.Scratch() }
+  var w: String { "\(scratch.path)/w" }
+  var log: String { "\(scratch.path)/calls.log" }
+  init() throws { scratch = try HostPathTests.Scratch(umlaut: true) }
 
   /// git and npm as the golden script's runCommand answers them: `remote remove` fails (no origin),
   /// npm says what the case says. Each notes "command args cwd".
   func environment(npm: JSONValue) throws -> ToolEnvironment {
     let ok = npm["success"] == .bool(true)
     let output = npm["output"]?.stringValue ?? ""
-    try scratch.script("bin/git", "echo \"git $* $(pwd)\" >> '\(log.path)'\necho 'error: No such remote' >&2\nexit 2")
-    try scratch.script("bin/npm", "echo \"npm $* $(pwd)\" >> '\(log.path)'\nprintf '%s' '\(output)'\nexit \(ok ? 0 : 1)")
-    let hostPath = HostPath(entries: [scratch.url.appendingPathComponent("bin").path, "/usr/bin", "/bin"], source: .inherited, added: [])
+    try scratch.script("bin/git", "echo \"git $* $(pwd)\" >> '\(log)'\necho 'error: No such remote' >&2\nexit 2")
+    try scratch.script("bin/npm", "echo \"npm $* $(pwd)\" >> '\(log)'\nprintf '%s' '\(output)'\nexit \(ok ? 0 : 1)")
+    let hostPath = HostPath(entries: ["\(scratch.path)/bin", "/usr/bin", "/bin"], source: .inherited, added: [])
     return ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin"], hostPath: hostPath, nodeMode: .system,
                            runtime: HelperRuntime.runtime, git: nil, bundledGitFailure: nil)
   }
@@ -40,11 +40,11 @@ struct ProjectDuplicatorTests {
     let dir = Self.fixtures.appendingPathComponent(name)
     let spec = try JSJSON.parse(Data(contentsOf: dir.appendingPathComponent("case.json")))
     let expected = try JSJSON.parse(Data(contentsOf: dir.appendingPathComponent("expected.json")))
-    let fill = { (text: String) in text.replacingOccurrences(of: "@W@", with: w.path, options: .literal) }
+    let fill = { (text: String) in text.replacingOccurrences(of: "@W@", with: w, options: .literal) }
 
-    try Self.layOut(spec["source"]!, at: w.appendingPathComponent("Original"), fill)
-    try Self.layOut(spec["vault"]!, at: w.appendingPathComponent("Vault"), fill)
-    let target = URL(fileURLWithPath: fill(spec["targetPath"]!.stringValue!))
+    try Self.layOut(spec["source"]!, at: "\(w)/Original", fill)
+    try Self.layOut(spec["vault"]!, at: "\(w)/Vault", fill)
+    let target = fill(spec["targetPath"]!.stringValue!)
     if let tree = spec["target"], tree != .null { try Self.layOut(tree, at: target, fill) }
 
     let content: ProjectDuplicator.Content = switch spec["content"]?["contentStrategy"]?.stringValue {
@@ -53,17 +53,18 @@ struct ProjectDuplicatorTests {
     default: .blank
     }
     let result = await ProjectDuplicator.duplicate(
-      .init(source: w.appendingPathComponent("Original"), target: target, content: content),
+      .init(source: "\(w)/Original", target: target, content: content),
       environment: try environment(npm: spec["npm"]!))
 
     #expect(result.success == (expected["success"] == .bool(true)), "\(result.output)")
     #expect(mask(result.output) == Self.localized(expected["output"]!.stringValue!), "\(name)")
-    let calls = ((try? String(contentsOf: log, encoding: .utf8)) ?? "").split(separator: "\n").map { mask(String($0)) }
+    let calls = ((try? Posix.read(log)).map { String(decoding: $0, as: UTF8.self) } ?? "").split(separator: "\n").map { mask(String($0)) }
     #expect(.array(calls.map(JSONValue.string)) == expected["calls"], "\(name)")
     if case .array(let entries)? = expected["tree"] {
       let tree = record(target)
       #expect(tree.count == entries.count, "\(name): \(tree.count) entries, QuartzControl \(entries.count)")
-      for (mine, theirs) in zip(tree, entries.map(Self.localizedEntry)) where mine != theirs {
+      // By bytes: Swift's == takes "Ü" and "U\u{308}" for one name.
+      for (mine, theirs) in zip(tree, entries.map(Self.localizedEntry)) where Array(JSJSON.compact(mine).utf8) != Array(JSJSON.compact(theirs).utf8) {
         Issue.record("\(name): \(mine) ≠ \(theirs)")
       }
     }
@@ -89,56 +90,55 @@ struct ProjectDuplicatorTests {
   }
 
   func mask(_ text: String) -> String {
-    let real = ContentFolder.realPath(w.path) ?? w.path
-    return text.replacingOccurrences(of: real, with: "@W@", options: .literal).replacingOccurrences(of: w.path, with: "@W@", options: .literal)
+    let real = ContentFolder.realPath(w) ?? w
+    return text.replacingOccurrences(of: real, with: "@W@", options: .literal).replacingOccurrences(of: w, with: "@W@", options: .literal)
   }
 
-  static func layOut(_ tree: JSONValue, at root: URL, _ fill: (String) -> String) throws {
-    let manager = FileManager.default
-    try manager.createDirectory(at: root, withIntermediateDirectories: true)
-    var modes: [(URL, Int)] = []
+  static func layOut(_ tree: JSONValue, at root: String, _ fill: (String) -> String) throws {
+    try Posix.mkdirs(root)
+    var modes: [(String, Int)] = []
     for path in tree.objectValue?.keys ?? [] {
       let spec = tree[path]!
-      let url = root.appendingPathComponent(path)
-      try manager.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+      let file = "\(root)/\(path)"
+      try Posix.mkdirs(NodePath.dirname(file))
       if case .string(let text) = spec {
-        try Data(fill(text).utf8).write(to: url)
+        try Posix.write(file, Data(fill(text).utf8))
       } else if let link = spec["link"]?.stringValue {
-        try manager.createSymbolicLink(atPath: url.path, withDestinationPath: fill(link))
+        try Posix.symlink(fill(link), file)
       } else if let size = spec["fill"]?.numberValue {
         // A file of that many "x", for size limits (option-schema-golden.mjs fills it the same way).
-        try Data(repeating: UInt8(ascii: "x"), count: Int(size)).write(to: url)
+        try Posix.write(file, Data(repeating: UInt8(ascii: "x"), count: Int(size)))
       } else if let mode = spec["dir"]?.numberValue {
-        try manager.createDirectory(at: url, withIntermediateDirectories: true)
-        modes.append((url, Int(mode)))
+        try Posix.mkdirs(file)
+        modes.append((file, Int(mode)))
       } else {
-        try Data(fill(spec["text"]!.stringValue!).utf8).write(to: url)
-        chmod(url.path, mode_t(spec["mode"]!.numberValue!))
+        try Posix.write(file, Data(fill(spec["text"]!.stringValue!).utf8))
+        chmod(file, mode_t(spec["mode"]!.numberValue!))
       }
     }
-    for (url, mode) in modes { chmod(url.path, mode_t(mode)) }
+    for (path, mode) in modes { chmod(path, mode_t(mode)) }
   }
 
   /// The golden script's `record`: every entry below the root, sorted, links by target, folders
   /// and files with their permissions in octal, files with their text.
-  func record(_ root: URL) -> [JSONValue] {
+  func record(_ root: String) -> [JSONValue] {
     var entries: [JSONValue] = []
-    func walk(_ dir: URL, _ relative: String) {
-      for name in ((try? FileManager.default.contentsOfDirectory(atPath: dir.path)) ?? []).sorted() {
-        let url = dir.appendingPathComponent(name)
+    func walk(_ dir: String, _ relative: String) {
+      for name in ((try? FileManager.default.contentsOfDirectory(atPath: dir)) ?? []).sorted() {
+        let full = "\(dir)/\(name)"
         let path = relative.isEmpty ? name : "\(relative)/\(name)"
         var info = stat()
-        lstat(url.path, &info)
+        lstat(full, &info)
         let mode = String(info.st_mode & 0o7777, radix: 8)
         switch info.st_mode & S_IFMT {
         case S_IFLNK:
-          let target = (try? FileManager.default.destinationOfSymbolicLink(atPath: url.path)) ?? ""
+          let target = (try? Posix.readlink(full)) ?? ""
           entries.append(.object(JSONObject([("path", .string(path)), ("link", .string(mask(target)))])))
         case S_IFDIR:
           entries.append(.object(JSONObject([("path", .string(path)), ("dir", .string(mode))])))
-          walk(url, path)
+          walk(full, path)
         default:
-          let text = String(decoding: (try? Data(contentsOf: url)) ?? Data(), as: UTF8.self)
+          let text = String(decoding: (try? Posix.read(full)) ?? Data(), as: UTF8.self)
           entries.append(.object(JSONObject([("path", .string(path)), ("mode", .string(mode)), ("text", .string(mask(text)))])))
         }
       }
@@ -149,19 +149,37 @@ struct ProjectDuplicatorTests {
 
   // MARK: what the golden files cannot show
 
-  @Test func theCopyLeavesTheOriginalsRemoteBehind() async throws {
-    let original = w.appendingPathComponent("Original")
+  /// The copy's folder, the title of its blank start page and a link to a vault keep the bytes
+  /// they were given; FileManager and `lastPathComponent` decomposed all three.
+  @Test func aCopyWithUmlautsKeepsItsBytes() async throws {
+    let original = "\(w)/Original"
     try Self.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: original) { $0 }
-    let git = { (args: [String], dir: URL) in
-      await ProcessRunner.run(Command("/usr/bin/git", ["-C", dir.path] + args,
+    try Self.layOut(.object(JSONObject([("a.md", .string("x"))])), at: "\(w)/G\u{E4}rten") { $0 }
+    let environment = try environment(npm: .object(JSONObject([("success", .bool(true))])))
+    let blank = "\(w)/Kopie \u{DC}ber"
+    #expect(await ProjectDuplicator.duplicate(.init(source: original, target: blank, content: .blank), environment: environment).success)
+    #expect((Posix.entries(w) ?? []).contains { Array($0.name.utf8) == Array("Kopie \u{DC}ber".utf8) })
+    let page = String(decoding: try Posix.read("\(blank)/content/index.md"), as: UTF8.self)
+    #expect(Array(page.utf8).starts(with: Array("---\ntitle: Kopie \u{DC}ber\n".utf8)), "\(page)")
+    let linked = "\(w)/Verlinkt"
+    #expect(await ProjectDuplicator.duplicate(.init(source: original, target: linked, content: .symlink(to: "\(w)/G\u{E4}rten")),
+                                              environment: environment).success)
+    #expect(Array(try Posix.readlink("\(linked)/content").utf8) == Array("\(w)/G\u{E4}rten".utf8))
+  }
+
+  @Test func theCopyLeavesTheOriginalsRemoteBehind() async throws {
+    let original = "\(w)/Original"
+    try Self.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: original) { $0 }
+    let git = { (args: [String], dir: String) in
+      await ProcessRunner.run(Command("/usr/bin/git", ["-C", dir] + args,
                                       environment: ["PATH": "/usr/bin:/bin", "HOME": NSHomeDirectory(), "GIT_CONFIG_GLOBAL": "/dev/null"]))
     }
     #expect(await git(["init", "-q"], original).success)
     #expect(await git(["remote", "add", "origin", "https://example.org/original.git"], original).success)
     var environment = try environment(npm: .object(JSONObject([("success", .bool(true)), ("output", .string(""))])))
-    environment.hostPath = HostPath(entries: [scratch.url.appendingPathComponent("bin").path, "/usr/bin", "/bin"], source: .inherited, added: [])
-    try FileManager.default.removeItem(at: scratch.url.appendingPathComponent("bin/git"))
-    let copy = w.appendingPathComponent("Kopie")
+    environment.hostPath = HostPath(entries: ["\(scratch.path)/bin", "/usr/bin", "/bin"], source: .inherited, added: [])
+    try Posix.unlink("\(scratch.path)/bin/git")
+    let copy = "\(w)/Kopie"
     let result = await ProjectDuplicator.duplicate(.init(source: original, target: copy, content: .blank), environment: environment)
     #expect(result.success, "\(result.output)")
     #expect(await git(["remote"], copy).stdout == "")
@@ -169,7 +187,7 @@ struct ProjectDuplicatorTests {
   }
 
   @Test func aSucceededInstallClearsOnlyTheFailedFlag() async throws {
-    let original = w.appendingPathComponent("Original")
+    let original = "\(w)/Original"
     let head = String(repeating: "a", count: 40)
     let note = """
       {"installPendingFor":"\(head)","reinstall":[{"name":"quartz-forms","section":"dependencies","range":"^0.6.0","extra":1},\
@@ -178,7 +196,7 @@ struct ProjectDuplicatorTests {
       """
     try Self.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n")),
                                         (".quartz-gui/core-update.json", .string(note))])), at: original) { $0 }
-    let copy = w.appendingPathComponent("Kopie")
+    let copy = "\(w)/Kopie"
     let result = await ProjectDuplicator.duplicate(.init(source: original, target: copy, content: .blank),
                                                    environment: try environment(npm: .object(JSONObject([("success", .bool(true))]))))
     #expect(result.success)

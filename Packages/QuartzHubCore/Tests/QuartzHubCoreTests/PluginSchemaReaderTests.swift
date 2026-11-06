@@ -73,7 +73,7 @@ struct PluginSchemaReaderTests {
     let spec = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("handmade/case.json")))
     #expect((spec["options"]?.arrayValue?.count ?? 0) >= 40, "scripts/option-schema-golden.mjs")
     let project = scratch.url.appendingPathComponent("P")
-    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project) { $0 }
+    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project.path) { $0 }
     try await check(project: project, spec: spec)
   }
 
@@ -89,7 +89,7 @@ struct PluginSchemaReaderTests {
   @Test func theCheckSaysWhatQuartzControlsSays() async throws {
     let spec = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("handmade/case.json")))
     let project = scratch.url.appendingPathComponent("P")
-    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project) { $0 }
+    try ProjectDuplicatorTests.layOut(spec["tree"]!, at: project.path) { $0 }
     let expected = try String(contentsOf: Self.fixtures.appendingPathComponent("handmade/check.txt"), encoding: .utf8)
     let report = try await OptionSchemaCheck.run(project: project.path, runtime: HelperRuntime.runtime)
     #expect(report.text.replacingOccurrences(of: project.path, with: "@P@", options: .literal) == expected)

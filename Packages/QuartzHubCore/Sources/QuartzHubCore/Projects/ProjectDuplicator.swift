@@ -48,11 +48,11 @@ public enum ProjectDuplicator {
   }
 
   public struct Options: Sendable, Equatable {
-    public var source: URL
-    public var target: URL
+    public var source: String
+    public var target: String
     public var content: Content
 
-    public init(source: URL, target: URL, content: Content) {
+    public init(source: String, target: String, content: Content) {
       self.source = source
       self.target = target
       self.content = content
@@ -64,30 +64,30 @@ public enum ProjectDuplicator {
     environment: ToolEnvironment,
     installDeadline: Duration = ProjectCreator.Deadlines().install
   ) async -> ProjectCreator.Result {
-    let source = URL(fileURLWithPath: FramePaths.resolve(options.source.path), isDirectory: true)
-    let target = URL(fileURLWithPath: FramePaths.resolve(options.target.path), isDirectory: true)
+    let source = FramePaths.resolve(options.source)
+    let target = FramePaths.resolve(options.target)
     let manager = FileManager.default
     func refuse(_ sentence: String) -> ProjectCreator.Result {
       ProjectCreator.Result(success: false, output: sentence)
     }
 
-    guard manager.fileExists(atPath: ConfigFile.path(project: source).path) else {
-      return refuse(L10n.t("main.duplicateSourceNotAProject", ["path": source.path]))
+    guard manager.fileExists(atPath: ConfigFile.path(project: source)) else {
+      return refuse(L10n.t("main.duplicateSourceNotAProject", ["path": source]))
     }
     // Asked before the copy: read after it, a config the app will not read left a half copy behind
     // carrying the original's remote (QuartzControl's twenty-first review, finding 6).
     do {
       _ = try await ConfigFile.read(project: source, runtime: environment.runtime)
     } catch {
-      return refuse(L10n.t("main.duplicateSourceConfigUnreadable", ["path": source.path, "reason": message(of: error)]))
+      return refuse(L10n.t("main.duplicateSourceConfigUnreadable", ["path": source, "reason": message(of: error)]))
     }
     // A file at the target counts as taken too; QuartzControl's readdir threw on it.
     var isDirectory: ObjCBool = false
-    if manager.fileExists(atPath: target.path, isDirectory: &isDirectory),
-       !isDirectory.boolValue || !((try? manager.contentsOfDirectory(atPath: target.path)) ?? []).isEmpty {
-      return refuse(L10n.t("main.createTargetExists", ["path": target.path]))
+    if manager.fileExists(atPath: target, isDirectory: &isDirectory),
+       !isDirectory.boolValue || !((try? manager.contentsOfDirectory(atPath: target)) ?? []).isEmpty {
+      return refuse(L10n.t("main.createTargetExists", ["path": target]))
     }
-    if contains(source.path, target.path) || contains(target.path, source.path) {
+    if contains(source, target) || contains(target, source) {
       return refuse(L10n.t("main.duplicateNested"))
     }
     switch options.content {
@@ -97,14 +97,15 @@ public enum ProjectDuplicator {
       if resolved.isEmpty || !manager.fileExists(atPath: resolved) {
         return refuse(L10n.t("main.contentSourceMissing", ["path": from]))
       }
-      if contains(resolved, target.path) {
-        return refuse(L10n.t("main.contentTargetInsideSource", ["target": target.path]))
+      if contains(resolved, target) {
+        return refuse(L10n.t("main.contentTargetInsideSource", ["target": target]))
       }
     }
 
     do {
-      try manager.createDirectory(at: target, withIntermediateDirectories: true)
-      try TreeCopy.copy(from: source.path, to: target.path, verbatimSymlinks: true) { relative in
+      // POSIX, not FileManager: that made "Gärten Kopie" decomposed on disk.
+      try Posix.mkdirs(target)
+      try TreeCopy.copy(from: source, to: target, verbatimSymlinks: true) { relative in
         relative.isEmpty || (!skip.contains(relative) && !skipPrefixes.contains { relative.hasPrefix($0) })
       }
       try await ProjectPaths.repointProjectPaths(from: source, to: target, runtime: environment.runtime)
@@ -115,19 +116,18 @@ public enum ProjectDuplicator {
                                                       timeout: ProjectCreator.Deadlines().local))
 
       let content = ContentFolder.path(project: target)
-      if (try? manager.destinationOfSymbolicLink(atPath: content.path)) != nil || manager.fileExists(atPath: content.path) {
-        try manager.removeItem(at: content)
-      }
+      if Posix.kind(content) != nil { try manager.removeItem(atPath: content) }
       switch options.content {
       case .symlink(let to):
-        try manager.createSymbolicLink(atPath: content.path, withDestinationPath: FramePaths.resolve(absolute(to)))
+        try Posix.symlink(FramePaths.resolve(absolute(to)), content)
       case .copy(let from):
-        try manager.createDirectory(at: content, withIntermediateDirectories: true)
-        try TreeCopy.copy(from: FramePaths.resolve(absolute(from)), to: content.path, verbatimSymlinks: false)
+        try Posix.mkdirs(content)
+        try TreeCopy.copy(from: FramePaths.resolve(absolute(from)), to: content, verbatimSymlinks: false)
       case .blank:
-        try manager.createDirectory(at: content, withIntermediateDirectories: true)
-        let page = "---\ntitle: \(target.lastPathComponent)\n---\n\n\(L10n.t("main.duplicateBlankContent"))\n"
-        try Data(page.utf8).write(to: content.appendingPathComponent("index.md"))
+        try Posix.mkdirs(content)
+        // The folder's name as given: `lastPathComponent` decomposed the title.
+        let page = "---\ntitle: \(NodePath.basename(target))\n---\n\n\(L10n.t("main.duplicateBlankContent"))\n"
+        try Posix.write("\(content)/index.md", Data(page.utf8))
       }
     } catch {
       return ProjectCreator.Result(success: false, output: message(of: error))
