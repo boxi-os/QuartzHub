@@ -162,17 +162,42 @@ public struct PendingInstall: JSONView {
     public let range: String
   }
 
-  public var reinstall: [Package] {
-    (object["reinstall"]?.arrayValue ?? []).compactMap { entry in
-      guard let name = Self.safe(entry["name"]), let range = Self.safe(entry["range"]),
-            let section = entry["section"]?.stringValue, Self.sections.contains(section) else { return nil }
-      return Package(name: name, section: section, range: range)
-    }
+  public var reinstall: [Package] { reinstallEntries.compactMap(Self.package) }
+
+  /// The entries of `reinstall` that pass, as they are in the file: QuartzControl filters the raw
+  /// objects and writes those back, extra keys and all.
+  var reinstallEntries: [JSONValue] {
+    (object["reinstall"]?.arrayValue ?? []).filter { Self.package($0) != nil }
+  }
+
+  private static func package(_ entry: JSONValue) -> Package? {
+    guard let name = safe(entry["name"]), let range = safe(entry["range"]),
+          let section = entry["section"]?.stringValue, sections.contains(section) else { return nil }
+    return Package(name: name, section: section, range: range)
   }
 
   public var filesAtHead: Bool { isTrue("filesAtHead") }
   public var installFailed: Bool { isTrue("installFailed") }
   public var putBack: [String] { (object["putBack"]?.arrayValue ?? []).compactMap(Self.safe) }
+
+  /// `noteInstallSucceeded`: an `npm install` over the whole project went through outside a core
+  /// update (the one caller is duplicating). The copy inherits the note with its commit, and with
+  /// `installFailed` it said "npm install failed" a second after its own install had not
+  /// (QuartzControl's twenty-sixth review, finding 5). Only that field changes; the rest is
+  /// written the way `markInstallPending` writes it. Nil when there is nothing to change.
+  public func afterInstallSucceeded() -> PendingInstall? {
+    guard !head.isEmpty, installFailed else { return nil }
+    let names = Set(reinstall.map(\.name))
+    var seen = Set<String>()
+    let putBack = putBack.filter { seen.insert($0).inserted && names.contains($0) }
+    return PendingInstall(object: JSONObject([
+      ("installPendingFor", .string(head)),
+      ("reinstall", .array(reinstallEntries)),
+      ("filesAtHead", .bool(filesAtHead)),
+      ("installFailed", .bool(false)),
+      ("putBack", .array(putBack.map(JSONValue.string)))
+    ]))
+  }
 }
 
 /// `snapshot-settings.json`. Not a jsonStore file: QuartzControl reads it with a bare JSON.parse

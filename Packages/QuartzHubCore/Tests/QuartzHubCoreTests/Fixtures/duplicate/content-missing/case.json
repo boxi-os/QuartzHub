@@ -1,0 +1,69 @@
+{
+  "source": {
+    "quartz.config.yaml": "configuration:\n  pageTitle: Original\nplugins:\n  - source: @W@/Original/.quartz-gui/authored-frames/frame-a\n    enabled: true\n  - source: /Users/else/plugin\n    enabled: true\n",
+    "quartz.lock.json": "{\n  \"plugins\": {\n    \"frame-a\": {\n      \"source\": \"@W@/Original/.quartz-gui/authored-frames/frame-a\"\n    }\n  }\n}\n",
+    "package.json": "{ \"name\": \"quartz\" }\n",
+    "quartz/styles/custom.scss": "// eigene Stile\n",
+    "bin/run.sh": {
+      "text": "#!/bin/sh\necho hi\n",
+      "mode": 493
+    },
+    "secret.txt": {
+      "text": "nur ich\n",
+      "mode": 384
+    },
+    "private": {
+      "dir": 448
+    },
+    "private/note.md": "privat\n",
+    "docs-link": {
+      "link": "quartz/styles"
+    },
+    "sub/node_modules/kept.js": "only the top-level node_modules is skipped\n",
+    "node_modules/x/index.js": "skipped\n",
+    "public/index.html": "skipped\n",
+    "content/a.md": "skipped\n",
+    ".quartz/plugins/frame-a": {
+      "link": "@W@/Original/.quartz-gui/authored-frames/frame-a"
+    },
+    ".quartz/plugins/rel": {
+      "link": "../../quartz"
+    },
+    ".quartz-gui/authored-frames/frame-a/index.ts": "export default {}\n",
+    ".quartz-gui/theme-presets.json": "[]",
+    ".quartz-gui/layout-breakpoints.json": "{}",
+    ".quartz-gui/core-update.json": "{}",
+    ".quartz-gui/deploy-manifestold.json": "{}",
+    ".quartz-gui/snapshots.git/HEAD": "skipped\n",
+    ".quartz-gui/content-backups/x/a.md": "skipped\n",
+    ".quartz-gui/publish-targets.json": "[]",
+    ".quartz-gui/deploy-manifest.json": "{}",
+    ".quartz-gui/deploy-manifest-abc.json": "{}",
+    ".quartz-gui/branch-worktree-abc/.git": "gitdir: elsewhere\n",
+    ".quartz-gui/project-prefs.json": "{ \"outputDir\": \"/Users/else/site\" }",
+    ".quartz-gui/logs/serve.log": "skipped\n",
+    ".quartz-gui/staging/x": "skipped\n",
+    ".quartz-gui/forms-relay.json": "{}"
+  },
+  "vault": {
+    "a.md": "# A\n",
+    ".obsidian/app.json": "{}",
+    "again.md": {
+      "link": "a.md"
+    },
+    "notes": {
+      "dir": 493
+    },
+    "notes/b.md": "# B\n"
+  },
+  "target": null,
+  "targetPath": "@W@/Kopie",
+  "content": {
+    "contentStrategy": "copy",
+    "contentSource": "@W@/Nirgends"
+  },
+  "npm": {
+    "success": true,
+    "output": "added 1 package"
+  }
+}

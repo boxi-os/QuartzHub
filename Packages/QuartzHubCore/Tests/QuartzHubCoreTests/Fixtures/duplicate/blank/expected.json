@@ -1,0 +1,140 @@
+{
+  "success": true,
+  "output": "added 1 package",
+  "calls": [
+    "git remote remove origin @W@/Kopie",
+    "npm install @W@/Kopie"
+  ],
+  "tree": [
+    {
+      "path": ".quartz",
+      "dir": "755"
+    },
+    {
+      "path": ".quartz/plugins",
+      "dir": "755"
+    },
+    {
+      "path": ".quartz/plugins/frame-a",
+      "link": "@W@/Kopie/.quartz-gui/authored-frames/frame-a"
+    },
+    {
+      "path": ".quartz/plugins/rel",
+      "link": "../../quartz"
+    },
+    {
+      "path": ".quartz-gui",
+      "dir": "755"
+    },
+    {
+      "path": ".quartz-gui/authored-frames",
+      "dir": "755"
+    },
+    {
+      "path": ".quartz-gui/authored-frames/frame-a",
+      "dir": "755"
+    },
+    {
+      "path": ".quartz-gui/authored-frames/frame-a/index.ts",
+      "mode": "644",
+      "text": "export default {}\n"
+    },
+    {
+      "path": ".quartz-gui/core-update.json",
+      "mode": "644",
+      "text": "{}"
+    },
+    {
+      "path": ".quartz-gui/deploy-manifestold.json",
+      "mode": "644",
+      "text": "{}"
+    },
+    {
+      "path": ".quartz-gui/layout-breakpoints.json",
+      "mode": "644",
+      "text": "{}"
+    },
+    {
+      "path": ".quartz-gui/theme-presets.json",
+      "mode": "644",
+      "text": "[]"
+    },
+    {
+      "path": "bin",
+      "dir": "755"
+    },
+    {
+      "path": "bin/run.sh",
+      "mode": "755",
+      "text": "#!/bin/sh\necho hi\n"
+    },
+    {
+      "path": "content",
+      "dir": "755"
+    },
+    {
+      "path": "content/index.md",
+      "mode": "644",
+      "text": "---\ntitle: Kopie\n---\n\n{\"key\":\"duplicateBlankContent\",\"args\":{}}\n"
+    },
+    {
+      "path": "docs-link",
+      "link": "quartz/styles"
+    },
+    {
+      "path": "package.json",
+      "mode": "644",
+      "text": "{ \"name\": \"quartz\" }\n"
+    },
+    {
+      "path": "private",
+      "dir": "700"
+    },
+    {
+      "path": "private/note.md",
+      "mode": "644",
+      "text": "privat\n"
+    },
+    {
+      "path": "quartz",
+      "dir": "755"
+    },
+    {
+      "path": "quartz/styles",
+      "dir": "755"
+    },
+    {
+      "path": "quartz/styles/custom.scss",
+      "mode": "644",
+      "text": "// eigene Stile\n"
+    },
+    {
+      "path": "quartz.config.yaml",
+      "mode": "644",
+      "text": "configuration:\n  pageTitle: Original\nplugins:\n  - source: @W@/Kopie/.quartz-gui/authored-frames/frame-a\n    enabled: true\n  - source: /Users/else/plugin\n    enabled: true\n"
+    },
+    {
+      "path": "quartz.lock.json",
+      "mode": "644",
+      "text": "{\n  \"plugins\": {\n    \"frame-a\": {\n      \"source\": \"@W@/Kopie/.quartz-gui/authored-frames/frame-a\"\n    }\n  }\n}\n"
+    },
+    {
+      "path": "secret.txt",
+      "mode": "600",
+      "text": "nur ich\n"
+    },
+    {
+      "path": "sub",
+      "dir": "755"
+    },
+    {
+      "path": "sub/node_modules",
+      "dir": "755"
+    },
+    {
+      "path": "sub/node_modules/kept.js",
+      "mode": "644",
+      "text": "only the top-level node_modules is skipped\n"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "source": {
+    "package.json": "{}"
+  },
+  "vault": {
+    "a.md": "# A\n",
+    ".obsidian/app.json": "{}",
+    "again.md": {
+      "link": "a.md"
+    },
+    "notes": {
+      "dir": 493
+    },
+    "notes/b.md": "# B\n"
+  },
+  "target": null,
+  "targetPath": "@W@/Kopie",
+  "content": {
+    "contentStrategy": "blank"
+  },
+  "npm": {
+    "success": true,
+    "output": "added 1 package"
+  }
+}

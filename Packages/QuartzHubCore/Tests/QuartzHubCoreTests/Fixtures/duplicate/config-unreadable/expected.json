@@ -1,0 +1,6 @@
+{
+  "success": false,
+  "output": "{\"key\":\"duplicateSourceConfigUnreadable\",\"args\":{\"path\":\"@W@/Original\",\"reason\":\"{\\\"key\\\":\\\"configNotAMapping\\\",\\\"args\\\":{}}\"}}",
+  "calls": [],
+  "tree": null
+}

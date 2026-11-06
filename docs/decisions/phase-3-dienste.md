@@ -323,3 +323,33 @@ in `quartz.lock.json` (im Format der CLI mit Zeilenende am Schluss) und die Link
   drankommen.
 - Gegenproben: `..x` als innen, Links gegen den Projektordner statt ihren eigenen, das Lockfile
   ohne Zeilenende, die Liste im Lockfile übergangen: jede lässt einen Fall scheitern.
+
+### Duplizieren (`duplicateService.ts` → `ProjectDuplicator`, `TreeCopy`)
+
+Dieselben Schritte und Sätze wie in QuartzControl: Quelle prüfen (Config da und lesbar, vor dem
+Kopieren), Ziel leer, keine Verschachtelung in beide Richtungen, Inhaltsquelle da und das Ziel nicht
+darin; dann kopieren ohne die `SKIP`-Liste, `ProjectPaths.repointProjectPaths`, `git remote remove
+origin`, Content leer (eine `index.md`), kopiert oder verlinkt, `npm install`, und der
+Core-Update-Vermerk verliert sein `installFailed` (`PendingInstall.afterInstallSucceeded`, in der
+Form von `markInstallPending`).
+
+- **Gemessen gegen QuartzControls Code.** `scripts/duplicate-golden.mjs` lädt `duplicateService.ts`
+  (Attrappen: `runCommand` notiert und antwortet, `contentDirPath`, `readLockfile`,
+  `noteInstallSucceeded`) und dupliziert ein Original mit jedem Eintrag der `SKIP`-Liste, Links,
+  Rechten 0755/0600/0700, einem `node_modules` tiefer im Baum, dazu einen Vault mit Link. Zehn Fälle,
+  davon sieben Ablehnungen und ein gescheitertes `npm install`. `ProjectDuplicatorTests` kommt in
+  allen zehn auf denselben Baum (Eintrag für Eintrag mit Rechten, Link-Zielen, Inhalten), dieselben
+  Aufrufe und dieselbe Antwort.
+- `TreeCopy` ist `fs.cp` mit `filter` und `verbatimSymlinks`, so weit es hier zählt: Ein Link bleibt
+  ein Link; ohne `verbatimSymlinks` (Inhalt kopieren) wird ein relatives Ziel absolut, wie in Node.
+  Ein Ordner, den die Kopie anlegt, bekommt die Rechte des Originals. **Anders:** Dateien werden mit
+  `COPYFILE_CLONE` geklont (APFS: kein Platz, keine Zeit) und behalten ihre Zeiten; Node schrieb
+  neue.
+- **Anders, mit Grund:** Liegt am Ziel eine Datei, heißt es „liegen bereits Dateien“; in
+  QuartzControl warf `readdir` ENOTDIR. `npm install` hat die Frist aus `ProjectCreator` (20 min),
+  `git remote remove` 30 s. Ein Fehler beim Kopieren ist eine Antwort mit Satz statt einer Ausnahme.
+- Übernommen, wie es ist: Der Titel der leeren `index.md` steht ohne Anführungszeichen im
+  Frontmatter (ein Ordnername mit „: “ ergäbe kaputtes YAML); `contentTargetInsideSource` nennt den
+  Projektordner, obwohl der Satz vom Content-Ordner spricht. Beides notiert, nicht behoben.
+- Gegenproben: `project-prefs.json` mitkopiert, Projekt-Links nicht wörtlich, Inhalts-Links
+  wörtlich, ohne Rechte, ohne `repointProjectPaths`, ohne Vermerk: jede lässt einen Test scheitern.
