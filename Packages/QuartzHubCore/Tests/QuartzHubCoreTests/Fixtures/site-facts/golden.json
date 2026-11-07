@@ -1,0 +1,6382 @@
+{
+ "sites": {
+  "plain": {
+   "static/contentIndex.json": "{\"2\":{\"title\":\"Zwei\"},\"10\":{\"title\":\"Zehn\"},\"index\":{\"title\":\"Start\",\"filePath\":\"index.md\",\"tags\":[\"a\",5,\"b\"],\"links\":[\"a/\",\"b\",7]},\"a/index\":{\"title\":\"Ordner A\",\"filePath\":\"a/index.md\"},\"a/x\":{\"title\":\"X\",\"filePath\":\"A Ordner/x.md\",\"tags\":\"nein\"},\"a/y\":{\"title\":7,\"filePath\":3,\"links\":\"b\"},\"b\":{\"title\":\"B\"},\"tags/foo\":{\"title\":\"Tag foo\"},\"tags\":{\"title\":\"Tags\"},\"ghost\":{\"title\":\"Ohne HTML\"},\"Gärten/über uns\":{\"title\":\"Über uns\"},\"z/tags\":{\"title\":\"Tags-Seite\"},\"c\":null,\"d\":\"text\"}",
+   "index.html": "<html>index</html>",
+   "a/index.html": "<html>a/index</html>",
+   "a/x.html": "<html>a/x</html>",
+   "a/y.html": "<html>a/y</html>",
+   "b.html": "<html>b</html>",
+   "tags/foo.html": "<html>tags/foo</html>",
+   "tags.html": "<html>tags</html>",
+   "Gärten/über uns.html": "<html>Gärten/über uns</html>",
+   "2.html": "<html>2</html>",
+   "10.html": "<html>10</html>",
+   "z/tags.html": "<html>z/tags</html>",
+   "c.html": "<html>c</html>",
+   "d.html": "<html>d</html>"
+  },
+  "languages": {
+   "static/contentIndex.json": "{\"index\":{\"title\":\"Start\"},\"neu\":{\"title\":\"Neu\"},\"en/index\":{\"title\":\"Home\"},\"en/new\":{\"title\":\"New\"},\"fr/index\":{\"title\":\"Accueil\"},\"fr/x\":{\"title\":\"X\"},\"lost\":{\"title\":\"Ohne Sprache\"}}",
+   "static/multilanguage.json": "{\"defaultLanguage\":\"de\",\"languages\":[{\"code\":\"de\",\"home\":\"index\",\"native\":\"Deutsch\",\"label\":\"German\",\"locale\":\"de-DE\"},{\"code\":\"en\",\"home\":\"en/index\",\"label\":\"English\"},{\"code\":\"fr\",\"home\":7},{\"home\":\"x/index\"},{\"code\":5}],\"pages\":{\"index\":{\"lang\":\"de\"},\"neu\":{\"lang\":\"de\"},\"en/index\":{\"lang\":\"en\"},\"en/new\":{\"lang\":\"en\"},\"fr/index\":{\"lang\":\"fr\"},\"fr/x\":{\"lang\":3},\"gone\":{\"lang\":\"en\"}}}",
+   "index.html": "<html>index</html>",
+   "neu.html": "<html>neu</html>",
+   "en/index.html": "<html>en/index</html>",
+   "en/new.html": "<html>en/new</html>",
+   "fr/index.html": "<html>fr/index</html>",
+   "fr/x.html": "<html>fr/x</html>",
+   "lost.html": "<html>lost</html>"
+  },
+  "noDefault": {
+   "static/contentIndex.json": "{\"index\":{\"title\":\"Start\"},\"en/index\":{\"title\":\"Home\"}}",
+   "static/multilanguage.json": "{\"languages\":[{\"code\":\"en\",\"home\":\"en/index\"},{\"code\":\"de\"}],\"pages\":{\"en/index\":{\"lang\":\"en\"}}}",
+   "index.html": "<html>index</html>",
+   "en/index.html": "<html>en/index</html>"
+  },
+  "emptyLanguages": {
+   "static/contentIndex.json": "{\"index\":{\"title\":\"Start\"}}",
+   "static/multilanguage.json": "{\"defaultLanguage\":\"de\",\"languages\":[]}",
+   "index.html": "<html>index</html>"
+  },
+  "brokenLanguages": {
+   "static/contentIndex.json": "{\"index\":{\"title\":\"Start\"}}",
+   "static/multilanguage.json": "{\"languages\":",
+   "index.html": "<html>index</html>"
+  },
+  "languagesNotList": {
+   "static/contentIndex.json": "{\"index\":{\"title\":\"Start\"}}",
+   "static/multilanguage.json": "{\"languages\":{\"de\":1},\"defaultLanguage\":5}",
+   "index.html": "<html>index</html>"
+  },
+  "pagesNotObject": {
+   "static/contentIndex.json": "{\"index\":{\"title\":\"Start\"}}",
+   "static/multilanguage.json": "{\"defaultLanguage\":\"en\",\"languages\":[{\"code\":\"en\"}],\"pages\":[{\"lang\":\"x\"}]}",
+   "index.html": "<html>index</html>"
+  },
+  "nullLanguage": {
+   "static/contentIndex.json": "{\"index\":{\"title\":\"Start\"},\"en/index\":{\"title\":\"Home\"}}",
+   "static/multilanguage.json": "{\"defaultLanguage\":\"en\",\"languages\":[{\"code\":\"en\",\"home\":\"en/index\"},null],\"pages\":{\"en/index\":{\"lang\":\"en\"}}}",
+   "index.html": "<html>index</html>",
+   "en/index.html": "<html>en/index</html>"
+  },
+  "noIndex": {
+   "index.html": "<html></html>"
+  },
+  "brokenIndex": {
+   "static/contentIndex.json": "{\"index\":",
+   "index.html": "<html>index</html>"
+  },
+  "arrayIndex": {
+   "static/contentIndex.json": "[]",
+   "index.html": "<html>index</html>"
+  },
+  "nullIndex": {
+   "static/contentIndex.json": "null",
+   "index.html": "<html>index</html>"
+  },
+  "numberIndex": {
+   "static/contentIndex.json": "4",
+   "index.html": "<html>index</html>"
+  },
+  "folderIndex": {
+   "static/contentIndex.json/x": "",
+   "index.html": "<html>index</html>"
+  },
+  "emptySite": {
+   "static/contentIndex.json": "{}"
+  }
+ },
+ "facts": [
+  {
+   "site": "plain",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "2",
+       {
+        "title": "Zwei",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "10",
+       {
+        "title": "Zehn",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "index",
+       {
+        "title": "Start",
+        "filePath": "index.md",
+        "tags": [
+         "a",
+         "b"
+        ],
+        "links": [
+         "a/",
+         "b"
+        ]
+       }
+      ],
+      [
+       "a/index",
+       {
+        "title": "Ordner A",
+        "filePath": "a/index.md",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "a/x",
+       {
+        "title": "X",
+        "filePath": "A Ordner/x.md",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "a/y",
+       {
+        "title": "a/y",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "b",
+       {
+        "title": "B",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "Gärten/über uns",
+       {
+        "title": "Über uns",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "z/tags",
+       {
+        "title": "Tags-Seite",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "c",
+       {
+        "title": "c",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "d",
+       {
+        "title": "d",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [],
+     "defaultLanguage": "",
+     "langOf": []
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "2",
+      "10",
+      "index",
+      "a/index",
+      "a/x",
+      "a/y",
+      "b",
+      "Gärten/über uns",
+      "z/tags",
+      "c",
+      "d"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": [
+      "2",
+      "10",
+      "index",
+      "a/index",
+      "a/x",
+      "a/y",
+      "b",
+      "Gärten/über uns",
+      "z/tags",
+      "c",
+      "d"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "2",
+      "10",
+      "index",
+      "a/index",
+      "a/x",
+      "a/y",
+      "b",
+      "Gärten/über uns",
+      "z/tags",
+      "c",
+      "d"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": [
+      "2",
+      "10",
+      "index",
+      "a/index",
+      "a/x",
+      "a/y",
+      "b",
+      "Gärten/über uns",
+      "z/tags",
+      "c",
+      "d"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": [
+      "2",
+      "10",
+      "index",
+      "a/index",
+      "a/x",
+      "a/y",
+      "b",
+      "Gärten/über uns",
+      "z/tags",
+      "c",
+      "d"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "languages",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "index",
+       {
+        "title": "Start",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "neu",
+       {
+        "title": "Neu",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "en/index",
+       {
+        "title": "Home",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "en/new",
+       {
+        "title": "New",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "fr/index",
+       {
+        "title": "Accueil",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "fr/x",
+       {
+        "title": "X",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "lost",
+       {
+        "title": "Ohne Sprache",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [
+      {
+       "code": "de",
+       "home": "index",
+       "locale": "de-DE",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "home": "en/index",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "home": "index",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "langOf": [
+      [
+       "index",
+       "de"
+      ],
+      [
+       "neu",
+       "de"
+      ],
+      [
+       "en/index",
+       "en"
+      ],
+      [
+       "en/new",
+       "en"
+      ],
+      [
+       "fr/index",
+       "fr"
+      ],
+      [
+       "gone",
+       "en"
+      ]
+     ]
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "index",
+      "neu",
+      "fr/x",
+      "lost"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": [
+      "index",
+      "neu",
+      "fr/x",
+      "lost"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "en/index",
+      "en/new"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "en/index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": "en"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": [
+      "fr/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "noDefault",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "index",
+       {
+        "title": "Start",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "en/index",
+       {
+        "title": "Home",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [
+      {
+       "code": "en",
+       "home": "en/index",
+       "label": "en"
+      },
+      {
+       "code": "de",
+       "home": "index",
+       "label": "de"
+      }
+     ],
+     "defaultLanguage": "en",
+     "langOf": [
+      [
+       "en/index",
+       "en"
+      ]
+     ]
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "index",
+      "en/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "en/index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": "en"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "index",
+      "en/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "en/index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": "en"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "emptyLanguages",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "index",
+       {
+        "title": "Start",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [],
+     "defaultLanguage": "de",
+     "langOf": []
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "brokenLanguages",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "index",
+       {
+        "title": "Start",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [],
+     "defaultLanguage": "",
+     "langOf": []
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "languagesNotList",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "index",
+       {
+        "title": "Start",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [],
+     "defaultLanguage": "",
+     "langOf": []
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "pagesNotObject",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "index",
+       {
+        "title": "Start",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [
+      {
+       "code": "en",
+       "home": "index",
+       "label": "en"
+      }
+     ],
+     "defaultLanguage": "en",
+     "langOf": [
+      [
+       "0",
+       "x"
+      ]
+     ]
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "nullLanguage",
+   "result": {
+    "ok": {
+     "pages": [
+      [
+       "index",
+       {
+        "title": "Start",
+        "tags": [],
+        "links": []
+       }
+      ],
+      [
+       "en/index",
+       {
+        "title": "Home",
+        "tags": [],
+        "links": []
+       }
+      ]
+     ],
+     "languages": [],
+     "defaultLanguage": "",
+     "langOf": []
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": [
+      "index",
+      "en/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": [
+      "index",
+      "en/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": [
+      "index",
+      "en/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": [
+      "index",
+      "en/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": [
+      "index",
+      "en/index"
+     ]
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  },
+  {
+   "site": "noIndex",
+   "result": {
+    "error": "{\"key\":\"exportNoContentIndex\",\"args\":{}}"
+   },
+   "calls": []
+  },
+  {
+   "site": "brokenIndex",
+   "result": {
+    "error": "{\"key\":\"exportBrokenContentIndex\",\"args\":{\"reason\":\"Unexpected end of JSON input\"}}"
+   },
+   "calls": []
+  },
+  {
+   "site": "arrayIndex",
+   "result": {
+    "error": "{\"key\":\"exportBrokenContentIndex\",\"args\":{\"reason\":\"not an object\"}}"
+   },
+   "calls": []
+  },
+  {
+   "site": "nullIndex",
+   "result": {
+    "error": "{\"key\":\"exportBrokenContentIndex\",\"args\":{\"reason\":\"not an object\"}}"
+   },
+   "calls": []
+  },
+  {
+   "site": "numberIndex",
+   "result": {
+    "error": "{\"key\":\"exportBrokenContentIndex\",\"args\":{\"reason\":\"not an object\"}}"
+   },
+   "calls": []
+  },
+  {
+   "site": "folderIndex",
+   "result": {
+    "error": "{\"key\":\"exportBrokenContentIndex\",\"args\":{\"reason\":\"Error: EISDIR: illegal operation on a directory, read\"}}"
+   },
+   "calls": []
+  },
+  {
+   "site": "emptySite",
+   "result": {
+    "ok": {
+     "pages": [],
+     "languages": [],
+     "defaultLanguage": "",
+     "langOf": []
+    }
+   },
+   "calls": [
+    {
+     "fn": "pagesInLanguage",
+     "language": "",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "de",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "de",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "de",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "en",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "en",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "en",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "fr",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "fr",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "fr",
+     "root": "en",
+     "result": "en"
+    },
+    {
+     "fn": "pagesInLanguage",
+     "language": "xx",
+     "result": []
+    },
+    {
+     "fn": "languageHome",
+     "language": "xx",
+     "result": "index"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "",
+     "result": ""
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "a",
+     "result": "a"
+    },
+    {
+     "fn": "effectiveRoot",
+     "language": "xx",
+     "root": "en",
+     "result": "en"
+    }
+   ]
+  }
+ ],
+ "orders": [
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [
+      "a/index",
+      "a/x",
+      "b",
+      "Gärten/über uns",
+      "a/y",
+      "index",
+      "10",
+      "2"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [
+      "a/index",
+      "a/x",
+      "b",
+      "Gärten/über uns",
+      "a/y",
+      "index",
+      "10",
+      "2"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "slugs": [
+      "b",
+      "a/index"
+     ],
+     "complete": false
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "slugs": [
+      "b",
+      "a/index"
+     ],
+     "complete": false
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "slugs": [
+      "index",
+      "Gärten/über uns",
+      "a/index",
+      "a/y",
+      "a/x",
+      "z/tags",
+      "b",
+      "c",
+      "d",
+      "10",
+      "2"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "slugs": [
+      "index",
+      "Gärten/über uns",
+      "a/index",
+      "a/y",
+      "a/x",
+      "z/tags",
+      "b",
+      "c",
+      "d",
+      "10",
+      "2"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [
+      "index"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [
+      "index"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "slugs": [],
+     "complete": false
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "slugs": [],
+     "complete": false
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "slugs": [
+      "index",
+      "fr/index",
+      "fr/x",
+      "en/index",
+      "en/new",
+      "neu",
+      "lost"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "slugs": [
+      "index",
+      "fr/index",
+      "fr/x",
+      "en/index",
+      "en/new",
+      "neu",
+      "lost"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [
+      "en/new",
+      "en/index",
+      "neu",
+      "fr/x",
+      "lost"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [
+      "en/new",
+      "en/index",
+      "neu",
+      "fr/x",
+      "lost"
+     ],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "slugs": [],
+     "complete": false
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "slugs": [],
+     "complete": false
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "slugs": [],
+     "complete": true
+    }
+   }
+  }
+ ],
+ "sitePages": [
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "none"
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "2",
+       "title": "Zwei",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "10",
+       "title": "Zehn",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/index",
+       "title": "Ordner A",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "a/y",
+       "title": "a/y",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "b",
+       "title": "B",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "c",
+       "title": "c",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "d",
+       "title": "d",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "Gärten/über uns",
+       "title": "Über uns",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "z/tags",
+       "title": "Tags-Seite",
+       "depth": 2,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "plain",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "fr/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "lost",
+       "title": "Ohne Sprache",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "neu",
+       "title": "Neu",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "fr/index",
+       "title": "Accueil",
+       "depth": 0,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "fr/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "lost",
+       "title": "Ohne Sprache",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "neu",
+       "title": "Neu",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "fr/index",
+       "title": "Accueil",
+       "depth": 0,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "fr/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": false
+      },
+      {
+       "slug": "lost",
+       "title": "Ohne Sprache",
+       "depth": 1,
+       "inNavigation": false
+      },
+      {
+       "slug": "neu",
+       "title": "Neu",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "fr/index",
+       "title": "Accueil",
+       "depth": 0,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "fr/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "neu",
+       "title": "Neu",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "lost",
+       "title": "Ohne Sprache",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "fr/index",
+       "title": "Accueil",
+       "depth": 0,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "none"
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "index",
+       "title": "Start",
+       "depth": 0,
+       "inNavigation": true
+      },
+      {
+       "slug": "neu",
+       "title": "Neu",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "fr/x",
+       "title": "X",
+       "depth": 2,
+       "inNavigation": true
+      },
+      {
+       "slug": "lost",
+       "title": "Ohne Sprache",
+       "depth": 1,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/en/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "en/new",
+       "title": "New",
+       "depth": 1,
+       "inNavigation": true
+      },
+      {
+       "slug": "en/index",
+       "title": "Home",
+       "depth": 0,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": [
+      {
+       "slug": "fr/index",
+       "title": "Accueil",
+       "depth": 0,
+       "inNavigation": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "site": "languages",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [
+      {
+       "code": "de",
+       "label": "Deutsch"
+      },
+      {
+       "code": "en",
+       "label": "English"
+      },
+      {
+       "code": "fr",
+       "label": "fr"
+      }
+     ],
+     "defaultLanguage": "de",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/a/",
+     "/a/x",
+     "/a/x.html",
+     "/b",
+     "/ghost",
+     "/tags/foo",
+     "https://example.com/b",
+     "/Gärten/über%20uns",
+     "/%C3%BCber",
+     "/a/y#k",
+     "/a/y?q=1",
+     "/",
+     "/10",
+     "/2"
+    ]
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "quartz-navigations",
+    "hrefs": [
+     "/b",
+     "/a/"
+    ],
+    "complete": false
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "quartz-navigations",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "links",
+    "hrefs": []
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "links",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "none"
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "contentIndex",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "a",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "en",
+   "language": "en",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "fr",
+   "language": "fr",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  },
+  {
+   "site": "emptySite",
+   "nav": {
+    "source": "explorer",
+    "hrefs": [
+     "/en/new",
+     "/en/",
+     "/neu",
+     "/fr/x",
+     "/lost"
+    ]
+   },
+   "root": "nichts",
+   "language": "",
+   "loads": [
+    "/index"
+   ],
+   "result": {
+    "ok": {
+     "source": "explorer",
+     "languages": [],
+     "defaultLanguage": "",
+     "pages": []
+    }
+   }
+  }
+ ],
+ "noBuild": {
+  "error": "{\"key\":\"deployNoBuild\",\"args\":{\"dir\":\"@W@/Projekt Ü/public\"}}"
+ }
+}
