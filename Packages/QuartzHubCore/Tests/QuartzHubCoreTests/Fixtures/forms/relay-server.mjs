@@ -107,6 +107,9 @@ const server = createServer((req, res) => {
       res.on('close', () => clearInterval(timer))
       return
     }
+    case 'half':
+      if (file === 'counters/qf-probe.count') return page(res, 200, 'quartz-forms relay probe 0', 'text/plain')
+      return
     case 'cnt-probe':
       if (file === 'counters/qf-probe.count') return page(res, 200, 'quartz-forms relay probe 0', 'text/plain')
       return json(res, 200, { ok: true, stamp: 's1', generation })
