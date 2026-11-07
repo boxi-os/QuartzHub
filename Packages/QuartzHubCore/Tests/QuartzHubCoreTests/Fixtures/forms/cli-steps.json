@@ -1,0 +1,1791 @@
+{
+ "steps": [
+  {
+   "name": "no plugin at all",
+   "op": "check",
+   "args": [],
+   "setup": [],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsNoCli\",\"args\":{}}"
+    }
+   },
+   "log": [],
+   "keys": null
+  },
+  {
+   "name": "a plugin without the command line",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "version": "0.1.2"
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsNoCli\",\"args\":{}}"
+    }
+   },
+   "log": [],
+   "keys": null
+  },
+  {
+   "name": "0.2.0: no --lang",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "cli": ""
+    },
+    {
+     "version": "0.2.0"
+    },
+    {
+     "scenario": {
+      "check": {
+       "stdout": "{\"ok\":true,\"problems\":[\"Formular „a“ fehlt\",3,null],\"hints\":[\"h1\"],\"keys\":[{\"name\":\"k\",\"fingerprint\":\"AB12\",\"userIds\":[\"A <a@b>\",7],\"expires\":\"2027-01-01\",\"problem\":\"p\",\"notice\":\"n\",\"extra\":1},\"kein Objekt\",null,{\"name\":5,\"problem\":false}]}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "Formular „a“ fehlt"
+     ],
+     "hints": [
+      "h1"
+     ],
+     "keys": [
+      {
+       "name": "k",
+       "fingerprint": "AB12",
+       "userIds": [
+        "A <a@b>"
+       ],
+       "expires": "2027-01-01",
+       "problem": "p",
+       "notice": "n"
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      }
+     ]
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "0.3.0: --lang",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "version": "0.3.0"
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "Formular „a“ fehlt"
+     ],
+     "hints": [
+      "h1"
+     ],
+     "keys": [
+      {
+       "name": "k",
+       "fingerprint": "AB12",
+       "userIds": [
+        "A <a@b>"
+       ],
+       "expires": "2027-01-01",
+       "problem": "p",
+       "notice": "n"
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      }
+     ]
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "0.3.0-beta.1 is older than 0.3.0",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "version": "0.3.0-beta.1"
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "Formular „a“ fehlt"
+     ],
+     "hints": [
+      "h1"
+     ],
+     "keys": [
+      {
+       "name": "k",
+       "fingerprint": "AB12",
+       "userIds": [
+        "A <a@b>"
+       ],
+       "expires": "2027-01-01",
+       "problem": "p",
+       "notice": "n"
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      }
+     ]
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "0.10.0 is newer",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "version": "0.10.0"
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "Formular „a“ fehlt"
+     ],
+     "hints": [
+      "h1"
+     ],
+     "keys": [
+      {
+       "name": "k",
+       "fingerprint": "AB12",
+       "userIds": [
+        "A <a@b>"
+       ],
+       "expires": "2027-01-01",
+       "problem": "p",
+       "notice": "n"
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      }
+     ]
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a version that is not one",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "version": "v0.6"
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "Formular „a“ fehlt"
+     ],
+     "hints": [
+      "h1"
+     ],
+     "keys": [
+      {
+       "name": "k",
+       "fingerprint": "AB12",
+       "userIds": [
+        "A <a@b>"
+       ],
+       "expires": "2027-01-01",
+       "problem": "p",
+       "notice": "n"
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      }
+     ]
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a version that is no string",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "write": [
+      "@W@/Gärten-Ü/.quartz/plugins/quartz-forms/package.json",
+      "{\"version\":6}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "Formular „a“ fehlt"
+     ],
+     "hints": [
+      "h1"
+     ],
+     "keys": [
+      {
+       "name": "k",
+       "fingerprint": "AB12",
+       "userIds": [
+        "A <a@b>"
+       ],
+       "expires": "2027-01-01",
+       "problem": "p",
+       "notice": "n"
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      }
+     ]
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a package.json that cannot be read",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "rm": "@W@/Gärten-Ü/.quartz/plugins/quartz-forms/package.json"
+    },
+    {
+     "mkdir": "@W@/Gärten-Ü/.quartz/plugins/quartz-forms/package.json"
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "Formular „a“ fehlt"
+     ],
+     "hints": [
+      "h1"
+     ],
+     "keys": [
+      {
+       "name": "k",
+       "fingerprint": "AB12",
+       "userIds": [
+        "A <a@b>"
+       ],
+       "expires": "2027-01-01",
+       "problem": "p",
+       "notice": "n"
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      },
+      {
+       "name": "",
+       "fingerprint": "",
+       "userIds": []
+      }
+     ]
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "lists missing",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "rm": "@W@/Gärten-Ü/.quartz/plugins/quartz-forms/package.json"
+    },
+    {
+     "version": "0.6.0"
+    },
+    {
+     "scenario": {
+      "check": {
+       "stdout": "{\"ok\":true,\"problems\":\"x\"}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [],
+     "hints": [],
+     "keys": []
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "several lines, the last one counts",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "Hinweis\n{\"ok\":true,\"problems\":[\"p\"]}\n\n  "
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [
+      "p"
+     ],
+     "hints": [],
+     "keys": []
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a line before the JSON on stdout only",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "{\"ok\":true,\"problems\":[\"früh\"]}\nnoch eine Zeile"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"{\\\"ok\\\":true,\\\"problems\\\":[\\\"früh\\\"]}\\nnoch eine Zeile\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "not JSON, with stderr",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stderr": "Warnung: veraltet\n",
+       "stdout": "kein JSON\n",
+       "exit": 1
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"Warnung: veraltet\\nkein JSON\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "not JSON, long",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "Zeile mit Ümlauten ääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääää"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"Zeile mit Ümlauten äääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääää\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "nothing at all",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "exit": 2
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "ok false with an error",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "{\"ok\":false,\"error\":\"Die Konfiguration ist kaputt.\"}",
+       "exit": 1
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "Die Konfiguration ist kaputt."
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "ok false without one",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "{\"ok\":false,\"error\":3}",
+       "stderr": "E"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"E{\\\"ok\\\":false,\\\"error\\\":3}\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "ok as a string",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "{\"ok\":\"true\"}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"{\\\"ok\\\":\\\"true\\\"}\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "JSON that is no object",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "[1,2]"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"[1,2]\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "JSON null",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "null"
+      }
+     }
+    }
+   ],
+   "result": {
+    "error": "TypeError: Cannot read properties of null (reading 'ok')"
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a failed exit with ok true",
+   "op": "check",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "check": {
+       "stdout": "{\"ok\":true,\"hints\":[\"trotzdem\"]}",
+       "exit": 3
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "checked",
+     "problems": [],
+     "hints": [
+      "trotzdem"
+     ],
+     "keys": []
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "check",
+      "--site",
+      "@W@/Gärten-Ü",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "texts",
+   "op": "texts",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "texts": {
+       "stdout": "{\"ok\":true,\"locales\":{\"de\":{\"a\":\"Ä\",\"b\":2,\"c\":\"C\"},\"en\":{\"a\":\"A\"},\"fr\":{\"x\":1},\"nl\":\"nein\",\"it\":null}}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "read",
+     "locales": {
+      "de": {
+       "a": "Ä",
+       "c": "C"
+      },
+      "en": {
+       "a": "A"
+      }
+     }
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "texts",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "texts again from the cache",
+   "op": "texts",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "texts": {
+       "stdout": "{\"ok\":true,\"locales\":{\"de\":{\"a\":\"neu\"}}}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "read",
+     "locales": {
+      "de": {
+       "a": "Ä",
+       "c": "C"
+      },
+      "en": {
+       "a": "A"
+      }
+     }
+    }
+   },
+   "log": [],
+   "keys": null
+  },
+  {
+   "name": "a new command line asks again",
+   "op": "texts",
+   "args": [],
+   "setup": [
+    {
+     "cli": "// 2\n"
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "read",
+     "locales": {
+      "de": {
+       "a": "neu"
+      }
+     }
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "texts",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "no locale with a string",
+   "op": "texts",
+   "args": [],
+   "setup": [
+    {
+     "cli": "// 3\n"
+    },
+    {
+     "scenario": {
+      "texts": {
+       "stdout": "{\"ok\":true,\"locales\":{\"de\":{\"a\":1}},\"extra\":\"ü\"}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"{\\\"ok\\\":true,\\\"locales\\\":{\\\"de\\\":{\\\"a\\\":1}},\\\"extra\\\":\\\"ü\\\"}\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "texts",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "unavailable is not kept",
+   "op": "texts",
+   "args": [],
+   "setup": [
+    {
+     "scenario": {
+      "texts": {
+       "stdout": "{\"ok\":true,\"locales\":{\"de\":{\"a\":\"wieder da\"}}}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "read",
+     "locales": {
+      "de": {
+       "a": "wieder da"
+      }
+     }
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "texts",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "locales not an object",
+   "op": "texts",
+   "args": [],
+   "setup": [
+    {
+     "cli": "// 4\n"
+    },
+    {
+     "scenario": {
+      "texts": {
+       "stdout": "{\"ok\":true,\"locales\":\"de\"}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "{\"key\":\"formsCliOutput\",\"args\":{\"output\":\"{\\\"ok\\\":true,\\\"locales\\\":\\\"de\\\"}\"}}"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "texts",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "texts refused",
+   "op": "texts",
+   "args": [],
+   "setup": [
+    {
+     "cli": "// 5\n"
+    },
+    {
+     "scenario": {
+      "texts": {
+       "stdout": "{\"ok\":false,\"error\":\"unknown command \\\"texts\\\"\"}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "state": "unavailable",
+     "reason": "unknown command \"texts\""
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "texts",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {}
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a key",
+   "op": "inspectKey",
+   "args": [
+    "Vorher\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\nNachher"
+   ],
+   "setup": [
+    {
+     "scenario": {
+      "key": {
+       "stdout": "{\"ok\":true,\"key\":{\"name\":\"\",\"fingerprint\":\"DDFD 7A73\",\"userIds\":[\"Boxi <b@x>\"]},\"armored\":\"-----BEGIN PGP PUBLIC KEY BLOCK-----\\n\\nxsDN\\n-----END PGP PUBLIC KEY BLOCK-----\"}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "key": {
+      "name": "",
+      "fingerprint": "DDFD 7A73",
+      "userIds": [
+       "Boxi <b@x>"
+      ]
+     },
+     "armored": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "key",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {
+      "QF_KEY_ARMORED": "Vorher\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\nNachher"
+     }
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a key without armored",
+   "op": "inspectKey",
+   "args": [
+    "x"
+   ],
+   "setup": [
+    {
+     "scenario": {
+      "key": {
+       "stdout": "{\"ok\":true,\"key\":{\"fingerprint\":\"\",\"userIds\":[],\"problem\":\"Kein öffentlicher Schlüssel.\"},\"armored\":5}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "key": {
+      "name": "",
+      "fingerprint": "",
+      "userIds": [],
+      "problem": "Kein öffentlicher Schlüssel."
+     }
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "key",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {
+      "QF_KEY_ARMORED": "x"
+     }
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a key answer without key",
+   "op": "inspectKey",
+   "args": [
+    "x"
+   ],
+   "setup": [
+    {
+     "scenario": {
+      "key": {
+       "stdout": "{\"ok\":true}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "key": {
+      "name": "",
+      "fingerprint": "",
+      "userIds": []
+     }
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "key",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {
+      "QF_KEY_ARMORED": "x"
+     }
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a key refused",
+   "op": "inspectKey",
+   "args": [
+    "x"
+   ],
+   "setup": [
+    {
+     "scenario": {
+      "key": {
+       "stdout": "{\"ok\":false,\"error\":\"kaputt\"}"
+      }
+     }
+    }
+   ],
+   "result": {
+    "ok": {
+     "unavailable": "kaputt"
+    }
+   },
+   "log": [
+    {
+     "argv": [
+      "key",
+      "--json",
+      "--lang",
+      "@LANG@"
+     ],
+     "env": {
+      "QF_KEY_ARMORED": "x"
+     }
+    }
+   ],
+   "keys": null
+  },
+  {
+   "name": "a key with no command line",
+   "op": "inspectKey",
+   "args": [
+    "x"
+   ],
+   "setup": [
+    {
+     "rm": "@W@/Gärten-Ü/.quartz/plugins/quartz-forms/dist/cli.js"
+    }
+   ],
+   "result": {
+    "ok": {
+     "unavailable": "{\"key\":\"formsNoCli\",\"args\":{}}"
+    }
+   },
+   "log": [],
+   "keys": null
+  },
+  {
+   "name": "a name that is not one",
+   "op": "importKey",
+   "args": [
+    "@W@/k.asc",
+    "a b",
+    false
+   ],
+   "setup": [],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyName\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": null
+  },
+  {
+   "name": "a name too long",
+   "op": "importKey",
+   "args": [
+    "@W@/k.asc",
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    false
+   ],
+   "setup": [],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyName\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": null
+  },
+  {
+   "name": "a name of 64",
+   "op": "importKey",
+   "args": [
+    "@W@/k64.asc",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+    false
+   ],
+   "setup": [
+    {
+     "write": [
+      "@W@/k64.asc",
+      "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "file": "quartz-forms/keys/yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc"
+    }
+   },
+   "log": [],
+   "keys": {
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "a name with an umlaut",
+   "op": "importKey",
+   "args": [
+    "@W@/k.asc",
+    "schlüssel",
+    false
+   ],
+   "setup": [],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyName\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": {
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "no such file",
+   "op": "importKey",
+   "args": [
+    "@W@/fehlt.asc",
+    "k",
+    false
+   ],
+   "setup": [],
+   "result": {
+    "error": "Error: ENOENT: no such file or directory, stat '@W@/fehlt.asc'"
+   },
+   "log": [],
+   "keys": {
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "a folder",
+   "op": "importKey",
+   "args": [
+    "@W@/ordner",
+    "k",
+    false
+   ],
+   "setup": [
+    {
+     "mkdir": "@W@/ordner"
+    }
+   ],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyNotAFile\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": {
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "too large",
+   "op": "importKey",
+   "args": [
+    "@W@/gross.asc",
+    "k",
+    false
+   ],
+   "setup": [
+    {
+     "fill": [
+      "@W@/gross.asc",
+      "",
+      262145
+     ]
+    }
+   ],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyTooLarge\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": {
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "exactly the limit",
+   "op": "importKey",
+   "args": [
+    "@W@/grenze.asc",
+    "k",
+    false
+   ],
+   "setup": [
+    {
+     "fill": [
+      "@W@/grenze.asc",
+      "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+      262144
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "file": "quartz-forms/keys/k.asc"
+    }
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "a private key",
+   "op": "importKey",
+   "args": [
+    "@W@/privat.asc",
+    "k",
+    false
+   ],
+   "setup": [
+    {
+     "write": [
+      "@W@/privat.asc",
+      "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n-----BEGIN PGP PRIVATE KEY BLOCK-----\n"
+     ]
+    }
+   ],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyPrivate\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "no public block",
+   "op": "importKey",
+   "args": [
+    "@W@/leer.asc",
+    "k",
+    false
+   ],
+   "setup": [
+    {
+     "write": [
+      "@W@/leer.asc",
+      "nur Text"
+     ]
+    }
+   ],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyNoPublic\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "a key file",
+   "op": "importKey",
+   "args": [
+    "@W@/Schlüssel Ö.asc",
+    "kontakt_1-A",
+    false
+   ],
+   "setup": [
+    {
+     "write": [
+      "@W@/Schlüssel Ö.asc",
+      "Kommentar ä\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "file": "quartz-forms/keys/kontakt_1-A.asc"
+    }
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "kontakt_1-A.asc": "Kommentar ä\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "it exists",
+   "op": "importKey",
+   "args": [
+    "@W@/Schlüssel Ö.asc",
+    "kontakt_1-A",
+    false
+   ],
+   "setup": [
+    {
+     "write": [
+      "@W@/Schlüssel Ö.asc",
+      "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "exists": "quartz-forms/keys/kontakt_1-A.asc"
+    }
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "kontakt_1-A.asc": "Kommentar ä\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "overwritten",
+   "op": "importKey",
+   "args": [
+    "@W@/Schlüssel Ö.asc",
+    "kontakt_1-A",
+    true
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "file": "quartz-forms/keys/kontakt_1-A.asc"
+    }
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "kontakt_1-A.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "through a link to the source",
+   "op": "importKey",
+   "args": [
+    "@W@/link.asc",
+    "verlinkt",
+    false
+   ],
+   "setup": [
+    {
+     "symlink": [
+      "@W@/Schlüssel Ö.asc",
+      "@W@/link.asc"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "file": "quartz-forms/keys/verlinkt.asc"
+    }
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "kontakt_1-A.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "verlinkt.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "the target is a link",
+   "op": "importKey",
+   "args": [
+    "@W@/Schlüssel Ö.asc",
+    "ziel",
+    false
+   ],
+   "setup": [
+    {
+     "write": [
+      "@W@/anderswo.asc",
+      "alt"
+     ]
+    },
+    {
+     "symlink": [
+      "@W@/anderswo.asc",
+      "@W@/Gärten-Ü/quartz-forms/keys/ziel.asc"
+     ]
+    }
+   ],
+   "result": {
+    "error": "Error: {\"key\":\"formsKeyName\",\"args\":{}}"
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "kontakt_1-A.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "verlinkt.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "ziel.asc": "link"
+   }
+  },
+  {
+   "name": "a folder with the name",
+   "op": "importKey",
+   "args": [
+    "@W@/Schlüssel Ö.asc",
+    "ordner",
+    true
+   ],
+   "setup": [
+    {
+     "mkdir": "@W@/Gärten-Ü/quartz-forms/keys/ordner.asc"
+    }
+   ],
+   "result": {
+    "error": "Error: EISDIR: illegal operation on a directory, rename '@W@/Gärten-Ü/quartz-forms/keys/ordner.asc.tmp-@PID@' -> '@W@/Gärten-Ü/quartz-forms/keys/ordner.asc'"
+   },
+   "log": [],
+   "keys": {
+    "k.asc": "262144: -----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBL",
+    "kontakt_1-A.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "ordner.asc": "folder",
+    "ordner.asc.tmp-@PID@": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "verlinkt.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.asc": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "ziel.asc": "link"
+   }
+  },
+  {
+   "name": "the key folder is a link",
+   "op": "importKey",
+   "args": [
+    "@W@/Schlüssel Ö.asc",
+    "k2",
+    false
+   ],
+   "setup": [
+    {
+     "rm": "@W@/Gärten-Ü/quartz-forms"
+    },
+    {
+     "mkdir": "@W@/fremd/keys"
+    },
+    {
+     "symlink": [
+      "@W@/fremd",
+      "@W@/Gärten-Ü/quartz-forms"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "file": "quartz-forms/keys/k2.asc"
+    }
+   },
+   "log": [],
+   "keys": {
+    "k2.asc": "neu\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+   }
+  },
+  {
+   "name": "a file where the folder goes",
+   "op": "importKey",
+   "args": [
+    "@W@/Schlüssel Ö.asc",
+    "k3",
+    false
+   ],
+   "setup": [
+    {
+     "rm": "@W@/Gärten-Ü/quartz-forms"
+    },
+    {
+     "write": [
+      "@W@/Gärten-Ü/quartz-forms",
+      "datei"
+     ]
+    }
+   ],
+   "result": {
+    "error": "Error: ENOTDIR: not a directory, mkdir '@W@/Gärten-Ü/quartz-forms/keys'"
+   },
+   "log": [],
+   "keys": null
+  },
+  {
+   "name": "an unreadable source",
+   "op": "importKey",
+   "args": [
+    "@W@/gesperrt.asc",
+    "k4",
+    false
+   ],
+   "setup": [
+    {
+     "rm": "@W@/Gärten-Ü/quartz-forms"
+    },
+    {
+     "write": [
+      "@W@/gesperrt.asc",
+      "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxsDN\n-----END PGP PUBLIC KEY BLOCK-----\n"
+     ]
+    },
+    {
+     "chmod": [
+      "@W@/gesperrt.asc",
+      "000"
+     ]
+    }
+   ],
+   "result": {
+    "error": "Error: EACCES: permission denied, open '@W@/gesperrt.asc'"
+   },
+   "log": [],
+   "keys": null
+  }
+ ]
+}

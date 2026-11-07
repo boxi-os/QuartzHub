@@ -25765,13 +25765,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das installierte quartz-forms hat keine Kommandozeile (dist/cli.js, ab 0.2.0). Ohne sie kann QuartzControl die Formulare nicht prüfen."
+            "value" : "Das installierte quartz-forms hat keine Kommandozeile (dist/cli.js, ab 0.2.0). Ohne sie kann QuartzHub die Formulare nicht prüfen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The installed quartz-forms has no command line (dist/cli.js, from 0.2.0). Without it QuartzControl cannot check the forms."
+            "value" : "The installed quartz-forms has no command line (dist/cli.js, from 0.2.0). Without it QuartzHub cannot check the forms."
           }
         }
       }
