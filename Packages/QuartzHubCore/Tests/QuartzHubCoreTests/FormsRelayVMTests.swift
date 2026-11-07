@@ -79,7 +79,7 @@ struct FormsRelayVMTests {
     let fpm = "https://\(Self.host):8442\(remote.replacingOccurrences(of: "/srv/qc/www", with: ""))/forms/send.php"
     let modPHP = fpm.replacingOccurrences(of: ":8442", with: ":8441")
     let first = await relay.upload(url: fpm, form: "kontakt")
-    #expect(first.success, "\(first.output)")
+    try #require(first.success, "\(first.output)")
     #expect(first.check == .ok(url: fpm, counters: true), "\(String(describing: first.check))")
     let generation = relay.readFile().lastUpload?["generation"]?.stringValue
     let listing = "find \(remote) -printf '%y %m %P\\n' | sort"
@@ -102,7 +102,7 @@ struct FormsRelayVMTests {
     settings["configReadable"] = .bool(true)
     try relay.saveSettings(settings)
     let readable = await relay.upload(url: modPHP, form: "kontakt")
-    #expect(readable.success, "\(readable.output)")
+    try #require(readable.success, "\(readable.output)")
     // Readable, mod_php answers, and cannot write the account's counters folder.
     #expect(readable.check == .ok(url: modPHP, counters: false), "\(String(describing: readable.check))")
     #expect(JSText.includes(await Self.ssh(key, known, listing), "f 644 forms/config.php"))
