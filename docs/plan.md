@@ -220,7 +220,9 @@ nach Abhängigkeit:
      `PublishTargets`, `DeployManifests`, `Deploy` mit Staging, Ordner, Git-Branch und Webhook,
      `GitHubAPI`; das Ziel „Dokument“ kommt mit Punkt 9. 8b fertig: SSH über das System-OpenSSH mit eigenem SFTP-Client
      (`SSHLogin`, `HostKeyCheck`, `SFTPChannel`, `SFTPAdapter`, `RsyncAdapter`), gegen QuartzControl lokal und auf debian-vm
-     gemessen. Als Nächstes 8c.
+     gemessen. 8c fertig: FTP/FTPS über QuartzControls basic-ftp im Helfer `ftp-session` (`FTPSession`,
+     `FTPAdapter`), die Relay-Abfrage über URLSession (`RelayProbe`), quartz-forms (`FormsCLI`, `FormsRelay`);
+     offen nur der FTPS-Lauf des Relays auf debian-vm (Passwort, vom Nutzer) und das Aufräumen der VM.
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:
      - SFTP über das System-OpenSSH (`ssh -s sftp`), SFTP-Protokoll selbst geschrieben (Nutzer, 2026-11-06,

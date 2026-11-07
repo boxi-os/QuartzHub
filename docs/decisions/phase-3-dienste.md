@@ -1667,3 +1667,56 @@ gefangen.
 - **Nicht gemessen:** ein Passwort-Login gegen einen echten Server (debian-vm erlaubt über SSH keine
   Passwörter, und das sshd der VM wird dafür nicht gelockert; lokal ist gemessen, dass ssh das
   Passwort über den Helfer anbietet).
+
+### 8c: FTP/FTPS, Relay-Abfrage und quartz-forms
+
+- **FTP und FTPS über QuartzControls eigenen Client (Nutzer, 2026-11-07).** basic-ftp 6.2.0 läuft
+  als Helfer `ftp-session` unter QuartzHubs Node, eine Sitzung je Lauf, eine JSON-Zeile je Aufruf
+  (die einzige Ausnahme vom Ein-Anfrage-Protokoll der Helfer). Verworfen: ein eigener Kanal auf
+  Network.framework (kann kein STARTTLS) und LibreSSL `s_client` (Version 3.3.6 übernimmt keine
+  TLS-1.3-Sitzung, „522 session reuse required“, und deutet „R“ und „Q“ am Anfang eines Blocks als
+  Befehl; ein `RETR` wurde zur Neuverhandlung). So bleiben die Sitzungsübernahme der Datenverbindung,
+  Nodes Zertifikatsprüfung und basic-ftps Fehlertexte, wie sie in der Ausgabe stehen. Gemessen auf
+  debian-vm gegen vsftpd mit TLS (erlaubt, nicht erzwungen, `require_ssl_reuse=YES`) und einer
+  Test-CA mit 365-Tage-Zertifikat: macOS lehnt Serverzertifikate über 825 Tage ab, auch das
+  Snakeoil-Zertifikat der VM.
+- **Die Relay-Abfrage über URLSession** (`RelayProbe`). Jedes Urteil aus `checkRelay` und
+  `countersServed` ist QuartzControls. Wo es an Chromium hing, macht QuartzHub es nach: Es sieht die
+  Weiterleitungen einzeln, sendet `Origin: null`, sobald ein Schritt die Origin wechselt, und
+  serialisiert jedes Ziel wie WHATWG. Dafür kennt `WebURL` hinter einem Schalter IPv4 in jeder Form
+  („0x7f000001“, „2130706433“) und IPv6-Literale; der Webhook lehnt sie weiter ab. Abweichungen des
+  Transports: Ein GET, dessen Verbindung ohne Antwort abbricht, schickt URLSession bis zu dreimal;
+  ein `text/plain`-Body, der unter 512 Bytes stockt, heißt „keine Antwort“ statt „unvollständig“
+  (URLSession hält die Antwort fürs MIME-Sniffing zurück; JSON und HTML nicht); ein Fehler außerhalb
+  der sechs gemessenen Arten (abgelehnt, kein Name, keine Route, abgebrochen, Zertifikat, kein TLS)
+  kommt mit dem Satz des Systems statt mit Chromiums Code. Ein Weiterleitungsziel, dessen Host
+  `WebURL` nicht liest („%“ oder Nicht-ASCII), gilt als dieser Rechner und wird nicht verfolgt; eine
+  Relay-Adresse mit so einem Host ist „keine Adresse“.
+- **quartz-forms fragen** (`FormsCLI`): check, texts (je Inhalt von `cli.js` zwischengespeichert),
+  inspectKey, importKeyFile, `--lang` ab 0.3.0 (`SemVer`, aus `shared/semver.ts`). Eine Antwort
+  `null` heißt „konnte nicht geprüft werden“; QuartzControl warf einen TypeError.
+- **Das Relay** (`FormsRelay`): Zustand, Einstellungen, Hochladen über `Deploy.directoryUpload`,
+  Export, Entfernen, Ausschluss aus dem Website-Ziel, Temp-Ordner `qh-relay-*` (beim Beenden
+  geräumt, beim Start nach einer Stunde). Abweichungen: Der Ausschluss behält `withDocuments` des
+  Website-Ziels; ein Fehler des Schlüsselbunds beim Lesen oder Anlegen der Relay-Geheimnisse ist die
+  gescheiterte Antwort des Uploads, wo QuartzControl den Aufruf abwies.
+- **Gefunden in QuartzControl** (Wartung: nur notiert): `excludeFromSite` speichert das Website-Ziel
+  ohne `withDocuments` und wirft „Dokumente mitnehmen“ weg; `importKeyFile` schreibt durch einen
+  verlinkten Ordner `quartz-forms/` hindurch, weil `writableTarget` erst unterhalb von `keys/` prüft
+  (QuartzHub bildet das nach).
+- **Gemessen:** QuartzControls `formsService.ts` mit seinem echten `connectionsService`,
+  `publishTargetsService`, Deploy-Verteiler und Ordner-Adapter gegen QuartzHub, die
+  quartz-forms-Kommandozeile als Attrappe (`fake-cli.mjs`), die Abfrage gegen einen Testserver, der
+  zugleich HTTP-Proxy für die `.test`-Namen ist: 52 Schritte FormsCLI, 64 Abfragen, 19 PHP-Texte,
+  67 Adressen, 73 Schritte Relay; Gegenproben 25/25, 45/45, 45/45. Auf debian-vm
+  (`FormsRelayVMTests`, `QH_VM_TESTS=1`): das echte quartz-forms über SFTP und über FTPS
+  hochgeladen, abgefragt unter PHP-FPM als Upload-Konto (:8442) und mod_php als www-data (:8441),
+  lesbar gemacht, erneut abgefragt und entfernt. Über SFTP gemessen am 2026-11-07: mit 0600 antwortet
+  FPM (Zähler schreibbar), mod_php stoppt mit „Failed opening required …/config.php“ (leere 500,
+  `phpError`), lesbar antworten beide und mod_php meldet `counters: false`; Apache sperrt `counters/`
+  per `.htaccess` (403, kein `countersOpen`); ohne die Test-CA heißt es „Zertifikat“, mit ihr bleibt
+  ein fremdes Zertifikat (nginx :8443, Snakeoil) abgelehnt. Der FTPS-Lauf braucht `QH_FTP_PW` und
+  wird vom Nutzer gestartet (die Rechteprüfung lässt das Passwort nicht durch die Sitzung); der
+  FTP-Adapter selbst ist mit 5847d5e auf der VM gemessen. Für die Abfrage liefert Apache auf
+  :8441/:8442 das Zertifikat der Test-CA (`qc.conf` gesichert als `qc.conf.vor-qh-8c`, am Ende von
+  Punkt 8 zurück).
