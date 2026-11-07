@@ -22,6 +22,9 @@ func usage() -> Never {
     export-window                     das Exportfenster gegen QuartzControls Regel in WebKit:
                                       was ein zweiter Server erreicht, was gezählt wird, Frist,
                                       Abbruch, Seitenskripte (braucht Helpers/dist/page-scripts.js)
+    export-pages <build> <chrome.json> [--out <webkit.json>]
+                                      die Seitenskripte des Exports in WebKit gegen ihre Aufnahme
+                                      in Chrome (scripts/export-pages-golden.mjs), ohne Netz
     inline-svg [projekt]              der SVG-Bereiniger gegen WebKit: jedes Ergebnis als HTML
                                       und, mit einem Projekt mit quartz-layout-box, durch dessen
                                       Markdown-Kette; Exit 3, wenn Lagen ausgelassen wurden
@@ -128,6 +131,12 @@ case "export-window":
   setvbuf(stdout, nil, _IOLBF, 0)
   let root = repositoryRoot()
   runAndExit { await runExportWindowCheck(root: root) }
+case "export-pages":
+  setvbuf(stdout, nil, _IOLBF, 0)
+  let positional = arguments.filter { !$0.hasPrefix("--") && $0 != option("--root") && $0 != option("--out") }
+  guard positional.count == 2 else { usage() }
+  let root = repositoryRoot()
+  runAndExit { await runExportPagesCheck(root: root, build: positional[0], golden: positional[1], out: option("--out")) }
 case "inline-svg":
   // WebKit wants the main run loop turning (see runAndExit).
   setvbuf(stdout, nil, _IOLBF, 0)

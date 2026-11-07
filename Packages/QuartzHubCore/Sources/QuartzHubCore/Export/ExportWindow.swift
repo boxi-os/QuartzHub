@@ -43,6 +43,7 @@ public final class ExportWindow: NSObject {
   public private(set) var unfinished: [String] = []
 
   private let loadTimeout: Duration
+  private let outside: Bool
   private var ruleStore: WKContentRuleListStore?
   private var ruleStoreFolder: String?
   private var waiting: [ObjectIdentifier: CheckedContinuation<Void, Error>] = [:]
@@ -54,9 +55,12 @@ public final class ExportWindow: NSObject {
     String(decoding: try Posix.read("\(location.helpers)/page-scripts.js"), as: UTF8.self)
   }
 
-  public init(origin: String, size: CGSize, pageScripts: String, loadTimeout: Duration = ExportWindow.loadTimeout) {
+  /// `outside: false` refuses even what the rule lets in from outside: for a measurement that must
+  /// not reach the network.
+  public init(origin: String, size: CGSize, pageScripts: String, loadTimeout: Duration = ExportWindow.loadTimeout, outside: Bool = true) {
     self.origin = origin
     self.loadTimeout = loadTimeout
+    self.outside = outside
     _ = NSApplication.shared
     let configuration = WKWebViewConfiguration()
     configuration.websiteDataStore = .nonPersistent()
@@ -93,22 +97,23 @@ public final class ExportWindow: NSObject {
     ruleStoreFolder = folder
     guard let store = WKContentRuleListStore(url: URL(fileURLWithPath: folder)) else { return } // path boundary
     ruleStore = store
-    let list = try await store.compileContentRuleList(forIdentifier: "export", encodedContentRuleList: Self.rules(origin: origin))
+    let list = try await store.compileContentRuleList(forIdentifier: "export", encodedContentRuleList: Self.rules(origin: origin, outside: outside))
     if let list { webView.configuration.userContentController.add(list) }
   }
 
   /// QuartzControl's rule as a content rule list: block everything, then let through the own
   /// origin, data:, blob:, stylesheets, fonts and images, and Mermaid's scripts. (The rule list's
   /// regular expressions know no `|`.)
-  nonisolated static func rules(origin: String) -> String {
-    let own = NSRegularExpression.escapedPattern(for: origin + "/")
+  nonisolated static func rules(origin: String, outside: Bool = true) -> String {
+    let ownPrefix = NSRegularExpression.escapedPattern(for: origin + "/")
     let allow = { (filter: String, types: [String]?) -> String in
       let types = types.map { ",\"resource-type\":[\($0.map { "\"\($0)\"" }.joined(separator: ","))]" } ?? ""
       return "{\"trigger\":{\"url-filter\":\(JSJSON.compact(.string(filter)))\(types)},\"action\":{\"type\":\"ignore-previous-rules\"}}"
     }
-    return "[" + ["{\"trigger\":{\"url-filter\":\".*\"},\"action\":{\"type\":\"block\"}}",
-                  allow("^" + own, nil), allow("^data:", nil), allow("^blob:", nil), allow("^about:", nil),
-                  allow(".*", ["style-sheet", "font", "image"]), allow("/mermaid[@/.-]", ["script"])].joined(separator: ",") + "]"
+    let own = ["{\"trigger\":{\"url-filter\":\".*\"},\"action\":{\"type\":\"block\"}}",
+               allow("^" + ownPrefix, nil), allow("^data:", nil), allow("^blob:", nil), allow("^about:", nil)]
+    let fromOutside = outside ? [allow(".*", ["style-sheet", "font", "image"]), allow("/mermaid[@/.-]", ["script"])] : []
+    return "[" + (own + fromOutside).joined(separator: ",") + "]"
   }
 
   /// In the export's world, before the page: resource timing for what was fetched, element errors
