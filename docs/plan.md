@@ -228,7 +228,8 @@ nach Abhängigkeit:
      - SFTP über das System-OpenSSH (`ssh -s sftp`), SFTP-Protokoll selbst geschrieben (Nutzer, 2026-11-06,
        statt Citadel: dessen swift-nio-ssh-Fork, kein lstat, kein Keepalive, kein Agent); Modus 0644,
        Keepalive ~60 s, Host-Keys als known_hosts wie bei rsync
-     - FTP/FTPS als eigener Client auf Network.framework (es gibt keine gepflegte Swift-Bibliothek)
+     - FTP/FTPS über QuartzControls basic-ftp im Helfer `ftp-session` (Nutzer, 2026-11-07, statt eines
+       eigenen Clients auf Network.framework: der kann kein STARTTLS)
      - rsync über `/usr/bin/rsync`. **Unter macOS 15 ist das openrsync**: Flags und Modi neu
        messen (`shared/rsyncSupport.ts`)
      - Git-Branch, Ordner, Webhook
@@ -236,6 +237,14 @@ nach Abhängigkeit:
      `publishing-and-credentials.md` gemessenen Chromium-Fälle (301/302/303, `Origin: null`). Dazu
      `formsService` (quartz-forms-CLI). Gemessen auf `debian-vm` wie bisher.
 9. **Export:** WebKit-Pipeline nach dem Spike
+   - **Stand 2026-11-07:** in drei Teilen in einem Zug (Nutzer, 2026-11-07). 9a: was ohne Browser
+     läuft (`bookService`, `exportModel`, Fakten der Website, `documentHtml`, `siteServer`, ePub- und
+     HTML-Packen), golden gegen QuartzControl. 9b: das Exportfenster auf `WKWebView` mit
+     `pageScripts.ts` gebündelt, Sperren und Zählen, Fertigerkennung, `takeSnapshot`. 9c: PDF,
+     `exportBook`, Zieltyp „Dokument“; Fußzeile und Lesezeichen über PDFKit nach einer kurzen Messung
+     (sonst pdf-lib im Helfer), Gegenprobe mit `check:export --files` aus QuartzControl, epubcheck auf
+     `debian-vm` (Nutzer, 2026-11-07). Verglichen wird der Aufbau, nicht die Seitenzahl. Die
+     ePub-Reader und das Handbuch-PDF kommen mit Phase 5.
    - `NSPrintOperation.runModal`, `shouldPrintBackgrounds`
    - unsichtbares Fenster mit Alpha 0 auf einem Bildschirm; die Ansicht wächst bis zum Element,
      weil `scrollIntoView` unter dem Druck-Stylesheet nichts tut
