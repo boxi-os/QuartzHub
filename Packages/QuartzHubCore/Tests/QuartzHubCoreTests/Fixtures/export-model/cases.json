@@ -1,0 +1,7641 @@
+{
+ "defaultLocale": "de-DE",
+ "cases": [
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/"
+   ],
+   "result": "index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    ""
+   ],
+   "result": "index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/index"
+   ],
+   "result": "index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/index.html"
+   ],
+   "result": "index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a/"
+   ],
+   "result": "a/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a/index.html"
+   ],
+   "result": "a/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a.html"
+   ],
+   "result": "a"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a"
+   ],
+   "result": "a"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "//a"
+   ],
+   "result": "a"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "///a/"
+   ],
+   "result": "a/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%C3%BC"
+   ],
+   "result": "ü"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%c3%bc/x.html"
+   ],
+   "result": "ü/x"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%E0%A4%A"
+   ],
+   "result": "%E0%A4%A"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%ZZ"
+   ],
+   "result": "%ZZ"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a%2Fb"
+   ],
+   "result": "a/b"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a.html/"
+   ],
+   "result": "a.html/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/.html"
+   ],
+   "result": ""
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/x.HTML"
+   ],
+   "result": "x.HTML"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a b"
+   ],
+   "result": "a b"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%F0%9F%98%80"
+   ],
+   "result": "😀"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%ED%A0%80"
+   ],
+   "result": "%ED%A0%80"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%C0%AF"
+   ],
+   "result": "%C0%AF"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a/.html"
+   ],
+   "result": "a/"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/1-einstieg/"
+   ],
+   "result": "1-einstieg/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/1-einstieg/index.html"
+   ],
+   "result": "1-einstieg/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/en/"
+   ],
+   "result": "en/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/Gärten/Über uns"
+   ],
+   "result": "Gärten/Über uns"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%25"
+   ],
+   "result": "%"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a%"
+   ],
+   "result": "a%"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%E2%82"
+   ],
+   "result": "%E2%82"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/%FF"
+   ],
+   "result": "%FF"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/a.html.html"
+   ],
+   "result": "a.html"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "/index.html/"
+   ],
+   "result": "index.html/index"
+  },
+  {
+   "fn": "slugFromPathname",
+   "args": [
+    "a/b"
+   ],
+   "result": "a/b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "index"
+   ],
+   "result": "p-index"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "index",
+    ""
+   ],
+   "result": "p-index"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "index",
+    "kopf"
+   ],
+   "result": "p-index--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "index",
+    "a b"
+   ],
+   "result": "p-index--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "index",
+    "h-1"
+   ],
+   "result": "p-index--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "index",
+    "😀"
+   ],
+   "result": "p-index--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a"
+   ],
+   "result": "p-a"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a",
+    ""
+   ],
+   "result": "p-a"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a",
+    "kopf"
+   ],
+   "result": "p-a--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a",
+    "a b"
+   ],
+   "result": "p-a--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a",
+    "h-1"
+   ],
+   "result": "p-a--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a",
+    "😀"
+   ],
+   "result": "p-a--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a-b"
+   ],
+   "result": "p-a-b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a-b",
+    ""
+   ],
+   "result": "p-a-b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a-b",
+    "kopf"
+   ],
+   "result": "p-a-b--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a-b",
+    "a b"
+   ],
+   "result": "p-a-b--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a-b",
+    "h-1"
+   ],
+   "result": "p-a-b--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a-b",
+    "😀"
+   ],
+   "result": "p-a-b--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a/b"
+   ],
+   "result": "p-a_2f_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a/b",
+    ""
+   ],
+   "result": "p-a_2f_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a/b",
+    "kopf"
+   ],
+   "result": "p-a_2f_b--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a/b",
+    "a b"
+   ],
+   "result": "p-a_2f_b--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a/b",
+    "h-1"
+   ],
+   "result": "p-a_2f_b--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a/b",
+    "😀"
+   ],
+   "result": "p-a_2f_b--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a_b"
+   ],
+   "result": "p-a_5f_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a_b",
+    ""
+   ],
+   "result": "p-a_5f_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a_b",
+    "kopf"
+   ],
+   "result": "p-a_5f_b--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a_b",
+    "a b"
+   ],
+   "result": "p-a_5f_b--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a_b",
+    "h-1"
+   ],
+   "result": "p-a_5f_b--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a_b",
+    "😀"
+   ],
+   "result": "p-a_5f_b--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "A9-z"
+   ],
+   "result": "p-A9-z"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "A9-z",
+    ""
+   ],
+   "result": "p-A9-z"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "A9-z",
+    "kopf"
+   ],
+   "result": "p-A9-z--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "A9-z",
+    "a b"
+   ],
+   "result": "p-A9-z--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "A9-z",
+    "h-1"
+   ],
+   "result": "p-A9-z--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "A9-z",
+    "😀"
+   ],
+   "result": "p-A9-z--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "Über"
+   ],
+   "result": "p-_dc_ber"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "Über",
+    ""
+   ],
+   "result": "p-_dc_ber"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "Über",
+    "kopf"
+   ],
+   "result": "p-_dc_ber--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "Über",
+    "a b"
+   ],
+   "result": "p-_dc_ber--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "Über",
+    "h-1"
+   ],
+   "result": "p-_dc_ber--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "Über",
+    "😀"
+   ],
+   "result": "p-_dc_ber--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ü"
+   ],
+   "result": "p-_fc_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ü",
+    ""
+   ],
+   "result": "p-_fc_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ü",
+    "kopf"
+   ],
+   "result": "p-_fc_--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ü",
+    "a b"
+   ],
+   "result": "p-_fc_--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ü",
+    "h-1"
+   ],
+   "result": "p-_fc_--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ü",
+    "😀"
+   ],
+   "result": "p-_fc_--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "😀"
+   ],
+   "result": "p-_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "😀",
+    ""
+   ],
+   "result": "p-_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "😀",
+    "kopf"
+   ],
+   "result": "p-_d83d__de00_--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "😀",
+    "a b"
+   ],
+   "result": "p-_d83d__de00_--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "😀",
+    "h-1"
+   ],
+   "result": "p-_d83d__de00_--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "😀",
+    "😀"
+   ],
+   "result": "p-_d83d__de00_--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a b"
+   ],
+   "result": "p-a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a b",
+    ""
+   ],
+   "result": "p-a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a b",
+    "kopf"
+   ],
+   "result": "p-a_20_b--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a b",
+    "a b"
+   ],
+   "result": "p-a_20_b--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a b",
+    "h-1"
+   ],
+   "result": "p-a_20_b--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "a b",
+    "😀"
+   ],
+   "result": "p-a_20_b--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "x.y"
+   ],
+   "result": "p-x_2e_y"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "x.y",
+    ""
+   ],
+   "result": "p-x_2e_y"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "x.y",
+    "kopf"
+   ],
+   "result": "p-x_2e_y--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "x.y",
+    "a b"
+   ],
+   "result": "p-x_2e_y--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "x.y",
+    "h-1"
+   ],
+   "result": "p-x_2e_y--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "x.y",
+    "😀"
+   ],
+   "result": "p-x_2e_y--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "1-einstieg/index"
+   ],
+   "result": "p-1-einstieg_2f_index"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "1-einstieg/index",
+    ""
+   ],
+   "result": "p-1-einstieg_2f_index"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "1-einstieg/index",
+    "kopf"
+   ],
+   "result": "p-1-einstieg_2f_index--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "1-einstieg/index",
+    "a b"
+   ],
+   "result": "p-1-einstieg_2f_index--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "1-einstieg/index",
+    "h-1"
+   ],
+   "result": "p-1-einstieg_2f_index--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "1-einstieg/index",
+    "😀"
+   ],
+   "result": "p-1-einstieg_2f_index--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "__quartzcontrol/register"
+   ],
+   "result": "p-_5f__5f_quartzcontrol_2f_register"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "__quartzcontrol/register",
+    ""
+   ],
+   "result": "p-_5f__5f_quartzcontrol_2f_register"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "__quartzcontrol/register",
+    "kopf"
+   ],
+   "result": "p-_5f__5f_quartzcontrol_2f_register--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "__quartzcontrol/register",
+    "a b"
+   ],
+   "result": "p-_5f__5f_quartzcontrol_2f_register--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "__quartzcontrol/register",
+    "h-1"
+   ],
+   "result": "p-_5f__5f_quartzcontrol_2f_register--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "__quartzcontrol/register",
+    "😀"
+   ],
+   "result": "p-_5f__5f_quartzcontrol_2f_register--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    ""
+   ],
+   "result": "p-"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "",
+    ""
+   ],
+   "result": "p-"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "",
+    "kopf"
+   ],
+   "result": "p---kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "",
+    "a b"
+   ],
+   "result": "p---a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "",
+    "h-1"
+   ],
+   "result": "p---h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "",
+    "😀"
+   ],
+   "result": "p---_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "-"
+   ],
+   "result": "p--"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "-",
+    ""
+   ],
+   "result": "p--"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "-",
+    "kopf"
+   ],
+   "result": "p----kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "-",
+    "a b"
+   ],
+   "result": "p----a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "-",
+    "h-1"
+   ],
+   "result": "p----h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "-",
+    "😀"
+   ],
+   "result": "p----_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "_2f_"
+   ],
+   "result": "p-_5f_2f_5f_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "_2f_",
+    ""
+   ],
+   "result": "p-_5f_2f_5f_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "_2f_",
+    "kopf"
+   ],
+   "result": "p-_5f_2f_5f_--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "_2f_",
+    "a b"
+   ],
+   "result": "p-_5f_2f_5f_--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "_2f_",
+    "h-1"
+   ],
+   "result": "p-_5f_2f_5f_--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "_2f_",
+    "😀"
+   ],
+   "result": "p-_5f_2f_5f_--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ǅ"
+   ],
+   "result": "p-_1c5_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ǅ",
+    ""
+   ],
+   "result": "p-_1c5_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ǅ",
+    "kopf"
+   ],
+   "result": "p-_1c5_--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ǅ",
+    "a b"
+   ],
+   "result": "p-_1c5_--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ǅ",
+    "h-1"
+   ],
+   "result": "p-_1c5_--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "ǅ",
+    "😀"
+   ],
+   "result": "p-_1c5_--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "́"
+   ],
+   "result": "p-_301_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "́",
+    ""
+   ],
+   "result": "p-_301_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "́",
+    "kopf"
+   ],
+   "result": "p-_301_--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "́",
+    "a b"
+   ],
+   "result": "p-_301_--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "́",
+    "h-1"
+   ],
+   "result": "p-_301_--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "́",
+    "😀"
+   ],
+   "result": "p-_301_--_d83d__de00_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "é"
+   ],
+   "result": "p-e_301_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "é",
+    ""
+   ],
+   "result": "p-e_301_"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "é",
+    "kopf"
+   ],
+   "result": "p-e_301_--kopf"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "é",
+    "a b"
+   ],
+   "result": "p-e_301_--a_20_b"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "é",
+    "h-1"
+   ],
+   "result": "p-e_301_--h-1"
+  },
+  {
+   "fn": "anchorFor",
+   "args": [
+    "é",
+    "😀"
+   ],
+   "result": "p-e_301_--_d83d__de00_"
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    "index"
+   ],
+   "result": ""
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    "index"
+   ],
+   "result": true
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    "a"
+   ],
+   "result": ""
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    "a"
+   ],
+   "result": false
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    "a/b"
+   ],
+   "result": "a"
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    "a/b/index"
+   ],
+   "result": "a/b"
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    "a/b/index"
+   ],
+   "result": true
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    "a/b/c"
+   ],
+   "result": "a/b"
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    "a/b/c"
+   ],
+   "result": false
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    ""
+   ],
+   "result": ""
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    ""
+   ],
+   "result": false
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    "/"
+   ],
+   "result": ""
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    "/"
+   ],
+   "result": false
+  },
+  {
+   "fn": "folderOf",
+   "args": [
+    "a//b"
+   ],
+   "result": "a/"
+  },
+  {
+   "fn": "isFolderIndex",
+   "args": [
+    "a//b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "index",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "index",
+    ""
+   ],
+   "result": 0
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "index",
+    "a"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "index",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "index",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "index",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/index",
+    ""
+   ],
+   "result": 1
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index",
+    "a"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/index",
+    "a"
+   ],
+   "result": 0
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a",
+    ""
+   ],
+   "result": 1
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a",
+    "a"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b",
+    ""
+   ],
+   "result": 2
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b",
+    "a"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b",
+    "a"
+   ],
+   "result": 1
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/index",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b/index",
+    ""
+   ],
+   "result": 2
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/index",
+    "a"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b/index",
+    "a"
+   ],
+   "result": 1
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/index",
+    "a/b"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b/index",
+    "a/b"
+   ],
+   "result": 0
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/index",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/index",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/c",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b/c",
+    ""
+   ],
+   "result": 3
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/c",
+    "a"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b/c",
+    "a"
+   ],
+   "result": 2
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/c",
+    "a/b"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/b/c",
+    "a/b"
+   ],
+   "result": 1
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/c",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/b/c",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "ab/c",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "ab/c",
+    ""
+   ],
+   "result": 2
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "ab/c",
+    "a"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "ab/c",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "ab/c",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "ab/c",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/index",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "en/index",
+    ""
+   ],
+   "result": 1
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/index",
+    "a"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/index",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/index",
+    "en"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "en/index",
+    "en"
+   ],
+   "result": 0
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/index",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/a/b",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "en/a/b",
+    ""
+   ],
+   "result": 3
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/a/b",
+    "a"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/a/b",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/a/b",
+    "en"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "en/a/b",
+    "en"
+   ],
+   "result": 2
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "en/a/b",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "x/index",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "x/index",
+    ""
+   ],
+   "result": 1
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "x/index",
+    "a"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "x/index",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "x/index",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "x/index",
+    "x"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "x/index",
+    "x"
+   ],
+   "result": 0
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index/x",
+    ""
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/index/x",
+    ""
+   ],
+   "result": 3
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index/x",
+    "a"
+   ],
+   "result": true
+  },
+  {
+   "fn": "pageDepth",
+   "args": [
+    "a/index/x",
+    "a"
+   ],
+   "result": 2
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index/x",
+    "a/b"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index/x",
+    "en"
+   ],
+   "result": false
+  },
+  {
+   "fn": "insideRoot",
+   "args": [
+    "a/index/x",
+    "x"
+   ],
+   "result": false
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "index",
+      "title": "Start"
+     },
+     {
+      "slug": "1-einstieg/index",
+      "title": "1 Einstieg"
+     },
+     {
+      "slug": "1-einstieg/a",
+      "title": "Zweite"
+     },
+     {
+      "slug": "1-einstieg/b",
+      "title": "erste"
+     },
+     {
+      "slug": "10-anhang/index",
+      "title": "10 Anhang"
+     },
+     {
+      "slug": "2-mitte/index",
+      "title": "2 Mitte"
+     },
+     {
+      "slug": "2-mitte/x",
+      "title": "X"
+     },
+     {
+      "slug": "lose",
+      "title": "Lose Seite"
+     },
+     {
+      "slug": "Ärger",
+      "title": "Ärger"
+     }
+    ]
+   ],
+   "result": [
+    "index",
+    "1-einstieg/index",
+    "1-einstieg/b",
+    "1-einstieg/a",
+    "2-mitte/index",
+    "2-mitte/x",
+    "10-anhang/index",
+    "Ärger",
+    "lose"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "b/c",
+      "title": "C",
+      "filePath": "B Ordner/c.md"
+     },
+     {
+      "slug": "b/a",
+      "title": "a"
+     },
+     {
+      "slug": "a",
+      "title": "Z"
+     },
+     {
+      "slug": "index",
+      "title": "Home"
+     }
+    ]
+   ],
+   "result": [
+    "index",
+    "b/a",
+    "b/c",
+    "a"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "a/b/c/d",
+      "title": "D",
+      "filePath": "A/B/C/d.md"
+     },
+     {
+      "slug": "a/b/index",
+      "title": "index"
+     },
+     {
+      "slug": "a/index",
+      "title": "Ordner A"
+     }
+    ]
+   ],
+   "result": [
+    "a/index",
+    "a/b/index",
+    "a/b/c/d"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "x",
+      "title": "Seite X"
+     },
+     {
+      "slug": "x/y",
+      "title": "Y"
+     },
+     {
+      "slug": "x/index",
+      "title": "Index X"
+     }
+    ]
+   ],
+   "result": [
+    "x",
+    "x/y"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "v10",
+      "title": "v10"
+     },
+     {
+      "slug": "v2",
+      "title": "v2"
+     },
+     {
+      "slug": "V1",
+      "title": "V1"
+     },
+     {
+      "slug": "é",
+      "title": "é"
+     },
+     {
+      "slug": "e",
+      "title": "e"
+     },
+     {
+      "slug": "f",
+      "title": "f"
+     }
+    ]
+   ],
+   "result": [
+    "é",
+    "e",
+    "f",
+    "V1",
+    "v2",
+    "v10"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "docs/tags",
+      "title": "Tags-Komponente"
+     },
+     {
+      "slug": "docs/index",
+      "title": "Docs"
+     },
+     {
+      "slug": "index",
+      "title": "Home"
+     }
+    ]
+   ],
+   "result": [
+    "index",
+    "docs/index",
+    "docs/tags"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "index",
+      "title": "A"
+     },
+     {
+      "slug": "index",
+      "title": "B"
+     },
+     {
+      "slug": "k/index",
+      "title": "K1"
+     },
+     {
+      "slug": "k/index",
+      "title": "K2"
+     }
+    ]
+   ],
+   "result": [
+    "index",
+    "k/index"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "a/x",
+      "title": "X",
+      "filePath": ""
+     },
+     {
+      "slug": "b/x",
+      "title": "X"
+     },
+     {
+      "slug": "c/x",
+      "title": "X",
+      "filePath": "C/x.md"
+     }
+    ]
+   ],
+   "result": [
+    "a/x",
+    "b/x",
+    "c/x"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    []
+   ],
+   "result": []
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "nur",
+      "title": "Nur"
+     }
+    ]
+   ],
+   "result": [
+    "nur"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "a/y",
+      "title": "Y",
+      "filePath": "Zulu/y.md"
+     },
+     {
+      "slug": "b/x",
+      "title": "X",
+      "filePath": "Alpha/x.md"
+     }
+    ]
+   ],
+   "result": [
+    "b/x",
+    "a/y"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "x/index",
+      "title": "index"
+     },
+     {
+      "slug": "x/p",
+      "title": "P"
+     },
+     {
+      "slug": "m/index",
+      "title": "Mitte"
+     },
+     {
+      "slug": "m/q",
+      "title": "Q"
+     }
+    ]
+   ],
+   "result": [
+    "m/index",
+    "m/q",
+    "x/index",
+    "x/p"
+   ]
+  },
+  {
+   "fn": "explorerOrder",
+   "args": [
+    [
+     {
+      "slug": "Gärten/über",
+      "title": "über"
+     },
+     {
+      "slug": "Gärten/Ufer",
+      "title": "Ufer"
+     },
+     {
+      "slug": "gärten/index",
+      "title": "gärten"
+     },
+     {
+      "slug": "Zebra",
+      "title": "zebra"
+     },
+     {
+      "slug": "apfel",
+      "title": "Apfel"
+     }
+    ]
+   ],
+   "result": [
+    "Gärten/über",
+    "Gärten/Ufer",
+    "gärten/index",
+    "apfel",
+    "Zebra"
+   ]
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "c",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [
+      "a/x",
+      "c"
+     ],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 2
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [],
+     "root": "a"
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [],
+     "root": "en"
+    },
+    [
+     "en/a"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "en/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "en/a",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [],
+     "root": ""
+    },
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "c",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "gone",
+     "a/x"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "c",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [],
+     "root": "b"
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "a/x",
+     "b/z"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [
+      {
+       "slug": "c"
+      },
+      {
+       "heading": "Anhang"
+      },
+      {
+       "slug": "a/x"
+      },
+      {
+       "slug": "gone"
+      },
+      {
+       "slug": "a/x"
+      }
+     ],
+     "excluded": [],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "c",
+      "level": 1
+     },
+     {
+      "kind": "heading",
+      "text": "Anhang",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 3
+     },
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 3
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 3
+     }
+    ],
+    "missing": [
+     "gone"
+    ],
+    "appended": [
+     "index",
+     "a/index",
+     "a/y",
+     "b/index",
+     "b/z"
+    ]
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [
+      {
+       "heading": "Erst"
+      },
+      {
+       "slug": "b/z"
+      }
+     ],
+     "excluded": [
+      "a/y"
+     ],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "heading",
+      "text": "Erst",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 3
+     },
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 3
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "c",
+      "level": 2
+     }
+    ],
+    "missing": [],
+    "appended": [
+     "index",
+     "a/index",
+     "a/x",
+     "b/index",
+     "c"
+    ]
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [
+      {
+       "slug": "a/x"
+      },
+      {
+       "slug": "en/a"
+      },
+      {
+       "slug": "b/z"
+      }
+     ],
+     "excluded": [],
+     "root": "a"
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": [
+     "a/index",
+     "a/y"
+    ]
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [],
+     "excluded": [],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "c",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ]
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [
+      {
+       "heading": "H"
+      }
+     ],
+     "excluded": [],
+     "root": ""
+    },
+    [],
+    []
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "heading",
+      "text": "H",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [
+      {
+       "slug": "gone"
+      },
+      {
+       "slug": "c"
+      }
+     ],
+     "excluded": [
+      "c"
+     ],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 2
+     }
+    ],
+    "missing": [
+     "gone"
+    ],
+    "appended": [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z"
+    ]
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [],
+     "root": ""
+    },
+    [
+     "a/b/c/d/e/f/g/h",
+     "a/b/c/d/e/f/g/index",
+     "a/b"
+    ],
+    [
+     "a/b/c/d/e/f/g/h",
+     "a/b/c/d/e/f/g/index",
+     "a/b",
+     "index"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/b/c/d/e/f/g/h",
+      "level": 6
+     },
+     {
+      "kind": "page",
+      "slug": "a/b/c/d/e/f/g/index",
+      "level": 6
+     },
+     {
+      "kind": "page",
+      "slug": "a/b",
+      "level": 2
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [
+      {
+       "heading": "Tief"
+      },
+      {
+       "slug": "a/b/c/d/e/f/g/h"
+      },
+      {
+       "slug": "a/b/c/d/e/f/g"
+      }
+     ],
+     "excluded": [],
+     "root": ""
+    },
+    [],
+    [
+     "a/b/c/d/e/f/g/h",
+     "a/b/c/d/e/f/g"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "heading",
+      "text": "Tief",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/b/c/d/e/f/g/h",
+      "level": 6
+     },
+     {
+      "kind": "page",
+      "slug": "a/b/c/d/e/f/g",
+      "level": 6
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": null,
+     "excluded": [
+      "index"
+     ],
+     "root": ""
+    },
+    [
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/x",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "a/y",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "b/index",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "b/z",
+      "level": 2
+     },
+     {
+      "kind": "page",
+      "slug": "c",
+      "level": 1
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "resolveOrder",
+   "args": [
+    {
+     "order": [
+      {
+       "slug": "index"
+      },
+      {
+       "heading": "A"
+      },
+      {
+       "heading": "B"
+      },
+      {
+       "slug": "a/index"
+      }
+     ],
+     "excluded": [],
+     "root": ""
+    },
+    [
+     "a/index"
+    ],
+    [
+     "index",
+     "a/index",
+     "a/x",
+     "a/y",
+     "b/index",
+     "b/z",
+     "c",
+     "en/index",
+     "en/a"
+    ]
+   ],
+   "result": {
+    "items": [
+     {
+      "kind": "page",
+      "slug": "index",
+      "level": 1
+     },
+     {
+      "kind": "heading",
+      "text": "A",
+      "level": 1
+     },
+     {
+      "kind": "heading",
+      "text": "B",
+      "level": 1
+     },
+     {
+      "kind": "page",
+      "slug": "a/index",
+      "level": 2
+     }
+    ],
+    "missing": [],
+    "appended": []
+   }
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "index",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "a/index",
+    "#k"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "a/b",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "x?y",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "a/index/",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "😀",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    null,
+    "it's(1)!*~",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "index",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "a/index",
+    "#k"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "a/b",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "x?y",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "a/index/",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "😀",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "index",
+    ""
+   ],
+   "result": "https://example.com/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "a/index",
+    "#k"
+   ],
+   "result": "https://example.com/a/#k"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "a/b",
+    ""
+   ],
+   "result": "https://example.com/a/b"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": "https://example.com/a%20b/%C3%BC#t%C3%BC"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "x?y",
+    ""
+   ],
+   "result": "https://example.com/x%3Fy"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "a/index/",
+    ""
+   ],
+   "result": "https://example.com/a/index/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "😀",
+    ""
+   ],
+   "result": "https://example.com/%F0%9F%98%80"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": "https://example.com/it's(1)!*~"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "index",
+    ""
+   ],
+   "result": "https://example.com/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "a/index",
+    "#k"
+   ],
+   "result": "https://example.com/a/#k"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "a/b",
+    ""
+   ],
+   "result": "https://example.com/a/b"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": "https://example.com/a%20b/%C3%BC#t%C3%BC"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "x?y",
+    ""
+   ],
+   "result": "https://example.com/x%3Fy"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "a/index/",
+    ""
+   ],
+   "result": "https://example.com/a/index/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "😀",
+    ""
+   ],
+   "result": "https://example.com/%F0%9F%98%80"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://example.com/",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": "https://example.com/it's(1)!*~"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "index",
+    ""
+   ],
+   "result": "https://example.com/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "a/index",
+    "#k"
+   ],
+   "result": "https://example.com/a/#k"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "a/b",
+    ""
+   ],
+   "result": "https://example.com/a/b"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": "https://example.com/a%20b/%C3%BC#t%C3%BC"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "x?y",
+    ""
+   ],
+   "result": "https://example.com/x%3Fy"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "a/index/",
+    ""
+   ],
+   "result": "https://example.com/a/index/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "😀",
+    ""
+   ],
+   "result": "https://example.com/%F0%9F%98%80"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "example.com",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": "https://example.com/it's(1)!*~"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "index",
+    ""
+   ],
+   "result": "https://x.y/sub/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "a/index",
+    "#k"
+   ],
+   "result": "https://x.y/sub/a/#k"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "a/b",
+    ""
+   ],
+   "result": "https://x.y/sub/a/b"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": "https://x.y/sub/a%20b/%C3%BC#t%C3%BC"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "x?y",
+    ""
+   ],
+   "result": "https://x.y/sub/x%3Fy"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "a/index/",
+    ""
+   ],
+   "result": "https://x.y/sub/a/index/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "😀",
+    ""
+   ],
+   "result": "https://x.y/sub/%F0%9F%98%80"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "http://x.y/sub/",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": "https://x.y/sub/it's(1)!*~"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "index",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "a/index",
+    "#k"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "a/b",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "x?y",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "a/index/",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "😀",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "https://",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "index",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "a/index",
+    "#k"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "a/b",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "x?y",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "a/index/",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "😀",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "///",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": null
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "index",
+    ""
+   ],
+   "result": "https://quartzmac.borkel.net/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "a/index",
+    "#k"
+   ],
+   "result": "https://quartzmac.borkel.net/a/#k"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "a/b",
+    ""
+   ],
+   "result": "https://quartzmac.borkel.net/a/b"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": "https://quartzmac.borkel.net/a%20b/%C3%BC#t%C3%BC"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "x?y",
+    ""
+   ],
+   "result": "https://quartzmac.borkel.net/x%3Fy"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "a/index/",
+    ""
+   ],
+   "result": "https://quartzmac.borkel.net/a/index/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "😀",
+    ""
+   ],
+   "result": "https://quartzmac.borkel.net/%F0%9F%98%80"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "quartzmac.borkel.net/",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": "https://quartzmac.borkel.net/it's(1)!*~"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "index",
+    ""
+   ],
+   "result": "https:// x /"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "a/index",
+    "#k"
+   ],
+   "result": "https:// x /a/#k"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "a/b",
+    ""
+   ],
+   "result": "https:// x /a/b"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": "https:// x /a%20b/%C3%BC#t%C3%BC"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "x?y",
+    ""
+   ],
+   "result": "https:// x /x%3Fy"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "a/index/",
+    ""
+   ],
+   "result": "https:// x /a/index/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "😀",
+    ""
+   ],
+   "result": "https:// x /%F0%9F%98%80"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    " x ",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": "https:// x /it's(1)!*~"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "index",
+    ""
+   ],
+   "result": "https://HTTPS://Groß.de/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "a/index",
+    "#k"
+   ],
+   "result": "https://HTTPS://Groß.de/a/#k"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "a/b",
+    ""
+   ],
+   "result": "https://HTTPS://Groß.de/a/b"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "a b/ü",
+    "#t%C3%BC"
+   ],
+   "result": "https://HTTPS://Groß.de/a%20b/%C3%BC#t%C3%BC"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "x?y",
+    ""
+   ],
+   "result": "https://HTTPS://Groß.de/x%3Fy"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "a/index/",
+    ""
+   ],
+   "result": "https://HTTPS://Groß.de/a/index/"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "😀",
+    ""
+   ],
+   "result": "https://HTTPS://Groß.de/%F0%9F%98%80"
+  },
+  {
+   "fn": "outsideUrl",
+   "args": [
+    "HTTPS://Groß.de",
+    "it's(1)!*~",
+    ""
+   ],
+   "result": "https://HTTPS://Groß.de/it's(1)!*~"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "a"
+   ],
+   "result": "a"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "/a"
+   ],
+   "result": "a"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "//a/"
+   ],
+   "result": "a/index"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "a/"
+   ],
+   "result": "a/index"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    ""
+   ],
+   "result": "index"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "/"
+   ],
+   "result": "index"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "a#k"
+   ],
+   "result": "a"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "a/#k"
+   ],
+   "result": "a/index"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "#k"
+   ],
+   "result": "index"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "a/b#x#y"
+   ],
+   "result": "a/b"
+  },
+  {
+   "fn": "linkSlug",
+   "args": [
+    "/4-gestaltung/"
+   ],
+   "result": "4-gestaltung/index"
+  },
+  {
+   "fn": "backlinksInBook",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "x/index"
+    ],
+    {
+     "a": [
+      "b",
+      "c",
+      "/b",
+      "b#k",
+      "a",
+      "x/"
+     ],
+     "b": [
+      "a/"
+     ],
+     "c": [
+      "b",
+      "nicht"
+     ],
+     "d": [
+      "a",
+      "b",
+      "c",
+      "x/index"
+     ],
+     "x/index": [
+      "a",
+      "d"
+     ]
+    }
+   ],
+   "result": [
+    [
+     "a",
+     [
+      "d",
+      "x/index"
+     ]
+    ],
+    [
+     "b",
+     [
+      "a",
+      "c",
+      "d"
+     ]
+    ],
+    [
+     "c",
+     [
+      "a",
+      "d"
+     ]
+    ],
+    [
+     "d",
+     [
+      "x/index"
+     ]
+    ],
+    [
+     "x/index",
+     [
+      "a",
+      "d"
+     ]
+    ]
+   ]
+  },
+  {
+   "fn": "backlinksInBook",
+   "args": [
+    [
+     "d",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "b",
+      "c",
+      "/b",
+      "b#k",
+      "a",
+      "x/"
+     ],
+     "b": [
+      "a/"
+     ],
+     "c": [
+      "b",
+      "nicht"
+     ],
+     "d": [
+      "a",
+      "b",
+      "c",
+      "x/index"
+     ],
+     "x/index": [
+      "a",
+      "d"
+     ]
+    }
+   ],
+   "result": [
+    [
+     "d",
+     []
+    ],
+    [
+     "c",
+     [
+      "d",
+      "a"
+     ]
+    ],
+    [
+     "b",
+     [
+      "d",
+      "c",
+      "a"
+     ]
+    ],
+    [
+     "a",
+     [
+      "d"
+     ]
+    ]
+   ]
+  },
+  {
+   "fn": "backlinksInBook",
+   "args": [
+    [
+     "a"
+    ],
+    {
+     "a": [
+      "b",
+      "c",
+      "/b",
+      "b#k",
+      "a",
+      "x/"
+     ],
+     "b": [
+      "a/"
+     ],
+     "c": [
+      "b",
+      "nicht"
+     ],
+     "d": [
+      "a",
+      "b",
+      "c",
+      "x/index"
+     ],
+     "x/index": [
+      "a",
+      "d"
+     ]
+    }
+   ],
+   "result": [
+    [
+     "a",
+     []
+    ]
+   ]
+  },
+  {
+   "fn": "backlinksInBook",
+   "args": [
+    [],
+    {
+     "a": [
+      "b",
+      "c",
+      "/b",
+      "b#k",
+      "a",
+      "x/"
+     ],
+     "b": [
+      "a/"
+     ],
+     "c": [
+      "b",
+      "nicht"
+     ],
+     "d": [
+      "a",
+      "b",
+      "c",
+      "x/index"
+     ],
+     "x/index": [
+      "a",
+      "d"
+     ]
+    }
+   ],
+   "result": []
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "de"
+   ],
+   "result": [
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "de"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "en"
+   ],
+   "result": [
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "en"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    ""
+   ],
+   "result": [
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    ""
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "sv"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "sv"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "de-CH"
+   ],
+   "result": [
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "de-CH"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "tr"
+   ],
+   "result": [
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "tr"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "es"
+   ],
+   "result": [
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "es"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "cs"
+   ],
+   "result": [
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "cs"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "a",
+     "b",
+     "c",
+     "d",
+     "e"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "fi"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "tagRegister",
+   "args": [
+    [
+     "e",
+     "c",
+     "b",
+     "a"
+    ],
+    {
+     "a": [
+      "Zebra",
+      "apfel",
+      "Äpfel",
+      "zebra"
+     ],
+     "b": [
+      "v10",
+      "v2",
+      "Apfel",
+      "apfel"
+     ],
+     "c": [
+      "ö",
+      "z",
+      "o",
+      "é",
+      "e",
+      "Z",
+      "ñ",
+      "n",
+      "å",
+      "ş",
+      "s",
+      "č",
+      "c"
+     ],
+     "d": [],
+     "e": [
+      "a",
+      "a",
+      "B"
+     ]
+    },
+    "fi"
+   ],
+   "result": [
+    {
+     "tag": "a",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "Apfel",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "apfel",
+     "pages": [
+      "b",
+      "a"
+     ]
+    },
+    {
+     "tag": "B",
+     "pages": [
+      "e"
+     ]
+    },
+    {
+     "tag": "č",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "c",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "é",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "e",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ñ",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "n",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "o",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "ş",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "s",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "v2",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "v10",
+     "pages": [
+      "b"
+     ]
+    },
+    {
+     "tag": "z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Z",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "zebra",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "å",
+     "pages": [
+      "c"
+     ]
+    },
+    {
+     "tag": "Äpfel",
+     "pages": [
+      "a"
+     ]
+    },
+    {
+     "tag": "ö",
+     "pages": [
+      "c"
+     ]
+    }
+   ]
+  },
+  {
+   "fn": "REGISTER_SLUG",
+   "args": [],
+   "result": "__quartzcontrol/register"
+  }
+ ]
+}

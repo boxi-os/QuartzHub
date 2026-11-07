@@ -85,6 +85,23 @@ extension JS {
     }
   }
 
+  /// `a.localeCompare(b, locale || undefined, { numeric, sensitivity: 'base' })` and
+  /// `Intl.Collator(…).compare`: ICU collation, as -1, 0 or 1, from the system's ICU
+  /// (`ICUCollation`), else Foundation, which folds accents regardless of the language. Without a
+  /// locale, German, as `localeCompare` above (QuartzControl's default locale is the system's;
+  /// measured de-DE).
+  static func collate(_ a: String, _ b: String, locale: String, numeric: Bool, base: Bool) -> Double {
+    if let result = ICUCollation.compare(a, b, locale: locale.isEmpty ? "de" : locale, numeric: numeric, base: base) { return Double(result) }
+    var options: String.CompareOptions = []
+    if numeric { options.insert(.numeric) }
+    if base { options.formUnion([.caseInsensitive, .diacriticInsensitive]) }
+    switch a.compare(b, options: options, range: nil, locale: Locale(identifier: locale.isEmpty ? "de" : locale)) {
+    case .orderedAscending: return -1
+    case .orderedSame: return 0
+    case .orderedDescending: return 1
+    }
+  }
+
   static func round(_ value: Double) -> Double { (value + 0.5).rounded(.down) }
 
   /// A TypeError as `String(error)` prints it.
