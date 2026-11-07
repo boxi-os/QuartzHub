@@ -15,21 +15,24 @@ public final class SiteServer: Sendable {
   /// `http://127.0.0.1:<port>`.
   public let origin: String
   private let listener: NWListener
+  private let observe: (@Sendable (String) -> Void)?
   private let connections = Mutex<[ObjectIdentifier: NWConnection]>([:])
   private static let queue = DispatchQueue(label: "io.github.boxios.quartzhub.site-server")
 
-  private init(copy: SiteCopy, origin: String, listener: NWListener) {
+  private init(copy: SiteCopy, origin: String, listener: NWListener, observe: (@Sendable (String) -> Void)?) {
     self.copy = copy
     self.origin = origin
     self.listener = listener
+    self.observe = observe
   }
 
   public struct StartFailure: Error, CustomStringConvertible {
     public let description: String
   }
 
-  /// Listens on a free port of 127.0.0.1 and answers from `copy` until `close()`.
-  public static func start(_ copy: SiteCopy) async throws -> SiteServer {
+  /// Listens on a free port of 127.0.0.1 and answers from `copy` until `close()`. `observe` hears
+  /// the path of every request (for measuring what reached the server).
+  public static func start(_ copy: SiteCopy, observe: (@Sendable (String) -> Void)? = nil) async throws -> SiteServer {
     let parameters = NWParameters.tcp
     parameters.requiredLocalEndpoint = .hostPort(host: "127.0.0.1", port: .any)
     parameters.allowLocalEndpointReuse = true
@@ -52,7 +55,7 @@ public final class SiteServer: Sendable {
       }
       listener.start(queue: queue)
     }
-    let made = SiteServer(copy: copy, origin: "http://127.0.0.1:\(port)", listener: listener)
+    let made = SiteServer(copy: copy, origin: "http://127.0.0.1:\(port)", listener: listener, observe: observe)
     server.value = made
     return made
   }
@@ -107,6 +110,7 @@ public final class SiteServer: Sendable {
       rest.removeFirst(length)
       // `new URL(req.url, 'http://x').pathname`: dot segments resolved, the escapes as WHATWG writes them.
       let pathname = WebURL("http://x" + target).parts?.pathname ?? "/"
+      observe?(pathname)
       let answer = copy.answer(pathname: pathname)
       var response = "HTTP/1.1 \(answer.status) \(Self.reason(answer.status))\r\n"
       if let type = answer.type { response += "Content-Type: \(type)\r\n" }

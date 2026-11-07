@@ -1,0 +1,438 @@
+{
+ "origin": "http://127.0.0.1:52103",
+ "decisions": [
+  {
+   "url": "http://127.0.0.1:52103/",
+   "resourceType": "mainFrame",
+   "cancel": false
+  },
+  {
+   "url": "http://127.0.0.1:52103/index.css",
+   "resourceType": "stylesheet",
+   "cancel": false
+  },
+  {
+   "url": "http://127.0.0.1:52103/static/x.js",
+   "resourceType": "script",
+   "cancel": false
+  },
+  {
+   "url": "http://127.0.0.1:52103/static/contentIndex.json",
+   "resourceType": "xhr",
+   "cancel": false
+  },
+  {
+   "url": "http://127.0.0.1:52103",
+   "resourceType": "mainFrame",
+   "cancel": false
+  },
+  {
+   "url": "http://127.0.0.1:52103x/evil",
+   "resourceType": "script",
+   "cancel": true
+  },
+  {
+   "url": "http://127.0.0.1:52104/x.js",
+   "resourceType": "script",
+   "cancel": true
+  },
+  {
+   "url": "http://localhost:52103/x.js",
+   "resourceType": "script",
+   "cancel": true
+  },
+  {
+   "url": "data:image/png;base64,AAAA",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "data:text/javascript,1",
+   "resourceType": "script",
+   "cancel": false
+  },
+  {
+   "url": "blob:http://127.0.0.1:52103/1-2",
+   "resourceType": "script",
+   "cancel": false
+  },
+  {
+   "url": "devtools://devtools/x",
+   "resourceType": "other",
+   "cancel": false
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css",
+   "resourceType": "stylesheet",
+   "cancel": false
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2",
+   "resourceType": "font",
+   "cancel": false
+  },
+  {
+   "url": "https://fonts.gstatic.com/s/inter/v1/a.woff2",
+   "resourceType": "font",
+   "cancel": false
+  },
+  {
+   "url": "https://example.com/picture.png",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "https://example.com:8443/picture.png",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js",
+   "resourceType": "script",
+   "cancel": false
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs",
+   "resourceType": "script",
+   "cancel": false
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js",
+   "resourceType": "script",
+   "cancel": false
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/mermaid-chunk.js",
+   "resourceType": "script",
+   "cancel": false
+  },
+  {
+   "url": "https://x.example/mermaidx.js",
+   "resourceType": "script",
+   "cancel": true
+  },
+  {
+   "url": "https://x.example/Mermaid.js",
+   "resourceType": "script",
+   "cancel": true
+  },
+  {
+   "url": "https://plausible.io/js/script.js",
+   "resourceType": "script",
+   "cancel": true
+  },
+  {
+   "url": "https://plausible.io/api/event",
+   "resourceType": "ping",
+   "cancel": true
+  },
+  {
+   "url": "https://plausible.io/api/event",
+   "resourceType": "xhr",
+   "cancel": true
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/d3@7",
+   "resourceType": "script",
+   "cancel": true
+  },
+  {
+   "url": "wss://live.example/socket",
+   "resourceType": "webSocket",
+   "cancel": true
+  },
+  {
+   "url": "ws://127.0.0.1:52104/ws",
+   "resourceType": "webSocket",
+   "cancel": true
+  },
+  {
+   "url": "https://www.youtube.com/embed/x",
+   "resourceType": "subFrame",
+   "cancel": true
+  },
+  {
+   "url": "https://example.com/video.mp4",
+   "resourceType": "media",
+   "cancel": true
+  },
+  {
+   "url": "https://example.com/doc.pdf",
+   "resourceType": "object",
+   "cancel": true
+  },
+  {
+   "url": "chrome-extension://mhjfbmdgcfjbbpaeojofohoefgiehjai/index.html",
+   "resourceType": "subFrame",
+   "cancel": true
+  },
+  {
+   "url": "about:blank",
+   "resourceType": "subFrame",
+   "cancel": true
+  },
+  {
+   "url": "ftp://example.com/x",
+   "resourceType": "other",
+   "cancel": true
+  },
+  {
+   "url": "not a url at all, longer than forty characters for the cut",
+   "resourceType": "other",
+   "cancel": true
+  },
+  {
+   "url": "https://example.com/a.css",
+   "resourceType": "stylesheet",
+   "cancel": false
+  },
+  {
+   "url": "https://example.com/a.css",
+   "resourceType": "stylesheet",
+   "cancel": false
+  },
+  {
+   "url": "https://user:pw@example.com/p.png",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "https://EXAMPLE.com/p.png",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "https://xn--grten-gra.example/p.png",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "https://gärten.example/p.png",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "https://[::1]:8080/p.png",
+   "resourceType": "image",
+   "cancel": false
+  },
+  {
+   "url": "https://example.com/beacon",
+   "resourceType": "ping",
+   "cancel": true
+  },
+  {
+   "url": "https://example.com/csp",
+   "resourceType": "cspReport",
+   "cancel": true
+  },
+  {
+   "url": "https://example.com/x",
+   "resourceType": "other",
+   "cancel": true
+  }
+ ],
+ "navigations": [
+  {
+   "event": "will-navigate",
+   "url": "http://127.0.0.1:52103/a",
+   "prevented": false
+  },
+  {
+   "event": "will-navigate",
+   "url": "http://127.0.0.1:52103/",
+   "prevented": false
+  },
+  {
+   "event": "will-navigate",
+   "url": "http://127.0.0.1:52103",
+   "prevented": true
+  },
+  {
+   "event": "will-navigate",
+   "url": "https://example.com/",
+   "prevented": true
+  },
+  {
+   "event": "will-navigate",
+   "url": "http://127.0.0.1:52103x/",
+   "prevented": true
+  },
+  {
+   "event": "will-navigate",
+   "url": "about:blank",
+   "prevented": true
+  },
+  {
+   "event": "will-navigate",
+   "url": "javascript:alert(1)",
+   "prevented": true
+  },
+  {
+   "event": "will-navigate",
+   "url": "http://127.0.0.1:52104/",
+   "prevented": true
+  },
+  {
+   "event": "will-redirect",
+   "url": "http://127.0.0.1:52103/a",
+   "prevented": false
+  },
+  {
+   "event": "will-redirect",
+   "url": "http://127.0.0.1:52103/",
+   "prevented": false
+  },
+  {
+   "event": "will-redirect",
+   "url": "http://127.0.0.1:52103",
+   "prevented": true
+  },
+  {
+   "event": "will-redirect",
+   "url": "https://example.com/",
+   "prevented": true
+  },
+  {
+   "event": "will-redirect",
+   "url": "http://127.0.0.1:52103x/",
+   "prevented": true
+  },
+  {
+   "event": "will-redirect",
+   "url": "about:blank",
+   "prevented": true
+  },
+  {
+   "event": "will-redirect",
+   "url": "javascript:alert(1)",
+   "prevented": true
+  },
+  {
+   "event": "will-redirect",
+   "url": "http://127.0.0.1:52104/",
+   "prevented": true
+  }
+ ],
+ "refused": [
+  [
+   "script http://127.0.0.1:52103x/evil",
+   1
+  ],
+  [
+   "script 127.0.0.1:52104",
+   1
+  ],
+  [
+   "script localhost:52103",
+   1
+  ],
+  [
+   "script x.example",
+   2
+  ],
+  [
+   "script plausible.io",
+   1
+  ],
+  [
+   "ping plausible.io",
+   1
+  ],
+  [
+   "xhr plausible.io",
+   1
+  ],
+  [
+   "script cdn.jsdelivr.net",
+   1
+  ],
+  [
+   "webSocket live.example",
+   1
+  ],
+  [
+   "webSocket 127.0.0.1:52104",
+   1
+  ],
+  [
+   "subFrame www.youtube.com",
+   1
+  ],
+  [
+   "media example.com",
+   1
+  ],
+  [
+   "object example.com",
+   1
+  ],
+  [
+   "subFrame (chrome-extension)",
+   1
+  ],
+  [
+   "subFrame (about)",
+   1
+  ],
+  [
+   "other (ftp)",
+   1
+  ],
+  [
+   "other not a url at all, longer than forty char",
+   1
+  ],
+  [
+   "ping example.com",
+   1
+  ],
+  [
+   "cspReport example.com",
+   1
+  ],
+  [
+   "other example.com",
+   1
+  ]
+ ],
+ "fetched": [
+  [
+   "cdn.jsdelivr.net",
+   5
+  ],
+  [
+   "fonts.gstatic.com",
+   1
+  ],
+  [
+   "example.com",
+   5
+  ],
+  [
+   "example.com:8443",
+   1
+  ],
+  [
+   "cdnjs.cloudflare.com",
+   1
+  ],
+  [
+   "xn--grten-gra.example",
+   2
+  ],
+  [
+   "[::1]:8080",
+   1
+  ]
+ ],
+ "windowOpen": {
+  "action": "deny"
+ },
+ "permissionGranted": false,
+ "windowOptions": {
+  "show": false,
+  "sandbox": true,
+  "backgroundThrottling": false
+ }
+}

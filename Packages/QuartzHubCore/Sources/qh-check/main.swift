@@ -4,6 +4,7 @@
 //   swift run --package-path Packages/QuartzHubCore qh-check i18n [--root <repo>] [--unused]
 //   swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]
 //   swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]
+//   swift run --package-path Packages/QuartzHubCore qh-check export-window
 //
 // Exit codes: 0 all good, 1 findings, 2 wrong call, 3 could not check everything.
 import Foundation
@@ -18,6 +19,9 @@ func usage() -> Never {
     option-schema <projekt> [--plugin <name>] [--dump]
                                       wie viele Optionen je Plugin QuartzHub darstellen kann
                                       (Feld, nur Text, unsichtbar); --dump das Schema als JSON
+    export-window                     das Exportfenster gegen QuartzControls Regel in WebKit:
+                                      was ein zweiter Server erreicht, was gezählt wird, Frist,
+                                      Abbruch, Seitenskripte (braucht Helpers/dist/page-scripts.js)
     inline-svg [projekt]              der SVG-Bereiniger gegen WebKit: jedes Ergebnis als HTML
                                       und, mit einem Projekt mit quartz-layout-box, durch dessen
                                       Markdown-Kette; Exit 3, wenn Lagen ausgelassen wurden
@@ -119,6 +123,11 @@ case "option-schema":
       return 2
     }
   }
+case "export-window":
+  // WebKit wants the main run loop turning (see runAndExit).
+  setvbuf(stdout, nil, _IOLBF, 0)
+  let root = repositoryRoot()
+  runAndExit { await runExportWindowCheck(root: root) }
 case "inline-svg":
   // WebKit wants the main run loop turning (see runAndExit).
   setvbuf(stdout, nil, _IOLBF, 0)
