@@ -51,10 +51,16 @@ import Testing
     let clock = ContinuousClock()
     let start = clock.now
     // The grandchild prints its pid and then holds stdout, as rsync's ssh does.
-    let result = await ProcessRunner.run(Self.sh("sleep 30 & echo $!; wait", timeout: .milliseconds(300)))
+    var command = Self.sh("sleep 30 & echo $!; wait", timeout: .milliseconds(300))
+    // "At once" is before the kill: with 10 s between SIGTERM and SIGKILL, an answer that waited
+    // for the kill takes 10.3 s. The margin is for the test runner: with the whole suite on the
+    // cooperative pool, this task resumed up to 3.6 s after the answer (4 of 7 runs over 2 s
+    // with a margin of 2 s, 2026-11-07); the answer itself came at 300 ms.
+    command.killGrace = .seconds(10)
+    let result = await ProcessRunner.run(command)
     let took = clock.now - start
     #expect(result.termination == .timedOut)
-    #expect(took < .seconds(2), "took \(took)")
+    #expect(took < .seconds(8), "took \(took)")
     let grandchild = try #require(pid_t(result.stdout.trimmingCharacters(in: .whitespacesAndNewlines)))
     // SIGTERM to the group reaches the grandchild too.
     var gone = false

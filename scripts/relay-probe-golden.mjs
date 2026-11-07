@@ -82,7 +82,7 @@ const stubs = {
 }
 const forms = await loadQuartzControl(control, 'electron/main/services/formsService.ts', stubs, {
   expose: ['checkRelay', 'countersServed', 'phpMessage', 'localHost'],
-  replace: [['const CHECK_RELAY_TIMEOUT_MS = 10_000', 'const CHECK_RELAY_TIMEOUT_MS = 2_000'], ['const RELAY_ASK_AGAIN_MS = 3000', 'const RELAY_ASK_AGAIN_MS = 500']]
+  replace: [['const CHECK_RELAY_TIMEOUT_MS = 10_000', 'const CHECK_RELAY_TIMEOUT_MS = 2_000'], ['const RELAY_ASK_AGAIN_MS = 3000', 'const RELAY_ASK_AGAIN_MS = 1500']]
 })
 
 const P = (s) => s.split('@PORT@').join(String(port)).split('@CLOSED@').join(String(closedPort))
@@ -97,7 +97,7 @@ async function probe(name, url, origin, form, generation) {
   const started = Date.now()
   const answer = await forms.checkRelay(url === null ? undefined : P(url), origin, form ?? undefined, generation ?? undefined)
   const ms = Date.now() - started
-  cases.push({ name, op: 'check', args: [url, origin, form, generation], answer: JSON.parse(mask(JSON.stringify(answer))), requests: await serverLog(), slow: ms > 400 })
+  cases.push({ name, op: 'check', args: [url, origin, form, generation], answer: JSON.parse(mask(JSON.stringify(answer))), requests: await serverLog(), slow: ms > 1000 })
 }
 async function counters(name, url) {
   await serverLog()

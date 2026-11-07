@@ -39,7 +39,7 @@ struct RelayProbeTests {
   }
 
   static func probe(port: Int) -> RelayProbe {
-    RelayProbe(timeout: .seconds(2), askAgain: .milliseconds(500), configuration: {
+    RelayProbe(timeout: .seconds(2), askAgain: .milliseconds(1500), configuration: {
       let configuration = URLSessionConfiguration.ephemeral
       configuration.urlCache = nil
       configuration.connectionProxyDictionary = [
@@ -99,7 +99,9 @@ struct RelayProbeTests {
       } else {
         answer = await probe.countersServed(unmask(args[0].stringValue!)).map { .string(mask($0)) } ?? .null
       }
-      let slow = ContinuousClock.now - started > .milliseconds(400)
+      // Asking again waits 1.5 s, a deadline 2 s; 1 s between them and a quick answer leaves room
+      // for the test runner (at 0.5 s and 0.4 s a quick case read "slow" with the whole suite running).
+      let slow = ContinuousClock.now - started > .milliseconds(1000)
       var requests = try await Self.serverLog(port).arrayValue ?? []
       if c["op"] == .string("counters") { requests.sort { JS.string($0["path"]) < JS.string($1["path"]) } }
       // URLSession repeats a GET whose connection dropped without an answer (up to three times).
