@@ -8,5 +8,8 @@
     "types": ["node"],
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  // The export window's page scripts are for the browser and QuartzControl's files unchanged (their
+  // type imports name QuartzControl's shared/ipc-contract); esbuild bundles them, tsc leaves them out.
+  "exclude": ["src/export", "src/page-scripts.ts"]
 }

@@ -16,4 +16,7 @@ for name in yaml-edit dts-schema sass-check locale-edit ftp-session; do
   node_modules/.bin/esbuild "src/$name.ts" --bundle --platform=node --target=node24 --format=cjs \
     --minify-syntax --keep-names --legal-comments=eof --outfile="dist/$name.cjs" --log-level=warning
 done
+# The export window's page scripts: for WebKit, not for Node (Safari 18 is macOS 15's engine).
+node_modules/.bin/esbuild src/page-scripts.ts --bundle --platform=browser --target=safari18 --format=iife \
+  --keep-names --legal-comments=eof --outfile=dist/page-scripts.js --log-level=warning
 ls -la dist | sed -n '2,$p' >&2

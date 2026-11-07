@@ -17,6 +17,7 @@ scripts/build-helpers.sh 2>/dev/null
 for h in yaml-edit dts-schema sass-check locale-edit ftp-session; do
   [ -f "Helpers/dist/$h.cjs" ] || { echo "Helpers/dist/$h.cjs fehlt nach dem Bau" >&2; exit 1; }
 done
+[ -f Helpers/dist/page-scripts.js ] || { echo "Helpers/dist/page-scripts.js fehlt nach dem Bau" >&2; exit 1; }
 
 scripts/xcodegen.sh
 xcodebuild -project QuartzHub.xcodeproj -scheme QuartzHub -configuration Release \
@@ -33,7 +34,7 @@ cp -R Runtime/node "$RES/node"
 cp -R Runtime/git "$RES/git"
 rm -f "$RES/node/.version" "$RES/git/.version" "$RES/node/CHANGELOG.md" "$RES/node/README.md"
 mkdir -p "$RES/helpers" "$RES/licenses" "$RES/templates"
-cp Helpers/dist/*.cjs "$RES/helpers/"
+cp Helpers/dist/*.cjs Helpers/dist/page-scripts.js "$RES/helpers/"
 # The basic template a new project can start from, when the online copy cannot be fetched
 # (BuiltinTemplate.swift).
 cp Resources/templates/qc-basic.qtpl "$RES/templates/"
