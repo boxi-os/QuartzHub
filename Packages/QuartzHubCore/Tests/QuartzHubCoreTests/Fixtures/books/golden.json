@@ -1,0 +1,4523 @@
+{
+ "normalized": [
+  {
+   "raw": {},
+   "result": {
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "title": "Handbuch"
+   },
+   "result": {
+    "title": "Handbuch",
+    "id": "buch",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": null,
+   "result": null
+  },
+  {
+   "raw": [],
+   "result": null
+  },
+  {
+   "raw": [
+    1,
+    2
+   ],
+   "result": null
+  },
+  {
+   "raw": "text",
+   "result": null
+  },
+  {
+   "raw": 7,
+   "result": null
+  },
+  {
+   "raw": true,
+   "result": null
+  },
+  {
+   "raw": {
+    "title": 5,
+    "subtitle": null,
+    "author": [
+     "a"
+    ],
+    "language": "de",
+    "root": "/handbuch/",
+    "order": "nav",
+    "excluded": "x",
+    "coverImage": 1,
+    "toc": "yes",
+    "tagIndex": 1,
+    "backlinks": null,
+    "outsideLinks": "none",
+    "pdf": "A5"
+   },
+   "result": {
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "de",
+    "root": "handbuch",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": "buch"
+   }
+  },
+  {
+   "raw": {
+    "root": "///a/b///",
+    "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "subtitle": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxäö",
+    "author": "üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüz",
+    "language": "en"
+   },
+   "result": {
+    "root": "a/b",
+    "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "subtitle": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxä",
+    "author": "üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü",
+    "language": "en",
+    "id": "buch",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "root": "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
+   },
+   "result": {
+    "root": "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "root": 7
+   },
+   "result": {
+    "root": "",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "root": ""
+   },
+   "result": {
+    "root": "",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "root": "/"
+   },
+   "result": {
+    "root": "",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "order": []
+   },
+   "result": {
+    "order": [],
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "order": null
+   },
+   "result": {
+    "order": null,
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "order": {}
+   },
+   "result": {
+    "order": null,
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "order": [
+     {
+      "slug": "a"
+     },
+     {
+      "slug": "a"
+     },
+     {
+      "heading": "Anhang"
+     },
+     {
+      "heading": "   "
+     },
+     {
+      "heading": ""
+     },
+     {
+      "slug": ""
+     },
+     {
+      "slug": 5
+     },
+     null,
+     "b",
+     [],
+     {
+      "slug": "b",
+      "heading": "H"
+     },
+     {
+      "heading": "H",
+      "x": 1
+     },
+     {
+      "slug": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     },
+     {
+      "slug": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     },
+     {
+      "heading": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     },
+     {
+      "slug": "c",
+      "extra": true
+     },
+     {
+      "heading": "　"
+     },
+     {
+      "heading": "﻿"
+     },
+     {
+      "heading": " x"
+     }
+    ]
+   },
+   "result": {
+    "order": [
+     {
+      "slug": "a"
+     },
+     {
+      "heading": "Anhang"
+     },
+     {
+      "slug": "b"
+     },
+     {
+      "heading": "H"
+     },
+     {
+      "slug": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     },
+     {
+      "heading": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     },
+     {
+      "slug": "c"
+     },
+     {
+      "heading": " x"
+     }
+    ],
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "order": {
+     "generated": 10005
+    }
+   },
+   "result": {
+    "order": {
+     "length": 10000,
+     "first": [
+      {
+       "slug": "p0"
+      },
+      {
+       "slug": "p1"
+      },
+      {
+       "slug": "p2"
+      }
+     ],
+     "last": [
+      {
+       "slug": "p9997"
+      },
+      {
+       "slug": "p9998"
+      },
+      {
+       "slug": "p9999"
+      }
+     ]
+    },
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "excluded": [
+     "a",
+     "a",
+     "",
+     5,
+     null,
+     "b",
+     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    ]
+   },
+   "result": {
+    "excluded": [
+     "a",
+     "b",
+     "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    ],
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "excluded": {
+     "generated": 10003
+    }
+   },
+   "result": {
+    "excluded": {
+     "length": 10000,
+     "first": [
+      "e0",
+      "e1",
+      "e2"
+     ],
+     "last": [
+      "e9997",
+      "e9998",
+      "e9999"
+     ]
+    },
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "pdf": {
+     "pageSize": "A5",
+     "landscape": true,
+     "margin": 3
+    }
+   },
+   "result": {
+    "pdf": {
+     "pageSize": "A5",
+     "landscape": true,
+     "margin": 3
+    },
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site"
+   }
+  },
+  {
+   "raw": {
+    "pdf": {
+     "pageSize": "a4",
+     "landscape": "yes"
+    }
+   },
+   "result": {
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site"
+   }
+  },
+  {
+   "raw": {
+    "pdf": null
+   },
+   "result": {
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site"
+   }
+  },
+  {
+   "raw": {
+    "pdf": [
+     1,
+     2
+    ]
+   },
+   "result": {
+    "pdf": {
+     "0": 1,
+     "1": 2,
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site"
+   }
+  },
+  {
+   "raw": {
+    "pdf": {
+     "pageSize": "Letter"
+    }
+   },
+   "result": {
+    "pdf": {
+     "pageSize": "Letter",
+     "landscape": false
+    },
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site"
+   }
+  },
+  {
+   "raw": {
+    "1": "one",
+    "2": "two",
+    "later": {
+     "x": 1
+    },
+    "title": "T",
+    "id": "other",
+    "version": 3
+   },
+   "result": {
+    "1": "one",
+    "2": "two",
+    "later": {
+     "x": 1
+    },
+    "title": "T",
+    "id": "buch",
+    "version": 3,
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "outsideLinks": "text"
+   },
+   "result": {
+    "outsideLinks": "text",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "outsideLinks": "site"
+   },
+   "result": {
+    "outsideLinks": "site",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "outsideLinks": "TEXT"
+   },
+   "result": {
+    "outsideLinks": "site",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "toc": false,
+    "tagIndex": true,
+    "backlinks": true
+   },
+   "result": {
+    "toc": false,
+    "tagIndex": true,
+    "backlinks": true,
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  },
+  {
+   "raw": {
+    "coverImage": "static/cover.png",
+    "language": "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
+   },
+   "result": {
+    "coverImage": "static/cover.png",
+    "language": "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",
+    "id": "buch",
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   }
+  }
+ ],
+ "serialized": [
+  {
+   "book": {
+    "id": "a",
+    "title": "T"
+   },
+   "result": {
+    "title": "T",
+    "version": 1
+   }
+  },
+  {
+   "book": {
+    "title": "T",
+    "id": "a",
+    "version": 9,
+    "x": 1
+   },
+   "result": {
+    "title": "T",
+    "version": 1,
+    "x": 1
+   }
+  },
+  {
+   "book": {
+    "title": "Neu",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "result": {
+    "title": "Neu",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "version": 1
+   }
+  },
+  {
+   "book": {
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "version": 0,
+    "later": [
+     1
+    ]
+   },
+   "result": {
+    "title": "",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "version": 1,
+    "later": [
+     1
+    ]
+   }
+  }
+ ],
+ "ids": [
+  {
+   "title": "Handbuch für Einsteiger",
+   "taken": [],
+   "result": "handbuch-fuer-einsteiger"
+  },
+  {
+   "title": "Übersicht",
+   "taken": [],
+   "result": "uebersicht"
+  },
+  {
+   "title": "ÄÖÜ äöü ß",
+   "taken": [],
+   "result": "aeoeue-aeoeue-ss"
+  },
+  {
+   "title": "Straße",
+   "taken": [],
+   "result": "strasse"
+  },
+  {
+   "title": "Crème brûlée",
+   "taken": [],
+   "result": "creme-brulee"
+  },
+  {
+   "title": "Ångström",
+   "taken": [],
+   "result": "angstroem"
+  },
+  {
+   "title": "Ærø",
+   "taken": [],
+   "result": "r"
+  },
+  {
+   "title": "Œuvre",
+   "taken": [],
+   "result": "uvre"
+  },
+  {
+   "title": "İstanbul",
+   "taken": [],
+   "result": "istanbul"
+  },
+  {
+   "title": "ǅemal",
+   "taken": [],
+   "result": "dzemal"
+  },
+  {
+   "title": "東京",
+   "taken": [],
+   "result": "dokument"
+  },
+  {
+   "title": "   ",
+   "taken": [],
+   "result": "dokument"
+  },
+  {
+   "title": "",
+   "taken": [],
+   "result": "dokument"
+  },
+  {
+   "title": "---",
+   "taken": [],
+   "result": "dokument"
+  },
+  {
+   "title": "a--b",
+   "taken": [],
+   "result": "a-b"
+  },
+  {
+   "title": "-a-",
+   "taken": [],
+   "result": "a"
+  },
+  {
+   "title": "Kapitel 1: Start!",
+   "taken": [],
+   "result": "kapitel-1-start"
+  },
+  {
+   "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "taken": [],
+   "result": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "title": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa b",
+   "taken": [],
+   "result": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+   "title": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-b",
+   "taken": [],
+   "result": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+   "title": "ﬁnal",
+   "taken": [],
+   "result": "final"
+  },
+  {
+   "title": "①②",
+   "taken": [],
+   "result": "12"
+  },
+  {
+   "title": "Ⅻ",
+   "taken": [],
+   "result": "xii"
+  },
+  {
+   "title": "ﬀ",
+   "taken": [],
+   "result": "ff"
+  },
+  {
+   "title": "é",
+   "taken": [],
+   "result": "e"
+  },
+  {
+   "title": "Ãó",
+   "taken": [],
+   "result": "ao"
+  },
+  {
+   "title": "Ǆ",
+   "taken": [],
+   "result": "dz"
+  },
+  {
+   "title": "ı",
+   "taken": [],
+   "result": "dokument"
+  },
+  {
+   "title": "ẞ",
+   "taken": [],
+   "result": "ss"
+  },
+  {
+   "title": "São Paulo",
+   "taken": [],
+   "result": "sao-paulo"
+  },
+  {
+   "title": "naïve café",
+   "taken": [],
+   "result": "naive-cafe"
+  },
+  {
+   "title": "Dokument",
+   "taken": [],
+   "result": "dokument"
+  },
+  {
+   "title": "dokument",
+   "taken": [],
+   "result": "dokument"
+  },
+  {
+   "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "taken": [],
+   "result": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+   "title": "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ",
+   "taken": [],
+   "result": "aeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeae"
+  },
+  {
+   "title": "1 2 3",
+   "taken": [],
+   "result": "1-2-3"
+  },
+  {
+   "title": "Ŀ",
+   "taken": [],
+   "result": "l"
+  },
+  {
+   "title": "ǈ",
+   "taken": [],
+   "result": "lj"
+  },
+  {
+   "title": "ﬆ",
+   "taken": [],
+   "result": "st"
+  },
+  {
+   "title": "ʼn",
+   "taken": [],
+   "result": "n"
+  },
+  {
+   "title": "İ̇",
+   "taken": [],
+   "result": "i"
+  },
+  {
+   "title": "Handbuch",
+   "taken": [
+    "handbuch"
+   ],
+   "result": "handbuch-2"
+  },
+  {
+   "title": "",
+   "taken": [
+    "handbuch"
+   ],
+   "result": "dokument"
+  },
+  {
+   "title": "Handbuch",
+   "taken": [
+    "handbuch",
+    "handbuch-2"
+   ],
+   "result": "handbuch-3"
+  },
+  {
+   "title": "",
+   "taken": [
+    "handbuch",
+    "handbuch-2"
+   ],
+   "result": "dokument"
+  },
+  {
+   "title": "Handbuch",
+   "taken": [
+    "handbuch",
+    "handbuch-3"
+   ],
+   "result": "handbuch-2"
+  },
+  {
+   "title": "",
+   "taken": [
+    "handbuch",
+    "handbuch-3"
+   ],
+   "result": "dokument"
+  },
+  {
+   "title": "Handbuch",
+   "taken": [
+    "dokument"
+   ],
+   "result": "handbuch"
+  },
+  {
+   "title": "",
+   "taken": [
+    "dokument"
+   ],
+   "result": "dokument-2"
+  },
+  {
+   "title": "Handbuch",
+   "taken": [
+    "dokument",
+    "dokument-2",
+    "dokument-3"
+   ],
+   "result": "handbuch"
+  },
+  {
+   "title": "",
+   "taken": [
+    "dokument",
+    "dokument-2",
+    "dokument-3"
+   ],
+   "result": "dokument-4"
+  }
+ ],
+ "bookIdCases": [
+  {
+   "id": "a",
+   "valid": true
+  },
+  {
+   "id": "0",
+   "valid": true
+  },
+  {
+   "id": "a-b",
+   "valid": true
+  },
+  {
+   "id": "-a",
+   "valid": false
+  },
+  {
+   "id": "A",
+   "valid": false
+  },
+  {
+   "id": "a_b",
+   "valid": false
+  },
+  {
+   "id": "ä",
+   "valid": false
+  },
+  {
+   "id": "",
+   "valid": false
+  },
+  {
+   "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "valid": true
+  },
+  {
+   "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "valid": false
+  },
+  {
+   "id": "a\n",
+   "valid": false
+  },
+  {
+   "id": "a b",
+   "valid": false
+  },
+  {
+   "id": "1-",
+   "valid": true
+  }
+ ],
+ "rules": [
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": "buch"
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": "Buch"
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": ""
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "id": 5
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": 5,
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     {
+      "slug": "a"
+     },
+     {
+      "heading": "H"
+     }
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     {
+      "slug": ""
+     }
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     {
+      "heading": ""
+     }
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     {
+      "heading": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     }
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     {
+      "slug": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     }
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     {
+      "slug": "a",
+      "heading": ""
+     }
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     {}
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": [
+     5
+    ],
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": "nav",
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": {
+     "generated": 10001,
+     "entry": {
+      "slug": "a"
+     }
+    },
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": {
+     "generated": 10000,
+     "entry": {
+      "slug": "a"
+     }
+    },
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [
+     ""
+    ],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": {
+     "generated": 10001,
+     "entry": "a"
+    },
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": null,
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": "yes",
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": 1,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "none",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "text",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A5",
+     "landscape": true
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A3",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4"
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false,
+     "x": 1
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": null
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    },
+    "later": 1
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "T",
+    "subtitle": "",
+    "author": "",
+    "language": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  },
+  {
+   "book": {
+    "title": "ääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääää",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": true
+  },
+  {
+   "book": {
+    "title": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+    "subtitle": "",
+    "author": "",
+    "language": "",
+    "root": "",
+    "order": null,
+    "excluded": [],
+    "coverImage": "",
+    "toc": true,
+    "tagIndex": false,
+    "backlinks": false,
+    "outsideLinks": "site",
+    "pdf": {
+     "pageSize": "A4",
+     "landscape": false
+    }
+   },
+   "valid": false
+  }
+ ],
+ "steps": [
+  {
+   "name": "list without a folder",
+   "op": "list",
+   "args": [],
+   "setup": [],
+   "result": {
+    "ok": {
+     "books": [],
+     "unreadable": []
+    }
+   },
+   "files": {}
+  },
+  {
+   "name": "read without a folder",
+   "op": "read",
+   "args": [
+    "buch"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {}
+  },
+  {
+   "name": "delete without a folder",
+   "op": "delete",
+   "args": [
+    "buch"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {}
+  },
+  {
+   "name": "save a new book",
+   "op": "save",
+   "args": [
+    {
+     "title": "Handbuch für Einsteiger",
+     "subtitle": "",
+     "author": "Boxi",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "title": "Handbuch für Einsteiger",
+     "subtitle": "",
+     "author": "Boxi",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "version": 1,
+     "id": "handbuch-fuer-einsteiger"
+    }
+   },
+   "files": {
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"Boxi\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "the same title again",
+   "op": "save",
+   "args": [
+    {
+     "title": "Handbuch für Einsteiger",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "title": "Handbuch für Einsteiger",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "version": 1,
+     "id": "handbuch-fuer-einsteiger-2"
+    }
+   },
+   "files": {
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"Boxi\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "an empty title",
+   "op": "save",
+   "args": [
+    {
+     "title": "",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "title": "",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "version": 1,
+     "id": "dokument"
+    }
+   },
+   "files": {
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"Boxi\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "save by id with an own order and an unknown key",
+   "op": "save",
+   "args": [
+    {
+     "id": "handbuch-fuer-einsteiger",
+     "title": "Neu",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": [
+      {
+       "slug": "a"
+      },
+      {
+       "heading": "Anhang"
+      },
+      {
+       "slug": "a"
+      }
+     ],
+     "excluded": [
+      "x",
+      "x"
+     ],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "later": {
+      "kept": true
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "title": "Neu",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": [
+      {
+       "slug": "a"
+      },
+      {
+       "heading": "Anhang"
+      }
+     ],
+     "excluded": [
+      "x"
+     ],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "later": {
+      "kept": true
+     },
+     "version": 1,
+     "id": "handbuch-fuer-einsteiger"
+    }
+   },
+   "files": {
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "save by an id that has no file yet",
+   "op": "save",
+   "args": [
+    {
+     "later": 1,
+     "title": "Zuerst",
+     "id": "reihenfolge",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "version": 0
+    }
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "later": 1,
+     "title": "Zuerst",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "version": 1,
+     "id": "reihenfolge"
+    }
+   },
+   "files": {
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "list",
+   "op": "list",
+   "args": [],
+   "setup": [],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": []
+    }
+   },
+   "files": {
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "read",
+   "op": "read",
+   "args": [
+    "handbuch-fuer-einsteiger"
+   ],
+   "setup": [],
+   "result": {
+    "ok": {
+     "title": "Neu",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": [
+      {
+       "slug": "a"
+      },
+      {
+       "heading": "Anhang"
+      }
+     ],
+     "excluded": [
+      "x"
+     ],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     },
+     "later": {
+      "kept": true
+     },
+     "version": 1,
+     "id": "handbuch-fuer-einsteiger"
+    }
+   },
+   "files": {
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "read one that is not there",
+   "op": "read",
+   "args": [
+    "fehlt"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "files that are not books",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "write": [
+      "quartz-books/Notizen.json",
+      "{}"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/a.json.corrupt-1",
+      "{}"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/.json",
+      "{}"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/a_b.json",
+      "{}"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/notiz.txt",
+      "x"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/-a.json",
+      "{}"
+     ]
+    },
+    {
+     "mkdir": "quartz-books/sub.json"
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": [
+      {
+       "id": "sub",
+       "reason": "EISDIR: illegal operation on a directory, read"
+      }
+     ]
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/sub.json": {
+     "folder": true
+    }
+   }
+  },
+  {
+   "name": "a merge conflict",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "rm": "quartz-books/sub.json"
+    },
+    {
+     "write": [
+      "quartz-books/konflikt.json",
+      "<<<<<<< HEAD\n{\"title\":\"A\"}\n=======\n{\"title\":\"B\"}\n>>>>>>> x\n"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": [
+      {
+       "id": "konflikt",
+       "reason": "Unexpected token '<', \"<<<<<<< HE\"... is not valid JSON"
+      }
+     ]
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/konflikt.json": "<<<<<<< HEAD\n{\"title\":\"A\"}\n=======\n{\"title\":\"B\"}\n>>>>>>> x\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "read the conflict",
+   "op": "read",
+   "args": [
+    "konflikt"
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookUnreadable\",\"args\":{\"file\":\"quartz-books/konflikt.json\",\"reason\":\"Unexpected token '<', \\\"<<<<<<< HE\\\"... is not valid JSON\"}}"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/konflikt.json": "<<<<<<< HEAD\n{\"title\":\"A\"}\n=======\n{\"title\":\"B\"}\n>>>>>>> x\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "save over the conflict",
+   "op": "save",
+   "args": [
+    {
+     "id": "konflikt",
+     "title": "X",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookUnreadable\",\"args\":{\"file\":\"quartz-books/konflikt.json\",\"reason\":\"Unexpected token '<', \\\"<<<<<<< HE\\\"... is not valid JSON\"}}"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/konflikt.json": "<<<<<<< HEAD\n{\"title\":\"A\"}\n=======\n{\"title\":\"B\"}\n>>>>>>> x\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "delete the conflict",
+   "op": "delete",
+   "args": [
+    "konflikt"
+   ],
+   "setup": [],
+   "result": {
+    "ok": null
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "not an object",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "write": [
+      "quartz-books/liste.json",
+      "[1,2]"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/null.json",
+      "null"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/text.json",
+      "\"x\""
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/zahl.json",
+      "42"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": [
+      {
+       "id": "liste",
+       "reason": "{\"key\":\"bookNotAnObject\",\"args\":{}}"
+      },
+      {
+       "id": "null",
+       "reason": "{\"key\":\"bookNotAnObject\",\"args\":{}}"
+      },
+      {
+       "id": "text",
+       "reason": "{\"key\":\"bookNotAnObject\",\"args\":{}}"
+      },
+      {
+       "id": "zahl",
+       "reason": "{\"key\":\"bookNotAnObject\",\"args\":{}}"
+      }
+     ]
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/liste.json": "[1,2]",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/null.json": "null",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/text.json": "\"x\"",
+    "quartz-books/zahl.json": "42"
+   }
+  },
+  {
+   "name": "save over one that is not an object",
+   "op": "save",
+   "args": [
+    {
+     "id": "liste",
+     "title": "L",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookUnreadable\",\"args\":{\"file\":\"quartz-books/liste.json\",\"reason\":\"{\\\"key\\\":\\\"bookNotAnObject\\\",\\\"args\\\":{}}\"}}"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/liste.json": "[1,2]",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/null.json": "null",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/text.json": "\"x\"",
+    "quartz-books/zahl.json": "42"
+   }
+  },
+  {
+   "name": "empty, truncated and with a byte order mark",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "rm": "quartz-books/liste.json"
+    },
+    {
+     "rm": "quartz-books/null.json"
+    },
+    {
+     "rm": "quartz-books/text.json"
+    },
+    {
+     "rm": "quartz-books/zahl.json"
+    },
+    {
+     "write": [
+      "quartz-books/leer.json",
+      ""
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/halb.json",
+      "{\"title\":"
+     ]
+    },
+    {
+     "write": [
+      "quartz-books/bom.json",
+      "﻿{\"title\":\"B\"}"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": [
+      {
+       "id": "bom",
+       "reason": "Unexpected token '﻿', \"﻿{\"title\":\"B\"}\" is not valid JSON"
+      },
+      {
+       "id": "halb",
+       "reason": "Unexpected end of JSON input"
+      },
+      {
+       "id": "leer",
+       "reason": "Unexpected end of JSON input"
+      }
+     ]
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/bom.json": "﻿{\"title\":\"B\"}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/halb.json": "{\"title\":",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/leer.json": "",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "invalid UTF-8 in a title",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "rm": "quartz-books/leer.json"
+    },
+    {
+     "rm": "quartz-books/halb.json"
+    },
+    {
+     "rm": "quartz-books/bom.json"
+    },
+    {
+     "bytes": [
+      "quartz-books/bytes.json",
+      "eyJ0aXRsZSI6ImH//mIifQ=="
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "a��b",
+       "id": "bytes",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       }
+      },
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": []
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/bytes.json": "{\"title\":\"a��b\"}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "a folder where a book file belongs",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "rm": "quartz-books/bytes.json"
+    },
+    {
+     "mkdir": "quartz-books/ordner.json"
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": [
+      {
+       "id": "ordner",
+       "reason": "EISDIR: illegal operation on a directory, read"
+      }
+     ]
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/ordner.json": {
+     "folder": true
+    },
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "read the folder",
+   "op": "read",
+   "args": [
+    "ordner"
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookUnreadable\",\"args\":{\"file\":\"quartz-books/ordner.json\",\"reason\":\"EISDIR: illegal operation on a directory, read\"}}"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/ordner.json": {
+     "folder": true
+    },
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "delete the folder",
+   "op": "delete",
+   "args": [
+    "ordner"
+   ],
+   "setup": [],
+   "result": {
+    "error": "Path is a directory: rm returned EISDIR (is a directory) @P@/quartz-books/ordner.json"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/ordner.json": {
+     "folder": true
+    },
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "a file that cannot be opened",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "rm": "quartz-books/ordner.json"
+    },
+    {
+     "write": [
+      "quartz-books/gesperrt.json",
+      "{}"
+     ]
+    },
+    {
+     "chmod": [
+      "quartz-books/gesperrt.json",
+      0
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": [
+      {
+       "id": "gesperrt",
+       "reason": "EACCES: permission denied, open '@P@/quartz-books/gesperrt.json'"
+      }
+     ]
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/gesperrt.json": {
+     "unreadableFile": true
+    },
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "save over the file that cannot be opened",
+   "op": "save",
+   "args": [
+    {
+     "id": "gesperrt",
+     "title": "",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookUnreadable\",\"args\":{\"file\":\"quartz-books/gesperrt.json\",\"reason\":\"EACCES: permission denied, open '@P@/quartz-books/gesperrt.json'\"}}"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/gesperrt.json": {
+     "unreadableFile": true
+    },
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "a book file that is a link",
+   "op": "save",
+   "args": [
+    {
+     "id": "link",
+     "title": "L",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [
+    {
+     "chmod": [
+      "quartz-books/gesperrt.json",
+      420
+     ]
+    },
+    {
+     "rm": "quartz-books/gesperrt.json"
+    },
+    {
+     "write": [
+      "../elsewhere.json",
+      "{\"title\":\"Fremd\"}"
+     ]
+    },
+    {
+     "link": [
+      "@W@/elsewhere.json",
+      "quartz-books/link.json"
+     ]
+    }
+   ],
+   "result": {
+    "error": "{\"key\":\"bookPathBlocked\",\"args\":{\"dir\":\"quartz-books\"}}"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/link.json": {
+     "link": "@W@/elsewhere.json"
+    },
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "list reads through it",
+   "op": "list",
+   "args": [],
+   "setup": [],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "dokument"
+      },
+      {
+       "title": "Neu",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": [
+        {
+         "slug": "a"
+        },
+        {
+         "heading": "Anhang"
+        }
+       ],
+       "excluded": [
+        "x"
+       ],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "later": {
+        "kept": true
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger"
+      },
+      {
+       "title": "Handbuch für Einsteiger",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "handbuch-fuer-einsteiger-2"
+      },
+      {
+       "title": "Fremd",
+       "id": "link",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       }
+      },
+      {
+       "later": 1,
+       "title": "Zuerst",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       },
+       "version": 1,
+       "id": "reihenfolge"
+      }
+     ],
+     "unreadable": []
+    }
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/link.json": {
+     "link": "@W@/elsewhere.json"
+    },
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "delete through it",
+   "op": "delete",
+   "args": [
+    "link"
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookPathBlocked\",\"args\":{\"dir\":\"quartz-books\"}}"
+   },
+   "files": {
+    "quartz-books/-a.json": "{}",
+    "quartz-books/.json": "{}",
+    "quartz-books/Notizen.json": "{}",
+    "quartz-books/a.json.corrupt-1": "{}",
+    "quartz-books/a_b.json": "{}",
+    "quartz-books/dokument.json": "{\n  \"title\": \"\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger-2.json": "{\n  \"title\": \"Handbuch für Einsteiger\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/handbuch-fuer-einsteiger.json": "{\n  \"title\": \"Neu\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": [\n    {\n      \"slug\": \"a\"\n    },\n    {\n      \"heading\": \"Anhang\"\n    },\n    {\n      \"slug\": \"a\"\n    }\n  ],\n  \"excluded\": [\n    \"x\",\n    \"x\"\n  ],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"later\": {\n    \"kept\": true\n  },\n  \"version\": 1\n}\n",
+    "quartz-books/link.json": {
+     "link": "@W@/elsewhere.json"
+    },
+    "quartz-books/notiz.txt": "x",
+    "quartz-books/reihenfolge.json": "{\n  \"later\": 1,\n  \"title\": \"Zuerst\",\n  \"subtitle\": \"\",\n  \"author\": \"\",\n  \"language\": \"\",\n  \"root\": \"\",\n  \"order\": null,\n  \"excluded\": [],\n  \"coverImage\": \"\",\n  \"toc\": true,\n  \"tagIndex\": false,\n  \"backlinks\": false,\n  \"outsideLinks\": \"site\",\n  \"pdf\": {\n    \"pageSize\": \"A4\",\n    \"landscape\": false\n  },\n  \"version\": 1\n}\n"
+   }
+  },
+  {
+   "name": "quartz-books as a link",
+   "op": "save",
+   "args": [
+    {
+     "title": "Fremd",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [
+    {
+     "rm": "quartz-books"
+    },
+    {
+     "mkdir": "../other-books"
+    },
+    {
+     "write": [
+      "../other-books/fremd.json",
+      "{\"title\":\"Fremd\"}"
+     ]
+    },
+    {
+     "link": [
+      "@W@/other-books",
+      "quartz-books"
+     ]
+    }
+   ],
+   "result": {
+    "error": "{\"key\":\"bookPathBlocked\",\"args\":{\"dir\":\"quartz-books\"}}"
+   },
+   "files": {
+    "quartz-books": {
+     "link": "@W@/other-books"
+    }
+   }
+  },
+  {
+   "name": "list through the linked folder",
+   "op": "list",
+   "args": [],
+   "setup": [],
+   "result": {
+    "ok": {
+     "books": [
+      {
+       "title": "Fremd",
+       "id": "fremd",
+       "subtitle": "",
+       "author": "",
+       "language": "",
+       "root": "",
+       "order": null,
+       "excluded": [],
+       "coverImage": "",
+       "toc": true,
+       "tagIndex": false,
+       "backlinks": false,
+       "outsideLinks": "site",
+       "pdf": {
+        "pageSize": "A4",
+        "landscape": false
+       }
+      }
+     ],
+     "unreadable": []
+    }
+   },
+   "files": {
+    "quartz-books": {
+     "link": "@W@/other-books"
+    }
+   }
+  },
+  {
+   "name": "delete in the linked folder",
+   "op": "delete",
+   "args": [
+    "fremd"
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookPathBlocked\",\"args\":{\"dir\":\"quartz-books\"}}"
+   },
+   "files": {
+    "quartz-books": {
+     "link": "@W@/other-books"
+    }
+   }
+  },
+  {
+   "name": "quartz-books as a file",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "rm": "quartz-books"
+    },
+    {
+     "write": [
+      "quartz-books",
+      "kein Ordner"
+     ]
+    }
+   ],
+   "result": {
+    "ok": {
+     "books": [],
+     "unreadable": []
+    }
+   },
+   "files": {
+    "quartz-books": "kein Ordner"
+   }
+  },
+  {
+   "name": "save with a file in the way",
+   "op": "save",
+   "args": [
+    {
+     "title": "Datei",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [],
+   "result": {
+    "error": "EEXIST: file already exists, mkdir '@P@/quartz-books'"
+   },
+   "files": {
+    "quartz-books": "kein Ordner"
+   }
+  },
+  {
+   "name": "read with a file in the way",
+   "op": "read",
+   "args": [
+    "datei"
+   ],
+   "setup": [],
+   "result": {
+    "error": "{\"key\":\"bookUnreadable\",\"args\":{\"file\":\"quartz-books/datei.json\",\"reason\":\"ENOTDIR: not a directory, open '@P@/quartz-books/datei.json'\"}}"
+   },
+   "files": {
+    "quartz-books": "kein Ordner"
+   }
+  },
+  {
+   "name": "a folder that cannot be listed",
+   "op": "list",
+   "args": [],
+   "setup": [
+    {
+     "rm": "quartz-books"
+    },
+    {
+     "mkdir": "quartz-books"
+    },
+    {
+     "write": [
+      "quartz-books/a.json",
+      "{}"
+     ]
+    },
+    {
+     "chmod": [
+      "quartz-books",
+      192
+     ]
+    }
+   ],
+   "result": {
+    "error": "EACCES: permission denied, scandir '@P@/quartz-books'"
+   },
+   "files": {
+    "quartz-books": {
+     "unreadableFolder": true
+    }
+   }
+  },
+  {
+   "name": "a folder that cannot be written",
+   "op": "save",
+   "args": [
+    {
+     "title": "Schreibschutz",
+     "subtitle": "",
+     "author": "",
+     "language": "",
+     "root": "",
+     "order": null,
+     "excluded": [],
+     "coverImage": "",
+     "toc": true,
+     "tagIndex": false,
+     "backlinks": false,
+     "outsideLinks": "site",
+     "pdf": {
+      "pageSize": "A4",
+      "landscape": false
+     }
+    }
+   ],
+   "setup": [
+    {
+     "chmod": [
+      "quartz-books",
+      365
+     ]
+    }
+   ],
+   "result": {
+    "error": "EACCES: permission denied, open '@P@/quartz-books/schreibschutz.json.tmp-*'"
+   },
+   "files": {
+    "quartz-books/a.json": "{}"
+   }
+  },
+  {
+   "name": "delete in a folder that cannot be written",
+   "op": "delete",
+   "args": [
+    "a"
+   ],
+   "setup": [],
+   "result": {
+    "error": "EACCES: permission denied, unlink '@P@/quartz-books/a.json'"
+   },
+   "files": {
+    "quartz-books/a.json": "{}"
+   }
+  }
+ ]
+}

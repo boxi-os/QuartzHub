@@ -23766,13 +23766,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Ordner {{dir}} oder die Buchdatei darin ist eine Verknüpfung. QuartzControl schreibt Bücher nur als echte Datei im Projekt."
+            "value" : "Der Ordner {{dir}} oder die Buchdatei darin ist eine Verknüpfung. QuartzHub schreibt Bücher nur als echte Datei im Projekt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The folder {{dir}} or the book file in it is a link. QuartzControl writes books only as a real file in the project."
+            "value" : "The folder {{dir}} or the book file in it is a link. QuartzHub writes books only as a real file in the project."
           }
         }
       }
@@ -23782,13 +23782,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "{{file}} konnte nicht gelesen werden ({{reason}}). Die Datei bleibt, wie sie ist; QuartzControl schreibt sie erst wieder, wenn sie lesbar ist."
+            "value" : "{{file}} konnte nicht gelesen werden ({{reason}}). Die Datei bleibt, wie sie ist; QuartzHub schreibt sie erst wieder, wenn sie lesbar ist."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "{{file}} could not be read ({{reason}}). The file stays as it is; QuartzControl writes it again only once it is readable."
+            "value" : "{{file}} could not be read ({{reason}}). The file stays as it is; QuartzHub writes it again only once it is readable."
           }
         }
       }

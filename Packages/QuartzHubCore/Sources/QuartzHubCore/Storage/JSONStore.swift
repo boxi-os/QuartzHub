@@ -101,7 +101,8 @@ public enum JSONStore {
   }
 
   /// The write half for a file that is not JSON (a generated frame module, say, that Quartz imports
-  /// in a process already running).
+  /// in a process already running). Fails with Node's error, as QuartzControl's `writeFileAtomic`
+  /// did (`EACCES: permission denied, open '<path>.tmp-<pid>-<8 hex>'`).
   public static func writeAtomic(_ data: Data, to path: String) throws {
     let suffix = UUID().uuidString.lowercased().prefix(8)
     let tmp = "\(path).tmp-\(getpid())-\(suffix)"
@@ -109,7 +110,7 @@ public enum JSONStore {
       // 0o666 before the umask, as Node's open(path, 'w') does; the rename then gives the target
       // these permissions, exactly as QuartzControl's write does.
       let fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0o666)
-      guard fd >= 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
+      guard fd >= 0 else { throw NodeFileError(code: errno, syscall: "open", path: tmp) }
       var failure: Error?
       data.withUnsafeBytes { buffer in
         var offset = 0
@@ -117,7 +118,7 @@ public enum JSONStore {
           let written = Darwin.write(fd, buffer.baseAddress! + offset, buffer.count - offset)
           if written < 0 {
             if errno == EINTR { continue }
-            failure = POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO)
+            failure = NodeFileError(code: errno, syscall: "write", path: nil)
             return
           }
           offset += written
@@ -125,10 +126,10 @@ public enum JSONStore {
       }
       // Without this the rename can land before the data does: the one crash window a rename
       // alone does not close.
-      if failure == nil && fsync(fd) != 0 { failure = POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
+      if failure == nil && fsync(fd) != 0 { failure = NodeFileError(code: errno, syscall: "fsync", path: nil) }
       close(fd)
       if let failure { throw failure }
-      guard rename(tmp, path) == 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
+      guard rename(tmp, path) == 0 else { throw NodeFileError(code: errno, syscall: "rename", path: "\(tmp)' -> '\(path)") }
     } catch {
       unlink(tmp)
       throw error
