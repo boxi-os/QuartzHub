@@ -244,7 +244,9 @@ nach Abhängigkeit:
      `exportBook`, Zieltyp „Dokument“; Fußzeile und Lesezeichen über PDFKit nach einer kurzen Messung
      (sonst pdf-lib im Helfer), Gegenprobe mit `check:export --files` aus QuartzControl, epubcheck auf
      `debian-vm` (Nutzer, 2026-11-07). Verglichen wird der Aufbau, nicht die Seitenzahl. Die
-     ePub-Reader und das Handbuch-PDF kommen mit Phase 5.
+     ePub-Reader und das Handbuch-PDF kommen mit Phase 5. 9a fertig: `Books`, `ExportModel` (mit
+     `ICUCollation` aus libicucore für Sortierung nach Sprache), `SiteFacts`, `DocumentHTML`,
+     `BookPack`, `SiteCopy`; Messungen in `decisions/phase-3-dienste.md`.
    - `NSPrintOperation.runModal`, `shouldPrintBackgrounds`
    - unsichtbares Fenster mit Alpha 0 auf einem Bildschirm; die Ansicht wächst bis zum Element,
      weil `scrollIntoView` unter dem Druck-Stylesheet nichts tut

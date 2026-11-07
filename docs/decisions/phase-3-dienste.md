@@ -1722,3 +1722,75 @@ gefangen.
   Lauf nachholt, richtet vorher wieder her, was am 2026-11-07 abgebaut wurde: eine Test-CA mit
   365-Tage-Zertifikat für debian.local, vsftpd mit TLS (nicht erzwungen, `require_ssl_reuse=YES`),
   Apache :8441/:8442 mit diesem Zertifikat und ein Testschlüssel für qchost.
+
+## Punkt 9: Export
+
+In drei Teilen in einem Zug (Nutzer, 2026-11-07): 9a, was ohne Browser läuft; 9b das Exportfenster
+auf `WKWebView`; 9c PDF, `exportBook` und der Zieltyp „Dokument“. Fußzeile und Lesezeichen des PDFs
+über PDFKit nach einer kurzen Messung, epubcheck auf debian-vm (beides Nutzer, 2026-11-07).
+
+### 9a: Bücher, Modell, Website-Fakten, Druckdokument, ePub und HTML, die Kopie des Baus
+
+- **Bücher** (`Books`, `BookFile`, aus `bookService.ts` und `shared/bookDefinition.ts`):
+  `quartz-books/<id>.json`, ein unlesbares Buch bleibt liegen, ein Link auf dem Weg wird abgelehnt,
+  Lesen legt den Ordner nie an. Die Eingaberegeln (`bookSaveArgs`) stehen als `BookFile.problem`.
+  `JSONStore.writeAtomic` scheitert jetzt mit Nodes Fehler (`open` der Temp-Datei, `write`,
+  `fsync`, `rename`), wie `writeFileAtomic` in QuartzControl.
+- **Das Modell** (`ExportModel`, aus `shared/exportModel.ts`): Slugs aus URL-Pfaden, der injektive
+  Anker (je UTF-16-Einheit, wie die Regex ohne `u`), Tiefe unter einer Wurzel, die
+  Standardreihenfolge des Explorers, die Reihenfolge des Buchs gegen die Navigation, Links auf die
+  veröffentlichte Website, Rückverweise, das Schlagwortregister.
+- **Sortieren nach Sprache über ICU** (`ICUCollation`, `JS.collate`): `localeCompare` und
+  `Intl.Collator` mit `numeric` und `sensitivity: 'base'`. Foundation kann das nicht ausdrücken:
+  `.diacriticInsensitive` faltet jeden Akzent auf seinen Buchstaben, ICU auf Primärstärke (was V8
+  verlangt) folgt der Sprache, im Schwedischen steht „ä“ hinter „z“, im Spanischen „ñ“ hinter „n“.
+  Gemessen gegen Node an 18 Sprachen und 18 Buchstabenpaaren: Foundation wich in 15 Sprachen ab,
+  ICU in keiner. Die C-Funktionen (`ucol_open`, `ucol_setAttribute`, `ucol_strcoll`) kommen per
+  `dlsym` aus `/usr/lib/libicucore.dylib`, also nicht über eine öffentliche Swift-Schnittstelle;
+  fehlen sie, sortiert Foundation. Ohne Sprache gilt Deutsch wie bei `JS.localeCompare`
+  (QuartzControls Vorgabe ist die des Systems, gemessen `de-DE`).
+- **Was die gebaute Website über sich sagt** (`SiteFacts`, `NavigationOrder`, `SitePages`, aus
+  `collect.ts` und dem Ende von `readSitePages`): contentIndex.json und multilanguage.json, die
+  Sprachen, die Wurzel, von der ein Buch zählt, die Adressen der Navigation als Slugs, die
+  Explorer-Reihenfolge ohne Navigation, die Seitenliste des Buch-Editors. Die Navigation selbst
+  liest erst das Exportfenster (9b); die Prüfung „kein Build da“ kommt mit dem Aufruf in 9b.
+- **Das Druckdokument und die Zutaten** (`DocumentHTML`, `ExportExtras`, aus `documentHtml.ts` und
+  den fensterfreien Teilen von `exportService.ts`): Papier, Druckbreite, Druckregeln,
+  Inhaltsverzeichnis, Titelseite; Rückverweise und Register als weitere Seite, Schlagwörter des
+  PDFs, die `urn:uuid:` des Buchs, das Titelbild, die Megabyte-Angabe (`JS.toFixed`: ein Gleichstand
+  rundet auf wie in JavaScript, `printf` rundet zur geraden Ziffer). Die Randfelder
+  (`@bottom-left`, `@bottom-right`) bleiben in den Druckregeln, wie QuartzControl sie schrieb;
+  WebKit lässt sie aus, die Fußzeile kommt in 9c nach dem Druck. Die Kennung behält QuartzControls
+  Präfix, damit ein Reader eine Ausgabe aus QuartzHub für dasselbe Buch hält.
+- **ePub und Offline-HTML packen** (`EpubPack`, `HtmlPack`, aus `writeEpub.ts` und `writeHtml.ts`):
+  das ePub-3-Paket mit `mimetype` zuerst und ungepackt, das HTML mit Bildern als `data:`-URIs und
+  der Grenze von 200 MiB, geschätzt vor dem Kodieren. Den Inhalt (`BookContent`) liefert das
+  Exportfenster in 9b.
+- **Die Kopie des Baus** (`SiteCopy`, aus `siteServer.ts` ohne den Server): Klon ohne Links, Pfade
+  wie ein statischer Host, Inhaltstypen, die eigenen Dokumente unter `/__quartzcontrol/` vor jeder
+  Datei, Aufräumen alter Kopien nach einer Stunde. Wie die Antworten ins Fenster kommen, entscheidet
+  9b. Das Aufräumen beim Start wird wie das des Relays mit der App angeschlossen (Phase 4).
+- **Abweichungen, gewollt:** Ein Grund aus dem JSON-Parser ist der von QuartzHubs Parser, nicht V8s
+  („Unexpected token at byte 0“ statt „Unexpected token '<', "<<<<<<< HE"... is not valid JSON“);
+  der `generator` in ePub und HTML ist QuartzHub; die Kopien heißen `quartzhub-export-…`, also räumt
+  QuartzHub seine eigenen und nicht die von QuartzControl.
+- **Gemessen** gegen QuartzControls eigenen Code (`scripts/{books,export-model,site-facts,document,epub,site-copy}-golden.mjs`):
+  Bücher 32 Rohwerte, 51 Kennungen, 43 Eingaben, 37 Schritte (Links, Ordner oder Datei im Weg,
+  EACCES, EISDIR, ungültiges UTF-8, ein Merge-Konflikt); das Modell 392 Aufrufe; 15 gebaute
+  Websites, 30 Navigationsreihenfolgen, 90 Seitenlisten (Exportfenster und Seitenskripte als
+  Attrappen, die die Navigation übergeben); 16 Druckdokumente, 18 Regelsätze, 13 Läufe mit
+  Rückverweisen und Register in drei Sprachen, 16 Titelbilder aus Dateien; 8 Bücher als ePub Byte
+  für Byte (die Einträge, die QuartzControl zippte, mit den Texten des Katalogs neu gezippt mit
+  `ZipArchive`, das selbst gegen `createZip` gemessen ist) und als HTML, die Grenze an sieben
+  Kanten; die Kopie mit vier Links, 50 Pfade mit Status, Typ und Inhalt aus dem laufenden Server,
+  das Aufräumen. Gegenproben 35/35, 35/35, 26/26, 32/33, 28/29, 16/16; die zwei übrigen sind
+  gleichwertig (eine Überschrift mit leerem Slug, den keine Website hat; `mimetype` als gepackt
+  markiert, aber `ZipArchive` speichert, was Deflate nicht verkleinert). Wer zuerst überlebte,
+  bekam seinen Fall: der Ordnername aus `filePath`, eine Indexseite mit dem Titel „index“, ein
+  `null` in der Sprachliste, eine Seite zweimal mit zwei Titeln, schwedische Registerreihenfolge,
+  ein Bildname mit Sonderzeichen, Formel und SVG in einem Kapitel, die HTML-Grenze genau und
+  knapp, ein eigenes Dokument mit maskiertem Namen, `..` mit einer Datei am Ziel, eine Datei
+  `.html` im Ordner, genau eine Stunde.
+- **Nebenbei:** `ProcessRunnerTests.timeoutAnswersAtOnceAndKillsTheGroup` brauchte im vollen Lauf
+  einmal 3,2 s statt unter 2 s; allein dreimal 0,42 s, der volle Lauf danach grün. Last durch die
+  parallelen Tests, kein Fehler der Änderung; notiert, nicht geändert.
