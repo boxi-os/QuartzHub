@@ -1,0 +1,625 @@
+{
+ "files": {
+  "index.html": "<h1>Start</h1>",
+  "a.html": "a-datei",
+  "a/index.html": "a-ordner",
+  "b/index.html": "b",
+  "c.html": "c",
+  "c": "c-ohne",
+  "Gärten/über uns.html": "über",
+  "static/contentIndex.json": "{}",
+  "static/icon.png": "png",
+  "x.CSS": "css",
+  "y.woff2": "w",
+  "z.unknown": "u",
+  "noext": "n",
+  "d/e/f.svg": "<svg/>",
+  "d/e/.html": "versteckt",
+  "__quartzcontrol/epub.html": "fremd",
+  "leer/.keep": "",
+  "%41.html": "prozent",
+  "a b.mjs": "m"
+ },
+ "links": {
+  "static/geheim.txt": "@W@/geheim.txt",
+  "draussen": "@W@/draussen",
+  "kaputt.html": "fehlt",
+  "neben.html": "a.html"
+ },
+ "copy": {
+  "%41.html": "prozent",
+  "Gärten": {
+   "folder": true
+  },
+  "Gärten/über uns.html": "über",
+  "__quartzcontrol": {
+   "folder": true
+  },
+  "__quartzcontrol/epub.html": "fremd",
+  "a": {
+   "folder": true
+  },
+  "a/index.html": "a-ordner",
+  "a b.mjs": "m",
+  "a.html": "a-datei",
+  "b": {
+   "folder": true
+  },
+  "b/index.html": "b",
+  "c": "c-ohne",
+  "c.html": "c",
+  "d": {
+   "folder": true
+  },
+  "d/e": {
+   "folder": true
+  },
+  "d/e/.html": "versteckt",
+  "d/e/f.svg": "<svg/>",
+  "index.html": "<h1>Start</h1>",
+  "leer": {
+   "folder": true
+  },
+  "leer/.keep": "",
+  "noext": "n",
+  "static": {
+   "folder": true
+  },
+  "static/contentIndex.json": "{}",
+  "static/icon.png": "png",
+  "x.CSS": "css",
+  "y.woff2": "w",
+  "z.unknown": "u"
+ },
+ "copyName": "quartzcontrol-export-*",
+ "ownPrefix": "/__quartzcontrol/",
+ "tempPrefix": "quartzcontrol-export-",
+ "types": {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
+  ".json": "application/json",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+  ".avif": "image/avif",
+  ".ico": "image/x-icon",
+  ".woff": "font/woff",
+  ".woff2": "font/woff2",
+  ".ttf": "font/ttf",
+  ".otf": "font/otf",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".mp3": "audio/mpeg",
+  ".pdf": "application/pdf",
+  ".xml": "application/xml",
+  ".txt": "text/plain; charset=utf-8"
+ },
+ "own": [
+  "/__quartzcontrol/epub.html",
+  "/__quartzcontrol/drawing.html",
+  "/__quartzcontrol/a b.html"
+ ],
+ "resolved": [
+  {
+   "path": "/",
+   "file": "/index.html"
+  },
+  {
+   "path": "/index",
+   "file": "/index.html"
+  },
+  {
+   "path": "/index.html",
+   "file": "/index.html"
+  },
+  {
+   "path": "/a",
+   "file": "/a.html"
+  },
+  {
+   "path": "/a/",
+   "file": "/a/index.html"
+  },
+  {
+   "path": "/a.html",
+   "file": "/a.html"
+  },
+  {
+   "path": "/a/index.html",
+   "file": "/a/index.html"
+  },
+  {
+   "path": "/b",
+   "file": "/b/index.html"
+  },
+  {
+   "path": "/b/",
+   "file": "/b/index.html"
+  },
+  {
+   "path": "/c",
+   "file": "/c"
+  },
+  {
+   "path": "/c.html",
+   "file": "/c.html"
+  },
+  {
+   "path": "/Gärten/über uns",
+   "file": "/Gärten/über uns.html"
+  },
+  {
+   "path": "/G%C3%A4rten/%C3%BCber%20uns",
+   "file": "/Gärten/über uns.html"
+  },
+  {
+   "path": "/G%C3%A4rten/%C3%BCber%20uns.html",
+   "file": "/Gärten/über uns.html"
+  },
+  {
+   "path": "/static/contentIndex.json",
+   "file": "/static/contentIndex.json"
+  },
+  {
+   "path": "/static/icon.png",
+   "file": "/static/icon.png"
+  },
+  {
+   "path": "/static/geheim.txt",
+   "file": null
+  },
+  {
+   "path": "/draussen/x",
+   "file": null
+  },
+  {
+   "path": "/kaputt",
+   "file": null
+  },
+  {
+   "path": "/neben",
+   "file": null
+  },
+  {
+   "path": "/x.CSS",
+   "file": "/x.CSS"
+  },
+  {
+   "path": "/y.woff2",
+   "file": "/y.woff2"
+  },
+  {
+   "path": "/z.unknown",
+   "file": "/z.unknown"
+  },
+  {
+   "path": "/noext",
+   "file": "/noext"
+  },
+  {
+   "path": "/d/e/f.svg",
+   "file": "/d/e/f.svg"
+  },
+  {
+   "path": "/d/e/",
+   "file": null
+  },
+  {
+   "path": "/d",
+   "file": null
+  },
+  {
+   "path": "/leer/",
+   "file": null
+  },
+  {
+   "path": "/leer",
+   "file": null
+  },
+  {
+   "path": "/../geheim.txt",
+   "file": null
+  },
+  {
+   "path": "/%2e%2e/geheim.txt",
+   "file": null
+  },
+  {
+   "path": "/a/../c",
+   "file": "/c"
+  },
+  {
+   "path": "/%E0%A4%A",
+   "file": null
+  },
+  {
+   "path": "/%41",
+   "file": "/A.html"
+  },
+  {
+   "path": "/%2541",
+   "file": "/%41.html"
+  },
+  {
+   "path": "/__quartzcontrol/epub.html",
+   "file": "/__quartzcontrol/epub.html"
+  },
+  {
+   "path": "/__quartzcontrol/drawing.html",
+   "file": null
+  },
+  {
+   "path": "/__quartzcontrol/fehlt.html",
+   "file": null
+  },
+  {
+   "path": "/__quartzcontrol/",
+   "file": null
+  },
+  {
+   "path": "/__quartzcontrol/a%20b.html",
+   "file": null
+  },
+  {
+   "path": "/../neben-der-kopie.txt",
+   "file": null
+  },
+  {
+   "path": "/%2e%2e/neben-der-kopie.txt",
+   "file": null
+  },
+  {
+   "path": "/..%2fneben-der-kopie.txt",
+   "file": null
+  },
+  {
+   "path": "/d/e/.html",
+   "file": "/d/e/.html"
+  },
+  {
+   "path": "/a b.mjs",
+   "file": "/a b.mjs"
+  },
+  {
+   "path": "/a%20b.mjs",
+   "file": "/a b.mjs"
+  },
+  {
+   "path": "/fehlt",
+   "file": null
+  },
+  {
+   "path": "//index.html",
+   "file": "/index.html"
+  },
+  {
+   "path": "/a?x=1",
+   "file": null
+  },
+  {
+   "path": "/a#k",
+   "file": null
+  }
+ ],
+ "answers": [
+  {
+   "path": "/",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "<h1>Start</h1>"
+  },
+  {
+   "path": "/index",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "<h1>Start</h1>"
+  },
+  {
+   "path": "/index.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "<h1>Start</h1>"
+  },
+  {
+   "path": "/a",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "a-datei"
+  },
+  {
+   "path": "/a/",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "a-ordner"
+  },
+  {
+   "path": "/a.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "a-datei"
+  },
+  {
+   "path": "/a/index.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "a-ordner"
+  },
+  {
+   "path": "/b",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "b"
+  },
+  {
+   "path": "/b/",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "b"
+  },
+  {
+   "path": "/c",
+   "status": 200,
+   "type": "application/octet-stream",
+   "body": "c-ohne"
+  },
+  {
+   "path": "/c.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "c"
+  },
+  {
+   "path": "/Gärten/über uns",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "über"
+  },
+  {
+   "path": "/G%C3%A4rten/%C3%BCber%20uns",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "über"
+  },
+  {
+   "path": "/G%C3%A4rten/%C3%BCber%20uns.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "über"
+  },
+  {
+   "path": "/static/contentIndex.json",
+   "status": 200,
+   "type": "application/json",
+   "body": "{}"
+  },
+  {
+   "path": "/static/icon.png",
+   "status": 200,
+   "type": "image/png",
+   "body": "png"
+  },
+  {
+   "path": "/static/geheim.txt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/draussen/x",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/kaputt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/neben",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/x.CSS",
+   "status": 200,
+   "type": "text/css; charset=utf-8",
+   "body": "css"
+  },
+  {
+   "path": "/y.woff2",
+   "status": 200,
+   "type": "font/woff2",
+   "body": "w"
+  },
+  {
+   "path": "/z.unknown",
+   "status": 200,
+   "type": "application/octet-stream",
+   "body": "u"
+  },
+  {
+   "path": "/noext",
+   "status": 200,
+   "type": "application/octet-stream",
+   "body": "n"
+  },
+  {
+   "path": "/d/e/f.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "body": "<svg/>"
+  },
+  {
+   "path": "/d/e/",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/d",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/leer/",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/leer",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/../geheim.txt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/%2e%2e/geheim.txt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/a/../c",
+   "status": 200,
+   "type": "application/octet-stream",
+   "body": "c-ohne"
+  },
+  {
+   "path": "/%E0%A4%A",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/%41",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "a-datei"
+  },
+  {
+   "path": "/%2541",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "prozent"
+  },
+  {
+   "path": "/__quartzcontrol/epub.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "<p>eigen</p>"
+  },
+  {
+   "path": "/__quartzcontrol/drawing.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "zeichnen"
+  },
+  {
+   "path": "/__quartzcontrol/fehlt.html",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/__quartzcontrol/",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/__quartzcontrol/a%20b.html",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/../neben-der-kopie.txt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/%2e%2e/neben-der-kopie.txt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/..%2fneben-der-kopie.txt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "/d/e/.html",
+   "status": 200,
+   "type": "application/octet-stream",
+   "body": "versteckt"
+  },
+  {
+   "path": "/a b.mjs",
+   "status": 200,
+   "type": "text/javascript; charset=utf-8",
+   "body": "m"
+  },
+  {
+   "path": "/a%20b.mjs",
+   "status": 200,
+   "type": "text/javascript; charset=utf-8",
+   "body": "m"
+  },
+  {
+   "path": "/fehlt",
+   "status": 404,
+   "type": null,
+   "body": ""
+  },
+  {
+   "path": "//index.html",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "<h1>Start</h1>"
+  },
+  {
+   "path": "/a?x=1",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "a-datei"
+  },
+  {
+   "path": "/a#k",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "body": "a-datei"
+  }
+ ],
+ "removedAfterClose": true,
+ "swept": [
+  "quartzcontrol-export-alt",
+  "quartzcontrol-export-genau",
+  "quartzcontrol-export-link"
+ ],
+ "left": [
+  "neben-der-kopie.txt",
+  "qh-relay-alt",
+  "quartzcontrol-anders-alt",
+  "quartzcontrol-export-datei",
+  "quartzcontrol-export-knapp",
+  "quartzcontrol-export-neu"
+ ]
+}
