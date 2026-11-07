@@ -69,6 +69,8 @@ public struct RelayProbe: Sendable {
   /// The pause before asking once more for another generation; 3 s.
   var askAgain: Duration
   let configuration: @Sendable () -> URLSessionConfiguration
+  /// Certificates (DER) trusted besides the system's, for a test's server (as FTPSession's `ca`).
+  var anchors: [Data] = []
 
   public init() {
     self.init(timeout: .seconds(10), askAgain: .seconds(3), configuration: {
@@ -294,7 +296,7 @@ public struct RelayProbe: Sendable {
     let handedOn = deadline != nil
     let deadline = deadline ?? .now + timeout
     guard let request = URL(string: url) else { return .failed("net::ERR_INVALID_URL") }
-    let fetch = Fetch(start: url, origin: origin, seconds: Self.seconds(timeout), reportsStatus: !handedOn)
+    let fetch = Fetch(start: url, origin: origin, seconds: Self.seconds(timeout), reportsStatus: !handedOn, anchors: anchors)
     let session = URLSession(configuration: configuration(), delegate: fetch, delegateQueue: nil)
     defer { session.invalidateAndCancel() }
     let outcome: Fetch.Result = await withTaskCancellationHandler {
@@ -385,13 +387,15 @@ public struct RelayProbe: Sendable {
     let origin: String?
     let seconds: String
     let reportsStatus: Bool
+    let anchors: [Data]
     let state: Mutex<State>
 
-    init(start: String, origin: String?, seconds: String, reportsStatus: Bool) {
+    init(start: String, origin: String?, seconds: String, reportsStatus: Bool, anchors: [Data] = []) {
       self.start = start
       self.origin = origin
       self.seconds = seconds
       self.reportsStatus = reportsStatus
+      self.anchors = anchors
       self.state = Mutex(State(current: start))
     }
 
@@ -484,6 +488,24 @@ public struct RelayProbe: Sendable {
       }
       if origin != nil { followed.setValue(tainted ? "null" : origin, forHTTPHeaderField: "Origin") }
       completionHandler(followed)
+    }
+
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+      guard !anchors.isEmpty, challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+            let trust = challenge.protectionSpace.serverTrust else {
+        completionHandler(.performDefaultHandling, nil)
+        return
+      }
+      let certificates = anchors.compactMap { SecCertificateCreateWithData(nil, $0 as CFData) }
+      SecTrustSetAnchorCertificates(trust, certificates as CFArray)
+      SecTrustSetAnchorCertificatesOnly(trust, false)
+      // Not trusted with them either: the system's answer, which names the certificate.
+      if SecTrustEvaluateWithError(trust, nil) {
+        completionHandler(.useCredential, URLCredential(trust: trust))
+      } else {
+        completionHandler(.performDefaultHandling, nil)
+      }
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
