@@ -1,0 +1,2056 @@
+{
+ "cases": [
+  {
+   "name": "no address",
+   "op": "check",
+   "args": [
+    null,
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "noUrl"
+   },
+   "requests": [],
+   "slow": false
+  },
+  {
+   "name": "ftp",
+   "op": "check",
+   "args": [
+    "ftp://relay.test/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "noUrl"
+   },
+   "requests": [],
+   "slow": false
+  },
+  {
+   "name": "no form",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok/send.php",
+    "https://garten.example",
+    null,
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "noUrl"
+   },
+   "requests": [],
+   "slow": false
+  },
+  {
+   "name": "not a URL",
+   "op": "check",
+   "args": [
+    "http://",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "noUrl"
+   },
+   "requests": [],
+   "slow": false
+  },
+  {
+   "name": "upper-case scheme",
+   "op": "check",
+   "args": [
+    "HTTP://relay.test/ok/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "HTTP://relay.test/ok/send.php",
+    "counters": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "ok",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/ok/send.php",
+    "counters": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "ok with a query of its own",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok/send.php?a=b%20c&challenge=alt&x",
+    "https://garten.example",
+    "kontakt-2",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/ok/send.php?a=b%20c&challenge=alt&x",
+    "counters": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?a=b+c&challenge=kontakt-2&x=&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "ok, no origin",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok/send.php",
+    null,
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/ok/send.php",
+    "counters": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": null
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "ok, no generation",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok/send.php",
+    "https://garten.example",
+    "kontakt",
+    null
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/ok/send.php",
+    "counters": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "counters not a boolean",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok-nocounters/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/ok-nocounters/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok-nocounters/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "ok without a stamp",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok-nostamp/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/ok-nostamp/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok-nostamp/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "another generation, twice",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok-old/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "otherRelay",
+    "url": "http://relay.test/ok-old/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok-old/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok-old/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": true
+  },
+  {
+   "name": "another generation, then this one",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok-late/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/ok-late/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok-late/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok-late/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": true
+  },
+  {
+   "name": "ok with 201",
+   "op": "check",
+   "args": [
+    "http://relay.test/ok-status/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/ok-status/send.php",
+    "status": 201
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok-status/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "unknown form",
+   "op": "check",
+   "args": [
+    "http://relay.test/unknown/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "otherRelay",
+    "url": "http://relay.test/unknown/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/unknown/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "origin refused",
+   "op": "check",
+   "args": [
+    "http://relay.test/origin/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "relayError",
+    "url": "http://relay.test/origin/send.php",
+    "status": 403,
+    "error": "origin",
+    "message": "Origin nicht erlaubt: ääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääääää"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/origin/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a long error",
+   "op": "check",
+   "args": [
+    "http://relay.test/longerr/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "relayError",
+    "url": "http://relay.test/longerr/send.php",
+    "status": 400,
+    "error": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee😀",
+    "message": ""
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/longerr/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "mbstring",
+   "op": "check",
+   "args": [
+    "http://relay.test/mbstring/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "relayError",
+    "url": "http://relay.test/mbstring/send.php",
+    "status": 500,
+    "error": "mbstring_config",
+    "message": ""
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/mbstring/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "PHP stopped",
+   "op": "check",
+   "args": [
+    "http://relay.test/php500/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "phpError",
+    "url": "http://relay.test/php500/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/php500/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "the host's 500",
+   "op": "check",
+   "args": [
+    "http://relay.test/host500/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/host500/send.php",
+    "status": 500
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/host500/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "no PHP, config served",
+   "op": "check",
+   "args": [
+    "http://relay.test/nophp/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "noPhp",
+    "url": "http://relay.test/nophp/send.php",
+    "configOpen": "http://relay.test/nophp/config.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/nophp/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/nophp/config.php",
+     "origin": null
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "no PHP, config closed",
+   "op": "check",
+   "args": [
+    "http://relay.test/nophp-closed/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "noPhp",
+    "url": "http://relay.test/nophp-closed/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/nophp-closed/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/nophp-closed/config.php",
+     "origin": null
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "fatal error as HTML",
+   "op": "check",
+   "args": [
+    "http://relay.test/fatal-html/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "phpMessage",
+    "url": "http://relay.test/fatal-html/send.php",
+    "message": "Uncaught Error: Failed opening required '/srv/www/forms/config.php' (include_path='.:/usr/share/php')"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/fatal-html/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "warning as HTML",
+   "op": "check",
+   "args": [
+    "http://relay.test/warn-html/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "phpMessage",
+    "url": "http://relay.test/warn-html/send.php",
+    "message": "Undefined variable $x"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/warn-html/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "deprecated as text",
+   "op": "check",
+   "args": [
+    "http://relay.test/warn-text/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "phpMessage",
+    "url": "http://relay.test/warn-text/send.php",
+    "message": "Creation of dynamic property"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/warn-text/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "fatal as long text",
+   "op": "check",
+   "args": [
+    "http://relay.test/fatal-text/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "phpMessage",
+    "url": "http://relay.test/fatal-text/send.php",
+    "message": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/fatal-text/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a host page with Warning",
+   "op": "check",
+   "args": [
+    "http://relay.test/host404-warning/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/host404-warning/send.php",
+    "status": 404
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/host404-warning/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a text 404 with Warning",
+   "op": "check",
+   "args": [
+    "http://relay.test/text404-warning/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/text404-warning/send.php",
+    "status": 404
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/text404-warning/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "PHP-FPM cannot read",
+   "op": "check",
+   "args": [
+    "http://relay.test/fpm/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "phpCannotRead",
+    "url": "http://relay.test/fpm/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/fpm/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "not found",
+   "op": "check",
+   "args": [
+    "http://relay.test/notfound/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/notfound/send.php",
+    "status": 404
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/notfound/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a big body",
+   "op": "check",
+   "args": [
+    "http://relay.test/big/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/big/send.php",
+    "status": 200
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/big/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a big relay answer",
+   "op": "check",
+   "args": [
+    "http://relay.test/bigjson/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/bigjson/send.php",
+    "status": 200
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/bigjson/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a body that never ends",
+   "op": "check",
+   "args": [
+    "http://relay.test/slowbody/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "unreachable",
+    "url": "http://relay.test/slowbody/send.php",
+    "reason": "{\"key\":\"relayCheckIncomplete\",\"args\":{\"seconds\":2,\"status\":200}}"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/slowbody/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": true
+  },
+  {
+   "name": "a JSON body that never ends",
+   "op": "check",
+   "args": [
+    "http://relay.test/slowjson/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "unreachable",
+    "url": "http://relay.test/slowjson/send.php",
+    "reason": "{\"key\":\"relayCheckIncomplete\",\"args\":{\"seconds\":2,\"status\":200}}"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/slowjson/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": true
+  },
+  {
+   "name": "an HTML body that never ends",
+   "op": "check",
+   "args": [
+    "http://relay.test/slowhtml/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "unreachable",
+    "url": "http://relay.test/slowhtml/send.php",
+    "reason": "{\"key\":\"relayCheckIncomplete\",\"args\":{\"seconds\":2,\"status\":200}}"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/slowhtml/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": true
+  },
+  {
+   "name": "a server that never answers",
+   "op": "check",
+   "args": [
+    "http://relay.test/silent/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "unreachable",
+    "url": "http://relay.test/silent/send.php",
+    "reason": "{\"key\":\"relayCheckTimeout\",\"args\":{\"seconds\":2}}"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/silent/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": true
+  },
+  {
+   "name": "a server that hangs up",
+   "op": "check",
+   "args": [
+    "http://relay.test/drop/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "unreachable",
+    "url": "http://relay.test/drop/send.php",
+    "reason": "{\"key\":\"relayCheckDropped\",\"args\":{\"code\":\"net::ERR_EMPTY_RESPONSE\"}}"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/drop/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "refused",
+   "op": "check",
+   "args": [
+    "http://127.0.0.1:@CLOSED@/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "unreachable",
+    "url": "http://127.0.0.1:@CLOSED@/send.php",
+    "reason": "{\"key\":\"relayCheckRefused\",\"args\":{\"code\":\"net::ERR_CONNECTION_REFUSED\"}}"
+   },
+   "requests": [],
+   "slow": false
+  },
+  {
+   "name": "301 within the origin",
+   "op": "check",
+   "args": [
+    "http://relay.test/r301-same/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "postRedirect",
+    "url": "http://relay.test/r301-same/send.php",
+    "to": "http://relay.test/ok/send.php",
+    "status": 301
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r301-same/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "303 within the origin",
+   "op": "check",
+   "args": [
+    "http://relay.test/r303-same/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "postRedirect",
+    "url": "http://relay.test/r303-same/send.php",
+    "to": "http://relay.test/ok/send.php",
+    "status": 303
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r303-same/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "307 within the origin",
+   "op": "check",
+   "args": [
+    "http://relay.test/r307-same/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "ok",
+    "url": "http://relay.test/r307-same/send.php",
+    "counters": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r307-same/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "308 home",
+   "op": "check",
+   "args": [
+    "http://relay.test/r308-same-home/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r308-same-home/send.php",
+    "to": "http://relay.test/"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r308-same-home/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "307 home",
+   "op": "check",
+   "args": [
+    "http://relay.test/r307-same-home/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r307-same-home/send.php",
+    "to": "http://relay.test/"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r307-same-home/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/?x=1",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "301 home",
+   "op": "check",
+   "args": [
+    "http://relay.test/r301-same-home/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r301-same-home/send.php",
+    "to": "http://relay.test/"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r301-same-home/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "302 to a relay elsewhere",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-cross-relay/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirect",
+    "url": "http://relay.test/r302-cross-relay/send.php",
+    "to": "http://other.test/ok/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-cross-relay/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/ok/send.php?challenge=kontakt",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "308 to a relay elsewhere",
+   "op": "check",
+   "args": [
+    "http://relay.test/r308-cross-relay/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirect",
+    "url": "http://relay.test/r308-cross-relay/send.php",
+    "to": "http://other.test/ok/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r308-cross-relay/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/ok/send.php?challenge=kontakt",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "302 to a home elsewhere",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-cross-home/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r302-cross-home/send.php",
+    "to": "http://other.test/"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-cross-home/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/?challenge=kontakt",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "302 to an API elsewhere",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-cross-api/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r302-cross-api/send.php",
+    "to": "http://other.test/unknown-api/x"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-cross-api/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/unknown-api/x",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "302 to a refusal elsewhere",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-cross-origin-refusal/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirect",
+    "url": "http://relay.test/r302-cross-origin-refusal/send.php",
+    "to": "http://other.test/origin/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-cross-origin-refusal/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/origin/send.php?challenge=kontakt",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "301 to this machine",
+   "op": "check",
+   "args": [
+    "http://relay.test/r301-to-local/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r301-to-local/send.php",
+    "to": "http://127.0.0.1:@PORT@/ok/send.php",
+    "local": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r301-to-local/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "301 to this machine in hex",
+   "op": "check",
+   "args": [
+    "http://relay.test/r301-to-hex/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r301-to-hex/send.php",
+    "to": "http://127.0.0.1:@PORT@/ok/send.php",
+    "local": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r301-to-hex/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "301 to this machine over IPv6",
+   "op": "check",
+   "args": [
+    "http://relay.test/r301-to-v6/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r301-to-v6/send.php",
+    "to": "http://[::1]:@PORT@/ok/send.php",
+    "local": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r301-to-v6/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "301 into the LAN",
+   "op": "check",
+   "args": [
+    "http://relay.test/r301-to-lan/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r301-to-lan/send.php",
+    "to": "http://192.168.1.20/ok/send.php",
+    "local": true
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r301-to-lan/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a local address may go local",
+   "op": "check",
+   "args": [
+    "http://127.0.0.1:@PORT@/r301-to-local/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "postRedirect",
+    "url": "http://127.0.0.1:@PORT@/r301-to-local/send.php",
+    "to": "http://127.0.0.1:@PORT@/ok/send.php",
+    "status": 301
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "127.0.0.1:@PORT@",
+     "path": "/r301-to-local/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "127.0.0.1:@PORT@",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a chain back home",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-chain/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "postRedirect",
+    "url": "http://relay.test/r302-chain/send.php",
+    "to": "http://relay.test/ok/send.php",
+    "status": 302
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-chain/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/r302-chain2/send.php?challenge=kontakt",
+     "origin": "null"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a long place",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-long/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r302-long/send.php",
+    "to": "http://other.test/%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC…"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-long/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC%C3%BC?geheim=1",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "elsewhere ok without a stamp",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-cross-nostamp/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "redirectNoRelay",
+    "url": "http://relay.test/r302-cross-nostamp/send.php",
+    "to": "http://other.test/ok-nostamp/send.php"
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-cross-nostamp/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/ok-nostamp/send.php",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "away and back without a generation",
+   "op": "check",
+   "args": [
+    "http://relay.test/r302-away-and-back/send.php",
+    "https://garten.example",
+    "kontakt",
+    null
+   ],
+   "answer": {
+    "kind": "postRedirect",
+    "url": "http://relay.test/r302-away-and-back/send.php",
+    "to": "http://relay.test/ok/send.php",
+    "status": 302
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r302-away-and-back/send.php?challenge=kontakt",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "other.test",
+     "path": "/r307-back/send.php",
+     "origin": "null"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php",
+     "origin": "null"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "303, then 301",
+   "op": "check",
+   "args": [
+    "http://relay.test/r303-then-301/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "postRedirect",
+    "url": "http://relay.test/r303-then-301/send.php",
+    "to": "http://relay.test/ok/send.php",
+    "status": 303
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r303-then-301/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/r301-same/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "a body that grows without end",
+   "op": "check",
+   "args": [
+    "http://relay.test/endless/send.php",
+    "https://garten.example",
+    "kontakt",
+    "0123456789abcdef"
+   ],
+   "answer": {
+    "kind": "http",
+    "url": "http://relay.test/endless/send.php",
+    "status": 200
+   },
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/endless/send.php?challenge=kontakt&generation=0123456789abcdef",
+     "origin": "https://garten.example"
+    }
+   ],
+   "slow": false
+  },
+  {
+   "name": "the probe file served",
+   "op": "counters",
+   "args": [
+    "http://relay.test/cnt-probe/send.php"
+   ],
+   "answer": "http://relay.test/cnt-probe/counters/qf-probe.count",
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/cnt-probe/counters/.htaccess",
+     "origin": null
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/cnt-probe/counters/qf-probe.count",
+     "origin": null
+    }
+   ]
+  },
+  {
+   "name": "the .htaccess served",
+   "op": "counters",
+   "args": [
+    "http://relay.test/cnt-ht/send.php"
+   ],
+   "answer": "http://relay.test/cnt-ht/counters/.htaccess",
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/cnt-ht/counters/.htaccess",
+     "origin": null
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/cnt-ht/counters/qf-probe.count",
+     "origin": null
+    }
+   ]
+  },
+  {
+   "name": "nothing served",
+   "op": "counters",
+   "args": [
+    "http://relay.test/ok/send.php"
+   ],
+   "answer": null,
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/counters/.htaccess",
+     "origin": null
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/ok/counters/qf-probe.count",
+     "origin": null
+    }
+   ]
+  },
+  {
+   "name": "every path answers",
+   "op": "counters",
+   "args": [
+    "http://relay.test/cnt-all200/send.php"
+   ],
+   "answer": null,
+   "requests": [
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/cnt-all200/counters/.htaccess",
+     "origin": null
+    },
+    {
+     "method": "GET",
+     "host": "relay.test",
+     "path": "/cnt-all200/counters/qf-probe.count",
+     "origin": null
+    }
+   ]
+  }
+ ],
+ "phpMessage": [
+  {
+   "body": "",
+   "message": null
+  },
+  {
+   "body": "{\"ok\":true}",
+   "message": null
+  },
+  {
+   "body": "<b>Warning</b>:  x in <b>/a.php</b> on line <b>1</b>",
+   "message": "x"
+  },
+  {
+   "body": "<br />\n<b>Fatal error</b>:  Uncaught Error: nope in /srv/a.php:3\nStack trace:",
+   "message": "Uncaught Error: nope"
+  },
+  {
+   "body": "<br />\n<b>Parse error</b>:  syntax error, unexpected end of file",
+   "message": "syntax error, unexpected end of file"
+  },
+  {
+   "body": "<br />\n<b>Notice</b>:  Undefined index: a in <b>/x/y.php</b> on line <b>2</b><br />\n<b>Fatal error</b>: boom in <b>/x/z.php</b> on line <b>9</b>",
+   "message": "boom"
+  },
+  {
+   "body": "PHP Warning:  file_get_contents(x): Failed to open stream in /var/www/a.php on line 5",
+   "message": "file_get_contents(x): Failed to open stream"
+  },
+  {
+   "body": "Warning: something without a place",
+   "message": null
+  },
+  {
+   "body": "Deprecated: thing in /a.php on line 1\nWarning: second in /b.php on line 2",
+   "message": "thing"
+  },
+  {
+   "body": "  Fatal error: Allowed memory size exhausted in /srv/a.php on line 44   ",
+   "message": "Allowed memory size exhausted"
+  },
+  {
+   "body": "<html><body>Fatal error: in /x.php on line 1</body></html>",
+   "message": null
+  },
+  {
+   "body": "<!DOCTYPE html>\n<b>Warning</b>: in html in /x.php on line 1",
+   "message": "in html"
+  },
+  {
+   "body": "Notice: üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü in /x.php on line 1",
+   "message": "üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü"
+  },
+  {
+   "body": "Warning: a\tb in /x.php:12",
+   "message": "a\tb"
+  },
+  {
+   "body": "PHP Fatal error:  Uncaught TypeError in /x.php:7",
+   "message": "Uncaught TypeError"
+  },
+  {
+   "body": "Fatal error:x in /x.php on line 1",
+   "message": null
+  },
+  {
+   "body": "Warning: two  spaces in  /x.php on line 1",
+   "message": "two  spaces"
+  },
+  {
+   "body": "<p>Warning: tagged in /x.php on line 1</p>",
+   "message": "tagged"
+  },
+  {
+   "body": "Error: not a PHP kind in /x.php on line 1",
+   "message": null
+  }
+ ],
+ "localHost": [
+  {
+   "url": "http://localhost/",
+   "hostname": "localhost",
+   "local": true
+  },
+  {
+   "url": "http://LOCALHOST./",
+   "hostname": "localhost.",
+   "local": true
+  },
+  {
+   "url": "http://a.localhost/",
+   "hostname": "a.localhost",
+   "local": true
+  },
+  {
+   "url": "http://localhost.example/",
+   "hostname": "localhost.example",
+   "local": false
+  },
+  {
+   "url": "http://127.0.0.1/",
+   "hostname": "127.0.0.1",
+   "local": true
+  },
+  {
+   "url": "http://127.1/",
+   "hostname": "127.0.0.1",
+   "local": true
+  },
+  {
+   "url": "http://0x7f000001/",
+   "hostname": "127.0.0.1",
+   "local": true
+  },
+  {
+   "url": "http://2130706433/",
+   "hostname": "127.0.0.1",
+   "local": true
+  },
+  {
+   "url": "http://0177.0.0.1/",
+   "hostname": "127.0.0.1",
+   "local": true
+  },
+  {
+   "url": "http://0.0.0.0/",
+   "hostname": "0.0.0.0",
+   "local": true
+  },
+  {
+   "url": "http://10.1.2.3/",
+   "hostname": "10.1.2.3",
+   "local": true
+  },
+  {
+   "url": "http://172.15.0.1/",
+   "hostname": "172.15.0.1",
+   "local": false
+  },
+  {
+   "url": "http://172.16.0.1/",
+   "hostname": "172.16.0.1",
+   "local": true
+  },
+  {
+   "url": "http://172.31.255.255/",
+   "hostname": "172.31.255.255",
+   "local": true
+  },
+  {
+   "url": "http://172.32.0.1/",
+   "hostname": "172.32.0.1",
+   "local": false
+  },
+  {
+   "url": "http://192.168.0.1/",
+   "hostname": "192.168.0.1",
+   "local": true
+  },
+  {
+   "url": "http://192.169.0.1/",
+   "hostname": "192.169.0.1",
+   "local": false
+  },
+  {
+   "url": "http://169.254.1.1/",
+   "hostname": "169.254.1.1",
+   "local": true
+  },
+  {
+   "url": "http://169.255.1.1/",
+   "hostname": "169.255.1.1",
+   "local": false
+  },
+  {
+   "url": "http://8.8.8.8/",
+   "hostname": "8.8.8.8",
+   "local": false
+  },
+  {
+   "url": "http://[::1]/",
+   "hostname": "[::1]",
+   "local": true
+  },
+  {
+   "url": "http://[::]/",
+   "hostname": "[::]",
+   "local": true
+  },
+  {
+   "url": "http://[::ffff:127.0.0.1]/",
+   "hostname": "[::ffff:7f00:1]",
+   "local": true
+  },
+  {
+   "url": "http://[::ffff:8.8.8.8]/",
+   "hostname": "[::ffff:808:808]",
+   "local": false
+  },
+  {
+   "url": "http://[fc00::1]/",
+   "hostname": "[fc00::1]",
+   "local": true
+  },
+  {
+   "url": "http://[fd12:3456::1]/",
+   "hostname": "[fd12:3456::1]",
+   "local": true
+  },
+  {
+   "url": "http://[fe80::1]/",
+   "hostname": "[fe80::1]",
+   "local": true
+  },
+  {
+   "url": "http://[febf::1]/",
+   "hostname": "[febf::1]",
+   "local": true
+  },
+  {
+   "url": "http://[fec0::1]/",
+   "hostname": "[fec0::1]",
+   "local": false
+  },
+  {
+   "url": "http://[2001:db8::1]/",
+   "hostname": "[2001:db8::1]",
+   "local": false
+  },
+  {
+   "url": "http://[0:0:0:0:0:0:0:1]/",
+   "hostname": "[::1]",
+   "local": true
+  },
+  {
+   "url": "http://[FC00::]/",
+   "hostname": "[fc00::]",
+   "local": true
+  },
+  {
+   "url": "http://[fc0::1]/",
+   "hostname": "[fc0::1]",
+   "local": true
+  },
+  {
+   "url": "http://example.com/",
+   "hostname": "example.com",
+   "local": false
+  },
+  {
+   "url": "http://garten.example:8080/x",
+   "hostname": "garten.example",
+   "local": false
+  },
+  {
+   "url": "http://xn--grten-gra.example/",
+   "hostname": "xn--grten-gra.example",
+   "local": false
+  },
+  {
+   "url": "http://1.2.3.4.5/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://256.0.0.1/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://[1:0:0:2:0:0:0:3]/",
+   "hostname": "[1:0:0:2::3]",
+   "local": false
+  },
+  {
+   "url": "http://[1:0:0:0:2:0:0:3]/",
+   "hostname": "[1::2:0:0:3]",
+   "local": false
+  },
+  {
+   "url": "http://[::ffff:1.2.3.4]:8080/",
+   "hostname": "[::ffff:102:304]",
+   "local": false
+  },
+  {
+   "url": "http://[1:2:3:4:5:6:7:8]/",
+   "hostname": "[1:2:3:4:5:6:7:8]",
+   "local": false
+  },
+  {
+   "url": "http://[::1.2.3.4]/",
+   "hostname": "[::102:304]",
+   "local": false
+  },
+  {
+   "url": "http://[1::]/",
+   "hostname": "[1::]",
+   "local": false
+  },
+  {
+   "url": "http://[1:2]/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://[::1:2:3:4:5:6:7:8]/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://[::01.2.3.4]/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://[::1.2.3]/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://[0000:00::0]/",
+   "hostname": "[::]",
+   "local": true
+  },
+  {
+   "url": "http://[fe80::1%25en0]/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://[::1]x/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://0x/",
+   "hostname": "0.0.0.0",
+   "local": true
+  },
+  {
+   "url": "http://0x100000000/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://0.0x300/",
+   "hostname": "0.0.3.0",
+   "local": true
+  },
+  {
+   "url": "http://4294967295/",
+   "hostname": "255.255.255.255",
+   "local": false
+  },
+  {
+   "url": "http://4294967296/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://1.2.3./",
+   "hostname": "1.2.0.3",
+   "local": false
+  },
+  {
+   "url": "http://08/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://0x7f.1/",
+   "hostname": "127.0.0.1",
+   "local": true
+  },
+  {
+   "url": "http://1.2.0x10000/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://0xffffffffffffffffffffff/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://1.256.3.4/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://a.0x1/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://1.2.3.09/",
+   "hostname": null,
+   "local": null
+  },
+  {
+   "url": "http://0X7F.0.0.1/",
+   "hostname": "127.0.0.1",
+   "local": true
+  },
+  {
+   "url": "http://[1:0:2:3:4:5:6:7]/",
+   "hostname": "[1:0:2:3:4:5:6:7]",
+   "local": false
+  },
+  {
+   "url": "http://[1:0:0:2:3:4:5:6]/",
+   "hostname": "[1::2:3:4:5:6]",
+   "local": false
+  }
+ ]
+}

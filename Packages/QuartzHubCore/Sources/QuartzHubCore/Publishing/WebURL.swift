@@ -14,6 +14,10 @@ import Foundation
 /// map (a "%" or anything beyond ASCII, which IDNA turns into punycode), an IPv6 literal, and an
 /// IPv4 address in any form but four plain decimal numbers. Such an address is refused where a
 /// credential is entered, rather than sent to a host this parser does not know it names.
+///
+/// With `numericHosts` (the relay probe, which judges where a redirect goes), IPv6 literals and
+/// IPv4 addresses in every form WHATWG reads ("0x7f.1", "2130706433", "0177.0.0.1") are parsed and
+/// serialized as Node does ("[::1]", "127.0.0.1"); only "%" and non-ASCII hosts stay unsupported.
 public enum WebURL: Equatable, Sendable {
   case parsed(Parts)
   /// Parsed by Node, but only with the host rules left out above.
@@ -72,7 +76,7 @@ public enum WebURL: Equatable, Sendable {
 
   static let defaultPorts = ["http": "80", "https": "443", "ws": "80", "wss": "443", "ftp": "21"]
 
-  public init(_ input: String) {
+  public init(_ input: String, numericHosts: Bool = false) {
     var scalars = Array(input.unicodeScalars)
     while let first = scalars.first, first.value <= 0x20 { scalars.removeFirst() }
     while let last = scalars.last, last.value <= 0x20 { scalars.removeLast() }
@@ -117,9 +121,24 @@ public enum WebURL: Equatable, Sendable {
         return
       }
     }
+    var bracketed: String?
     if hostAndPort.first == "[" {
-      self = .unsupported
-      return
+      guard numericHosts else {
+        self = .unsupported
+        return
+      }
+      guard let close = hostAndPort.firstIndex(of: "]"),
+            let address = Self.ipv6(String(String.UnicodeScalarView(hostAndPort[hostAndPort.index(after: hostAndPort.startIndex)..<close]))) else {
+        self = .invalid
+        return
+      }
+      bracketed = "[\(address)]"
+      let after = hostAndPort[hostAndPort.index(after: close)...]
+      guard after.isEmpty || after.first == ":" else {
+        self = .invalid
+        return
+      }
+      hostAndPort = after
     }
     var hostScalars = hostAndPort
     var port = ""
@@ -140,23 +159,37 @@ public enum WebURL: Equatable, Sendable {
         port = String(value) == defaultPort ? "" : String(value)
       }
     }
-    guard !hostScalars.isEmpty else {
-      self = .invalid
-      return
-    }
-    if hostScalars.contains(where: { $0.value > 0x7E || $0 == "%" }) {
-      self = .unsupported
-      return
-    }
-    // Forbidden domain code points that can still be here (the terminators and "@" are gone).
-    if hostScalars.contains(where: { $0.value < 0x21 || $0.value == 0x7F || "<>[]^|".unicodeScalars.contains($0) }) {
-      self = .invalid
-      return
-    }
-    let hostname = String(String.UnicodeScalarView(hostScalars)).lowercased()
-    guard let host = Self.hostOrIPv4(hostname) else {
-      self = .unsupported
-      return
+    let host: String
+    if let bracketed {
+      host = bracketed
+    } else {
+      guard !hostScalars.isEmpty else {
+        self = .invalid
+        return
+      }
+      if hostScalars.contains(where: { $0.value > 0x7E || $0 == "%" }) {
+        self = .unsupported
+        return
+      }
+      // Forbidden domain code points that can still be here (the terminators and "@" are gone).
+      if hostScalars.contains(where: { $0.value < 0x21 || $0.value == 0x7F || "<>[]^|".unicodeScalars.contains($0) }) {
+        self = .invalid
+        return
+      }
+      let hostname = String(String.UnicodeScalarView(hostScalars)).lowercased()
+      if numericHosts {
+        guard let parsed = Self.hostOrAnyIPv4(hostname) else {
+          self = .invalid
+          return
+        }
+        host = parsed
+      } else {
+        guard let plain = Self.hostOrIPv4(hostname) else {
+          self = .unsupported
+          return
+        }
+        host = plain
+      }
     }
 
     // Path, query and fragment, each up to the next part.
@@ -186,6 +219,148 @@ public enum WebURL: Equatable, Sendable {
     // The IPv4 parser drops a trailing dot, and so does its serialization.
     guard labels.count == 4, labels.allSatisfy({ JSText.test($0, #"\A(?:0|[1-9][0-9]{0,2})\z"#) && Int($0)! <= 255 }) else { return nil }
     return labels.joined(separator: ".")
+  }
+
+  /// WHATWG's IPv4 parser where the host ends in a number: up to four parts, each decimal, octal
+  /// ("0…") or hex ("0x…"), the last one filling the remaining bytes. Nil where Node throws.
+  static func hostOrAnyIPv4(_ host: String) -> String? {
+    var parts = JSText.split(host, ".")
+    if parts.count > 1, parts.last == "" { parts.removeLast() }
+    let last = parts.last ?? ""
+    let endsInNumber = (!last.isEmpty && last.allSatisfy(\.isASCIIDigitScalar)) || ipv4Number(last) != nil && JSText.test(last, #"\A0[xX]"#)
+    guard endsInNumber else { return host }
+    guard parts.count <= 4 else { return nil }
+    var numbers: [UInt64] = []
+    for part in parts {
+      guard let number = ipv4Number(part) else { return nil }
+      numbers.append(number)
+    }
+    for number in numbers.dropLast() where number > 255 { return nil }
+    guard numbers.last! < UInt64(1) << (8 * (5 - numbers.count)) else { return nil }
+    var address = numbers.last!
+    for (i, number) in numbers.dropLast().enumerated() { address += number << (8 * (3 - i)) }
+    return (0..<4).map { String((address >> (8 * (3 - $0))) & 255) }.joined(separator: ".")
+  }
+
+  static func ipv4Number(_ part: String) -> UInt64? {
+    guard !part.isEmpty else { return nil }
+    var digits = Substring(part), radix = 10
+    if digits.hasPrefix("0x") || digits.hasPrefix("0X") {
+      digits = digits.dropFirst(2)
+      radix = 16
+    } else if digits.count >= 2, digits.hasPrefix("0") {
+      digits = digits.dropFirst()
+      radix = 8
+    }
+    if digits.isEmpty { return 0 }
+    guard digits.allSatisfy({ $0.isASCII && $0.isHexDigit && Int(String($0), radix: 16)! < radix }) else { return nil }
+    // Beyond 2^32 is a failure for every part; the cap keeps the arithmetic in range.
+    var value: UInt64 = 0
+    for digit in digits { value = min(value * UInt64(radix) + UInt64(Int(String(digit), radix: 16)!), UInt64(1) << 40) }
+    return value
+  }
+
+  /// WHATWG's IPv6 parser and serializer: eight pieces, "::" for the first longest run of two or
+  /// more zero pieces, lower-case hex without leading zeros; a dotted IPv4 tail as two pieces.
+  static func ipv6(_ input: String) -> String? {
+    let c = Array(input.lowercased().unicodeScalars)
+    var pieces = [UInt16](repeating: 0, count: 8)
+    var index = 0, pointer = 0
+    var compress: Int?
+    func hexValue(_ s: Unicode.Scalar) -> UInt16? { UInt16(String(s), radix: 16) }
+    if pointer < c.count, c[pointer] == ":" {
+      guard pointer + 1 < c.count, c[pointer + 1] == ":" else { return nil }
+      pointer += 2
+      index += 1
+      compress = index
+    }
+    while pointer < c.count {
+      guard index < 8 else { return nil }
+      if c[pointer] == ":" {
+        guard compress == nil else { return nil }
+        pointer += 1
+        index += 1
+        compress = index
+        continue
+      }
+      var value: UInt16 = 0, length = 0
+      while length < 4, pointer < c.count, let digit = hexValue(c[pointer]) {
+        value = value * 16 + digit
+        pointer += 1
+        length += 1
+      }
+      if pointer < c.count, c[pointer] == "." {
+        guard length > 0 else { return nil }
+        pointer -= length
+        guard index <= 6 else { return nil }
+        var seen = 0
+        while pointer < c.count {
+          var number: Int?
+          if seen > 0 {
+            guard c[pointer] == ".", seen < 4 else { return nil }
+            pointer += 1
+          }
+          guard pointer < c.count, ("0"..."9").contains(c[pointer]) else { return nil }
+          while pointer < c.count, ("0"..."9").contains(c[pointer]) {
+            let digit = Int(c[pointer].value - 0x30)
+            if number == 0 { return nil }
+            number = (number ?? 0) * 10 + digit
+            guard number! <= 255 else { return nil }
+            pointer += 1
+          }
+          pieces[index] = pieces[index] * 0x100 + UInt16(number!)
+          seen += 1
+          if seen == 2 || seen == 4 { index += 1 }
+        }
+        guard seen == 4 else { return nil }
+        break
+      } else if pointer < c.count, c[pointer] == ":" {
+        pointer += 1
+        guard pointer < c.count else { return nil }
+      } else if pointer < c.count {
+        return nil
+      }
+      pieces[index] = value
+      index += 1
+    }
+    if let compress {
+      var swaps = index - compress
+      index = 7
+      while index != 0, swaps > 0 {
+        pieces.swapAt(index, compress + swaps - 1)
+        index -= 1
+        swaps -= 1
+      }
+    } else if index != 8 {
+      return nil
+    }
+    // Serialize: the first longest run of zeros, if longer than one.
+    var best: (start: Int, length: Int)?
+    var i = 0
+    while i < 8 {
+      if pieces[i] == 0 {
+        var j = i
+        while j < 8, pieces[j] == 0 { j += 1 }
+        if j - i > 1, j - i > (best?.length ?? 0) { best = (i, j - i) }
+        i = j
+      } else {
+        i += 1
+      }
+    }
+    var out = ""
+    var ignore0 = false
+    for k in 0..<8 {
+      if ignore0, pieces[k] == 0 { continue }
+      ignore0 = false
+      if let best, best.start == k {
+        out += k == 0 ? "::" : ":"
+        ignore0 = true
+        continue
+      }
+      out += String(pieces[k], radix: 16)
+      if k != 7 { out += ":" }
+    }
+    return out
   }
 
   // Node's percent-encode sets (the path set is GitHubRemote.encode's).
