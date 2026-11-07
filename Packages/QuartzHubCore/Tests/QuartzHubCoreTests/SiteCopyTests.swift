@@ -32,9 +32,8 @@ import Testing
     return found
   }
 
-  @Test func copiesResolvesAndAnswersAsQuartzControl() throws {
-    let work = TemplatePackageTests.realpath(TestFolder.make("qh-site-copy"))
-    defer { try? FileManager.default.removeItem(atPath: work) }
+  /// The build of the golden with its links, and the folder the copy goes to.
+  static func buildFixture(_ work: String) throws -> (build: String, temp: String) {
     let build = "\(work)/public", temp = "\(work)/tmp"
     try Posix.mkdirs(temp)
     let files = Self.golden["files"]!.objectValue!
@@ -48,7 +47,13 @@ import Testing
     try Posix.write("\(work)/draussen/x.html", Data("draussen".utf8))
     let links = Self.golden["links"]!.objectValue!
     for path in links.keys { try Posix.symlink(links[path]!.stringValue!.replacingOccurrences(of: "@W@", with: work), "\(build)/\(path)") }
+    return (build, temp)
+  }
 
+  @Test func copiesResolvesAndAnswersAsQuartzControl() throws {
+    let work = TemplatePackageTests.realpath(TestFolder.make("qh-site-copy"))
+    defer { try? FileManager.default.removeItem(atPath: work) }
+    let (build, temp) = try Self.buildFixture(work)
     let site = try SiteCopy.make(from: build, tempRoot: temp)
     #expect(JSText.startsWith(NodePath.basename(site.root), SiteCopy.tempPrefix) && NodePath.dirname(site.root) == temp)
     #expect(JSJSON.compact(.object(Self.tree(site.root))) == JSJSON.compact(Self.golden["copy"]!))
