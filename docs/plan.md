@@ -222,7 +222,7 @@ nach Abhängigkeit:
      (`SSHLogin`, `HostKeyCheck`, `SFTPChannel`, `SFTPAdapter`, `RsyncAdapter`), gegen QuartzControl lokal und auf debian-vm
      gemessen. 8c fertig: FTP/FTPS über QuartzControls basic-ftp im Helfer `ftp-session` (`FTPSession`,
      `FTPAdapter`), die Relay-Abfrage über URLSession (`RelayProbe`), quartz-forms (`FormsCLI`, `FormsRelay`);
-     offen nur der FTPS-Lauf des Relays auf debian-vm (Passwort, vom Nutzer) und das Aufräumen der VM.
+     nicht gemessen nur das Relay über FTPS auf debian-vm (offen gelassen, Nutzer 2026-11-07); VM aufgeräumt.
    - `connectionsService` (Schlüsselbund), `publishTargetsService`, `githubService`
    - Adapter:
      - SFTP über das System-OpenSSH (`ssh -s sftp`), SFTP-Protokoll selbst geschrieben (Nutzer, 2026-11-06,

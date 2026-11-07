@@ -1715,8 +1715,10 @@ gefangen.
   FPM (Zähler schreibbar), mod_php stoppt mit „Failed opening required …/config.php“ (leere 500,
   `phpError`), lesbar antworten beide und mod_php meldet `counters: false`; Apache sperrt `counters/`
   per `.htaccess` (403, kein `countersOpen`); ohne die Test-CA heißt es „Zertifikat“, mit ihr bleibt
-  ein fremdes Zertifikat (nginx :8443, Snakeoil) abgelehnt. Der FTPS-Lauf braucht `QH_FTP_PW` und
-  wird vom Nutzer gestartet (die Rechteprüfung lässt das Passwort nicht durch die Sitzung); der
-  FTP-Adapter selbst ist mit 5847d5e auf der VM gemessen. Für die Abfrage liefert Apache auf
-  :8441/:8442 das Zertifikat der Test-CA (`qc.conf` gesichert als `qc.conf.vor-qh-8c`, am Ende von
-  Punkt 8 zurück).
+  ein fremdes Zertifikat (nginx :8443, Snakeoil) abgelehnt. Dafür lieferte Apache auf :8441/:8442
+  das Zertifikat der Test-CA. **Nicht gemessen:** das Relay über FTPS (`overFTPS`, braucht
+  `QH_FTP_PW`; die Rechteprüfung lässt das Passwort nicht durch die Sitzung, und der Lauf blieb auf
+  Wunsch des Nutzers offen). Der FTP-Adapter selbst ist mit 5847d5e auf der VM gemessen. Wer den
+  Lauf nachholt, richtet vorher wieder her, was am 2026-11-07 abgebaut wurde: eine Test-CA mit
+  365-Tage-Zertifikat für debian.local, vsftpd mit TLS (nicht erzwungen, `require_ssl_reuse=YES`),
+  Apache :8441/:8442 mit diesem Zertifikat und ein Testschlüssel für qchost.
