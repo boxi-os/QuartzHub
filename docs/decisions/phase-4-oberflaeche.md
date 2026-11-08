@@ -274,3 +274,93 @@ geprüft:
 - „Installieren“ (npm aus dem Netz);
 - die Update-Prüfung selbst;
 - Starten des Servers: ohne `node_modules` startet Quartz nicht, und mit fehlt der Kopie nichts.
+
+### Vorschau & Build
+
+Vorbild `BuildServer.tsx` mit `LogConsole`, `DiscoveredServers` und `BuildActivityLine`. Neu im
+Kern ist nur **`ProjectPrefs.outputDirProblem`**: die Regel aus QuartzControls Schema
+`projectPrefs` (`ipc/schemas.ts`) für den Ausgabeordner. Erlaubt sind leer, absolut bis 4096
+UTF-16-Einheiten oder relativ bis 1024 ohne ein Segment „..“ (getrennt an „/“ und „\“). Gemessen
+mit `scripts/output-dir-golden.mjs` gegen das Schema selbst, 37 Fälle. Die Gegenproben scheitern:
+Zeichen statt UTF-16 zählen, oder nur an „/“ trennen.
+
+**Aussehen.** Drei Abschnitte eines gruppierten `Form`:
+- **Dev-Server.** Er beginnt mit der Adresse: ein Link, wenn der Server läuft, sonst grau mit der
+  Adresse, die er haben wird. Daneben steht „Kopieren“. Darunter kommen:
+  - die Angaben zum Lauf oder der Hinweis;
+  - der Fehler;
+  - der Hinweis auf eine fehlende `index.md`;
+  - die Aktivität;
+  - Starten oder Neustarten und Stoppen;
+  - die Server-Einstellungen, eingeklappt, jedes Feld eine Zeile;
+  - die Live-Vorschau;
+  - die Konsole.
+- **Laufende Server auf diesem Rechner** (`ServerScan.discover`).
+- **Einmaliger Build** mit:
+  - „Jetzt bauen“;
+  - dem Inhalt des Ausgabeordners;
+  - dem Feld „Ausgabeordner“ mit „Auswählen“ und „Zurücksetzen“;
+  - dem Ergebnis;
+  - der Konsole.
+
+**Gemessen** in Hell und Dunkel an einer Kopie von gui-test. Die `node_modules` sind per APFS-Klon
+mitgekopiert, Server auf 8080/3001:
+
+| Vorgang | Ergebnis |
+|---|---|
+| Starten | Port 8080 lauscht nach 16 s; Zustand „Läuft“, Vorschau zeigt die Startseite |
+| „Mobil“ | Vorschau 390 pt breit, mittig, Anzeige „390 px“ |
+| In der Vorschau auf „animation“, dann „Desktop“ | Vorschau bleibt auf „animation“: Breitenwechsel lädt nicht neu |
+| „Jetzt bauen“ nach `public/` bei laufendem Server | abgelehnt, der Satz rot in der Build-Konsole |
+| Ausgabeordner „../x“ | Fehler unter dem Feld, `project-prefs.json` unverändert |
+| Ausgabeordner „dist“, dann bauen | Datei hat `"dist"`, „Erfolgreich in 12,1s“, 475 Dateien in `dist/`, der Server lief weiter |
+| „Server beenden“ in der Liste, „Abbrechen“ | Server läuft weiter |
+| dasselbe, „Server beenden“ | Port frei, Liste „Es läuft kein Quartz-Server …“, 0 |
+| Port 8095 eingetippt, zur Übersicht und zurück | 8095 steht noch, die Adresse sagt `:8095`, die Einstellungen offen |
+
+**Was beim Bau anders war als gedacht.**
+- **Die Konsole folgte dem Ende nicht.** Ob der Leser unten steht, prüfte sie an der Höhe des
+  Dokuments. TextKit 2 legt neue Zeilen aber erst später aus. Die Höhe war also noch die alte,
+  und die Konsole blieb auf dem ersten Bildschirm stehen (gesehen an der Server-Konsole). Jetzt
+  merkt sie sich das Folgen, wenn der Leser selbst rollt (`boundsDidChange`; wachsender Text
+  bewegt keine Grenzen). Sie rollt über den Bereich (`scrollRangeToVisible`), nicht über den
+  Rahmen.
+- **„localhost:8.080“.** Ein interpolierter String-Literal in `Label("…\(port)")` ist ein
+  `LocalizedStringKey`, und die Zahl kam mit Tausenderpunkt heraus. Jetzt steht dort ein
+  zusammengesetzter `String`.
+- **Ein `Text` meldet seine Worte als Wert, nicht als Label.** Unter XCUITest ist `label` leer, der
+  Text steht in `value` (gemessen über `AXValue`). Der Test wartet deshalb auf `value`.
+- **Übernommene Texte nannten „QuartzControl“ und „Von dieser App“.** Das betraf die
+  Stopp-Fragen, den Warnhinweis und die Herkunft in der Liste. Sie sagen jetzt „QuartzHub“.
+- **Die Stopp-Frage teilt sich am Absatz.** Der Text vor dem Absatz ist der Titel, der Rest der
+  Text des Hinweisfensters. QuartzControl hatte beides in einem Text.
+
+**Abweichungen von QuartzControl.**
+- **Die Konsole ist ein `NSTextView` statt einer Liste.**
+  - Text lässt sich über Zeilen hinweg markieren und kopieren.
+  - Neue Zeilen werden angehängt, statt bis zu 999 neu zu zeichnen.
+  - Der Hintergrund folgt dem System, nicht immer dunkel.
+  - Sie folgt dem Ende nur, wenn man unten steht; QuartzControl rollte bei jeder Zeile hinab.
+  - Neue Zeilen werden nicht angesagt (`role="log"`); bei einem laufenden Server wäre das
+    Dauerrede.
+- **Die Vorschau ist ein `WKWebView`.** Eine Navigation bleibt nur innerhalb des Servers. Ein Link
+  anderswohin öffnet sich im Browser, ebenso `target="_blank"`. QuartzControls Sandbox ließ beide
+  stumm.
+- **`sitePreview.highlight` nach dem Laden entfällt.** Es begrenzte `scrollIntoView` der Seite auf
+  den iframe. Ein `WKWebView` ist eine eigene Rollansicht, die das Formular nicht mitrollt.
+  Beobachtet beim Rollen, nicht mit einem Sprung aus dem Inhaltsverzeichnis gemessen.
+- **Ein unverändertes Feld „Ausgabeordner“ schreibt nichts**, auch kein `.quartz-gui/`.
+  QuartzControl schrieb bei jedem Verlassen des Feldes.
+- **Ein abgelehnter Ordner bekommt einen Satz** (`buildServer.exportDirInvalid`), nicht die
+  Meldung von zod.
+- **Die Dauer des Builds hat ein Dezimalkomma** („12,1s“). QuartzControls `toFixed` schrieb immer
+  einen Punkt.
+- **Fertig und abgelehnt werden angesagt.** In QuartzControl war die Ergebniszeile still.
+- **Die Server-Einstellungen bleiben im Speicher je Projekt** (`BuildServerMemory`), wie
+  `useStickyState`, nicht auf der Platte.
+
+**Nicht gemessen:**
+- ein Server mit `remoteDevHost` (Tunnel);
+- ein fremder Server aus dem Terminal in der Liste;
+- „Ordner öffnen“ und „Auswählen“, weil beide den Finder bzw. das Ablagefenster öffnen;
+- VoiceOver.

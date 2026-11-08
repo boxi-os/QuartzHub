@@ -96,6 +96,40 @@ final class SmokeTests: XCTestCase {
     XCTAssertTrue(any["page.plugins"].firstMatch.waitForExistence(timeout: 5), "the link did not open Plugins")
   }
 
+  /// Vorschau & Build of the scratch project: both consoles there and empty, the scan of this Mac
+  /// answers, and an output folder the schema refuses is said and not written, a good one is.
+  func testServerPageScansAndRefusesABadOutputFolder() throws {
+    let (profile, project) = try scratchProject()
+    let app = launch(profile: profile, open: project)
+    let window = projectWindow(app)
+    XCTAssertTrue(window.waitForExistence(timeout: 10))
+    let any = window.descendants(matching: .any)
+    any["overview.link.server"].firstMatch.click()
+    XCTAssertTrue(any["page.server"].firstMatch.waitForExistence(timeout: 5), "Vorschau & Build did not open")
+    XCTAssertTrue(any["server.log.server"].firstMatch.exists, "no server console")
+    XCTAssertTrue(any["server.log.build"].firstMatch.exists, "no build console")
+    let scan = any["server.discovery.status"].firstMatch
+    // A static text's words are its value, not its label (AXValue; the label is empty).
+    let answered = expectation(for: NSPredicate(format: "value != %@ AND value != ''", "Suche laufende Server…"), evaluatedWith: scan)
+    wait(for: [answered], timeout: 15)
+
+    let prefs = project.appendingPathComponent(".quartz-gui/project-prefs.json")
+    let field = any["server.outputDir"].firstMatch
+    field.click()
+    field.typeText("../x\r")
+    XCTAssertTrue(any["server.outputDir.error"].firstMatch.waitForExistence(timeout: 5), "\"../x\" was not refused")
+    XCTAssertFalse(FileManager.default.fileExists(atPath: prefs.path), "a refused folder was written")
+
+    field.click()
+    field.typeKey("a", modifierFlags: .command)
+    field.typeText("dist\r")
+    let written = expectation(for: NSPredicate { _, _ in
+      (try? String(contentsOf: prefs, encoding: .utf8))?.contains("\"dist\"") == true
+    }, evaluatedWith: nil)
+    wait(for: [written], timeout: 5)
+    XCTAssertFalse(any["server.outputDir.error"].firstMatch.exists, "the error stayed after a good folder")
+  }
+
   func testInspectorToggles() throws {
     let (profile, project) = try scratchProject()
     let app = launch(profile: profile, open: project)

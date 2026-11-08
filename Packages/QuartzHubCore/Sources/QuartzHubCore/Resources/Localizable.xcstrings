@@ -1238,13 +1238,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server auf Port {{port}} beenden?\n\nDieser Server wurde nicht von QuartzControl gestartet ({{name}}). Wer ihn gestartet hat (ein Terminal, ein anderes Fenster, eine frühere Sitzung), arbeitet vielleicht gerade damit."
+            "value" : "Server auf Port {{port}} beenden?\n\nDieser Server wurde nicht von QuartzHub gestartet ({{name}}). Wer ihn gestartet hat (ein Terminal, ein anderes Fenster, eine frühere Sitzung), arbeitet vielleicht gerade damit."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stop the server on port {{port}}?\n\nThis server was not started by QuartzControl ({{name}}). Whoever started it (a terminal, another window, an earlier session) may be working with it right now."
+            "value" : "Stop the server on port {{port}}?\n\nThis server was not started by QuartzHub ({{name}}). Whoever started it (a terminal, another window, an earlier session) may be working with it right now."
           }
         }
       }
@@ -1254,13 +1254,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server auf Port {{port}} beenden?\n\nEr gehört zu {{name}} und wurde von QuartzControl gestartet. Die Vorschau im Browser ist danach nicht mehr erreichbar."
+            "value" : "Server auf Port {{port}} beenden?\n\nEr gehört zu {{name}} und wurde von QuartzHub gestartet. Die Vorschau im Browser ist danach nicht mehr erreichbar."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stop the server on port {{port}}?\n\nIt belongs to {{name}} and was started by QuartzControl. The preview in the browser will stop working."
+            "value" : "Stop the server on port {{port}}?\n\nIt belongs to {{name}} and was started by QuartzHub. The preview in the browser will stop working."
           }
         }
       }
@@ -1310,13 +1310,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Von dieser App"
+            "value" : "Von QuartzHub"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Started by this app"
+            "value" : "Started by QuartzHub"
           }
         }
       }
@@ -1570,13 +1570,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server, die außerhalb von QuartzControl gestartet wurden, gehören jemand anderem (einem Terminal, einem zweiten Fenster, einer Sitzung, die hart beendet wurde). QuartzControl beendet sie nie von sich aus; das Beenden ist hier jedes Mal deine Entscheidung."
+            "value" : "Server, die außerhalb von QuartzHub gestartet wurden, gehören jemand anderem (einem Terminal, einem zweiten Fenster, einer Sitzung, die hart beendet wurde). QuartzHub beendet sie nie von sich aus; das Beenden ist hier jedes Mal deine Entscheidung."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Servers started outside QuartzControl belong to someone else (a terminal, a second window, a session that was force-quit). QuartzControl never stops them on its own; stopping one is your decision, every time."
+            "value" : "Servers started outside QuartzHub belong to someone else (a terminal, a second window, a session that was force-quit). QuartzHub never stops them on its own; stopping one is your decision, every time."
           }
         }
       }

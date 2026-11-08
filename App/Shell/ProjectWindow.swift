@@ -70,6 +70,7 @@ struct ProjectWindow: View {
   @ViewBuilder private func page(_ page: ProjectPage, _ project: ProjectContext) -> some View {
     switch page {
     case .overview: OverviewPage(project: project)
+    case .server: BuildServerPage(project: project)
     default: PendingPage(page: page)
     }
   }

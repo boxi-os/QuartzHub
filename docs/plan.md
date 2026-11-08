@@ -289,7 +289,9 @@ nach Abhängigkeit:
 - **Stand 2026-11-08: 4c läuft.** Übersicht fertig, mit `BuildOutput` (gegen `getBuildOutput`
   gemessen) und `ProjectAttention` im Kern; in der App `BuildMonitor` (Serverzustand und
   Aktivität für alle Seiten), `BuildAction` (Bauen mit der Frage zum Ausgabeordner), `Formats`.
-  Als Nächstes Vorschau & Build.
+  Vorschau & Build fertig: `ProjectPrefs.outputDirProblem` im Kern (gegen QuartzControls Schema
+  gemessen); in der App die Konsolen (`LogConsole`, Zeilen über `BuildMonitor`), die Liste der
+  Server auf dem Mac, die Live-Vorschau in `WKWebView`. Als Nächstes Konfiguration.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl
