@@ -53,3 +53,25 @@ public enum Coexistence {
     return text.isEmpty ? nil : text
   }
 }
+
+extension Coexistence {
+  /// What a project window says about QuartzControl: that it runs, and its dev server for this
+  /// project if it has one. A server of another project is not this window's concern; the path is
+  /// compared as the store compares it (`==`, both Unicode forms alike).
+  public struct Concerns: Equatable, Sendable {
+    public var quartzControlRunning: Bool
+    public var serverPort: Int??
+
+    public var isEmpty: Bool { !quartzControlRunning && serverPort == nil }
+
+    public init(quartzControlRunning: Bool, serverPort: Int??) {
+      self.quartzControlRunning = quartzControlRunning
+      self.serverPort = serverPort
+    }
+  }
+
+  public static func concerns(project path: String, quartzControlRunning: Bool, servers: [ForeignServer]) -> Concerns {
+    let server = servers.first { $0.projectPath == path }
+    return Concerns(quartzControlRunning: quartzControlRunning, serverPort: server.map { $0.port })
+  }
+}
