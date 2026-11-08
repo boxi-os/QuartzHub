@@ -1914,8 +1914,19 @@ auf `WKWebView`; 9c PDF, `exportBook` und der Zieltyp „Dokument“. Fußzeile 
   2042), ePub-Aufbau, keine fremden Ressourcen, epubcheck 0 Fehler und 0 Warnungen, HTML ohne
   Netz und ohne kaputte Bilder. Befund nur „nicht getaggt“ (gewollt). Gegenproben: 5/5 für
   `PDFFinishTests`, 5/5 für `ExportBookTests` und `DocumentAdapterTests`.
-- **Offen:** Der Vergleich der Bilder (Formeln, Diagramme) mit QuartzControls eigener Ausgabe am
-  selben Buch braucht einen frischen Export aus QuartzControl, der Mermaid und KaTeX aus dem Netz
-  lädt; die ePubs vom 2026-11-05 auf der VM sind von einem älteren Example. Das Aufräumen alter
-  Kopien beim Start (`SiteCopy.sweep`, nimmt auch die Ordner der Exportfenster mit) und
+- **Gegen QuartzControls eigene Ausgabe am selben Buch** (Nutzer 2026-11-08, mit Netz für Mermaid
+  und KaTeX): QuartzControls `check:export` auf Example (Kopie, Bau, Export über die App, 52 s,
+  alles grün samt Tagging), danach derselbe Build durch `qh-check export-document`. ePub: 139
+  Kapitel, 138 Einträge der Navigation gleich, 33 Bilder im Paket, 26 gezeichnet; alle 26 im
+  selben Kapitel mit demselben Alt-Text, die Pixelmaße höchstens 1 % auseinander (Textmessung
+  der Engine), die em-Angaben in der dritten Nachkommastelle. Formeln fast pixelgleich (mittlere
+  Abweichung 0,01–0,04). **Befund in QuartzControl, nicht in QuartzHub:** Mit macOS im
+  Dunkelmodus zeichnet QuartzControl 9 der 16 Diagramme dunkel, mit dunkler Schrift auf dunklen
+  Kästen, im ePub, im HTML und auch im PDF (Seite 70, dasselbe Flussdiagramm). Mermaid rendert
+  schon beim Einsammeln im Exportfenster, das dem System folgt; QuartzControl erzwingt Hell nur
+  für den Druck. QuartzHubs Fenster ist immer hell (`NSAppearance.aqua`), dort sind alle hell
+  und lesbar. Nur notiert: QuartzControl bekommt Fixes in seinem eigenen Repo.
+- Nicht erklärt: QuartzControls PDF zählt 1974 interne Verweise, QuartzHubs 1901.
+- **Offen für Phase 4:** Das Aufräumen alter Kopien beim Start (`SiteCopy.sweep`, nimmt auch die
+  Ordner der Exportfenster mit) und
   `ExportBook.cancelAll()` beim Schließen des letzten Fensters schließt die App an (Phase 4).

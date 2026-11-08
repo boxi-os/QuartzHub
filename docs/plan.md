@@ -250,8 +250,9 @@ nach Abhängigkeit:
      `ExportWindow`, Seitenskripte in WebKit gegen Chrome, `ExportCollect`, `BookContentPrep`. 9c
      fertig (2026-11-08): `PDFWrite` (Fußzeile, Lesezeichen über Markierungs-Links, `/Lang` per
      Nachtrag am Katalog; pdf-lib nicht nötig), `ExportBook`, `DocumentAdapter`; `check:export
-     --files` und epubcheck ohne Befund außer „nicht getaggt“. Offen: Bildvergleich mit einem
-     frischen QuartzControl-Export (lädt Mermaid und KaTeX aus dem Netz).
+     --files` und epubcheck ohne Befund außer „nicht getaggt“; Bilder gegen einen frischen
+     QuartzControl-Export verglichen (gleich bis auf QuartzControls dunkle Diagramme im
+     Dunkelmodus). Punkt 9 fertig.
    - `NSPrintOperation.runModal`, `shouldPrintBackgrounds`
    - unsichtbares Fenster mit Alpha 0 auf einem Bildschirm; die Ansicht wächst bis zum Element,
      weil `scrollIntoView` unter dem Druck-Stylesheet nichts tut
