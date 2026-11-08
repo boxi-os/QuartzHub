@@ -67,3 +67,30 @@ public struct EnvironmentReport: Sendable, Equatable {
                              hostNodeVersion: hostNode, rsyncAvailable: path.find("rsync") != nil)
   }
 }
+
+extension EnvironmentReport {
+  /// The tools that are there but do not answer, or are not there (QuartzControl's band).
+  public var broken: [Tool] { tools.filter { $0.version == nil } }
+
+  /// The start page's reassurance line, grouped by origin: "in QuartzHub: node 24.22.2, npm 11.19.1,
+  /// git 2.53.0 · vom System: …" (`toolSummary` in `Home.tsx`). Only the number of each answer:
+  /// the full answer belongs to the band, when something is missing.
+  public func toolSummary(language: String = L10n.language) -> String {
+    let groups: [(String, Set<Tool.Source>)] = [
+      (L10n.t(in: language, "home.environment.bundled"), [.embedded, .bundled]),
+      (L10n.t(in: language, "home.environment.fromSystem"), [.host]),
+    ]
+    return groups.compactMap { label, sources in
+      let members = tools.filter { sources.contains($0.source) }
+      guard !members.isEmpty else { return nil }
+      return "\(label): " + members.map { "\($0.name) \(Self.versionNumber($0.version) ?? "")" }.joined(separator: ", ")
+    }.joined(separator: " · ")
+  }
+
+  /// `versionNumber`: the number in what a tool answers to `--version` ("v24.22.2", a bare
+  /// "11.19.1", "git version 2.53.0 (Apple Git-155)").
+  public static func versionNumber(_ version: String?) -> String? {
+    guard let version, let match = version.firstMatch(of: /\d+(?:\.\d+)*/) else { return nil }
+    return String(match.output)
+  }
+}
