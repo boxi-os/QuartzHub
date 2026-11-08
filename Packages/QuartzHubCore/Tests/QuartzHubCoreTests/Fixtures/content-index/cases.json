@@ -1,0 +1,295 @@
+{
+ "locale": "de-DE",
+ "scenarios": [
+  {
+   "id": "fallback-basic",
+   "files": {
+    "x/a.md": "a",
+    "x/sub/b.md": "b",
+    "y/c.md": "c",
+    "z.md": "z",
+    "tpl/t.md": "t",
+    "w/w.md": "w",
+    "img/pic.png": "p",
+    "Up.MD": "u",
+    "Teil 10.md": "10",
+    "Teil 2.md": "2",
+    "äpfel & Birnen.md": "ä",
+    "Zebra.md": "z",
+    ".obsidian/app.json": "{}",
+    ".hidden.md": "h",
+    "a[1].md": "a",
+    "Ordner mit Leerzeichen/n.md": "n",
+    "B-ordner/b.md": "b",
+    "b.md": "b",
+    "only/deep/x.md": "x"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: [\"tpl\",\"private/**\"]\nplugins: []\n",
+   "title": "  Mein Garten  ",
+   "answer": {
+    "path": "@W@/fallback-basic/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: Mein Garten\n---\n\n- [B-ordner](<./B-ordner/>)\n- [only](<./only/>)\n- [Ordner mit Leerzeichen](<./Ordner mit Leerzeichen/>)\n- [w](<./w/>)\n- [x](<./x/>)\n- [y](<./y/>)\n- [a\\[1\\]](<./a[1].md>)\n- [äpfel & Birnen](<./äpfel & Birnen.md>)\n- [b](<./b.md>)\n- [Teil 2](<./Teil 2.md>)\n- [Teil 10](<./Teil 10.md>)\n- [z](<./z.md>)\n- [Zebra](<./Zebra.md>)\n"
+   }
+  },
+  {
+   "id": "quartz-basic",
+   "files": {
+    "x/a.md": "a",
+    "x/sub/b.md": "b",
+    "y/c.md": "c",
+    "z.md": "z",
+    "tpl/t.md": "t",
+    "w/w.md": "w",
+    "img/pic.png": "p",
+    "Up.MD": "u",
+    "Teil 10.md": "10",
+    "Teil 2.md": "2",
+    "äpfel & Birnen.md": "ä",
+    "Zebra.md": "z",
+    ".obsidian/app.json": "{}",
+    ".hidden.md": "h",
+    "a[1].md": "a",
+    "Ordner mit Leerzeichen/n.md": "n",
+    "B-ordner/b.md": "b",
+    "b.md": "b",
+    "only/deep/x.md": "x"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: [\"tpl\",\"y/*\"]\nplugins: []\n",
+   "globby": true,
+   "title": "Mein Garten",
+   "answer": {
+    "path": "@W@/quartz-basic/projekt/content/index.md",
+    "listSource": "quartz",
+    "index": "---\ntitle: Mein Garten\n---\n\n- [B-ordner](<./B-ordner/>)\n- [only](<./only/>)\n- [Ordner mit Leerzeichen](<./Ordner mit Leerzeichen/>)\n- [w](<./w/>)\n- [x](<./x/>)\n- [a\\[1\\]](<./a[1].md>)\n- [äpfel & Birnen](<./äpfel & Birnen.md>)\n- [b](<./b.md>)\n- [Teil 2](<./Teil 2.md>)\n- [Teil 10](<./Teil 10.md>)\n- [z](<./z.md>)\n- [Zebra](<./Zebra.md>)\n"
+   }
+  },
+  {
+   "id": "fallback-star",
+   "files": {
+    "x/a.md": "a",
+    "x/sub/b.md": "b",
+    "y/c.md": "c",
+    "z.md": "z",
+    "tpl/t.md": "t",
+    "w/w.md": "w",
+    "img/pic.png": "p",
+    "Up.MD": "u",
+    "Teil 10.md": "10",
+    "Teil 2.md": "2",
+    "äpfel & Birnen.md": "ä",
+    "Zebra.md": "z",
+    ".obsidian/app.json": "{}",
+    ".hidden.md": "h",
+    "a[1].md": "a",
+    "Ordner mit Leerzeichen/n.md": "n",
+    "B-ordner/b.md": "b",
+    "b.md": "b",
+    "only/deep/x.md": "x"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: [\"*\"]\nplugins: []\n",
+   "title": "Stern",
+   "answer": {
+    "path": "@W@/fallback-star/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: Stern\n---\n\n- [B-ordner](<./B-ordner/>)\n- [only](<./only/>)\n- [Ordner mit Leerzeichen](<./Ordner mit Leerzeichen/>)\n- [tpl](<./tpl/>)\n- [w](<./w/>)\n- [x](<./x/>)\n- [y](<./y/>)\n"
+   }
+  },
+  {
+   "id": "fallback-dir-slash",
+   "files": {
+    "x/a.md": "a",
+    "x/sub/b.md": "b",
+    "y/c.md": "c",
+    "z.md": "z",
+    "tpl/t.md": "t",
+    "w/w.md": "w",
+    "img/pic.png": "p",
+    "Up.MD": "u",
+    "Teil 10.md": "10",
+    "Teil 2.md": "2",
+    "äpfel & Birnen.md": "ä",
+    "Zebra.md": "z",
+    ".obsidian/app.json": "{}",
+    ".hidden.md": "h",
+    "a[1].md": "a",
+    "Ordner mit Leerzeichen/n.md": "n",
+    "B-ordner/b.md": "b",
+    "b.md": "b",
+    "only/deep/x.md": "x"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: [\"x/\",\"**/sub\",\"Teil*\"]\nplugins: []\n",
+   "title": "Ordner",
+   "answer": {
+    "path": "@W@/fallback-dir-slash/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: Ordner\n---\n\n- [B-ordner](<./B-ordner/>)\n- [only](<./only/>)\n- [Ordner mit Leerzeichen](<./Ordner mit Leerzeichen/>)\n- [tpl](<./tpl/>)\n- [w](<./w/>)\n- [y](<./y/>)\n- [a\\[1\\]](<./a[1].md>)\n- [äpfel & Birnen](<./äpfel & Birnen.md>)\n- [b](<./b.md>)\n- [z](<./z.md>)\n- [Zebra](<./Zebra.md>)\n"
+   }
+  },
+  {
+   "id": "quartz-dir-slash",
+   "files": {
+    "x/a.md": "a",
+    "x/sub/b.md": "b",
+    "y/c.md": "c",
+    "z.md": "z",
+    "tpl/t.md": "t",
+    "w/w.md": "w",
+    "img/pic.png": "p",
+    "Up.MD": "u",
+    "Teil 10.md": "10",
+    "Teil 2.md": "2",
+    "äpfel & Birnen.md": "ä",
+    "Zebra.md": "z",
+    ".obsidian/app.json": "{}",
+    ".hidden.md": "h",
+    "a[1].md": "a",
+    "Ordner mit Leerzeichen/n.md": "n",
+    "B-ordner/b.md": "b",
+    "b.md": "b",
+    "only/deep/x.md": "x"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: [\"x/\",\"**/sub\",\"Teil*\"]\nplugins: []\n",
+   "globby": true,
+   "title": "Ordner",
+   "answer": {
+    "path": "@W@/quartz-dir-slash/projekt/content/index.md",
+    "listSource": "quartz",
+    "index": "---\ntitle: Ordner\n---\n\n- [B-ordner](<./B-ordner/>)\n- [only](<./only/>)\n- [Ordner mit Leerzeichen](<./Ordner mit Leerzeichen/>)\n- [tpl](<./tpl/>)\n- [w](<./w/>)\n- [y](<./y/>)\n- [a\\[1\\]](<./a[1].md>)\n- [äpfel & Birnen](<./äpfel & Birnen.md>)\n- [b](<./b.md>)\n- [z](<./z.md>)\n- [Zebra](<./Zebra.md>)\n"
+   }
+  },
+  {
+   "id": "quartz-gitignore",
+   "files": {
+    "geheim/g.md": "g",
+    "offen/o.md": "o",
+    ".gitignore": "geheim/\n"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "globby": true,
+   "title": "Titel: mit Doppelpunkt",
+   "answer": {
+    "path": "@W@/quartz-gitignore/projekt/content/index.md",
+    "listSource": "quartz",
+    "index": "---\ntitle: \"Titel: mit Doppelpunkt\"\n---\n\n- [offen](<./offen/>)\n"
+   }
+  },
+  {
+   "id": "fallback-gitignore",
+   "files": {
+    "geheim/g.md": "g",
+    "offen/o.md": "o",
+    ".gitignore": "geheim/\n"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "title": "yes",
+   "answer": {
+    "path": "@W@/fallback-gitignore/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: yes\n---\n\n- [geheim](<./geheim/>)\n- [offen](<./offen/>)\n"
+   }
+  },
+  {
+   "id": "exists",
+   "files": {
+    "Index.MD": "x",
+    "a.md": "a"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "title": "T",
+   "answer": {
+    "error": "indexPageExists"
+   }
+  },
+  {
+   "id": "no-content",
+   "files": null,
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "title": "T",
+   "answer": {
+    "error": "indexPageNoContent"
+   }
+  },
+  {
+   "id": "dangling-link",
+   "link": "../nirgends",
+   "files": null,
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "title": "T",
+   "answer": {
+    "error": "indexPageNoContent"
+   }
+  },
+  {
+   "id": "linked",
+   "link": "../vault",
+   "vault": {
+    "Gärten-Ü/a.md": "a",
+    "Notiz.md": "n"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "globby": true,
+   "title": "Ein sehr langer Titel für eine Startseite, der deutlich länger ist als achtzig Zeichen, damit yaml ihn faltet",
+   "answer": {
+    "path": "@W@/linked/vault/index.md",
+    "listSource": "quartz",
+    "index": "---\ntitle: Ein sehr langer Titel für eine Startseite, der deutlich länger ist als\n  achtzig Zeichen, damit yaml ihn faltet\n---\n\n- [Gärten-Ü](<./Gärten-Ü/>)\n- [Notiz](<./Notiz.md>)\n"
+   }
+  },
+  {
+   "id": "encode",
+   "files": {
+    "a<b>.md": "x",
+    "x>y/n.md": "n",
+    "c\\d.md": "c"
+   },
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "title": "#hash \"quote\"",
+   "answer": {
+    "path": "@W@/encode/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: '#hash \"quote\"'\n---\n\n- [x>y](./x%3Ey/)\n- [a<b>](./a%3Cb%3E.md)\n- [c\\\\d](<./c\\d.md>)\n"
+   }
+  },
+  {
+   "id": "empty",
+   "files": {},
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins: []\n",
+   "title": "- liste",
+   "answer": {
+    "path": "@W@/empty/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: \"- liste\"\n---\n\n"
+   }
+  },
+  {
+   "id": "bad-config",
+   "files": {
+    "tpl/t.md": "t",
+    "a.md": "a"
+   },
+   "config": "configuration: [unclosed\n",
+   "title": "T",
+   "answer": {
+    "path": "@W@/bad-config/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: T\n---\n\n- [tpl](<./tpl/>)\n- [a](<./a.md>)\n"
+   }
+  },
+  {
+   "id": "non-string-patterns",
+   "files": {
+    "tpl/t.md": "t",
+    "a.md": "a",
+    "b/b.md": "b"
+   },
+   "config": "configuration:\n  ignorePatterns: [tpl, 5, null, {x: 1}]\n",
+   "title": "T",
+   "answer": {
+    "path": "@W@/non-string-patterns/projekt/content/index.md",
+    "listSource": "fallback",
+    "index": "---\ntitle: T\n---\n\n- [b](<./b/>)\n- [a](<./a.md>)\n"
+   }
+  }
+ ]
+}

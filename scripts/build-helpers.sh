@@ -12,7 +12,7 @@ if [ ! -d node_modules ] || [ package-lock.json -nt node_modules ]; then
   if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
 fi
 rm -rf dist
-for name in yaml-edit dts-schema sass-check locale-edit ftp-session; do
+for name in yaml-edit dts-schema sass-check locale-edit ftp-session content-files; do
   node_modules/.bin/esbuild "src/$name.ts" --bundle --platform=node --target=node24 --format=cjs \
     --minify-syntax --keep-names --legal-comments=eof --outfile="dist/$name.cjs" --log-level=warning
 done

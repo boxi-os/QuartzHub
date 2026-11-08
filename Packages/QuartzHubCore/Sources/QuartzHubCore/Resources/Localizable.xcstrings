@@ -3000,6 +3000,23 @@
         }
       }
     },
+    "content.indexHelperBroken" : {
+      "comment" : "Konfiguration › Website › Content-Ordner, dialog „Startseite anlegen“: the content-files helper did not answer",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Startseite konnte nicht angelegt werden, weil ein Teil von QuartzHub nicht geantwortet hat ({{reason}})."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The start page could not be created because a part of QuartzHub did not answer ({{reason}})."
+          }
+        }
+      }
+    },
     "content.label" : {
       "localizations" : {
         "de" : {

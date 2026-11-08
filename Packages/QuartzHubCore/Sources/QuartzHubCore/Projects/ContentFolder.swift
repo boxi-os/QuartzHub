@@ -3,8 +3,8 @@ import Foundation
 
 /// The project's `content/`: what it is, how much is in it, and getting a link to a vault out of
 /// git's way. The reading half of `contentService.ts` and all of `contentSymlink.ts`. Changing the
-/// source, the start page and the form usages need the config, the snapshots and the project's
-/// globby and come with those.
+/// source is `ContentFolder+Source.swift`, the start page `ContentIndexPage`; the form usages come
+/// with Veröffentlichen.
 public enum ContentFolder {
   public struct Status: Equatable, Sendable {
     public var path: String
