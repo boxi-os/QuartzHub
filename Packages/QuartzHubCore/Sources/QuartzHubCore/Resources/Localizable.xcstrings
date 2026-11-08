@@ -16909,13 +16909,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ aus der Liste entfernen?\n\nDer Ordner auf der Festplatte bleibt unangetastet. Die Empfänger-Adressen und Captcha-Secrets des Formular-Relays löscht QuartzControl dabei; wer das Projekt wieder hinzufügt, trägt sie neu ein."
+            "value" : "„{{name}}“ aus der Liste entfernen?\n\nDer Ordner auf der Festplatte bleibt unangetastet. Die Empfänger-Adressen und Captcha-Secrets des Formular-Relays löscht QuartzHub dabei; wer das Projekt wieder hinzufügt, trägt sie neu ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remove “{{name}}” from the list?\n\nThe folder on disk is left untouched. QuartzControl deletes the form relay’s recipient addresses and captcha secrets; adding the project again means entering them again."
+            "value" : "Remove “{{name}}” from the list?\n\nThe folder on disk is left untouched. QuartzHub deletes the form relay’s recipient addresses and captcha secrets; adding the project again means entering them again."
           }
         }
       }
@@ -16941,13 +16941,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ aus der Liste entfernen?\n\nDer laufende Dev-Server wird dabei beendet. Der Ordner auf der Festplatte bleibt unangetastet. Die Empfänger-Adressen und Captcha-Secrets des Formular-Relays löscht QuartzControl dabei; wer das Projekt wieder hinzufügt, trägt sie neu ein."
+            "value" : "„{{name}}“ aus der Liste entfernen?\n\nDer laufende Dev-Server wird dabei beendet. Der Ordner auf der Festplatte bleibt unangetastet. Die Empfänger-Adressen und Captcha-Secrets des Formular-Relays löscht QuartzHub dabei; wer das Projekt wieder hinzufügt, trägt sie neu ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remove “{{name}}” from the list?\n\nIts running dev server will be stopped. The folder on disk is left untouched. QuartzControl deletes the form relay’s recipient addresses and captcha secrets; adding the project again means entering them again."
+            "value" : "Remove “{{name}}” from the list?\n\nIts running dev server will be stopped. The folder on disk is left untouched. QuartzHub deletes the form relay’s recipient addresses and captcha secrets; adding the project again means entering them again."
           }
         }
       }
@@ -40780,6 +40780,23 @@
         }
       }
     },
+    "shell.alert.ok" : {
+      "comment" : "The one button of an alert that only reports",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
     "shell.inspector.group" : {
       "comment" : "Sidebar-Gruppe der Seite im Inspektor, z. B. „Bereich: Gestaltung“.",
       "localizations" : {
@@ -40882,6 +40899,23 @@
         }
       }
     },
+    "shell.menu.openExisting" : {
+      "comment" : "File menu, ⌘O: adds a folder to the list and opens it",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorhandenes Projekt öffnen…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Existing Project…"
+          }
+        }
+      }
+    },
     "shell.page.pending" : {
       "comment" : "Platzhalter für eine Seite, die noch nicht portiert ist (Phase 4). Fällt mit der letzten Seite weg.",
       "localizations" : {
@@ -40895,6 +40929,142 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "QuartzHub is still rebuilding this page. Until then, it is available in QuartzControl."
+          }
+        }
+      }
+    },
+    "shell.projects.baseUrl" : {
+      "comment" : "Projects window inspector: the site's baseUrl from quartz.config.yaml",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
+          }
+        }
+      }
+    },
+    "shell.projects.folder" : {
+      "comment" : "Projects window inspector: label of the project's folder path",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder"
+          }
+        }
+      }
+    },
+    "shell.projects.notInList" : {
+      "comment" : "Project window whose project was removed from the list",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Projekt steht nicht mehr in der Projektliste."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This project is no longer in the project list."
+          }
+        }
+      }
+    },
+    "shell.projects.open" : {
+      "comment" : "Projects window: opens the selected project in its own window",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open"
+          }
+        }
+      }
+    },
+    "shell.projects.show" : {
+      "comment" : "Button in a project window whose project is gone; opens the Projects window",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projekte zeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Projects"
+          }
+        }
+      }
+    },
+    "shell.projects.showInFinder" : {
+      "comment" : "Projects window inspector: reveals the project folder",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Finder zeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show in Finder"
+          }
+        }
+      }
+    },
+    "shell.projects.siteTitle" : {
+      "comment" : "Projects window inspector: the site's pageTitle from quartz.config.yaml",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        }
+      }
+    },
+    "shell.projects.title" : {
+      "comment" : "Title of the window with the project list; also its entry in the Window menu",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projekte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projects"
           }
         }
       }

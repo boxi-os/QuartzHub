@@ -21,27 +21,9 @@ struct PageScaffold<Content: View, Inspector: View>: View {
   var body: some View {
     content()
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-      .navigationTitle(page.title)
-      .inspector(isPresented: $inspectorPresented) {
-        inspector()
-          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-          .accessibilityElement(children: .contain)
-          .accessibilityLabel(L10n.t("shell.inspector.name"))
-          .accessibilityIdentifier("inspector")
-          .inspectorColumnWidth(min: 240, ideal: 300, max: 440)
-      }
-      .focusedSceneValue(\.inspectorPresented, $inspectorPresented)
-      .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            inspectorPresented.toggle()
-          } label: {
-            Label(L10n.t("shell.inspector.toggle"), systemImage: "sidebar.trailing")
-          }
-          .help(L10n.t("shell.inspector.toggle"))
-          .accessibilityIdentifier("inspector.toggle")
-        }
-      }
+      // The window's title is the project's name (ProjectWindow); the page is its subtitle.
+      .navigationSubtitle(page.title)
+      .inspectorColumn(isPresented: $inspectorPresented, content: inspector)
   }
 }
 

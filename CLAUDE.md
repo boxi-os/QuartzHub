@@ -17,7 +17,7 @@ Abschnitt in `../QuartzControl/docs/decisions/`. Die Messungen und Ränder dort 
 
 ## Aufbau
 
-- `App/` — SwiftUI-App (`QuartzHub`). `Shell/` Fenster, Sidebar, Menübefehle; `Components/`
+- `App/` — SwiftUI-App (`QuartzHub`). `Projects/` das Fenster „Projekte“; `Shell/` Projektfenster, Sidebar, Menübefehle; `Components/`
   Bausteine (`PageScaffold` mit Inspektor); `Pages/` eine Datei oder ein Ordner je Seite.
 - `Packages/QuartzHubCore/` — SwiftPM-Paket mit der ganzen Logik ohne UI, dazu `qh-check`
   (Prüfungen, Nachfolger der `check:*`-Skripte) und `QuartzHubCoreTests` (Swift Testing). Der
@@ -94,6 +94,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Codable, Golden Files, Übernahme samt Messung gegen Electron und am echten Profil
 - [`phase-3-dienste.md`](docs/decisions/phase-3-dienste.md) — die Kern-Dienste, ein Abschnitt je
   Dienst (Prozessstarter, …)
+- [`phase-4-oberflaeche.md`](docs/decisions/phase-4-oberflaeche.md) — die Oberfläche: Fenstermodell,
+  Seiten, was der UI-Test dabei lernte
 
 ## Stand
 

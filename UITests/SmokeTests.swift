@@ -21,16 +21,36 @@ final class SmokeTests: XCTestCase {
     return url
   }
 
-  private func launch(size: CGSize? = nil, profile: URL? = nil, migrationSource: String = "") -> XCUIApplication {
+  private func launch(size: CGSize? = nil, profile: URL? = nil, migrationSource: String = "", open project: URL? = nil) -> XCUIApplication {
     let app = XCUIApplication()
     // A fresh window state every run: no restored page, inspector at its default. The takeover
     // from QuartzControl is off unless a test hands it a source profile.
     app.launchArguments += ["-QHLanguage", "de", "-ApplePersistenceIgnoreState", "YES",
                             "-QHMigrationSource", migrationSource]
     if let profile { app.launchArguments += ["-QHProfileDir", profile.path] }
+    if let project { app.launchArguments += ["-QHOpenProject", project.path] }
     if let size { app.launchArguments += ["-QHWindowSize", "\(Int(size.width))x\(Int(size.height))"] }
     app.launch()
     return app
+  }
+
+  static let projectName = "smoke-projekt"
+
+  /// A scratch profile and a folder with a quartz.config.yaml in it: enough for the list to call it
+  /// a Quartz project and open its window. Nothing of a real profile is read or written.
+  private func scratchProject() throws -> (profile: URL, project: URL) {
+    let root = try scratchDirectory("project")
+    let profile = root.appendingPathComponent("profil")
+    let project = root.appendingPathComponent(Self.projectName)
+    try FileManager.default.createDirectory(at: profile, withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: project, withIntermediateDirectories: true)
+    try Data("configuration:\n  pageTitle: Smoke\n".utf8).write(to: project.appendingPathComponent("quartz.config.yaml"))
+    return (profile, project)
+  }
+
+  /// Its title is the project's name followed by the page ("smoke-projekt – Übersicht").
+  private func projectWindow(_ app: XCUIApplication) -> XCUIElement {
+    app.windows.matching(NSPredicate(format: "title BEGINSWITH %@", Self.projectName)).firstMatch
   }
 
   /// Small: the minimum (content 900×560; the window adds the toolbar). Large: 1400×860, which
@@ -38,18 +58,19 @@ final class SmokeTests: XCTestCase {
   /// dragging edges did not resize the window under XCUITest (see QuartzHubApp.initialSize).
   func testEveryPageAtTwoSizes() throws {
     var widths: [CGFloat] = []
+    let (profile, project) = try scratchProject()
     for size in [CGSize(width: 900, height: 560), CGSize(width: 1400, height: 860)] {
-      let app = launch(size: size)
-      let window = app.windows.firstMatch
+      let app = launch(size: size, profile: profile, open: project)
+      let window = projectWindow(app)
       XCTAssertTrue(window.waitForExistence(timeout: 10))
       widths.append(window.frame.width)
       for page in Self.pages {
-        let row = app.descendants(matching: .any)["sidebar.\(page)"].firstMatch
+        let row = window.descendants(matching: .any)["sidebar.\(page)"].firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 5), "sidebar row \(page) missing")
         row.click()
-        let content = app.descendants(matching: .any)["page.\(page)"].firstMatch
+        let content = window.descendants(matching: .any)["page.\(page)"].firstMatch
         XCTAssertTrue(content.waitForExistence(timeout: 5), "page \(page) did not render at \(window.frame.size)")
-        XCTAssertTrue(app.descendants(matching: .any)["inspector.pageContext"].firstMatch.exists,
+        XCTAssertTrue(window.descendants(matching: .any)["inspector.pageContext"].firstMatch.exists,
                       "inspector context missing on \(page) at \(window.frame.size)")
       }
       app.terminate()
@@ -59,17 +80,22 @@ final class SmokeTests: XCTestCase {
   }
 
   func testInspectorToggles() throws {
-    let app = launch()
-    let toggle = app.descendants(matching: .any)["inspector.toggle"].firstMatch
+    let (profile, project) = try scratchProject()
+    let app = launch(profile: profile, open: project)
+    XCTAssertTrue(projectWindow(app).waitForExistence(timeout: 10), "project window did not open")
+    // Within the project window: the Projects window has an inspector and a toggle of its own.
+    let window = projectWindow(app)
+    window.click()
+    let toggle = window.descendants(matching: .any)["inspector.toggle"].firstMatch
     XCTAssertTrue(toggle.waitForExistence(timeout: 10))
-    let context = app.descendants(matching: .any)["inspector.pageContext"].firstMatch
+    let context = window.descendants(matching: .any)["inspector.pageContext"].firstMatch
     XCTAssertTrue(context.waitForExistence(timeout: 5))
 
     toggle.click()
     XCTAssertTrue(context.waitForNonExistence(timeout: 5), "inspector did not hide")
     // The hidden state holds across pages: one setting per window.
-    app.descendants(matching: .any)["sidebar.styles"].firstMatch.click()
-    XCTAssertTrue(app.descendants(matching: .any)["page.styles"].firstMatch.waitForExistence(timeout: 5))
+    window.descendants(matching: .any)["sidebar.styles"].firstMatch.click()
+    XCTAssertTrue(window.descendants(matching: .any)["page.styles"].firstMatch.waitForExistence(timeout: 5))
     XCTAssertFalse(context.exists, "inspector came back on another page")
 
     toggle.click()
@@ -82,6 +108,42 @@ final class SmokeTests: XCTestCase {
     XCTAssertTrue(app.menuItems["Inspektor einblenden"].exists, "menu item did not change its title")
     app.typeKey("i", modifierFlags: [.control, .command])
     XCTAssertTrue(context.waitForExistence(timeout: 5), "⌃⌘I did not show the inspector")
+  }
+
+  /// The Projects window: a project in the list opens its own window by double click, and removing
+  /// it asks first, then leaves its open window saying so.
+  func testProjectsWindowOpensAndRemoves() throws {
+    let (profile, project) = try scratchProject()
+    let app = launch(profile: profile, open: project)
+    XCTAssertTrue(projectWindow(app).waitForExistence(timeout: 10), "project window did not open")
+    projectWindow(app).buttons[XCUIIdentifierCloseWindow].click()
+    XCTAssertTrue(projectWindow(app).waitForNonExistence(timeout: 5))
+
+    let row = app.descendants(matching: .any)["projects.row.\(Self.projectName)"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 5), "row missing in the Projects window")
+    row.doubleClick()
+    XCTAssertTrue(projectWindow(app).waitForExistence(timeout: 5), "double click did not open the project")
+    XCTAssertTrue(app.descendants(matching: .any)["sidebar.overview"].firstMatch.exists)
+
+    // Back to the list, remove: the safe answer first, then the removal.
+    app.typeKey("0", modifierFlags: [.command, .shift])
+    row.click()
+    let remove = app.descendants(matching: .any)["projects.remove"].firstMatch
+    XCTAssertTrue(remove.waitForExistence(timeout: 5), "inspector shows no remove action")
+    remove.click()
+    // In the windows, not app.buttons: that also finds the Touch Bar's copy of the button.
+    let confirm = app.windows.buttons["Aus der Liste entfernen"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 5), "no question before removing")
+    XCTAssertTrue(app.windows.buttons["Abbrechen"].firstMatch.exists)
+    confirm.click()
+    XCTAssertTrue(row.waitForNonExistence(timeout: 5), "row still listed")
+    XCTAssertTrue(app.descendants(matching: .any)["projects.gettingStarted"].firstMatch.waitForExistence(timeout: 5))
+    XCTAssertTrue(app.descendants(matching: .any)["project.notInList"].firstMatch.waitForExistence(timeout: 5),
+                  "the open project window did not notice")
+    // The folder stays.
+    XCTAssertTrue(FileManager.default.fileExists(atPath: project.appendingPathComponent("quartz.config.yaml").path))
+    let list = try String(contentsOf: profile.appendingPathComponent("projects.json"), encoding: .utf8)
+    XCTAssertEqual(list.trimmingCharacters(in: .whitespacesAndNewlines), "[]")
   }
 
   /// The takeover against a QuartzControl profile made here (two projects, no secrets, so no

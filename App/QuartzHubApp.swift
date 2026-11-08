@@ -36,14 +36,39 @@ struct QuartzHubApp: App {
   }()
 
   var body: some Scene {
-    WindowGroup {
-      RootView()
-        .frame(minWidth: 900, minHeight: 560)
+    // First, so it is the window at launch and the one the Dock icon brings back. Window ▸ Projekte
+    // lists it with its shortcut.
+    Window(L10n.t("shell.projects.title"), id: ProjectsWindow.sceneID) {
+      ProjectsWindow()
+        .frame(minWidth: 640, minHeight: 420)
     }
-    .defaultSize(Self.initialSize)
+    .defaultSize(width: 980, height: 640)
+    .keyboardShortcut("0", modifiers: [.command, .shift])
     .commands {
       SidebarCommands()
       InspectorCommand()
+      ProjectCommands()
+    }
+
+    WindowGroup(id: ProjectWindow.sceneID, for: String.self) { $projectId in
+      ProjectWindow(projectId: projectId)
+    }
+    .defaultSize(Self.initialSize)
+  }
+}
+
+/// The File menu: no "New Window" (a project window without a project means nothing), and
+/// "Vorhandenes Projekt öffnen…" with ⌘O, from any window.
+struct ProjectCommands: Commands {
+  @Environment(\.openWindow) private var openWindow
+
+  var body: some Commands {
+    CommandGroup(replacing: .newItem) {
+      Button(L10n.t("shell.menu.openExisting")) {
+        openWindow(id: ProjectsWindow.sceneID)
+        ProjectsModel.shared.request = .openExisting
+      }
+      .keyboardShortcut("o", modifiers: .command)
     }
   }
 }
