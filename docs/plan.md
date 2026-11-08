@@ -246,7 +246,12 @@ nach Abhängigkeit:
      `debian-vm` (Nutzer, 2026-11-07). Verglichen wird der Aufbau, nicht die Seitenzahl. Die
      ePub-Reader und das Handbuch-PDF kommen mit Phase 5. 9a fertig: `Books`, `ExportModel` (mit
      `ICUCollation` aus libicucore für Sortierung nach Sprache), `SiteFacts`, `DocumentHTML`,
-     `BookPack`, `SiteCopy`; Messungen in `decisions/phase-3-dienste.md`.
+     `BookPack`, `SiteCopy`; Messungen in `decisions/phase-3-dienste.md`. 9b fertig: `SiteServer`,
+     `ExportWindow`, Seitenskripte in WebKit gegen Chrome, `ExportCollect`, `BookContentPrep`. 9c
+     fertig (2026-11-08): `PDFWrite` (Fußzeile, Lesezeichen über Markierungs-Links, `/Lang` per
+     Nachtrag am Katalog; pdf-lib nicht nötig), `ExportBook`, `DocumentAdapter`; `check:export
+     --files` und epubcheck ohne Befund außer „nicht getaggt“. Offen: Bildvergleich mit einem
+     frischen QuartzControl-Export (lädt Mermaid und KaTeX aus dem Netz).
    - `NSPrintOperation.runModal`, `shouldPrintBackgrounds`
    - unsichtbares Fenster mit Alpha 0 auf einem Bildschirm; die Ansicht wächst bis zum Element,
      weil `scrollIntoView` unter dem Druck-Stylesheet nichts tut

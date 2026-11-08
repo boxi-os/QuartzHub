@@ -1854,5 +1854,68 @@ auf `WKWebView`; 9c PDF, `exportBook` und der Zieltyp „Dokument“. Fußzeile 
   das lange Polynom, die User Journey mit 3000 px, das Zustands-, Sequenz- und das größte
   Flussdiagramm). `BookContentPrepTests` für die `data:`-Fälle und die Grenze der Kopie;
   Gegenproben 3/3.
-- **Noch offen für 9c:** der Vergleich der Bilder mit QuartzControls Ausgabe am selben Buch
-  (`check:export -- --files`), epubcheck auf debian-vm, das PDF.
+- **Für 9c blieben** das PDF, epubcheck und der Vergleich mit QuartzControls Ausgabe (unten).
+
+### 9c: Das PDF, der ganze Export, der Zieltyp „Dokument“
+
+- **Das PDF auf WebKits Druck** (`PDFWrite`, aus `writePdf.ts`): das Druckdokument unter
+  `mediaType = "print"` geladen, geprüft wie bisher (Rand, tote Verweise, Bilder), dann
+  `NSPrintOperation.runModal` in eine Datei (`run()` kehrt mit einer WKWebView nicht zurück,
+  Spike), Hintergründe über `shouldPrintBackgrounds`. Was Chromiums `printToPDF` mitbrachte und
+  WebKits Druck nicht, kommt danach mit PDFKit dazu (kurze Messung am 2026-11-08, Nutzer
+  2026-11-07: erst messen, sonst pdf-lib im Helfer; pdf-lib war nicht nötig):
+  - **Fußzeile:** WebKit kennt die Randfelder von `@page` nicht. Eine eigene `PDFPage`-Klasse
+    zeichnet Titel links und „Seite / Seiten“ rechts auf jede Seite außer dem Deckblatt, 8 pt
+    Systemschrift in #777, in der Flucht der Seitenränder, mittig im unteren Rand (Chromes stand
+    1 pt tiefer, `pdftotext -bbox`). Es ist Text: `pdftotext` liest „Example … 5 / 298“, der
+    übrige Text der Seiten bleibt Zeichen für Zeichen gleich. **Preis:** Mit einer eigenen
+    Seitenklasse zeichnet PDFKit beim Schreiben jede Seite neu; Example wird 2,4 → 3,6 MB groß
+    (ohne eigene Klasse bleibt es 2,4 MB; Chromes getaggtes PDF desselben Dokuments: 9,1 MB).
+  - **Lesezeichen:** WebKit schreibt keine Gliederung und keine benannten Ziele, aber jeder Link
+    trägt Seite und Punkt seines Ziels. Vor dem Druck kommt je Überschrift (und je Ziel einer
+    Seitenzahl) ein unsichtbarer Link von 1 px aufs Deckblatt, in Dokumentreihenfolge, eine Zeile
+    nach der anderen; ihre Ziele sind die Orte der Überschriften. Gelesen nach Lage (gestapelt
+    übereinander gab WebKit von 590 nur einen aus), danach entfernt. Die Ziele der 34 Einträge
+    des Inhaltsverzeichnisses auf Seite 2 stimmten mit denen der Markierungen überein. Die
+    Gliederung schachtelt nach Ebene, betitelt mit `innerText` (Chrome nimmt den gerenderten
+    Text: 23 Titel standen dort in Großbuchstaben, `text-transform`).
+  - **`/Lang` und „Titel im Fenster“** (`/ViewerPreferences /DisplayDocTitle`), die pdf-lib
+    setzte: PDFKit kann beides nicht. Ein inkrementeller Nachtrag am Ende der Datei hängt den
+    Katalog mit beiden Schlüsseln noch einmal an, mit eigener Querverweis-Tabelle und `/Prev`.
+    Für die klassische Tabelle, die PDFKit schreibt (PDF 1.4, keine Objekt-Streams); bei etwas
+    anderem bleibt das PDF ohne die zwei Schlüssel, nicht kaputt. Gelesen mit Core Graphics,
+    pdf-lib und `pdfinfo`.
+  - **Nicht getaggt.** Entschieden mit dem Plan (Tagged PDF verzichtbar).
+  - Seitenzahlen in Inhaltsverzeichnis und Register in zwei Durchgängen wie bisher, die Seiten aus
+    denselben Markierungen statt aus `/Dests`.
+- **Gegen Chrome** (dasselbe `document.html` mit den Optionen von `writePdf.ts`,
+  `chrome-pdf.mjs` aus dem Spike): Lesezeichen je Ebene gleich, Example 9/46/252/260/16/7,
+  gui-test 11/35/124/326/630/35. Die Titel sind gleich bis auf vier in gui-test, in denen Chrome
+  an einem Zeilenumbruch der Überschrift das Leerzeichen verliert („WASNICHT“); QuartzHub nicht.
+  Seiten: Example 298 statt 279, gui-test 348 statt 323 (WebKit bricht früher um, wie im Spike).
+  Druck 2,5 s für 298 Seiten, mit zweitem Durchgang und PDFKit 4,7 s. A5, A4 quer und Letter quer
+  haben die richtige Seitengröße und die Fußzeile am Rand.
+- **Der ganze Export** (`ExportBook`, aus `exportBook` und `readSitePages` in
+  `exportService.ts`): Reihenfolge, Seiten, Rückverweise und Register, PDF, ePub und HTML, der
+  Bericht in QuartzControls Sätzen. Läufe hängen an der Ziel-ID und brechen über ihre Task ab
+  (gemessen nach 6 s beim Einsammeln und nach 21 s beim Schreiben: „abgebrochen, nichts
+  geschrieben“, kein Ordner angelegt). Das Datum auf dem Deckblatt ist ICUs Muster für `yMMMMd`
+  wie bei `toLocaleDateString`, gegen Node für neun Sprachen.
+- **Der Zieltyp „Dokument“** (`DocumentAdapter`, aus `deploy/document.ts`): Vorschau mit den
+  Dateien, die Ablehnungen vor dem Export (Ordner im oder über dem Build, das Projekt selbst, ein
+  fehlendes Buch, ein fehlender Ordner darüber), jede Datei unter einem Schmierzettel-Namen
+  geschrieben und umbenannt.
+- **Gemessen über den Weg von „Jetzt veröffentlichen“** (`qh-check export-document`: ein
+  Wegwerf-Projekt mit der Config und dem geklonten Build, ein Buch über die ganze Website mit
+  Inhaltsverzeichnis, Register und Rückverweisen, `Deploy.run`, ohne Netz) und geprüft mit
+  QuartzControls `check:export -- --files` samt epubcheck 5.4.0 auf debian-vm:
+  Example 298 Seiten PDF, 138 Kapitel, 10 Formeln, 16 Diagramme, 28,6 s; gui-test 348 Seiten,
+  11 Diagramme, 29,9 s. Beide: Seiten, Lesezeichen, Titel, Sprache, interne Verweise (1901 und
+  2042), ePub-Aufbau, keine fremden Ressourcen, epubcheck 0 Fehler und 0 Warnungen, HTML ohne
+  Netz und ohne kaputte Bilder. Befund nur „nicht getaggt“ (gewollt). Gegenproben: 5/5 für
+  `PDFFinishTests`, 5/5 für `ExportBookTests` und `DocumentAdapterTests`.
+- **Offen:** Der Vergleich der Bilder (Formeln, Diagramme) mit QuartzControls eigener Ausgabe am
+  selben Buch braucht einen frischen Export aus QuartzControl, der Mermaid und KaTeX aus dem Netz
+  lädt; die ePubs vom 2026-11-05 auf der VM sind von einem älteren Example. Das Aufräumen alter
+  Kopien beim Start (`SiteCopy.sweep`, nimmt auch die Ordner der Exportfenster mit) und
+  `ExportBook.cancelAll()` beim Schließen des letzten Fensters schließt die App an (Phase 4).
