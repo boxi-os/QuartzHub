@@ -191,15 +191,17 @@ extension EnvironmentValues {
 
 extension View {
   /// A page that edits a document: registered with its window's guard while `dirty`, and its save
-  /// on ⌘S. `save` nil while there is nothing it can do (a save running).
-  func unsavedChanges(_ dirty: Bool, save: (@MainActor () async -> Bool)?) -> some View {
-    modifier(UnsavedChanges(dirty: dirty, save: save))
+  /// on ⌘S. `save` nil while there is nothing it can do (a save running). `command: false` keeps
+  /// the guard but not ⌘S (Konfiguration's Übersetzungen tab saves elsewhere, as in QuartzControl).
+  func unsavedChanges(_ dirty: Bool, save: (@MainActor () async -> Bool)?, command: Bool = true) -> some View {
+    modifier(UnsavedChanges(dirty: dirty, save: save, command: command))
   }
 }
 
 private struct UnsavedChanges: ViewModifier {
   let dirty: Bool
   let save: (@MainActor () async -> Bool)?
+  let command: Bool
 
   @Environment(\.unsavedGuard) private var unsaved
   @State private var token = UUID()
@@ -209,7 +211,7 @@ private struct UnsavedChanges: ViewModifier {
       .onChange(of: dirty, initial: true) { _, dirty in sync(dirty) }
       .onChange(of: save == nil) { sync(dirty) }
       .onDisappear { unsaved?.clear(token) }
-      .focusedSceneValue(\.pageSave, dirty ? save.map(PageSaveAction.init) : nil)
+      .focusedSceneValue(\.pageSave, dirty && command ? save.map(PageSaveAction.init) : nil)
   }
 
   private func sync(_ dirty: Bool) {

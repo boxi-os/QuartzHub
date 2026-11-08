@@ -441,3 +441,34 @@ verwerfen“ (destruktiv). Ungespeichert zeigt das Fenster zusätzlich den Punkt
 - der Schalter „Im Kopfbereich zeigen“ mit Installation von quartz-layout-box (Netz); die
   Listen-Logik dahinter ist golden gemessen;
 - VoiceOver.
+
+### Konfiguration: Übersetzungen
+
+Vorbild `ConfigEditor/Localization.tsx`; im Kern war `LocaleFiles` schon fertig (Helfer
+`locale-edit`). Ein Umschalter über dem Inhalt wählt den Reiter, je Fenster gemerkt
+(`@SceneStorage("config.tab")`). In der Symbolleiste schob er den Inspektor-Knopf in die
+Fenstermitte (gesehen), deshalb steht er über dem Formular.
+
+Der Reiter zeigt den Update-Schutz (`.gitattributes` mit `merge=ours` und Treiber) mit „Jetzt
+aktivieren“, darunter Sprache, Suche, „N ungespeichert“ und „Speichern“ in einer Zeile, dann je
+Eintrag Schlüssel und Feld. Gespeichert wird je Sprache mit dem Knopf daneben, nicht mit ⌘S, wie
+in QuartzControl. Gewählte Sprache, Suche und ungespeicherte Einträge bleiben je Projekt im
+Speicher (`LocalizationModel.forProject`, wie `useStickyState`); ein Seitenwechsel fragt deshalb
+nicht.
+
+**Gemessen** am Wegwerf-Projekt mit `de-DE.ts` und `en-US.ts` aus gui-test, als git-Repository:
+
+| Vorgang | Ergebnis |
+|---|---|
+| `propertyDefaults.title` geändert, „Speichern“ | genau diese Zeile in `de-DE.ts` geändert, `.gitattributes` mit `quartz/i18n/locales/*.ts merge=ours`, `merge.ours.driver` = `true`, Abzeichen „Update-Schutz aktiv“ |
+| geändert, zur Übersicht und zurück | keine Frage; „1 ungespeichert“ und der Text stehen noch, der Reiter auch |
+
+**Abweichungen von QuartzControl.**
+- **Einspaltig.** QuartzControl stellte die Einträge ab breitem Fenster zweispaltig; hier ist es ein
+  gruppiertes Formular.
+- **Ein Satz statt „ließ sich nicht laden“** (`localization.localeLoadFailed`): „konnte nicht
+  geladen werden“, nach der Stilregel.
+- **Speichern wird angesagt**, erfolgreich oder nicht.
+
+**Nicht gemessen:** ein Eintrag der Art `template` (mehrzeilig, „JS“) mit Syntaxfehler; ein
+Sprachwechsel mit ungespeicherten Einträgen (sie werden verworfen, wie in QuartzControl); VoiceOver.

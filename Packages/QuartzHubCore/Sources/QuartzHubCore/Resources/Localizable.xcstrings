@@ -23623,7 +23623,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Sprache „{{code}}“ ließ sich nicht laden."
+            "value" : "Die Sprache „{{code}}“ konnte nicht geladen werden."
           }
         },
         "en" : {

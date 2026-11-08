@@ -340,6 +340,13 @@ final class SmokeTests: XCTestCase {
     any["sidebar.plugins"].firstMatch.click()
     XCTAssertTrue(any["page.plugins"].firstMatch.waitForExistence(timeout: 5), "a saved page did not let go")
     XCTAssertFalse(window.sheets.firstMatch.exists, "a saved page asked")
+
+    // The second tab: the scratch project ships no locale files, and the tab says so.
+    any["sidebar.config"].firstMatch.click()
+    let tabs = any["config.tabs"].firstMatch
+    XCTAssertTrue(tabs.waitForExistence(timeout: 5), "no tab switcher")
+    tabs.radioButtons["Übersetzungen"].firstMatch.click()
+    XCTAssertTrue(any["localization.none"].firstMatch.waitForExistence(timeout: 10), "Übersetzungen did not say there are no locale files")
   }
 
 }

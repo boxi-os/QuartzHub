@@ -294,8 +294,8 @@ nach Abhängigkeit:
   Server auf dem Mac, die Live-Vorschau in `WKWebView`.
   Konfiguration, Reiter Website: `ProjectImageBox` und `ContentIndexPage` im Kern (golden
   gemessen; Helfer `content-files` mit dem globby des Projekts), in der App ⌘S und die Frage beim
-  Verlassen (`UnsavedGuard`: Seitenleiste, Link, Fenster schließen, Beenden). Als Nächstes der
-  Reiter Übersetzungen.
+  Verlassen (`UnsavedGuard`: Seitenleiste, Link, Fenster schließen, Beenden); Reiter
+  Übersetzungen über `LocaleFiles`. Konfiguration fertig. Als Nächstes Plugins.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl
