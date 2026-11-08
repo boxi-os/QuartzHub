@@ -1,0 +1,4923 @@
+{
+ "constants": {
+  "readAgainst": "0.6.0",
+  "layoutSince": "0.4.0",
+  "textsSince": "0.5.9",
+  "envelopeSenderSince": "0.6.0",
+  "reserved": [
+   "form",
+   "lang",
+   "page",
+   "ts",
+   "pow",
+   "captcha",
+   "encrypted",
+   "ciphertext",
+   "fields",
+   "pageTitle",
+   "cf-turnstile-response",
+   "h-captcha-response"
+  ],
+  "templateNames": [
+   "contact",
+   "feedback",
+   "rsvp",
+   "survey"
+  ],
+  "templates": {
+   "contact": {
+    "title": {
+     "en": "Contact",
+     "de": "Kontakt"
+    },
+    "fields": [
+     {
+      "type": "text",
+      "name": "name",
+      "label": {
+       "en": "Name",
+       "de": "Name"
+      },
+      "autocomplete": "name"
+     },
+     {
+      "type": "email",
+      "name": "email",
+      "label": {
+       "en": "E-mail",
+       "de": "E-Mail"
+      },
+      "hint": {
+       "en": "Only if you want a reply.",
+       "de": "Nur, wenn du eine Antwort möchtest."
+      },
+      "autocomplete": "email"
+     },
+     {
+      "type": "textarea",
+      "name": "message",
+      "label": {
+       "en": "Message",
+       "de": "Nachricht"
+      },
+      "required": true
+     },
+     {
+      "type": "consent",
+      "name": "consent",
+      "text": {
+       "en": "I agree that my message is processed to answer it.",
+       "de": "Ich bin einverstanden, dass meine Nachricht zur Beantwortung verarbeitet wird."
+      }
+     }
+    ]
+   },
+   "feedback": {
+    "title": {
+     "en": "Feedback on this page",
+     "de": "Feedback zu dieser Seite"
+    },
+    "pageContext": true,
+    "fields": [
+     {
+      "type": "scale",
+      "name": "rating",
+      "label": {
+       "en": "How helpful was this page?",
+       "de": "Wie hilfreich war diese Seite?"
+      },
+      "min": 1,
+      "max": 5,
+      "minLabel": {
+       "en": "Not at all",
+       "de": "Gar nicht"
+      },
+      "maxLabel": {
+       "en": "Very",
+       "de": "Sehr"
+      },
+      "required": true
+     },
+     {
+      "type": "textarea",
+      "name": "comment",
+      "label": {
+       "en": "What could be better?",
+       "de": "Was könnte besser sein?"
+      },
+      "rows": 4
+     }
+    ]
+   },
+   "rsvp": {
+    "title": {
+     "en": "Sign up",
+     "de": "Anmeldung"
+    },
+    "fields": [
+     {
+      "type": "text",
+      "name": "name",
+      "label": {
+       "en": "Name",
+       "de": "Name"
+      },
+      "required": true,
+      "autocomplete": "name"
+     },
+     {
+      "type": "email",
+      "name": "email",
+      "label": {
+       "en": "E-mail",
+       "de": "E-Mail"
+      },
+      "required": true,
+      "autocomplete": "email"
+     },
+     {
+      "type": "select",
+      "name": "choice",
+      "label": {
+       "en": "Date",
+       "de": "Termin"
+      },
+      "required": true,
+      "options": [
+       {
+        "value": "1",
+        "label": {
+         "en": "First date",
+         "de": "Erster Termin"
+        }
+       },
+       {
+        "value": "2",
+        "label": {
+         "en": "Second date",
+         "de": "Zweiter Termin"
+        }
+       }
+      ]
+     },
+     {
+      "type": "number",
+      "name": "guests",
+      "label": {
+       "en": "Number of people",
+       "de": "Anzahl Personen"
+      },
+      "min": 1,
+      "max": 10,
+      "required": true
+     },
+     {
+      "type": "textarea",
+      "name": "note",
+      "label": {
+       "en": "Note",
+       "de": "Anmerkung"
+      },
+      "rows": 3
+     },
+     {
+      "type": "consent",
+      "name": "consent",
+      "text": {
+       "en": "I agree that my details are stored to organise the event.",
+       "de": "Ich bin einverstanden, dass meine Angaben zur Organisation gespeichert werden."
+      }
+     }
+    ]
+   },
+   "survey": {
+    "title": {
+     "en": "Survey",
+     "de": "Umfrage"
+    },
+    "anonymous": true,
+    "fields": [
+     {
+      "type": "radio",
+      "name": "usage",
+      "label": {
+       "en": "How often do you visit this site?",
+       "de": "Wie oft besuchst du diese Website?"
+      },
+      "required": true,
+      "options": [
+       {
+        "value": "first",
+        "label": {
+         "en": "First time",
+         "de": "Zum ersten Mal"
+        }
+       },
+       {
+        "value": "sometimes",
+        "label": {
+         "en": "Now and then",
+         "de": "Gelegentlich"
+        }
+       },
+       {
+        "value": "often",
+        "label": {
+         "en": "Often",
+         "de": "Oft"
+        }
+       }
+      ]
+     },
+     {
+      "type": "checkboxes",
+      "name": "topics",
+      "label": {
+       "en": "Which topics interest you?",
+       "de": "Welche Themen interessieren dich?"
+      },
+      "options": [
+       {
+        "value": "news",
+        "label": {
+         "en": "News",
+         "de": "Neuigkeiten"
+        }
+       },
+       {
+        "value": "guides",
+        "label": {
+         "en": "Guides",
+         "de": "Anleitungen"
+        }
+       },
+       {
+        "value": "background",
+        "label": {
+         "en": "Background",
+         "de": "Hintergrund"
+        }
+       }
+      ]
+     },
+     {
+      "type": "scale",
+      "name": "satisfaction",
+      "label": {
+       "en": "How satisfied are you overall?",
+       "de": "Wie zufrieden bist du insgesamt?"
+      },
+      "min": 1,
+      "max": 5
+     },
+     {
+      "type": "textarea",
+      "name": "comment",
+      "label": {
+       "en": "Anything else?",
+       "de": "Noch etwas?"
+      },
+      "rows": 3
+     }
+    ]
+   }
+  },
+  "transportKinds": [
+   "relay",
+   "endpoint",
+   "formspree",
+   "web3forms",
+   "mailto",
+   "demo"
+  ],
+  "encryptionModes": [
+   "required",
+   "optional",
+   "off"
+  ],
+  "sections": [
+   {
+    "id": "transport",
+    "keys": [
+     "transport"
+    ]
+   },
+   {
+    "id": "keys",
+    "keys": [
+     "keys"
+    ]
+   },
+   {
+    "id": "spam",
+    "keys": [
+     "spam"
+    ]
+   },
+   {
+    "id": "layout",
+    "keys": [
+     "layoutForm",
+     "language"
+    ]
+   },
+   {
+    "id": "relay",
+    "keys": []
+   },
+   {
+    "id": "texts",
+    "keys": [
+     "texts"
+    ]
+   },
+   {
+    "id": "technical",
+    "keys": [
+     "frontmatterKey",
+     "codeBlockLang"
+    ]
+   }
+  ],
+  "fieldGroups": {
+   "text": [
+    "text",
+    "textarea",
+    "email",
+    "tel",
+    "url",
+    "number",
+    "date"
+   ],
+   "choice": [
+    "select",
+    "radio",
+    "checkboxes",
+    "checkbox",
+    "scale"
+   ],
+   "other": [
+    "consent",
+    "pgpKey",
+    "hidden"
+   ],
+   "structure": [
+    "pageBreak"
+   ]
+  },
+  "sameShape": [
+   [
+    "text",
+    "email",
+    "tel",
+    "url",
+    "number",
+    "date",
+    "textarea"
+   ],
+   [
+    "select",
+    "radio",
+    "checkboxes"
+   ]
+  ],
+  "inputKeys": {
+   "text": [
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "maxLength"
+   ],
+   "email": [
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "maxLength"
+   ],
+   "tel": [
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "maxLength"
+   ],
+   "url": [
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "maxLength"
+   ],
+   "number": [
+    "placeholder",
+    "min",
+    "max",
+    "step"
+   ],
+   "date": [
+    "min",
+    "max"
+   ],
+   "textarea": [
+    "placeholder",
+    "rows",
+    "maxLength"
+   ]
+  },
+  "personalAutocomplete": [
+   "name",
+   "given-name",
+   "family-name",
+   "additional-name",
+   "honorific-prefix",
+   "honorific-suffix",
+   "nickname",
+   "username",
+   "street-address",
+   "address-line1",
+   "address-line2",
+   "postal-code",
+   "tel",
+   "email",
+   "bday",
+   "organization"
+  ],
+  "controllerTypes": [
+   "select",
+   "radio",
+   "checkboxes",
+   "checkbox",
+   "scale"
+  ],
+  "formKeys": [
+   "template",
+   "title",
+   "description",
+   "submitLabel",
+   "fields",
+   "recipient",
+   "subject",
+   "transport",
+   "encryption",
+   "anonymous",
+   "pageContext",
+   "spam",
+   "success",
+   "className"
+  ],
+  "relayOwnWords": [
+   "messagePage",
+   "messageKey"
+  ]
+ },
+ "forms": [
+  {
+   "options": null,
+   "forms": [],
+   "perForm": [],
+   "renamed": [],
+   "removed": [],
+   "duplicated": [
+    {
+     "from": "none",
+     "options": {},
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "neu": {
+       "title": "T"
+      }
+     }
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      }
+     }
+    }
+   ],
+   "captcha": {
+    "global": null,
+    "forms": []
+   },
+   "globals": {
+    "spam": {},
+    "transport": {}
+   }
+  },
+  {
+   "options": {},
+   "forms": [],
+   "perForm": [],
+   "renamed": [],
+   "removed": [],
+   "duplicated": [
+    {
+     "from": "none",
+     "options": {},
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "neu": {
+       "title": "T"
+      }
+     }
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      }
+     }
+    }
+   ],
+   "captcha": {
+    "global": null,
+    "forms": []
+   },
+   "globals": {
+    "spam": {},
+    "transport": {}
+   }
+  },
+  {
+   "options": {
+    "forms": "x"
+   },
+   "forms": [],
+   "perForm": [],
+   "renamed": [],
+   "removed": [],
+   "duplicated": [
+    {
+     "from": "none",
+     "options": {
+      "forms": "x"
+     },
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "neu": {
+       "title": "T"
+      }
+     }
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      }
+     }
+    }
+   ],
+   "captcha": {
+    "global": null,
+    "forms": []
+   },
+   "globals": {
+    "spam": {},
+    "transport": {}
+   }
+  },
+  {
+   "options": {
+    "forms": []
+   },
+   "forms": [],
+   "perForm": [],
+   "renamed": [],
+   "removed": [],
+   "duplicated": [
+    {
+     "from": "none",
+     "options": {
+      "forms": []
+     },
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "neu": {
+       "title": "T"
+      }
+     }
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      }
+     }
+    }
+   ],
+   "captcha": {
+    "global": null,
+    "forms": []
+   },
+   "globals": {
+    "spam": {},
+    "transport": {}
+   }
+  },
+  {
+   "options": {
+    "forms": {
+     "kontakt": {
+      "template": "contact",
+      "recipient": "a",
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "umfrage": {
+      "template": "survey"
+     }
+    },
+    "transport": {
+     "kind": "relay",
+     "url": "https://x"
+    },
+    "layoutForm": "kontakt"
+   },
+   "forms": [
+    [
+     "kontakt",
+     {
+      "template": "contact",
+      "recipient": "a",
+      "encryption": {
+       "mode": "required"
+      }
+     }
+    ],
+    [
+     "umfrage",
+     {
+      "template": "survey"
+     }
+    ]
+   ],
+   "perForm": [
+    {
+     "id": "kontakt",
+     "effective": {
+      "title": {
+       "en": "Contact",
+       "de": "Kontakt"
+      },
+      "fields": [
+       {
+        "type": "text",
+        "name": "name",
+        "label": {
+         "en": "Name",
+         "de": "Name"
+        },
+        "autocomplete": "name"
+       },
+       {
+        "type": "email",
+        "name": "email",
+        "label": {
+         "en": "E-mail",
+         "de": "E-Mail"
+        },
+        "hint": {
+         "en": "Only if you want a reply.",
+         "de": "Nur, wenn du eine Antwort möchtest."
+        },
+        "autocomplete": "email"
+       },
+       {
+        "type": "textarea",
+        "name": "message",
+        "label": {
+         "en": "Message",
+         "de": "Nachricht"
+        },
+        "required": true
+       },
+       {
+        "type": "consent",
+        "name": "consent",
+        "text": {
+         "en": "I agree that my message is processed to answer it.",
+         "de": "Ich bin einverstanden, dass meine Nachricht zur Beantwortung verarbeitet wird."
+        }
+       }
+      ],
+      "template": "contact",
+      "recipient": "a",
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "usesTemplate": true,
+     "transport": "relay",
+     "encryption": "required",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\nkontakt\n```",
+      "placeholder": "{{form:kontakt}}",
+      "frontmatter": "form: kontakt"
+     }
+    },
+    {
+     "id": "umfrage",
+     "effective": {
+      "title": {
+       "en": "Survey",
+       "de": "Umfrage"
+      },
+      "anonymous": true,
+      "fields": [
+       {
+        "type": "radio",
+        "name": "usage",
+        "label": {
+         "en": "How often do you visit this site?",
+         "de": "Wie oft besuchst du diese Website?"
+        },
+        "required": true,
+        "options": [
+         {
+          "value": "first",
+          "label": {
+           "en": "First time",
+           "de": "Zum ersten Mal"
+          }
+         },
+         {
+          "value": "sometimes",
+          "label": {
+           "en": "Now and then",
+           "de": "Gelegentlich"
+          }
+         },
+         {
+          "value": "often",
+          "label": {
+           "en": "Often",
+           "de": "Oft"
+          }
+         }
+        ]
+       },
+       {
+        "type": "checkboxes",
+        "name": "topics",
+        "label": {
+         "en": "Which topics interest you?",
+         "de": "Welche Themen interessieren dich?"
+        },
+        "options": [
+         {
+          "value": "news",
+          "label": {
+           "en": "News",
+           "de": "Neuigkeiten"
+          }
+         },
+         {
+          "value": "guides",
+          "label": {
+           "en": "Guides",
+           "de": "Anleitungen"
+          }
+         },
+         {
+          "value": "background",
+          "label": {
+           "en": "Background",
+           "de": "Hintergrund"
+          }
+         }
+        ]
+       },
+       {
+        "type": "scale",
+        "name": "satisfaction",
+        "label": {
+         "en": "How satisfied are you overall?",
+         "de": "Wie zufrieden bist du insgesamt?"
+        },
+        "min": 1,
+        "max": 5
+       },
+       {
+        "type": "textarea",
+        "name": "comment",
+        "label": {
+         "en": "Anything else?",
+         "de": "Noch etwas?"
+        },
+        "rows": 3
+       }
+      ],
+      "template": "survey"
+     },
+     "usesTemplate": true,
+     "transport": "relay",
+     "encryption": "off",
+     "anonymous": true,
+     "embed": {
+      "codeBlock": "```quartz-form\numfrage\n```",
+      "placeholder": "{{form:umfrage}}",
+      "frontmatter": "form: umfrage"
+     }
+    }
+   ],
+   "renamed": [
+    {
+     "id": "kontakt",
+     "to": "kontakt-neu",
+     "options": {
+      "forms": {
+       "kontakt-neu": {
+        "template": "contact",
+        "recipient": "a",
+        "encryption": {
+         "mode": "required"
+        }
+       },
+       "umfrage": {
+        "template": "survey"
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": "kontakt-neu"
+     }
+    },
+    {
+     "id": "umfrage",
+     "to": "umfrage-neu",
+     "options": {
+      "forms": {
+       "kontakt": {
+        "template": "contact",
+        "recipient": "a",
+        "encryption": {
+         "mode": "required"
+        }
+       },
+       "umfrage-neu": {
+        "template": "survey"
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": "kontakt"
+     }
+    },
+    {
+     "id": "kontakt",
+     "to": "umfrage",
+     "options": {
+      "forms": {
+       "umfrage": {
+        "template": "survey"
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": "umfrage"
+     }
+    }
+   ],
+   "removed": [
+    {
+     "id": "kontakt",
+     "options": {
+      "forms": {
+       "umfrage": {
+        "template": "survey"
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": ""
+     }
+    },
+    {
+     "id": "umfrage",
+     "options": {
+      "forms": {
+       "kontakt": {
+        "template": "contact",
+        "recipient": "a",
+        "encryption": {
+         "mode": "required"
+        }
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": "kontakt"
+     }
+    }
+   ],
+   "duplicated": [
+    {
+     "from": "kontakt",
+     "options": {
+      "forms": {
+       "kontakt": {
+        "template": "contact",
+        "recipient": "a",
+        "encryption": {
+         "mode": "required"
+        }
+       },
+       "kontakt-copy": {
+        "template": "contact",
+        "recipient": "a",
+        "encryption": {
+         "mode": "required"
+        }
+       },
+       "umfrage": {
+        "template": "survey"
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": "kontakt"
+     },
+     "id": "kontakt-copy"
+    },
+    {
+     "from": "umfrage",
+     "options": {
+      "forms": {
+       "kontakt": {
+        "template": "contact",
+        "recipient": "a",
+        "encryption": {
+         "mode": "required"
+        }
+       },
+       "umfrage": {
+        "template": "survey"
+       },
+       "umfrage-copy": {
+        "template": "survey"
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": "kontakt"
+     },
+     "id": "umfrage-copy"
+    },
+    {
+     "from": "none",
+     "options": {
+      "forms": {
+       "kontakt": {
+        "template": "contact",
+        "recipient": "a",
+        "encryption": {
+         "mode": "required"
+        }
+       },
+       "umfrage": {
+        "template": "survey"
+       }
+      },
+      "transport": {
+       "kind": "relay",
+       "url": "https://x"
+      },
+      "layoutForm": "kontakt"
+     },
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "kontakt": {
+       "title": "T"
+      },
+      "umfrage": {
+       "template": "survey"
+      }
+     },
+     "transport": {
+      "kind": "relay",
+      "url": "https://x"
+     },
+     "layoutForm": "kontakt"
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      },
+      "kontakt": {
+       "template": "contact",
+       "recipient": "a",
+       "encryption": {
+        "mode": "required"
+       }
+      },
+      "umfrage": {
+       "template": "survey"
+      }
+     },
+     "transport": {
+      "kind": "relay",
+      "url": "https://x"
+     },
+     "layoutForm": "kontakt"
+    }
+   ],
+   "captcha": {
+    "global": null,
+    "forms": []
+   },
+   "globals": {
+    "spam": {},
+    "transport": {
+     "kind": "relay",
+     "url": "https://x"
+    }
+   }
+  },
+  {
+   "options": {
+    "forms": {
+     "1": 7,
+     "2": {
+      "fields": [
+       {
+        "type": "text",
+        "name": "a"
+       }
+      ]
+     },
+     "b": null,
+     "c": {
+      "template": "rsvp",
+      "fields": [
+       {
+        "type": "email",
+        "name": "e"
+       },
+       "junk",
+       null
+      ],
+      "title": null
+     },
+     "d": {
+      "template": "nope",
+      "anonymous": true,
+      "transport": {
+       "kind": "mailto"
+      },
+      "spam": {
+       "captcha": "hcaptcha"
+      }
+     }
+    },
+    "transport": {
+     "kind": "formspree"
+    },
+    "layoutForm": "d"
+   },
+   "forms": [
+    [
+     "1",
+     {}
+    ],
+    [
+     "2",
+     {
+      "fields": [
+       {
+        "type": "text",
+        "name": "a"
+       }
+      ]
+     }
+    ],
+    [
+     "b",
+     {}
+    ],
+    [
+     "c",
+     {
+      "template": "rsvp",
+      "fields": [
+       {
+        "type": "email",
+        "name": "e"
+       },
+       "junk",
+       null
+      ],
+      "title": null
+     }
+    ],
+    [
+     "d",
+     {
+      "template": "nope",
+      "anonymous": true,
+      "transport": {
+       "kind": "mailto"
+      },
+      "spam": {
+       "captcha": "hcaptcha"
+      }
+     }
+    ]
+   ],
+   "perForm": [
+    {
+     "id": "1",
+     "effective": {
+      "fields": []
+     },
+     "usesTemplate": false,
+     "transport": "formspree",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\n1\n```",
+      "placeholder": "{{form:1}}",
+      "frontmatter": "form: 1"
+     }
+    },
+    {
+     "id": "2",
+     "effective": {
+      "fields": [
+       {
+        "type": "text",
+        "name": "a"
+       }
+      ]
+     },
+     "usesTemplate": false,
+     "transport": "formspree",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\n2\n```",
+      "placeholder": "{{form:2}}",
+      "frontmatter": "form: 2"
+     }
+    },
+    {
+     "id": "b",
+     "effective": {
+      "fields": []
+     },
+     "usesTemplate": false,
+     "transport": "formspree",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\nb\n```",
+      "placeholder": "{{form:b}}",
+      "frontmatter": "form: b"
+     }
+    },
+    {
+     "id": "c",
+     "effective": {
+      "title": {
+       "en": "Sign up",
+       "de": "Anmeldung"
+      },
+      "fields": [
+       {
+        "type": "email",
+        "name": "e"
+       }
+      ],
+      "template": "rsvp"
+     },
+     "usesTemplate": false,
+     "transport": "formspree",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\nc\n```",
+      "placeholder": "{{form:c}}",
+      "frontmatter": "form: c"
+     }
+    },
+    {
+     "id": "d",
+     "effective": {
+      "template": "nope",
+      "anonymous": true,
+      "transport": {
+       "kind": "mailto"
+      },
+      "spam": {
+       "captcha": "hcaptcha"
+      },
+      "fields": []
+     },
+     "usesTemplate": false,
+     "transport": "mailto",
+     "encryption": "off",
+     "anonymous": true,
+     "embed": {
+      "codeBlock": "```quartz-form\nd\n```",
+      "placeholder": "{{form:d}}",
+      "frontmatter": "form: d"
+     }
+    }
+   ],
+   "renamed": [
+    {
+     "id": "1",
+     "to": "1-neu",
+     "options": {
+      "forms": {
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "1-neu": {},
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "2",
+     "to": "2-neu",
+     "options": {
+      "forms": {
+       "1": {},
+       "2-neu": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "b",
+     "to": "b-neu",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b-neu": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "c",
+     "to": "c-neu",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c-neu": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "d",
+     "to": "d-neu",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d-neu": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d-neu"
+     }
+    },
+    {
+     "id": "1",
+     "to": "2",
+     "options": {
+      "forms": {
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    }
+   ],
+   "removed": [
+    {
+     "id": "1",
+     "options": {
+      "forms": {
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "2",
+     "options": {
+      "forms": {
+       "1": {},
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "b",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "c",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     }
+    },
+    {
+     "id": "d",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": ""
+     }
+    }
+   ],
+   "duplicated": [
+    {
+     "from": "1",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "1-copy": {},
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     },
+     "id": "1-copy"
+    },
+    {
+     "from": "2",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "2-copy": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     },
+     "id": "2-copy"
+    },
+    {
+     "from": "b",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "b-copy": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     },
+     "id": "b-copy"
+    },
+    {
+     "from": "c",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "c-copy": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     },
+     "id": "c-copy"
+    },
+    {
+     "from": "d",
+     "options": {
+      "forms": {
+       "1": {},
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": {},
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       },
+       "d-copy": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     },
+     "id": "d-copy"
+    },
+    {
+     "from": "none",
+     "options": {
+      "forms": {
+       "1": 7,
+       "2": {
+        "fields": [
+         {
+          "type": "text",
+          "name": "a"
+         }
+        ]
+       },
+       "b": null,
+       "c": {
+        "template": "rsvp",
+        "fields": [
+         {
+          "type": "email",
+          "name": "e"
+         },
+         "junk",
+         null
+        ],
+        "title": null
+       },
+       "d": {
+        "template": "nope",
+        "anonymous": true,
+        "transport": {
+         "kind": "mailto"
+        },
+        "spam": {
+         "captcha": "hcaptcha"
+        }
+       }
+      },
+      "transport": {
+       "kind": "formspree"
+      },
+      "layoutForm": "d"
+     },
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "1": {
+       "title": "T"
+      },
+      "2": {
+       "fields": [
+        {
+         "type": "text",
+         "name": "a"
+        }
+       ]
+      },
+      "b": {},
+      "c": {
+       "template": "rsvp",
+       "fields": [
+        {
+         "type": "email",
+         "name": "e"
+        },
+        "junk",
+        null
+       ],
+       "title": null
+      },
+      "d": {
+       "template": "nope",
+       "anonymous": true,
+       "transport": {
+        "kind": "mailto"
+       },
+       "spam": {
+        "captcha": "hcaptcha"
+       }
+      }
+     },
+     "transport": {
+      "kind": "formspree"
+     },
+     "layoutForm": "d"
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      },
+      "1": {},
+      "2": {
+       "fields": [
+        {
+         "type": "text",
+         "name": "a"
+        }
+       ]
+      },
+      "b": {},
+      "c": {
+       "template": "rsvp",
+       "fields": [
+        {
+         "type": "email",
+         "name": "e"
+        },
+        "junk",
+        null
+       ],
+       "title": null
+      },
+      "d": {
+       "template": "nope",
+       "anonymous": true,
+       "transport": {
+        "kind": "mailto"
+       },
+       "spam": {
+        "captcha": "hcaptcha"
+       }
+      }
+     },
+     "transport": {
+      "kind": "formspree"
+     },
+     "layoutForm": "d"
+    }
+   ],
+   "captcha": {
+    "global": null,
+    "forms": []
+   },
+   "globals": {
+    "spam": {},
+    "transport": {
+     "kind": "formspree"
+    }
+   }
+  },
+  {
+   "options": {
+    "forms": {
+     "a": {
+      "template": "feedback",
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k2"
+      }
+     },
+     "b": {
+      "template": "contact"
+     },
+     "c": {
+      "template": "survey"
+     },
+     "d": {
+      "template": "contact",
+      "spam": {
+       "captcha": "none"
+      }
+     },
+     "e": {
+      "transport": {
+       "kind": "endpoint"
+      },
+      "template": "contact"
+     }
+    },
+    "spam": {
+     "captcha": "turnstile",
+     "captchaSiteKey": "k1"
+    },
+    "codeBlockLang": "  ",
+    "frontmatterKey": "formular"
+   },
+   "forms": [
+    [
+     "a",
+     {
+      "template": "feedback",
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k2"
+      }
+     }
+    ],
+    [
+     "b",
+     {
+      "template": "contact"
+     }
+    ],
+    [
+     "c",
+     {
+      "template": "survey"
+     }
+    ],
+    [
+     "d",
+     {
+      "template": "contact",
+      "spam": {
+       "captcha": "none"
+      }
+     }
+    ],
+    [
+     "e",
+     {
+      "transport": {
+       "kind": "endpoint"
+      },
+      "template": "contact"
+     }
+    ]
+   ],
+   "perForm": [
+    {
+     "id": "a",
+     "effective": {
+      "title": {
+       "en": "Feedback on this page",
+       "de": "Feedback zu dieser Seite"
+      },
+      "pageContext": true,
+      "fields": [
+       {
+        "type": "scale",
+        "name": "rating",
+        "label": {
+         "en": "How helpful was this page?",
+         "de": "Wie hilfreich war diese Seite?"
+        },
+        "min": 1,
+        "max": 5,
+        "minLabel": {
+         "en": "Not at all",
+         "de": "Gar nicht"
+        },
+        "maxLabel": {
+         "en": "Very",
+         "de": "Sehr"
+        },
+        "required": true
+       },
+       {
+        "type": "textarea",
+        "name": "comment",
+        "label": {
+         "en": "What could be better?",
+         "de": "Was könnte besser sein?"
+        },
+        "rows": 4
+       }
+      ],
+      "template": "feedback",
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k2"
+      }
+     },
+     "usesTemplate": true,
+     "transport": "relay",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\na\n```",
+      "placeholder": "{{form:a}}",
+      "frontmatter": "formular: a"
+     }
+    },
+    {
+     "id": "b",
+     "effective": {
+      "title": {
+       "en": "Contact",
+       "de": "Kontakt"
+      },
+      "fields": [
+       {
+        "type": "text",
+        "name": "name",
+        "label": {
+         "en": "Name",
+         "de": "Name"
+        },
+        "autocomplete": "name"
+       },
+       {
+        "type": "email",
+        "name": "email",
+        "label": {
+         "en": "E-mail",
+         "de": "E-Mail"
+        },
+        "hint": {
+         "en": "Only if you want a reply.",
+         "de": "Nur, wenn du eine Antwort möchtest."
+        },
+        "autocomplete": "email"
+       },
+       {
+        "type": "textarea",
+        "name": "message",
+        "label": {
+         "en": "Message",
+         "de": "Nachricht"
+        },
+        "required": true
+       },
+       {
+        "type": "consent",
+        "name": "consent",
+        "text": {
+         "en": "I agree that my message is processed to answer it.",
+         "de": "Ich bin einverstanden, dass meine Nachricht zur Beantwortung verarbeitet wird."
+        }
+       }
+      ],
+      "template": "contact"
+     },
+     "usesTemplate": true,
+     "transport": "relay",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\nb\n```",
+      "placeholder": "{{form:b}}",
+      "frontmatter": "formular: b"
+     }
+    },
+    {
+     "id": "c",
+     "effective": {
+      "title": {
+       "en": "Survey",
+       "de": "Umfrage"
+      },
+      "anonymous": true,
+      "fields": [
+       {
+        "type": "radio",
+        "name": "usage",
+        "label": {
+         "en": "How often do you visit this site?",
+         "de": "Wie oft besuchst du diese Website?"
+        },
+        "required": true,
+        "options": [
+         {
+          "value": "first",
+          "label": {
+           "en": "First time",
+           "de": "Zum ersten Mal"
+          }
+         },
+         {
+          "value": "sometimes",
+          "label": {
+           "en": "Now and then",
+           "de": "Gelegentlich"
+          }
+         },
+         {
+          "value": "often",
+          "label": {
+           "en": "Often",
+           "de": "Oft"
+          }
+         }
+        ]
+       },
+       {
+        "type": "checkboxes",
+        "name": "topics",
+        "label": {
+         "en": "Which topics interest you?",
+         "de": "Welche Themen interessieren dich?"
+        },
+        "options": [
+         {
+          "value": "news",
+          "label": {
+           "en": "News",
+           "de": "Neuigkeiten"
+          }
+         },
+         {
+          "value": "guides",
+          "label": {
+           "en": "Guides",
+           "de": "Anleitungen"
+          }
+         },
+         {
+          "value": "background",
+          "label": {
+           "en": "Background",
+           "de": "Hintergrund"
+          }
+         }
+        ]
+       },
+       {
+        "type": "scale",
+        "name": "satisfaction",
+        "label": {
+         "en": "How satisfied are you overall?",
+         "de": "Wie zufrieden bist du insgesamt?"
+        },
+        "min": 1,
+        "max": 5
+       },
+       {
+        "type": "textarea",
+        "name": "comment",
+        "label": {
+         "en": "Anything else?",
+         "de": "Noch etwas?"
+        },
+        "rows": 3
+       }
+      ],
+      "template": "survey"
+     },
+     "usesTemplate": true,
+     "transport": "relay",
+     "encryption": "off",
+     "anonymous": true,
+     "embed": {
+      "codeBlock": "```quartz-form\nc\n```",
+      "placeholder": "{{form:c}}",
+      "frontmatter": "formular: c"
+     }
+    },
+    {
+     "id": "d",
+     "effective": {
+      "title": {
+       "en": "Contact",
+       "de": "Kontakt"
+      },
+      "fields": [
+       {
+        "type": "text",
+        "name": "name",
+        "label": {
+         "en": "Name",
+         "de": "Name"
+        },
+        "autocomplete": "name"
+       },
+       {
+        "type": "email",
+        "name": "email",
+        "label": {
+         "en": "E-mail",
+         "de": "E-Mail"
+        },
+        "hint": {
+         "en": "Only if you want a reply.",
+         "de": "Nur, wenn du eine Antwort möchtest."
+        },
+        "autocomplete": "email"
+       },
+       {
+        "type": "textarea",
+        "name": "message",
+        "label": {
+         "en": "Message",
+         "de": "Nachricht"
+        },
+        "required": true
+       },
+       {
+        "type": "consent",
+        "name": "consent",
+        "text": {
+         "en": "I agree that my message is processed to answer it.",
+         "de": "Ich bin einverstanden, dass meine Nachricht zur Beantwortung verarbeitet wird."
+        }
+       }
+      ],
+      "template": "contact",
+      "spam": {
+       "captcha": "none"
+      }
+     },
+     "usesTemplate": true,
+     "transport": "relay",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\nd\n```",
+      "placeholder": "{{form:d}}",
+      "frontmatter": "formular: d"
+     }
+    },
+    {
+     "id": "e",
+     "effective": {
+      "title": {
+       "en": "Contact",
+       "de": "Kontakt"
+      },
+      "fields": [
+       {
+        "type": "text",
+        "name": "name",
+        "label": {
+         "en": "Name",
+         "de": "Name"
+        },
+        "autocomplete": "name"
+       },
+       {
+        "type": "email",
+        "name": "email",
+        "label": {
+         "en": "E-mail",
+         "de": "E-Mail"
+        },
+        "hint": {
+         "en": "Only if you want a reply.",
+         "de": "Nur, wenn du eine Antwort möchtest."
+        },
+        "autocomplete": "email"
+       },
+       {
+        "type": "textarea",
+        "name": "message",
+        "label": {
+         "en": "Message",
+         "de": "Nachricht"
+        },
+        "required": true
+       },
+       {
+        "type": "consent",
+        "name": "consent",
+        "text": {
+         "en": "I agree that my message is processed to answer it.",
+         "de": "Ich bin einverstanden, dass meine Nachricht zur Beantwortung verarbeitet wird."
+        }
+       }
+      ],
+      "transport": {
+       "kind": "endpoint"
+      },
+      "template": "contact"
+     },
+     "usesTemplate": true,
+     "transport": "endpoint",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```quartz-form\ne\n```",
+      "placeholder": "{{form:e}}",
+      "frontmatter": "formular: e"
+     }
+    }
+   ],
+   "renamed": [
+    {
+     "id": "a",
+     "to": "a-neu",
+     "options": {
+      "forms": {
+       "a-neu": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "b",
+     "to": "b-neu",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b-neu": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "c",
+     "to": "c-neu",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c-neu": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "d",
+     "to": "d-neu",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d-neu": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "e",
+     "to": "e-neu",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e-neu": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "a",
+     "to": "b",
+     "options": {
+      "forms": {
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    }
+   ],
+   "removed": [
+    {
+     "id": "a",
+     "options": {
+      "forms": {
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "b",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "c",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "d",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    },
+    {
+     "id": "e",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     }
+    }
+   ],
+   "duplicated": [
+    {
+     "from": "a",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "a-copy": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     },
+     "id": "a-copy"
+    },
+    {
+     "from": "b",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "b-copy": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     },
+     "id": "b-copy"
+    },
+    {
+     "from": "c",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "c-copy": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     },
+     "id": "c-copy"
+    },
+    {
+     "from": "d",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "d-copy": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     },
+     "id": "d-copy"
+    },
+    {
+     "from": "e",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       },
+       "e-copy": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     },
+     "id": "e-copy"
+    },
+    {
+     "from": "none",
+     "options": {
+      "forms": {
+       "a": {
+        "template": "feedback",
+        "spam": {
+         "captcha": "turnstile",
+         "captchaSiteKey": "k2"
+        }
+       },
+       "b": {
+        "template": "contact"
+       },
+       "c": {
+        "template": "survey"
+       },
+       "d": {
+        "template": "contact",
+        "spam": {
+         "captcha": "none"
+        }
+       },
+       "e": {
+        "transport": {
+         "kind": "endpoint"
+        },
+        "template": "contact"
+       }
+      },
+      "spam": {
+       "captcha": "turnstile",
+       "captchaSiteKey": "k1"
+      },
+      "codeBlockLang": "  ",
+      "frontmatterKey": "formular"
+     },
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "a": {
+       "title": "T"
+      },
+      "b": {
+       "template": "contact"
+      },
+      "c": {
+       "template": "survey"
+      },
+      "d": {
+       "template": "contact",
+       "spam": {
+        "captcha": "none"
+       }
+      },
+      "e": {
+       "transport": {
+        "kind": "endpoint"
+       },
+       "template": "contact"
+      }
+     },
+     "spam": {
+      "captcha": "turnstile",
+      "captchaSiteKey": "k1"
+     },
+     "codeBlockLang": "  ",
+     "frontmatterKey": "formular"
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      },
+      "a": {
+       "template": "feedback",
+       "spam": {
+        "captcha": "turnstile",
+        "captchaSiteKey": "k2"
+       }
+      },
+      "b": {
+       "template": "contact"
+      },
+      "c": {
+       "template": "survey"
+      },
+      "d": {
+       "template": "contact",
+       "spam": {
+        "captcha": "none"
+       }
+      },
+      "e": {
+       "transport": {
+        "kind": "endpoint"
+       },
+       "template": "contact"
+      }
+     },
+     "spam": {
+      "captcha": "turnstile",
+      "captchaSiteKey": "k1"
+     },
+     "codeBlockLang": "  ",
+     "frontmatterKey": "formular"
+    }
+   ],
+   "captcha": {
+    "global": {
+     "provider": "turnstile"
+    },
+    "forms": [
+     {
+      "id": "a",
+      "provider": "turnstile"
+     }
+    ]
+   },
+   "globals": {
+    "spam": {
+     "captcha": "turnstile",
+     "captchaSiteKey": "k1"
+    },
+    "transport": {}
+   }
+  },
+  {
+   "options": {
+    "forms": {
+     "x": {
+      "template": "contact",
+      "anonymous": false,
+      "pageContext": true
+     }
+    },
+    "codeBlockLang": "qf",
+    "frontmatterKey": ""
+   },
+   "forms": [
+    [
+     "x",
+     {
+      "template": "contact",
+      "anonymous": false,
+      "pageContext": true
+     }
+    ]
+   ],
+   "perForm": [
+    {
+     "id": "x",
+     "effective": {
+      "title": {
+       "en": "Contact",
+       "de": "Kontakt"
+      },
+      "fields": [
+       {
+        "type": "text",
+        "name": "name",
+        "label": {
+         "en": "Name",
+         "de": "Name"
+        },
+        "autocomplete": "name"
+       },
+       {
+        "type": "email",
+        "name": "email",
+        "label": {
+         "en": "E-mail",
+         "de": "E-Mail"
+        },
+        "hint": {
+         "en": "Only if you want a reply.",
+         "de": "Nur, wenn du eine Antwort möchtest."
+        },
+        "autocomplete": "email"
+       },
+       {
+        "type": "textarea",
+        "name": "message",
+        "label": {
+         "en": "Message",
+         "de": "Nachricht"
+        },
+        "required": true
+       },
+       {
+        "type": "consent",
+        "name": "consent",
+        "text": {
+         "en": "I agree that my message is processed to answer it.",
+         "de": "Ich bin einverstanden, dass meine Nachricht zur Beantwortung verarbeitet wird."
+        }
+       }
+      ],
+      "template": "contact",
+      "anonymous": false,
+      "pageContext": true
+     },
+     "usesTemplate": true,
+     "transport": "relay",
+     "encryption": "off",
+     "anonymous": false,
+     "embed": {
+      "codeBlock": "```qf\nx\n```",
+      "placeholder": "{{form:x}}",
+      "frontmatter": "form: x"
+     }
+    }
+   ],
+   "renamed": [
+    {
+     "id": "x",
+     "to": "x-neu",
+     "options": {
+      "forms": {
+       "x-neu": {
+        "template": "contact",
+        "anonymous": false,
+        "pageContext": true
+       }
+      },
+      "codeBlockLang": "qf",
+      "frontmatterKey": ""
+     }
+    }
+   ],
+   "removed": [
+    {
+     "id": "x",
+     "options": {
+      "forms": {},
+      "codeBlockLang": "qf",
+      "frontmatterKey": ""
+     }
+    }
+   ],
+   "duplicated": [
+    {
+     "from": "x",
+     "options": {
+      "forms": {
+       "x": {
+        "template": "contact",
+        "anonymous": false,
+        "pageContext": true
+       },
+       "x-copy": {
+        "template": "contact",
+        "anonymous": false,
+        "pageContext": true
+       }
+      },
+      "codeBlockLang": "qf",
+      "frontmatterKey": ""
+     },
+     "id": "x-copy"
+    },
+    {
+     "from": "none",
+     "options": {
+      "forms": {
+       "x": {
+        "template": "contact",
+        "anonymous": false,
+        "pageContext": true
+       }
+      },
+      "codeBlockLang": "qf",
+      "frontmatterKey": ""
+     },
+     "id": "none"
+    }
+   ],
+   "withForm": [
+    {
+     "forms": {
+      "x": {
+       "title": "T"
+      }
+     },
+     "codeBlockLang": "qf",
+     "frontmatterKey": ""
+    },
+    {
+     "forms": {
+      "0": {
+       "title": "Null"
+      },
+      "x": {
+       "template": "contact",
+       "anonymous": false,
+       "pageContext": true
+      }
+     },
+     "codeBlockLang": "qf",
+     "frontmatterKey": ""
+    }
+   ],
+   "captcha": {
+    "global": null,
+    "forms": []
+   },
+   "globals": {
+    "spam": {},
+    "transport": {}
+   }
+  }
+ ],
+ "texts": [
+  {
+   "text": "x",
+   "lang": "de",
+   "result": "x"
+  },
+  {
+   "text": {
+    "en": "E",
+    "de": "D"
+   },
+   "lang": "de",
+   "result": "D"
+  },
+  {
+   "text": {
+    "en": "E",
+    "de": "D"
+   },
+   "lang": "de-AT",
+   "result": "D"
+  },
+  {
+   "text": {
+    "en": "E",
+    "de-AT": "A",
+    "de": "D"
+   },
+   "lang": "DE-at",
+   "result": "A"
+  },
+  {
+   "text": {
+    "en": "E",
+    "de_CH": "C"
+   },
+   "lang": "de",
+   "result": "C"
+  },
+  {
+   "text": {
+    "fr": "F",
+    "en": 7
+   },
+   "lang": "de",
+   "result": "F"
+  },
+  {
+   "text": {},
+   "lang": "de",
+   "result": ""
+  },
+  {
+   "text": 7,
+   "lang": "de",
+   "result": ""
+  },
+  {
+   "text": null,
+   "lang": "de",
+   "result": ""
+  },
+  {
+   "text": {
+    "EN": "X"
+   },
+   "lang": "en-us",
+   "result": "X"
+  }
+ ],
+ "ids": [
+  {
+   "id": "",
+   "own": null,
+   "problem": "empty"
+  },
+  {
+   "id": "",
+   "own": "kontakt",
+   "problem": "empty"
+  },
+  {
+   "id": "a",
+   "own": null,
+   "problem": null
+  },
+  {
+   "id": "a",
+   "own": "kontakt",
+   "problem": null
+  },
+  {
+   "id": "A",
+   "own": null,
+   "problem": "pattern"
+  },
+  {
+   "id": "A",
+   "own": "kontakt",
+   "problem": "pattern"
+  },
+  {
+   "id": "-a",
+   "own": null,
+   "problem": "pattern"
+  },
+  {
+   "id": "-a",
+   "own": "kontakt",
+   "problem": "pattern"
+  },
+  {
+   "id": "a-",
+   "own": null,
+   "problem": null
+  },
+  {
+   "id": "a-",
+   "own": "kontakt",
+   "problem": null
+  },
+  {
+   "id": "kontakt",
+   "own": null,
+   "problem": "taken"
+  },
+  {
+   "id": "kontakt",
+   "own": "kontakt",
+   "problem": null
+  },
+  {
+   "id": "ä",
+   "own": null,
+   "problem": "pattern"
+  },
+  {
+   "id": "ä",
+   "own": "kontakt",
+   "problem": "pattern"
+  },
+  {
+   "id": "1",
+   "own": null,
+   "problem": null
+  },
+  {
+   "id": "1",
+   "own": "kontakt",
+   "problem": null
+  },
+  {
+   "id": "a b",
+   "own": null,
+   "problem": "pattern"
+  },
+  {
+   "id": "a b",
+   "own": "kontakt",
+   "problem": "pattern"
+  },
+  {
+   "id": "a_b",
+   "own": null,
+   "problem": "pattern"
+  },
+  {
+   "id": "a_b",
+   "own": "kontakt",
+   "problem": "pattern"
+  },
+  {
+   "id": "abc\n",
+   "own": null,
+   "problem": "pattern"
+  },
+  {
+   "id": "abc\n",
+   "own": "kontakt",
+   "problem": "pattern"
+  }
+ ],
+ "names": [
+  {
+   "name": "",
+   "problem": "empty"
+  },
+  {
+   "name": "a",
+   "problem": null
+  },
+  {
+   "name": "1a",
+   "problem": "pattern"
+  },
+  {
+   "name": "a-b_c",
+   "problem": null
+  },
+  {
+   "name": "a b",
+   "problem": "pattern"
+  },
+  {
+   "name": "form",
+   "problem": "reserved"
+  },
+  {
+   "name": "pageTitle",
+   "problem": "reserved"
+  },
+  {
+   "name": "name",
+   "problem": "taken"
+  },
+  {
+   "name": "Ä",
+   "problem": "pattern"
+  },
+  {
+   "name": "x\n",
+   "problem": "pattern"
+  }
+ ],
+ "freeIds": [
+  {
+   "base": "Kontakt",
+   "id": "kontakt-3"
+  },
+  {
+   "base": "kontakt",
+   "id": "kontakt-3"
+  },
+  {
+   "base": "Über uns!",
+   "id": "ber-uns"
+  },
+  {
+   "base": "---",
+   "id": "form-2"
+  },
+  {
+   "base": "",
+   "id": "form-2"
+  },
+  {
+   "base": "a--b",
+   "id": "a--b"
+  },
+  {
+   "base": "😀x",
+   "id": "x"
+  },
+  {
+   "base": "umfrage",
+   "id": "umfrage-2"
+  },
+  {
+   "base": "a  !b",
+   "id": "a-b"
+  },
+  {
+   "base": "ä😀b",
+   "id": "b"
+  }
+ ],
+ "freeNames": [
+  {
+   "base": "name",
+   "name": "name3"
+  },
+  {
+   "base": "email",
+   "name": "email2"
+  },
+  {
+   "base": "Über",
+   "name": "ber"
+  },
+  {
+   "base": "1abc",
+   "name": "abc"
+  },
+  {
+   "base": "___",
+   "name": "field"
+  },
+  {
+   "base": "",
+   "name": "field"
+  },
+  {
+   "base": "form",
+   "name": "form2"
+  },
+  {
+   "base": "a-b",
+   "name": "a-b"
+  },
+  {
+   "base": "x y",
+   "name": "xy"
+  }
+ ],
+ "newForms": [
+  {
+   "start": "contact",
+   "def": {
+    "template": "contact"
+   }
+  },
+  {
+   "start": "empty",
+   "def": {
+    "fields": [
+     {
+      "type": "textarea",
+      "name": "message",
+      "label": "Nachricht",
+      "required": true
+     }
+    ]
+   }
+  },
+  {
+   "start": "survey",
+   "def": {
+    "template": "survey"
+   }
+  }
+ ],
+ "fields": [
+  {
+   "field": {
+    "type": "text",
+    "name": "n",
+    "autocomplete": "name",
+    "label": {
+     "de": "Name"
+    }
+   },
+   "personal": true,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "Name",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "text",
+    "name": "t",
+    "autocomplete": "off"
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "t",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "email",
+    "name": "e"
+   },
+   "personal": true,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "e",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "tel",
+    "name": "p"
+   },
+   "personal": true,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "p",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "pgpKey",
+    "name": "k"
+   },
+   "personal": true,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "k",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "textarea",
+    "name": "m",
+    "autocomplete": "street-address"
+   },
+   "personal": true,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "m",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "select",
+    "name": "s",
+    "options": [
+     {
+      "value": "a",
+      "label": {
+       "en": "A",
+       "de": "Ah"
+      }
+     },
+     {
+      "value": "",
+      "label": "x"
+     },
+     "junk",
+     {
+      "value": "b"
+     }
+    ]
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [
+    {
+     "value": "a",
+     "label": "Ah"
+    },
+    {
+     "value": "b",
+     "label": "b"
+    }
+   ],
+   "label": "s",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "radio",
+    "name": "r",
+    "options": "nope"
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [],
+   "label": "r",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "checkboxes",
+    "name": "c",
+    "options": [
+     {
+      "value": "x",
+      "label": "X"
+     }
+    ]
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [
+    {
+     "value": "x",
+     "label": "X"
+    }
+   ],
+   "label": "c",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "checkbox",
+    "name": "cb",
+    "text": {
+     "de": "Ja"
+    }
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [
+    {
+     "value": "yes",
+     "label": "yes"
+    }
+   ],
+   "label": "Ja",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "scale",
+    "name": "sc",
+    "min": 1,
+    "max": 5
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [
+    {
+     "value": "1",
+     "label": "1"
+    },
+    {
+     "value": "2",
+     "label": "2"
+    },
+    {
+     "value": "3",
+     "label": "3"
+    },
+    {
+     "value": "4",
+     "label": "4"
+    },
+    {
+     "value": "5",
+     "label": "5"
+    }
+   ],
+   "label": "sc",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "scale",
+    "name": "sc2",
+    "min": 1.5,
+    "max": 3
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [],
+   "label": "sc2",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "scale",
+    "name": "sc3",
+    "min": 0,
+    "max": 25
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [],
+   "label": "sc3",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "scale",
+    "name": "sc4",
+    "min": 3,
+    "max": 1
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": true,
+   "values": [],
+   "label": "sc4",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "consent",
+    "name": "ok",
+    "text": "Einverstanden"
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "Einverstanden",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "pageBreak",
+    "title": {
+     "de": "Schritt 2"
+    },
+    "showIf": {
+     "field": "s",
+     "equals": "a"
+    }
+   },
+   "personal": false,
+   "showIf": {
+    "field": "s",
+    "equals": [
+     "a"
+    ]
+   },
+   "controller": false,
+   "values": [],
+   "label": "Schritt 2",
+   "pageBreak": true
+  },
+  {
+   "field": {
+    "type": "hidden",
+    "name": "h"
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "h",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "text",
+    "name": "cond",
+    "showIf": {
+     "field": "r",
+     "equals": [
+      "x",
+      "",
+      3,
+      "y"
+     ]
+    }
+   },
+   "personal": false,
+   "showIf": {
+    "field": "r",
+    "equals": [
+     "x",
+     "y"
+    ]
+   },
+   "controller": false,
+   "values": [],
+   "label": "cond",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "text",
+    "name": "bad",
+    "showIf": {
+     "field": "",
+     "equals": "a"
+    }
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "bad",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "text",
+    "name": "bad2",
+    "showIf": {
+     "field": "s",
+     "equals": []
+    }
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "bad2",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "text",
+    "name": "bad3",
+    "showIf": "x"
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "bad3",
+   "pageBreak": false
+  },
+  {
+   "field": {
+    "type": "select",
+    "label": "no name"
+   },
+   "personal": false,
+   "showIf": "__undefined",
+   "controller": false,
+   "values": [],
+   "label": "no name",
+   "pageBreak": false
+  }
+ ],
+ "renamedConditions": [
+  {
+   "type": "text",
+   "name": "n",
+   "autocomplete": "name",
+   "label": {
+    "de": "Name"
+   }
+  },
+  {
+   "type": "text",
+   "name": "t",
+   "autocomplete": "off"
+  },
+  {
+   "type": "email",
+   "name": "e"
+  },
+  {
+   "type": "tel",
+   "name": "p"
+  },
+  {
+   "type": "pgpKey",
+   "name": "k"
+  },
+  {
+   "type": "textarea",
+   "name": "m",
+   "autocomplete": "street-address"
+  },
+  {
+   "type": "select",
+   "name": "s",
+   "options": [
+    {
+     "value": "a",
+     "label": {
+      "en": "A",
+      "de": "Ah"
+     }
+    },
+    {
+     "value": "",
+     "label": "x"
+    },
+    "junk",
+    {
+     "value": "b"
+    }
+   ]
+  },
+  {
+   "type": "radio",
+   "name": "r",
+   "options": "nope"
+  },
+  {
+   "type": "checkboxes",
+   "name": "c",
+   "options": [
+    {
+     "value": "x",
+     "label": "X"
+    }
+   ]
+  },
+  {
+   "type": "checkbox",
+   "name": "cb",
+   "text": {
+    "de": "Ja"
+   }
+  },
+  {
+   "type": "scale",
+   "name": "sc",
+   "min": 1,
+   "max": 5
+  },
+  {
+   "type": "scale",
+   "name": "sc2",
+   "min": 1.5,
+   "max": 3
+  },
+  {
+   "type": "scale",
+   "name": "sc3",
+   "min": 0,
+   "max": 25
+  },
+  {
+   "type": "scale",
+   "name": "sc4",
+   "min": 3,
+   "max": 1
+  },
+  {
+   "type": "consent",
+   "name": "ok",
+   "text": "Einverstanden"
+  },
+  {
+   "type": "pageBreak",
+   "title": {
+    "de": "Schritt 2"
+   },
+   "showIf": {
+    "field": "auswahl",
+    "equals": "a"
+   }
+  },
+  {
+   "type": "hidden",
+   "name": "h"
+  },
+  {
+   "type": "text",
+   "name": "cond",
+   "showIf": {
+    "field": "r",
+    "equals": [
+     "x",
+     "",
+     3,
+     "y"
+    ]
+   }
+  },
+  {
+   "type": "text",
+   "name": "bad",
+   "showIf": {
+    "field": "",
+    "equals": "a"
+   }
+  },
+  {
+   "type": "text",
+   "name": "bad2",
+   "showIf": {
+    "field": "auswahl",
+    "equals": []
+   }
+  },
+  {
+   "type": "text",
+   "name": "bad3",
+   "showIf": "x"
+  },
+  {
+   "type": "select",
+   "label": "no name"
+  }
+ ],
+ "showIfValues": [
+  {
+   "field": "s",
+   "equals": "a"
+  },
+  {
+   "field": "s",
+   "equals": [
+    "a",
+    "b"
+   ]
+  },
+  {
+   "field": "s",
+   "equals": []
+  }
+ ],
+ "messages": [
+  {
+   "text": "forms.kontakt.fields[2].pattern: kein gültiger Ausdruck",
+   "placed": {
+    "text": "forms.kontakt.fields[2].pattern: kein gültiger Ausdruck",
+    "form": "kontakt",
+    "field": 2,
+    "rest": "pattern: kein gültiger Ausdruck"
+   },
+   "part": "fields"
+  },
+  {
+   "text": "forms.kontakt: no fields given",
+   "placed": {
+    "text": "forms.kontakt: no fields given",
+    "form": "kontakt",
+    "rest": "no fields given"
+   },
+   "part": "fields"
+  },
+  {
+   "text": "forms.kontakt: keine Felder angegeben",
+   "placed": {
+    "text": "forms.kontakt: keine Felder angegeben",
+    "form": "kontakt",
+    "rest": "keine Felder angegeben"
+   },
+   "part": "fields"
+  },
+  {
+   "text": "forms.kontakt.recipient: unknown key",
+   "placed": {
+    "text": "forms.kontakt.recipient: unknown key",
+    "form": "kontakt",
+    "rest": "recipient: unknown key"
+   },
+   "part": "sending"
+  },
+  {
+   "text": "forms.kontakt.transport.kind: x",
+   "placed": {
+    "text": "forms.kontakt.transport.kind: x",
+    "form": "kontakt",
+    "rest": "transport.kind: x"
+   },
+   "part": "sending"
+  },
+  {
+   "text": "forms.kontakt.encryption: mode",
+   "placed": {
+    "text": "forms.kontakt.encryption: mode",
+    "form": "kontakt",
+    "rest": "encryption: mode"
+   },
+   "part": "privacy"
+  },
+  {
+   "text": "forms.kontakt.spam.pow: 3",
+   "placed": {
+    "text": "forms.kontakt.spam.pow: 3",
+    "form": "kontakt",
+    "rest": "spam.pow: 3"
+   },
+   "part": "spam"
+  },
+  {
+   "text": "forms.kontakt.colour: unknown",
+   "placed": {
+    "text": "forms.kontakt.colour: unknown",
+    "form": "kontakt",
+    "rest": "colour: unknown"
+   },
+   "part": "more"
+  },
+  {
+   "text": "forms.kontakt.title: missing",
+   "placed": {
+    "text": "forms.kontakt.title: missing",
+    "form": "kontakt",
+    "rest": "title: missing"
+   },
+   "part": "general"
+  },
+  {
+   "text": "forms.kontakt: needs a title",
+   "placed": {
+    "text": "forms.kontakt: needs a title",
+    "form": "kontakt",
+    "rest": "needs a title"
+   },
+   "part": "general"
+  },
+  {
+   "text": "forms.kontakt.fields: no fields",
+   "placed": {
+    "text": "forms.kontakt.fields: no fields",
+    "form": "kontakt",
+    "rest": "fields: no fields"
+   },
+   "part": "fields"
+  },
+  {
+   "text": "forms.kontakt.fieldsX: what",
+   "placed": {
+    "text": "forms.kontakt.fieldsX: what",
+    "form": "kontakt",
+    "rest": "fieldsX: what"
+   },
+   "part": "more"
+  },
+  {
+   "text": "forms.my-form.anonymous: yes",
+   "placed": {
+    "text": "forms.my-form.anonymous: yes",
+    "form": "my-form",
+    "rest": "anonymous: yes"
+   },
+   "part": "privacy"
+  },
+  {
+   "text": "forms.Kontakt.title: upper",
+   "placed": {
+    "text": "forms.Kontakt.title: upper",
+    "rest": "forms.Kontakt.title: upper"
+   },
+   "part": "general"
+  },
+  {
+   "text": "forms.kontakt.fields[x].a: b",
+   "placed": {
+    "text": "forms.kontakt.fields[x].a: b",
+    "form": "kontakt",
+    "rest": "fields[x].a: b"
+   },
+   "part": "fields"
+  },
+  {
+   "text": "keys.boxi: expired",
+   "placed": {
+    "text": "keys.boxi: expired",
+    "section": "keys",
+    "rest": "keys.boxi: expired"
+   },
+   "part": "general"
+  },
+  {
+   "text": "keys: none",
+   "placed": {
+    "text": "keys: none",
+    "section": "keys",
+    "rest": "keys: none"
+   },
+   "part": "general"
+  },
+  {
+   "text": "transport.url: missing",
+   "placed": {
+    "text": "transport.url: missing",
+    "section": "transport",
+    "rest": "transport.url: missing"
+   },
+   "part": "sending"
+  },
+  {
+   "text": "spam.pow: too low",
+   "placed": {
+    "text": "spam.pow: too low",
+    "section": "spam",
+    "rest": "spam.pow: too low"
+   },
+   "part": "spam"
+  },
+  {
+   "text": "layoutForm: unknown form",
+   "placed": {
+    "text": "layoutForm: unknown form",
+    "section": "layout",
+    "rest": "layoutForm: unknown form"
+   },
+   "part": "general"
+  },
+  {
+   "text": "language: de",
+   "placed": {
+    "text": "language: de",
+    "section": "layout",
+    "rest": "language: de"
+   },
+   "part": "general"
+  },
+  {
+   "text": "texts.de.submit: x",
+   "placed": {
+    "text": "texts.de.submit: x",
+    "section": "texts",
+    "rest": "texts.de.submit: x"
+   },
+   "part": "general"
+  },
+  {
+   "text": "frontmatterKey: empty",
+   "placed": {
+    "text": "frontmatterKey: empty",
+    "section": "technical",
+    "rest": "frontmatterKey: empty"
+   },
+   "part": "general"
+  },
+  {
+   "text": "codeBlockLang: x",
+   "placed": {
+    "text": "codeBlockLang: x",
+    "section": "technical",
+    "rest": "codeBlockLang: x"
+   },
+   "part": "general"
+  },
+  {
+   "text": "something else",
+   "placed": {
+    "text": "something else",
+    "rest": "something else"
+   },
+   "part": "general"
+  },
+  {
+   "text": "forms.kontakt.fields[12]",
+   "placed": {
+    "text": "forms.kontakt.fields[12]",
+    "form": "kontakt",
+    "field": 12,
+    "rest": ""
+   },
+   "part": "fields"
+  },
+  {
+   "text": "forms.kontakt.subject:x",
+   "placed": {
+    "text": "forms.kontakt.subject:x",
+    "form": "kontakt",
+    "rest": "subject:x"
+   },
+   "part": "sending"
+  },
+  {
+   "text": "forms.kontakt.pageContext\tmeh",
+   "placed": {
+    "text": "forms.kontakt.pageContext\tmeh",
+    "form": "kontakt",
+    "rest": "pageContext\tmeh"
+   },
+   "part": "privacy"
+  },
+  {
+   "text": "forms.kontakt.$weird.x: y",
+   "placed": {
+    "text": "forms.kontakt.$weird.x: y",
+    "form": "kontakt",
+    "rest": "$weird.x: y"
+   },
+   "part": "more"
+  },
+  {
+   "text": "forms.kontakt: no fieldsets",
+   "placed": {
+    "text": "forms.kontakt: no fieldsets",
+    "form": "kontakt",
+    "rest": "no fieldsets"
+   },
+   "part": "general"
+  }
+ ],
+ "entryKeys": [
+  {
+   "texts": {
+    "de": {},
+    "en": {}
+   },
+   "code": "de",
+   "key": "de"
+  },
+  {
+   "texts": {
+    "de-DE": {}
+   },
+   "code": "de",
+   "key": "de-DE"
+  },
+  {
+   "texts": {
+    "DE": {}
+   },
+   "code": "de",
+   "key": "DE"
+  },
+  {
+   "texts": {
+    "de-AT": {},
+    "de": {}
+   },
+   "code": "de",
+   "key": "de"
+  },
+  {
+   "texts": {},
+   "code": "fr",
+   "key": "fr"
+  },
+  {
+   "texts": {
+    "en_US": {}
+   },
+   "code": "en-gb",
+   "key": "en_US"
+  }
+ ],
+ "schemaParts": {
+  "formKeys": [
+   "template",
+   "title",
+   "description",
+   "submitLabel",
+   "fields",
+   "recipient",
+   "subject",
+   "transport",
+   "encryption",
+   "anonymous",
+   "pageContext",
+   "spam",
+   "success",
+   "className"
+  ],
+  "objectKeys": {
+   "spam": [
+    "honeypot",
+    "minSeconds",
+    "noScript",
+    "pow",
+    "powDifficulty",
+    "captcha",
+    "captchaSiteKey",
+    "rateLimitPerHour",
+    "maxFieldLength",
+    "maxTextareaLength",
+    "maxKeyLength",
+    "maxBytes"
+   ],
+   "transport": [
+    "kind",
+    "url",
+    "format",
+    "extra"
+   ],
+   "keys": null,
+   "forms": null,
+   "nothing": null
+  },
+  "variants": {
+   "text": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "min",
+    "max",
+    "step",
+    "rows",
+    "maxLength",
+    "width",
+    "showIf"
+   ],
+   "textarea": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "min",
+    "max",
+    "step",
+    "rows",
+    "maxLength",
+    "width",
+    "showIf"
+   ],
+   "email": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "min",
+    "max",
+    "step",
+    "rows",
+    "maxLength",
+    "width",
+    "showIf"
+   ],
+   "tel": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "min",
+    "max",
+    "step",
+    "rows",
+    "maxLength",
+    "width",
+    "showIf"
+   ],
+   "url": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "min",
+    "max",
+    "step",
+    "rows",
+    "maxLength",
+    "width",
+    "showIf"
+   ],
+   "number": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "min",
+    "max",
+    "step",
+    "rows",
+    "maxLength",
+    "width",
+    "showIf"
+   ],
+   "date": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "placeholder",
+    "autocomplete",
+    "pattern",
+    "min",
+    "max",
+    "step",
+    "rows",
+    "maxLength",
+    "width",
+    "showIf"
+   ],
+   "select": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "options",
+    "width",
+    "layout",
+    "showIf"
+   ],
+   "radio": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "options",
+    "width",
+    "layout",
+    "showIf"
+   ],
+   "checkboxes": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "options",
+    "width",
+    "layout",
+    "showIf"
+   ],
+   "checkbox": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "width",
+    "showIf"
+   ],
+   "scale": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "min",
+    "max",
+    "minLabel",
+    "maxLabel",
+    "width",
+    "showIf"
+   ],
+   "consent": [
+    "type",
+    "name",
+    "text",
+    "link",
+    "linkLabel",
+    "width"
+   ],
+   "pgpKey": [
+    "type",
+    "name",
+    "label",
+    "required",
+    "hint",
+    "width",
+    "showIf"
+   ],
+   "hidden": [
+    "type",
+    "name",
+    "value"
+   ],
+   "pageBreak": [
+    "type",
+    "title",
+    "showIf"
+   ],
+   "nope": []
+  },
+  "defaults": {
+   "spam": "__undefined",
+   "transport": "__undefined",
+   "frontmatterKey": "__undefined",
+   "codeBlockLang": "__undefined",
+   "layoutForm": "__undefined",
+   "language": "__undefined",
+   "nothing": "__undefined"
+  }
+ }
+}

@@ -152,5 +152,7 @@ import Testing
     #expect(nav.hideUnlessSet == nil)
     #expect(nav.lead?.has("variant") == true)
     #expect(OptionRoot.withoutTiles(entry("@quartz-community/explorer", JSONObject()), fields: [], packageVersion: nil, lang: .de) == nil)
+    let forms = try #require(OptionRoot.withoutTiles(entry("github:boxi-os/quartz-forms", JSONObject()), fields: [], packageVersion: nil, lang: .de))
+    #expect(forms.entryReason?("pageContext", JSONObject([("anonymous", .bool(true))]), JSONObject()) == L10n.t("formsEditor.pageContextAnonymous"))
   }
 }

@@ -290,6 +290,7 @@ extension OptionRoot {
     switch PluginRepository.quartzName(entry.source) {
     case NavigationVariants.plugin?: root = NavigationVariants.root(options: options, fields: fields, lang: lang, withVariant: true)
     case LayoutBoxes.plugin?: root = LayoutBoxes.root(options: options, installed: packageVersion, withTiles: false)
+    case FormsOptions.plugin?: root = FormsOptions.root()
     default: return nil
     }
     root.hideUnlessSet = nil
