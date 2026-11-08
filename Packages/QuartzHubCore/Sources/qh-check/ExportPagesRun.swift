@@ -6,7 +6,9 @@ import QuartzHubCore
 /// WebKit on the build `scripts/export-pages-golden.mjs` ran them on in Chrome, with the same
 /// arguments, compared step by step - the start page's navigation, each page's settlePage and
 /// extractArticle, then epubChapters over the collected pages. Nothing goes to the network (both
-/// sides refuse everything from outside). The engine is what differs; the report says where.
+/// sides refuse everything from outside; for Mermaid and KaTeX see `scripts/cdn-build.mjs`). The
+/// engine is what differs; the report says where. A Mermaid diagram is compared by structure
+/// (`DiagramCompare`).
 @MainActor
 func runExportPagesCheck(root: String, build: String, golden: String, out: String?) async -> Int32 {
   let chrome: JSONValue
@@ -42,6 +44,8 @@ func runExportPagesCheck(root: String, build: String, golden: String, out: Strin
   var record = JSONObject([("engine", .string("webkit")), ("origin", .string(server.origin))])
   var differences: [String] = []
   var same = 0
+  // Pages and diagrams equal only in structure (`DiagramCompare`).
+  var shapedPages = 0, shapedDiagrams = 0
   do {
     try await window.prepare()
     try await window.load("\(server.origin)/index")
@@ -61,8 +65,22 @@ func runExportPagesCheck(root: String, build: String, golden: String, out: Strin
       pages.append(.object(JSONObject([("slug", .string(slug)), ("settled", settled), ("extracted", extracted)])))
       let expected = mine(page["extracted"]!)
       if extracted == expected && settled == page["settled"]! { same += 1; continue }
+      if settled == page["settled"]!, extracted["ok"] == expected["ok"],
+         ["title", "lang", "images", "counts"].allSatisfy({ extracted["value"]?[$0] == expected["value"]?[$0] }),
+         let a = extracted["value"]?["html"]?.stringValue, let b = expected["value"]?["html"]?.stringValue {
+        switch DiagramCompare.compare(a, b) {
+        case .equal: same += 1; continue
+        case .sameShape(let n): same += 1; shapedPages += 1; shapedDiagrams += n; continue
+        case .different: break
+        }
+      }
       if settled != page["settled"]! { differences.append("\(slug): settlePage \(JSJSON.compact(settled)) statt \(JSJSON.compact(page["settled"]!))") }
       for key in ["title", "lang", "images", "counts", "html"] where extracted["value"]?[key] != expected["value"]?[key] {
+        if key == "html", let a = extracted["value"]?["html"]?.stringValue, let b = expected["value"]?["html"]?.stringValue,
+           let where_ = DiagramCompare.locate(a, b) {
+          differences.append("\(slug): html \(where_)")
+          continue
+        }
         let a = JSJSON.compact(extracted["value"]?[key] ?? .null), b = JSJSON.compact(expected["value"]?[key] ?? .null)
         let at = zip(a, b).prefix { $0 == $1 }.count
         differences.append("\(slug): \(key) weicht ab bei Zeichen \(at): WebKit …\(a.dropFirst(max(0, at - 60)).prefix(160))… Chrome …\(b.dropFirst(max(0, at - 60)).prefix(160))…")
@@ -102,12 +120,29 @@ func runExportPagesCheck(root: String, build: String, golden: String, out: Strin
       }
     }
     if ours.count != theirsChapters.count { differences.append("Kapitel: \(ours.count) statt \(theirsChapters.count)") }
-    for key in ["counts", "drawings"] where chapters["value"]?[key] != expectedChapters["value"]?[key] {
-      let x = JSJSON.compact(chapters["value"]?[key] ?? .null), y = JSJSON.compact(expectedChapters["value"]?[key] ?? .null)
-      let at = zip(x, y).prefix { $0 == $1 }.count
-      differences.append("epubChapters \(key) bei \(at): WebKit …\(x.dropFirst(max(0, at - 60)).prefix(200))… Chrome …\(y.dropFirst(max(0, at - 60)).prefix(200))…")
+    // The drawings (formulas and diagrams the ePub takes as pictures) by name, a diagram by structure.
+    let drawings = chapters["value"]?["drawings"]?.arrayValue ?? [], theirDrawings = expectedChapters["value"]?["drawings"]?.arrayValue ?? []
+    var shapedDrawings = 0
+    if drawings.count != theirDrawings.count { differences.append("Zeichnungen: \(drawings.count) statt \(theirDrawings.count)") }
+    for (a, b) in zip(drawings, theirDrawings) where a != b {
+      let name = a["name"]?.stringValue ?? "?"
+      guard a["name"] == b["name"], let x = a["html"]?.stringValue, let y = b["html"]?.stringValue else {
+        differences.append("Zeichnung \(name) statt \(b["name"]?.stringValue ?? "?")")
+        continue
+      }
+      switch DiagramCompare.compare(x, y) {
+      case .equal: continue
+      case .sameShape: shapedDrawings += 1
+      case .different: differences.append("Zeichnung \(name): \(DiagramCompare.locate(x, y) ?? "weicht ab")")
+      }
     }
-    print("Seiten gleich: \(same) von \(pages.count); Kapitel gleich: \(sameChapters) von \(theirsChapters.count)")
+    if chapters["value"]?["counts"] != expectedChapters["value"]?["counts"] {
+      differences.append("epubChapters counts: WebKit \(JSJSON.compact(chapters["value"]?["counts"] ?? .null)) Chrome \(JSJSON.compact(expectedChapters["value"]?["counts"] ?? .null))")
+    }
+    print("Seiten gleich: \(same) von \(pages.count); Kapitel gleich: \(sameChapters) von \(theirsChapters.count); Zeichnungen: \(drawings.count)")
+    if shapedPages + shapedDrawings > 0 {
+      print("Mermaid-Diagramme nur im Aufbau gleich (Elemente, Text; die Geometrie misst jede Engine selbst): \(shapedDiagrams) auf \(shapedPages) Seiten, \(shapedDrawings) Zeichnungen")
+    }
   } catch {
     print("Lauf abgebrochen: \(error)")
     return 3

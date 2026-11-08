@@ -8,8 +8,9 @@
 // the same scripts in WebKit on the same build and compares.
 //
 // Nothing goes to the network: every request from outside the copy is refused (QuartzHub's run
-// does the same), so both engines render alike without KaTeX's fonts from jsdelivr. The rule that
-// lets such requests through is measured on its own (`qh-check export-window`).
+// does the same). For Mermaid and KaTeX's stylesheet, run it on a copy from `scripts/cdn-build.mjs`,
+// which serves both from the copy. The rule that lets such requests through is measured on its own
+// (`qh-check export-window`).
 //
 // The texts that replace a form, a frame, a video or a canvas are marks (`@@form@@` …), so both
 // sides put in the same thing.
