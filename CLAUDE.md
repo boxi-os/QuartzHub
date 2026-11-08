@@ -49,6 +49,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `Runtime/node/bin/node scripts/cdn-build.mjs <build> <kopie>`, dann `… scripts/export-pages-golden.mjs <kopie> <chrome.json>`
   und `swift run --package-path Packages/QuartzHubCore qh-check export-pages <kopie> <chrome.json>` — die Seitenskripte
   des Exports in WebKit gegen Chrome, ohne Netz; die Kopie bringt Mermaid und KaTeX' Stylesheet selbst mit (gepinnt nach `.tools/cdn/`)
+- `swift run --package-path Packages/QuartzHubCore qh-check export-book <build> <ordner> [--offline]` — ein Build durch den
+  Export bis zu den Reader-Formaten (Reihenfolge, Seiten, Kapitel, Formeln und Diagramme als PNG); schreibt `content.json`, `pictures/`, `book.epub`
 - `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)

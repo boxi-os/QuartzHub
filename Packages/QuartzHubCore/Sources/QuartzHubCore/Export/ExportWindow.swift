@@ -44,6 +44,7 @@ public final class ExportWindow: NSObject {
 
   private let loadTimeout: Duration
   private let outside: Bool
+  private let pageScripts: String
   private var ruleStore: WKContentRuleListStore?
   private var ruleStoreFolder: String?
   private var waiting: [ObjectIdentifier: CheckedContinuation<Void, Error>] = [:]
@@ -61,6 +62,7 @@ public final class ExportWindow: NSObject {
     self.origin = origin
     self.loadTimeout = loadTimeout
     self.outside = outside
+    self.pageScripts = pageScripts
     _ = NSApplication.shared
     let configuration = WKWebViewConfiguration()
     configuration.websiteDataStore = .nonPersistent()
@@ -301,6 +303,49 @@ public final class ExportWindow: NSObject {
     guard let text = raw as? String, let answer = try? JSJSON.parse(text) else { throw ScriptFailure(description: "no answer") }
     if answer["ok"] == .bool(true) { return answer["value"] ?? .null }
     throw ScriptFailure(description: answer["error"]?.stringValue ?? "unknown error")
+  }
+
+  /// Another window of the same export (same origin, scripts, deadline and rule), not yet prepared.
+  public func sibling(size: CGSize) -> ExportWindow {
+    ExportWindow(origin: origin, size: size, pageScripts: pageScripts, loadTimeout: loadTimeout, outside: outside)
+  }
+
+  /// Adds what another window of the same export refused and fetched to this one's counts.
+  public func absorb(_ other: ExportWindow) {
+    for (key, n) in other.refused {
+      if let i = refused.firstIndex(where: { $0.key == key }) { refused[i].count += n } else { refused.append((key, n)) }
+    }
+    for (host, n) in other.fetched {
+      if let i = fetched.firstIndex(where: { $0.host == host }) { fetched[i].count += n } else { fetched.append((host, n)) }
+    }
+  }
+
+  /// Grows the window to hold `size` (CSS pixels at zoom 1), never shrinks it.
+  public func makeRoom(_ size: CGSize) {
+    let now = webView.frame.size
+    guard size.width > now.width || size.height > now.height else { return }
+    window.setContentSize(NSSize(width: max(now.width, size.width), height: max(now.height, size.height)))
+  }
+
+  /// A picture of `rect` (CSS pixels of the page at zoom 1) painted anew at `pixels` wide and `height`
+  /// high: WebKit paints the snapshot at its size rather than scaling the screen's frame, so a zoom
+  /// is the output size, not the page's (Electron's capturePage took the painted frame and needed
+  /// setZoomFactor). nil when WebKit gives no picture.
+  public func snapshot(_ rect: CGRect, pixels width: Int, _ height: Int) async throws -> CGImage? {
+    guard !closed else { throw CancellationError() }
+    let configuration = WKSnapshotConfiguration()
+    configuration.rect = rect
+    configuration.afterScreenUpdates = true
+    // In points: on a Retina screen the image has twice the pixels, drawn down to `width` below.
+    configuration.snapshotWidth = NSNumber(value: Double(width))
+    let image = try await webView.takeSnapshot(configuration: configuration)
+    guard let source = image.cgImage(forProposedRect: nil, context: nil, hints: nil), width > 0, height > 0 else { return nil }
+    if source.width == width && source.height == height { return source }
+    guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+                                  space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+    context.interpolationQuality = .high
+    context.draw(source, in: CGRect(x: 0, y: 0, width: width, height: height))
+    return context.makeImage()
   }
 
   /// Closes the window at once, whatever it waits for.

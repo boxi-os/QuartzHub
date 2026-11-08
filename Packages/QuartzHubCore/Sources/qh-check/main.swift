@@ -5,6 +5,8 @@
 //   swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]
 //   swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]
 //   swift run --package-path Packages/QuartzHubCore qh-check export-window
+//   swift run --package-path Packages/QuartzHubCore qh-check export-pages <build> <chrome.json>
+//   swift run --package-path Packages/QuartzHubCore qh-check export-book <build> <ordner>
 //
 // Exit codes: 0 all good, 1 findings, 2 wrong call, 3 could not check everything.
 import Foundation
@@ -25,6 +27,10 @@ func usage() -> Never {
     export-pages <build> <chrome.json> [--out <webkit.json>]
                                       die Seitenskripte des Exports in WebKit gegen ihre Aufnahme
                                       in Chrome (scripts/export-pages-golden.mjs), ohne Netz
+    export-book <build> <ordner> [--language <code>] [--offline]
+                                      einen Build durch den Export bis zu den Reader-Formaten:
+                                      Reihenfolge, Seiten, Kapitel, Formeln und Diagramme als
+                                      Bilder; schreibt content.json, pictures/ und book.epub
     inline-svg [projekt]              der SVG-Bereiniger gegen WebKit: jedes Ergebnis als HTML
                                       und, mit einem Projekt mit quartz-layout-box, durch dessen
                                       Markdown-Kette; Exit 3, wenn Lagen ausgelassen wurden
@@ -137,6 +143,15 @@ case "export-pages":
   guard positional.count == 2 else { usage() }
   let root = repositoryRoot()
   runAndExit { await runExportPagesCheck(root: root, build: positional[0], golden: positional[1], out: option("--out")) }
+case "export-book":
+  setvbuf(stdout, nil, _IOLBF, 0)
+  let positional = arguments.filter { !$0.hasPrefix("--") && $0 != option("--root") && $0 != option("--language") }
+  guard positional.count == 2 else { usage() }
+  let root = repositoryRoot()
+  let out = positional[1].hasPrefix("/") ? positional[1] : FileManager.default.currentDirectoryPath + "/" + positional[1]
+  runAndExit {
+    await runExportBookCheck(root: root, build: positional[0], out: out, language: option("--language") ?? "", offline: arguments.contains("--offline"))
+  }
 case "inline-svg":
   // WebKit wants the main run loop turning (see runAndExit).
   setvbuf(stdout, nil, _IOLBF, 0)
