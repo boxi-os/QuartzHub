@@ -35675,13 +35675,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links ein Plugin: Hier stehen dann seine Beschreibung aus dem Repository und der Button zum Installieren."
+            "value" : "Wähle in der Liste ein Plugin: Hier stehen dann seine Beschreibung aus dem Repository und der Button zum Installieren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pick a plugin on the left: this panel then shows the description from its repository and the button to install it."
+            "value" : "Select a plugin in the list: this panel then shows the description from its repository and the button to install it."
           }
         }
       }
@@ -35851,13 +35851,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Katalog ist gerade nicht erreichbar (GitHub antwortet nicht oder das Anfragelimit ist erschöpft). Unten steht deshalb nur ein Platzhalter. Mit „Katalog neu laden“ nochmal versuchen; ein GitHub-Token in den Einstellungen hebt das Limit deutlich an."
+            "value" : "Der Katalog konnte nicht geladen werden: GitHub antwortet nicht, oder das Anfragelimit ist erschöpft. Unten steht nur ein Platzhalter; „Katalog neu laden“ versucht es noch einmal, ein GitHub-Token hebt das Limit an."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The catalog is unreachable right now (GitHub is not answering, or the rate limit is used up). What is listed below is a placeholder. Try “Reload catalog”; a GitHub token in the settings raises the limit considerably."
+            "value" : "The catalog could not be loaded: GitHub is not answering, or the rate limit is used up. Below is only a placeholder; “Reload catalog” tries again, and a GitHub token raises the limit."
           }
         }
       }

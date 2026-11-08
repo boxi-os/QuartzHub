@@ -273,6 +273,27 @@ final class PluginsModel {
     reloadFrames()
   }
 
+  /// `quartz plugin add <source>` from the Marktplatz, with a snapshot (QuartzControl's
+  /// `addPlugin`). After the edits still queued: the CLI rewrites the config, and a save pending
+  /// behind it wrote the list without the new entry.
+  func add(source: String) async -> PluginCommands.Result {
+    busy = true
+    defer { busy = false }
+    await writes?.value
+    let environment = await AppServices.current()
+    let result = await PluginCommands.shared.add(source: source, project: project.path, environment: environment,
+                                                 snapshot: SnapshotStore.live(environment: environment).take)
+    await reload()
+    reloadFrames()
+    return result
+  }
+
+  /// The repositories the config already holds, as the Marktplatz compares them (`owner/repo`,
+  /// lower case).
+  var installedRepositories: Set<String> {
+    Set((config?.plugins ?? []).compactMap { PluginRepository.id($0.source) })
+  }
+
   /// `quartz plugin install` and `prune` repair `.quartz/plugins` rather than change the site.
   func runMaintenance(_ kind: Maintenance, window: NSWindow?) async {
     if kind == .prune {

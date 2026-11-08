@@ -10,6 +10,9 @@ final class AppServices {
   let logs = LogBuffer()
   let store = RunningServersStore(profile: AppProfile.own)
   let builds: BuildService
+  /// The Marktplatz's catalog and READMEs, kept fifteen minutes for every window. The token only
+  /// raises GitHub's rate limit and is read from the connections before each request.
+  let marketplace = Marketplace(token: Connections(profile: AppProfile.own, secrets: KeychainSecrets()).rateLimitToken)
   /// The tools for every command the app runs, resolved once (the login shell is asked for PATH)
   /// and again when the Node setting changes: a running server keeps the environment it was
   /// started with, everything started afterwards gets the new one.

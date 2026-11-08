@@ -37,13 +37,17 @@ struct PluginsPage: View {
   let project: ProjectContext
 
   @State private var model: PluginsModel
+  @State private var marketplace: MarketplaceModel
   /// Per window, by stable names (docs/conventions.md, „Wo war ich“).
   @SceneStorage("plugins.tab") private var tabID = Tab.installed.rawValue
   @SceneStorage("plugins.selected") private var selected: String?
+  @SceneStorage("marketplace.selected") private var marketplaceSelected: String?
 
   init(project: ProjectContext) {
     self.project = project
-    _model = State(initialValue: PluginsModel(project: project))
+    let plugins = PluginsModel(project: project)
+    _model = State(initialValue: plugins)
+    _marketplace = State(initialValue: MarketplaceModel(plugins: plugins))
   }
 
   private var tab: Tab { Tab(rawValue: tabID) ?? .installed }
@@ -72,6 +76,12 @@ struct PluginsPage: View {
           InstalledTab(model: model, selection: $selected)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins")
+        case .marketplace:
+          MarketplaceTab(model: marketplace, selection: $marketplaceSelected)
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("page.plugins.marketplace")
+            // Asked when the tab is first shown, not with the page: the catalog is a GitHub request.
+            .task { if marketplace.result == nil { await marketplace.load() } }
         default:
           ContentUnavailableView {
             Label(tab.title, systemImage: ProjectPage.plugins.symbol)
@@ -88,13 +98,32 @@ struct PluginsPage: View {
       if tab == .installed, let selected, let item = model.items.first(where: { $0.id == selected }) {
         PluginInspector(item: item, model: model)
           .id(item.id)
+      } else if tab == .marketplace, let marketplaceSelected,
+                let plugin = marketplace.result?.plugins.first(where: { $0.fullName == marketplaceSelected }) {
+        MarketplaceInspector(plugin: plugin, model: marketplace)
+          .id(plugin.fullName)
       } else {
         InspectorPageContext(page: .plugins) {
           Section {
             Text(tab.description).foregroundStyle(.secondary)
           }
           if tab == .installed, model.config != nil { summary }
+          if tab == .marketplace { marketplaceSummary }
         }
+      }
+    }
+  }
+
+  /// Nothing selected on the Marktplatz: how to start, and how many of the catalog's plugins this
+  /// project has.
+  private var marketplaceSummary: some View {
+    Section(L10n.t("pluginsMarketplace.panelEmptyTitle")) {
+      Note(L10n.t("pluginsMarketplace.panelEmptyText"))
+      if let result = marketplace.result {
+        let plugins = result.split(query: "").plugins
+        Text(L10n.t("pluginsMarketplace.panelEmptyCount", ["count": String(plugins.count),
+                                                          "installed": String(plugins.filter(marketplace.isInstalled).count)]))
+          .foregroundStyle(.secondary)
       }
     }
   }

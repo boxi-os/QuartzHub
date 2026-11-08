@@ -533,3 +533,48 @@ ihren Reitern. Bis dahin ist `file` ein Textfeld.
 
 Die Prüfung, ob ein Plugin ein Update hat (`git ls-remote` je Eintrag), läuft wie auf der Übersicht
 nicht mit `-QHNoUpdateCheck YES`.
+
+### Plugins: Marktplatz
+
+Vorbild `routes/Plugins/Marketplace.tsx` und `components/ReadmeText.tsx`. Der Katalog kommt aus
+`Marketplace` (Phase 3) und gilt fünfzehn Minuten für alle Fenster (`AppServices.marketplace`).
+Gefragt wird erst, wenn der Reiter erscheint, nicht mit der Seite. Der Token hebt nur das
+Anfragelimit und kommt vor jeder Anfrage aus den Verbindungen.
+
+**README ohne HTML.** `ReadmeText` liest die Markdown-Formen einer Plugin-README (Überschriften,
+Absätze, Listen, Codeblöcke, Tabellen, Code, Fett, Links) in Blöcke, die die App nativ zeigt; HTML
+verliert seine Klammern, ein Bild sagt seinen Alt-Text. Gemessen mit
+`scripts/readme-text-golden.mjs`: QuartzControls Komponente liefert React-Elemente, das Skript
+liest sie in eine neutrale Form zurück. Verglichen werden
+- die sechs READMEs der Plugins von gui-test,
+- 20 Ränder (Leerzeichen anderer Schriften, U+2028, CRLF, offene Kommentare und Tags, Links aller
+  Arten, die Grenze von 4000 Zeichen je Absatz),
+- 400 Zufallstexte mit festem Startwert.
+
+Alle 426 stimmen. JavaScripts `\s`, `.` und `$` stehen ausgeschrieben im Muster, denn ICU versteht
+sie anders (gemessen mit NSRegularExpression gegen Node): `\s` trifft U+0085, aber nicht U+FEFF;
+`.` trifft weder U+000B noch U+0085; `$` trifft auch vor einem letzten Zeilenende. Zwei Gegenproben schlugen an: `.` mit U+2028 bei 8 von 426, `trim` ohne U+00A0 bei 42.
+
+**Preis.** Eine README von 256 KB aus lauter offenen Links unter der Absatzgrenze braucht in Swift
+1,4 s (Debug-Bau), in Node 70 ms; ICU sucht langsamer zurück als V8. Echte READMEs sind schnell,
+alle 426 zusammen 0,11 s. Deshalb liest der Inspektor die README außerhalb des Main-Threads und
+zeigt bis dahin „Lade die Beschreibung…“. Ein einzelner Absatz von 120 KB dieser Art ist dank der
+Grenze in 9 ms Text; ohne sie 22 s (`overlongParagraphIsPlainText`).
+
+**Liste.** Die Suche und die Teilung in Plugins (Markierung `quartz-plugin`, nicht archiviert) und
+„Weitere Repositories“ stehen im Kern (`MarketplaceResult.split`), nach Sternen und sonst in der
+Reihenfolge des Katalogs. Der Satz, was die weiteren Repositories sind, steht als Zeile in der Liste,
+nicht im Abschnittskopf, der ihn auf eine Zeile kürzte.
+
+**Installieren** geht über `PluginsModel.add` (`quartz plugin add` mit Snapshot `pluginChange`) und
+wartet zuerst auf die Schreib-Schlange von Installiert: Der CLI schreibt die Config, und ein
+später gespeicherter Stand hätte den neuen Eintrag wieder entfernt.
+
+Angesehen gegen GitHub (nur lesend) an der gui-test-Kopie, Hell und Dunkel: 47 Plugins im Katalog,
+44 davon im Projekt, eine README mit Codeblöcken und Links, „Weitere Repositories“ auf- und
+zugeklappt, Katalog neu geladen. Nicht ausgelöst: Installieren und Hinzufügen, das wären npm- und
+git-Läufe ins Netz. Der UI-Test öffnet den Reiter nicht, weil er ohne Netz läuft.
+
+Geändert: Der leere Inspektor sagte „Wähle links ein Plugin“. Der Hinweis „nicht erreichbar“
+verwies auf einen GitHub-Token „in den Einstellungen“, wo QuartzHub ihn nicht hat, und hatte vier
+Sätze.
