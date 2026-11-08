@@ -7,6 +7,7 @@
 //   swift run --package-path Packages/QuartzHubCore qh-check export-window
 //   swift run --package-path Packages/QuartzHubCore qh-check export-pages <build> <chrome.json>
 //   swift run --package-path Packages/QuartzHubCore qh-check export-book <build> <ordner>
+//   swift run --package-path Packages/QuartzHubCore qh-check export-document <build> <ordner> --config <yaml>
 //
 // Exit codes: 0 all good, 1 findings, 2 wrong call, 3 could not check everything.
 import Foundation
@@ -27,10 +28,15 @@ func usage() -> Never {
     export-pages <build> <chrome.json> [--out <webkit.json>]
                                       die Seitenskripte des Exports in WebKit gegen ihre Aufnahme
                                       in Chrome (scripts/export-pages-golden.mjs), ohne Netz
-    export-book <build> <ordner> [--language <code>] [--offline] [--pdf]
+    export-book <build> <ordner> [--language <code>] [--offline]
+                [--pdf [--paper <A4|A5|Letter|…>] [--landscape]]
                                       einen Build durch den Export: Reihenfolge, Seiten, Kapitel,
                                       Formeln und Diagramme als Bilder; schreibt content.json,
                                       pictures/, book.epub und book.html, mit --pdf auch book.pdf
+    export-document <build> <ordner> --config <quartz.config.yaml> [--formats pdf,epub,html]
+                [--cancel-after <s>]
+                                      der Export wie „Jetzt veröffentlichen“: Wegwerf-Projekt,
+                                      Buch über die ganze Website, Ziel „Dokument“, Deploy.run
     inline-svg [projekt]              der SVG-Bereiniger gegen WebKit: jedes Ergebnis als HTML
                                       und, mit einem Projekt mit quartz-layout-box, durch dessen
                                       Markdown-Kette; Exit 3, wenn Lagen ausgelassen wurden
@@ -145,13 +151,23 @@ case "export-pages":
   runAndExit { await runExportPagesCheck(root: root, build: positional[0], golden: positional[1], out: option("--out")) }
 case "export-book":
   setvbuf(stdout, nil, _IOLBF, 0)
-  let positional = arguments.filter { !$0.hasPrefix("--") && $0 != option("--root") && $0 != option("--language") }
+  let positional = arguments.filter { !$0.hasPrefix("--") && $0 != option("--root") && $0 != option("--language") && $0 != option("--paper") }
   guard positional.count == 2 else { usage() }
   let root = repositoryRoot()
   let out = positional[1].hasPrefix("/") ? positional[1] : FileManager.default.currentDirectoryPath + "/" + positional[1]
   runAndExit {
-    await runExportBookCheck(root: root, build: positional[0], out: out, language: option("--language") ?? "", offline: arguments.contains("--offline"), pdf: arguments.contains("--pdf"))
+    await runExportBookCheck(root: root, build: positional[0], out: out, language: option("--language") ?? "", offline: arguments.contains("--offline"), pdf: arguments.contains("--pdf"),
+                             paper: option("--paper") ?? "A4", landscape: arguments.contains("--landscape"))
   }
+case "export-document":
+  setvbuf(stdout, nil, _IOLBF, 0)
+  let positional = arguments.filter { !$0.hasPrefix("--") && $0 != option("--config") && $0 != option("--formats") && $0 != option("--cancel-after") }
+  guard positional.count == 2, let config = option("--config") else { usage() }
+  let cwd = FileManager.default.currentDirectoryPath
+  let absolute = { (path: String) in path.hasPrefix("/") ? path : "\(cwd)/\(path)" }
+  let formats = (option("--formats") ?? "pdf,epub,html").split(separator: ",").map { String($0) }
+  runAndExit { await runExportDocumentCheck(build: absolute(positional[0]), out: absolute(positional[1]), config: absolute(config), formats: formats,
+                                                 cancelAfter: option("--cancel-after").flatMap(Double.init)) }
 case "inline-svg":
   // WebKit wants the main run loop turning (see runAndExit).
   setvbuf(stdout, nil, _IOLBF, 0)

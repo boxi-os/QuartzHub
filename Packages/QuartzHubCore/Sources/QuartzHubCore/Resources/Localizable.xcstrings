@@ -24947,13 +24947,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Ordner über „{{path}}“ fehlt ({{parent}}). Ist das Laufwerk oder die Freigabe verbunden? QuartzControl legt nur den letzten Ordner selbst an."
+            "value" : "Der Ordner über „{{path}}“ fehlt ({{parent}}). Ist das Laufwerk oder die Freigabe verbunden? QuartzHub legt nur den letzten Ordner selbst an."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The folder above “{{path}}” is missing ({{parent}}). Is the drive or share connected? QuartzControl creates only the last folder itself."
+            "value" : "The folder above “{{path}}” is missing ({{parent}}). Is the drive or share connected? QuartzHub creates only the last folder itself."
           }
         }
       }

@@ -53,6 +53,9 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   Export (Reihenfolge, Seiten, Kapitel, Formeln und Diagramme als PNG); schreibt `content.json`, `pictures/`, `book.epub`, `book.html`,
   mit `--pdf` auch `book.pdf`. Geprüft mit QuartzControls `npm run check:export -- --files <ordner> --book <id>` (Dateien als `<id>.pdf` usw.;
   epubcheck mit `--epubcheck-ssh debian-vm:/home/boxi/epubcheck/epubcheck-5.4.0/epubcheck.jar`)
+- `swift run --package-path Packages/QuartzHubCore qh-check export-document <build> <ordner> --config <quartz.config.yaml> [--formats …] [--cancel-after <s>]` —
+  der Export wie „Jetzt veröffentlichen“ (Wegwerf-Projekt, Buch über die ganze Website, Ziel „Dokument“, `Deploy.run`), ohne Netz;
+  die Dateien heißen `check-export.*` und gehen an dasselbe `check:export -- --files`
 - `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)

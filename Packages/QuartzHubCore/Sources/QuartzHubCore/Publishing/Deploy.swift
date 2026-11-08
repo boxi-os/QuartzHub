@@ -55,9 +55,9 @@ public protocol DeployAdapter: Sendable {
 public struct Deploy: Sendable {
   public let project: String
   public let connections: Connections
-  /// By destination type; "sftp" with `transfer: "rsync"` asks for "rsync". The adapters of points
-  /// 8b and 8c (sftp, ftp, rsync) and 9 (document) are not here yet, and such a target says that
-  /// there is no adapter for its type, as QuartzControl did for a type it did not know.
+  /// By destination type; "sftp" with `transfer: "rsync"` asks for "rsync". A target whose type
+  /// has none here says that there is no adapter for its type, as QuartzControl did for a type it
+  /// did not know.
   public let adapters: [String: any DeployAdapter]
   let progress: @Sendable (_ targetId: String, _ processed: Int, _ total: Int, _ currentFile: String?) -> Void
 
