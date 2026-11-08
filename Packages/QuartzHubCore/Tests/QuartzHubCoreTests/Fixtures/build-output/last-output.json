@@ -1,0 +1,473 @@
+[
+  {
+    "name": "missing",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": false,
+      "fileCount": 0,
+      "sizeBytes": 0,
+      "looksLikeBuild": false
+    }
+  },
+  {
+    "name": "a-file",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public": "not a folder"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": false,
+      "fileCount": 0,
+      "sizeBytes": 0,
+      "looksLikeBuild": false
+    }
+  },
+  {
+    "name": "empty",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public": {
+        "dir": 493
+      }
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": false,
+      "fileCount": 0,
+      "sizeBytes": 0,
+      "looksLikeBuild": false
+    }
+  },
+  {
+    "name": "only-empty-folders",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/a/b": {
+        "dir": 493
+      },
+      "proj/public/c": {
+        "dir": 493
+      }
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/a": 1600000000000.25,
+      "proj/public/a/b": 1600000000000.25,
+      "proj/public/c": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": false,
+      "fileCount": 0,
+      "sizeBytes": 0,
+      "looksLikeBuild": false
+    }
+  },
+  {
+    "name": "built",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/index.html": "<html></html>",
+      "proj/public/404.html": "nope",
+      "proj/public/static/x.css": "body{}",
+      "proj/public/Gärten-Ü/über.html": "ü"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/index.html": 1600000000000.25,
+      "proj/public/404.html": 1600000000000.25,
+      "proj/public/static": 1600000000000.25,
+      "proj/public/static/x.css": 1700000000123.456,
+      "proj/public/Gärten-Ü": 1600000000000.25,
+      "proj/public/Gärten-Ü/über.html": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": true,
+      "builtAt": "2023-11-14T22:13:20.123Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "newest-deep",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/index.html": "<html></html>",
+      "proj/public/404.html": "nope",
+      "proj/public/static/x.css": "body{}",
+      "proj/public/Gärten-Ü/über.html": "ü"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/index.html": 1600000000000.25,
+      "proj/public/404.html": 1600000000000.25,
+      "proj/public/static": 1600000000000.25,
+      "proj/public/static/x.css": 1600000000000.25,
+      "proj/public/Gärten-Ü": 1600000000000.25,
+      "proj/public/Gärten-Ü/über.html": 1750000000999.9
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": true,
+      "builtAt": "2025-06-15T15:06:40.999Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "not-a-build",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/notes.md": "mine",
+      "proj/public/b.md": "mine too"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/notes.md": 1600000000000.25,
+      "proj/public/b.md": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": true,
+      "builtAt": "2020-09-13T12:26:40.000Z",
+      "fileCount": 2,
+      "sizeBytes": 12,
+      "looksLikeBuild": false
+    }
+  },
+  {
+    "name": "empty-string-is-default",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/index.html": "<html></html>",
+      "proj/public/404.html": "nope",
+      "proj/public/static/x.css": "body{}",
+      "proj/public/Gärten-Ü/über.html": "ü"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/index.html": 1600000000000.25,
+      "proj/public/404.html": 1600000000000.25,
+      "proj/public/static": 1600000000000.25,
+      "proj/public/static/x.css": 1600000000000.25,
+      "proj/public/Gärten-Ü": 1600000000000.25,
+      "proj/public/Gärten-Ü/über.html": 1600000000000.25
+    },
+    "outputDir": "",
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": true,
+      "builtAt": "2020-09-13T12:26:40.000Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "dist",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/dist/index.html": "<html></html>",
+      "proj/dist/404.html": "nope",
+      "proj/dist/static/x.css": "body{}",
+      "proj/dist/Gärten-Ü/über.html": "ü",
+      "proj/public/index.html": "old"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/dist": 1600000000000.25,
+      "proj/dist/index.html": 1600000000000.25,
+      "proj/dist/404.html": 1600000000000.25,
+      "proj/dist/static": 1600000000000.25,
+      "proj/dist/static/x.css": 1600000000000.25,
+      "proj/dist/Gärten-Ü": 1600000000000.25,
+      "proj/dist/Gärten-Ü/über.html": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/index.html": 1600000000000.25
+    },
+    "outputDir": "dist",
+    "expected": {
+      "dir": "@W@/proj/dist",
+      "exists": true,
+      "builtAt": "2020-09-13T12:26:40.000Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "outside",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "site/index.html": "<html></html>",
+      "site/404.html": "nope",
+      "site/static/x.css": "body{}",
+      "site/Gärten-Ü/über.html": "ü"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "site": 1600000000000.25,
+      "site/index.html": 1600000000000.25,
+      "site/404.html": 1600000000000.25,
+      "site/static": 1600000000000.25,
+      "site/static/x.css": 1600000000000.25,
+      "site/Gärten-Ü": 1600000000000.25,
+      "site/Gärten-Ü/über.html": 1600000000000.25
+    },
+    "outputDir": "../site",
+    "expected": {
+      "dir": "@W@/site",
+      "exists": true,
+      "builtAt": "2020-09-13T12:26:40.000Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "absolute",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "elsewhere/out/index.html": "<html></html>",
+      "elsewhere/out/404.html": "nope",
+      "elsewhere/out/static/x.css": "body{}",
+      "elsewhere/out/Gärten-Ü/über.html": "ü"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "elsewhere": 1600000000000.25,
+      "elsewhere/out": 1600000000000.25,
+      "elsewhere/out/index.html": 1600000000000.25,
+      "elsewhere/out/404.html": 1600000000000.25,
+      "elsewhere/out/static": 1600000000000.25,
+      "elsewhere/out/static/x.css": 1600000000000.25,
+      "elsewhere/out/Gärten-Ü": 1600000000000.25,
+      "elsewhere/out/Gärten-Ü/über.html": 1600000000000.25
+    },
+    "outputDir": "@W@/elsewhere/out",
+    "expected": {
+      "dir": "@W@/elsewhere/out",
+      "exists": true,
+      "builtAt": "2020-09-13T12:26:40.000Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "link-to-file",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/index.html": "<html></html>",
+      "proj/public/404.html": "nope",
+      "proj/public/static/x.css": "body{}",
+      "proj/public/Gärten-Ü/über.html": "ü",
+      "proj/public/linked.txt": {
+        "link": "@W@/target.txt"
+      },
+      "target.txt": "12345"
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/index.html": 1600000000000.25,
+      "proj/public/404.html": 1600000000000.25,
+      "proj/public/static": 1600000000000.25,
+      "proj/public/static/x.css": 1600000000000.25,
+      "proj/public/Gärten-Ü": 1600000000000.25,
+      "proj/public/Gärten-Ü/über.html": 1600000000000.25,
+      "target.txt": 1800000000000
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": true,
+      "builtAt": "2027-01-15T08:00:00.000Z",
+      "fileCount": 5,
+      "sizeBytes": 30,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "dangling-link",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/index.html": "<html></html>",
+      "proj/public/404.html": "nope",
+      "proj/public/static/x.css": "body{}",
+      "proj/public/Gärten-Ü/über.html": "ü",
+      "proj/public/gone": {
+        "link": "@W@/nowhere"
+      }
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/index.html": 1600000000000.25,
+      "proj/public/404.html": 1600000000000.25,
+      "proj/public/static": 1600000000000.25,
+      "proj/public/static/x.css": 1600000000000.25,
+      "proj/public/Gärten-Ü": 1600000000000.25,
+      "proj/public/Gärten-Ü/über.html": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": true,
+      "builtAt": "2020-09-13T12:26:40.000Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "public-is-a-link",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "real/index.html": "<html></html>",
+      "real/404.html": "nope",
+      "real/static/x.css": "body{}",
+      "real/Gärten-Ü/über.html": "ü",
+      "proj/public": {
+        "link": "@W@/real"
+      }
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "real": 1600000000000.25,
+      "real/index.html": 1600000000000.25,
+      "real/404.html": 1600000000000.25,
+      "real/static": 1600000000000.25,
+      "real/static/x.css": 1600000000000.25,
+      "real/Gärten-Ü": 1600000000000.25,
+      "real/Gärten-Ü/über.html": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "dir": "@W@/proj/public",
+      "exists": true,
+      "builtAt": "2020-09-13T12:26:40.000Z",
+      "fileCount": 4,
+      "sizeBytes": 25,
+      "looksLikeBuild": true
+    }
+  },
+  {
+    "name": "unreadable-folder",
+    "tree": {
+      "proj/quartz.config.yaml": "plugins: []\n",
+      "proj/content/index.md": "# Start\n",
+      "proj/public/index.html": "<html></html>",
+      "proj/public/404.html": "nope",
+      "proj/public/static/x.css": "body{}",
+      "proj/public/Gärten-Ü/über.html": "ü",
+      "proj/public/locked": {
+        "dir": 0
+      }
+    },
+    "times": {
+      "proj": 1600000000000.25,
+      "proj/quartz.config.yaml": 1600000000000.25,
+      "proj/content": 1600000000000.25,
+      "proj/content/index.md": 1600000000000.25,
+      "proj/public": 1600000000000.25,
+      "proj/public/index.html": 1600000000000.25,
+      "proj/public/404.html": 1600000000000.25,
+      "proj/public/static": 1600000000000.25,
+      "proj/public/static/x.css": 1600000000000.25,
+      "proj/public/Gärten-Ü": 1600000000000.25,
+      "proj/public/Gärten-Ü/über.html": 1600000000000.25,
+      "proj/public/locked": 1600000000000.25
+    },
+    "outputDir": null,
+    "expected": {
+      "rejected": true
+    }
+  }
+]
