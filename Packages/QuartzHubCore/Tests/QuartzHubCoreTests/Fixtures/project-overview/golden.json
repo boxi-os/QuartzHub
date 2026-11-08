@@ -1,0 +1,202 @@
+{
+  "rows": [
+    {
+      "id": "1",
+      "name": "Zettel",
+      "path": "/Users/x/Zettel",
+      "lastOpenedAt": "2026-11-01T10:00:00.000Z",
+      "siteTitle": "Mein Zettelkasten"
+    },
+    {
+      "id": "2",
+      "name": "äpfel",
+      "path": "/Users/x/äpfel",
+      "lastOpenedAt": "2026-11-01T10:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Apfel",
+      "path": "/Users/x/Apfel",
+      "lastOpenedAt": "2026-11-01T10:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "apfel",
+      "path": "/Users/x/apfel2"
+    },
+    {
+      "id": "5",
+      "name": "Beta",
+      "path": "/Users/x/Beta"
+    },
+    {
+      "id": "6",
+      "name": "Alpha",
+      "path": "/Users/x/Alpha"
+    },
+    {
+      "id": "7",
+      "name": "Neu",
+      "path": "/Users/x/Neu",
+      "lastOpenedAt": "2026-11-08T09:00:00Z"
+    },
+    {
+      "id": "8",
+      "name": "Kaputt",
+      "path": "/Users/x/Kaputt",
+      "lastOpenedAt": "gestern"
+    },
+    {
+      "id": "9",
+      "name": "Gärten-Ü",
+      "path": "/Volumes/Gärten-Ü/site",
+      "lastOpenedAt": "2026-11-08T09:00:00.001Z",
+      "siteTitle": "Über Gärten"
+    },
+    {
+      "id": "10",
+      "name": "Projekt 10",
+      "path": "/Users/x/p10",
+      "lastOpenedAt": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "11",
+      "name": "Projekt 9",
+      "path": "/Users/x/p9",
+      "lastOpenedAt": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "12",
+      "name": "Handbuch",
+      "path": "/Users/x/Handbuch",
+      "lastOpenedAt": "",
+      "siteTitle": "QuartzHub Handbuch"
+    },
+    {
+      "id": "13",
+      "name": "Älter",
+      "path": "/Users/x/Aelter",
+      "lastOpenedAt": "1999-12-31T23:59:59.999Z"
+    }
+  ],
+  "order": [
+    "9",
+    "7",
+    "3",
+    "2",
+    "8",
+    "1",
+    "10",
+    "11",
+    "13",
+    "6",
+    "4",
+    "5",
+    "12"
+  ],
+  "search": [
+    {
+      "query": "",
+      "ids": [
+        "9",
+        "7",
+        "3",
+        "2",
+        "8",
+        "1",
+        "10",
+        "11",
+        "13",
+        "6",
+        "4",
+        "5",
+        "12"
+      ]
+    },
+    {
+      "query": "   ",
+      "ids": [
+        "9",
+        "7",
+        "3",
+        "2",
+        "8",
+        "1",
+        "10",
+        "11",
+        "13",
+        "6",
+        "4",
+        "5",
+        "12"
+      ]
+    },
+    {
+      "query": "apfel",
+      "ids": [
+        "3",
+        "4"
+      ]
+    },
+    {
+      "query": "APFEL",
+      "ids": [
+        "3",
+        "4"
+      ]
+    },
+    {
+      "query": " zettel ",
+      "ids": [
+        "1"
+      ]
+    },
+    {
+      "query": "gärten",
+      "ids": [
+        "9"
+      ]
+    },
+    {
+      "query": "ÜBER",
+      "ids": [
+        "9"
+      ]
+    },
+    {
+      "query": "handbuch",
+      "ids": [
+        "12"
+      ]
+    },
+    {
+      "query": "/users/x/p",
+      "ids": [
+        "10",
+        "11"
+      ]
+    },
+    {
+      "query": "x/p1",
+      "ids": [
+        "10"
+      ]
+    },
+    {
+      "query": "nichts",
+      "ids": []
+    },
+    {
+      "query": "ä",
+      "ids": [
+        "9",
+        "2",
+        "13"
+      ]
+    },
+    {
+      "query": "ß",
+      "ids": []
+    }
+  ]
+}
