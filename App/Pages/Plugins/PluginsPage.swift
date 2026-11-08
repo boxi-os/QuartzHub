@@ -42,6 +42,9 @@ struct PluginsPage: View {
   @SceneStorage("plugins.tab") private var tabID = Tab.installed.rawValue
   @SceneStorage("plugins.selected") private var selected: String?
   @SceneStorage("marketplace.selected") private var marketplaceSelected: String?
+  /// The navigation by its #n among the navigations: instances have no name of their own.
+  @SceneStorage("navigations.selected") private var navigationSelected: Int?
+  @State private var styled: Set<String> = []
 
   init(project: ProjectContext) {
     self.project = project
@@ -76,6 +79,10 @@ struct PluginsPage: View {
           InstalledTab(model: model, selection: $selected)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins")
+        case .navigations:
+          NavigationsTab(model: model, selection: $navigationSelected, styled: $styled)
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("page.plugins.navigations")
         case .marketplace:
           MarketplaceTab(model: marketplace, selection: $marketplaceSelected)
             .accessibilityElement(children: .contain)
@@ -92,12 +99,24 @@ struct PluginsPage: View {
       }
       .task {
         await model.load()
+        let path = project.path
+        styled = Set((try? await Task.detached { try SiteFonts.takenClasses(project: path, prefixes: InstanceClass.prefixes) }.value) ?? [])
         await model.checkOutdated()
       }
     } inspector: {
       if tab == .installed, let selected, let item = model.items.first(where: { $0.id == selected }) {
         PluginInspector(item: item, model: model)
           .id(item.id)
+      } else if tab == .navigations, let navigationSelected,
+                let item = NavigationInstance.all(model.config?.plugins ?? []).first(where: { $0.occurrence == navigationSelected }) {
+        let count = NavigationInstance.all(model.config?.plugins ?? []).count
+        NavigationInspector(item: item, label: item.label(among: count), model: model) {
+          // The plugin list knows the entry by its name and its number among the same-named.
+          let same = (model.config?.plugins ?? []).prefix(item.index + 1).filter { $0.name == item.entry.name }.count
+          selected = same == 1 ? item.entry.name : "\(item.entry.name)#\(same)"
+          tabID = Tab.installed.rawValue
+        }
+        .id(item.occurrence)
       } else if tab == .marketplace, let marketplaceSelected,
                 let plugin = marketplace.result?.plugins.first(where: { $0.fullName == marketplaceSelected }) {
         MarketplaceInspector(plugin: plugin, model: marketplace)
@@ -109,6 +128,9 @@ struct PluginsPage: View {
           }
           if tab == .installed, model.config != nil { summary }
           if tab == .marketplace { marketplaceSummary }
+          if tab == .navigations {
+            Section(L10n.t("navigationsEditor.panelEmptyTitle")) { Note(L10n.t("navigationsEditor.panelEmptyText")) }
+          }
         }
       }
     }

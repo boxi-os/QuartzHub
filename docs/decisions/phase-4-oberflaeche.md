@@ -578,3 +578,67 @@ git-Läufe ins Netz. Der UI-Test öffnet den Reiter nicht, weil er ohne Netz lä
 Geändert: Der leere Inspektor sagte „Wähle links ein Plugin“. Der Hinweis „nicht erreichbar“
 verwies auf einen GitHub-Token „in den Einstellungen“, wo QuartzHub ihn nicht hat, und hatte vier
 Sätze.
+
+### Die Vorschau neben den Plugin-Editoren
+
+Vorbild `components/SitePreview.tsx`, `utils/sitePreview.ts`, `data/componentSelectors.ts` und
+`electron/main/services/previewHighlight.ts`. Navigationen, Zusätzliche Inhalte, Mehrsprachigkeit
+und Formulare zeigen sie unter ihrer Liste (`EditorPreview`).
+
+**Kern.** Gemessen mit `scripts/site-preview-golden.mjs` gegen QuartzControls Code:
+- welcher Selektor einen Eintrag findet (`ComponentSelectors`), 14 Einträge mit Kopien und Klassen;
+- ob ein Bericht des Markierungsskripts gilt, 21 Fälle;
+- der Zoom-Ausschnitt, 40 Fälle;
+- die nächste Seite mit dem Eintrag und welcher Satz unter der Vorschau steht.
+
+Seitenpfade werden nach Bytes verglichen, nicht mit `==` („Über“ in NFC und NFD sind zwei Seiten,
+wie in Node). Das Markierungsskript selbst ist QuartzControls `previewScript`, wie dessen Bundle es
+übersetzt. Das Golden-Skript schreibt es als `PreviewScript.swift`, und ein zweiter Lauf lässt die
+Datei byte-gleich. Drei Gegenproben schlugen an: Vergleich mit `==`, Zoom-Grenze 2,0, Kopien nicht
+ausgenommen.
+
+**Skalieren.** Die Website wird in echter Gerätebreite gerendert (Desktop mindestens 1280 px) und
+auf die Spalte verkleinert, wie QuartzControls iframe mit CSS-Transform. Nativ hängt die WKWebView
+in einer Ansicht, deren `bounds` der Ausschnitt der Website sind. AppKit zeichnet sie dann skaliert
+und rechnet Klicks zurück, und die Web-Ansicht behält ihre Größe, also bleibt auch der Viewport der
+Website gleich. In der laufenden App: 1280 px gezeigt mit 73 %, scharf; der Zoom auf eine
+Navigation zeigt sie mit 100 %.
+
+Das Skript meldet sich mit `parent.postMessage`. In der Web-Ansicht ist die Website das oberste
+Fenster, `parent` ist also die Seite selbst; ein Nutzerskript reicht die Meldung als Text an
+QuartzHub weiter, und `PreviewMarks.report` prüft jedes Feld. Gesehen: Markierung und Abdunkeln,
+„Markiert: „Akkordeon #1““. Nach einer gespeicherten Änderung lädt Quartz' eigener Live-Reload die
+Seite neu, und die Markierung steht wieder.
+
+### Plugins: Navigationen
+
+Vorbild `routes/Plugins/Navigations.tsx`, `navigationVariants.ts`, `instanceClass.ts`,
+`navigationRoot` in `optionFormExtras.ts` und der Teil von `LayoutEditor/utils.ts`, den die Editoren
+mit der Bühne teilen (`LayoutEntries`). Gemessen mit `scripts/navigations-golden.mjs`, mit dem
+Schema von quartz-navigations aus gui-test:
+- 3290 Gründe „wirkt nicht“ (zehn Varianten, sieben Werte für `mobile`, alle Optionen);
+- 52 Form-Einstellungen mit Leitabschnitt, Sätzen und dem, was nur gesetzt erscheint;
+- 22 Namen als Klasse, 12 Einträge und 11 Duplikate mit Neunummerierung.
+
+Drei Gegenproben schlugen an (Slug ohne NFKD, `columns` mit Wirkung, Kopie behält `id`).
+
+**Abweichung.** Ein Eintrag an einer Position, die die Bühne nicht kennt, ließ QuartzControls
+`duplicateAfter` werfen; `LayoutEntries` antwortet `nil`. QuartzControls `getLayout` zählt auch eine
+Liste als Layout-Block (`typeof` sagt `object`); das ist übernommen.
+
+**Oberfläche.** Liste und Vorschau stehen untereinander in einem `VSplitView`, die gewählte
+Navigation im Inspektor: an/aus, die Variante als Kacheln, dann die Optionen dieser Variante. Was
+bei ihr nicht wirkt, steht ausgegraut mit den Varianten, bei denen es wirkt. „Neue Navigation“
+öffnet dieselben Kacheln in einem Popover. Alles schreibt über die Schlange von Installiert.
+
+Gemessen an der gui-test-Kopie, Hell und Dunkel:
+- Variante Baum und zurück zu Akkordeon: eine Zeile, danach byte-gleich;
+- Duplizieren nummeriert die linke Seitenleiste neu (vier Prioritäten) und hängt die Kopie mit
+  `className: nav-menue nav-menue-2` an;
+- Entfernen über den Dialog nimmt nur die Kopie, die Neunummerierung bleibt (wie in QuartzControl);
+- eine neue Leiste steht im Kopfbereich mit Priorität 80 und `nav-bar`, und nach dem Neubau
+  markiert die Vorschau sie;
+- „Alle Optionen in der Plugin-Liste“ öffnet Installiert mit der Navigation im Inspektor.
+
+Gefunden in der laufenden App: „Auf der Bühne zeigen“ und „Alle Optionen …“ standen nebeneinander
+und wurden im Inspektor abgeschnitten; jetzt stehen sie untereinander.

@@ -31811,13 +31811,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links eine Navigation, um ihre Variante und Optionen einzustellen."
+            "value" : "Wähle in der Liste eine Navigation, um ihre Variante und Optionen einzustellen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pick a navigation on the left to set its variant and options."
+            "value" : "Select a navigation in the list to set its variant and options."
           }
         }
       }
