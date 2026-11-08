@@ -130,6 +130,11 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   `GitAuth`, `GitHubRemote`, `Sync`; 7c `PackageJsonDeps`, `CoreUpdate` (Stash-Name und
   Merge-Betreff sind QuartzControls Wortlaut, ein Format beider Apps), `PluginUpdates`. Danach der
   NFD-Durchgang. Punkt 8 (Veröffentlichen) läuft: 8a fertig (`Connections` mit dem Schlüsselbund, `PublishTargets`, `DeployManifests`, `Deploy` mit Ordner, Git-Branch und Webhook, `GitHubAPI`); 8b fertig (SSH über das System-OpenSSH: `SSHLogin`, `HostKeyCheck`, `SFTPChannel`, `SFTPAdapter`, `RsyncAdapter`; lokal gegen ein vom Test gestartetes sshd, dazu debian-vm); 8c fertig (FTP/FTPS über basic-ftp im Helfer `ftp-session`, `FTPAdapter`; `RelayProbe` über URLSession, `FormsCLI`, `FormsRelay`; das Relay über FTPS ist nicht auf der VM gemessen). Punkt 9 (Export) fertig am 2026-11-08: 9a (`Books`, `ExportModel` mit `ICUCollation`, `SiteFacts`, `DocumentHTML`, `BookPack`, `SiteCopy`); 9b fertig (`SiteServer`, `ExportWindow` mit `WKContentRuleList` und Zählen, Seitenskripte in WebKit gegen Chrome mit Mermaid und KaTeX über `cdn-build.mjs`, `ExportCollect`, `BookContentPrep` mit `takeSnapshot`); 9c fertig (`PDFWrite` mit Fußzeile, Lesezeichen und `/Lang` über PDFKit, `ExportBook`, `DocumentAdapter`, `qh-check export-document`); Bilder gegen einen frischen QuartzControl-Export verglichen. Punkt 9 ist fertig.
+- **Phase 4 (Oberfläche) läuft.** Entscheidungen des Nutzers vom 2026-11-08 im Plan (natives
+  Aussehen, Einstellungsfenster, ein Fenster „Projekte“ und eines je Projekt). 4a fertig: Fenster
+  „Projekte“ mit Anlegen und Duplizieren, Projektfenster, Einstellungen, Band neben QuartzControl.
+  Der Rauchtest läuft auf einem Wegwerf-Profil mit `-QHOpenProject`. Als Nächstes 4b (Code-Editor,
+  Umsortieren mit der Tastatur), dann die Seiten.
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
   nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über

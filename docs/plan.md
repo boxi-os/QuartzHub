@@ -271,6 +271,15 @@ nach Abhängigkeit:
   Einstellungen, Speichern und Schutz, Bausteine, Warnung bei laufendem QuartzControl), 4b die zwei
   Entscheidungen mit Messung, 4c die Seiten in der Reihenfolge unten. Was im Kern noch fehlt
   (Übersicht, Startseite anlegen, Formular-Verwendungen), kommt mit der Seite, die es braucht.
+  Dazu (Nutzer, 2026-11-08): ein Fenster „Projekte“ und ein Fenster je Projekt.
+- **Stand 2026-11-08: 4a fertig.** Fenster „Projekte“ (Liste, Inspektor, Öffnen, Hinzufügen ⌘O,
+  Ordner suchen, Entfernen, Neues Projekt ⌘N, Duplizieren, Werkzeug-Band), ein Fenster je Projekt,
+  Einstellungsfenster (Allgemein, Laufzeit, Daten & Wartung), Band bei laufendem QuartzControl. Im
+  Kern dazu `ProjectOverviews`, `ProjectList`, `ProjectCreation`, `ImportWarnings`, `SettingsStore`.
+  Verschoben, weil sie ihre erste Seite brauchen: Speichern (⌘S) und der Schutz vor ungespeicherten
+  Änderungen (mit Konfiguration), LogConsole (mit Vorschau & Build), GitHub-Token und Verbindungen
+  (mit Veröffentlichen), HandbookLink und der Hinweis auf eine neuere Fassung (Phase 5, Handbuch und
+  Releases). Messungen in `decisions/phase-4-oberflaeche.md`.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl
