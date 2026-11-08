@@ -13,12 +13,29 @@ struct ProjectWindow: View {
   @Environment(\.openWindow) private var openWindow
   /// "Where was I" per window, by stable identifier (docs/conventions.md, Sticky-State).
   @SceneStorage("page") private var pageID = ProjectPage.overview.rawValue
+  /// Edits on the page that are not saved: switching pages, a link and closing ask first.
+  @State private var unsaved = UnsavedGuard()
 
-  private var selection: Binding<ProjectPage?> {
-    Binding(
-      get: { ProjectPage(rawValue: pageID) ?? .overview },
-      set: { pageID = ($0 ?? .overview).rawValue }
-    )
+  /// The sidebar's highlight, its own state: a page change the leave question cancels has to
+  /// move it back, and a binding onto `pageID` left the list on the row clicked (measured).
+  @State private var highlighted: ProjectPage?
+
+  private var current: ProjectPage { ProjectPage(rawValue: pageID) ?? .overview }
+
+  /// Every way to another page goes through here, so an edited page asks before it is left.
+  private func go(to page: ProjectPage) {
+    guard page.rawValue != pageID else { return }
+    guard unsaved.dirty else {
+      pageID = page.rawValue
+      return
+    }
+    Task {
+      if await unsaved.confirmLeave() {
+        pageID = page.rawValue
+      } else {
+        highlighted = current
+      }
+    }
   }
 
   var body: some View {
@@ -44,7 +61,7 @@ struct ProjectWindow: View {
 
   private func pages(_ row: ProjectOverview) -> some View {
     NavigationSplitView {
-      List(selection: selection) {
+      List(selection: $highlighted) {
         ForEach(ProjectPage.Group.allCases, id: \.self) { group in
           if let title = group.title {
             Section(title) { rows(group) }
@@ -57,19 +74,26 @@ struct ProjectWindow: View {
       .accessibilityLabel(L10n.t("projectLayout.navLabel"))
       .accessibilityIdentifier("sidebar")
     } detail: {
-      page(selection.wrappedValue ?? .overview, ProjectContext(id: row.id, name: row.name, path: row.path))
+      page(current, ProjectContext(id: row.id, name: row.name, path: row.path))
         .id(pageID)
         .safeAreaInset(edge: .top, spacing: 0) { CoexistenceBand(projectPath: row.path) }
     }
     .navigationTitle(row.name)
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
-    .environment(\.openPage, OpenPageAction { pageID = $0.rawValue })
+    .environment(\.openPage, OpenPageAction { go(to: $0) })
+    .environment(\.unsavedGuard, unsaved)
+    .onChange(of: highlighted) { _, page in
+      if let page { go(to: page) }
+    }
+    .onChange(of: pageID, initial: true) { highlighted = current }
+    .background(UnsavedWindowHook(unsaved: unsaved))
   }
 
   /// The ported pages; the others are placeholders until Phase 4 reaches them.
   @ViewBuilder private func page(_ page: ProjectPage, _ project: ProjectContext) -> some View {
     switch page {
     case .overview: OverviewPage(project: project)
+    case .config: ConfigPage(project: project)
     case .server: BuildServerPage(project: project)
     default: PendingPage(page: page)
     }

@@ -103,7 +103,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     if quitAsking { return .terminateCancel }
     quitAsking = true
     Task {
-      let quit = await settleRunningServers()
+      // Unsaved edits first: "Abbrechen" there keeps everything as it is, servers included.
+      let quit = await UnsavedGuard.confirmAll() ? await settleRunningServers() : false
       quitAsking = false
       quitDecided = quit
       sender.reply(toApplicationShouldTerminate: quit)
