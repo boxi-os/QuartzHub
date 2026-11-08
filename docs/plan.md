@@ -263,6 +263,14 @@ nach Abhängigkeit:
 
 ## Phase 4 – Oberfläche in SwiftUI (`QuartzHub`)
 
+- **Entscheidungen des Nutzers (2026-11-08):** QuartzControl gibt Funktion, Texte und Ränder vor,
+  das Aussehen ist natives macOS (`Form` grouped, Listen, Inspektor statt Karten). Die
+  Einstellungen sind ein eigenes Fenster (⌘,), keine Seite. Für den Code-Editor darf ein Fremdpaket
+  über SwiftPM rein (STTextView), wenn die Lizenz zu GPL-3.0 passt. Gearbeitet wird wie in Phase 3
+  in einem Zug mit Bericht nach jedem Teil. Reihenfolge: 4a Grundgerüst (Startseite,
+  Einstellungen, Speichern und Schutz, Bausteine, Warnung bei laufendem QuartzControl), 4b die zwei
+  Entscheidungen mit Messung, 4c die Seiten in der Reihenfolge unten. Was im Kern noch fehlt
+  (Übersicht, Startseite anlegen, Formular-Verwendungen), kommt mit der Seite, die es braucht.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl
