@@ -48,7 +48,7 @@ export async function loadQuartzControl(control, entry, stubs = commonStubs, { e
                 if (!text.includes(from)) throw new Error(`${entry}: "${from}" not found`)
                 text = text.split(from).join(to)
               }
-              return { contents: expose.length ? `${text}\nexport { ${expose.join(', ')} }\n` : text, loader: 'ts' }
+              return { contents: expose.length ? `${text}\nexport { ${expose.join(', ')} }\n` : text, loader: target.endsWith('.tsx') ? 'tsx' : 'ts' }
             })
           }
         }

@@ -1,0 +1,2801 @@
+{
+  "fields": [
+    {
+      "id": "texts",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "sort": {
+            "type": "string",
+            "enum": [
+              "alpha",
+              "date",
+              "none"
+            ],
+            "default": "alpha",
+            "title": "Sort",
+            "description": "How folders are sorted",
+            "x-quartz-l10n": {
+              "de": {
+                "title": "Sortierung",
+                "description": "Wie Ordner sortiert werden",
+                "group": "Ordnung",
+                "enum": {
+                  "alpha": "Alphabetisch",
+                  "date": "Datum"
+                }
+              }
+            }
+          },
+          "order": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "frontmatter",
+                "git",
+                "filesystem"
+              ]
+            },
+            "default": [
+              "frontmatter",
+              "git"
+            ],
+            "x-quartz-group": "Ordering",
+            "x-quartz-l10n": {
+              "de": {
+                "group": "Ordnung"
+              },
+              "en": {
+                "group": "Ordering"
+              }
+            }
+          },
+          "newest": {
+            "type": "boolean",
+            "default": true,
+            "title": "Newest first",
+            "x-quartz-when": {
+              "sort": "date"
+            },
+            "x-quartz-group": "Ordering"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "x-quartz-when": {
+              "sort": [
+                "alpha",
+                "date"
+              ],
+              "newest": false
+            }
+          },
+          "folded": {
+            "type": "boolean",
+            "x-quartz-when": {
+              "collapsible": true
+            }
+          },
+          "open": {
+            "type": "boolean",
+            "x-quartz-when": {
+              "collapsible": false,
+              "deep.mode": [
+                "a",
+                2,
+                true
+              ]
+            }
+          },
+          "collapsible": {
+            "type": "boolean",
+            "title": "Collapsible",
+            "x-quartz-l10n": {
+              "de": {
+                "title": "Einklappbar"
+              }
+            }
+          },
+          "deep": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "a",
+                  "b",
+                  2,
+                  true
+                ],
+                "x-quartz-l10n": {
+                  "de": {
+                    "enum": {
+                      "2": "Zwei",
+                      "a": "Erstens",
+                      "true": "Ja"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "size": {
+            "type": "number",
+            "x-quartz-when": {
+              "level": 3
+            },
+            "x-quartz-advanced": true
+          },
+          "level": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "title": "Level",
+            "x-quartz-l10n": {
+              "de": {
+                "enum": {
+                  "3": "Drei"
+                }
+              }
+            }
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "both",
+                  "none"
+                ]
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "x-quartz-l10n": {
+              "de": {
+                "enum": {
+                  "both": "Beide",
+                  "true": "An"
+                }
+              }
+            }
+          },
+          "shape": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "byLang": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "title": "Label"
+                }
+              }
+            },
+            "x-quartz-keys": "languages",
+            "x-quartz-group": "Sprachen"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "tag name with Umlaut ÄÖÜ"
+                }
+              }
+            }
+          },
+          "anything": {
+            "not": {
+              "type": "string"
+            }
+          },
+          "nothing": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "free": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "fields": [
+        {
+          "path": [
+            "sort"
+          ],
+          "text": {
+            "de": {
+              "title": "Sortierung",
+              "description": "Wie Ordner sortiert werden",
+              "group": "Ordnung"
+            },
+            "en": {
+              "title": "Sort",
+              "description": "How folders are sorted"
+            }
+          },
+          "enumLabels": {
+            "de": [
+              "Alphabetisch",
+              "Datum",
+              "none"
+            ],
+            "en": [
+              "alpha",
+              "date",
+              "none"
+            ]
+          },
+          "empty": "alpha",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "self",
+              "en": "self"
+            },
+            "ordnung": {
+              "de": "self",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "order"
+          ],
+          "text": {
+            "de": {
+              "group": "Ordnung"
+            },
+            "en": {
+              "group": "Ordering"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": [],
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "self",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "self"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "newest"
+          ],
+          "text": {
+            "de": {
+              "title": "Newest first",
+              "group": "Ordering"
+            },
+            "en": {
+              "title": "Newest first",
+              "group": "Ordering"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": false,
+          "condition": {
+            "de": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Sortierung\\\",\\\"values\\\":\\\"Datum\\\"}}\"}}",
+            "en": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Sort\\\",\\\"values\\\":\\\"date\\\"}}\"}}",
+            "prefixed": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Sortierung\\\",\\\"values\\\":\\\"Datum\\\"}}\"}}"
+          },
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "self",
+              "en": "self"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "limit"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": 0,
+          "condition": {
+            "de": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Sortierung\\\",\\\"values\\\":\\\"Alphabetisch{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}Datum\\\"}}{\\\"key\\\":\\\"pluginOptions.conditionAnd\\\"}{\\\"key\\\":\\\"pluginOptions.conditionOff\\\",\\\"args\\\":{\\\"name\\\":\\\"Newest first\\\"}}\"}}",
+            "en": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Sort\\\",\\\"values\\\":\\\"alpha{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}date\\\"}}{\\\"key\\\":\\\"pluginOptions.conditionAnd\\\"}{\\\"key\\\":\\\"pluginOptions.conditionOff\\\",\\\"args\\\":{\\\"name\\\":\\\"Newest first\\\"}}\"}}",
+            "prefixed": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Sortierung\\\",\\\"values\\\":\\\"Alphabetisch{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}Datum\\\"}}{\\\"key\\\":\\\"pluginOptions.conditionAnd\\\"}{\\\"key\\\":\\\"pluginOptions.conditionOff\\\",\\\"args\\\":{\\\"name\\\":\\\"Newest first\\\"}}\"}}"
+          },
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "folded"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": false,
+          "condition": {
+            "de": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionOn\\\",\\\"args\\\":{\\\"name\\\":\\\"Einklappbar\\\"}}\"}}",
+            "en": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionOn\\\",\\\"args\\\":{\\\"name\\\":\\\"Collapsible\\\"}}\"}}",
+            "prefixed": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionOn\\\",\\\"args\\\":{\\\"name\\\":\\\"Einklappbar\\\"}}\"}}"
+          },
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "open"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": false,
+          "condition": {
+            "de": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionOff\\\",\\\"args\\\":{\\\"name\\\":\\\"Einklappbar\\\"}}{\\\"key\\\":\\\"pluginOptions.conditionAnd\\\"}{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"deep.mode\\\",\\\"values\\\":\\\"a{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}2{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}true\\\"}}\"}}",
+            "en": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionOff\\\",\\\"args\\\":{\\\"name\\\":\\\"Collapsible\\\"}}{\\\"key\\\":\\\"pluginOptions.conditionAnd\\\"}{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"deep.mode\\\",\\\"values\\\":\\\"a{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}2{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}true\\\"}}\"}}",
+            "prefixed": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionOff\\\",\\\"args\\\":{\\\"name\\\":\\\"Einklappbar\\\"}}{\\\"key\\\":\\\"pluginOptions.conditionAnd\\\"}{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"switcher.deep.mode\\\",\\\"values\\\":\\\"a{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}2{\\\\\\\"key\\\\\\\":\\\\\\\"pluginOptions.conditionOr\\\\\\\"}true\\\"}}\"}}"
+          },
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "collapsible"
+          ],
+          "text": {
+            "de": {
+              "title": "Einklappbar"
+            },
+            "en": {
+              "title": "Collapsible"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": false,
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "self",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "deep"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": {},
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "deep",
+            "mode"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [
+              "Erstens",
+              "b",
+              "Zwei",
+              "Ja"
+            ],
+            "en": [
+              "a",
+              "b",
+              "2",
+              "true"
+            ]
+          },
+          "empty": "a",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "size"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": 0,
+          "condition": {
+            "de": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Level\\\",\\\"values\\\":\\\"Drei\\\"}}\"}}",
+            "en": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Level\\\",\\\"values\\\":\\\"3\\\"}}\"}}",
+            "prefixed": "{\"key\":\"pluginOptions.onlyWhen\",\"args\":{\"conditions\":\"{\\\"key\\\":\\\"pluginOptions.conditionPart\\\",\\\"args\\\":{\\\"name\\\":\\\"Level\\\",\\\"values\\\":\\\"Drei\\\"}}\"}}"
+          },
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "level"
+          ],
+          "text": {
+            "de": {
+              "title": "Level"
+            },
+            "en": {
+              "title": "Level"
+            }
+          },
+          "enumLabels": {
+            "de": [
+              "1",
+              "2",
+              "Drei"
+            ],
+            "en": [
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "empty": 1,
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "mode"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [
+              "Beide",
+              "none",
+              "An",
+              "false"
+            ],
+            "en": [
+              "both",
+              "none",
+              "true",
+              "false"
+            ]
+          },
+          "empty": "both",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "shape"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": {},
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "child",
+              "en": "child"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "shape",
+            "x"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "self",
+              "en": "self"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "byLang"
+          ],
+          "text": {
+            "de": {
+              "group": "Sprachen"
+            },
+            "en": {
+              "group": "Sprachen"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": {},
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "child",
+              "en": "child"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "byLang",
+            "label"
+          ],
+          "text": {
+            "de": {
+              "title": "Label"
+            },
+            "en": {
+              "title": "Label"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "self",
+              "en": "self"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "tags"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": [],
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "child",
+              "en": "child"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "child",
+              "en": "child"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "child",
+              "en": "child"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "tags",
+            "name"
+          ],
+          "text": {
+            "de": {
+              "description": "tag name with Umlaut ÄÖÜ"
+            },
+            "en": {
+              "description": "tag name with Umlaut ÄÖÜ"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "self",
+              "en": "self"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "self",
+              "en": "self"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "self",
+              "en": "self"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "anything"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "nothing"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": [],
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "free"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": {},
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        }
+      ],
+      "groups": {
+        "de": [
+          [
+            null,
+            [
+              "limit",
+              "folded",
+              "open",
+              "collapsible",
+              "deep",
+              "size",
+              "level",
+              "mode",
+              "shape",
+              "tags",
+              "anything",
+              "nothing",
+              "free"
+            ]
+          ],
+          [
+            "Ordnung",
+            [
+              "sort",
+              "order"
+            ]
+          ],
+          [
+            "Ordering",
+            [
+              "newest"
+            ]
+          ],
+          [
+            "Sprachen",
+            [
+              "byLang"
+            ]
+          ]
+        ],
+        "en": [
+          [
+            null,
+            [
+              "sort",
+              "limit",
+              "folded",
+              "open",
+              "collapsible",
+              "deep",
+              "size",
+              "level",
+              "mode",
+              "shape",
+              "tags",
+              "anything",
+              "nothing",
+              "free"
+            ]
+          ],
+          [
+            "Ordering",
+            [
+              "order",
+              "newest"
+            ]
+          ],
+          [
+            "Sprachen",
+            [
+              "byLang"
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ordered",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "z": {
+            "type": "string",
+            "x-quartz-group": "B",
+            "x-quartz-order": 3
+          },
+          "y": {
+            "type": "string",
+            "x-quartz-order": 1
+          },
+          "x": {
+            "type": "string",
+            "x-quartz-group": "A"
+          },
+          "w": {
+            "type": "string",
+            "x-quartz-group": "B",
+            "x-quartz-order": 1
+          },
+          "v": {
+            "type": "string",
+            "x-quartz-l10n": {
+              "de": {
+                "group": "B"
+              },
+              "en": {
+                "group": "Bee"
+              }
+            }
+          },
+          "u": {
+            "type": "string",
+            "x-quartz-group": "A",
+            "x-quartz-order": -2
+          }
+        }
+      },
+      "fields": [
+        {
+          "path": [
+            "z"
+          ],
+          "text": {
+            "de": {
+              "group": "B"
+            },
+            "en": {
+              "group": "B"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "y"
+          ],
+          "text": {
+            "de": {},
+            "en": {}
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "x"
+          ],
+          "text": {
+            "de": {
+              "group": "A"
+            },
+            "en": {
+              "group": "A"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "self",
+              "en": "self"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "w"
+          ],
+          "text": {
+            "de": {
+              "group": "B"
+            },
+            "en": {
+              "group": "B"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "v"
+          ],
+          "text": {
+            "de": {
+              "group": "B"
+            },
+            "en": {
+              "group": "Bee"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        },
+        {
+          "path": [
+            "u"
+          ],
+          "text": {
+            "de": {
+              "group": "A"
+            },
+            "en": {
+              "group": "A"
+            }
+          },
+          "enumLabels": {
+            "de": [],
+            "en": []
+          },
+          "empty": "",
+          "condition": null,
+          "match": {
+            "": {
+              "de": "self",
+              "en": "self"
+            },
+            "sort": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordnung": {
+              "de": "none",
+              "en": "none"
+            },
+            "ordering": {
+              "de": "none",
+              "en": "none"
+            },
+            "umlaut äöü": {
+              "de": "none",
+              "en": "none"
+            },
+            "label": {
+              "de": "none",
+              "en": "none"
+            },
+            "tag name": {
+              "de": "none",
+              "en": "none"
+            },
+            "x": {
+              "de": "none",
+              "en": "none"
+            },
+            "nichts": {
+              "de": "none",
+              "en": "none"
+            },
+            "name": {
+              "de": "none",
+              "en": "none"
+            },
+            "ein": {
+              "de": "none",
+              "en": "none"
+            },
+            "datum": {
+              "de": "none",
+              "en": "none"
+            }
+          }
+        }
+      ],
+      "groups": {
+        "de": [
+          [
+            null,
+            [
+              "y"
+            ]
+          ],
+          [
+            "B",
+            [
+              "z",
+              "w",
+              "v"
+            ]
+          ],
+          [
+            "A",
+            [
+              "x",
+              "u"
+            ]
+          ]
+        ],
+        "en": [
+          [
+            null,
+            [
+              "y"
+            ]
+          ],
+          [
+            "B",
+            [
+              "z",
+              "w"
+            ]
+          ],
+          [
+            "A",
+            [
+              "x",
+              "u"
+            ]
+          ],
+          [
+            "Bee",
+            [
+              "v"
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "inline": [
+    {
+      "value": "",
+      "text": "\"\""
+    },
+    {
+      "value": "text",
+      "text": "text"
+    },
+    {
+      "value": "with \"quotes\"",
+      "text": "with \"quotes\""
+    },
+    {
+      "value": 0,
+      "text": "0"
+    },
+    {
+      "value": -1.5,
+      "text": "-1.5"
+    },
+    {
+      "value": 1e+21,
+      "text": "1e+21"
+    },
+    {
+      "value": 1e-7,
+      "text": "1e-7"
+    },
+    {
+      "value": true,
+      "text": "true"
+    },
+    {
+      "value": null,
+      "text": "null"
+    },
+    {
+      "value": [],
+      "text": ""
+    },
+    {
+      "value": [
+        "a",
+        "b"
+      ],
+      "text": "a, b"
+    },
+    {
+      "value": [
+        1,
+        "x",
+        2.5
+      ],
+      "text": "1, x, 2.5"
+    },
+    {
+      "value": [
+        true
+      ],
+      "text": "[true]"
+    },
+    {
+      "value": [
+        [
+          "a"
+        ]
+      ],
+      "text": "[[\"a\"]]"
+    },
+    {
+      "value": {
+        "a": 1
+      },
+      "text": "{\"a\":1}"
+    },
+    {
+      "value": {
+        "b": [
+          1,
+          {
+            "c": "ü"
+          }
+        ]
+      },
+      "text": "{\"b\":[1,{\"c\":\"ü\"}]}"
+    },
+    {
+      "value": [
+        null
+      ],
+      "text": "[null]"
+    },
+    {
+      "value": [
+        "",
+        ""
+      ],
+      "text": ", "
+    },
+    {
+      "value": "ä",
+      "text": "ä"
+    }
+  ],
+  "typed": [
+    {
+      "raw": "",
+      "value": ""
+    },
+    {
+      "raw": " ",
+      "value": " "
+    },
+    {
+      "raw": "true",
+      "value": true
+    },
+    {
+      "raw": "false",
+      "value": false
+    },
+    {
+      "raw": " true ",
+      "value": true
+    },
+    {
+      "raw": "True",
+      "value": "True"
+    },
+    {
+      "raw": "3",
+      "value": 3
+    },
+    {
+      "raw": "-0",
+      "value": 0
+    },
+    {
+      "raw": "0x10",
+      "value": 16
+    },
+    {
+      "raw": "0o17",
+      "value": 15
+    },
+    {
+      "raw": "0b11",
+      "value": 3
+    },
+    {
+      "raw": "1e3",
+      "value": 1000
+    },
+    {
+      "raw": ".5",
+      "value": 0.5
+    },
+    {
+      "raw": "5.",
+      "value": 5
+    },
+    {
+      "raw": "+7",
+      "value": 7
+    },
+    {
+      "raw": "-0x10",
+      "value": "-0x10"
+    },
+    {
+      "raw": "Infinity",
+      "value": {
+        "nonFinite": "Infinity"
+      }
+    },
+    {
+      "raw": "-Infinity",
+      "value": {
+        "nonFinite": "-Infinity"
+      }
+    },
+    {
+      "raw": "NaN",
+      "value": "NaN"
+    },
+    {
+      "raw": "1_000",
+      "value": "1_000"
+    },
+    {
+      "raw": "12px",
+      "value": "12px"
+    },
+    {
+      "raw": "[1, 2]",
+      "value": [
+        1,
+        2
+      ]
+    },
+    {
+      "raw": "[1, 2",
+      "value": "[1, 2"
+    },
+    {
+      "raw": "{\"a\": 1}",
+      "value": {
+        "a": 1
+      }
+    },
+    {
+      "raw": "{a: 1}",
+      "value": "{a: 1}"
+    },
+    {
+      "raw": "\"quoted\"",
+      "value": "quoted"
+    },
+    {
+      "raw": "\"broken",
+      "value": "\"broken"
+    },
+    {
+      "raw": "  [ ]  ",
+      "value": []
+    },
+    {
+      "raw": "null",
+      "value": "null"
+    },
+    {
+      "raw": "text with spaces",
+      "value": "text with spaces"
+    },
+    {
+      "raw": " padded ",
+      "value": " padded "
+    },
+    {
+      "raw": "\t42\n",
+      "value": 42
+    },
+    {
+      "raw": "١٢",
+      "value": "١٢"
+    },
+    {
+      "raw": "0.1e-2",
+      "value": 0.001
+    },
+    {
+      "raw": "1,5",
+      "value": "1,5"
+    },
+    {
+      "raw": "00012",
+      "value": 12
+    },
+    {
+      "raw": "9007199254740993",
+      "value": 9007199254740992
+    }
+  ],
+  "languages": [
+    {
+      "id": "none",
+      "config": null,
+      "languages": []
+    },
+    {
+      "id": "locale",
+      "config": {
+        "configuration": {
+          "locale": "de-DE"
+        },
+        "plugins": []
+      },
+      "languages": [
+        "de"
+      ]
+    },
+    {
+      "id": "locale-upper",
+      "config": {
+        "configuration": {
+          "locale": "EN"
+        },
+        "plugins": []
+      },
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "id": "locale-empty",
+      "config": {
+        "configuration": {
+          "locale": ""
+        },
+        "plugins": []
+      },
+      "languages": []
+    },
+    {
+      "id": "locale-number",
+      "config": {
+        "configuration": {
+          "locale": 5
+        },
+        "plugins": []
+      },
+      "languages": []
+    },
+    {
+      "id": "multilanguage",
+      "config": {
+        "configuration": {
+          "locale": "de-DE"
+        },
+        "plugins": [
+          {
+            "name": "quartz-multilanguage",
+            "source": "github:quartz-community/quartz-multilanguage",
+            "options": {
+              "languages": [
+                "DE",
+                {
+                  "code": " en "
+                },
+                {
+                  "code": 5
+                },
+                null,
+                "",
+                "de",
+                "fr-CA"
+              ]
+            }
+          }
+        ]
+      },
+      "languages": [
+        "de",
+        "en",
+        "fr-ca"
+      ]
+    },
+    {
+      "id": "multilanguage-empty",
+      "config": {
+        "configuration": {
+          "locale": "it-IT"
+        },
+        "plugins": [
+          {
+            "name": "quartz-multilanguage",
+            "source": {
+              "repo": "https://github.com/quartz-community/quartz-multilanguage.git"
+            },
+            "options": {
+              "languages": []
+            }
+          }
+        ]
+      },
+      "languages": [
+        "it"
+      ]
+    },
+    {
+      "id": "multilanguage-not-list",
+      "config": {
+        "configuration": {},
+        "plugins": [
+          {
+            "name": "quartz-multilanguage",
+            "source": "github:quartz-community/quartz-multilanguage",
+            "options": {
+              "languages": "de"
+            }
+          }
+        ]
+      },
+      "languages": []
+    },
+    {
+      "id": "multilanguage-second",
+      "config": {
+        "configuration": {
+          "locale": "de"
+        },
+        "plugins": [
+          {
+            "name": "x",
+            "source": "github:someone/quartz-multilanguage",
+            "options": {
+              "languages": [
+                "nl"
+              ]
+            }
+          },
+          {
+            "name": "quartz-multilanguage",
+            "source": "github:quartz-community/quartz-multilanguage",
+            "options": {
+              "languages": [
+                "sv"
+              ]
+            }
+          }
+        ]
+      },
+      "languages": [
+        "nl"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source": "github:quartz-community/explorer",
+      "id": "quartz-community/explorer",
+      "url": "https://github.com/quartz-community/explorer"
+    },
+    {
+      "source": "github:Quartz-Community/Explorer#v2",
+      "id": "quartz-community/explorer",
+      "url": "https://github.com/quartz-community/explorer"
+    },
+    {
+      "source": "@quartz-community/explorer",
+      "id": "quartz-community/explorer",
+      "url": "https://github.com/quartz-community/explorer"
+    },
+    {
+      "source": "git+https://github.com/boxi-os/quartz-layout-box.git",
+      "id": "boxi-os/quartz-layout-box",
+      "url": "https://github.com/boxi-os/quartz-layout-box"
+    },
+    {
+      "source": "https://github.com/a/b.git#main",
+      "id": "a/b",
+      "url": "https://github.com/a/b"
+    },
+    {
+      "source": "http://github.com/a/b",
+      "id": "a/b",
+      "url": "https://github.com/a/b"
+    },
+    {
+      "source": "/Users/x/project/.quartz-gui/authored-frames/f1",
+      "id": null,
+      "url": null
+    },
+    {
+      "source": "./local/plugin",
+      "id": null,
+      "url": null
+    },
+    {
+      "source": "npm-package",
+      "id": null,
+      "url": null
+    },
+    {
+      "source": "github:a/b/c",
+      "id": null,
+      "url": null
+    },
+    {
+      "source": "github:a/",
+      "id": null,
+      "url": null
+    },
+    {
+      "source": "",
+      "id": null,
+      "url": null
+    },
+    {
+      "source": {
+        "repo": "github:owner/repo",
+        "ref": "main"
+      },
+      "id": "owner/repo",
+      "url": "https://github.com/owner/repo"
+    },
+    {
+      "source": {
+        "repo": "https://github.com/Owner/Repo.git",
+        "subdir": "x"
+      },
+      "id": "owner/repo",
+      "url": "https://github.com/owner/repo"
+    },
+    {
+      "source": {
+        "repo": "gitlab.com/a/b"
+      },
+      "id": null,
+      "url": null
+    },
+    {
+      "source": "git+github:a/b",
+      "id": "a/b",
+      "url": "https://github.com/a/b"
+    },
+    {
+      "source": "@scope/pkg",
+      "id": "scope/pkg",
+      "url": "https://github.com/scope/pkg"
+    },
+    {
+      "source": "github:ä/ü",
+      "id": "ä/ü",
+      "url": "https://github.com/ä/ü"
+    }
+  ]
+}
