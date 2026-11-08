@@ -21,6 +21,8 @@ final class ProjectsModel {
   }
 
   let list: ProjectList
+  /// What the tools answered; nil until the first probe.
+  private(set) var environment: EnvironmentReport?
 
   private init() {
     let profile = AppProfile.own
@@ -29,6 +31,12 @@ final class ProjectsModel {
   }
 
   func row(_ id: String) -> ProjectOverview? { rows.first { $0.id == id } }
+
+  /// Not cached by the report: whoever installs a tool because the band said so expects the answer
+  /// to change on "Erneut prüfen".
+  func checkEnvironment() async {
+    environment = await EnvironmentReport.probe(await AppServices.shared.environment.value)
+  }
 
   func reload() async {
     let servers = Dictionary(await list.builds.runningServerSummaries().map { ($0.projectId, Optional($0.port)) },

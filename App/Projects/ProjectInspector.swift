@@ -85,11 +85,24 @@ struct ProjectInspector: View {
 
 /// The Projects window without a selection: what QuartzControl's start page put beside the list.
 struct ProjectsContext: View {
+  @State private var model = ProjectsModel.shared
+
   var body: some View {
     Form {
       Section {
         Text(L10n.t("home.subtitle")).foregroundStyle(.secondary)
           .accessibilityIdentifier("inspector.projectsContext")
+        // Named rather than implied by the band's absence: "no warning" and "ready" look alike.
+        if let report = model.environment, report.ok {
+          Label {
+            Text(L10n.t("home.environment.ready")).fontWeight(.medium)
+              + Text(" · " + report.toolSummary()).foregroundStyle(.secondary)
+          } icon: {
+            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+          }
+          .font(.caption)
+          .accessibilityIdentifier("environment.ready")
+        }
       }
       Section(L10n.t("home.aboutQuartz.title")) {
         Text(L10n.t("home.aboutQuartz.body")).foregroundStyle(.secondary)
@@ -141,5 +154,41 @@ struct GettingStarted: View {
       Button(L10n.t("home.openExisting"), action: addExisting)
     }
     .accessibilityIdentifier("projects.gettingStarted")
+  }
+}
+
+/// Tools that are missing or do not run: QuartzControl's warning band above the list. Two kinds of
+/// failing, two sentences: "reinstall" helps a tool of QuartzHub's that is broken, not one this
+/// system cannot load.
+struct EnvironmentBand: View {
+  let report: EnvironmentReport
+  let recheck: () -> Void
+
+  var body: some View {
+    let broken = report.broken
+    VStack(alignment: .leading, spacing: 6) {
+      Label {
+        // "Fehlen" is only true while none of them is there.
+        Text(broken.allSatisfy { $0.path == nil } ? L10n.t("home.environment.titleProblem") : L10n.t("home.environment.titleUnusable"))
+          .font(.headline)
+      } icon: {
+        Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+      }
+      Text(L10n.t("home.environment.description")).foregroundStyle(.secondary)
+      ForEach(broken, id: \.name) { tool in
+        Text("\(tool.name) — \(tool.incompatible ? L10n.t("home.environment.incompatibleTool") : tool.path != nil ? L10n.t("home.environment.brokenTool") : L10n.t("home.environment.missing"))")
+          .font(.callout.monospaced())
+      }
+      Text(broken.contains { $0.incompatible } ? L10n.t("home.environment.embeddedIncompatible") : L10n.t("home.environment.embeddedBroken"))
+        .font(.caption)
+        .foregroundStyle(.secondary)
+      Button(L10n.t("home.environment.recheck"), action: recheck)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding(12)
+    .background(.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+    .padding([.horizontal, .top], 12)
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("environment.band")
   }
 }

@@ -17229,13 +17229,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "in QuartzControl"
+            "value" : "in QuartzHub"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "in QuartzControl"
+            "value" : "in QuartzHub"
           }
         }
       }
@@ -17261,13 +17261,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Werkzeuge gehören zu QuartzControl. Dass sie sich nicht ausführen lassen, heißt, dass diese Installation unvollständig ist. Am schnellsten hilft, QuartzControl neu zu installieren."
+            "value" : "Diese Werkzeuge gehören zu QuartzHub. Dass sie sich nicht ausführen lassen, heißt, dass diese Installation unvollständig ist. Am schnellsten hilft, QuartzHub neu zu installieren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "These tools are part of QuartzControl. If they cannot run, this installation is incomplete. Reinstalling QuartzControl is the quickest fix."
+            "value" : "These tools are part of QuartzHub. If they cannot run, this installation is incomplete. Reinstalling QuartzHub is the quickest fix."
           }
         }
       }

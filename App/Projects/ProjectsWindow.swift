@@ -34,7 +34,12 @@ struct ProjectsWindow: View {
   private var shown: [ProjectOverview] { ProjectOverviews.filter(sorted, query: query) }
 
   var body: some View {
-    content
+    VStack(spacing: 0) {
+      if let report = model.environment, !report.ok {
+        EnvironmentBand(report: report) { Task { await model.checkEnvironment() } }
+      }
+      content
+    }
       .navigationTitle(L10n.t("shell.projects.title"))
       .inspectorColumn(isPresented: $inspectorPresented) {
         if let id = selection, let row = model.row(id) {
@@ -63,7 +68,10 @@ struct ProjectsWindow: View {
           .accessibilityIdentifier("projects.openExisting")
         }
       }
-      .task { await model.reload() }
+      .task {
+        await model.reload()
+        await model.checkEnvironment()
+      }
       .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
         Task { await model.reload() }
       }
