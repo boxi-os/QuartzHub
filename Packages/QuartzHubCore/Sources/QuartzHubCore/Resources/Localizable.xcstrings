@@ -1645,6 +1645,23 @@
         }
       }
     },
+    "buildServer.exportDirInvalid" : {
+      "comment" : "Vorschau & Build, under the output folder field: the typed value was not saved",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Ausgabeordner muss ein absoluter Pfad sein oder ein Ordner im Projekt, ohne „..“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The output folder must be an absolute path or a folder inside the project, without “..”."
+          }
+        }
+      }
+    },
     "buildServer.exportDirPlaceholder" : {
       "localizations" : {
         "de" : {

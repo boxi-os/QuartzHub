@@ -37,3 +37,18 @@ extension ProjectPrefs {
     BuildOutputGuard.buildDirectory(project: project, outputDir: outputDir)
   }
 }
+
+extension ProjectPrefs {
+  /// Whether `value` may be stored as `outputDir`: QuartzControl's `projectPrefs.save` schema
+  /// (`z.union([z.literal(''), buildOutputDir])` in `ipc/schemas.ts`). Empty, an absolute path of
+  /// at most 4096 UTF-16 units, or a relative one of at most 1024 without a ".." segment (split at
+  /// "/" and "\", as the schema does). QuartzControl showed zod's own message; here it is one
+  /// sentence in the user's language, nil when the value is fine.
+  public static func outputDirProblem(_ value: String) -> String? {
+    if value.isEmpty { return nil }
+    let length = value.utf16.count
+    if value.hasPrefix("/") { return length <= 4096 ? nil : L10n.t("buildServer.exportDirInvalid") }
+    let segments = value.split(omittingEmptySubsequences: false) { $0 == "/" || $0 == "\\" }
+    return length <= 1024 && !segments.contains("..") ? nil : L10n.t("buildServer.exportDirInvalid")
+  }
+}
