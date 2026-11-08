@@ -1,0 +1,466 @@
+{
+ "type": "object",
+ "properties": {
+  "languages": {
+   "type": "array",
+   "items": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/language"
+     },
+     {
+      "type": "string",
+      "description": "A language code."
+     }
+    ]
+   },
+   "description": "Languages of the site. A plain string is a language code.",
+   "x-quartz-group": "Languages",
+   "x-quartz-order": 10,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Sprachen der Site. Ein einfacher Text ist ein Sprachcode.",
+     "group": "Sprachen"
+    }
+   }
+  },
+  "defaultLanguage": {
+   "type": "string",
+   "description": "Language of pages that match no detection strategy. Defaults to the first language.",
+   "x-quartz-group": "Languages",
+   "x-quartz-order": 20,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Sprache für Seiten, die keine Erkennung trifft. Standard: die erste Sprache.",
+     "group": "Sprachen"
+    }
+   }
+  },
+  "publishLanguages": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "description": "Only publish these languages (empty = all). `QUARTZ_LANGS=de,en` overrides at build time.",
+   "x-quartz-group": "Languages",
+   "x-quartz-order": 30,
+   "x-quartz-advanced": true,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Nur diese Sprachen veröffentlichen (leer = alle). `QUARTZ_LANGS=de,en` überschreibt beim Bauen.",
+     "group": "Sprachen"
+    }
+   }
+  },
+  "detection": {
+   "type": "array",
+   "items": {
+    "type": "string",
+    "enum": [
+     "folder",
+     "suffix",
+     "frontmatter"
+    ]
+   },
+   "description": "How the language of a page is determined, in priority order. `[]` puts every page in the default language.",
+   "x-quartz-group": "Detection and linking",
+   "x-quartz-order": 40,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Wie die Sprache einer Seite erkannt wird, in Prioritätsreihenfolge. `[]` ordnet alle Seiten der Standardsprache zu.",
+     "group": "Erkennen und Verknüpfen"
+    }
+   }
+  },
+  "linking": {
+   "type": "array",
+   "items": {
+    "type": "string",
+    "enum": [
+     "frontmatter",
+     "aliases",
+     "path"
+    ]
+   },
+   "description": "How translations of the same page are matched, in priority order.",
+   "x-quartz-group": "Detection and linking",
+   "x-quartz-order": 50,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Wie Übersetzungen derselben Seite zusammengefunden werden, in Prioritätsreihenfolge.",
+     "group": "Erkennen und Verknüpfen"
+    }
+   }
+  },
+  "frontmatterKeys": {
+   "type": "object",
+   "properties": {
+    "lang": {
+     "type": "string",
+     "description": "Frontmatter key holding the page language.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Frontmatter-Schlüssel mit der Sprache der Seite."
+      }
+     }
+    },
+    "key": {
+     "type": "string",
+     "description": "Frontmatter key shared by all translations of a page.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Frontmatter-Schlüssel, den alle Übersetzungen einer Seite teilen."
+      }
+     }
+    },
+    "translations": {
+     "type": "string",
+     "description": "Frontmatter key mapping language codes to slugs.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Frontmatter-Schlüssel, der Sprachcodes auf Slugs abbildet."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Frontmatter keys the plugin reads.",
+   "x-quartz-group": "Detection and linking",
+   "x-quartz-order": 60,
+   "x-quartz-advanced": true,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Frontmatter-Schlüssel, die das Plugin liest.",
+     "group": "Erkennen und Verknüpfen"
+    }
+   }
+  },
+  "switcher": {
+   "type": "object",
+   "properties": {
+    "style": {
+     "type": "string",
+     "enum": [
+      "links",
+      "dropdown",
+      "flags"
+     ],
+     "description": "How the switcher looks: inline links, a dropdown menu, or flags.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Darstellung: Links nebeneinander, ein Aufklappmenü oder Flaggen.",
+       "enum": {
+        "links": "Links",
+        "dropdown": "Aufklappmenü",
+        "flags": "Flaggen"
+       }
+      }
+     }
+    },
+    "label": {
+     "type": "string",
+     "enum": [
+      "code",
+      "label",
+      "native",
+      "translatedTitle"
+     ],
+     "description": "What each entry shows. `translatedTitle` shows the title of the target page.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Text der Einträge. `translatedTitle` zeigt den Titel der Zielseite.",
+       "enum": {
+        "code": "Code",
+        "label": "Anzeigename",
+        "native": "Eigenname",
+        "translatedTitle": "Titel der Übersetzung"
+       }
+      }
+     }
+    },
+    "showCurrent": {
+     "type": "boolean",
+     "description": "Show the current language as a highlighted entry without a link.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Aktuelle Sprache als hervorgehobenen Eintrag ohne Link anzeigen."
+      }
+     }
+    },
+    "missing": {
+     "type": "string",
+     "enum": [
+      "hide",
+      "home",
+      "disabled"
+     ],
+     "description": "Languages without a translation of the current page: hide them, link to their home page, or show them greyed out.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Sprachen ohne Übersetzung der aktuellen Seite: ausblenden, auf ihre Startseite verlinken oder ausgegraut zeigen.",
+       "enum": {
+        "hide": "Ausblenden",
+        "home": "Auf Startseite verlinken",
+        "disabled": "Ausgegraut"
+       }
+      }
+     }
+    },
+    "separator": {
+     "type": "string",
+     "description": "Text between entries. An empty string for none.",
+     "x-quartz-when": {
+      "style": "links"
+     },
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Trenner zwischen den Einträgen. Leer für keinen."
+      }
+     }
+    },
+    "title": {
+     "type": "string",
+     "description": "Accessible name of the switcher. Defaults to the translated “Language”.",
+     "x-quartz-advanced": true,
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Barrierefreier Name des Sprachwechslers. Standard: das übersetzte „Sprache“."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "The language switcher component.",
+   "x-quartz-group": "Language switcher",
+   "x-quartz-order": 70,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Die Komponente Sprachwechsler.",
+     "group": "Sprachwechsler"
+    }
+   }
+  },
+  "seo": {
+   "type": "object",
+   "properties": {
+    "hreflang": {
+     "type": "boolean",
+     "description": "Emit `<link rel=\"alternate\" hreflang>` for every translation. Requires `configuration.baseUrl`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`<link rel=\"alternate\" hreflang>` für jede Übersetzung ausgeben. Braucht `configuration.baseUrl`."
+      }
+     }
+    },
+    "ogLocale": {
+     "type": "boolean",
+     "description": "Emit `og:locale` and `og:locale:alternate`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`og:locale` und `og:locale:alternate` ausgeben."
+      }
+     }
+    },
+    "xDefault": {
+     "type": "string",
+     "description": "Which page the `x-default` alternate points to: `default` (the default language), a language code, or `none`.",
+     "x-quartz-when": {
+      "hreflang": true
+     },
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Worauf `x-default` zeigt: `default` (die Standardsprache), ein Sprachcode oder `none`."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "What search engines and link previews learn about the languages.",
+   "x-quartz-group": "Addresses (SEO)",
+   "x-quartz-order": 80,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Was Suchmaschinen und Link-Vorschauen über die Sprachen erfahren.",
+     "group": "Adressen (SEO)"
+    }
+   }
+  },
+  "rootRedirect": {
+   "type": "string",
+   "enum": [
+    "none",
+    "default",
+    "browser"
+   ],
+   "description": "Write an `index.html` at the root that redirects to a language home page: never, to the default language, or by the browser’s language (remembered choice first). Only when the vault has no root `index.md`.",
+   "x-quartz-group": "Redirects",
+   "x-quartz-order": 90,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Eine `index.html` im Wurzelverzeichnis schreiben, die auf eine Sprach-Startseite leitet: nie, zur Standardsprache oder nach der Sprache des Browsers (gemerkte Wahl zuerst). Nur ohne `index.md` im Root des Vaults.",
+     "group": "Weiterleitungen",
+     "enum": {
+      "none": "Keine",
+      "default": "Standardsprache",
+      "browser": "Browsersprache"
+     }
+    }
+   }
+  },
+  "rememberChoice": {
+   "type": "boolean",
+   "description": "Remember the language chosen in the switcher in `localStorage`; the root redirect honours it.",
+   "x-quartz-group": "Redirects",
+   "x-quartz-order": 100,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Die im Sprachwechsler gewählte Sprache in `localStorage` merken; die Startseiten-Weiterleitung berücksichtigt sie.",
+     "group": "Weiterleitungen"
+    }
+   }
+  },
+  "fallbackPages": {
+   "type": "string",
+   "enum": [
+    "none",
+    "redirect"
+   ],
+   "description": "Emit redirect pages where a translation is missing (`de/coffee` → `en/coffee`), for the folder and suffix conventions.",
+   "x-quartz-group": "Redirects",
+   "x-quartz-order": 110,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Weiterleitungsseiten schreiben, wo eine Übersetzung fehlt (`de/coffee` → `en/coffee`), für Ordner- und Suffix-Konvention.",
+     "group": "Weiterleitungen",
+     "enum": {
+      "none": "Keine",
+      "redirect": "Weiterleiten"
+     }
+    }
+   }
+  },
+  "missingTranslationNotice": {
+   "type": "boolean",
+   "description": "Show a notice on pages that have no translation in the visitor’s language.",
+   "x-quartz-group": "Notices",
+   "x-quartz-order": 120,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Hinweis anzeigen, wenn es keine Übersetzung in der Sprache des Besuchers gibt.",
+     "group": "Hinweise"
+    }
+   }
+  },
+  "availableTranslationNotice": {
+   "type": "boolean",
+   "description": "Show a notice with a link when a translation in the visitor’s language exists.",
+   "x-quartz-group": "Notices",
+   "x-quartz-order": 130,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Hinweis mit Link anzeigen, wenn es eine Übersetzung in der Sprache des Besuchers gibt.",
+     "group": "Hinweise"
+    }
+   }
+  },
+  "rewriteCrossLanguageLinks": {
+   "type": "boolean",
+   "description": "Rewrite links that point to another language’s page when the same page exists in the page’s language.",
+   "x-quartz-group": "Links and dates",
+   "x-quartz-order": 140,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Links auf die Seite einer anderen Sprache umschreiben, wenn es dieselbe Seite in der Sprache der Seite gibt.",
+     "group": "Links und Datum"
+    }
+   }
+  },
+  "localizeDates": {
+   "type": "boolean",
+   "description": "Re-format `<time datetime>` elements in the browser in the page language.",
+   "x-quartz-group": "Links and dates",
+   "x-quartz-order": 150,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "`<time datetime>`-Elemente im Browser in der Sprache der Seite formatieren.",
+     "group": "Links und Datum"
+    }
+   }
+  }
+ },
+ "additionalProperties": false,
+ "$defs": {
+  "language": {
+   "type": "object",
+   "description": "One language of the site.",
+   "properties": {
+    "code": {
+     "type": "string",
+     "description": "Language code used in folder names, file suffixes and frontmatter, e.g. `de`. Required.",
+     "x-quartz-order": 10,
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Code in Ordnern, Suffixen und Frontmatter, z. B. `de`. Pflicht."
+      }
+     }
+    },
+    "label": {
+     "type": "string",
+     "description": "Display name, e.g. `German`. Defaults to the upper-cased code.",
+     "x-quartz-order": 20,
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Anzeigename, z. B. `German`. Standard: der Code in Großbuchstaben."
+      }
+     }
+    },
+    "native": {
+     "type": "string",
+     "description": "Name in the language itself, e.g. `Deutsch`. Defaults to `label`.",
+     "x-quartz-order": 30,
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Name in der Sprache selbst, z. B. `Deutsch`. Standard: `label`."
+      }
+     }
+    },
+    "locale": {
+     "type": "string",
+     "description": "BCP 47 locale for `<html lang>`, `hreflang` and `og:locale`, e.g. `de-DE`. Defaults to `code`.",
+     "x-quartz-order": 40,
+     "x-quartz-l10n": {
+      "de": {
+       "description": "BCP-47-Locale für `<html lang>`, `hreflang` und `og:locale`, z. B. `de-DE`. Standard: `code`."
+      }
+     }
+    },
+    "home": {
+     "type": "string",
+     "description": "Slug of the language’s home page. Defaults to `<code>/index`, or `index` for the default language.",
+     "x-quartz-order": 50,
+     "x-quartz-advanced": true,
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Slug der Sprach-Startseite. Standard: `<code>/index`, sonst `index` für die Standardsprache."
+      }
+     }
+    },
+    "flag": {
+     "type": "string",
+     "description": "Text or emoji shown for `switcher.style: flags`. Defaults to the flag of the locale’s region.",
+     "x-quartz-order": 60,
+     "x-quartz-advanced": true,
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Text oder Emoji für `switcher.style: flags`. Standard: die Flagge der Region des Locale."
+      }
+     }
+    }
+   },
+   "required": [
+    "code"
+   ],
+   "additionalProperties": false
+  }
+ }
+}

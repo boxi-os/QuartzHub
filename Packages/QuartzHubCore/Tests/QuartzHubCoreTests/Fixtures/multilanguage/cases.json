@@ -1,0 +1,5955 @@
+{
+ "readAgainst": "0.3.0",
+ "sameCode": [
+  "0.2.0"
+ ],
+ "languageKeys": [
+  "languages",
+  "defaultLanguage",
+  "publishLanguages"
+ ],
+ "cases": [
+  {
+   "options": null,
+   "languages": [
+    {
+     "code": "en"
+    }
+   ],
+   "defaultLanguage": "en",
+   "published": [],
+   "byRemoving": {
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "en-x"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "xx"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {},
+   "languages": [
+    {
+     "code": "en"
+    }
+   ],
+   "defaultLanguage": "en",
+   "published": [],
+   "byRemoving": {
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "en-x"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "xx"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {
+    "languages": []
+   },
+   "languages": [
+    {
+     "code": "en"
+    }
+   ],
+   "defaultLanguage": "en",
+   "published": [],
+   "byRemoving": {
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "en-x"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "xx"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {
+    "languages": "de"
+   },
+   "languages": [
+    {
+     "code": "en"
+    }
+   ],
+   "defaultLanguage": "en",
+   "published": [],
+   "byRemoving": {
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "en-x"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": "de",
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": "de",
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "xx"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {
+    "languages": [
+     "de",
+     "en"
+    ]
+   },
+   "languages": [
+    {
+     "code": "de"
+    },
+    {
+     "code": "en"
+    }
+   ],
+   "defaultLanguage": "de",
+   "published": [],
+   "byRemoving": {
+    "de": [],
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       "de-x",
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en"
+      ],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en"
+      ],
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       "en",
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "Neu"
+       },
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en-x"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": [
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en"
+      ],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en"
+      ],
+      "publishLanguages": [
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       "de",
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "xx"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en"
+      ]
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {
+    "languages": [
+     {
+      "code": "de",
+      "label": "German",
+      "native": "Deutsch",
+      "locale": "de-DE"
+     },
+     {
+      "code": "en",
+      "label": "English"
+     }
+    ],
+    "defaultLanguage": "de"
+   },
+   "languages": [
+    {
+     "code": "de",
+     "label": "German",
+     "native": "Deutsch",
+     "locale": "de-DE"
+    },
+    {
+     "code": "en",
+     "label": "English"
+    }
+   ],
+   "defaultLanguage": "de",
+   "published": [],
+   "byRemoving": {
+    "de": [],
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de-x",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de-x"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "en"
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "en"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de",
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "label": "English"
+       },
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       }
+      ],
+      "defaultLanguage": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "Neu",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en-x",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "de",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       }
+      ],
+      "defaultLanguage": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de",
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de",
+      "publishLanguages": [
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ],
+      "defaultLanguage": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       },
+       "xx"
+      ],
+      "defaultLanguage": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "German",
+        "native": "Deutsch",
+        "locale": "de-DE"
+       },
+       {
+        "code": "en",
+        "label": "English"
+       }
+      ],
+      "defaultLanguage": "de"
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {
+    "languages": [
+     " DE ",
+     {
+      "code": "En",
+      "native": "English"
+     },
+     "de",
+     {
+      "label": "no code"
+     },
+     7,
+     null,
+     {
+      "code": ""
+     },
+     {
+      "code": "fr"
+     },
+     "FR"
+    ],
+    "defaultLanguage": "EN",
+    "publishLanguages": [
+     "DE",
+     "xx",
+     3,
+     "fr"
+    ],
+    "seo": {
+     "xDefault": "De",
+     "hreflang": true
+    }
+   },
+   "languages": [
+    {
+     "code": "de"
+    },
+    {
+     "code": "en",
+     "native": "English"
+    },
+    {
+     "code": "fr"
+    }
+   ],
+   "defaultLanguage": "en",
+   "published": [
+    "de",
+    "fr"
+   ],
+   "byRemoving": {
+    "de": [],
+    "en": [],
+    "fr": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       "de-x",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "de-x",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "de-x",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "en",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "En",
+        "native": "English"
+       },
+       {
+        "code": "fr"
+       },
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "default",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "de",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "En",
+        "native": "English"
+       },
+       " DE ",
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "Neu"
+       },
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "en-x",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "en-x",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "fr"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "fr",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "fr",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "fr"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       "FR"
+      ],
+      "defaultLanguage": "de",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "de",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 1,
+      "j": 2
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "fr"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "en",
+        "native": "English",
+        "label": "Neu"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "fr",
+      "to": "fr-x"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       "fr-x"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr-x"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "fr",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       "de"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "de"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "fr"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       }
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "fr",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "de",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "fr",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 2,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr",
+        "label": "Neu"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR",
+       "xx"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       " DE ",
+       {
+        "code": "En",
+        "native": "English"
+       },
+       "de",
+       {
+        "label": "no code"
+       },
+       7,
+       null,
+       {
+        "code": ""
+       },
+       {
+        "code": "fr"
+       },
+       "FR"
+      ],
+      "defaultLanguage": "EN",
+      "publishLanguages": [
+       "DE",
+       "xx",
+       3,
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "De",
+       "hreflang": true
+      }
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": [
+    {
+     "id": "",
+     "title": "",
+     "keys": [
+      "seo"
+     ]
+    }
+   ]
+  },
+  {
+   "options": {
+    "languages": [
+     "de",
+     "en",
+     "fr"
+    ],
+    "defaultLanguage": "it",
+    "publishLanguages": [
+     "en"
+    ]
+   },
+   "languages": [
+    {
+     "code": "de"
+    },
+    {
+     "code": "en"
+    },
+    {
+     "code": "fr"
+    }
+   ],
+   "defaultLanguage": "de",
+   "published": [
+    "en"
+   ],
+   "byRemoving": {
+    "de": [],
+    "en": [
+     "de",
+     "fr"
+    ],
+    "fr": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       "de-x",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "de",
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       "en",
+       "de",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "Neu"
+       },
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en-x",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en-x"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "fr"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "fr",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "fr"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 1,
+      "j": 2
+     },
+     "result": {
+      "languages": [
+       "de",
+       "fr",
+       "en"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       "de",
+       {
+        "code": "en",
+        "label": "Neu"
+       },
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "fr",
+      "to": "fr-x"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr-x"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "fr",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "de"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "fr"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "fr",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en",
+       "fr"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "fr",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 2,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       {
+        "code": "fr",
+        "label": "Neu"
+       }
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr",
+       "xx"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "it",
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {
+    "languages": [
+     "de",
+     "en",
+     "fr"
+    ],
+    "defaultLanguage": "",
+    "publishLanguages": [
+     "de",
+     "en",
+     "fr"
+    ],
+    "seo": {
+     "xDefault": "en"
+    }
+   },
+   "languages": [
+    {
+     "code": "de"
+    },
+    {
+     "code": "en"
+    },
+    {
+     "code": "fr"
+    }
+   ],
+   "defaultLanguage": "de",
+   "published": [
+    "de",
+    "en",
+    "fr"
+   ],
+   "byRemoving": {
+    "de": [],
+    "en": [],
+    "fr": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       "de-x",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de-x",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "en",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       "en",
+       "de",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "Neu"
+       },
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en-x",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en-x",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en-x"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "fr"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "fr",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "fr",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "fr"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "default"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 1,
+      "j": 2
+     },
+     "result": {
+      "languages": [
+       "de",
+       "fr",
+       "en"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       "de",
+       {
+        "code": "en",
+        "label": "Neu"
+       },
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "fr",
+      "to": "fr-x"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr-x"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr-x"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "fr",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "de"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "de"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "fr"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "fr",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "fr",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 2,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       {
+        "code": "fr",
+        "label": "Neu"
+       }
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr",
+       "xx"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "defaultLanguage": "",
+      "publishLanguages": [
+       "de",
+       "en",
+       "fr"
+      ],
+      "seo": {
+       "xDefault": "en"
+      }
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": [
+    {
+     "id": "",
+     "title": "",
+     "keys": [
+      "seo"
+     ]
+    }
+   ]
+  },
+  {
+   "options": {
+    "languages": [
+     {
+      "code": "ΣΟΦΟΣ"
+     },
+     {
+      "code": "İstanbul"
+     },
+     {
+      "code": "ﬁ"
+     }
+    ],
+    "publishLanguages": "de"
+   },
+   "languages": [
+    {
+     "code": "σοφος"
+    },
+    {
+     "code": "i̇stanbul"
+    },
+    {
+     "code": "ﬁ"
+    }
+   ],
+   "defaultLanguage": "σοφος",
+   "published": [],
+   "byRemoving": {
+    "σοφος": [],
+    "i̇stanbul": [],
+    "ﬁ": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "σοφος",
+      "to": "σοφος-x"
+     },
+     "result": {
+      "languages": [
+       "σοφος-x",
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "σοφος",
+      "to": "i̇stanbul"
+     },
+     "result": {
+      "languages": [
+       "i̇stanbul",
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "σοφος"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "σοφος",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "σοφος",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": [
+       "i̇stanbul",
+       "ﬁ"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "σοφος",
+        "label": "Neu"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "i̇stanbul",
+      "to": "i̇stanbul-x"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       "i̇stanbul-x",
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "i̇stanbul",
+      "to": "ﬁ"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       "ﬁ",
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "i̇stanbul"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "i̇stanbul",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "i̇stanbul",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": [
+       "σοφος",
+       "ﬁ"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 1,
+      "j": 2
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "ﬁ"
+       },
+       {
+        "code": "İstanbul"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "i̇stanbul",
+        "label": "Neu"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "ﬁ",
+      "to": "ﬁ-x"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       "ﬁ-x"
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "ﬁ",
+      "to": "σοφος"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       "σοφος"
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "ﬁ"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "ﬁ",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "ﬁ",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": [
+       "σοφος",
+       "i̇stanbul"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 2,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ",
+        "label": "Neu"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       },
+       "xx"
+      ],
+      "publishLanguages": "de"
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "ΣΟΦΟΣ"
+       },
+       {
+        "code": "İstanbul"
+       },
+       {
+        "code": "ﬁ"
+       }
+      ],
+      "publishLanguages": "de"
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  },
+  {
+   "options": {
+    "languages": [
+     "de"
+    ],
+    "detection": [
+     "folder"
+    ],
+    "switcher": {
+     "style": "dropdown"
+    },
+    "extra": 1,
+    "rememberChoice": true
+   },
+   "languages": [
+    {
+     "code": "de"
+    }
+   ],
+   "defaultLanguage": "de",
+   "published": [],
+   "byRemoving": {
+    "de": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       "de-x"
+      ],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       "de"
+      ],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de"
+      ],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true,
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de"
+      ],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true,
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "Neu"
+       }
+      ],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "xx"
+      ],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "de"
+      ],
+      "detection": [
+       "folder"
+      ],
+      "switcher": {
+       "style": "dropdown"
+      },
+      "extra": 1,
+      "rememberChoice": true
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     },
+     {
+      "id": "unknown",
+      "title": "",
+      "keys": [
+       "extra"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     },
+     {
+      "id": "unknown",
+      "title": "",
+      "keys": [
+       "extra"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": [
+    {
+     "id": "",
+     "title": "",
+     "keys": [
+      "detection",
+      "switcher",
+      "extra",
+      "rememberChoice"
+     ]
+    }
+   ]
+  },
+  {
+   "options": {
+    "languages": [
+     {
+      "code": "de",
+      "home": "start",
+      "flag": "🇩🇪"
+     },
+     "en"
+    ],
+    "publishLanguages": [
+     "de"
+    ],
+    "seo": "nope"
+   },
+   "languages": [
+    {
+     "code": "de",
+     "home": "start",
+     "flag": "🇩🇪"
+    },
+    {
+     "code": "en"
+    }
+   ],
+   "defaultLanguage": "de",
+   "published": [
+    "de"
+   ],
+   "byRemoving": {
+    "de": [
+     "en"
+    ],
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de-x",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en"
+      ],
+      "publishLanguages": [
+       "de-x"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "en",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en"
+      ],
+      "publishLanguages": [
+       "en"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ],
+      "publishLanguages": [],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en"
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en"
+      ],
+      "publishLanguages": [],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       "en",
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       }
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪",
+        "label": "Neu"
+       },
+       "en"
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en-x"
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "de"
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       }
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en"
+      ],
+      "publishLanguages": [],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en"
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en",
+       "xx"
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "home": "start",
+        "flag": "🇩🇪"
+       },
+       "en"
+      ],
+      "publishLanguages": [
+       "de"
+      ],
+      "seo": "nope"
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": [
+    {
+     "id": "",
+     "title": "",
+     "keys": [
+      "seo"
+     ]
+    }
+   ]
+  },
+  {
+   "options": {
+    "languages": [
+     "de",
+     "DE",
+     "en"
+    ]
+   },
+   "languages": [
+    {
+     "code": "de"
+    },
+    {
+     "code": "en"
+    }
+   ],
+   "defaultLanguage": "de",
+   "published": [],
+   "byRemoving": {
+    "de": [],
+    "en": []
+   },
+   "steps": [
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "de-x"
+     },
+     "result": {
+      "languages": [
+       "de-x",
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "de",
+      "to": "en"
+     },
+     "result": {
+      "languages": [
+       "en",
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "de"
+     },
+     "result": {
+      "languages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "en"
+      ],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "de",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "en"
+      ],
+      "publishLanguages": [
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "swap",
+      "i": 0,
+      "j": 1
+     },
+     "result": {
+      "languages": [
+       "en",
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 0,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       {
+        "code": "de",
+        "label": "Neu"
+       },
+       "DE",
+       "en"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "en-x"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "en-x"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "rename",
+      "from": "en",
+      "to": "de"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "remove",
+      "code": "en"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": true
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "en"
+      ],
+      "publishLanguages": []
+     }
+    },
+    {
+     "step": {
+      "op": "publish",
+      "code": "en",
+      "on": false
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "en"
+      ],
+      "publishLanguages": [
+       "de"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "edit",
+      "i": 1,
+      "key": "label",
+      "value": "Neu"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       {
+        "code": "en",
+        "label": "Neu"
+       }
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "add",
+      "code": "xx"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "en",
+       "xx"
+      ]
+     }
+    },
+    {
+     "step": {
+      "op": "same"
+     },
+     "result": {
+      "languages": [
+       "de",
+       "DE",
+       "en"
+      ]
+     }
+    }
+   ],
+   "groups": {
+    "de": [
+     {
+      "id": "Detection and linking",
+      "title": "Erkennen und Verknüpfen",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Sprachwechsler",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Adressen (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Weiterleitungen",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Hinweise",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links und Datum",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ],
+    "en": [
+     {
+      "id": "Detection and linking",
+      "title": "Detection and linking",
+      "keys": [
+       "detection",
+       "linking",
+       "frontmatterKeys"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Language switcher",
+      "title": "Language switcher",
+      "keys": [
+       "switcher"
+      ],
+      "sole": "switcher"
+     },
+     {
+      "id": "Addresses (SEO)",
+      "title": "Addresses (SEO)",
+      "keys": [
+       "seo"
+      ],
+      "sole": "seo"
+     },
+     {
+      "id": "Redirects",
+      "title": "Redirects",
+      "keys": [
+       "rootRedirect",
+       "rememberChoice",
+       "fallbackPages"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Notices",
+      "title": "Notices",
+      "keys": [
+       "missingTranslationNotice",
+       "availableTranslationNotice"
+      ],
+      "sole": null
+     },
+     {
+      "id": "Links and dates",
+      "title": "Links and dates",
+      "keys": [
+       "rewriteCrossLanguageLinks",
+       "localizeDates"
+      ],
+      "sole": null
+     }
+    ]
+   },
+   "groupsWithoutSchema": []
+  }
+ ],
+ "problems": [
+  {
+   "code": "de",
+   "own": null,
+   "problem": "taken"
+  },
+  {
+   "code": "de",
+   "own": "en",
+   "problem": "taken"
+  },
+  {
+   "code": " DE ",
+   "own": null,
+   "problem": "taken"
+  },
+  {
+   "code": " DE ",
+   "own": "en",
+   "problem": "taken"
+  },
+  {
+   "code": "",
+   "own": null,
+   "problem": "empty"
+  },
+  {
+   "code": "",
+   "own": "en",
+   "problem": "empty"
+  },
+  {
+   "code": "   ",
+   "own": null,
+   "problem": "empty"
+  },
+  {
+   "code": "   ",
+   "own": "en",
+   "problem": "empty"
+  },
+  {
+   "code": "pt-br",
+   "own": null,
+   "problem": null
+  },
+  {
+   "code": "pt-br",
+   "own": "en",
+   "problem": null
+  },
+  {
+   "code": "a b",
+   "own": null,
+   "problem": "form"
+  },
+  {
+   "code": "a b",
+   "own": "en",
+   "problem": "form"
+  },
+  {
+   "code": "a/b",
+   "own": null,
+   "problem": "form"
+  },
+  {
+   "code": "a/b",
+   "own": "en",
+   "problem": "form"
+  },
+  {
+   "code": "a\\b",
+   "own": null,
+   "problem": "form"
+  },
+  {
+   "code": "a\\b",
+   "own": "en",
+   "problem": "form"
+  },
+  {
+   "code": "EN",
+   "own": null,
+   "problem": "taken"
+  },
+  {
+   "code": "EN",
+   "own": "en",
+   "problem": null
+  },
+  {
+   "code": "en",
+   "own": null,
+   "problem": "taken"
+  },
+  {
+   "code": "en",
+   "own": "en",
+   "problem": null
+  },
+  {
+   "code": "zh_Hant",
+   "own": null,
+   "problem": null
+  },
+  {
+   "code": "zh_Hant",
+   "own": "en",
+   "problem": null
+  },
+  {
+   "code": "x\ty",
+   "own": null,
+   "problem": "form"
+  },
+  {
+   "code": "x\ty",
+   "own": "en",
+   "problem": "form"
+  }
+ ],
+ "normalized": [
+  {
+   "code": "DE",
+   "result": "de"
+  },
+  {
+   "code": " En ",
+   "result": "en"
+  },
+  {
+   "code": "ΣΟΦΟΣ",
+   "result": "σοφος"
+  },
+  {
+   "code": "İ",
+   "result": "i̇"
+  },
+  {
+   "code": "ﬁ",
+   "result": "ﬁ"
+  },
+  {
+   "code": " x ",
+   "result": "x"
+  },
+  {
+   "code": "Straße",
+   "result": "straße"
+  }
+ ],
+ "syntheticSchema": {
+  "type": "object",
+  "properties": {
+   "plain": {
+    "type": "string"
+   },
+   "late": {
+    "type": "string",
+    "x-quartz-group": "Late",
+    "x-quartz-order": 9
+   },
+   "early": {
+    "type": "boolean",
+    "x-quartz-group": "Early",
+    "x-quartz-order": 1
+   },
+   "loose": {
+    "type": "string",
+    "x-quartz-order": 5
+   },
+   "same": {
+    "type": "string",
+    "x-quartz-group": "Late",
+    "x-quartz-order": 9
+   },
+   "wrapped": {
+    "type": "object",
+    "x-quartz-group": "Box",
+    "properties": {
+     "x": {
+      "type": "string"
+     }
+    }
+   },
+   "languages": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  }
+ },
+ "syntheticGroups": [
+  {
+   "id": "Early",
+   "title": "Early",
+   "keys": [
+    "early"
+   ],
+   "sole": null
+  },
+  {
+   "id": "Late",
+   "title": "Late",
+   "keys": [
+    "late",
+    "same"
+   ],
+   "sole": null
+  },
+  {
+   "id": "Box",
+   "title": "Box",
+   "keys": [
+    "wrapped"
+   ],
+   "sole": "wrapped"
+  },
+  {
+   "id": "",
+   "title": "",
+   "keys": [
+    "loose",
+    "plain"
+   ],
+   "sole": null
+  },
+  {
+   "id": "unknown",
+   "title": "",
+   "keys": [
+    "stray"
+   ],
+   "sole": null
+  }
+ ]
+}
