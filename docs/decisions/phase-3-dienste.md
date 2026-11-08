@@ -1794,3 +1794,65 @@ auf `WKWebView`; 9c PDF, `exportBook` und der Zieltyp „Dokument“. Fußzeile 
 - **Nebenbei:** `ProcessRunnerTests.timeoutAnswersAtOnceAndKillsTheGroup` brauchte im vollen Lauf
   einmal 3,2 s statt unter 2 s; allein dreimal 0,42 s, der volle Lauf danach grün. Last durch die
   parallelen Tests, kein Fehler der Änderung; notiert, nicht geändert.
+
+### 9b: Das Exportfenster auf WebKit, Einsammeln, Bilder
+
+- **Seitenskripte** (`Helpers/src/export/`): `pageScripts.ts` und `shared/exportModel.ts` wörtlich
+  aus QuartzControl 1.3.0, gebündelt für Safari 18 nach `dist/page-scripts.js`. In WebKit läuft
+  derselbe Code wie in Chromium; was abweicht, ist die Engine. `PageScriptsTests` vergleicht die
+  Abschriften per SHA-256 mit QuartzControls Dateien.
+- **Die Kopie über http auf 127.0.0.1** (`SiteServer`, NWListener), kein eigenes URL-Schema: Eine
+  Quartz-Seite löst Links, Skripte und contentIndex.json gegen eine Web-Wurzel auf und hält ihr
+  Theme in `localStorage`, das WebKit nur einer bekannten Origin gibt (die eines eigenen Schemas
+  ist opak). Gemessen gegen QuartzControls laufenden Server (50 Antworten) und am rohen Socket.
+- **Das Fenster** (`ExportWindow`): unsichtbar mit Alpha 0 auf einem Bildschirm (ein Fenster weit
+  außerhalb jedes Bildschirms macht keinen Schnappschuss, Spike), Datenspeicher im Speicher, hell,
+  keine neuen Fenster, keine Dialoge, keine Rechte. Die Seitenskripte laufen in einer eigenen
+  Content World. QuartzControls Regel als `WKContentRuleList`; WebKit sperrt stumm, also wird dort
+  gezählt, wo jede Art Anfrage sichtbar ist (Resource Timing, Fehlerereignis des Elements, Scan
+  nach `object`/`embed`, Hüllen um fetch/XHR/Beacon/WebSocket/EventSource in der Seitenwelt, die
+  Navigationsregel). Gemessen gegen einen zweiten Server, der genau die erlaubten Anfragen bekam;
+  `ExportWindowRuleTests` hält die Regel gegen QuartzControls `exportWindow.ts`.
+- **WebKit läuft nicht unter `swift test`** (kein CFRunLoop auf dem Hauptthread), deshalb messen
+  `qh-check export-window`, `export-pages` und `export-book` in einem ausführbaren Ziel mit
+  RunLoop; `ExportWindowTests` ruft das hinter `QH_WEBKIT_TESTS=1` auf.
+- **Seitenskripte in WebKit gegen Chrome** (`scripts/export-pages-golden.mjs` mit QuartzControls
+  Code in Chrome über playwright-core, `qh-check export-pages` in WebKit, dieselben Argumente):
+  Navigation der Startseite, settlePage und extractArticle je Seite, epubChapters über alle.
+  Mermaid und KaTeX' Stylesheet kommen im Betrieb vom CDN (die Regel lässt sie durch); für die
+  Messung ohne Netz schreibt `scripts/cdn-build.mjs` eine Kopie des Builds auf `/__cdn/…` um und
+  legt die npm-Pakete derselben Fassung dazu (Mermaid 11.4.0, KaTeX 0.16.11, einmal geholt nach
+  `.tools/cdn/`, SHA-256 im Skript, gegen die sha512-Integrität der Registry geprüft; Nutzer
+  2026-11-08). Die Kopie wird umgeschrieben, nicht die Anfrage: WebKit lässt eine https-Anfrage
+  nicht von der App beantworten (kein Schema-Handler für http/https, ein Proxy bräuchte TLS).
+  Ergebnis: Example 137 von 137 Seiten und Kapiteln gleich (16 Diagramme, 10 Formeln), gui-test
+  138 von 138 (11 Diagramme, vorher ungerendert), 1,44 Mio. Zeichen Artikel-HTML. **Mermaid-SVGs
+  sind nur im Aufbau gleich:** Mermaid misst Text in der Engine (Koordinaten bis einige hundert px
+  auseinander, wenn eine Beschriftung das Layout verschiebt), stempelt die ID mit `Date.now()` und
+  jede Engine serialisiert Zahlen und CSS auf ihre Art (`262.109375px` gegen `262.109px`,
+  `font-family` mit und ohne Anführungszeichen, ein `xmlns` mehr in Chrome). `DiagramCompare`
+  vergleicht dort Elementfolge und Text, alles andere Zeichen für Zeichen; Gegenproben 4/4
+  (Beschriftung, Element, Text außerhalb, Zeichnung), jede an ihrer Stelle gemeldet.
+- **Einsammeln** (`ExportCollect`, aus `collect.ts`): `readNavigationOrder` und `collectPages` wie
+  in QuartzControl, die Ersatztexte in der Sprache des Dokuments.
+- **Bilder** (`BookContentPrep`, aus `prepareBookContent` und `drawPictures`): epubChapters in
+  einer Seite der Kopie, die Bilder der Website aus der Kopie (`data:`-URLs wie Node:
+  base64 ohne Auffüllen, mit Leerzeichen, im URL-Alphabet), jede Formel und jedes Diagramm als PNG
+  in einem zweiten Fenster von 3000 × 3000, Zoom 3 und 2, die Größe auf der Website in em. Zwei
+  Abweichungen von Electron, beide gemessen am 2026-11-08:
+  - `takeSnapshot` malt das Rechteck in der Ausgabegröße neu, der Zoom ist also die Größe des
+    Bildes, nicht der Seite (kein `setZoomFactor`). Ein Bild größer als das Fenster vergrößert das
+    Fenster; Electron zeichnete es mit einem Zoom unter 1, bei dem die Seite Platz hatte.
+  - **Kein Warten auf zwei Animationsframes:** In einem Fenster mit Alpha 0 feuert
+    `requestAnimationFrame` nie, WebKit hält es für verdeckt (eine Probe mit 2 s Frist lief im
+    Exportfenster und in Zeichenfenstern von 3000 und 800 px ab; der erste Lauf stand an der ersten
+    Formel). QuartzControl wartete nur, weil `capturePage` den zuletzt gemalten Frame nimmt.
+    Mermaid und settlePage brauchen rAF nicht.
+- **Gemessen** mit `qh-check export-book` (ein Build durch Reihenfolge, Seiten, Kapitel und Bilder,
+  dazu das ePub): Example 137 Seiten in 18 s, 10 Formeln und 16 Diagramme in 1,2 s; gui-test 138
+  Seiten, 11 Diagramme. Alle Bilder verschieden, scharf, Beschriftungen vollständig (angesehen:
+  das lange Polynom, die User Journey mit 3000 px, das Zustands-, Sequenz- und das größte
+  Flussdiagramm). `BookContentPrepTests` für die `data:`-Fälle und die Grenze der Kopie;
+  Gegenproben 3/3.
+- **Noch offen für 9c:** der Vergleich der Bilder mit QuartzControls Ausgabe am selben Buch
+  (`check:export -- --files`), epubcheck auf debian-vm, das PDF.
