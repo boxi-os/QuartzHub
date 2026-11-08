@@ -26,6 +26,9 @@ struct OptionsForm: View {
   /// The free key/value row; off in the editors that know every option.
   var freeKeys = true
   var root: RootExtras?
+  /// The project the options belong to, for the editors that read and write its files (snippets);
+  /// without it they are text fields.
+  var projectPath: String?
 
   @State private var search = ""
 
@@ -45,7 +48,7 @@ struct OptionsForm: View {
     let merged = merged
     let query = search.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     let context = OptionsFormContext(language: language, explicitEmpty: explicitEmpty, languages: languages, query: query,
-                                     mark: query, entryReason: root?.entryReason)
+                                     mark: query, entryReason: root?.entryReason, projectPath: projectPath)
     let incomplete = schema == nil || schema?.source == .defaults || !(schema?.notes.isEmpty ?? true)
     if merged.fields.count >= Self.searchFrom || schema?.source == .defaults || merged.fields.isEmpty || !(schema?.notes.isEmpty ?? true) {
       Section {
@@ -92,6 +95,7 @@ struct OptionsFormContext {
   /// Inside an option that does nothing right now: the labels below are muted too.
   var muted = false
   var entryReason: ((String, JSONObject, JSONObject) -> String?)?
+  var projectPath: String?
   /// What "wie oben" is called where the values above are known by another name.
   var above: (short: String, choice: String)?
 }

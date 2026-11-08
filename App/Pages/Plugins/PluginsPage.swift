@@ -44,6 +44,8 @@ struct PluginsPage: View {
   @SceneStorage("marketplace.selected") private var marketplaceSelected: String?
   /// The navigation by its #n among the navigations: instances have no name of their own.
   @SceneStorage("navigations.selected") private var navigationSelected: Int?
+  /// The box by its #n among the boxes, as the plugin list keys a second instance.
+  @SceneStorage("extraContent.selected") private var boxSelected: Int?
   @State private var styled: Set<String> = []
 
   init(project: ProjectContext) {
@@ -83,6 +85,10 @@ struct PluginsPage: View {
           NavigationsTab(model: model, selection: $navigationSelected, styled: $styled)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins.navigations")
+        case .extras:
+          ExtraContentTab(model: model, selection: $boxSelected, styled: $styled)
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("page.plugins.extras")
         case .marketplace:
           MarketplaceTab(model: marketplace, selection: $marketplaceSelected)
             .accessibilityElement(children: .contain)
@@ -117,6 +123,16 @@ struct PluginsPage: View {
           tabID = Tab.installed.rawValue
         }
         .id(item.occurrence)
+      } else if tab == .extras, let boxSelected,
+                let box = LayoutBoxes.boxes(model.config?.plugins ?? []).first(where: { $0.occurrence == boxSelected }) {
+        let boxes = LayoutBoxes.boxes(model.config?.plugins ?? [])
+        BoxInspector(box: box, label: BoxLabels.label(box, among: boxes), model: model) {
+          // The plugin list knows the entry by its name and its number among the same-named.
+          let same = (model.config?.plugins ?? []).prefix(box.index + 1).filter { $0.name == box.plugin.name }.count
+          selected = same == 1 ? box.plugin.name : "\(box.plugin.name)#\(same)"
+          tabID = Tab.installed.rawValue
+        }
+        .id(box.occurrence)
       } else if tab == .marketplace, let marketplaceSelected,
                 let plugin = marketplace.result?.plugins.first(where: { $0.fullName == marketplaceSelected }) {
         MarketplaceInspector(plugin: plugin, model: marketplace)
@@ -130,6 +146,9 @@ struct PluginsPage: View {
           if tab == .marketplace { marketplaceSummary }
           if tab == .navigations {
             Section(L10n.t("navigationsEditor.panelEmptyTitle")) { Note(L10n.t("navigationsEditor.panelEmptyText")) }
+          }
+          if tab == .extras {
+            Section(L10n.t("extraContent.panelEmptyTitle")) { Note(L10n.t("extraContent.panelEmptyText")) }
           }
         }
       }

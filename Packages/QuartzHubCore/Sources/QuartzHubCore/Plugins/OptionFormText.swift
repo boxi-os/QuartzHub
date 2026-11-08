@@ -278,3 +278,21 @@ public struct OptionRoot {
     self.keyPrefix = keyPrefix
   }
 }
+
+extension OptionRoot {
+  /// The extras for a form without tiles above it (QuartzControl's `rootWithoutTiles`): the plugin
+  /// list and the Layout page's inspector. Both show every option, the variant or the text
+  /// included, and grey what does nothing the way the editors do; nothing is hidden there.
+  public static func withoutTiles(_ entry: PluginEntry, fields: [OptionField], packageVersion: String?,
+                                  lang: OptionFormText.Language) -> OptionRoot? {
+    let options = entry.object["options"]?.objectValue ?? JSONObject()
+    var root: OptionRoot
+    switch PluginRepository.quartzName(entry.source) {
+    case NavigationVariants.plugin?: root = NavigationVariants.root(options: options, fields: fields, lang: lang, withVariant: true)
+    case LayoutBoxes.plugin?: root = LayoutBoxes.root(options: options, installed: packageVersion, withTiles: false)
+    default: return nil
+    }
+    root.hideUnlessSet = nil
+    return root
+  }
+}

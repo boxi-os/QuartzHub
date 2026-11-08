@@ -642,3 +642,80 @@ Gemessen an der gui-test-Kopie, Hell und Dunkel:
 
 Gefunden in der laufenden App: „Auf der Bühne zeigen“ und „Alle Optionen …“ standen nebeneinander
 und wurden im Inspektor abgeschnitten; jetzt stehen sie untereinander.
+
+### Der Code-Editor, zum ersten Mal gebraucht
+
+`App/Components/CodeEditor.swift` baut die Entscheidung aus 4b. Es ist NSTextView mit TextKit 2 und
+den Zeilennummern aus dem Messgeschirr (eine Nummer je Absatz, ein umbrochener Absatz behält eine).
+Dazu kommen die Suchleiste des Systems, Hell und Dunkel über dynamische Systemfarben und das
+Einfügen an der Cursorstelle, nur wenn der Nutzer einen Cursor gesetzt hat (sonst ans Ende, auf
+eine eigene Zeile, wie in QuartzControl). Gefärbt wird je Zeile durch `CodeColors` im Kern (HTML und
+Markdown; CSS und SCSS kommen mit Stile). Regeln laufen nie über einen Zeilenumbruch. Ein
+HTML-Kommentar oder ein Codeblock über mehrere Zeilen wird deshalb nur an seinen Marken gefärbt,
+wo CodeMirror das ganze Dokument parste.
+
+**Messung.** Eine Zeile in der Mitte von 5.000 Zeilen färben, 2.000-mal: zusammen 0,5 s für HTML
+und Markdown. Die Gegenprobe (jede Regel über das ganze Dokument) lief nach zehn Minuten noch und
+wurde abgebrochen. Die Schranke im Test liegt bei 5 ms je Zeile, weit über der Messung.
+
+**Zwei Fehler, gefunden beim Klicken.** Beide sind behoben, und ihr Grund steht im Code:
+- Die Einfügung kam nicht an, solange der Editor sie als Binding bekam. Eine Ansicht, deren `body`
+  ein Binding nur weiterreicht, rechnet SwiftUI nicht neu, also lief `updateNSView` nie. Jetzt geht
+  die Einfügung als Wert hinein.
+- Danach lief die Einfügung, verschwand aber wieder. Sie geschah mitten in `updateNSView`; SwiftUI
+  verwirft das Zurückschreiben ins Binding dort, und das nächste Update setzte den alten Text.
+  Jetzt fügt der Editor einen Takt später ein.
+
+Gemessen an der Datei auf der Platte: `{{title}}` steht nach „Snippet speichern“ an der
+Cursorstelle.
+
+### Plugins: Zusätzliche Inhalte
+
+Vorbild `routes/Plugins/ExtraContent.tsx`, `ExtraContentFiles.tsx`, `layoutBoxes.ts`,
+`boxSilenced` und `layoutBoxRoot` in `optionFormExtras.ts` und die Snippet-Felder aus
+`PluginOptionsForm/snippets.tsx`. Gemessen mit `scripts/layout-boxes-golden.mjs`, mit dem Schema
+von quartz-layout-box aus gui-test:
+- 34 Optionssätze, je mit sechs installierten Fassungen für die Frage, wo das Plugin abbricht;
+- sechs Umbenennungen eines Schnipsels über 17 Einträge;
+- 372 Form-Einstellungen;
+- dazu Bildverweise, Ordnernamen und Geschwisterwerte.
+
+Nachgebaut ist auch JavaScripts Spread von Listen und Texten (`{ ...[1] }` ergibt `{"0": 1}`).
+`mentionsImage` vergleicht UTF-16-Einheiten wie `includes`: „ü“ und „u + ̈“ sind zwei Namen. Vier
+Gegenproben schlugen an:
+- `byLang` wird beim Umbenennen nicht nachgezogen;
+- `null` bricht nie;
+- der Ordnername ohne `trim`;
+- Swifts `contains` statt `includes`.
+
+**Oberfläche.** In der Mitte stehen drei Teile untereinander in einem `VSplitView`: die Boxen, die
+Dateien hinter ihnen (Schnipsel je Ordner, Bilder, das Projektbild nur lesend) und die Vorschau. Die
+gewählte Box steht im Inspektor: an/aus, „Text in der Konfiguration | Datei“ als Kacheln, dann die
+Optionen. Was nicht wirkt, steht grau mit dem Grund. Die Options-Form kennt jetzt den Projektpfad.
+Ein Feld mit `x-quartz-widget: snippetFile` ist dann eine Dateiauswahl mit „Neu“, „Importieren…“
+und „Bearbeiten“. Ein HTML- oder Markdown-Text bekommt „Bild einfügen…“ (ein SVG auf Wunsch als
+Code über `InlineSvg`), und wo das Plugin `placeholders` hat, die Liste der Platzhalter. Installiert
+benutzt dafür jetzt dieselben Extras ohne Kacheln wie QuartzControl (`OptionRoot.withoutTiles`).
+Fragen mit drei Antworten (Ersetzen, Vorhandene verwenden, Abbrechen) sind `Confirm.choose`.
+
+Gemessen an der gui-test-Kopie, Hell und Dunkel:
+- Datei → Text → Datei an „Über dieses Handbuch“: Aus einer Markdown-Datei wird der Beispieltext,
+  `file` steht grau mit „wirkt nicht“. Zurück mit „Text entfernen“ ist die Config byte-gleich.
+- `sidebar-note.en.md` → `sidebar-note.english.md`: Die Datei heißt neu, die Box nennt für `en`
+  den neuen Namen. Zurückbenannt ist die Config byte-gleich.
+- Neue Box: links, Priorität 50, `layout-box-neue-box`. Duplizieren gibt der Kopie
+  `layout-box-neue-box layout-box-neue-box-2` und nummeriert links neu. Zwei gleich benannte
+  Boxen heißen „Neue Box #8“ und „#9“. Entfernen über den Dialog nimmt nur die Kopie.
+- Snippet bearbeiten: Tippen zeigt „Ungespeichert“. `{{title}}` aus der Liste landet am Cursor,
+  „Snippet speichern“ schreibt die Datei. Danach ist die Datei zurückgespielt.
+
+Gefunden in der laufenden App und behoben:
+- „Neu“, „Importieren…“ und „Bearbeiten“ neben der Dateiauswahl waren im Inspektor auf je einen
+  Buchstaben gekürzt. Dasselbe galt für „Bild einfügen…“ neben „Schließen“ und „Snippet
+  speichern“. Beide Reihen stehen jetzt in eigenen Zeilen.
+- Die Kachel „Text in der Konfiguration“ trennte das Wort.
+- Der Status „… ist gespeichert.“ drückte den Dateinamen auf „side…te.md“.
+- Die Platzhalter waren als graue Knöpfe zu breit; jetzt sind sie randlos in der Akzentfarbe.
+
+Nicht gemessen: Importieren und „Bild einfügen…“ mit dem Dateidialog, In den Papierkorb, Ordner
+hinter einer Verknüpfung.

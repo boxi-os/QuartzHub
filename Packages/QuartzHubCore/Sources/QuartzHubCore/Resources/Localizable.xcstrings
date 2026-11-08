@@ -6551,13 +6551,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Ordner liegt hinter einer Verknüpfung. Lesen funktioniert, QuartzControl ändert hier nichts."
+            "value" : "Der Ordner liegt hinter einer Verknüpfung. Lesen funktioniert, QuartzHub ändert hier nichts."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The folder lies behind a link. Reading works, QuartzControl changes nothing here."
+            "value" : "The folder lies behind a link. Reading works, QuartzHub changes nothing here."
           }
         }
       }
@@ -6583,13 +6583,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl liest und schreibt in diesem Ordner nicht."
+            "value" : "QuartzHub liest und schreibt in diesem Ordner nicht."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl does not read or write in this folder."
+            "value" : "QuartzHub does not read or write in this folder."
           }
         }
       }
@@ -6631,13 +6631,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ umbenennen?\n\nBenutzt von {{names}}. Diese Verweise stehen im Text, QuartzControl ändert sie nicht. Das Bild fehlt dort, bis du sie anpasst."
+            "value" : "„{{name}}“ umbenennen?\n\nBenutzt von {{names}}. Diese Verweise stehen im Text, QuartzHub ändert sie nicht. Das Bild fehlt dort, bis du sie anpasst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rename “{{name}}”?\n\nUsed by {{names}}. Those references are part of the text, QuartzControl does not change them. The picture is missing there until you update them."
+            "value" : "Rename “{{name}}”?\n\nUsed by {{names}}. Those references are part of the text, QuartzHub does not change them. The picture is missing there until you update them."
           }
         }
       }
@@ -6743,7 +6743,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gehört zum Projektbild und lässt sich hier weder umbenennen noch löschen. Quartz baut daraus das Favicon."
+            "value" : "Gehört zum Projektbild und kann hier weder umbenannt noch gelöscht werden. Quartz baut daraus das Favicon."
           }
         },
         "en" : {
@@ -7335,13 +7335,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links eine Box, um Inhalt, Überschrift und Sprachen einzustellen."
+            "value" : "Wähle eine Box, um Inhalt, Überschrift und Sprachen einzustellen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pick a box on the left to set its content, heading and languages."
+            "value" : "Pick a box to set its content, heading and languages."
           }
         }
       }
@@ -28999,7 +28999,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ ließ sich nicht in den Papierkorb legen und liegt unverändert da. Das System sagt: {{reason}}"
+            "value" : "„{{name}}“ konnte nicht in den Papierkorb gelegt werden und liegt unverändert da. Das System sagt: {{reason}}"
           }
         },
         "en" : {
@@ -42172,13 +42172,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Ordner {{dir}} liegt außerhalb des Projekts. QuartzControl liest dort nicht, deshalb gibt es keine Auswahl."
+            "value" : "Der Ordner {{dir}} liegt außerhalb des Projekts. QuartzHub liest dort nicht, deshalb gibt es keine Auswahl."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The folder {{dir}} is outside the project. QuartzControl does not read there, so there is nothing to choose from."
+            "value" : "The folder {{dir}} is outside the project. QuartzHub does not read there, so there is nothing to choose from."
           }
         }
       }
@@ -42700,13 +42700,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Snippet ist eine eigene Datei. Es wird mit „Snippet speichern“ gespeichert, nicht mit dem „Speichern“-Button oben."
+            "value" : "Das Snippet ist eine eigene Datei. Es wird mit „Snippet speichern“ gespeichert, nicht mit den Optionen der Box."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The snippet is a file of its own. It is saved with “Save snippet”, not with the “Save” button at the top."
+            "value" : "The snippet is a file of its own. It is saved with “Save snippet”, not with the box’s options."
           }
         }
       }
@@ -42836,13 +42836,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ lässt sich nicht als SVG lesen."
+            "value" : "„{{name}}“ konnte nicht als SVG gelesen werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“{{name}}” cannot be read as SVG."
+            "value" : "“{{name}}” could not be read as SVG."
           }
         }
       }

@@ -160,7 +160,7 @@ struct NodeEditor: View {
       .frame(maxWidth: 130)
     case .string:
       StringEditor(field: field, value: value, defaultValue: defaultValue, hasDefault: hasDefault, onValue: onValue,
-                   context: context, name: name)
+                   context: context, inherit: inherit, name: name)
     case .object(let fields, _):
       VStack(alignment: .leading, spacing: 12) {
         ObjectBlock(fields: fields, values: value?.objectValue ?? JSONObject(), onValue: { onValue(.object($0)) }, context: context)
@@ -231,7 +231,9 @@ extension OptionEnumValue {
 }
 
 /// Text. A cleared field removes the key ("not set"); an empty text the plugin reads as "show
-/// nothing" has a button of its own where the caller allows it.
+/// nothing" has a button of its own where the caller allows it. With a project: a `snippetFile`
+/// widget is a choice of files, and an `html`/`markdown` text gets "Bild einfügen…" and, where the
+/// plugin has layout-box's `placeholders`, the list of placeholders.
 private struct StringEditor: View {
   let field: OptionField?
   let value: JSONValue?
@@ -239,17 +241,44 @@ private struct StringEditor: View {
   let hasDefault: Bool
   let onValue: (JSONValue?) -> Void
   let context: OptionsFormContext
+  var inherit: Inherited?
   let name: String
 
+  @State private var insertion: CodeInsertion?
+
   var body: some View {
+    // layout-box's `placeholders`: off, `{{root}}` stays as written and an inserted picture does
+    // not load. Read by its key, the option layout-box names in its schema.
+    let placeholdersOff = inherit.map { LayoutBoxes.siblingValue("placeholders", values: $0.values, fields: $0.fields) == .bool(false) } ?? false
+    let hasPlaceholders = inherit?.fields.contains { $0.key == "placeholders" } ?? false
+    if case .snippetFile(let dirOption)? = field?.widget, let project = context.projectPath, let inherit, let dirOption,
+       case .string(let dir)? = LayoutBoxes.siblingValue(dirOption, values: inherit.values, fields: inherit.fields), !dir.isEmpty {
+      SnippetFileField(projectPath: project, dir: dir, value: value, defaultValue: defaultValue, hasDefault: hasDefault,
+                       placeholdersOff: placeholdersOff, silenced: context.muted, onValue: onValue, name: name)
+    } else {
+      text(placeholdersOff: placeholdersOff, hasPlaceholders: hasPlaceholders)
+    }
+  }
+
+  @ViewBuilder private func text(placeholdersOff: Bool, hasPlaceholders: Bool) -> some View {
     let current = value?.stringValue ?? ""
     let placeholder = value == .string("") ? L10n.t("pluginsInstalled.explicitlyEmpty")
       : hasDefault ? defaultValue.map(OptionFormText.inline) : nil
     let multiline = field?.widget == .html || field?.widget == .markdown
     VStack(alignment: .leading, spacing: 4) {
-      CommitField(name: name, text: current, placeholder: placeholder, multiline: multiline, monospaced: multiline) { raw in
+      CommitField(name: name, text: current, placeholder: placeholder, multiline: multiline, monospaced: multiline,
+                  insertion: insertion) { raw in
         if raw != current { onValue(raw.isEmpty ? nil : .string(raw)) }
         return true
+      }
+      if multiline, let project = context.projectPath {
+        ImageButton(projectPath: project, format: field?.widget == .markdown ? .markdown : .html, placeholdersOff: placeholdersOff) {
+          insertion = CodeInsertion(text: $0)
+        }
+      }
+      // layout-box before 0.4 describes `html` without a widget, one line: the list stands there too.
+      if hasPlaceholders, multiline || field?.key == "html" {
+        PlaceholderList(onInsert: { insertion = CodeInsertion(text: $0) }, off: placeholdersOff)
       }
       if context.explicitEmpty, value == nil || value == .string("") {
         let isEmpty = value == .string("")
@@ -274,17 +303,20 @@ struct CommitField: View {
   var placeholder: String?
   var multiline = false
   var monospaced = false
+  /// Text to put in: at the cursor of a multi-line field, otherwise at the end; written at once.
+  var insertion: CodeInsertion?
   let commit: (String) -> Bool
 
   @State private var draft: String?
   @State private var committed: String?
+  @State private var selection: TextSelection?
   @FocusState private var focused: Bool
 
   var body: some View {
     let binding = Binding(get: { draft ?? text }, set: { draft = $0 })
     Group {
       if multiline {
-        TextEditor(text: binding)
+        TextEditor(text: binding, selection: $selection)
           .font(.system(.callout, design: .monospaced))
           .frame(minHeight: 70, maxHeight: 220)
           .scrollContentBackground(.hidden)
@@ -314,6 +346,19 @@ struct CommitField: View {
       committed = nil
     }
     .onDisappear(perform: finish)
+    .onChange(of: insertion) { _, next in if let next { insert(next.text) } }
+  }
+
+  private func insert(_ piece: String) {
+    var current = draft ?? text
+    if multiline, case .selection(let range)? = selection?.indices, range.lowerBound >= current.startIndex, range.upperBound <= current.endIndex {
+      current.replaceSubrange(range, with: piece)
+    } else {
+      current += piece
+    }
+    draft = current
+    committed = nil
+    finish()
   }
 
   /// A taken text stays the draft until the page hands the new value back. Dropped at once, the

@@ -137,4 +137,20 @@ import Testing
       #expect(value ?? .string("__undefined") == item["value"], "\(item)")
     }
   }
+
+  /// The plugin list's form: the editors' extras, nothing hidden, the variant or text leading.
+  @Test func rootWithoutTilesPicksThePlugin() throws {
+    func entry(_ source: String, _ options: JSONObject) -> PluginEntry {
+      PluginEntry(object: JSONObject([("name", .string("x")), ("source", .string(source)), ("enabled", .bool(true)), ("options", .object(options))]))
+    }
+    let box = try #require(OptionRoot.withoutTiles(entry("github:boxi-os/quartz-layout-box", JSONObject([("html", .string("t"))])),
+                                                   fields: Self.fields, packageVersion: "0.4.2", lang: .de))
+    #expect(box.hideUnlessSet == nil)
+    #expect(box.lead?.title == L10n.t("extraContent.leadContent"))
+    #expect(box.inactiveReason?("file") == L10n.t("extraContent.silencedByText"))
+    let nav = try #require(OptionRoot.withoutTiles(entry("github:boxi-os/quartz-navigations", JSONObject()), fields: [], packageVersion: nil, lang: .de))
+    #expect(nav.hideUnlessSet == nil)
+    #expect(nav.lead?.has("variant") == true)
+    #expect(OptionRoot.withoutTiles(entry("@quartz-community/explorer", JSONObject()), fields: [], packageVersion: nil, lang: .de) == nil)
+  }
 }

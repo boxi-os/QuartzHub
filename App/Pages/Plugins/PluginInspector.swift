@@ -154,7 +154,10 @@ struct PluginInspector: View {
       }
       OptionsForm(schema: schema.schema, values: item.entry.object["options"]?.objectValue ?? JSONObject(),
                   onChange: { next in set(["options"], next.map(JSONValue.object)) },
-                  explicitEmpty: true, languages: model.config?.siteLanguages ?? [])
+                  explicitEmpty: true, languages: model.config?.siteLanguages ?? [],
+                  root: OptionRoot.withoutTiles(item.entry, fields: schema.schema?.fields ?? [], packageVersion: schema.packageVersion,
+                                                lang: L10n.language == "en" ? .en : .de),
+                  projectPath: model.project.path)
     } else {
       Section(L10n.t("pluginsInstalled.optionsHeading")) {
         Text(L10n.t("layoutEditor.inspector.optionsLoading")).foregroundStyle(.secondary)
