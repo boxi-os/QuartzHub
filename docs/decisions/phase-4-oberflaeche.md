@@ -56,3 +56,20 @@ zwischen den `art:detail`-Warnungen und kam als „1× ‹ganzer Satz›“ hera
 den Warnungen die Sätze von `ImportOutcome.tsx` (gruppiert, Detail-Arten über eine Probe im
 Katalog). Der Dialog (`CreateProjectSheet`, ⌘N und Symbolleiste) ist im UI-Test nur bis vor das
 Anlegen geprüft: ein echtes Anlegen klont Quartz von GitHub und ist ein Netzlauf.
+
+**Einstellungen.** Ein eigenes Fenster (⌘,) mit drei Tabs: Allgemein (Design, Sprache,
+Projektordner, Beim Beenden), Laufzeit (Node, git), Daten & Wartung. Jede Wahl schreibt sofort und
+nur ihr Feld (`SettingsStore`, lesen–ändern–schreiben wie QuartzControls ganzes Objekt). Der
+GitHub-Token und die Verbindungen kommen mit „Veröffentlichen“. Drei Dinge, gemessen am laufenden
+Fenster (2026-11-08):
+
+- **Design** setzt `NSApp.appearance` und greift sofort, in allen Fenstern.
+- **Sprache:** Die Fenster bauen ihren Inhalt neu auf (`followsLanguage`, `.id` an einer Revision),
+  unsere Menübefehle ebenfalls, wenn ihr `body` die Revision liest; ohne das blieben „Neues
+  Projekt…“ und „Inspektor einblenden“ in der alten Sprache. Die Menüs von macOS selbst (Ablage,
+  Bearbeiten, Fenster) nehmen die Sprache beim Start. Deshalb schreibt der Wechsel auch
+  `AppleLanguages` der App, wie es die Systemeinstellung „Sprache je App“ tut; nach dem Neustart
+  hießen sie File, Edit, View. Bei „Systemsprache folgen“ wird der Schlüssel entfernt.
+- **Node-Laufzeit:** Die Umgebung wurde bisher einmal beim Start bestimmt. Jetzt wird sie beim
+  Umschalten neu bestimmt, und der `BuildService` fragt bei jedem Vorgang die aktuelle
+  (`AppServices.current()`): „Gilt für Vorgänge, die danach starten“, wie der Text sagt.

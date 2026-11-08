@@ -41,6 +41,7 @@ struct QuartzHubApp: App {
     Window(L10n.t("shell.projects.title"), id: ProjectsWindow.sceneID) {
       ProjectsWindow()
         .frame(minWidth: 640, minHeight: 420)
+        .followsLanguage()
     }
     .defaultSize(width: 980, height: 640)
     .keyboardShortcut("0", modifiers: [.command, .shift])
@@ -52,8 +53,13 @@ struct QuartzHubApp: App {
 
     WindowGroup(id: ProjectWindow.sceneID, for: String.self) { $projectId in
       ProjectWindow(projectId: projectId)
+        .followsLanguage()
     }
     .defaultSize(Self.initialSize)
+
+    Settings {
+      SettingsWindow()
+    }
   }
 }
 
@@ -63,6 +69,8 @@ struct ProjectCommands: Commands {
   @Environment(\.openWindow) private var openWindow
 
   var body: some Commands {
+    // Read so the items are made again after a language change.
+    let _ = AppAppearance.shared.revision
     CommandGroup(replacing: .newItem) {
       Button(L10n.t("shell.menu.newProject")) {
         openWindow(id: ProjectsWindow.sceneID)

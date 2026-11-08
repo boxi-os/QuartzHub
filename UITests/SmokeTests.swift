@@ -188,6 +188,26 @@ final class SmokeTests: XCTestCase {
     XCTAssertTrue(name.waitForNonExistence(timeout: 5))
   }
 
+  /// QuartzHub ▸ Einstellungen (⌘,): a choice is written at once and only that field; a folder
+  /// that is not a full path is refused with QuartzControl's sentence.
+  func testSettingsWriteAtOnce() throws {
+    let (profile, _) = try scratchProject()
+    try Data(#"{"fremd":true}"#.utf8).write(to: profile.appendingPathComponent("settings.json"))
+    let app = launch(profile: profile)
+    XCTAssertTrue(app.windows["Projekte"].waitForExistence(timeout: 10))
+    app.typeKey(",", modifierFlags: .command)
+    let settings = app.windows["Allgemein"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 5), "⌘, did not open the settings")
+    settings.radioButtons["Weiterlaufen lassen"].click()
+    let written = try String(contentsOf: profile.appendingPathComponent("settings.json"), encoding: .utf8)
+    XCTAssertEqual(written, "{\n  \"fremd\": true,\n  \"serversOnQuit\": \"keep\"\n}")
+    let field = settings.textFields["settings.directory"]
+    field.click()
+    field.typeText("Dokumente\r")
+    XCTAssertTrue(settings.staticTexts["Das ist kein vollständiger Pfad. Er muss mit „/“ oder „~/“ beginnen, oder du wählst den Ordner aus."]
+      .waitForExistence(timeout: 3), "a relative folder was not refused")
+  }
+
   /// The takeover against a QuartzControl profile made here (two projects, no secrets, so no
   /// Keychain prompt): offered, carried out, and not offered again once QuartzHub has a list.
   func testMigrationIsOfferedOnceAndWritesTheProjectList() throws {

@@ -10,22 +10,30 @@ final class AppServices {
   let logs = LogBuffer()
   let store = RunningServersStore(profile: AppProfile.own)
   let builds: BuildService
-  /// The tools for every command the app runs: resolved once (the login shell is asked for PATH).
-  let environment: Task<ToolEnvironment, Never>
+  /// The tools for every command the app runs, resolved once (the login shell is asked for PATH)
+  /// and again when the Node setting changes: a running server keeps the environment it was
+  /// started with, everything started afterwards gets the new one.
+  private(set) var environment: Task<ToolEnvironment, Never>
 
   private init() {
-    let profile = AppProfile.own
-    // Resolved once (the login shell is asked for PATH) and then kept; the Node setting is read
-    // here, as a running server keeps the environment it was started with.
-    environment = Task<ToolEnvironment, Never> {
-      var mode = ToolEnvironment.NodeMode.embedded
-      if case .ok(.object(let object)) = JSONStore.peek(profile.settings), SettingsFile(object: object).nodeRuntime == .system {
-        mode = .system
-      }
-      return await ToolEnvironment.resolve(nodeMode: mode)
-    }
-    let environment = environment
-    builds = BuildService(logs: logs, environment: { await environment.value }, store: store)
+    environment = Self.resolve()
+    // Through `current()`, not the task of this moment: a build started after the Node setting
+    // changed takes the new environment.
+    builds = BuildService(logs: logs, environment: { await AppServices.current() }, store: store)
+  }
+
+  private static func resolve() -> Task<ToolEnvironment, Never> {
+    let mode = SettingsStore.read(AppProfile.own).nodeRuntime == .system ? ToolEnvironment.NodeMode.system : .embedded
+    return Task { await ToolEnvironment.resolve(nodeMode: mode) }
+  }
+
+  /// After "Node-Laufzeit" changed.
+  func reloadEnvironment() {
+    environment = Self.resolve()
+  }
+
+  nonisolated static func current() async -> ToolEnvironment {
+    await MainActor.run { shared.environment }.value
   }
 
   /// Templates with the real commands: npm, `quartz plugin add`, git, the snapshot store.
@@ -57,6 +65,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private var quitAsking = false
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    AppAppearance.shared.applyTheme(SettingsStore.read(AppProfile.own).theme)
     #if DEBUG
     // For the UI test of these questions: a dev server of the project at that path, started as
     // the server page will start it.
@@ -131,17 +140,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // The answer clicked, not "never ask": ticked beside "Weiterlaufen lassen" it means something
     // else than beside "Server beenden". Read-modify-write, the other settings stay.
     if alert.suppressionButton?.state == .on {
-      var file = settings()
-      file.serversOnQuit = answer
-      try? Posix.mkdirs(AppProfile.own.path)
-      try? JSONStore.write(file.json, to: AppProfile.own.settings)
+      _ = try? SettingsStore.update(AppProfile.own) { $0.serversOnQuit = answer }
     }
     return answer
   }
 
-  private func settings() -> SettingsFile {
-    SettingsFile(object: JSONStore.read(AppProfile.own.settings, orEmpty: .object).objectValue ?? JSONObject())
-  }
+  private func settings() -> SettingsFile { SettingsStore.read(AppProfile.own) }
 
   /// One line per server: the project's name (its id when the list does not know it) and port.
   private func entries(_ servers: [(projectId: String, port: Int)]) -> String {

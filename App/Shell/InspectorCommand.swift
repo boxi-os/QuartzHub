@@ -11,6 +11,7 @@ struct InspectorCommand: Commands {
   @FocusedBinding(\.inspectorPresented) private var presented
 
   var body: some Commands {
+    let _ = AppAppearance.shared.revision
     CommandGroup(after: .sidebar) {
       Button(presented == true ? L10n.t("shell.inspector.hide") : L10n.t("shell.inspector.show")) {
         presented?.toggle()

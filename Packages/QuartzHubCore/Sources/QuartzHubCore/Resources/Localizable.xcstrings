@@ -40193,13 +40193,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Was QuartzControl außerhalb deiner Projekte ablegt."
+            "value" : "Was QuartzHub außerhalb deiner Projekte ablegt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "What QuartzControl stores outside your projects."
+            "value" : "What QuartzHub stores outside your projects."
           }
         }
       }
@@ -40273,13 +40273,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beim Start konnte QuartzControl eine seiner Dateien nicht lesen, vermutlich, weil das Programm beim Speichern hart beendet wurde. Die Datei wurde zur Seite gelegt statt überschrieben; was darin stand (etwa Zugänge oder die Projektliste), fehlt in QuartzControl und muss neu angelegt werden."
+            "value" : "Beim Start konnte QuartzHub eine seiner Dateien nicht lesen, vermutlich, weil das Programm beim Speichern hart beendet wurde. Die Datei wurde zur Seite gelegt statt überschrieben; was darin stand (etwa Zugänge oder die Projektliste), fehlt in QuartzHub und muss neu angelegt werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "At startup, QuartzControl could not read one of its own files, most likely because the program was killed while saving it. The file was moved aside instead of overwritten; whatever it held (connections, say, or the project list) is missing from QuartzControl and has to be set up again."
+            "value" : "At startup, QuartzHub could not read one of its own files, most likely because the program was killed while saving it. The file was moved aside instead of overwritten; whatever it held (connections, say, or the project list) is missing from QuartzHub and has to be set up again."
           }
         }
       }
@@ -40369,13 +40369,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Was mit einem laufenden Dev-Server passiert, wenn du QuartzControl schließt."
+            "value" : "Was mit einem laufenden Dev-Server passiert, wenn du QuartzHub schließt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "What happens to a running dev server when you close QuartzControl."
+            "value" : "What happens to a running dev server when you close QuartzHub."
           }
         }
       }
@@ -40385,13 +40385,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Läuft beim Beenden ein Server, fragt QuartzControl, was mit ihm geschehen soll."
+            "value" : "Läuft beim Beenden ein Server, fragt QuartzHub, was mit ihm geschehen soll."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "When a server is running at quit, QuartzControl asks what should happen to it."
+            "value" : "When a server is running at quit, QuartzHub asks what should happen to it."
           }
         }
       }
@@ -40401,13 +40401,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server laufen weiter und bleiben im Browser erreichbar. Beim nächsten Start fragt QuartzControl, ob sie beendet werden sollen."
+            "value" : "Server laufen weiter und bleiben im Browser erreichbar. Beim nächsten Start fragt QuartzHub, ob sie beendet werden sollen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Servers keep running and stay reachable in the browser. The next start of QuartzControl asks whether to stop them."
+            "value" : "Servers keep running and stay reachable in the browser. The next start of QuartzHub asks whether to stop them."
           }
         }
       }
@@ -40529,13 +40529,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In QuartzControl"
+            "value" : "In QuartzHub"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In QuartzControl"
+            "value" : "In QuartzHub"
           }
         }
       }
@@ -40545,13 +40545,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git {{version}} aus QuartzControl. Auf diesem Rechner ist keines installiert, deshalb wird das mitgelieferte benutzt."
+            "value" : "git {{version}} aus QuartzHub. Auf diesem Rechner ist keines installiert, deshalb wird das mitgelieferte benutzt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git {{version}} from QuartzControl. This machine has none installed, so the bundled one is used."
+            "value" : "git {{version}} from QuartzHub. This machine has none installed, so the bundled one is used."
           }
         }
       }
@@ -40561,13 +40561,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git {{version}} von diesem Rechner. QuartzControl bringt zwar eines mit, benutzt es aber nur, wenn keines installiert ist. Deine eigene Einrichtung (~/.gitconfig, Zugangshelfer) gilt so weiter."
+            "value" : "git {{version}} von diesem Rechner. QuartzHub bringt zwar eines mit, benutzt es aber nur, wenn keines installiert ist. Deine eigene Einrichtung (~/.gitconfig, Zugangshelfer) gilt so weiter."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git {{version}} from this machine. QuartzControl carries one too but only uses it when none is installed. Your own setup (~/.gitconfig, credential helpers) keeps applying."
+            "value" : "git {{version}} from this machine. QuartzHub carries one too but only uses it when none is installed. Your own setup (~/.gitconfig, credential helpers) keeps applying."
           }
         }
       }
@@ -40577,13 +40577,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git steht unter der GPL v2; der vollständige Lizenztext liegt in QuartzControl."
+            "value" : "git steht unter der GPL v2; der vollständige Lizenztext liegt in QuartzHub."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git is licensed under the GPL v2; the full licence text ships with QuartzControl."
+            "value" : "git is licensed under the GPL v2; the full licence text ships with QuartzHub."
           }
         }
       }
@@ -40657,13 +40657,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Im Einsatz: Node {{node}} und npm {{npm}} aus QuartzControl."
+            "value" : "Im Einsatz: Node {{node}} und npm {{npm}} aus QuartzHub."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In use: Node {{node}} and npm {{npm}} from QuartzControl."
+            "value" : "In use: Node {{node}} and npm {{npm}} from QuartzHub."
           }
         }
       }
@@ -40753,13 +40753,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einstellungen für QuartzControl. Projektbezogene Einstellungen stehen im jeweiligen Projekt."
+            "value" : "Einstellungen für QuartzHub. Projektbezogene Einstellungen stehen im jeweiligen Projekt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Settings for QuartzControl. Per-project settings live inside each project."
+            "value" : "Settings for QuartzHub. Per-project settings live inside each project."
           }
         }
       }
@@ -41082,6 +41082,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Projects"
+          }
+        }
+      }
+    },
+    "shell.settings.general" : {
+      "comment" : "Settings window: tab with appearance, language, project folder, quit",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
           }
         }
       }

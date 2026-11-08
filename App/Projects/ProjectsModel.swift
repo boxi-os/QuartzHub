@@ -76,8 +76,7 @@ final class ProjectsModel {
 
   /// The settings' default folder for new and opened projects (`defaultProjectDirectory`).
   static var defaultDirectory: String? {
-    let file = SettingsFile(object: JSONStore.read(AppProfile.own.settings, orEmpty: .object).objectValue ?? JSONObject())
-    return file.defaultProjectDirectory.flatMap { $0.isEmpty ? nil : $0 }
+    SettingsStore.read(AppProfile.own).defaultProjectDirectory.flatMap { $0.isEmpty ? nil : $0 }
   }
 
   static func pickFolder(start: String?) -> String? {
