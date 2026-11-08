@@ -73,3 +73,9 @@ Fenster (2026-11-08):
 - **Node-Laufzeit:** Die Umgebung wurde bisher einmal beim Start bestimmt. Jetzt wird sie beim
   Umschalten neu bestimmt, und der `BuildService` fragt bei jedem Vorgang die aktuelle
   (`AppServices.current()`): „Gilt für Vorgänge, die danach starten“, wie der Text sagt.
+
+**Neben QuartzControl.** Ein Band oben im Projektfenster, solange QuartzControl läuft
+(`NSRunningApplication`, aktualisiert bei Start und Ende von Apps), dazu dessen Dev-Server für genau
+dieses Projekt. Nicht am laufenden QuartzControl gesehen: es zu starten, löst dessen Abfrage nach
+einer neueren Fassung bei GitHub aus, ein Netzlauf. Was das Band meldet, prüft
+`CoexistenceConcernsTests`. Eine Warnung je Schreibvorgang kommt mit den Seiten, die schreiben.

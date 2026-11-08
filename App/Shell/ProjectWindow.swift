@@ -59,6 +59,7 @@ struct ProjectWindow: View {
     } detail: {
       PendingPage(page: selection.wrappedValue ?? .overview)
         .id(pageID)
+        .safeAreaInset(edge: .top, spacing: 0) { CoexistenceBand(projectPath: row.path) }
     }
     .navigationTitle(row.name)
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))

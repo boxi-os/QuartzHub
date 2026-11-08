@@ -40797,6 +40797,57 @@
         }
       }
     },
+    "shell.coexistence.running" : {
+      "comment" : "Band in a project window while QuartzControl runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzControl läuft gerade. Ändern beide Apps dasselbe Projekt, kann die eine überschreiben, was die andere gespeichert hat."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzControl is running. If both apps change the same project, one can overwrite what the other saved."
+          }
+        }
+      }
+    },
+    "shell.coexistence.server" : {
+      "comment" : "Band in a project window: QuartzControl's dev server for this project",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für dieses Projekt läuft ein Dev-Server von QuartzControl auf Port {{port}}. QuartzHub beendet ihn nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A QuartzControl dev server is running for this project on port {{port}}. QuartzHub does not stop it."
+          }
+        }
+      }
+    },
+    "shell.coexistence.serverNoPort" : {
+      "comment" : "Band in a project window: QuartzControl's dev server, port unknown",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für dieses Projekt läuft ein Dev-Server von QuartzControl. QuartzHub beendet ihn nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A QuartzControl dev server is running for this project. QuartzHub does not stop it."
+          }
+        }
+      }
+    },
     "shell.inspector.group" : {
       "comment" : "Sidebar-Gruppe der Seite im Inspektor, z. B. „Bereich: Gestaltung“.",
       "localizations" : {
