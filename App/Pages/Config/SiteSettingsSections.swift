@@ -1,0 +1,204 @@
+import QuartzHubCore
+import SwiftUI
+
+/// The site's own settings (QuartzControl's `SiteSettings.tsx`): three sections, one per question
+/// the form answers. Each field writes into the page's draft; "Speichern" writes the file.
+struct SiteSettingsSections: View {
+  @Bindable var model: ConfigModel
+  /// The patterns as typed: the draft keeps them trimmed and without empty lines, and a binding
+  /// that went through that on every keystroke would swallow the Return that starts a new line.
+  @State private var ignoreText = ""
+
+  var body: some View {
+    Section {
+      FormField(hint: L10n.t("siteSettings.pageTitleHint")) {
+        TextField(L10n.t("siteSettings.pageTitle"), text: binding("pageTitle"))
+          .accessibilityIdentifier("config.pageTitle")
+      }
+      FormField(hint: L10n.t("siteSettings.pageTitleSuffixHint")) {
+        TextField(L10n.t("siteSettings.pageTitleSuffix"), text: binding("pageTitleSuffix"))
+      }
+      FormField(hint: L10n.t("siteSettings.baseUrlHint")) {
+        TextField(L10n.t("siteSettings.baseUrl"), text: binding("baseUrl"), prompt: Text(verbatim: "example.com"))
+      }
+      localeField
+      FormField(hint: L10n.t("siteSettings.spaHint")) {
+        Toggle(L10n.t("siteSettings.spa"), isOn: flag("enableSPA"))
+      }
+      FormField(hint: L10n.t("siteSettings.popoversHint")) {
+        Toggle(L10n.t("siteSettings.popovers"), isOn: flag("enablePopovers"))
+      }
+    } header: {
+      Label(L10n.t("siteSettings.heading"), systemImage: "gearshape")
+    }
+
+    Section {
+      FormField(hint: L10n.t("siteSettings.ignorePatternsHint")) {
+        VStack(alignment: .leading, spacing: 4) {
+          Text(L10n.t("siteSettings.ignorePatterns"))
+          TextEditor(text: $ignoreText)
+            .font(.system(.body, design: .monospaced))
+            .frame(minHeight: 96)
+            .scrollContentBackground(.hidden)
+            .padding(4)
+            .background(RoundedRectangle(cornerRadius: 6).fill(.background))
+            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
+            .accessibilityLabel(L10n.t("siteSettings.ignorePatterns"))
+            .accessibilityIdentifier("config.ignorePatterns")
+        }
+      }
+    } header: {
+      Label(L10n.t("siteSettings.ignoreHeading"), systemImage: "eye.slash")
+    }
+    .onChange(of: model.ignorePatterns, initial: true) { _, patterns in
+      // Only when the draft changed under the text (read, saved, read again), not on our own edit.
+      if Self.parse(ignoreText) != patterns { ignoreText = patterns.joined(separator: "\n") }
+    }
+    .onChange(of: ignoreText) { _, text in
+      let patterns = Self.parse(text)
+      if patterns != model.ignorePatterns { model.setIgnorePatterns(patterns) }
+    }
+
+    AnalyticsSection(model: model)
+  }
+
+  static func parse(_ text: String) -> [String] {
+    text.split(separator: "\n", omittingEmptySubsequences: false)
+      .map { $0.trimmingCharacters(in: .whitespaces) }
+      .filter { !$0.isEmpty }
+  }
+
+  private func binding(_ key: String) -> Binding<String> {
+    Binding(get: { model.string(key) }, set: { model.setString(key, $0) })
+  }
+
+  private func flag(_ key: String) -> Binding<Bool> {
+    Binding(get: { model.bool(key) }, set: { model.setBool(key, $0) })
+  }
+
+  /// The valid values are the locale files in the project: Quartz's `i18n()` is a plain lookup, and
+  /// a wrong key failed the build in an emitter with an error naming neither the locale nor the
+  /// setting. A locale the project does not ship stays selectable, marked: it is what the file says.
+  @ViewBuilder private var localeField: some View {
+    let locale = model.string("locale")
+    let shipped = model.locales ?? []
+    if shipped.isEmpty {
+      FormField(hint: L10n.t("siteSettings.localeHintFree")) {
+        TextField(L10n.t("siteSettings.locale"), text: binding("locale"), prompt: Text(verbatim: "en-US"))
+      }
+    } else {
+      let options = Array(Set(shipped + [locale]).filter { !$0.isEmpty }).sorted()
+      FormField(hint: L10n.t("siteSettings.localeHint")) {
+        Picker(L10n.t("siteSettings.locale"), selection: binding("locale")) {
+          if locale.isEmpty { Text(verbatim: "–").tag("") }
+          ForEach(options, id: \.self) { code in
+            Text(shipped.contains(code) ? code : "\(code) \(L10n.t("siteSettings.localeUnknownSuffix"))").tag(code)
+          }
+        }
+        .accessibilityIdentifier("config.locale")
+      }
+    }
+  }
+}
+
+/// The analytics providers Quartz understands, with the fields each reads: the `Analytics` union in
+/// the project's `quartz/cfg.ts`. Switching provider drops the previous one's keys (the config is
+/// a union; a leftover `tagId` on a plausible entry is a shape Quartz never reads), an emptied
+/// optional field is removed rather than written as "" (Quartz would put it into the script URL),
+/// and the required fields still empty are named.
+private struct AnalyticsSection: View {
+  @Bindable var model: ConfigModel
+
+  struct Field {
+    let key: String
+    var required = false
+  }
+
+  static let providers: [(name: String, fields: [Field])] = [
+    ("plausible", [Field(key: "host")]),
+    ("google", [Field(key: "tagId", required: true)]),
+    ("umami", [Field(key: "websiteId", required: true), Field(key: "host")]),
+    ("goatcounter", [Field(key: "websiteId", required: true), Field(key: "host"), Field(key: "scriptSrc")]),
+    ("posthog", [Field(key: "apiKey", required: true), Field(key: "host")]),
+    ("tinylytics", [Field(key: "siteId", required: true)]),
+    ("cabin", [Field(key: "host")]),
+    ("clarity", [Field(key: "projectId")]),
+    ("matomo", [Field(key: "host", required: true), Field(key: "siteId", required: true)]),
+    ("vercel", []),
+    ("rybbit", [Field(key: "siteId", required: true), Field(key: "host")]),
+  ]
+
+  private var value: JSONObject? { model.config?.configuration["analytics"]?.objectValue }
+  private var provider: String { value?["provider"]?.stringValue ?? "" }
+  private var fields: [Field] { Self.providers.first { $0.name == provider }?.fields ?? [] }
+
+  var body: some View {
+    Section {
+      Note(L10n.t("siteSettings.analyticsDescription"))
+      Picker(L10n.t("siteSettings.analyticsProvider"), selection: Binding(get: { provider }, set: select)) {
+        Text(L10n.t("siteSettings.analyticsNone")).tag("")
+        // A provider QuartzHub does not know stays what the file says.
+        if !provider.isEmpty, !Self.providers.contains(where: { $0.name == provider }) {
+          Text(verbatim: provider).tag(provider)
+        }
+        ForEach(Self.providers, id: \.name) { Text(verbatim: $0.name).tag($0.name) }
+      }
+      .accessibilityIdentifier("config.analytics")
+      ForEach(fields, id: \.key) { field in
+        FormField(hint: Self.hint(field, provider: provider)) {
+          TextField(field.key + (field.required ? " *" : ""), text: text(field.key))
+        }
+      }
+      let missing = fields.filter { $0.required && JSRead.string(value?[$0.key]).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.map(\.key)
+      if !provider.isEmpty, !missing.isEmpty {
+        Label(L10n.t("siteSettings.analyticsMissing", ["fields": missing.joined(separator: ", ")]), systemImage: "exclamationmark.triangle")
+          .font(.callout)
+          .foregroundStyle(.orange)
+      }
+    } header: {
+      Label(L10n.t("siteSettings.analyticsHeading"), systemImage: "chart.bar")
+    }
+  }
+
+  private func select(_ next: String) {
+    model.config?.configuration["analytics"] = next.isEmpty ? .null : .object(JSONObject([("provider", .string(next))]))
+  }
+
+  private func text(_ key: String) -> Binding<String> {
+    Binding(
+      get: { JSRead.string(value?[key]) },
+      set: { typed in
+        var next = value ?? JSONObject()
+        next[key] = typed.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : .string(typed)
+        model.config?.configuration["analytics"] = .object(next)
+      })
+  }
+
+  /// `host` is the one key whose meaning flips: optional everywhere, the address of your own
+  /// installation for matomo, where "leave it empty" would contradict the asterisk.
+  static func hint(_ field: Field, provider: String) -> String? {
+    switch field.key {
+    case "host": field.required ? L10n.t("siteSettings.analyticsFields.hostRequired") : L10n.t("siteSettings.analyticsFields.host")
+    case "tagId": L10n.t("siteSettings.analyticsFields.tagId")
+    case "websiteId": L10n.t("siteSettings.analyticsFields.websiteId")
+    case "apiKey": L10n.t("siteSettings.analyticsFields.apiKey")
+    case "siteId": L10n.t("siteSettings.analyticsFields.siteId")
+    case "projectId": L10n.t("siteSettings.analyticsFields.projectId")
+    case "scriptSrc": L10n.t("siteSettings.analyticsFields.scriptSrc")
+    default: nil
+    }
+  }
+}
+
+/// `String(value ?? '')` for a field's text.
+enum JSRead {
+  static func string(_ value: JSONValue?) -> String {
+    switch value {
+    case nil, .null?: ""
+    case .string(let text)?: text
+    case .number(let number)?: number == number.rounded() && abs(number) < 1e15 ? String(Int64(number)) : String(number)
+    case .bool(let flag)?: flag ? "true" : "false"
+    default: ""
+    }
+  }
+}

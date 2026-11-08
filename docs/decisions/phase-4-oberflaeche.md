@@ -364,3 +364,80 @@ mitgekopiert, Server auf 8080/3001:
 - ein fremder Server aus dem Terminal in der Liste;
 - „Ordner öffnen“ und „Auswählen“, weil beide den Finder bzw. das Ablagefenster öffnen;
 - VoiceOver.
+
+### Konfiguration: Website, ⌘S und die Frage beim Verlassen
+
+Vorbild `ConfigEditor/index.tsx` mit `ContentFolder`, `ProjectImage` und `SiteSettings`, dazu
+`state/saveCommand.ts` und `state/unsavedGuard.tsx`. Neu im Kern:
+
+- **`ProjectImageBox`**, QuartzControls `shared/projectImageBox.ts`: das Projektbild im Kopfbereich
+  als eine Layout-Box, an ihrer Klasse wiedererkannt. Gemessen mit
+  `scripts/project-image-box-golden.mjs` über 18 Plugin-Listen, verglichen als JSON-Text, also mit
+  Schlüsselreihenfolge. Die Gegenproben scheitern: nur doppelte Anführungszeichen erkennen, oder
+  `enabled` beim Ersetzen ans Ende stellen.
+- **`ContentIndexPage`** („Startseite anlegen“), QuartzControls `createIndexPage`. Welche Notizen
+  der Build liest, fragt der neue Helfer `content-files` das globby des Projekts, so wie
+  `quartz/util/glob.ts` es aufruft. Fehlt globby, nimmt er QuartzControls Ersatzweg; die Abschrift
+  ist per `diff` wortgleich. Die Front Matter schreibt yaml's `stringify` im selben Helfer.
+  QuartzControl lud das globby des Projekts in seinen Hauptprozess, hier läuft es in einem kurzen
+  Kindprozess. Gemessen mit `scripts/content-index-golden.mjs` über 15 Projekte: globby aus
+  gui-test, Ersatzweg, `.gitignore`, verknüpfter Vault, vorhandene `index.md`, Sonderzeichen,
+  kaputte Config. Der Test baut sie unter „Gärten-Ü“ nach. Die Gegenproben scheitern: Sortieren
+  ohne `numeric` (2 Fälle), oder globby nie finden (die 4 globby-Fälle).
+
+**Aussehen.** Ein gruppiertes `Form`: Content-Ordner, Projektbild, Seiteneinstellungen,
+Ausschließen, Statistik, der Verweis auf die Stile. Die Dialoge „Quelle ändern…“ und „Startseite
+anlegen…“ sind Sheets. „Speichern“ steht in der Symbolleiste, daneben „Nicht gespeichert“ bzw.
+„Gespeichert.“; Fehler beim Speichern stehen oben im Formular.
+
+**Die Frage beim Verlassen** (`App/Shell/UnsavedGuard.swift`). Eine Seite meldet sich mit
+`.unsavedChanges(dirty, save:)` beim Wächter ihres Fensters an. Gefragt wird an vier Türen:
+Seitenleiste, Link auf einer Seite (`openPage`), Fenster schließen, Beenden. QuartzControl hatte
+ein Fenster und fragte an der Seitenleiste und am Weg zur Projektliste. Hier gehen Änderungen beim
+Schließen eines Projektfensters verloren, also fragt das Schließen. Die Frage ist ein `NSAlert`
+als Sheet am Fenster mit „Abbrechen“, „Speichern“ (wenn die Seite speichern kann) und „Änderungen
+verwerfen“ (destruktiv). Ungespeichert zeigt das Fenster zusätzlich den Punkt im Schließen-Knopf
+(`isDocumentEdited`).
+
+**Gemessen** in Hell und Dunkel an der gui-test-Kopie und an einem Wegwerf-Projekt:
+
+| Vorgang | Ergebnis |
+|---|---|
+| Seitentitel geändert | „Nicht gespeichert“ in der Symbolleiste, Punkt im Schließen-Knopf, Ablage ▸ Speichern aktiv |
+| Seitenleiste „Plugins“, „Abbrechen“ | bleibt auf Konfiguration, Markierung zurück, Änderung bleibt |
+| ⌘S | genau die Zeile `pageTitle` geändert, Snapshot angelegt, Ablage ▸ Speichern wieder grau |
+| geändert, ⌘W, „Änderungen verwerfen“ | Fenster zu, Datei unverändert |
+| geändert, ⌘Q, „Abbrechen“ | App läuft weiter |
+| geändert, ⌘Q, „Speichern“ | Datei geschrieben, App beendet |
+| „Startseite anlegen“, Titel „Mein: Garten“, ohne `node_modules` | `title: "Mein: Garten"`, „privat“ (Muster) fehlt, „Teil 2“ vor „Teil 10“, Hinweis auf den Ersatzweg |
+| Anbieter „google“, `tagId`, zweites Muster in neuer Zeile, ⌘S | `analytics: {provider: google, tagId: …}`, beide Muster |
+
+**Was beim Bau anders war als gedacht.**
+- **Ablage ▸ Speichern erschien nicht.** SwiftUI lässt die Gruppe `.saveItem` in einer App ohne
+  Dokumente weg, ob ersetzt, davor oder dahinter (gemessen, macOS 27). Der Eintrag steht jetzt
+  hinter „Öffnen“ mit Trennlinie.
+- **Die Seitenleiste blieb auf der abgelehnten Seite markiert.** Die Liste hing an einer Bindung
+  auf `pageID`; nach „Abbrechen“ änderte sich `pageID` nicht, also wurde nichts neu gezeichnet. Die
+  Markierung hat jetzt einen eigenen Zustand, den „Abbrechen“ zurücksetzt.
+- **Das Musterfeld hätte Return verschluckt.** Eine Bindung, die bei jedem Tastendruck leere
+  Zeilen wegwirft, nimmt die neue Zeile gleich wieder weg. Das Feld hält seinen Text selbst und
+  übergibt die bereinigte Liste.
+- **macOS 27 stapelt die Knöpfe des Hinweisfensters senkrecht**, „Abbrechen“ unten, obwohl er als
+  erster angelegt ist. Die Reihenfolge legt das System fest.
+- **Vier übernommene Texte nannten „QuartzControl“** (Projektbild, Kopfbereich). Sie sagen jetzt
+  „QuartzHub“.
+
+**Abweichungen von QuartzControl.**
+- **⌘S ist grau, wenn es nichts zu speichern gibt.** QuartzControls Menü konnte das nicht.
+- **Fenster schließen und Beenden fragen** (siehe oben).
+- **Nach dem Speichern liest die Seite die Datei neu** (Regel „Eine Seite besitzt ihr Dokument“).
+  QuartzControl übernahm seinen Entwurf als gespeichert.
+- **Ein Anbieter, den QuartzHub nicht kennt, bleibt wählbar**, statt als „Keine Statistik“ zu
+  erscheinen.
+
+**Nicht gemessen:**
+- „Quelle ändern…“ (kopiert oder verknüpft einen Ordner);
+- Bild wählen, ersetzen, entfernen, auch das dunkle (Ablagefenster);
+- der Schalter „Im Kopfbereich zeigen“ mit Installation von quartz-layout-box (Netz); die
+  Listen-Logik dahinter ist golden gemessen;
+- VoiceOver.

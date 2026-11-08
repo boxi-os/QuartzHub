@@ -36155,13 +36155,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das dunkle Bild wurde nicht in QuartzControl gewählt. Zeigt der Kopfbereich das Projektbild, dann wird im dunklen Modus solange dieses angezeigt, bis du ein eigenes wählst."
+            "value" : "Das dunkle Bild wurde nicht in QuartzHub gewählt. Zeigt der Kopfbereich das Projektbild, dann wird im dunklen Modus solange dieses angezeigt, bis du ein eigenes wählst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The dark image was not chosen in QuartzControl. If the header shows the project image, this one is shown in dark mode until you choose your own."
+            "value" : "The dark image was not chosen in QuartzHub. If the header shows the project image, this one is shown in dark mode until you choose your own."
           }
         }
       }
@@ -36315,13 +36315,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Braucht das Plugin quartz-layout-box, QuartzControl bietet beim Einschalten an, es zu installieren."
+            "value" : "Braucht das Plugin quartz-layout-box, QuartzHub bietet beim Einschalten an, es zu installieren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Needs the quartz-layout-box plugin; QuartzControl offers to install it when you switch this on."
+            "value" : "Needs the quartz-layout-box plugin; QuartzHub offers to install it when you switch this on."
           }
         }
       }
@@ -36347,13 +36347,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Plugin quartz-layout-box installieren?\n\nDas Bild im Kopfbereich wird damit gebaut. Vorher speichert QuartzControl die ungespeicherten Änderungen dieser Seite."
+            "value" : "Plugin quartz-layout-box installieren?\n\nDas Bild im Kopfbereich wird damit gebaut. Vorher speichert QuartzHub die ungespeicherten Änderungen dieser Seite."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Install the quartz-layout-box plugin?\n\nThe header image is built with it. QuartzControl saves this page’s unsaved changes first."
+            "value" : "Install the quartz-layout-box plugin?\n\nThe header image is built with it. QuartzHub saves this page’s unsaved changes first."
           }
         }
       }
@@ -36507,13 +36507,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Seite zeigt ein Bild, das nicht in QuartzControl gewählt wurde. Ein eigenes ersetzt es im Kopfbereich und als Favicon. PNG oder JPEG, am besten quadratisch."
+            "value" : "Die Seite zeigt ein Bild, das nicht in QuartzHub gewählt wurde. Ein eigenes ersetzt es im Kopfbereich und als Favicon. PNG oder JPEG, am besten quadratisch."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The site shows an image that was not chosen in QuartzControl. One of your own replaces it in the header and as the favicon. PNG or JPEG, ideally square."
+            "value" : "The site shows an image that was not chosen in QuartzHub. One of your own replaces it in the header and as the favicon. PNG or JPEG, ideally square."
           }
         }
       }

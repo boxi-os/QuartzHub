@@ -301,4 +301,45 @@ final class SmokeTests: XCTestCase {
     XCTAssertFalse(again.descendants(matching: .any)["migration"].firstMatch.waitForExistence(timeout: 3),
                    "takeover offered a second time")
   }
+
+  /// Konfiguration owns quartz.config.yaml: an edit says it is unsaved, leaving through the sidebar
+  /// asks and "Abbrechen" stays, ⌘S writes the file, and with nothing unsaved leaving asks nothing.
+  func testConfigAsksBeforeLeavingAndSavesWithCommandS() throws {
+    let (profile, project) = try scratchProject()
+    let app = launch(profile: profile, open: project)
+    let window = projectWindow(app)
+    XCTAssertTrue(window.waitForExistence(timeout: 10))
+    let any = window.descendants(matching: .any)
+    any["sidebar.config"].firstMatch.click()
+    XCTAssertTrue(any["page.config"].firstMatch.waitForExistence(timeout: 5), "Konfiguration did not open")
+
+    let field = any["config.pageTitle"].firstMatch
+    XCTAssertTrue(field.waitForExistence(timeout: 10), "no title field")
+    field.click()
+    field.typeKey("a", modifierFlags: .command)
+    field.typeText("Neu")
+    XCTAssertTrue(any["config.unsaved"].firstMatch.waitForExistence(timeout: 5), "the edit is not marked unsaved")
+
+    any["sidebar.plugins"].firstMatch.click()
+    let cancel = window.sheets.buttons["Abbrechen"].firstMatch
+    XCTAssertTrue(cancel.waitForExistence(timeout: 5), "leaving with an edit did not ask")
+    XCTAssertTrue(window.sheets.buttons["Änderungen verwerfen"].firstMatch.exists, "no way to discard")
+    cancel.click()
+    XCTAssertTrue(any["page.config"].firstMatch.waitForExistence(timeout: 5), "\"Abbrechen\" left the page")
+    XCTAssertFalse(any["page.plugins"].firstMatch.exists, "\"Abbrechen\" opened Plugins")
+
+    let config = project.appendingPathComponent("quartz.config.yaml")
+    window.typeKey("s", modifierFlags: .command)
+    let written = expectation(for: NSPredicate { _, _ in
+      (try? String(contentsOf: config, encoding: .utf8))?.contains("pageTitle: Neu") == true
+    }, evaluatedWith: nil)
+    wait(for: [written], timeout: 10)
+    let saved = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: any["config.unsaved"].firstMatch)
+    wait(for: [saved], timeout: 5)
+
+    any["sidebar.plugins"].firstMatch.click()
+    XCTAssertTrue(any["page.plugins"].firstMatch.waitForExistence(timeout: 5), "a saved page did not let go")
+    XCTAssertFalse(window.sheets.firstMatch.exists, "a saved page asked")
+  }
+
 }

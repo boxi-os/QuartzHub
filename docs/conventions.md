@@ -65,7 +65,8 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
 - **Eine Seite besitzt ihr Dokument. (QC, „Eine Route ist gemountet …“)** Beim Erscheinen lesen,
   explizit speichern, `dirty` per Vergleich mit dem Gelesenen, nach jedem eigenen Schreiben neu lesen.
 - **„Wo war ich“ (QC):** `@SceneStorage` mit stabilen Kennungen (`rawValue`), nie Listenindizes.
-- **Verlassen mit ungespeicherten Änderungen fragt (QC):** Abbrechen, Speichern, Verwerfen;
+- **Verlassen mit ungespeicherten Änderungen fragt (QC):** Abbrechen, Speichern, Verwerfen, an
+  Seitenleiste, Link, Fenster schließen und Beenden (`UnsavedGuard`, `.unsavedChanges`);
   scheitert das Speichern, bleibt man auf der Seite.
 - **Jedes Bedienelement hat einen Namen**, auch ohne sichtbaren Text (`Label` statt bloßem
   `Image`); der Spike las SwiftUI-Buttons über System Events namenlos. Test-Kennungen

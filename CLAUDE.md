@@ -135,7 +135,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   „Projekte“ mit Anlegen und Duplizieren, Projektfenster, Einstellungen, Band neben QuartzControl.
   Der Rauchtest läuft auf einem Wegwerf-Profil mit `-QHOpenProject`. 4b entschieden: Code-Editor
   NSTextView mit TextKit 2 ohne Paket, Umsortieren mit `onMove` und Befehlen (Messgeschirr in
-  `docs/decisions/phase-4-harness/`). 4c läuft: Übersicht und Vorschau & Build fertig; als Nächstes Konfiguration.
+  `docs/decisions/phase-4-harness/`). 4c läuft: Übersicht und Vorschau & Build fertig, Konfiguration mit dem Reiter Website (dazu ⌘S und die Frage beim Verlassen); als Nächstes der Reiter Übersetzungen.
   Rauchtest und Ansehen ohne Netz mit `-QHNoUpdateCheck YES` (nur Debug).
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node

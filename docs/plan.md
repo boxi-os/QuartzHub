@@ -291,7 +291,11 @@ nach Abhängigkeit:
   Aktivität für alle Seiten), `BuildAction` (Bauen mit der Frage zum Ausgabeordner), `Formats`.
   Vorschau & Build fertig: `ProjectPrefs.outputDirProblem` im Kern (gegen QuartzControls Schema
   gemessen); in der App die Konsolen (`LogConsole`, Zeilen über `BuildMonitor`), die Liste der
-  Server auf dem Mac, die Live-Vorschau in `WKWebView`. Als Nächstes Konfiguration.
+  Server auf dem Mac, die Live-Vorschau in `WKWebView`.
+  Konfiguration, Reiter Website: `ProjectImageBox` und `ContentIndexPage` im Kern (golden
+  gemessen; Helfer `content-files` mit dem globby des Projekts), in der App ⌘S und die Frage beim
+  Verlassen (`UnsavedGuard`: Seitenleiste, Link, Fenster schließen, Beenden). Als Nächstes der
+  Reiter Übersetzungen.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl
