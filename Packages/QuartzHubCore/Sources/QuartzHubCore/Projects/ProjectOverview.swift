@@ -22,6 +22,8 @@ public struct ProjectOverview: Equatable, Sendable, Identifiable {
   public var id: String { entry.id }
   public var name: String { entry.name }
   public var path: String { entry.path }
+  /// When the project was last opened; nil for never, or a stamp nobody can read.
+  public var lastOpened: Date? { entry.lastOpenedAt.flatMap(ProjectOverviews.parseISO) }
 
   public init(entry: ProjectEntry, missing: Bool, isQuartzProject: Bool, siteTitle: String? = nil, baseUrl: String? = nil,
               serverRunning: Bool = false, serverPort: Int? = nil, relaySecrets: Bool = false, icon: Data? = nil) {
