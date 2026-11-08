@@ -57,12 +57,21 @@ struct ProjectWindow: View {
       .accessibilityLabel(L10n.t("projectLayout.navLabel"))
       .accessibilityIdentifier("sidebar")
     } detail: {
-      PendingPage(page: selection.wrappedValue ?? .overview)
+      page(selection.wrappedValue ?? .overview, ProjectContext(id: row.id, name: row.name, path: row.path))
         .id(pageID)
         .safeAreaInset(edge: .top, spacing: 0) { CoexistenceBand(projectPath: row.path) }
     }
     .navigationTitle(row.name)
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
+    .environment(\.openPage, OpenPageAction { pageID = $0.rawValue })
+  }
+
+  /// The ported pages; the others are placeholders until Phase 4 reaches them.
+  @ViewBuilder private func page(_ page: ProjectPage, _ project: ProjectContext) -> some View {
+    switch page {
+    case .overview: OverviewPage(project: project)
+    default: PendingPage(page: page)
+    }
   }
 
   private func rows(_ group: ProjectPage.Group) -> some View {
@@ -72,4 +81,14 @@ struct ProjectWindow: View {
         .accessibilityIdentifier("sidebar.\(page.rawValue)")
     }
   }
+}
+
+/// Moves the window to another page, for a link on a page (the overview's "Plugins ›").
+struct OpenPageAction {
+  let open: (ProjectPage) -> Void
+  func callAsFunction(_ page: ProjectPage) { open(page) }
+}
+
+extension EnvironmentValues {
+  @Entry var openPage = OpenPageAction { _ in }
 }

@@ -108,3 +108,17 @@ public enum BuildOutputGuard {
     }
   }
 }
+
+extension OutputDirVerdict.Refusal {
+  /// The sentence QuartzControl's build handler threw for a refused folder (`buildDirRefused` with
+  /// its reason); `dir` as `BuildOutputGuard.buildDirectory` resolved it.
+  public func message(dir: String) -> String {
+    let why = switch self {
+    case .project: L10n.t("main.buildDirIsProject")
+    case .containsProject: L10n.t("main.buildDirContainsProject")
+    case .home: L10n.t("main.buildDirIsHome")
+    case .protected: L10n.t("main.buildDirReserved")
+    }
+    return L10n.t("main.buildDirRefused", ["dir": dir, "why": why])
+  }
+}

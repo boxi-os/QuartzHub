@@ -25,8 +25,9 @@ final class SmokeTests: XCTestCase {
     let app = XCUIApplication()
     // A fresh window state every run: no restored page, inspector at its default. The takeover
     // from QuartzControl is off unless a test hands it a source profile.
+    // No update check: the overview would ask GitHub on every run (DEBUG only, OverviewModel).
     app.launchArguments += ["-QHLanguage", "de", "-ApplePersistenceIgnoreState", "YES",
-                            "-QHMigrationSource", migrationSource]
+                            "-QHMigrationSource", migrationSource, "-QHNoUpdateCheck", "YES"]
     if let profile { app.launchArguments += ["-QHProfileDir", profile.path] }
     if let project { app.launchArguments += ["-QHOpenProject", project.path] }
     if let size { app.launchArguments += ["-QHWindowSize", "\(Int(size.width))x\(Int(size.height))"] }
@@ -77,6 +78,22 @@ final class SmokeTests: XCTestCase {
     }
     XCTAssertEqual(widths[0], 900, accuracy: 4, "small window is not at the minimum width")
     XCTAssertEqual(widths[1], 1400, accuracy: 4, "large window did not open at 1400: \(widths)")
+  }
+
+  /// The overview of the scratch project: no package.json and no base URL, so the band names both,
+  /// "Alles ok" is not there, and a section's link moves the window to its page.
+  func testOverviewNamesWhatIsMissingAndLinksToItsPage() throws {
+    let (profile, project) = try scratchProject()
+    let app = launch(profile: profile, open: project)
+    let window = projectWindow(app)
+    XCTAssertTrue(window.waitForExistence(timeout: 10))
+    let any = window.descendants(matching: .any)
+    XCTAssertTrue(any["overview.issue.baseurl"].firstMatch.waitForExistence(timeout: 10), "no line for the missing base URL")
+    XCTAssertTrue(any["overview.issue.dependencies-unreadable"].firstMatch.exists, "no line for the unreadable package.json")
+    XCTAssertFalse(any["overview.allGood"].firstMatch.exists, "\"Alles ok\" beside the band")
+    let link = any["overview.link.plugins"].firstMatch
+    link.click()
+    XCTAssertTrue(any["page.plugins"].firstMatch.waitForExistence(timeout: 5), "the link did not open Plugins")
   }
 
   func testInspectorToggles() throws {

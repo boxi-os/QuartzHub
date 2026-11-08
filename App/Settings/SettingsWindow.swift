@@ -236,7 +236,7 @@ private struct MaintenanceSettings: View {
       Section {
         LabeledContent(L10n.t("settings.maintenance.cache")) {
           if let cache {
-            Text(L10n.t("settings.maintenance.cacheSize", ["count": String(cache.entries), "size": Self.bytes(cache.bytes)], count: cache.entries))
+            Text(L10n.t("settings.maintenance.cacheSize", ["count": String(cache.entries), "size": Formats.bytes(cache.bytes)], count: cache.entries))
           } else {
             Text("…")
           }
@@ -268,18 +268,5 @@ private struct MaintenanceSettings: View {
     }
     .formStyle(.grouped)
     .task { cache = await schema.cacheStats() }
-  }
-
-  /// `formatBytes`: decimal units, one decimal below 10 from kB on.
-  static func bytes(_ count: Int) -> String {
-    let units = ["B", "kB", "MB", "GB"]
-    var value = Double(count)
-    var unit = 0
-    while value >= 1000 && unit < units.count - 1 {
-      value /= 1000
-      unit += 1
-    }
-    let digits = unit > 0 && value < 10 ? 1 : 0
-    return value.formatted(.number.precision(.fractionLength(0...digits)).locale(Locale(identifier: L10n.language))) + " " + units[unit]
   }
 }

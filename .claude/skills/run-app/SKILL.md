@@ -18,7 +18,9 @@ Startargumente: `-QHLanguage de|en` (Sprache unabhängig vom Mac), `-QHWindowSiz
 (Startgröße; entfernt gespeicherte Fensterrahmen), `-ApplePersistenceIgnoreState YES` (kein
 wiederhergestelltes Fenster), `-QHProfileDir <ordner>` (QuartzHubs Profil woanders, sonst
 `~/Library/Application Support/QuartzHub`), `-QHMigrationSource <ordner>` (Profil von QuartzControl
-für die Übernahme; leer = aus). **Ohne diese beiden bietet die App die Übernahme aus dem echten
+für die Übernahme; leer = aus), `-QHOpenProject <ordner>` (nimmt den Ordner in die Liste auf und
+öffnet sein Fenster), `-QHNoUpdateCheck YES` (nur Debug: die Übersicht fragt nicht bei GitHub nach
+Updates; ohne ihn geht jedes Öffnen der Übersicht per `git ls-remote` ins Netz). **Ohne diese beiden bietet die App die Übernahme aus dem echten
 QuartzControl-Profil an, solange QuartzHubs eigenes keine `projects.json` hat**; „Übernehmen“ liest
 dann den echten Schlüsselbund-Eintrag. Zum bloßen Ansehen `-QHMigrationSource ""` setzen. Die
 Übernahme-Tasten im Dialog: System Events findet den Button im Sheet nicht über `entire contents`;
@@ -28,6 +30,10 @@ Return löst „Übernehmen“ aus (Standardtaste). Für das Release-Paket: `scr
 Beenden: `pkill -x QuartzHub`.
 
 ## Ansehen
+
+Ein Projekt zum Ansehen: eine Kopie im Scratchpad, z. B. `rsync -a --exclude node_modules
+~/Documents/QuartzProjekte/gui-test/ <scratchpad>/gui-test-kopie/` (ohne `node_modules` zeigt die
+Übersicht „npm-Pakete fehlen“), mit einem Wegwerf-Profil unter `-QHProfileDir`.
 
 Fenster-Screenshot (ohne Schatten) in den Scratchpad, dann mit Read ansehen:
 

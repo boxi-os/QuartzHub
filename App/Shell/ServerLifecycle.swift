@@ -17,9 +17,18 @@ final class AppServices {
 
   private init() {
     environment = Self.resolve()
+    // States and activity go to the pages through one stream, so they arrive in the order the
+    // service sent them; log lines stay in `logs`.
+    let (events, feed) = AsyncStream.makeStream(of: BuildService.Event.self)
     // Through `current()`, not the task of this moment: a build started after the Node setting
     // changed takes the new environment.
-    builds = BuildService(logs: logs, environment: { await AppServices.current() }, store: store)
+    builds = BuildService(logs: logs, environment: { await AppServices.current() }, store: store, onEvent: { event in
+      if case .log = event { return }
+      feed.yield(event)
+    })
+    Task { @MainActor in
+      for await event in events { BuildMonitor.shared.apply(event) }
+    }
   }
 
   private static func resolve() -> Task<ToolEnvironment, Never> {

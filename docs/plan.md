@@ -286,6 +286,10 @@ nach Abhängigkeit:
   nicht gegen NSTextView. Umsortieren: `List` mit `onMove`, dazu „Nach oben/Nach unten“ in Menü
   (⌥⌘↑/⌥⌘↓), Kontextmenü und Bedienungshilfe-Aktion, mit Ansage. Raster und Board verschieben über
   den Inspektor. Gebaut wird beides mit der ersten Seite, die es braucht.
+- **Stand 2026-11-08: 4c läuft.** Übersicht fertig, mit `BuildOutput` (gegen `getBuildOutput`
+  gemessen) und `ProjectAttention` im Kern; in der App `BuildMonitor` (Serverzustand und
+  Aktivität für alle Seiten), `BuildAction` (Bauen mit der Frage zum Ausgabeordner), `Formats`.
+  Als Nächstes Vorschau & Build.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl

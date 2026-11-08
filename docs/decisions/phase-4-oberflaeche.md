@@ -196,3 +196,81 @@ Nicht gemessen:
   native Geste, mit der die Tastatur etwas in einem Raster zieht. Eine nachgebaute wäre wieder
   dnd-kits Pfeil-Logik mit allen Rändern aus `dndKeyboard.ts`. Gemessen wird das mit der Seite
   Layout.
+
+## 4c: Die Seiten
+
+Eine Seite je Abschnitt, in der Reihenfolge des Plans. Vorbild ist jeweils `src/routes/*` in
+QuartzControl 1.3.
+
+### Übersicht
+
+Vorbild `ProjectDashboard.tsx`. Neu im Kern sind zwei Dienste:
+
+- **`BuildOutput.info`** beschreibt, was im Ausgabeordner liegt, als Nachbau von `getBuildOutput`.
+  Gemessen mit `scripts/build-last-output-golden.mjs` gegen QuartzControls eigenen Code, 15 Fälle:
+  - Links, Links ins Leere und ein verlinkter Ausgabeordner;
+  - Millisekunden werden abgeschnitten, nicht gerundet;
+  - ein Unterordner, der sich nicht lesen lässt.
+
+  Abweichung: Lässt sich ein Unterordner nicht lesen, bekommt die Seite einen Fehler mit dem
+  Ordner. QuartzControls Kachel wartete dann für immer auf eine Antwort.
+- **`ProjectAttention`** enthält die Regeln des Bands „Handlungsbedarf“ und die Bedingung für
+  „Alles ok“, mit je einem Test. Ein Lesevorgang hat drei Zustände: läuft noch, gescheitert,
+  fertig. Ein gescheiterter Lesevorgang ergibt nie „Alles ok“.
+
+**Aussehen.** Aus jeder Kachel wird ein Abschnitt eines gruppierten `Form`, untereinander in der
+Reihenfolge der Kacheln:
+
+- Die Kopfzeile zeigt das Symbol der Seite, den Namen und rechts den Zustand: Serverzustand, Branch
+  oder Zahl der Updates.
+- Oben im Abschnitt steht der eine Wert, um den es geht.
+- Darunter stehen die Einzelheiten.
+- Am Fuß führt ein Verweis auf die zuständige Seite.
+- Das Band steht über allen Abschnitten.
+- „Build ausführen“, „Snapshot anlegen“ und „Projektordner öffnen“ stehen in der Symbolleiste.
+- Der Inspektor zeigt den Seitenkontext mit dem Projektordner.
+
+Gesehen in Hell und Dunkel an einer Kopie von gui-test ohne `node_modules`. Gegen die Platte
+geprüft:
+
+| Angabe | Seite | Platte |
+|---|---|---|
+| Build-Ordner | 475 Dateien, 32 MB, vor 2 Wochen | 475 Dateien, 32.499.736 Byte, 25. Oktober |
+| Snapshots | 12, nach einem Klick 13 („Von dir“) | 12 Refs, danach 13 |
+| Ziele | 7 | 7 |
+| Plugins | 46 von 64 aktiv | – |
+| Band | „88 npm-Pakete fehlen“ mit „Installieren“ | – |
+
+„Build ausführen“ meldete ohne Pakete „Build fehlgeschlagen“, und der alte Build blieb liegen.
+
+**Was beim Bau anders war als gedacht.**
+- **`RelativeDateTimeFormatter`** liest Wochen nur als `weekOfMonth`. Mit `weekOfYear` kam ein
+  leerer Text heraus (gemessen: „“ gegen „vor 3 Wochen“), und die Git-Zeile stand ohne Datum da.
+- **Serverzustand und Build-Aktivität** kamen bisher nur als Ereignisse aus `BuildService`.
+  `BuildMonitor` liest sie in der Reihenfolge, in der der Dienst sie sendet, über einen Strom mit
+  einem Leser auf dem Main Actor. Eine Seite, die vor dem ersten Ereignis öffnet, fragt den Dienst
+  einmal. Kommt inzwischen ein Ereignis, gewinnt das Ereignis.
+- **XCUITest liest als `label` den Text im Knopf**, auch wenn der Knopf selbst keinen
+  Bedienungshilfe-Namen trägt. Die Gegenprobe ohne `accessibilityLabel` blieb grün, also prüft
+  eine solche Assertion nichts. Ob ein Element einen Namen hat, sagt erst
+  `AXUIElementCopyAttributeValue` (`AXDescription`). So stellte sich auch heraus, dass die Verweise
+  `AXLink` mit Namen sind. Namenlos sind nur die Pfeile der Rollbalken und die Ampelknöpfe.
+- **Die Update-Prüfung ist der einzige Netzzugriff der Seite** (`git ls-remote`). Rauchtest und
+  Ansehen schalten sie im Debug-Bau mit `-QHNoUpdateCheck YES` ab. Der Abschnitt sagt dann „Nicht
+  prüfbar“.
+
+**Abweichungen von QuartzControl.**
+- „Abbrechen“ bei der Frage zum Ausgabeordner schließt die Frage ohne weitere Meldung. QuartzControl
+  zeigte einen Toast „Abgebrochen: …“. Die Frage selbst ist ein `NSAlert`; „Abbrechen“ steht zuerst
+  und ist die Standardtaste.
+- Was eine Aktion nicht konnte, steht in einem Hinweisfenster. QuartzControl zeigte dafür einen
+  Toast.
+- Der Rückweg zur Übersicht (`markReturn`) ist nicht übernommen. Die Seitenleiste zeigt den Weg
+  zurück.
+- Die Tabs, auf die ein Verweis zielt (`config?tab=site`, `styles?tab=customCss`), stehen schon
+  in `ProjectAttention.Issue.tab`. Die Seiten lesen sie, sobald sie Tabs haben.
+
+**Nicht gemessen:**
+- „Installieren“ (npm aus dem Netz);
+- die Update-Prüfung selbst;
+- Starten des Servers: ohne `node_modules` startet Quartz nicht, und mit fehlt der Kopie nichts.

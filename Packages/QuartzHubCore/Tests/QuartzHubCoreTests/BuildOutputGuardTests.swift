@@ -112,3 +112,17 @@ import Testing
     #expect(BuildOutputGuard.realPath("/nowhere-\(UUID().uuidString)/a/b").hasSuffix("/a/b"))
   }
 }
+
+extension BuildOutputGuardTests {
+  /// The handler's sentence, one reason per refusal (QuartzControl's map in handlers.ts).
+  @Test func refusalMessages() {
+    let reasons: [(OutputDirVerdict.Refusal, String)] = [
+      (.project, "main.buildDirIsProject"), (.containsProject, "main.buildDirContainsProject"),
+      (.home, "main.buildDirIsHome"), (.protected("content"), "main.buildDirReserved")
+    ]
+    for (refusal, key) in reasons {
+      #expect(refusal.message(dir: "/x/Gärten") == L10n.t("main.buildDirRefused", ["dir": "/x/Gärten", "why": L10n.t(key)]))
+    }
+    #expect(Set(reasons.map { $0.0.message(dir: "/d") }).count == 4)
+  }
+}

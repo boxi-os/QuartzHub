@@ -1,0 +1,612 @@
+import AppKit
+import QuartzHubCore
+import SwiftUI
+
+/// Übersicht: QuartzControl's `ProjectDashboard.tsx` as one grouped form. Its tiles become sections
+/// in the same order (Dev-Server, Die Seite, Git-Sync, Plugins, Gestaltung, Build, Veröffentlichen,
+/// Updates, Snapshots), each leading with the one number or name it is about and ending with a link
+/// to the page that owns it. The band "Handlungsbedarf" stands above them; the three things worth
+/// doing from here are in the toolbar.
+struct OverviewPage: View {
+  let project: ProjectContext
+
+  @State private var model: OverviewModel
+  @State private var monitor = BuildMonitor.shared
+  @Environment(\.openPage) private var openPage
+
+  init(project: ProjectContext) {
+    self.project = project
+    _model = State(initialValue: OverviewModel(project: project))
+  }
+
+  private var server: BuildService.ServerStatus { monitor.status(project.id) }
+  private var activity: BuildActivity? { monitor.activity(project.id) }
+  private var buildRunning: Bool { activity?.kind == .build }
+
+  var body: some View {
+    PageScaffold(page: .overview) {
+      // Relative ages ("vor 3 Minuten") are worked out when drawn; without a nudge they stay what
+      // they were when something else last changed (QuartzControl measured "vor 1 Sekunde" 55 s on).
+      TimelineView(.periodic(from: .now, by: 30)) { context in
+        form(now: context.date)
+      }
+      .toolbar { actions }
+      .task { await model.load() }
+      .task { await model.checkUpdates() }
+      // A build that ends while the page is open changes the folder the Build section describes.
+      .onChange(of: buildRunning) { _, running in
+        if !running { Task { await model.loadBuild() } }
+      }
+      .alert(model.failure ?? "", isPresented: Binding(get: { model.failure != nil }, set: { if !$0 { model.failure = nil } })) {
+        Button(L10n.t("shell.alert.ok"), role: .cancel) {}
+      }
+    } inspector: {
+      InspectorPageContext(page: .overview) {
+        Section {
+          Text(L10n.t("projectLayout.descriptions.overview")).foregroundStyle(.secondary)
+          LabeledContent(L10n.t("shell.projects.folder")) {
+            Text(project.path).font(.caption).textSelection(.enabled).multilineTextAlignment(.trailing)
+          }
+          Button(L10n.t("dashboard.openProjectFolder"), systemImage: "folder", action: openFolder)
+        }
+      }
+    }
+  }
+
+  // MARK: The form
+
+  private func form(now: Date) -> some View {
+    Form {
+      attentionSection
+      serverSection(now: now)
+      siteSection
+      gitSection(now: now)
+      pluginsSection
+      designSection
+      buildSection(now: now)
+      publishSection
+      updatesSection
+      snapshotsSection(now: now)
+    }
+    .formStyle(.grouped)
+  }
+
+  @ViewBuilder private var attentionSection: some View {
+    let issues = ProjectAttention.issues(model.attention)
+    if !issues.isEmpty {
+      Section {
+        ForEach(issues) { issue in
+          IssueRow(issue: issue, installing: model.busy.contains(.install)) {
+            Task { await model.installDependencies() }
+          } open: {
+            ProjectPage(rawValue: issue.page).map { openPage($0) }
+          }
+        }
+      } header: {
+        Label {
+          Text(L10n.t("dashboard.attention.title")) + Text(" (\(issues.count))").foregroundStyle(.secondary)
+        } icon: {
+          Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+        }
+        .accessibilityIdentifier("overview.attention")
+      }
+    } else if ProjectAttention.allGood(model.attention) {
+      Section {
+        Label(L10n.t("dashboard.attention.allGood"), systemImage: "checkmark.circle.fill")
+          .foregroundStyle(.green)
+          .accessibilityIdentifier("overview.allGood")
+      }
+    }
+  }
+
+  private func serverSection(now: Date) -> some View {
+    Section {
+      // On a row that is always there: a Form's identifier does not reach the accessibility tree.
+      Group {
+        if server.state == .running, let options = server.options,
+           let url = URL(string: "http://\(options.host.isEmpty ? "localhost" : options.host):\(options.port)") {
+          Link(destination: url) {
+            Label(url.absoluteString, systemImage: "arrow.up.right.square").font(.title3.weight(.semibold))
+          }
+          .help(L10n.t("common.openInBrowser"))
+        } else {
+          Metric(L10n.t("dashboard.noPreview"), muted: true)
+        }
+      }
+      .accessibilityIdentifier("page.overview")
+      if let activity, activity.kind != .build { ActivityLine(activity: activity) }
+      Note(serverFacts(now: now))
+      // "Stoppen" from `starting` on: a start waits for a one-off build into the same folder, and
+      // that whole build had no way out. Only `stopping` disables it.
+      HStack {
+        if server.state == .stopped || server.state == .error {
+          Button(L10n.t("dashboard.start"), systemImage: "play.fill", action: model.startServer)
+        } else {
+          Button(L10n.t("dashboard.stop"), systemImage: "stop.fill", action: model.stopServer)
+            .disabled(server.state == .stopping)
+        }
+        Button(L10n.t("dashboard.restart"), systemImage: "arrow.clockwise", action: model.restartServer)
+          .disabled(server.state != .running)
+      }
+    } header: {
+      SectionHeader(title: L10n.t("dashboard.devServer"), symbol: ProjectPage.server.symbol) {
+        StateBadge(text: Self.stateText(server.state), color: server.state == .running ? .green : server.state == .error ? .red : .secondary)
+      }
+    } footer: {
+      PageLink(page: .server)
+    }
+  }
+
+  private func serverFacts(now: Date) -> String {
+    guard server.state == .running else {
+      return ProjectAttention.serverErrorText(server) ?? L10n.t("dashboard.serverIdleHint")
+    }
+    var facts = L10n.t("dashboard.startedAgo", ["since": Formats.relative(server.startedAt, now: now) ?? "–"])
+    if let options = server.options { facts += " · WebSocket \(options.wsPort)" }
+    if let pid = server.pid { facts += " · PID \(pid)" }
+    return facts
+  }
+
+  /// All four rows are fields of Konfiguration ▸ Website, so the link names that page.
+  private var siteSection: some View {
+    let config = model.attention.config
+    let baseUrl = ProjectAttention.baseUrl(config)
+    return Section {
+      LabeledContent(L10n.t("dashboard.pageTitle"), value: nonEmpty(config?.configuration["pageTitle"]?.stringValue))
+      LabeledContent(L10n.t("dashboard.baseUrl")) {
+        if baseUrl.isEmpty {
+          StateBadge(text: L10n.t("dashboard.notSet"), color: .orange)
+        } else {
+          Text(baseUrl).font(.body.monospaced()).textSelection(.enabled)
+        }
+      }
+      LabeledContent(L10n.t("dashboard.locale"), value: nonEmpty(config?.configuration["locale"]?.stringValue))
+      LabeledContent(L10n.t("dashboard.contentFolder")) { contentValue }
+    } header: {
+      SectionHeader(title: L10n.t("dashboard.site"), symbol: ProjectPage.config.symbol) { EmptyView() }
+    } footer: {
+      PageLink(page: .config)
+    }
+  }
+
+  private func nonEmpty(_ text: String?) -> String {
+    guard let text, !text.isEmpty else { return "–" }
+    return text
+  }
+
+  @ViewBuilder private var contentValue: some View {
+    if let content = model.attention.content {
+      if !content.exists {
+        StateBadge(text: L10n.t("dashboard.notPresent"), color: .orange)
+      } else if content.isSymlink {
+        if content.targetExists == false {
+          StateBadge(text: L10n.t("dashboard.targetMissing"), color: .red)
+        } else {
+          Label(content.symlinkTarget ?? "", systemImage: "link").font(.body.monospaced()).lineLimit(1).truncationMode(.middle)
+        }
+      } else {
+        let count = content.fileCount ?? 0
+        Text(L10n.t("dashboard.realFolderFiles", ["count": String(count)], count: count))
+      }
+    } else {
+      Text("–")
+    }
+  }
+
+  /// Read straight from git: no token, no network.
+  private func gitSection(now: Date) -> some View {
+    let git = model.attention.git
+    return Section {
+      if let git {
+        if git.readError != nil {
+          Metric(L10n.t("dashboard.git.unreadable"), muted: true)
+          Note(L10n.t("dashboard.git.unreadableHint"))
+        } else if !git.isRepo {
+          Metric(L10n.t("dashboard.git.noRepo"), muted: true)
+          Note(L10n.t("dashboard.git.noRepoHint"))
+        } else {
+          HStack(alignment: .firstTextBaseline, spacing: 10) {
+            Text("↑ \(git.ahead)").monospacedDigit()
+            Text("↓ \(git.behind)").monospacedDigit().foregroundStyle(.secondary)
+            if git.conflictCount > 0 {
+              Text(L10n.t("dashboard.git.conflicts", ["count": String(git.conflictCount)], count: git.conflictCount))
+                .font(.callout.weight(.medium)).foregroundStyle(.red)
+            }
+            if git.upstream == nil { Text(L10n.t("dashboard.git.noUpstream")).font(.callout).foregroundStyle(.secondary) }
+          }
+          .font(.title3.weight(.semibold))
+          .accessibilityElement(children: .combine)
+          Text("\(git.changeCount) ").fontWeight(.semibold).monospacedDigit() + Text(L10n.t("dashboard.git.uncommitted")).foregroundStyle(.secondary)
+          if let commit = git.lastCommit {
+            Note("„\(commit.subject)“ · \(Formats.relative(Formats.date(iso: commit.date), now: now) ?? "–") · \(commit.author)")
+              .lineLimit(1)
+          }
+        }
+      } else {
+        Metric("–", muted: true)
+      }
+    } header: {
+      SectionHeader(title: L10n.t("projectLayout.tabs.sync"), symbol: ProjectPage.sync.symbol) {
+        if let operation = git?.inProgress {
+          StateBadge(text: L10n.t("dashboard.git.inProgress", ["operation": operation.rawValue]), color: .red)
+        } else if let branch = git?.branch {
+          Text(branch).font(.callout.monospaced())
+        }
+      }
+    } footer: {
+      PageLink(page: .sync)
+    }
+  }
+
+  private var pluginsSection: some View {
+    Section {
+      if let config = model.attention.config {
+        let total = config.plugins.count
+        let active = config.plugins.filter(\.enabled).count
+        Metric(String(active), note: L10n.t("dashboard.plugins.ofTotal", ["total": String(total)]))
+        Note(total - active > 0 ? L10n.t("dashboard.plugins.disabled", ["count": String(total - active)])
+             : L10n.t("dashboard.plugins.allEnabled"))
+      } else {
+        ProgressView().controlSize(.small)
+      }
+    } header: {
+      SectionHeader(title: L10n.t("projectLayout.tabs.plugins"), symbol: ProjectPage.plugins.symbol) { EmptyView() }
+    } footer: {
+      PageLink(page: .plugins)
+    }
+  }
+
+  /// The active theme is no field of its own: it is the enabled `@quartz-themes/*` plugin's
+  /// `theme` option (the convention of quartz-themes/core, as Stile ▸ Theme reads it).
+  private var activeTheme: String? {
+    let plugin = model.attention.config?.plugins.first { plugin in
+      guard plugin.enabled, case .string(let source)? = plugin.source else { return false }
+      return source.hasPrefix("@quartz-themes/")
+    }
+    return plugin?.object["options"]?["theme"]?.stringValue
+  }
+
+  private var designSection: some View {
+    Section {
+      Metric(activeTheme ?? L10n.t("dashboard.design.stockTheme"))
+      Note(L10n.t("dashboard.design.frames", ["count": String(model.frameCount ?? 0)], count: model.frameCount ?? 0) + " · "
+           + L10n.t("dashboard.design.stylesheets", ["count": String(model.stylesheetCount ?? 0)], count: model.stylesheetCount ?? 0))
+      switch model.attention.scss {
+      case nil: ProgressView().controlSize(.small)
+      case .ok?: StateBadge(text: L10n.t("dashboard.design.cssOk"), color: .green)
+      case .error?: StateBadge(text: L10n.t("dashboard.design.cssError"), color: .red)
+      case .unavailable?: StateBadge(text: L10n.t("dashboard.design.cssUnchecked"), color: .secondary)
+      }
+    } header: {
+      SectionHeader(title: L10n.t("projectLayout.groups.design"), symbol: ProjectPage.styles.symbol) { EmptyView() }
+    } footer: {
+      PageLink(page: .styles)
+    }
+  }
+
+  /// Nothing records that a build happened: this is the output folder as it is on disk.
+  private func buildSection(now: Date) -> some View {
+    Section {
+      if buildRunning, let activity {
+        Metric(L10n.t("dashboard.build.running"))
+        ActivityLine(activity: activity)
+      } else {
+        switch model.build {
+        case nil:
+          ProgressView().controlSize(.small)
+        case .success(let info) where info.exists:
+          Metric(Formats.relative(info.builtDate, now: now) ?? "–")
+          Note(L10n.t("dashboard.build.files", ["count": String(info.fileCount)], count: info.fileCount) + " · " + Formats.bytes(info.sizeBytes))
+        case .success:
+          Metric(L10n.t("dashboard.build.never"), muted: true)
+          Note(L10n.t("dashboard.build.neverHint"))
+        case .failure(let unreadable):
+          Metric("–", muted: true)
+          Note(unreadable.path)
+        }
+      }
+      if let message = model.buildMessage { Note(message) }
+    } header: {
+      SectionHeader(title: L10n.t("dashboard.build.title"), symbol: "hammer") { EmptyView() }
+    } footer: {
+      PageLink(page: .server)
+    }
+  }
+
+  private var publishSection: some View {
+    Section {
+      if let targets = model.targets, !targets.isEmpty {
+        Metric(String(targets.count), note: L10n.t("dashboard.publish.targets", count: targets.count))
+        ForEach(targets.prefix(3), id: \.id) { target in
+          Note("\(target.name) · \(target.destination["type"]?.stringValue ?? "")").lineLimit(1)
+        }
+      } else if model.targets == nil {
+        ProgressView().controlSize(.small)
+      } else {
+        Metric(L10n.t("dashboard.publish.none"), muted: true)
+        Note(L10n.t("dashboard.publish.noneHint"))
+      }
+    } header: {
+      SectionHeader(title: L10n.t("projectLayout.tabs.publish"), symbol: ProjectPage.publish.symbol) { EmptyView() }
+    } footer: {
+      PageLink(page: .publish)
+    }
+  }
+
+  /// The one section that goes to the network.
+  private var updatesSection: some View {
+    let behind = model.pluginUpdates?.filter { $0.state == .behind }.count ?? 0
+    let unknown = model.pluginUpdates?.filter { $0.state == .unknown }.count ?? 0
+    let coreState = model.core?.state
+    let count = (coreState == .behind || coreState == .pending ? 1 : 0) + behind
+    return Section {
+      if model.updatesPending {
+        HStack(spacing: 8) {
+          ProgressView().controlSize(.small)
+          Note(L10n.t("dashboard.updates.checking"))
+        }
+      } else {
+        Metric(updatesHeadline(core: coreState, behind: behind), tint: coreState == .upToDate && behind == 0 ? .green : nil)
+        Note(behind > 0 ? L10n.t("dashboard.updates.pluginsBehind", ["count": String(behind)], count: behind)
+             : L10n.t("dashboard.updates.pluginsCurrent", ["count": String(model.pluginUpdates?.count ?? 0)], count: model.pluginUpdates?.count ?? 0))
+        if unknown > 0 { Note(L10n.t("dashboard.updates.checkFailed", ["count": String(unknown)], count: unknown)) }
+      }
+    } header: {
+      SectionHeader(title: L10n.t("projectLayout.tabs.updates"), symbol: ProjectPage.updates.symbol) {
+        if !model.updatesPending && count > 0 { StateBadge(text: String(count), color: .orange) }
+      }
+    } footer: {
+      PageLink(page: .updates)
+    }
+  }
+
+  private func updatesHeadline(core: CoreUpdate.Status.State?, behind: Int) -> String {
+    switch core {
+    case .pending?: L10n.t("dashboard.updates.corePending")
+    case .behind?: L10n.t("dashboard.updates.coreBehind")
+    case .upToDate?: behind > 0 ? L10n.t("dashboard.updates.pluginsOnly") : L10n.t("dashboard.updates.allCurrent")
+    default: L10n.t("dashboard.updates.unknown")
+    }
+  }
+
+  private func snapshotsSection(now: Date) -> some View {
+    Section {
+      if let snapshots = model.snapshots, let newest = snapshots.first {
+        Metric(String(snapshots.count), note: L10n.t("dashboard.backups.states", count: snapshots.count))
+        Note(L10n.t("dashboard.backups.newest", ["when": Formats.relative(Formats.date(iso: newest.createdAt), now: now) ?? "–"]))
+        Note(newest.label.isEmpty ? SnapshotKinds.title(newest.kind) : newest.label).lineLimit(1)
+      } else if model.snapshots == nil {
+        ProgressView().controlSize(.small)
+      } else {
+        Metric(L10n.t("dashboard.backups.none"), muted: true)
+        Note(L10n.t("dashboard.backups.noneHint"))
+      }
+    } header: {
+      SectionHeader(title: L10n.t("projectLayout.tabs.backups"), symbol: ProjectPage.backups.symbol) { EmptyView() }
+    } footer: {
+      PageLink(page: .backups)
+    }
+  }
+
+  // MARK: Toolbar
+
+  @ToolbarContentBuilder private var actions: some ToolbarContent {
+    ToolbarItemGroup {
+      Button(model.busy.contains(.build) || buildRunning ? L10n.t("dashboard.build.running") : L10n.t("dashboard.build.run"),
+             systemImage: "hammer") {
+        Task { await model.runBuild() }
+      }
+      .disabled(model.busy.contains(.build) || buildRunning)
+      .help(L10n.t("dashboard.build.run"))
+      .accessibilityIdentifier("overview.build")
+      Button(model.busy.contains(.snapshot) ? L10n.t("dashboard.backups.saving") : L10n.t("dashboard.backups.save"),
+             systemImage: "archivebox") {
+        Task { await model.takeSnapshot() }
+      }
+      .disabled(model.busy.contains(.snapshot))
+      .help(L10n.t("dashboard.backups.save"))
+      Button(L10n.t("dashboard.openProjectFolder"), systemImage: "folder", action: openFolder)
+        .help(L10n.t("dashboard.openProjectFolder"))
+    }
+  }
+
+  private func openFolder() {
+    NSWorkspace.shared.open(URL(fileURLWithPath: project.path)) // path boundary
+  }
+
+  static func stateText(_ state: BuildService.ServerStatus.State) -> String {
+    switch state {
+    case .stopped: L10n.t("common.serverState.stopped")
+    case .starting: L10n.t("common.serverState.starting")
+    case .running: L10n.t("common.serverState.running")
+    case .stopping: L10n.t("common.serverState.stopping")
+    case .error: L10n.t("common.serverState.error")
+    }
+  }
+}
+
+// MARK: Pieces
+
+/// One line of the band: what is wrong, why, and the way to it (or "Installieren").
+private struct IssueRow: View {
+  let issue: ProjectAttention.Issue
+  let installing: Bool
+  let install: () -> Void
+  let open: () -> Void
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline, spacing: 10) {
+      Image(systemName: Self.symbol(issue.id))
+        .foregroundStyle(issue.tone == .red ? .red : .orange)
+        .accessibilityHidden(true)
+      VStack(alignment: .leading, spacing: 2) {
+        Text(issue.title).fontWeight(.medium)
+        if let detail = issue.detail {
+          Text(detail).font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+        }
+      }
+      Spacer(minLength: 8)
+      if issue.installs {
+        Button(installing ? L10n.t("dashboard.attention.dependenciesInstalling") : L10n.t("dashboard.attention.dependenciesInstall"),
+               action: install)
+          .disabled(installing)
+      } else {
+        Button(action: open) {
+          Label(issue.linkLabel, systemImage: "chevron.right").labelStyle(TrailingIcon())
+        }
+        .buttonStyle(.link)
+      }
+    }
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("overview.issue.\(issue.id)")
+  }
+
+  static func symbol(_ id: String) -> String {
+    switch id {
+    case "dependencies", "dependencies-unreadable": ProjectPage.plugins.symbol
+    case "frames": ProjectPage.layout.symbol
+    case "server": ProjectPage.server.symbol
+    case "content", "content-missing", "no-index": "link"
+    case "git-conflict", "git-progress", "git-unreadable": ProjectPage.sync.symbol
+    case "scss": ProjectPage.styles.symbol
+    case "core-update-pending": ProjectPage.updates.symbol
+    case "baseurl": "globe"
+    default: "exclamationmark.triangle"
+    }
+  }
+}
+
+/// The section's way to the page that owns it.
+private struct PageLink: View {
+  let page: ProjectPage
+  @Environment(\.openPage) private var openPage
+
+  var body: some View {
+    HStack {
+      Spacer()
+      Button { openPage(page) } label: {
+        Label(page.title, systemImage: "chevron.right").labelStyle(TrailingIcon())
+      }
+      .buttonStyle(.link)
+      .accessibilityIdentifier("overview.link.\(page.rawValue)")
+    }
+  }
+}
+
+private struct TrailingIcon: LabelStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    HStack(spacing: 3) {
+      configuration.title
+      configuration.icon.imageScale(.small)
+    }
+  }
+}
+
+/// A state in a word, with a dot of its colour: the word carries it, the colour only repeats it.
+private struct StateBadge: View {
+  let text: String
+  let color: Color
+
+  var body: some View {
+    HStack(spacing: 5) {
+      Circle().fill(color).frame(width: 7, height: 7).accessibilityHidden(true)
+      Text(text)
+    }
+  }
+}
+
+/// The one number or name a section leads with, and its muted half on the same line ("von 21 aktiv").
+private struct Metric: View {
+  let text: String
+  var note: String?
+  var muted = false
+  var tint: Color?
+
+  init(_ text: String, note: String? = nil, muted: Bool = false, tint: Color? = nil) {
+    self.text = text
+    self.note = note
+    self.muted = muted
+    self.tint = tint
+  }
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline, spacing: 6) {
+      Text(text).font(.title3.weight(.semibold)).monospacedDigit()
+        .foregroundStyle(muted ? AnyShapeStyle(.secondary) : AnyShapeStyle(tint ?? .primary))
+      if let note { Text(note).font(.callout).foregroundStyle(.secondary) }
+    }
+    .accessibilityElement(children: .combine)
+  }
+}
+
+/// A section's heading: the symbol of the page it belongs to, its name, and a state at the end.
+private struct SectionHeader<Badge: View>: View {
+  let title: String
+  let symbol: String
+  @ViewBuilder var badge: () -> Badge
+
+  var body: some View {
+    HStack {
+      Label(title, systemImage: symbol)
+      Spacer()
+      badge().font(.callout).foregroundStyle(.secondary)
+    }
+  }
+}
+
+private struct Note: View {
+  let text: String
+  init(_ text: String) { self.text = text }
+  var body: some View { Text(text).font(.callout).foregroundStyle(.secondary) }
+}
+
+/// "Build läuft seit 0:42 · schreibt die Seiten" (QuartzControl's `BuildActivityLine`), ticking
+/// once a second. Not announced: a line that changes every second would be read every second.
+struct ActivityLine: View {
+  let activity: BuildActivity
+
+  var body: some View {
+    TimelineView(.periodic(from: .now, by: 1)) { context in
+      HStack(spacing: 6) {
+        ProgressView().controlSize(.mini)
+        Text(Self.kind(activity.kind, time: Formats.elapsed(since: activity.startedAt, now: context.date)))
+          + Text(" · " + Self.phase(activity.phase)).foregroundStyle(.secondary)
+      }
+      .font(.callout)
+    }
+  }
+
+  static func kind(_ kind: BuildActivity.Kind, time: String) -> String {
+    switch kind {
+    case .build: L10n.t("buildActivity.kind.build", ["time": time])
+    case .serve: L10n.t("buildActivity.kind.serve", ["time": time])
+    case .rebuild: L10n.t("buildActivity.kind.rebuild", ["time": time])
+    }
+  }
+
+  static func phase(_ phase: BuildActivity.Phase) -> String {
+    switch phase {
+    case .preparing: L10n.t("buildActivity.phase.preparing")
+    case .parsing: L10n.t("buildActivity.phase.parsing")
+    case .emitting: L10n.t("buildActivity.phase.emitting")
+    }
+  }
+}
+
+/// A snapshot's kind in words (`backups.kinds.*`); an unknown kind as it stands.
+enum SnapshotKinds {
+  static func title(_ kind: String) -> String {
+    switch kind {
+    case "manual": L10n.t("backups.kinds.manual")
+    case "configChange": L10n.t("backups.kinds.configChange")
+    case "contentChange": L10n.t("backups.kinds.contentChange")
+    case "coreUpdate": L10n.t("backups.kinds.coreUpdate")
+    case "imported": L10n.t("backups.kinds.imported")
+    case "pluginChange": L10n.t("backups.kinds.pluginChange")
+    case "restore": L10n.t("backups.kinds.restore")
+    case "styleChange": L10n.t("backups.kinds.styleChange")
+    case "styleMigration": L10n.t("backups.kinds.styleMigration")
+    default: kind
+    }
+  }
+}
