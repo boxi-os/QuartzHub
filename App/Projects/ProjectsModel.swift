@@ -17,6 +17,7 @@ final class ProjectsModel {
 
   enum Request: Equatable {
     case openExisting
+    case create
   }
 
   let list: ProjectList

@@ -16,6 +16,7 @@ struct ProjectsWindow: View {
   @State private var query = ""
   @State private var failure: String?
   @State private var removing: ProjectOverview?
+  @State private var creating = false
   @SceneStorage("inspector.presented") private var inspectorPresented = true
   @Environment(\.openWindow) private var openWindow
   /// The takeover from QuartzControl, offered while QuartzHub has no project list of its own.
@@ -44,6 +45,15 @@ struct ProjectsWindow: View {
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
           Button {
+            creating = true
+          } label: {
+            Label(L10n.t("home.createNew"), systemImage: "plus")
+          }
+          .help(L10n.t("home.createNew"))
+          .accessibilityIdentifier("projects.create")
+        }
+        ToolbarItem(placement: .primaryAction) {
+          Button {
             addExisting()
           } label: {
             Label(L10n.t("home.openExisting"), systemImage: "folder.badge.plus")
@@ -61,6 +71,7 @@ struct ProjectsWindow: View {
         model.request = nil
         switch request {
         case .openExisting: addExisting()
+        case .create: creating = true
         }
       }
       .onAppear(perform: openFromLaunchArgument)
@@ -75,6 +86,15 @@ struct ProjectsWindow: View {
       }
       .alert(failure ?? "", isPresented: failurePresented) {
         Button(L10n.t("shell.alert.ok"), role: .cancel) {}
+      }
+      .sheet(isPresented: $creating) {
+        CreateProjectSheet { id in
+          creating = false
+          if let id, let row = model.row(id) {
+            selection = id
+            open(row)
+          }
+        }
       }
       .sheet(isPresented: migrationPresented) {
         if let migration {
@@ -92,7 +112,7 @@ struct ProjectsWindow: View {
       ProgressView(L10n.t("common.loading"))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     } else if model.rows.isEmpty {
-      GettingStarted(addExisting: addExisting)
+      GettingStarted(create: { creating = true }, addExisting: addExisting)
     } else {
       list
         .modifier(SearchFromThreshold(count: model.rows.count, query: $query))

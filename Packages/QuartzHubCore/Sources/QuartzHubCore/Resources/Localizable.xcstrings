@@ -17949,13 +17949,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl legt einen neuen Ordner an und lädt Quartz von GitHub hinein. Der Ordner darf noch nicht existieren, er wird für dich erstellt. Das dauert ein bis zwei Minuten."
+            "value" : "QuartzHub legt einen neuen Ordner an und lädt Quartz von GitHub hinein. Der Ordner darf noch nicht existieren, er wird für dich erstellt. Das dauert ein bis zwei Minuten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl creates a new folder and downloads Quartz from GitHub into it. The folder must not exist yet, it is created for you. This takes a minute or two."
+            "value" : "QuartzHub creates a new folder and downloads Quartz from GitHub into it. The folder must not exist yet, it is created for you. This takes a minute or two."
           }
         }
       }
@@ -40895,6 +40895,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show or hide the inspector"
+          }
+        }
+      }
+    },
+    "shell.menu.newProject" : {
+      "comment" : "File menu, ⌘N: opens the create wizard in the Projects window",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neues Projekt…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Project…"
           }
         }
       }

@@ -116,6 +116,7 @@ struct ProjectsContext: View {
 /// No project yet: the three steps and the two ways in, creating first (QuartzControl's order
 /// with an empty list).
 struct GettingStarted: View {
+  let create: () -> Void
   let addExisting: () -> Void
 
   var body: some View {
@@ -130,6 +131,8 @@ struct GettingStarted: View {
       }
       .frame(maxWidth: 420, alignment: .leading)
     } actions: {
+      Button(L10n.t("home.createNew"), action: create)
+        .buttonStyle(.borderedProminent)
       Button(L10n.t("home.openExisting"), action: addExisting)
     }
     .accessibilityIdentifier("projects.gettingStarted")

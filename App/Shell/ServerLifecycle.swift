@@ -10,19 +10,34 @@ final class AppServices {
   let logs = LogBuffer()
   let store = RunningServersStore(profile: AppProfile.own)
   let builds: BuildService
+  /// The tools for every command the app runs: resolved once (the login shell is asked for PATH).
+  let environment: Task<ToolEnvironment, Never>
 
   private init() {
     let profile = AppProfile.own
     // Resolved once (the login shell is asked for PATH) and then kept; the Node setting is read
     // here, as a running server keeps the environment it was started with.
-    let environment = Task<ToolEnvironment, Never> {
+    environment = Task<ToolEnvironment, Never> {
       var mode = ToolEnvironment.NodeMode.embedded
       if case .ok(.object(let object)) = JSONStore.peek(profile.settings), SettingsFile(object: object).nodeRuntime == .system {
         mode = .system
       }
       return await ToolEnvironment.resolve(nodeMode: mode)
     }
+    let environment = environment
     builds = BuildService(logs: logs, environment: { await environment.value }, store: store)
+  }
+
+  /// Templates with the real commands: npm, `quartz plugin add`, git, the snapshot store.
+  func templates() async -> TemplatePackage {
+    let environment = await environment.value
+    let snapshots = SnapshotStore.live(environment: environment)
+    let read: LayoutFrames.ReadConfig = { try await ConfigFile.read(project: $0, runtime: environment.runtime) }
+    let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
+    return TemplatePackage.live(
+      environment: environment, locales: LocaleFiles(environment: environment),
+      frames: LayoutFrames(readConfig: read, plugins: .cli(environment: { environment }, snapshot: snapshots.take)),
+      fonts: FontService(readConfig: read), snapshots: snapshots, appVersion: version)
   }
 }
 

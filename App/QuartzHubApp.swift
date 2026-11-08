@@ -57,13 +57,18 @@ struct QuartzHubApp: App {
   }
 }
 
-/// The File menu: no "New Window" (a project window without a project means nothing), and
-/// "Vorhandenes Projekt öffnen…" with ⌘O, from any window.
+/// The File menu: no "New Window" (a project window without a project means nothing), but
+/// "Neues Projekt…" (⌘N) and "Vorhandenes Projekt öffnen…" (⌘O), from any window.
 struct ProjectCommands: Commands {
   @Environment(\.openWindow) private var openWindow
 
   var body: some Commands {
     CommandGroup(replacing: .newItem) {
+      Button(L10n.t("shell.menu.newProject")) {
+        openWindow(id: ProjectsWindow.sceneID)
+        ProjectsModel.shared.request = .create
+      }
+      .keyboardShortcut("n", modifiers: .command)
       Button(L10n.t("shell.menu.openExisting")) {
         openWindow(id: ProjectsWindow.sceneID)
         ProjectsModel.shared.request = .openExisting

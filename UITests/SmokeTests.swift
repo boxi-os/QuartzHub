@@ -146,6 +146,25 @@ final class SmokeTests: XCTestCase {
     XCTAssertEqual(list.trimmingCharacters(in: .whitespacesAndNewlines), "[]")
   }
 
+  /// File ▸ Neues Projekt… (⌘N) opens the wizard on the Projects window; a name with "/" is refused
+  /// before anything runs, and Abbrechen closes it. Nothing is created: that would clone from GitHub.
+  func testCreateWizardRefusesABadNameAndCancels() throws {
+    let (profile, _) = try scratchProject()
+    let app = launch(profile: profile)
+    XCTAssertTrue(app.windows["Projekte"].waitForExistence(timeout: 10))
+    app.typeKey("n", modifierFlags: .command)
+    let name = app.descendants(matching: .any)["create.name"].firstMatch
+    XCTAssertTrue(name.waitForExistence(timeout: 5), "⌘N did not open the wizard")
+    let confirm = app.windows.buttons["create.confirm"].firstMatch
+    XCTAssertFalse(confirm.isEnabled, "create enabled without a name")
+    name.click()
+    name.typeText("a/b")
+    XCTAssertTrue(app.staticTexts["Der Name darf kein „/“ enthalten und nicht „.“ oder „..“ sein."].waitForExistence(timeout: 3))
+    XCTAssertFalse(confirm.isEnabled, "create enabled with a bad name")
+    app.windows.buttons["Abbrechen"].firstMatch.click()
+    XCTAssertTrue(name.waitForNonExistence(timeout: 5), "Abbrechen did not close the wizard")
+  }
+
   /// The takeover against a QuartzControl profile made here (two projects, no secrets, so no
   /// Keychain prompt): offered, carried out, and not offered again once QuartzHub has a list.
   func testMigrationIsOfferedOnceAndWritesTheProjectList() throws {
