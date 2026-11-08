@@ -1,0 +1,1198 @@
+{
+ "source": "github:boxi-os/quartz-layout-box",
+ "className": "layout-box-project-image",
+ "html": {
+  "light": "<a class=\"project-image\" href=\"{{root}}/\"><img src=\"{{root}}/static/icon.png\" alt=\"{{siteTitle}}\" style=\"height:2.5rem;width:auto\"></a>",
+  "dark": "<a class=\"project-image\" href=\"{{root}}/\"><img class=\"img-light\" src=\"{{root}}/static/icon.png\" alt=\"{{siteTitle}}\" style=\"height:2.5rem;width:auto\"><img class=\"img-dark\" src=\"{{root}}/static/icon-dark.png\" alt=\"{{siteTitle}}\" style=\"height:2.5rem;width:auto\"></a>"
+ },
+ "cases": [
+  {
+   "id": "empty",
+   "plugins": "[]",
+   "isLayoutBox": [],
+   "isFresh": [],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "noBox",
+   "plugins": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false}]",
+   "isLayoutBox": [
+    false,
+    false
+   ],
+   "isFresh": [
+    false,
+    false
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"@quartz-community/favicon\",\"options\":{},\"name\":\"favicon\",\"enabled\":false},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "fresh",
+   "plugins": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    false,
+    true
+   ],
+   "isFresh": [
+    false,
+    true
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "freshNoOptions",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]",
+   "isLayoutBox": [
+    true,
+    false
+   ],
+   "isFresh": [
+    true,
+    false
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"name\":\"quartz-layout-box\",\"enabled\":false},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box#v2\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "freshStringOptions",
+   "plugins": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "isLayoutBox": [
+    false,
+    true
+   ],
+   "isFresh": [
+    false,
+    true
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"name\":\"quartz-layout-box\",\"enabled\":true,\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"name\":\"quartz-layout-box\",\"enabled\":true,\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":\"x\",\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "ownLight",
+   "plugins": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    false,
+    true
+   ],
+   "isFresh": [
+    false,
+    false
+   ],
+   "findOwn": 1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    }
+   ]
+  },
+  {
+   "id": "ownDark",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]",
+   "isLayoutBox": [
+    true,
+    false
+   ],
+   "isFresh": [
+    false,
+    false
+   ],
+   "findOwn": 0,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]"
+    }
+   ]
+  },
+  {
+   "id": "ownAndFresh",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"old\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    true,
+    true
+   ],
+   "isFresh": [
+    true,
+    false
+   ],
+   "findOwn": 1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    }
+   ]
+  },
+  {
+   "id": "markDouble",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]",
+   "isLayoutBox": [
+    true,
+    false
+   ],
+   "isFresh": [
+    false,
+    false
+   ],
+   "findOwn": -1,
+   "findOther": 0,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:quartz-community/explorer\",\"name\":\"explorer\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "markSingle",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    true
+   ],
+   "isFresh": [
+    false
+   ],
+   "findOwn": -1,
+   "findOther": 0,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src='{{root}}/static/icon.png'>\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "markDark",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    true
+   ],
+   "isFresh": [
+    false
+   ],
+   "findOwn": -1,
+   "findOther": 0,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\"><img src=\\\"{{root}}/static/icon-dark.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "markOff",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    true
+   ],
+   "isFresh": [
+    false
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":false,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "markOtherFile",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    true,
+    true
+   ],
+   "isFresh": [
+    false,
+    false
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png.bak\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"/static/icon.pngx\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "markAndOwn",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"x\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    true,
+    true
+   ],
+   "isFresh": [
+    false,
+    false
+   ],
+   "findOwn": 1,
+   "findOther": 0,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<img src=\\\"{{root}}/static/icon.png\\\">\",\"className\":\"layout-box-mark\"},\"name\":\"quartz-layout-box\"},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true,\"extra\":1},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    }
+   ]
+  },
+  {
+   "id": "objectSource",
+   "plugins": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "isLayoutBox": [
+    false
+   ],
+   "isFresh": [
+    false
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":{\"name\":\"quartz-layout-box\",\"repo\":\"github:x/quartz-layout-box\"},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "forkAndFresh",
+   "plugins": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"}]",
+   "isLayoutBox": [
+    true,
+    true
+   ],
+   "isFresh": [
+    false,
+    true
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10},\"name\":\"quartz-layout-box\"}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:me/quartz-layout-box-fork\",\"options\":{\"html\":\"<b>x</b>\"},\"name\":\"quartz-layout-box-fork\",\"enabled\":true},{\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"position\":\"left\"},\"layout\":{\"position\":\"left\",\"priority\":50},\"name\":\"quartz-layout-box\"},{\"name\":\"quartz-layout-box\",\"source\":\"github:me/quartz-layout-box-fork\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "numberHtml",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "isLayoutBox": [
+    true
+   ],
+   "isFresh": [
+    false
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":5},\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  },
+  {
+   "id": "nullOptions",
+   "plugins": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "isLayoutBox": [
+    true
+   ],
+   "isFresh": [
+    true
+   ],
+   "findOwn": -1,
+   "findOther": -1,
+   "without": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true}]",
+   "with": [
+    {
+     "hasDark": false,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"name\":\"quartz-layout-box\",\"enabled\":true,\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": false,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": null,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": -1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 0,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"name\":\"quartz-layout-box\",\"enabled\":true,\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 1,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    },
+    {
+     "hasDark": true,
+     "replaceIndex": 2,
+     "result": "[{\"source\":\"github:boxi-os/quartz-layout-box\",\"options\":null,\"name\":\"quartz-layout-box\",\"enabled\":true},{\"name\":\"quartz-layout-box\",\"source\":\"github:boxi-os/quartz-layout-box\",\"enabled\":true,\"options\":{\"html\":\"<a class=\\\"project-image\\\" href=\\\"{{root}}/\\\"><img class=\\\"img-light\\\" src=\\\"{{root}}/static/icon.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"><img class=\\\"img-dark\\\" src=\\\"{{root}}/static/icon-dark.png\\\" alt=\\\"{{siteTitle}}\\\" style=\\\"height:2.5rem;width:auto\\\"></a>\",\"className\":\"layout-box-project-image\",\"placeholders\":true},\"layout\":{\"position\":\"header\",\"priority\":10}}]"
+    }
+   ]
+  }
+ ]
+}
