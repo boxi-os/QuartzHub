@@ -354,7 +354,9 @@ public final class ExportWindow: NSObject {
   /// comes on a thread of its own.
   public func printPDF(paper: CGSize, landscape: Bool) async throws -> Data {
     guard !closed else { throw CancellationError() }
-    let file = NSTemporaryDirectory() + "quartzhub-print-\(UUID().uuidString.lowercased()).pdf"
+    // In the window's own folder when it has one: it goes with close(), and a crash leaves it to
+    // SiteCopy.sweep (same prefix).
+    let file = (ruleStoreFolder ?? NSTemporaryDirectory()) + "/print-\(UUID().uuidString.lowercased()).pdf"
     defer { try? FileManager.default.removeItem(atPath: file) }
     let info = NSPrintInfo()
     info.paperSize = paper

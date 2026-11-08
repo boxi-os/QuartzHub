@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 import QuartzHubCore
 
-/// `qh-check export-book <build> <out> [--language <code>] [--offline] [--pdf]`: a whole build
+/// `qh-check export-book <build> <out> [--language <code>] [--offline] [--pdf [--paper <A4|…>] [--landscape]]`: a whole build
 /// through the export - the navigation's order, every page collected, epubChapters, every formula
 /// and diagram drawn - in WebKit, written to <out>: `content.json`
 /// (chapters, navigation, counts, each picture's size and style, what was refused and fetched),
@@ -12,7 +12,7 @@ import QuartzHubCore
 /// the same steps in Chrome; the export itself is `ExportBook`. `--offline` refuses what
 /// the rule lets in from outside (use a copy from `scripts/cdn-build.mjs` for Mermaid and KaTeX).
 @MainActor
-func runExportBookCheck(root: String, build: String, out: String, language: String, offline: Bool, pdf: Bool) async -> Int32 {
+func runExportBookCheck(root: String, build: String, out: String, language: String, offline: Bool, pdf: Bool, paper: String = "A4", landscape: Bool = false) async -> Int32 {
   let scripts: String
   do {
     scripts = try ExportWindow.pageScripts(location: RuntimeLocation(node: "", git: "", helpers: "\(root)/Helpers/dist"))
@@ -31,7 +31,7 @@ func runExportBookCheck(root: String, build: String, out: String, language: Stri
     return 2
   }
   defer { server.close() }
-  let window = ExportWindow(origin: server.origin, size: CGSize(width: DocumentHTML.printWidthPx("A4", landscape: false), height: 1000),
+  let window = ExportWindow(origin: server.origin, size: CGSize(width: DocumentHTML.printWidthPx(paper, landscape: landscape), height: 1000),
                             pageScripts: scripts, outside: !offline)
   defer { window.close() }
   do {
@@ -55,7 +55,7 @@ func runExportBookCheck(root: String, build: String, out: String, language: Stri
     let collected = Date()
     if pdf {
       let parts = DocumentHTML.Parts(lang: lang, title: "export-book", subtitle: "", author: "", meta: "", coverImage: nil, stylesheets: stylesheets,
-                                     items: items, pages: pages, toc: true, pageSize: "A4", landscape: false)
+                                     items: items, pages: pages, toc: true, pageSize: paper, landscape: landscape)
       // For Chrome (docs/decisions/native-macos-spike-harness/chrome-pdf.mjs), served from the build's root.
       try DocumentHTML.document(parts).replacingOccurrences(of: server.origin, with: "").write(toFile: "\(out)/document.html", atomically: true, encoding: .utf8) // path boundary
       let result = try await PDFWrite.write(window, server: server, parts, PdfMeta(title: "export-book", subtitle: "", author: "", keywords: ExportExtras.bookKeywords(items, facts: facts), lang: lang))
