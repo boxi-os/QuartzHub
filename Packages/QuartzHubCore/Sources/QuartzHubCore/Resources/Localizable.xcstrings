@@ -49224,13 +49224,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} Projektbild blieb unverändert, weil du es in QuartzControl gewählt hast."
+                  "value" : "{{count}} Projektbild blieb unverändert, weil du es selbst gewählt hast."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} Projektbilder blieben unverändert, weil du sie in QuartzControl gewählt hast."
+                  "value" : "{{count}} Projektbilder blieben unverändert, weil du sie selbst gewählt hast."
                 }
               }
             }
@@ -49242,13 +49242,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} project picture was left unchanged, because you chose it in QuartzControl."
+                  "value" : "{{count}} project picture was left unchanged, because you chose it yourself."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} project pictures were left unchanged, because you chose them in QuartzControl."
+                  "value" : "{{count}} project pictures were left unchanged, because you chose them yourself."
                 }
               }
             }
