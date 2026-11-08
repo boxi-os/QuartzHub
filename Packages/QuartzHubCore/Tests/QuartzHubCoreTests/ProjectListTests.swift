@@ -61,4 +61,20 @@ import Testing
     #expect(list.store.project(id: first.id)?.path == a)
     #expect(try await list.relocate(id: first.id, to: "\(scratch.path)/C")?.name == "C")
   }
+
+  /// The copy is listed only when it succeeded.
+  @Test func duplicateListsOnlyASuccessfulCopy() async throws {
+    let (list, _) = list()
+    let environment = ToolEnvironment(base: [:], hostPath: HostPath(entries: [], source: .inherited, added: []),
+                                      nodeMode: .system, runtime: .repository, git: nil, bundledGitFailure: nil)
+    let target = "\(scratch.path)/Kopie-Ü"
+    let options = ProjectDuplicator.Options(source: scratch.path, target: target, content: .blank)
+    let failed = try await list.duplicate(options, environment: environment) { _, _ in ProjectCreator.Result(success: false, output: "npm: kaputt") }
+    #expect(failed.entry == nil && failed.result.output == "npm: kaputt" && list.store.list().isEmpty)
+    let done = try await list.duplicate(options, environment: environment) { options, _ in
+      try? Posix.mkdirs(options.target)
+      return ProjectCreator.Result(success: true, output: "")
+    }
+    #expect(done.entry?.path == target && list.store.list().map(\.path) == [target])
+  }
 }

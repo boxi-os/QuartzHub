@@ -34,6 +34,17 @@ public struct ProjectList: Sendable {
     return try store.relocate(id: id, to: path)
   }
 
+  /// `projects:duplicate`: the copy, then its entry. The entry only when the copy succeeded; the
+  /// result's `output` is what the steps printed, the failing one's sentence included.
+  public func duplicate(_ options: ProjectDuplicator.Options, environment: ToolEnvironment,
+                        run: @Sendable (ProjectDuplicator.Options, ToolEnvironment) async -> ProjectCreator.Result = {
+                          await ProjectDuplicator.duplicate($0, environment: $1)
+                        }) async throws -> (result: ProjectCreator.Result, entry: ProjectEntry?) {
+    let result = await run(options, environment)
+    guard result.success else { return (result, nil) }
+    return (result, try store.add(path: options.target))
+  }
+
   /// `projects:open`: the entry, stamped as opened now.
   public func open(id: String, now: Date = Date()) throws -> ProjectEntry? {
     try store.touch(id: id, now: now)
