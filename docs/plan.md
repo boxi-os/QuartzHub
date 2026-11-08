@@ -295,7 +295,7 @@ nach Abhängigkeit:
   Konfiguration, Reiter Website: `ProjectImageBox` und `ContentIndexPage` im Kern (golden
   gemessen; Helfer `content-files` mit dem globby des Projekts), in der App ⌘S und die Frage beim
   Verlassen (`UnsavedGuard`: Seitenleiste, Link, Fenster schließen, Beenden); Reiter
-  Übersetzungen über `LocaleFiles`. Konfiguration fertig. Als Nächstes Plugins.
+  Übersetzungen über `LocaleFiles`. Konfiguration fertig. Plugins läuft: Installiert mit der Options-Form fertig, als Nächstes der Marktplatz und die vier Editor-Reiter.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl

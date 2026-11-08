@@ -349,4 +349,68 @@ final class SmokeTests: XCTestCase {
     XCTAssertTrue(any["localization.none"].firstMatch.waitForExistence(timeout: 10), "Übersetzungen did not say there are no locale files")
   }
 
+
+  /// Plugins ▸ Installiert writes at once: Anordnen ▸ Nach unten renumbers the sequence in the
+  /// file, the inspector's switch writes `enabled`, and the count says what the list holds.
+  func testPluginsReorderAndSwitchWriteTheConfig() throws {
+    let (profile, project) = try scratchProject()
+    let config = project.appendingPathComponent("quartz.config.yaml")
+    try Data("""
+      configuration:
+        pageTitle: Smoke
+      plugins:
+        - source: github:quartz-community/alpha
+          enabled: true
+          order: 10
+        - source: github:quartz-community/beta
+          enabled: true
+          order: 20
+        - source: github:quartz-community/gamma
+          enabled: false
+          layout:
+            position: left
+            priority: 10
+
+      """.utf8).write(to: config)
+    let app = launch(profile: profile, open: project)
+    let window = projectWindow(app)
+    XCTAssertTrue(window.waitForExistence(timeout: 10))
+    let any = window.descendants(matching: .any)
+    any["sidebar.plugins"].firstMatch.click()
+    let count = any["plugins.count"].firstMatch
+    XCTAssertTrue(count.waitForExistence(timeout: 10), "Plugins did not open")
+    XCTAssertTrue(count.waitForLabelOrValue("2 von 3 aktiv", timeout: 5), "count: \(count.label) \(String(describing: count.value))")
+
+    any["plugins.row.alpha"].firstMatch.click()
+    XCTAssertTrue(any["plugins.inspector.name"].firstMatch.waitForExistence(timeout: 5), "the inspector shows no plugin")
+    window.typeKey(.downArrow, modifierFlags: [.option, .command])
+    let read = { (try? String(contentsOf: config, encoding: .utf8)) ?? "" }
+    let moved = expectation(for: NSPredicate { _, _ in
+      let text = read()
+      guard let alpha = text.range(of: "alpha"), let beta = text.range(of: "beta") else { return false }
+      return text[alpha.upperBound...].hasPrefix("\n    enabled: true\n    order: 20") && text[beta.upperBound...].hasPrefix("\n    enabled: true\n    order: 10")
+    }, evaluatedWith: nil)
+    wait(for: [moved], timeout: 10)
+
+    any["plugins.inspector.enabled"].firstMatch.click()
+    let off = expectation(for: NSPredicate { _, _ in
+      let text = read()
+      guard let alpha = text.range(of: "alpha") else { return false }
+      return text[alpha.upperBound...].hasPrefix("\n    enabled: false")
+    }, evaluatedWith: nil)
+    wait(for: [off], timeout: 10)
+    XCTAssertTrue(count.waitForLabelOrValue("1 von 3 aktiv", timeout: 5), "the count did not follow the switch")
+  }
+}
+
+private extension XCUIElement {
+  /// A static text's words arrive as its value or its label, depending on the SwiftUI view.
+  func waitForLabelOrValue(_ text: String, timeout: TimeInterval) -> Bool {
+    let deadline = Date().addingTimeInterval(timeout)
+    while Date() < deadline {
+      if label == text || (value as? String) == text { return true }
+      RunLoop.current.run(until: Date().addingTimeInterval(0.2))
+    }
+    return false
+  }
 }

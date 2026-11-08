@@ -94,6 +94,7 @@ struct ProjectWindow: View {
     switch page {
     case .overview: OverviewPage(project: project)
     case .config: ConfigPage(project: project)
+    case .plugins: PluginsPage(project: project)
     case .server: BuildServerPage(project: project)
     default: PendingPage(page: page)
     }

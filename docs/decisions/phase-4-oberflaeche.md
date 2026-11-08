@@ -472,3 +472,64 @@ nicht.
 
 **Nicht gemessen:** ein Eintrag der Art `template` (mehrzeilig, „JS“) mit Syntaxfehler; ein
 Sprachwechsel mit ungespeicherten Einträgen (sie werden verworfen, wie in QuartzControl); VoiceOver.
+
+### Plugins: Installiert und die Options-Form
+
+Vorbild `routes/Plugins/Installed.tsx` und `components/PluginOptionsForm`. Die übrigen fünf Reiter
+kommen einzeln; bis dahin zeigen sie den Platzhalter.
+
+**Kern.** `OptionFormText` trägt, was die Form über eine Option sagt: Titel, Beschreibung und
+Gruppe je Sprache, Beschriftungen der Auswahl, die Suche, den Satz unter einer Option, deren
+Bedingung nicht gilt, die Reihenfolge der Gruppen und den Wert, den eine von Hand getippte Option
+wird. Dazu `QuartzConfig.siteLanguages` und `PluginRepository` (das „owner/repo“ einer Quelle).
+Gemessen mit `scripts/option-form-golden.mjs` gegen QuartzControls eigenen Code:
+- 27 Felder aus zwei Schemas, die beide Normalisierer lesen;
+- 19 Werte als eine Zeile;
+- 37 getippte Werte, darunter `0x10`, ` true `, `[1, 2` und Ziffern anderer Schriften;
+- 9 Configs für die Sprachen und 18 Quellformen.
+
+Sechs Gegenproben schlugen an (Reihenfolge der Gruppen, Trimmen, `@`, an/aus, Kleinschreibung,
+Beschriftungen).
+
+**Abweichung.** Ein getipptes `Infinity` bleibt Text. QuartzControls YAML-Schreiber schrieb `.inf`;
+der Weg zum Helfer `yaml-edit` ist JSON, und das kennt keine Unendlichkeit. Die Option wäre als
+`null` angekommen.
+
+**Form.** Sie besteht aus `Section`s im gegliederten `Form` des Inspektors. Gruppen falten über
+`DisclosureGroup`, verschachtelte Objekte stehen als Stapel in ihrer Zeile. Textfelder schreiben
+beim Verlassen und bei Return, wie QuartzControl beim `blur`.
+
+Gefunden in der laufenden App: Das Feld verwarf seinen Entwurf sofort nach dem Schreiben und zeigte
+einen Augenblick den alten Wert. Beim nächsten Verlassen schrieb das Textfeld diesen alten Wert
+zurück. Gemessen: Ein geleertes `condition` stand nach einem Zeilenwechsel wieder als „has-tags“ in
+der Datei. Jetzt bleibt der Entwurf stehen, bis die Seite den neuen Wert liefert. Derselbe Ablauf
+(eintragen, leeren, Zeile wechseln) lässt die Datei byte-gleich.
+
+**Liste.** Die Reihenfolge folgt Quartz: Komponenten je Position nach `layout.priority`,
+Seitentypen und die übrige Verarbeitung je nach `order`, eigene Frames ohne Reihenfolge.
+Umsortiert wird auf drei Wegen zu einer Funktion:
+- `onMove` mit der Maus;
+- Anordnen ▸ Nach oben/Nach unten (⌥⌘↑/⌥⌘↓), über `focusedSceneValue`;
+- dieselben zwei im Kontextmenü und als Bedienungshilfe-Aktion.
+
+Jede Bewegung nummeriert die Gruppe in Zehnerschritten neu, wie in QuartzControl. Gemessen an der
+gui-test-Kopie:
+- ⌥⌘↓ und ⌥⌘↑ stellen die zwei Zeilen wieder her;
+- ein dritter Eintrag mit Lücke ging dabei von 70 auf 60.
+
+Bei aktivem Filter ist das Umsortieren aus, und das Menü ist grau. Schreiben geht wie in
+QuartzControl durch eine Schlange: Die Änderung steht sofort im Speicher, die Schreibvorgänge
+folgen einander, und nur der letzte liest die Datei neu. Jedes Schreiben nimmt einen Snapshot
+`configChange`, Entfernen einen `pluginChange`.
+
+**Kleinstes Fenster.** Sechs Reiter mit fester Breite drückten das Fenster bei 900 pt breiter als
+den Bildschirm. Der UI-Test fand die Seitenleiste nicht mehr („Unable to find hit point“). Reicht
+der Platz nicht, werden die Reiter jetzt ein Menü (`ViewThatFits`).
+
+**Offen bis zur Seite Layout.** „Im Layout-Editor“ und „Auf der Bühne zeigen“ öffnen die Seite
+Layout, wählen dort aber noch nichts aus. Die Widgets der Layout-Box (Snippet-Datei, Bild einfügen,
+Platzhalter) und die Gründe „wirkt nicht“ für Navigationen, Layout-Box und Formulare kommen mit
+ihren Reitern. Bis dahin ist `file` ein Textfeld.
+
+Die Prüfung, ob ein Plugin ein Update hat (`git ls-remote` je Eintrag), läuft wie auf der Übersicht
+nicht mit `-QHNoUpdateCheck YES`.

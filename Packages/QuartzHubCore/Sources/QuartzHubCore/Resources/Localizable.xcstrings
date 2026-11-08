@@ -33907,7 +33907,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Beschreibung der Optionen ließ sich nicht lesen: {{reason}}"
+            "value" : "Die Beschreibung der Optionen konnte nicht gelesen werden: {{reason}}"
           }
         },
         "en" : {
@@ -34955,13 +34955,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links ein Plugin, um es hier einzustellen. Escape oder ein Klick ins Leere hebt die Auswahl wieder auf."
+            "value" : "Wähle in der Liste ein Plugin, um es hier einzustellen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pick a plugin on the left to set it up here. Escape or a click on an empty spot lets go of the selection."
+            "value" : "Select a plugin in the list to configure it here."
           }
         }
       }
@@ -40980,6 +40980,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show or hide the inspector"
+          }
+        }
+      }
+    },
+    "shell.menu.arrange" : {
+      "comment" : "Menu with Move Up / Move Down for the selected row of a sortable list (Plugins, later Formulare and Dokumente)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anordnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrange"
+          }
+        }
+      }
+    },
+    "shell.menu.moveDown" : {
+      "comment" : "Arrange menu and row context menu: moves the selected row one place down",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach unten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move Down"
+          }
+        }
+      }
+    },
+    "shell.menu.moveUp" : {
+      "comment" : "Arrange menu and row context menu: moves the selected row one place up",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach oben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move Up"
           }
         }
       }

@@ -50,6 +50,7 @@ struct QuartzHubApp: App {
       InspectorCommand()
       ProjectCommands()
       SaveCommand()
+      ArrangeCommands()
     }
 
     WindowGroup(id: ProjectWindow.sceneID, for: String.self) { $projectId in
