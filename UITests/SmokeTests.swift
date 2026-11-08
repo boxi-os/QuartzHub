@@ -165,6 +165,29 @@ final class SmokeTests: XCTestCase {
     XCTAssertTrue(name.waitForNonExistence(timeout: 5), "Abbrechen did not close the wizard")
   }
 
+  /// Duplizieren from the inspector: the name is suggested with "-2", a "/" is refused, Abbrechen
+  /// closes. Nothing is copied: the copy runs npm install.
+  func testDuplicateWizardSuggestsANameAndCancels() throws {
+    let (profile, project) = try scratchProject()
+    let app = launch(profile: profile, open: project)
+    XCTAssertTrue(projectWindow(app).waitForExistence(timeout: 10))
+    app.typeKey("0", modifierFlags: [.command, .shift])
+    let row = app.descendants(matching: .any)["projects.row.\(Self.projectName)"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 5))
+    row.click()
+    app.descendants(matching: .any)["projects.duplicate"].firstMatch.click()
+    let name = app.descendants(matching: .any)["duplicate.name"].firstMatch
+    XCTAssertTrue(name.waitForExistence(timeout: 5), "the duplicate wizard did not open")
+    XCTAssertEqual(name.value as? String, "\(Self.projectName)-2")
+    name.click()
+    name.typeKey("a", modifierFlags: .command)
+    name.typeText("x/y")
+    XCTAssertTrue(app.staticTexts["Der Name darf kein „/“ enthalten und nicht „.“ oder „..“ sein."].waitForExistence(timeout: 3))
+    XCTAssertFalse(app.windows.buttons["duplicate.confirm"].firstMatch.isEnabled)
+    app.windows.buttons["Abbrechen"].firstMatch.click()
+    XCTAssertTrue(name.waitForNonExistence(timeout: 5))
+  }
+
   /// The takeover against a QuartzControl profile made here (two projects, no secrets, so no
   /// Keychain prompt): offered, carried out, and not offered again once QuartzHub has a list.
   func testMigrationIsOfferedOnceAndWritesTheProjectList() throws {

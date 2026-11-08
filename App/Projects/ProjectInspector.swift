@@ -6,6 +6,7 @@ import SwiftUI
 struct ProjectInspector: View {
   let row: ProjectOverview
   let open: () -> Void
+  let duplicate: () -> Void
   let remove: () -> Void
 
   @State private var relocateFailure: String?
@@ -59,6 +60,10 @@ struct ProjectInspector: View {
           Button(L10n.t("shell.projects.showInFinder")) {
             NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: row.path)]) // path boundary
           }
+        }
+        if !row.missing && row.isQuartzProject {
+          Button(L10n.t("home.duplicate.action") + "…", action: duplicate)
+            .accessibilityIdentifier("projects.duplicate")
         }
         Button(L10n.t("home.confirmRemoveAction") + "…", role: .destructive, action: remove)
           .accessibilityIdentifier("projects.remove")

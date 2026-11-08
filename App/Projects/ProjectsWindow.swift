@@ -17,6 +17,7 @@ struct ProjectsWindow: View {
   @State private var failure: String?
   @State private var removing: ProjectOverview?
   @State private var creating = false
+  @State private var duplicating: ProjectOverview?
   @SceneStorage("inspector.presented") private var inspectorPresented = true
   @Environment(\.openWindow) private var openWindow
   /// The takeover from QuartzControl, offered while QuartzHub has no project list of its own.
@@ -37,7 +38,7 @@ struct ProjectsWindow: View {
       .navigationTitle(L10n.t("shell.projects.title"))
       .inspectorColumn(isPresented: $inspectorPresented) {
         if let id = selection, let row = model.row(id) {
-          ProjectInspector(row: row, open: { open(row) }, remove: { removing = row })
+          ProjectInspector(row: row, open: { open(row) }, duplicate: { duplicating = row }, remove: { removing = row })
         } else {
           ProjectsContext()
         }
@@ -96,6 +97,15 @@ struct ProjectsWindow: View {
           }
         }
       }
+      .sheet(item: $duplicating) { source in
+        DuplicateProjectSheet(source: source) { id in
+          duplicating = nil
+          if let id, let row = model.row(id) {
+            selection = id
+            open(row)
+          }
+        }
+      }
       .sheet(isPresented: migrationPresented) {
         if let migration {
           MigrationSheet(source: migration.source, plan: migration.plan) {
@@ -133,6 +143,8 @@ struct ProjectsWindow: View {
           .disabled(row.missing || !row.isQuartzProject)
         Button(L10n.t("shell.projects.showInFinder")) { reveal(row) }
           .disabled(row.missing)
+        Button(L10n.t("home.duplicate.action") + "…") { duplicating = row }
+          .disabled(row.missing || !row.isQuartzProject)
         Divider()
         Button(L10n.t("home.confirmRemoveAction") + "…") { removing = row }
       }
