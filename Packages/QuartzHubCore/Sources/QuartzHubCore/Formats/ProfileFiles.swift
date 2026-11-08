@@ -39,18 +39,31 @@ public struct SettingsFile: JSONView {
   public enum NodeRuntime: String, Sendable { case embedded, system }
   public enum ServersOnQuit: String, Sendable { case ask, stop, keep }
 
-  public var defaultProjectDirectory: String? { string("defaultProjectDirectory") }
+  /// Set to nil removes the key, as `undefined` did in QuartzControl's JSON.
+  public var defaultProjectDirectory: String? {
+    get { string("defaultProjectDirectory") }
+    set { set("defaultProjectDirectory", newValue) }
+  }
   /// As stored; `system` or missing means "follow the system" (`i18n.ts` `refreshMainLanguage`).
-  public var language: Language { string("language").flatMap(Language.init) ?? .system }
+  public var language: Language {
+    get { string("language").flatMap(Language.init) ?? .system }
+    set { set("language", newValue.rawValue) }
+  }
   /// Anything but light or dark is system (`theme.ts`).
   public var theme: Theme {
-    switch string("theme") {
-    case "light": .light
-    case "dark": .dark
-    default: .system
+    get {
+      switch string("theme") {
+      case "light": .light
+      case "dark": .dark
+      default: .system
+      }
     }
+    set { set("theme", newValue.rawValue) }
   }
-  public var nodeRuntime: NodeRuntime { string("nodeRuntime").flatMap(NodeRuntime.init) ?? .embedded }
+  public var nodeRuntime: NodeRuntime {
+    get { string("nodeRuntime").flatMap(NodeRuntime.init) ?? .embedded }
+    set { set("nodeRuntime", newValue.rawValue) }
+  }
   public var serversOnQuit: ServersOnQuit {
     get { string("serversOnQuit").flatMap(ServersOnQuit.init) ?? .ask }
     set { set("serversOnQuit", newValue.rawValue) }
