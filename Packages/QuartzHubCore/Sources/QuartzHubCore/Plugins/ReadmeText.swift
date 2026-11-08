@@ -240,7 +240,7 @@ public enum ReadmeText {
   }
 
   /// JavaScript's whitespace and line terminators, which `trim()` takes away.
-  private static func isSpace(_ unit: UInt16) -> Bool {
+  static func isSpace(_ unit: UInt16) -> Bool {
     switch unit {
     case 0x09...0x0D, 0x20, 0xA0, 0x1680, 0x2000...0x200A, 0x2028, 0x2029, 0x202F, 0x205F, 0x3000, 0xFEFF: true
     default: false

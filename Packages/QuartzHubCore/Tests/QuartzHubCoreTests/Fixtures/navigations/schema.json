@@ -1,0 +1,1002 @@
+{
+ "type": "object",
+ "properties": {
+  "language": {
+   "type": "string",
+   "description": "Cooperation with quartz-multilanguage. `auto` shows the tree of the current page's language, with paths (`rootPath`, `order`, `nodeIcons`, `include`, `exclude`) written without the language folder or suffix; without quartz-multilanguage it changes nothing. `all` ignores languages. A language code (`de`) always shows that language. Defaults to `auto`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 280,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Zusammenspiel mit quartz-multilanguage: `auto` zeigt den Baum in der Sprache der aktuellen Seite, `all` alle Sprachen, ein Sprachcode immer diese Sprache. Ohne quartz-multilanguage ändert die Option nichts.",
+     "group": "Seitenauswahl"
+    }
+   }
+  },
+  "variant": {
+   "type": "string",
+   "enum": [
+    "tree",
+    "bar",
+    "accordion",
+    "dropdown",
+    "flyout",
+    "tabs",
+    "mega",
+    "columns",
+    "select",
+    "pager"
+   ],
+   "description": "Presentation; each variant implies its orientation. Defaults to `tree`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 100,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Darstellung der Navigation. Jede Variante bringt ihre Ausrichtung mit.",
+     "group": "Variante",
+     "enum": {
+      "tree": "Baum",
+      "bar": "Leiste",
+      "accordion": "Akkordeon",
+      "dropdown": "Aufklappmenü",
+      "flyout": "Seitliche Panels",
+      "tabs": "Reiter",
+      "mega": "Mega-Menü",
+      "columns": "Spalten",
+      "select": "Auswahlliste",
+      "pager": "Zurück / Weiter"
+     }
+    }
+   }
+  },
+  "mobile": {
+   "type": "string",
+   "enum": [
+    "same",
+    "accordion",
+    "offcanvas",
+    "select",
+    "hidden"
+   ],
+   "description": "Presentation below the mobile breakpoint. Defaults to `same`.",
+   "x-quartz-group": "On smartphones",
+   "x-quartz-order": 600,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Darstellung unterhalb des Mobile-Breakpoints.",
+     "group": "Auf dem Smartphone",
+     "enum": {
+      "same": "Wie auf dem Desktop",
+      "accordion": "Akkordeon",
+      "offcanvas": "Schublade",
+      "select": "Auswahlliste",
+      "hidden": "Ausgeblendet"
+     }
+    }
+   }
+  },
+  "align": {
+   "type": "string",
+   "enum": [
+    "left",
+    "center",
+    "right",
+    "full"
+   ],
+   "description": "Alignment of `bar`, `dropdown`, `mega` and `tabs`. Defaults to `left`.",
+   "x-quartz-when": {
+    "variant": [
+     "bar",
+     "dropdown",
+     "mega",
+     "tabs"
+    ]
+   },
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 110,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ausrichtung der obersten Zeile von `bar`, `dropdown`, `mega` und `tabs`; `full` verteilt die Einträge über die ganze Breite. Andere Varianten ignorieren die Option.",
+     "group": "Variante",
+     "enum": {
+      "left": "Links",
+      "center": "Mittig",
+      "right": "Rechts",
+      "full": "Volle Breite"
+     }
+    }
+   }
+  },
+  "className": {
+   "type": "string",
+   "description": "Extra class names on the root element. Defaults to none.",
+   "x-quartz-group": "Technical",
+   "x-quartz-order": 710,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Zusätzliche Klassen am `<nav>`.",
+     "group": "Technisches"
+    }
+   }
+  },
+  "id": {
+   "type": "string",
+   "description": "Stable instance id used for `localStorage` and element ids. Defaults to a hash of the options.",
+   "x-quartz-group": "Technical",
+   "x-quartz-order": 720,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Stabile Instanz-ID für Element-IDs und `localStorage`. Setzen, wenn ein Layout dieselben Optionen zweimal verwendet, sonst teilen sich beide Instanzen ihre Element-IDs.",
+     "group": "Technisches"
+    }
+   }
+  },
+  "title": {
+   "type": "string",
+   "description": "Heading rendered above the navigation. Defaults to none.",
+   "x-quartz-group": "Labels and icons",
+   "x-quartz-order": 500,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Überschrift über der Navigation.",
+     "group": "Beschriftung und Symbole"
+    }
+   }
+  },
+  "ariaLabel": {
+   "type": "string",
+   "description": "Accessible name of the `<nav>`. Defaults to a translated \"Main navigation\".",
+   "x-quartz-group": "Technical",
+   "x-quartz-order": 700,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Zugänglicher Name des `<nav>`.",
+     "group": "Technisches"
+    }
+   }
+  },
+  "chevrons": {
+   "type": "boolean",
+   "description": "Render chevrons on collapsible folders. Defaults to `true`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 130,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Pfeile an aufklappbaren Ordnern. Bei `folderClick: link` ist der Pfeil der Aufklapp-Button und immer sichtbar.",
+     "group": "Variante"
+    }
+   }
+  },
+  "icons": {
+   "anyOf": [
+    {
+     "type": "string",
+     "enum": [
+      "none",
+      "type",
+      "custom",
+      "both"
+     ]
+    },
+    {
+     "type": "boolean"
+    }
+   ],
+   "description": "Row icons: `type` draws folder and file glyphs, `custom` the `navIcon` frontmatter value (and `nodeIcons`), `both` draws the custom icon where one is set and the type glyph elsewhere, `none` draws nothing. `true` / `false` mean `both` / `none`. Defaults to `both`.",
+   "x-quartz-group": "Labels and icons",
+   "x-quartz-order": 510,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "`type`: Ordner- und Datei-Glyphen. `custom`: `navIcon` / `nodeIcons`. `both`: eigenes Icon wo gesetzt, sonst Glyphe. `true` / `false` bedeuten `both` / `none`.",
+     "group": "Beschriftung und Symbole",
+     "enum": {
+      "none": "Keine",
+      "type": "Ordner und Seiten",
+      "custom": "Eigene",
+      "both": "Beide"
+     }
+    }
+   }
+  },
+  "iconNames": {
+   "type": "object",
+   "properties": {
+    "folder": {
+     "type": "string",
+     "description": "Closed folder. Defaults to `folder`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Geschlossener Ordner. Standard: `folder`."
+      }
+     }
+    },
+    "folderOpen": {
+     "type": "string",
+     "description": "Open folder. Defaults to `folder-open`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Offener Ordner. Standard: `folder-open`."
+      }
+     }
+    },
+    "file": {
+     "type": "string",
+     "description": "Page. Defaults to `file`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Seite. Standard: `file`."
+      }
+     }
+    },
+    "home": {
+     "type": "string",
+     "description": "The `showHome` entry. Defaults to `house`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Der Eintrag von `showHome`. Standard: `house`."
+      }
+     }
+    },
+    "chevron": {
+     "type": "string",
+     "description": "Folder toggle. Defaults to `chevron-down`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Pfeil zum Auf- und Zuklappen. Standard: `chevron-down`."
+      }
+     }
+    },
+    "menu": {
+     "type": "string",
+     "description": "Off-canvas burger. Defaults to `menu`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Burger-Button der Schublade. Standard: `menu`."
+      }
+     }
+    },
+    "close": {
+     "type": "string",
+     "description": "Off-canvas close button. Defaults to `x`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Schließen-Button der Schublade. Standard: `x`."
+      }
+     }
+    },
+    "previous": {
+     "type": "string",
+     "description": "Pager \"Previous\". Defaults to `chevron-left`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "„Zurück“ im Pager. Standard: `chevron-left`."
+      }
+     }
+    },
+    "next": {
+     "type": "string",
+     "description": "Pager \"Next\". Defaults to `chevron-right`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "„Weiter“ im Pager. Standard: `chevron-right`."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Lucide icons for folders, files, the home entry, chevrons, burger, close and pager arrows.",
+   "x-quartz-group": "Labels and icons",
+   "x-quartz-order": 530,
+   "x-quartz-advanced": true,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Lucide-Icons für die eigenen Symbole des Plugins.",
+     "group": "Beschriftung und Symbole"
+    }
+   }
+  },
+  "nodeIcons": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "string"
+   },
+   "description": "Icons per path from the site config, e.g. `{ docs: \"lucide:book-open\", \"docs/api\": \"🧩\" }`. Same syntax as `navIcon` (`lucide:<name>`, text, emoji, or `none`); frontmatter wins.",
+   "x-quartz-group": "Labels and icons",
+   "x-quartz-order": 520,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Icons je Pfad, z. B. `{ docs: \"lucide:book-open\", \"docs/api\": \"🧩\" }`; gleiche Syntax wie `navIcon`. Frontmatter gewinnt.",
+     "group": "Beschriftung und Symbole"
+    }
+   }
+  },
+  "rootPath": {
+   "type": "string",
+   "description": "Folder the navigation starts at, e.g. `docs`. Defaults to the site root.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 200,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ordner, an dem die Navigation beginnt, z. B. `docs` oder `de`.",
+     "group": "Seitenauswahl"
+    }
+   }
+  },
+  "scope": {
+   "type": "string",
+   "enum": [
+    "root",
+    "section",
+    "parent",
+    "current"
+   ],
+   "description": "Which subtree to show relative to the current page. Defaults to `root`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 210,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "`root`: Kinder von `rootPath`. `section`: der Top-Level-Ordner der aktuellen Seite. `parent`: der Ordner, der die aktuelle Seite enthält (auf der Indexseite von `rootPath` dieser selbst). `current`: der aktuelle Ordner.",
+     "group": "Seitenauswahl",
+     "enum": {
+      "root": "Ab der Wurzel",
+      "section": "Abschnitt",
+      "parent": "Elternordner",
+      "current": "Aktueller Ordner"
+     }
+    }
+   }
+  },
+  "depth": {
+   "type": "number",
+   "description": "Number of levels below the scope root; `0` means unlimited. Defaults to `0`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 220,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ebenen unterhalb der Scope-Wurzel.",
+     "group": "Seitenauswahl"
+    }
+   }
+  },
+  "hideOutsideRoot": {
+   "type": "boolean",
+   "description": "Render nothing on pages outside `rootPath`. Defaults to `true`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 230,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Auf Seiten außerhalb von `rootPath` nichts rendern.",
+     "group": "Seitenauswahl"
+    }
+   }
+  },
+  "showScopeRoot": {
+   "type": "boolean",
+   "description": "Render the scope root as a linked heading above the list. Defaults to `false`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 240,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Verlinkte Kopfzeile mit der Scope-Wurzel über der Liste.",
+     "group": "Seitenauswahl"
+    }
+   }
+  },
+  "showHome": {
+   "type": "boolean",
+   "description": "Prepend a link to the index page of `rootPath`. Defaults to `false`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 250,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Erster Eintrag verlinkt auf die Indexseite von `rootPath`.",
+     "group": "Seitenauswahl"
+    }
+   }
+  },
+  "indexEntry": {
+   "type": "string",
+   "enum": [
+    "none",
+    "first"
+   ],
+   "description": "Add the folder index page as the first child of an expanded folder. Defaults to `none`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 260,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "„Übersicht“ (die Ordnerseite) als erstes Kind jedes ausgeklappten Ordners.",
+     "group": "Seitenauswahl",
+     "enum": {
+      "none": "Keiner",
+      "first": "Als erster Eintrag"
+     }
+    }
+   }
+  },
+  "sort": {
+   "type": "string",
+   "enum": [
+    "manual",
+    "alphabetical",
+    "date"
+   ],
+   "description": "Sort mode. Defaults to `manual` (order map, `navOrder`, numeric prefix, title).",
+   "x-quartz-group": "Order",
+   "x-quartz-order": 400,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "`manual`: `order`-Liste → `navOrder` → Nummernpräfix → Titel. Ohne diese Angaben alphabetisch. `foldersFirst` gilt vor all dem.",
+     "group": "Reihenfolge",
+     "enum": {
+      "manual": "Manuell",
+      "alphabetical": "Alphabetisch",
+      "date": "Datum"
+     }
+    }
+   }
+  },
+  "sortDirection": {
+   "type": "string",
+   "enum": [
+    "asc",
+    "desc"
+   ],
+   "description": "Sort direction. Defaults to `asc`.",
+   "x-quartz-group": "Order",
+   "x-quartz-order": 410,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Fehlende Werte (kein Datum, keine Reihenfolge) stehen immer am Ende.",
+     "group": "Reihenfolge",
+     "enum": {
+      "asc": "Aufsteigend",
+      "desc": "Absteigend"
+     }
+    }
+   }
+  },
+  "foldersFirst": {
+   "type": "string",
+   "enum": [
+    "first",
+    "last",
+    "mixed"
+   ],
+   "description": "Where folders go relative to pages. Defaults to `first`.",
+   "x-quartz-group": "Order",
+   "x-quartz-order": 420,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ordner vor den Seiten, danach oder gemeinsam sortiert.",
+     "group": "Reihenfolge",
+     "enum": {
+      "first": "Ordner zuerst",
+      "last": "Ordner zuletzt",
+      "mixed": "Gemischt"
+     }
+    }
+   }
+  },
+  "dateField": {
+   "type": "string",
+   "enum": [
+    "created",
+    "modified",
+    "published"
+   ],
+   "description": "Date used by `sort: date`. Defaults to `created`.",
+   "x-quartz-when": {
+    "sort": "date"
+   },
+   "x-quartz-group": "Order",
+   "x-quartz-order": 430,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Datum für `sort: date`.",
+     "group": "Reihenfolge",
+     "enum": {
+      "created": "Erstellt",
+      "modified": "Geändert",
+      "published": "Veröffentlicht"
+     }
+    }
+   }
+  },
+  "order": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "description": "Explicit child order per folder path, e.g. `{ \"\": [\"docs\", \"blog\"], docs: [\"intro\"] }`.",
+   "x-quartz-group": "Order",
+   "x-quartz-order": 440,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Reihenfolge der Kinder je Ordnerpfad: `{ \"\": [docs, blog], docs: [intro, setup] }`. Einträge sind Slug-Segmente oder Dateinamen.",
+     "group": "Reihenfolge"
+    }
+   }
+  },
+  "stripNumericPrefix": {
+   "type": "boolean",
+   "description": "Remove a numeric prefix such as `01-` from titles taken from file names. Defaults to `false`.",
+   "x-quartz-group": "Order",
+   "x-quartz-order": 450,
+   "x-quartz-advanced": true,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Eine führende Zahl samt Trennzeichen (`01-`, `01 `, `01_`, `01.`) aus Titeln entfernen. Gilt für jeden Titel, der so beginnt, auch für `title` aus dem Frontmatter (`1.2 – Setup` wird `2 – Setup`); `navTitle` bleibt unberührt.",
+     "group": "Reihenfolge"
+    }
+   }
+  },
+  "frontmatterKeys": {
+   "type": "object",
+   "properties": {
+    "order": {
+     "type": "string",
+     "description": "Numeric sort key of a page or folder index. Defaults to `navOrder`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Numerischer Sortierschlüssel einer Seite oder Ordner-Indexseite. Standard: `navOrder`."
+      }
+     }
+    },
+    "title": {
+     "type": "string",
+     "description": "Title shown in the navigation instead of the page title. Defaults to `navTitle`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Titel, der in der Navigation statt des Seitentitels erscheint. Standard: `navTitle`."
+      }
+     }
+    },
+    "hide": {
+     "type": "string",
+     "description": "`true` hides the page, or the folder when set on its index page. Defaults to `navHide`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`true` blendet die Seite aus, auf der Indexseite den ganzen Ordner. Standard: `navHide`."
+      }
+     }
+    },
+    "icon": {
+     "type": "string",
+     "description": "Icon rendered before the title when `icons` is on: short text, an emoji or a Lucide icon as `lucide:<name>` (e.g. `lucide:book-open`). Defaults to `navIcon`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Symbol vor dem Titel, wenn `icons` es zeigt: kurzer Text, ein Emoji oder ein Lucide-Icon als `lucide:<name>`. Standard: `navIcon`."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Frontmatter keys read by the plugin.",
+   "x-quartz-group": "Technical",
+   "x-quartz-order": 730,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Frontmatter-Schlüssel, die das Plugin liest.",
+     "group": "Technisches"
+    }
+   }
+  },
+  "hideTags": {
+   "type": "boolean",
+   "description": "Hide the `tags` folder. Defaults to `true`.",
+   "x-quartz-group": "Hide",
+   "x-quartz-order": 300,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ordner `tags` ausblenden.",
+     "group": "Ausblenden"
+    }
+   }
+  },
+  "hideUnlisted": {
+   "type": "boolean",
+   "description": "Hide pages marked `unlisted`. Defaults to `true`.",
+   "x-quartz-group": "Hide",
+   "x-quartz-order": 310,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Als `unlisted` markierte Seiten ausblenden.",
+     "group": "Ausblenden"
+    }
+   }
+  },
+  "hideDrafts": {
+   "type": "boolean",
+   "description": "Hide pages with `draft: true`. Defaults to `true`.",
+   "x-quartz-group": "Hide",
+   "x-quartz-order": 320,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Seiten mit `draft: true` ausblenden.",
+     "group": "Ausblenden"
+    }
+   }
+  },
+  "hideEmptyFolders": {
+   "type": "boolean",
+   "description": "Drop folders that end up without visible children. Defaults to `true`.",
+   "x-quartz-group": "Hide",
+   "x-quartz-order": 330,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ordner ohne sichtbare Kinder entfernen.",
+     "group": "Ausblenden"
+    }
+   }
+  },
+  "keepIndexOnlyFolders": {
+   "type": "boolean",
+   "description": "Keep folders whose only content is their index page. Defaults to `true`.",
+   "x-quartz-group": "Hide",
+   "x-quartz-order": 360,
+   "x-quartz-advanced": true,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ordner behalten, deren einziger Inhalt die Indexseite ist.",
+     "group": "Ausblenden"
+    }
+   }
+  },
+  "include": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "description": "Globs on slugs; when set, only matching pages and subtrees are shown. Defaults to all.",
+   "x-quartz-widget": "glob",
+   "x-quartz-group": "Hide",
+   "x-quartz-order": 340,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Globs auf Slugs; `docs` behält den Teilbaum, `docs/**` alles darunter.",
+     "group": "Ausblenden"
+    }
+   }
+  },
+  "exclude": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "description": "Globs on slugs to hide, e.g. `private/**`. Defaults to none.",
+   "x-quartz-widget": "glob",
+   "x-quartz-group": "Hide",
+   "x-quartz-order": 350,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Globs auf Slugs zum Ausblenden, z. B. `private/**`. Ein Ordnername trifft den ganzen Teilbaum; `docs/*` trifft auch `docs/index` und alles darunter, der Ordner verschwindet. Wer nur `docs/index` ausschließt, behält den Ordner; er verlinkt dann auf seine erste Seite.",
+     "group": "Ausblenden"
+    }
+   }
+  },
+  "folderLink": {
+   "type": "string",
+   "enum": [
+    "index",
+    "none",
+    "first-child"
+   ],
+   "description": "Where a folder title links to. Defaults to `index`.",
+   "x-quartz-group": "Page selection",
+   "x-quartz-order": 270,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Wohin ein Ordnertitel verlinkt. `index` fällt auf die erste Seite zurück, wenn keine Ordnerseite existiert.",
+     "group": "Seitenauswahl",
+     "enum": {
+      "index": "Indexseite",
+      "none": "Kein Link",
+      "first-child": "Erste Seite darin"
+     }
+    }
+   }
+  },
+  "folderClick": {
+   "type": "string",
+   "enum": [
+    "link",
+    "toggle"
+   ],
+   "description": "Collapsible folders: `toggle` makes the whole row open and close the folder, `link` makes the row a link with a separate toggle button at its end. Defaults to `toggle`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 140,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Aufklappbare Ordner: `toggle` – die ganze Zeile klappt den Ordner auf und zu; `link` – die Zeile ist ein Link, aufgeklappt wird mit dem Button am Ende.",
+     "group": "Variante",
+     "enum": {
+      "link": "Zeile ist ein Link",
+      "toggle": "Zeile klappt auf und zu"
+     }
+    }
+   }
+  },
+  "folderDefaultState": {
+   "type": "string",
+   "enum": [
+    "collapsed",
+    "open"
+   ],
+   "description": "Initial state of collapsible folders. Defaults to `collapsed`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 150,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Anfangszustand aufklappbarer Ordner.",
+     "group": "Variante",
+     "enum": {
+      "collapsed": "Zugeklappt",
+      "open": "Offen"
+     }
+    }
+   }
+  },
+  "expandActive": {
+   "type": "boolean",
+   "description": "Open folders on the path to the current page. Defaults to `true`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 160,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Ordner auf dem Pfad zur aktuellen Seite öffnen.",
+     "group": "Variante"
+    }
+   }
+  },
+  "exclusive": {
+   "type": "boolean",
+   "description": "Only one open folder per level (`<details name>`). Defaults to `false`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 170,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Nur ein offener Ordner je Ebene (`<details name>`).",
+     "group": "Variante"
+    }
+   }
+  },
+  "persistState": {
+   "type": "boolean",
+   "description": "Remember open folders in `localStorage`. Defaults to `false`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 180,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Offene Ordner in `localStorage` merken (nur Akkordeon). Mit `exclusive` gewinnt der Ordner der aktuellen Seite gegen einen gemerkten: Ihn wieder zu öffnen würde den Ordner schließen, in dem die Seite liegt.",
+     "group": "Variante"
+    }
+   }
+  },
+  "trigger": {
+   "type": "string",
+   "enum": [
+    "click",
+    "hover"
+   ],
+   "description": "How dropdown, mega and flyout panels open: on click or on hover and focus. Defaults to `click`.",
+   "x-quartz-when": {
+    "variant": [
+     "dropdown",
+     "mega",
+     "flyout"
+    ]
+   },
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 120,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Wie sich `dropdown`, `mega` und `flyout` öffnen. Hover öffnet auch bei Tastaturfokus.",
+     "group": "Variante",
+     "enum": {
+      "click": "Klick",
+      "hover": "Zeiger oder Fokus"
+     }
+    }
+   }
+  },
+  "breakpoints": {
+   "type": "object",
+   "properties": {
+    "mobile": {
+     "type": "string",
+     "description": "Mobile breakpoint, e.g. `800px`. Defaults to the value in `quartz/styles/variables.scss`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Mobile-Breakpoint, z. B. `800px`. Standard: der Wert aus `quartz/styles/variables.scss`."
+      }
+     }
+    },
+    "desktop": {
+     "type": "string",
+     "description": "Desktop breakpoint, e.g. `1200px`. Defaults to the value in `quartz/styles/variables.scss`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "Desktop-Breakpoint, z. B. `1200px`. Standard: der Wert aus `quartz/styles/variables.scss`."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Override the breakpoints read from `quartz/styles/variables.scss`.",
+   "x-quartz-group": "On smartphones",
+   "x-quartz-order": 610,
+   "x-quartz-advanced": true,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Breakpoints der Site überschreiben, z. B. `{ mobile: 640px }`. Alle Instanzen teilen ein Stylesheet, also in jedem Eintrag denselben Wert setzen. `desktop` wird angenommen, derzeit aber nicht benutzt.",
+     "group": "Auf dem Smartphone"
+    }
+   }
+  },
+  "tabs": {
+   "type": "object",
+   "properties": {
+    "secondary": {
+     "type": "boolean",
+     "description": "Show the children of the active tab in a second row. Defaults to `true`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`tabs`: Kinder des aktiven Tabs in einer zweiten Zeile."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Options of the `tabs` variant.",
+   "x-quartz-when": {
+    "variant": "tabs"
+   },
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 190,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Optionen der Variante `tabs`.",
+     "group": "Variante"
+    }
+   }
+  },
+  "flyout": {
+   "type": "object",
+   "properties": {
+    "side": {
+     "type": "string",
+     "enum": [
+      "auto",
+      "right",
+      "left"
+     ],
+     "description": "Side the panels open to. `auto` (default) opens to the left when the navigation sits in the right half of the viewport, decided by the client script; `right` / `left` fix it.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`flyout`: Seite, zu der die Panels öffnen. `auto` öffnet nach links, wenn die Navigation in der rechten Seitenhälfte steht (im Browser entschieden).",
+       "enum": {
+        "auto": "Automatisch",
+        "right": "Rechts",
+        "left": "Links"
+       }
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Options of the `flyout` variant.",
+   "x-quartz-when": {
+    "variant": "flyout"
+   },
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 200,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Optionen der Variante `flyout`.",
+     "group": "Variante"
+    }
+   }
+  },
+  "select": {
+   "type": "object",
+   "properties": {
+    "button": {
+     "type": "boolean",
+     "description": "Show a \"Go\" button next to the select. Choosing an option navigates anyway (pointer selection immediately, keyboard selection on Enter). Defaults to `false`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`select` und `mobile: select`: Button „Los“ anzeigen. Eine Auswahl navigiert ohnehin: per Zeiger sofort, per Tastatur mit Enter."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Options of the `select` variant and of `mobile: select`.",
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 210,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Optionen der Variante `select` und von `mobile: select`.",
+     "group": "Variante"
+    }
+   }
+  },
+  "columns": {
+   "type": "object",
+   "properties": {
+    "max": {
+     "type": "number",
+     "description": "Maximum number of columns. Defaults to `4`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`columns`: reserviert für eine Spaltenbegrenzung; das Layout nutzt derzeit ein Auto-Fit-Raster."
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Options of the `columns` variant.",
+   "x-quartz-when": {
+    "variant": "columns"
+   },
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 220,
+   "x-quartz-advanced": true,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Optionen der Variante `columns`.",
+     "group": "Variante"
+    }
+   }
+  },
+  "pager": {
+   "type": "object",
+   "properties": {
+    "labels": {
+     "type": "boolean",
+     "description": "Show \"Previous\" / \"Next\" labels above the titles. Defaults to `true`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`pager`: „Zurück“ / „Weiter“ über den Titeln anzeigen."
+      }
+     }
+    },
+    "order": {
+     "type": "string",
+     "enum": [
+      "tree",
+      "siblings"
+     ],
+     "description": "Walk the whole tree in order or only the siblings of the current page. Defaults to `tree`.",
+     "x-quartz-l10n": {
+      "de": {
+       "description": "`pager`: den ganzen Baum in Lesereihenfolge durchlaufen oder nur die Geschwister der aktuellen Seite.",
+       "enum": {
+        "tree": "Ganzer Baum",
+        "siblings": "Nur Geschwister"
+       }
+      }
+     }
+    }
+   },
+   "additionalProperties": false,
+   "description": "Options of the `pager` variant.",
+   "x-quartz-when": {
+    "variant": "pager"
+   },
+   "x-quartz-group": "Variant",
+   "x-quartz-order": 230,
+   "x-quartz-l10n": {
+    "de": {
+     "description": "Optionen der Variante `pager`.",
+     "group": "Variante"
+    }
+   }
+  }
+ },
+ "additionalProperties": false
+}

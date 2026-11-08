@@ -237,3 +237,44 @@ public enum PluginRepository {
 
   nonisolated(unsafe) private static let githubURL = #/https?:\/\/github\.com\//#.matchingSemantics(.unicodeScalar)
 }
+
+/// What the editors with tiles above the form (navigations, layout-box, forms) add on the top
+/// level; the form alone knows only the schema's `when` (QuartzControl's `RootExtras`, editors.tsx).
+public struct OptionRoot {
+  public struct Lead {
+    public var has: (String) -> Bool
+    public var title: String
+    public var empty: String
+    public var note: String?
+
+    public init(has: @escaping (String) -> Bool, title: String, empty: String, note: String? = nil) {
+      self.has = has
+      self.title = title
+      self.empty = empty
+      self.note = note
+    }
+  }
+
+  /// A reason beyond `when` why a field does nothing right now.
+  public var inactiveReason: ((String) -> String?)?
+  /// Shown only while set (or searched for): the options of the variants not chosen.
+  public var hideUnlessSet: ((String) -> Bool)?
+  /// These fields first, open, under the given title: the section the tiles above switch.
+  public var lead: Lead?
+  /// The same as inactiveReason for a field of a record entry: the entry's values and the ones above.
+  public var entryReason: ((String, JSONObject, JSONObject) -> String?)?
+  /// The groups as plain sections, without a fold.
+  public var flat = false
+  /// Put before every key on the top level, for a form that shows the inside of one option.
+  public var keyPrefix: String?
+
+  public init(inactiveReason: ((String) -> String?)? = nil, hideUnlessSet: ((String) -> Bool)? = nil, lead: Lead? = nil,
+              entryReason: ((String, JSONObject, JSONObject) -> String?)? = nil, flat: Bool = false, keyPrefix: String? = nil) {
+    self.inactiveReason = inactiveReason
+    self.hideUnlessSet = hideUnlessSet
+    self.lead = lead
+    self.entryReason = entryReason
+    self.flat = flat
+    self.keyPrefix = keyPrefix
+  }
+}

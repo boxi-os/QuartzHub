@@ -77,29 +77,9 @@ struct OptionsForm: View {
   }
 }
 
-/// What the editors with tiles above the form (navigations, layout-box, forms) add on the top
-/// level; the form alone knows only the schema's `when` (QuartzControl's `RootExtras`).
-struct RootExtras {
-  struct Lead {
-    var has: (String) -> Bool
-    var title: String
-    var empty: String
-    var note: String?
-  }
-
-  /// A reason beyond `when` why a field does nothing right now.
-  var inactiveReason: ((String) -> String?)?
-  /// Shown only while set (or searched for): the options of the variants not chosen.
-  var hideUnlessSet: ((String) -> Bool)?
-  /// These fields first, open, under the given title: the section the tiles above switch.
-  var lead: Lead?
-  /// The same as inactiveReason for a field of a record entry: the entry's values and the ones above.
-  var entryReason: ((String, JSONObject, JSONObject) -> String?)?
-  /// The groups as plain sections, without a fold.
-  var flat = false
-  /// Put before every key on the top level, for a form that shows the inside of one option.
-  var keyPrefix: String?
-}
+/// What the editors with tiles above the form add on the top level (`OptionRoot` in the core,
+/// where the editors' tables build it).
+typealias RootExtras = OptionRoot
 
 struct OptionsFormContext {
   var language: OptionFormText.Language
