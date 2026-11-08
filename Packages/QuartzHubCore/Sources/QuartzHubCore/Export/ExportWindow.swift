@@ -348,6 +348,40 @@ public final class ExportWindow: NSObject {
     return context.makeImage()
   }
 
+  /// The loaded page printed to PDF on `paper` (points, portrait), as the page's `@page` rule sets
+  /// it out: margins and size from there, backgrounds printed. `NSPrintOperation.run()` does not
+  /// return with a WKWebView (the spike: 60 s without output); `runModal` prints, and its answer
+  /// comes on a thread of its own.
+  public func printPDF(paper: CGSize, landscape: Bool) async throws -> Data {
+    guard !closed else { throw CancellationError() }
+    let file = NSTemporaryDirectory() + "quartzhub-print-\(UUID().uuidString.lowercased()).pdf"
+    defer { try? FileManager.default.removeItem(atPath: file) }
+    let info = NSPrintInfo()
+    info.paperSize = paper
+    info.orientation = landscape ? .landscape : .portrait
+    info.topMargin = 0
+    info.bottomMargin = 0
+    info.leftMargin = 0
+    info.rightMargin = 0
+    info.horizontalPagination = .automatic
+    info.verticalPagination = .automatic
+    info.isHorizontallyCentered = false
+    info.isVerticallyCentered = false
+    info.jobDisposition = .save
+    info.dictionary()[NSPrintInfo.AttributeKey.jobSavingURL] = URL(fileURLWithPath: file) // path boundary: a temporary file of ASCII
+    let operation = webView.printOperation(with: info)
+    operation.showsPrintPanel = false
+    operation.showsProgressPanel = false
+    let done = PrintDone()
+    let success = await withCheckedContinuation { continuation in
+      done.continuation = continuation
+      operation.runModal(for: window, delegate: done, didRun: #selector(PrintDone.printOperationDidRun(_:success:contextInfo:)), contextInfo: nil)
+    }
+    try Task.checkCancellation()
+    guard success, let data = try? Posix.read(file), !data.isEmpty else { throw PublishFailure(L10n.t("main.exportPdfNotWritten")) }
+    return data
+  }
+
   /// Closes the window at once, whatever it waits for.
   public func close() {
     guard !closed else { return }
@@ -439,5 +473,16 @@ final class MessageRelay: NSObject, WKScriptMessageHandler {
       guard let body = message.body as? [String: Any], let kind = body["kind"] as? String, let url = body["url"] as? String else { return }
       target?.note(kind: kind, type: body["type"] as? String ?? "other", url: url)
     }
+  }
+}
+
+/// The print operation's answer; the operation does not hold its delegate, the caller does.
+final class PrintDone: NSObject, @unchecked Sendable {
+  var continuation: CheckedContinuation<Bool, Never>?
+
+  @objc func printOperationDidRun(_ operation: NSPrintOperation, success: Bool, contextInfo: UnsafeMutableRawPointer?) {
+    let continuation = self.continuation
+    self.continuation = nil
+    DispatchQueue.main.async { continuation?.resume(returning: success) }
   }
 }

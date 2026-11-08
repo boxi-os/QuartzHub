@@ -2,15 +2,17 @@ import AppKit
 import Foundation
 import QuartzHubCore
 
-/// `qh-check export-book <build> <out> [--language <code>] [--offline]`: a whole build through the
-/// export as far as the reader formats go - the navigation's order, every page collected,
-/// epubChapters, every formula and diagram drawn - in WebKit, written to <out>: `content.json`
+/// `qh-check export-book <build> <out> [--language <code>] [--offline] [--pdf]`: a whole build
+/// through the export - the navigation's order, every page collected, epubChapters, every formula
+/// and diagram drawn - in WebKit, written to <out>: `content.json`
 /// (chapters, navigation, counts, each picture's size and style, what was refused and fetched),
-/// `pictures/` (the drawn PNGs) and `book.epub`. For looking at the pictures and for comparing
-/// with the same steps in Chrome; the export itself is `exportBook` (9c). `--offline` refuses what
+/// `pictures/` (the drawn PNGs), `book.epub` and `book.html`; with `--pdf` also `book.pdf` and the
+/// document it printed (`document.html`, for Chrome). Backlinks and the register are always in.
+/// For looking at the files, for QuartzControl's `check:export -- --files` and for comparing with
+/// the same steps in Chrome; the export itself is `ExportBook`. `--offline` refuses what
 /// the rule lets in from outside (use a copy from `scripts/cdn-build.mjs` for Mermaid and KaTeX).
 @MainActor
-func runExportBookCheck(root: String, build: String, out: String, language: String, offline: Bool) async -> Int32 {
+func runExportBookCheck(root: String, build: String, out: String, language: String, offline: Bool, pdf: Bool) async -> Int32 {
   let scripts: String
   do {
     scripts = try ExportWindow.pageScripts(location: RuntimeLocation(node: "", git: "", helpers: "\(root)/Helpers/dist"))
@@ -40,19 +42,35 @@ func runExportBookCheck(root: String, build: String, out: String, language: Stri
                                             available: Set(facts.pages(inLanguage: language)))
     print("Reihenfolge: \(nav.source), \(resolved.items.count) Einträge")
     let docLanguage = language.isEmpty ? (facts.defaultLanguage.isEmpty ? "en" : facts.defaultLanguage) : language
-    let pages = try await ExportCollect.pages(window, origin: server.origin,
+    var pages = try await ExportCollect.pages(window, origin: server.origin,
                                               .init(items: resolved.items, baseUrl: "quartzmac.example", outsideLinks: "site", language: docLanguage)) { done, total, _ in
       if done % 20 == 0 || done == total { print("  \(done)/\(total)") }
     }
     let stylesheets = try await window.evaluate("return [...document.querySelectorAll('head link[rel=\"stylesheet\"]')].map((l) => l.href);")
       .arrayValue?.compactMap(\.stringValue) ?? []
     let lang = pages.first?.lang ?? docLanguage
+    var items = resolved.items
+    let extras = ExportExtras.addBacklinksAndRegister(&pages, &items, backlinks: true, tagIndex: true, facts: facts, lang: lang)
+    print("Rückverweise: \(extras.backlinks), Schlagwörter im Register: \(extras.tags)")
     let collected = Date()
-    let content = try await BookContentPrep.prepare(window, server: server, .init(lang: lang, items: resolved.items, pages: pages, stylesheets: stylesheets, cover: nil))
+    if pdf {
+      let parts = DocumentHTML.Parts(lang: lang, title: "export-book", subtitle: "", author: "", meta: "", coverImage: nil, stylesheets: stylesheets,
+                                     items: items, pages: pages, toc: true, pageSize: "A4", landscape: false)
+      // For Chrome (docs/decisions/native-macos-spike-harness/chrome-pdf.mjs), served from the build's root.
+      try DocumentHTML.document(parts).replacingOccurrences(of: server.origin, with: "").write(toFile: "\(out)/document.html", atomically: true, encoding: .utf8) // path boundary
+      let result = try await PDFWrite.write(window, server: server, parts, PdfMeta(title: "export-book", subtitle: "", author: "", keywords: ExportExtras.bookKeywords(items, facts: facts), lang: lang))
+      try result.bytes.write(to: URL(fileURLWithPath: "\(out)/book.pdf")) // path boundary
+      print("PDF: \(result.pages) Seiten, Lesezeichen \(result.outline.map(String.init).joined(separator: "/")), \(result.passes) Durchgänge, \(result.bytes.count) Bytes in \(String(format: "%.1f s", Date().timeIntervalSince(collected)))")
+    }
+    let pdfDone = Date()
+    let content = try await BookContentPrep.prepare(window, server: server, .init(lang: lang, items: items, pages: pages, stylesheets: stylesheets, cover: nil))
     let drawn = Date()
     let epub = try EpubPack.pack(content, BookParts(lang: lang, title: "export-book", subtitle: "", author: "", identifier: "urn:uuid:00000000-0000-5000-8000-000000000000",
                                                      modified: Date(timeIntervalSince1970: 0)))
     try epub.bytes.write(to: URL(fileURLWithPath: "\(out)/book.epub")) // path boundary: a folder the caller names
+    let html = try HtmlPack.pack(content, BookParts(lang: lang, title: "export-book", subtitle: "", author: "", identifier: "urn:uuid:00000000-0000-5000-8000-000000000000",
+                                                    modified: Date(timeIntervalSince1970: 0)))
+    try html.bytes.write(to: URL(fileURLWithPath: "\(out)/book.html")) // path boundary
 
     var pictures: [JSONValue] = []
     for (name, asset) in content.assets where asset.type == "image/png" && group(name, #"^images/([fd])[0-9]+\.png$"#) != nil {
@@ -77,7 +95,7 @@ func runExportBookCheck(root: String, build: String, out: String, language: Stri
     ])
     try JSJSON.stringify(.object(record)).write(toFile: "\(out)/content.json", atomically: true, encoding: .utf8) // path boundary
     let secs = { (a: Date, b: Date) in String(format: "%.1f s", b.timeIntervalSince(a)) }
-    print("Seiten: \(pages.count) in \(secs(started, collected)); Kapitel: \(content.chapters.count); Bilder: \(content.drawings.formulas) Formeln, \(content.drawings.diagrams) Diagramme in \(secs(collected, drawn)); ePub \(epub.bytes.count) Bytes")
+    print("Seiten: \(pages.count) in \(secs(started, collected)); Kapitel: \(content.chapters.count); Bilder: \(content.drawings.formulas) Formeln, \(content.drawings.diagrams) Diagramme in \(secs(pdfDone, drawn)); ePub \(epub.bytes.count) Bytes")
     if !window.refused.isEmpty { print("Gesperrt: \(window.refused.map { "\($0.key) ×\($0.count)" }.joined(separator: ", "))") }
     if !window.fetched.isEmpty { print("Von außen: \(window.fetched.map { "\($0.host) ×\($0.count)" }.joined(separator: ", "))") }
     return 0

@@ -25071,6 +25071,23 @@
         }
       }
     },
+    "main.exportPdfNotWritten" : {
+      "comment" : "Export result, when WebKit's print gave no PDF or the finished PDF could not be read back.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das PDF konnte nicht geschrieben werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The PDF could not be written."
+          }
+        }
+      }
+    },
     "main.exportProblemDeadLinks" : {
       "localizations" : {
         "de" : {

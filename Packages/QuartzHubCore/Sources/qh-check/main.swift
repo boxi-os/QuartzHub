@@ -27,10 +27,10 @@ func usage() -> Never {
     export-pages <build> <chrome.json> [--out <webkit.json>]
                                       die Seitenskripte des Exports in WebKit gegen ihre Aufnahme
                                       in Chrome (scripts/export-pages-golden.mjs), ohne Netz
-    export-book <build> <ordner> [--language <code>] [--offline]
-                                      einen Build durch den Export bis zu den Reader-Formaten:
-                                      Reihenfolge, Seiten, Kapitel, Formeln und Diagramme als
-                                      Bilder; schreibt content.json, pictures/ und book.epub
+    export-book <build> <ordner> [--language <code>] [--offline] [--pdf]
+                                      einen Build durch den Export: Reihenfolge, Seiten, Kapitel,
+                                      Formeln und Diagramme als Bilder; schreibt content.json,
+                                      pictures/, book.epub und book.html, mit --pdf auch book.pdf
     inline-svg [projekt]              der SVG-Bereiniger gegen WebKit: jedes Ergebnis als HTML
                                       und, mit einem Projekt mit quartz-layout-box, durch dessen
                                       Markdown-Kette; Exit 3, wenn Lagen ausgelassen wurden
@@ -150,7 +150,7 @@ case "export-book":
   let root = repositoryRoot()
   let out = positional[1].hasPrefix("/") ? positional[1] : FileManager.default.currentDirectoryPath + "/" + positional[1]
   runAndExit {
-    await runExportBookCheck(root: root, build: positional[0], out: out, language: option("--language") ?? "", offline: arguments.contains("--offline"))
+    await runExportBookCheck(root: root, build: positional[0], out: out, language: option("--language") ?? "", offline: arguments.contains("--offline"), pdf: arguments.contains("--pdf"))
   }
 case "inline-svg":
   // WebKit wants the main run loop turning (see runAndExit).
