@@ -77,6 +77,14 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   nicht nur mit Grau. (QC)**
 - **Farben nach Rolle (QC):** Systemstile (`.secondary`, `.tint`, Materialien) statt fester
   Farben; Hell und Dunkel folgen dem System bzw. der Einstellung.
+- **Code bearbeitet man in NSTextView mit TextKit 2, ohne Editor-Paket.** Zeilennummern
+  (`NSRulerView`), Färben und Einrückungslinien sind eigene Teile. Der Färber steht im Kern und
+  wird je Tastendruck gemessen: Färben, nicht der Editor, ist das Teure (Messung in
+  `decisions/phase-4-oberflaeche.md`, 4b).
+- **Umsortieren hat drei Wege zu einer Funktion.** Mit der Maus wird gezogen (`onMove`, im
+  Raster `draggable`/`dropDestination`). In einer Liste gibt es dazu „Nach oben“ und „Nach unten“
+  im Menü (⌥⌘↑/⌥⌘↓), im Kontextmenü und als Bedienungshilfe-Aktion. In Raster und Board übernimmt
+  der Inspektor diese Rolle. Jede Bewegung wird angesagt.
 
 ### Texte
 

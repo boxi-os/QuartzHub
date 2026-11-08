@@ -133,8 +133,9 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
 - **Phase 4 (Oberfläche) läuft.** Entscheidungen des Nutzers vom 2026-11-08 im Plan (natives
   Aussehen, Einstellungsfenster, ein Fenster „Projekte“ und eines je Projekt). 4a fertig: Fenster
   „Projekte“ mit Anlegen und Duplizieren, Projektfenster, Einstellungen, Band neben QuartzControl.
-  Der Rauchtest läuft auf einem Wegwerf-Profil mit `-QHOpenProject`. Als Nächstes 4b (Code-Editor,
-  Umsortieren mit der Tastatur), dann die Seiten.
+  Der Rauchtest läuft auf einem Wegwerf-Profil mit `-QHOpenProject`. 4b entschieden: Code-Editor
+  NSTextView mit TextKit 2 ohne Paket, Umsortieren mit `onMove` und Befehlen (Messgeschirr in
+  `docs/decisions/phase-4-harness/`). Als Nächstes 4c, die Seiten in der Reihenfolge des Plans.
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
   nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über

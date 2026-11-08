@@ -280,6 +280,12 @@ nach Abhängigkeit:
   Änderungen (mit Konfiguration), LogConsole (mit Vorschau & Build), GitHub-Token und Verbindungen
   (mit Veröffentlichen), HandbookLink und der Hinweis auf eine neuere Fassung (Phase 5, Handbuch und
   Releases). Messungen in `decisions/phase-4-oberflaeche.md`.
+- **Stand 2026-11-08: 4b entschieden.** Der Code-Editor wird NSTextView mit TextKit 2, ohne
+  Paket: STTextView 2.4.1 kostete je Tastendruck 8,1 ms statt 1,3 ms, sein Speicher wuchs um gut
+  1 MB je Tastendruck, und es bot weniger Bedienungshilfen. Lizenz und Zeilennummern sprachen
+  nicht gegen NSTextView. Umsortieren: `List` mit `onMove`, dazu „Nach oben/Nach unten“ in Menü
+  (⌥⌘↑/⌥⌘↓), Kontextmenü und Bedienungshilfe-Aktion, mit Ansage. Raster und Board verschieben über
+  den Inspektor. Gebaut wird beides mit der ersten Seite, die es braucht.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl
