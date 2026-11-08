@@ -166,6 +166,9 @@ public struct NormalizedOptionSchema: Equatable, Sendable {
   public var source: Source
   public var fields: [OptionField]
   public var notes: [OptionSchemaNote]
+
+  /// Nothing described: what the options form starts from for an entry without a schema.
+  public static let empty = NormalizedOptionSchema(source: .defaults, fields: [], notes: [])
 }
 
 // MARK: - JSON Schema → OptionNode
