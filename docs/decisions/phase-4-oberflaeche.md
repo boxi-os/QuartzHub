@@ -719,3 +719,51 @@ Gefunden in der laufenden App und behoben:
 
 Nicht gemessen: Importieren und „Bild einfügen…“ mit dem Dateidialog, In den Papierkorb, Ordner
 hinter einer Verknüpfung.
+
+### Plugins: Mehrsprachigkeit
+
+Vorbild `routes/Plugins/Multilanguage.tsx` und `multilanguageOptions.ts`. Gemessen mit
+`scripts/multilanguage-golden.mjs`, mit dem Schema von quartz-multilanguage aus gui-test:
+- 13 Optionssätze, je mit 188 Schritten zusammen: umbenennen, entfernen, veröffentlichen,
+  tauschen, ändern, hinzufügen, unverändert zurückschreiben;
+- die Gruppen der Einstellungen in beiden Sprachen;
+- 24 Code-Prüfungen.
+
+QuartzControl merkt sich in einer WeakMap, aus welchem geschriebenen Eintrag eine Sprache gelesen
+ist, damit ein `DE`, das niemand angefasst hat, `DE` bleibt. In Swift ist das ein Feld `readFrom`
+am Eintrag, das beim Ändern wegfällt. Die Golden-Datei beschreibt die Schritte deshalb als Schritte
+auf den Einträgen, und der Test geht sie auf seinen eigenen nach.
+
+`normalizeCode` nimmt `NSString.lowercased`, nicht Swifts `lowercased()`: Nur das schreibt ein
+Schluss-Sigma als „ς“ wie JavaScripts `toLowerCase` (gemessen mit „ΣΟΦΟΣ“). Vier Gegenproben
+schlugen an:
+- `readFrom` vergessen;
+- Swifts Kleinschreibung;
+- ein zweiter Eintrag vor seiner Sprache bleibt beim Tauschen stehen;
+- die Gruppe ohne Namen nicht zuletzt.
+
+Für den letzten Fall hat das echte Schema keine Felder, deshalb steht ein kleines eigenes Schema
+in der Golden-Datei. Eine fünfte Gegenprobe, Sortieren ohne den Platz als Gleichstand, schlug
+nicht an: Swifts Sortierung ist in der Praxis stabil, zugesagt ist es nicht, und der Gleichstand
+bleibt im Code.
+
+**Oberfläche.** Oben steht der Eintrag mit „Eingeschaltet“ und „Alle Optionen“. Darunter kommt
+eine Liste mit zwei Abschnitten: die Sprachen (ziehen, Anordnen ▸ Nach oben/unten mit ⌥⌘↑/⌥⌘↓,
+Kontextmenü, Bedienungshilfe-Aktion) und die Gruppen der Einstellungen mit einer Zeile, was sie
+gerade sagen. Unten steht die Vorschau. Im Inspektor steht eine Sprache, eine Gruppe (eine Gruppe
+aus einem einzigen Objekt zeigt dessen Inhalt mit `switcher.`-Schlüsseln) oder der Überblick.
+
+Gemessen an der gui-test-Kopie, Hell und Dunkel; nach jedem Hin und Zurück war die Config
+byte-gleich:
+- `en` → `en-GB` schreibt `en-gb` in einer Zeile und behält die Auswahl;
+- `de` als Code von English sagt „Diese Sprache gibt es schon.“ und schreibt nichts;
+- „Früher“ tauscht die Einträge, ⌥⌘↑ tauscht zurück (das Menü bot für die zweite Sprache nur
+  „Nach oben“ an);
+- `FR` hinzufügen schreibt `- fr`, Entfernen über den Dialog nimmt es wieder;
+- English nicht veröffentlichen schreibt `publishLanguages: [de]`. Deutsch entfernen fragt dann
+  „… entfernen und English veröffentlichen?“ mit „Entfernen und veröffentlichen“ (abgebrochen),
+  wieder einschalten gibt `[]`;
+- `switcher.showCurrent` aus und an.
+
+Gefunden in der laufenden App: Die Code-Spalte brach „EN-GB“ in zwei Zeilen; sie ist jetzt
+einzeilig und so breit wie nötig.

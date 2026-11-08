@@ -167,6 +167,13 @@ public struct NormalizedOptionSchema: Equatable, Sendable {
   public var fields: [OptionField]
   public var notes: [OptionSchemaNote]
 
+  /// A form of its own for the fields of one object option (Mehrsprachigkeit's `switcher`, `seo`).
+  public init(source: Source, fields: [OptionField], notes: [OptionSchemaNote]) {
+    self.source = source
+    self.fields = fields
+    self.notes = notes
+  }
+
   /// Nothing described: what the options form starts from for an entry without a schema.
   public static let empty = NormalizedOptionSchema(source: .defaults, fields: [], notes: [])
 }

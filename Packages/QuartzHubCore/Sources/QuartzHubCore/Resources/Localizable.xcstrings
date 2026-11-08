@@ -30939,13 +30939,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links eine Sprache oder einen Bereich der Einstellungen."
+            "value" : "Wähle eine Sprache oder einen Bereich der Einstellungen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pick a language or a group of settings on the left."
+            "value" : "Pick a language or a group of settings."
           }
         }
       }

@@ -46,6 +46,10 @@ struct PluginsPage: View {
   @SceneStorage("navigations.selected") private var navigationSelected: Int?
   /// The box by its #n among the boxes, as the plugin list keys a second instance.
   @SceneStorage("extraContent.selected") private var boxSelected: Int?
+  /// `lang:<code>` or `section:<id>`.
+  @SceneStorage("multilanguage.selected") private var languageSelected: String?
+  /// quartz-multilanguage's schema: its groups are the rows of the tab and the panels of the inspector.
+  @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
 
   init(project: ProjectContext) {
@@ -89,6 +93,20 @@ struct PluginsPage: View {
           ExtraContentTab(model: model, selection: $boxSelected, styled: $styled)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins.extras")
+        case .languages:
+          MultilanguageTab(model: model, selection: $languageSelected, schema: $multilanguageSchema) {
+            if let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first { showAllOptions(entry.plugin, index: entry.index) }
+          }
+          .accessibilityElement(children: .contain)
+          .accessibilityIdentifier("page.plugins.languages")
+          .task(id: MultilanguageOptions.entries(model.config?.plugins ?? []).first?.plugin.source.map(JSJSON.compact) ?? "") {
+            guard let source = PluginSource(MultilanguageOptions.entries(model.config?.plugins ?? []).first?.plugin.source) else {
+              multilanguageSchema = nil
+              return
+            }
+            let environment = await AppServices.current()
+            multilanguageSchema = await PluginSchemaReader.shared.optionSchema(project: project.path, source: source, runtime: environment.runtime)
+          }
         case .marketplace:
           MarketplaceTab(model: marketplace, selection: $marketplaceSelected)
             .accessibilityElement(children: .contain)
@@ -133,6 +151,18 @@ struct PluginsPage: View {
           tabID = Tab.installed.rawValue
         }
         .id(box.occurrence)
+      } else if tab == .languages, let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first,
+                let languageSelected {
+        let view = MultilanguageView(entry: entry, schema: multilanguageSchema?.schema)
+        if languageSelected.hasPrefix("lang:"), let language = view.languages.first(where: { "lang:\($0.code)" == languageSelected }) {
+          LanguageInspector(language: language, view: view, model: model, selection: $languageSelected)
+            .id(languageSelected)
+        } else if languageSelected.hasPrefix("section:"), let group = view.groups.first(where: { "section:\($0.id)" == languageSelected }) {
+          SettingsGroupInspector(group: group, view: view, model: model)
+            .id(languageSelected)
+        } else {
+          InspectorPageContext(page: .plugins) { MultilanguageOverview(view: view) }
+        }
       } else if tab == .marketplace, let marketplaceSelected,
                 let plugin = marketplace.result?.plugins.first(where: { $0.fullName == marketplaceSelected }) {
         MarketplaceInspector(plugin: plugin, model: marketplace)
@@ -150,9 +180,20 @@ struct PluginsPage: View {
           if tab == .extras {
             Section(L10n.t("extraContent.panelEmptyTitle")) { Note(L10n.t("extraContent.panelEmptyText")) }
           }
+          if tab == .languages, let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first {
+            MultilanguageOverview(view: MultilanguageView(entry: entry, schema: multilanguageSchema?.schema))
+          }
         }
       }
     }
+  }
+
+  /// „Alle Optionen in der Plugin-Liste“: the plugin list knows the entry by its name and its
+  /// number among the same-named.
+  private func showAllOptions(_ plugin: PluginEntry, index: Int) {
+    let same = (model.config?.plugins ?? []).prefix(index + 1).filter { $0.name == plugin.name }.count
+    selected = same == 1 ? plugin.name : "\(plugin.name)#\(same)"
+    tabID = Tab.installed.rawValue
   }
 
   /// Nothing selected on the Marktplatz: how to start, and how many of the catalog's plugins this
