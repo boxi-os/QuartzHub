@@ -214,3 +214,32 @@ public actor Marketplace {
     return request
   }
 }
+
+// MARK: - The page's two lists
+
+extension MarketplaceResult {
+  /// The org's own marker for "this is a plugin". A split rather than a filter: a forked plugin can
+  /// be missing it, and hiding a real plugin is worse than listing an odd repository under "other".
+  public static let pluginTopic = "quartz-plugin"
+
+  /// The Marktplatz's two lists for a search (QuartzControl's `useMemo` in Marketplace.tsx): a
+  /// substring of name, full name or description, ignoring case; plugins are the entries with the
+  /// topic that are not archived (the org's archived entry is the Quartz core itself), everything
+  /// else is "other". Both by stars, most first, and otherwise in the catalog's order (JavaScript's
+  /// sort is stable).
+  public func split(query: String) -> (plugins: [MarketplacePlugin], other: [MarketplacePlugin]) {
+    let q = ReadmeText.trim(query).lowercased()
+    let found = plugins.filter { plugin in
+      q.isEmpty || plugin.name.lowercased().contains(q) || plugin.fullName.lowercased().contains(q)
+        || (plugin.description ?? "").lowercased().contains(q)
+    }
+    let isPlugin = { (plugin: MarketplacePlugin) in (plugin.topics ?? []).contains(Self.pluginTopic) && plugin.archived != true }
+    func byStars(_ list: [MarketplacePlugin]) -> [MarketplacePlugin] {
+      list.enumerated().sorted { a, b in
+        let (x, y) = (a.element.stars ?? 0, b.element.stars ?? 0)
+        return x != y ? x > y : a.offset < b.offset
+      }.map(\.element)
+    }
+    return (byStars(found.filter(isPlugin)), byStars(found.filter { !isPlugin($0) }))
+  }
+}

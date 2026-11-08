@@ -281,3 +281,38 @@ final class StubHTTP: URLProtocol, @unchecked Sendable {
     #expect(await market.readme("quartz-community/qh-no-such-repository") == .missing)
   }
 }
+
+/// The page's two lists (QuartzControl's `useMemo` in Marketplace.tsx, read by hand: it lives
+/// inside the component).
+@Suite struct MarketplaceSplitTests {
+  static func plugin(_ name: String, stars: Int?, topics: [String]? = ["quartz-plugin"], archived: Bool? = false,
+                     description: String? = nil) -> MarketplacePlugin {
+    MarketplacePlugin(name: name, fullName: "quartz-community/\(name)", description: description, stars: stars,
+                      url: "https://github.com/quartz-community/\(name)", topics: topics, archived: archived)
+  }
+
+  static let catalog = MarketplaceResult(plugins: [
+    plugin("explorer", stars: 5, description: "Enhanced file explorer"),
+    plugin("graph", stars: 9),
+    plugin("v5", stars: 900, archived: true),
+    plugin("awesome", stars: 9, topics: nil),
+    plugin("search", stars: nil),
+    plugin("backlinks", stars: 5),
+    plugin("Über-Plugin", stars: 1, topics: ["quartz-plugin", "x"])
+  ], unavailable: false)
+
+  @Test func pluginsAndOtherByStarsStable() {
+    let (plugins, other) = Self.catalog.split(query: "")
+    #expect(plugins.map(\.name) == ["graph", "explorer", "backlinks", "Über-Plugin", "search"])
+    #expect(other.map(\.name) == ["v5", "awesome"])
+  }
+
+  @Test func searchIsASubstringIgnoringCaseAndSpace() {
+    #expect(Self.catalog.split(query: "  EXPLORER\u{00A0}").plugins.map(\.name) == ["explorer"])
+    #expect(Self.catalog.split(query: "file EXP").plugins.map(\.name) == ["explorer"])
+    #expect(Self.catalog.split(query: "community/gra").plugins.map(\.name) == ["graph"])
+    #expect(Self.catalog.split(query: "über").plugins.map(\.name) == ["Über-Plugin"])
+    let none = Self.catalog.split(query: "nothing")
+    #expect(none.plugins.isEmpty && none.other.isEmpty)
+  }
+}
