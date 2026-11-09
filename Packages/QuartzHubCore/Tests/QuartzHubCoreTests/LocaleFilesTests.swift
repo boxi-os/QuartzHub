@@ -121,6 +121,28 @@ struct LocaleFilesTests {
     #expect(!FileManager.default.fileExists(atPath: "\(project)/.quartz-gui"))
   }
 
+  /// Node's `readFileSync` names why a file could not be read; a locked file is no missing one.
+  @Test func anUnreadableFileSaysWhy() throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let file = "\(scratch.path)/de-DE.ts"
+    try Posix.write(file, Data("export default {}\n".utf8))
+    #expect(try LocaleFiles.readText(file) == "export default {}\n")
+    chmod(file, 0)
+    defer { chmod(file, 0o644) }
+    #expect(throws: NodeFileError.self) { try LocaleFiles.readText(file) }
+    do {
+      _ = try LocaleFiles.readText(file)
+    } catch {
+      #expect(String(describing: error) == "Error: EACCES: permission denied, open '\(file)'")
+    }
+    #expect(String(describing: (try? LocaleFiles.readText("\(scratch.path)/fehlt.ts")) ?? "") == "")
+    do {
+      _ = try LocaleFiles.readText("\(scratch.path)/fehlt.ts")
+    } catch {
+      #expect(String(describing: error) == "Error: ENOENT: no such file or directory, open '\(scratch.path)/fehlt.ts'")
+    }
+  }
+
   @Test func localeCodes() {
     for code in ["de", "de-DE", "deu", "tlh-Latn", "zh-Hant-TW", "ab-12345678", "Ab"] { #expect(LocaleFiles.isLocaleCode(code), "\(code)") }
     for code in ["d", "deut", "de-", "-de", "de--DE", "de-D", "de-123456789", "dé", "de_DE", "1a", String(repeating: "ab-", count: 12) + "ab", ""] {

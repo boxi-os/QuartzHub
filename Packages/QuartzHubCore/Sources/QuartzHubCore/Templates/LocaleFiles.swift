@@ -84,8 +84,9 @@ public struct LocaleFiles: Sendable {
     if FileManager.default.fileExists(atPath: url, isDirectory: &isDirectory), isDirectory.boolValue {
       throw NodeFileError(code: EISDIR, syscall: "read")
     }
-    guard let data = FileManager.default.contents(atPath: url) else { throw NodeFileError(code: ENOENT, syscall: "open", path: url) }
-    return String(decoding: data, as: UTF8.self)
+    // With the system's reason: `FileManager.contents` gives none, and a locked file read
+    // "ENOENT: no such file or directory" where Node says EACCES (measured 2026-11-09).
+    return String(decoding: try Posix.read(url), as: UTF8.self)
   }
 
   /// The entries of several texts in one helper call; nil where the file has no default-exported object.
