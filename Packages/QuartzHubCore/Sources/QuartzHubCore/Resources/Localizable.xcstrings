@@ -43920,13 +43920,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keine @font-face-Regel im Projekt nennt: {{families}}. Besucher sehen sie nur, wenn die Schrift auf ihrem Rechner installiert ist. Sonst importiere die Datei unten oder wähle bei der Font-Quelle Google Fonts."
+            "value" : "Keine @font-face-Regel im Projekt nennt {{families}}, Besucher sehen die Schrift nur, wenn sie bei ihnen installiert ist. Sonst importiere die Datei unten oder wähle Google Fonts als Font-Quelle."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No @font-face rule in the project names: {{families}}. Visitors only see them if they are installed on their own machine. Otherwise import the file below, or pick Google Fonts as the font source."
+            "value" : "No @font-face rule in the project names {{families}}, so visitors only see it if it is installed on their machine. Otherwise import the file below or pick Google Fonts as the font source."
           }
         }
       }
@@ -43936,13 +43936,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieses Projekt wurde noch nicht gebaut. Quartz lädt die Google-Schriften erst beim Build herunter. „Jetzt bauen“ oder den Dev-Server starten."
+            "value" : "Dieses Projekt wurde noch nicht gebaut, und Quartz lädt die Google-Schriften erst beim Build herunter. „Jetzt bauen“ oder den Dev-Server starten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This project has not been built yet. Quartz downloads the Google fonts only at build time. “Build now” or start the dev server."
+            "value" : "This project has not been built yet, and Quartz downloads the Google fonts only at build time. “Build now” or start the dev server."
           }
         }
       }
@@ -44736,13 +44736,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Plugin @quartz-community/quartz-fonts setzt \"h1,…,h6 { font-family: … }\" ungelayert.\nUngelayert schlägt jedes @layer — also auch das aktive Theme —, und weil die Datei nach\ncustom.scss geladen wird, gewinnt sie auch gegen eine gleich spezifische Regel von dir.\n\"body h1\" ist eine Stufe spezifischer und gewinnt deshalb unabhängig von der Reihenfolge.\n\nDie Verweise auf die Variablen sorgen dafür, dass der Variablen-Tab wieder die Kontrolle hat.\nAngelegt von QuartzControl — frei bearbeitbar."
+            "value" : "Das Plugin @quartz-community/quartz-fonts setzt \"h1,…,h6 { font-family: … }\" ungelayert.\nUngelayert schlägt jedes @layer — also auch das aktive Theme —, und weil die Datei nach\ncustom.scss geladen wird, gewinnt sie auch gegen eine gleich spezifische Regel von dir.\n\"body h1\" ist eine Stufe spezifischer und gewinnt deshalb unabhängig von der Reihenfolge.\n\nDie Verweise auf die Variablen sorgen dafür, dass der Variablen-Tab wieder die Kontrolle hat.\nAngelegt von QuartzHub — frei bearbeitbar."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The plugin @quartz-community/quartz-fonts sets \"h1,…,h6 { font-family: … }\" unlayered.\nUnlayered beats every @layer - including the active theme - and because its stylesheet is\nlinked after custom.scss, it also beats an equally specific rule of your own.\n\"body h1\" is one step more specific and therefore wins regardless of load order.\n\nPointing at the variables puts the Variables tab back in control.\nWritten by QuartzControl - edit freely."
+            "value" : "The plugin @quartz-community/quartz-fonts sets \"h1,…,h6 { font-family: … }\" unlayered.\nUnlayered beats every @layer - including the active theme - and because its stylesheet is\nlinked after custom.scss, it also beats an equally specific rule of your own.\n\"body h1\" is one step more specific and therefore wins regardless of load order.\n\nPointing at the variables puts the Variables tab back in control.\nWritten by QuartzHub - edit freely."
           }
         }
       }
@@ -45120,13 +45120,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieses Projekt hält Ladereihenfolge, Schriften und Variablen noch in custom.scss, wie QuartzControl 1.0. Umstellen legt sie in eine eigene Datei, quartz/styles/_quartzcontrol.scss. Ältere Fassungen von QuartzControl lesen das Projekt danach ohne Variablen und Stylesheets; arbeitest du auf mehreren Rechnern, stelle erst alle auf 1.1 um."
+            "value" : "Dieses Projekt hält Ladereihenfolge, Schriften und Variablen noch in custom.scss, wie QuartzControl 1.0; Umstellen legt sie in quartz/styles/_quartzcontrol.scss. Ältere Fassungen von QuartzControl lesen das Projekt danach ohne Variablen und Stylesheets, stelle also erst alle Rechner auf QuartzControl 1.1 oder QuartzHub um."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This project still keeps its load order, fonts and variables in custom.scss, as QuartzControl 1.0 did. Moving puts them into a file of their own, quartz/styles/_quartzcontrol.scss. Older versions of QuartzControl then read the project without variables and stylesheets; if you work on several machines, move all of them to 1.1 first."
+            "value" : "This project still keeps its load order, fonts and variables in custom.scss, as QuartzControl 1.0 did; moving puts them into quartz/styles/_quartzcontrol.scss. Older versions of QuartzControl then read the project without variables and stylesheets, so move every machine to QuartzControl 1.1 or QuartzHub first."
           }
         }
       }
@@ -50033,13 +50033,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lokal ausliefern: QuartzControl holt die Schriftdateien einmal von Google und legt sie im Projekt ab. Die Website ruft nichts mehr bei Google auf (die DSGVO-freundliche Variante)."
+            "value" : "Lokal ausliefern: QuartzHub holt die Schriftdateien einmal von Google und legt sie im Projekt ab. Die Website ruft nichts mehr bei Google auf (die DSGVO-freundliche Variante)."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Serving locally: QuartzControl fetches the font files from Google once and stores them in the project. The site then makes no request to Google at all (the GDPR-friendly option)."
+            "value" : "Serving locally: QuartzHub fetches the font files from Google once and stores them in the project. The site then makes no request to Google at all (the GDPR-friendly option)."
           }
         }
       }
@@ -50097,13 +50097,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quartz lädt diese Schriften erst beim Build und verweist dabei auf die veröffentlichte Website. Die Vorschau zeigt sie deshalb nicht. Speichern holt sie ins Projekt."
+            "value" : "Quartz lädt diese Schriften erst beim Build und verweist dabei auf die veröffentlichte Website, deshalb zeigt die Vorschau sie nicht. Speichern holt sie ins Projekt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quartz downloads these fonts only at build time and points at the published site for them. That is why the preview does not show them. Saving fetches them into the project."
+            "value" : "Quartz downloads these fonts only at build time and points at the published site for them, which is why the preview does not show them. Saving fetches them into the project."
           }
         }
       }
@@ -50145,13 +50145,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl: holt die Schriften ins Projekt, die Website liefert sie selbst aus."
+            "value" : "QuartzHub: holt die Schriften ins Projekt, die Website liefert sie selbst aus."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl: fetches the fonts into the project, the site serves them itself."
+            "value" : "QuartzHub: fetches the fonts into the project, the site serves them itself."
           }
         }
       }
@@ -50225,13 +50225,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Theme bringt eigene Schriften mit und lädt sie von unpkg.com. Lokal ausliefern lassen sie sich nicht. Ausschalten heißt, die Schriften des Themes wegzulassen, dann greifen die Schriftarten von oben."
+            "value" : "Das Theme lädt seine eigenen Schriften von unpkg.com, lokal ausliefern kann QuartzHub sie nicht. Ausgeschaltet fallen sie weg, und es gelten die Schriftarten von oben."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The theme ships its own fonts and loads them from unpkg.com. They cannot be served locally. Turning them off means dropping the theme’s fonts, and the fonts chosen above apply instead."
+            "value" : "The theme loads its own fonts from unpkg.com, and QuartzHub cannot serve them locally. Turned off, they are dropped and the fonts chosen above apply."
           }
         }
       }

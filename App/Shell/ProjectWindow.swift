@@ -99,6 +99,7 @@ struct ProjectWindow: View {
     case .sync: GitSyncPage(project: project)
     case .updates: UpdatesPage(project: project)
     case .backups: SnapshotsPage(project: project)
+    case .styles: StylesPage(project: project)
     default: PendingPage(page: page)
     }
   }

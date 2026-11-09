@@ -1164,3 +1164,49 @@ Vault-Link beim Sync.
   QuartzControls `src/data/googleFonts.ts` nach `GoogleFontList.swift`, als eine Zeichenkette mit
   Tabulatoren, die beim ersten Gebrauch zerlegt wird.
 - Gegenproben (16, jede lässt einen Test scheitern).
+
+### Stile: der Rahmen und Basis
+
+- **Ein Modell für vier Reiter** (`StylesModel`, QuartzControls `Styles/index.tsx`): Config, eigene
+  Variablen, `custom.scss`, die Entwürfe der Stylesheets und der Variablen-Graph. Die vier Reiter
+  schreiben in zwei Orte, also überlebt ein Entwurf den Wechsel des Reiters, und „Speichern“ (⌘S)
+  schreibt alles, was `dirty` zählt, egal welcher Reiter vorn ist: erst `custom.scss` als Ganzes,
+  dann die übrigen Stylesheets, dann die Config samt Google-Schriften, zuletzt die Variablen. Ein
+  Entwurf von `custom.scss` oder `_quartzcontrol.scss`, unter dem etwas anderes geschrieben hat,
+  geht nur vom Reiter „Eigenes CSS“ aus. Gebaut ist jetzt Basis; die drei anderen Reiter zeigen bis
+  zu ihrem eigenen Commit den Platzhalter.
+- **Basis** wie dort: Font-Quelle, drei Schriftfelder mit Vorschlägen (die 1959 Google-Familien
+  oder, bei „lokal“, die Familien des Projekts, über `textInputSuggestions`), die Hinweise auf
+  andere Schreibweise, unbekannte Namen, Theme und eigene Variable; die Auslieferung mit beiden
+  Schaltern und dem Stand der Schriften; bekannte Konflikte; Import einer Schriftdatei; ungenutzte
+  Schriften; die Farben je Modus. Der Farbwähler ist der des Systems (`ColorPicker` mit Alpha) und
+  schreibt `#rrggbb` oder `rgba()`; in QuartzControl konnte das HTML-Feld kein Alpha und behielt es
+  deshalb neben dem Hex.
+- **Die Sätze der Seite** (Speicherfehler, was das Speichern nebenbei tat, „Umstellen“) stehen als
+  erste Abschnitte im Formular des Reiters, in seiner Flucht. Darüber gestellt waren sie breiter als
+  das Formular, und mit `fixedSize(vertical:)` am Text des Umstellens blieb das ganze Fenster leer
+  (die Regel aus den Konventionen, hier ein zweites Mal gesehen).
+- **Bei 1000×700 werden die Reiter zum Menü**, wie bei Plugins: Als Segmente schoben sie das
+  Fenster über seinen Rahmen, Seitenleiste und Inspektor waren angeschnitten (gesehen).
+- **Gemessen** an Kopien von gui-test und Example, Hell und Dunkel, 1400×860 und 1000×700:
+  - Eine Farbe ändern und mit ⌘S speichern: In der Config ändert sich nur diese Farbe (dazu die
+    Pfade der Frames, die `ConfigFile.write` auf den Ordner der Kopie setzt), die Stylesheets
+    bleiben gleich, Google wird nicht gefragt (die Anfrage ist dieselbe, alle Dateien da).
+  - Theme minimal und Fonts-Plugin an: Das Band zählt 9 von 9 Farben und 3 von 3 Schriften, die
+    Felder sind abgeblendet, „THEME“ steht an den Farben, die Lader sagen Quartz und Plugin.
+  - „Fix anlegen“ legt `custom/fix-heading-fonts.scss` an, nimmt sie in die Ladereihenfolge und
+    wechselt zu „Eigenes CSS“.
+  - Import einer WOFF2: Familie aus dem Dateinamen, Gewicht 100 900 und kursiv aus der Datei,
+    danach unter „Ungenutzte Schriften“; Entfernen fragt und nimmt Datei und Regel weg.
+  - Ein Projekt in der Form von 1.0 (Blöcke in custom.scss): Der Hinweis erscheint, „Jetzt
+    umstellen“ legt zuerst einen Snapshot `styleMigration` an, danach ist `_quartzcontrol.scss`
+    byte-gleich mit der des Originals.
+- **Nicht gemessen:** eine neue Google-Schrift speichern (holt bei Google, braucht Netz), die
+  Schalter für die Auslieferung speichern (holt oder entfernt die Google-Dateien), ein
+  Speicherfehler mitten im Ablauf.
+- **Nebenbefund, nicht behoben (beide Apps):** Wird ein Stylesheet außerhalb der App gelöscht und
+  bleibt seine Zeile in der Ladereihenfolge, dann legt „Fix anlegen“ (allgemein: ein Stylesheet
+  gleichen Namens anlegen) es ein zweites Mal in die Reihenfolge, mit dem Namensraum `…-2`.
+  QuartzControls `createStyleFileNow` und `StyleFiles.create` schreiben erst die Datei und lesen
+  dann die Reihenfolge, in der die verwaiste Zeile damit wieder gilt. Ob Sass das zweimalige
+  `@use` derselben Datei annimmt, ist nicht gemessen.

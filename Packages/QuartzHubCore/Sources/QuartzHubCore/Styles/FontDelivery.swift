@@ -26,9 +26,9 @@ public enum FontDelivery {
     public var mode: String
   }
 
-  static func enabled(_ plugin: PluginEntry) -> Bool { JS.truthy(plugin.object["enabled"]) }
+  public static func enabled(_ plugin: PluginEntry) -> Bool { JS.truthy(plugin.object["enabled"]) }
 
-  static func isThemePlugin(_ plugin: PluginEntry) -> Bool {
+  public static func isThemePlugin(_ plugin: PluginEntry) -> Bool {
     if case .string(let source)? = plugin.source { return JSText.startsWith(source, themePluginPrefix) }
     return false
   }
