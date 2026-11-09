@@ -317,6 +317,15 @@ nach Abhängigkeit:
 
 ## Phase 5 – Gleichstand und erstes Release
 
+- **Entscheidungen des Nutzers (2026-11-09):** Die Gleichstand-Liste hat eine Zeile je Funktion,
+  gruppiert nach Seite, die Kanäle darauf abgebildet; je Zeile, wie und wann gemessen oder warum
+  offen. Gemessen wird an einer Kopie von gui-test, Seite für Seite. Die Netzläufe (Push mit Token,
+  echtes Core-Update mit npm, Relay über FTPS, echter Deploy) stehen als „nicht gemessen, braucht
+  Netz“ darin und werden je Lauf einzeln erfragt. Die Review-Runden schreibt ein frischer Agent
+  nach einem Auftrag (`docs/REVIEW-<datum>-auftrag.md`); der Nutzer wählt die Befunde aus, die mit
+  `review-befund` abgearbeitet werden. Das Handbuch entsteht in einem neuen Vault
+  `~/Obsidian/QuartzProjekte/QuartzHub-Handbuch` als Kopie von `QuartzControl-Handbuch`, mit eigenem
+  Projekt; online erst nach Freigabe. Reihenfolge: Liste, Reviews, Handbuch, Release.
 - **Gleichstand-Liste** aus den Routen, Kanälen (`shared/ipc-contract.ts`, 171 Kanäle) und
   Handbuch-Kapiteln von QuartzControl 1.3. Abgehakt wird nur, was an der gebauten App gemessen ist.
 - **Review-Runden** mit dem übernommenen Skill `review-befund`.
