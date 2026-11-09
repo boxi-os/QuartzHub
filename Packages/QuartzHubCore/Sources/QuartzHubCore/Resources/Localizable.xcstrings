@@ -44224,7 +44224,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Datei „{{name}}“ löschen?\n\nSie wird aus der Ladereihenfolge genommen und aus dem Projekt gelöscht. Zurückholen lässt sie sich nur über git oder einen älteren Snapshot."
+            "value" : "Datei „{{name}}“ löschen?\n\nSie wird aus der Ladereihenfolge genommen und aus dem Projekt gelöscht. Zurückholen kann man sie nur über git oder einen älteren Snapshot."
           }
         },
         "en" : {
@@ -44480,13 +44480,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Datei schreibt QuartzControl selbst. Was zwischen den QuartzControl-Markern steht, schreibt jede Änderung an Ladereihenfolge, Schriften oder Variablen auf dieser Seite neu; Text außerhalb der Marker bleibt."
+            "value" : "QuartzHub schreibt diese Datei selbst. Was zwischen den QuartzControl-Markern steht, schreibt jede Änderung an Ladereihenfolge, Schriften oder Variablen auf dieser Seite neu; Text außerhalb der Marker bleibt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl writes this file itself. What stands between the QuartzControl markers is rewritten by every change to the load order, fonts or variables on this page; text outside the markers is kept."
+            "value" : "QuartzHub writes this file itself. What stands between the QuartzControl markers is rewritten by every change to the load order, fonts or variables on this page; text outside the markers is kept."
           }
         }
       }

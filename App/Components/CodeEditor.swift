@@ -9,6 +9,12 @@ struct CodeInsertion: Equatable {
   let text: String
 }
 
+/// A line to put the cursor on and scroll to (a diagnostic's location). A new value each time.
+struct CodeJump: Equatable {
+  let id = UUID()
+  let line: Int
+}
+
 /// The code editor: NSTextView with TextKit 2, no package (decided in 4b, measured in
 /// `docs/decisions/phase-4-oberflaeche.md`). Line numbers, colours from `CodeColors` line by line,
 /// the system's find bar, light and dark through dynamic system colours.
@@ -25,6 +31,9 @@ struct CodeEditor: NSViewRepresentable {
   /// Passed as a value, not a binding: a view whose body only hands a binding on is not drawn
   /// again when it changes, and the insertion never arrived (measured in the snippet editor).
   var insertion: CodeInsertion?
+  /// The same way in for a jump to a line; the line is clamped, the diagnostic can be older than
+  /// the text.
+  var jump: CodeJump?
   /// The accessible name of the text area.
   let name: String
 
@@ -33,6 +42,7 @@ struct CodeEditor: NSViewRepresentable {
   func makeNSView(context: Context) -> NSScrollView {
     let scroll = NSTextView.scrollableTextView()
     scroll.borderType = .noBorder
+    scroll.clipsToBounds = true
     scroll.drawsBackground = true
     let view = scroll.documentView as! NSTextView  // swiftlint:disable:this force_cast
     view.isRichText = false
@@ -63,6 +73,8 @@ struct CodeEditor: NSViewRepresentable {
     // An insertion from before this view existed has been made, or was meant for another one.
     context.coordinator.lastInsertion = insertion
     context.coordinator.replace(with: text)
+    if let jump { DispatchQueue.main.async { context.coordinator.go(to: jump.line) } }
+    context.coordinator.lastJump = jump
     if lineNumbers {
       scroll.verticalRulerView = LineNumberRuler(textView: view)
       scroll.hasVerticalRuler = true
@@ -81,6 +93,10 @@ struct CodeEditor: NSViewRepresentable {
       // next update put the old text back (measured: "{{title}}" never reached the file).
       DispatchQueue.main.async { coordinator.insert(insertion.text) }
     }
+    if let jump, jump != coordinator.lastJump {
+      coordinator.lastJump = jump
+      DispatchQueue.main.async { coordinator.go(to: jump.line) }
+    }
   }
 
   @MainActor final class Coordinator: NSObject, NSTextViewDelegate, NSTextStorageDelegate {
@@ -89,6 +105,7 @@ struct CodeEditor: NSViewRepresentable {
     var parent: CodeEditor
     weak var view: NSTextView?
     var lastInsertion: CodeInsertion?
+    var lastJump: CodeJump?
     /// The user has set a cursor (typed, clicked, moved it); an outside change resets it.
     private var cursorPlaced = false
     /// A change made here, not by the user: neither a placed cursor nor a write back.
@@ -121,6 +138,25 @@ struct CodeEditor: NSViewRepresentable {
         view.didChangeText()
       }
       view.setSelectedRange(NSRange(location: range.location + (piece as NSString).length, length: 0))
+      view.scrollRangeToVisible(view.selectedRange())
+      cursorPlaced = true
+      view.window?.makeFirstResponder(view)
+    }
+
+    /// The cursor at the start of a line (1-based), scrolled into view; a placed cursor, as a
+    /// click would make one.
+    func go(to line: Int) {
+      guard let view else { return }
+      let string = view.string as NSString
+      var location = 0
+      var current = 1
+      while current < max(1, line) {
+        let next = string.range(of: "\n", options: .literal, range: NSRange(location: location, length: string.length - location))
+        guard next.location != NSNotFound else { break }
+        location = next.location + 1
+        current += 1
+      }
+      view.setSelectedRange(NSRange(location: location, length: 0))
       view.scrollRangeToVisible(view.selectedRange())
       cursorPlaced = true
       view.window?.makeFirstResponder(view)
@@ -186,6 +222,9 @@ final class LineNumberRuler: NSRulerView {
     super.init(scrollView: textView.enclosingScrollView, orientation: .verticalRuler)
     clientView = textView
     ruleThickness = 36
+    // Views do not clip since macOS 14: the ruler's edge ran from the top of the window to the
+    // bottom, through everything above the editor (seen on the CSS tab).
+    clipsToBounds = true
     NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSText.didChangeNotification, object: textView)
     NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSView.boundsDidChangeNotification,
                                            object: textView.enclosingScrollView?.contentView)

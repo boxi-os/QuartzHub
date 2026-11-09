@@ -1332,3 +1332,32 @@ Vault-Link beim Sync.
   das dieselben Einträge jetzt auch durch `componentSelectors` schickt (dazu ein Plugin ohne
   Layout-Block, das nicht erscheint). Gleich.
 - Gegenproben (3, jede lässt den Test scheitern).
+
+### Stile: Eigenes CSS, Editor und Dateien
+
+- **In der Mitte der Editor**, wie dort: custom.scss als erster Reiter, der nicht schließt, jede
+  geöffnete Datei als eigener Reiter mit Punkt für „ungespeichert“, `_quartzcontrol.scss` mit seiner
+  Warnung. Darüber der Pfad mit „Code prüfen“ (die Datei im Editor, Entwurf eingeschlossen, allein
+  kompiliert), „Extern öffnen“ und „Datei importieren…“, dann die Hinweise (Zusammenlegen der
+  Vorlagen-Stylesheets von 1.0, ein Entwurf, unter dem etwas geschrieben hat, das Ergebnis der
+  SCSS-Prüfung mit Sprung zur Zeile) und „Komponente wählen“. Die Entwürfe liegen im Modell der
+  Seite, ein Reiterwechsel verliert nichts; was eine Datei auf der Platte hält, auch, damit
+  „geändert“ ein Vergleich bleibt.
+- **Die Ladereihenfolge steht im Inspektor** (in QuartzControl in der rechten Spalte): die
+  geladenen Dateien mit Nummer, Nach oben, Nach unten, Umbenennen und Löschen (fragt), darunter
+  `_quartzcontrol.scss` und custom.scss, „Vorhanden, aber nicht eingebunden“ mit „Einbinden“, und
+  „Neue Datei“. Jede Dateiaktion liest custom.scss neu (ein Entwurf bleibt und wird markiert) und
+  prüft wieder.
+- **Der Code-Editor** kann jetzt zu einer Zeile springen (`CodeJump`), und sein Lineal schneidet ab:
+  Seit macOS 14 tun Views das nicht mehr von selbst, und die Kante des Lineals lief vom oberen
+  Fensterrand bis unten durch alles über dem Editor (gesehen; den Editor unter „Zusätzliche
+  Inhalte“ hätte es genauso getroffen).
+- **Gemessen** an der gui-test-Kopie, Dunkel, 1400×860: Die Prüfung beim Ankommen sagt
+  „fehlerfrei“; `foundation.scss` aus der Ladereihenfolge geöffnet, eine Zeile getippt, ⌘S: genau
+  diese Zeile in der Datei. Eine Zeile mit `@include nope;` und „Code prüfen“: „Undefined mixin“
+  mit „In custom/foundation.scss, Zeile 290 öffnen“, der Sprung landet dort. „Neue Datei“ `probe`
+  legt `custom/probe.scss` an und nimmt sie in die Ladereihenfolge; Löschen fragt und nimmt beides
+  wieder weg.
+- **Nicht gemessen:** Zusammenlegen (die Kopien sind schon zusammengelegt), Importieren über den
+  Dateidialog, Umbenennen, Verschieben, der Hinweis eines veralteten Entwurfs in der App (das Modell
+  ist an der Logik von QuartzControl entlang gebaut, aber nicht geklickt).

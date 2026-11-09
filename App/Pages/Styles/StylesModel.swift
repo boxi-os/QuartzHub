@@ -57,6 +57,9 @@ final class StylesModel {
   private(set) var fileSet: StyleFiles.FileSet?
   /// Unsaved editor content per relativePath: only files someone typed in.
   private(set) var fileDrafts: [String: String] = [:]
+  /// What the opened stylesheets hold on disk, so "changed" is a comparison; read when a file's
+  /// editor tab opens, updated from what a save wrote.
+  private(set) var loadedFiles: [String: String] = [:]
   private(set) var graph: VariableGraph.Graph?
   private(set) var graphLoading = true
   private var graphRound = 0
@@ -185,6 +188,10 @@ final class StylesModel {
     fileDrafts[relativePath] = content
   }
 
+  func setLoaded(_ relativePath: String, _ content: String) {
+    loadedFiles[relativePath] = content
+  }
+
   func clearFileDrafts(_ relativePaths: [String]) {
     for path in relativePaths { fileDrafts[path] = nil }
   }
@@ -217,6 +224,7 @@ final class StylesModel {
 
     func commitDrafts() async {
       clearFileDrafts(Array(draftsWritten.keys))
+      for (path, content) in draftsWritten where path != Self.managedStylesheet { loadedFiles[path] = content }
       if let managed = draftsWritten[Self.managedStylesheet], !managedReloaded, var current = self.scss, let info = current.info.managed {
         current.info.managed = (info.path, managed)
         self.scss = current

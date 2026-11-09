@@ -26,6 +26,10 @@ struct StylesPage: View {
   @SceneStorage("styles.allVars.openGroups") private var varOpenBrowseGroups = ""
   @SceneStorage("styles.vars.darkOpen") private var varDarkOpen = ""
   @State private var varScroll: String?
+  @SceneStorage("styles.css.openTabs") private var cssOpenTabs = CssTab.mainTab
+  @SceneStorage("styles.css.activeTab") private var cssActiveTab = CssTab.mainTab
+  @State private var cssCheck: ScssCheck.Result?
+  @State private var cssChecking = false
   @Environment(\.unsavedGuard) private var unsaved
 
   init(project: ProjectContext) {
@@ -87,6 +91,9 @@ struct StylesPage: View {
         ThemeInspector(id: themeSelected, listing: themeCatalog?.themes.first { $0.id == themeSelected }, model: model,
                        active: active == themeSelected) { id in activateTheme(id) }
           .id(themeSelected)
+      } else if tab == .customCss, model.config != nil {
+        CssFilesInspector(model: model, activeTab: cssActiveTab, open: openCssTab, afterFileOp: afterCssFileOp, applyOrder: applyCssOrder,
+                          extra: AnyView(EmptyView()))
       } else if tab == .variables, let varSelected, model.config != nil {
         VariableInspector(key: varSelected, model: model, darkOpen: VariablesPlace.lines(varDarkOpen).contains(varSelected),
                           setDarkOpen: { open in
@@ -97,6 +104,38 @@ struct StylesPage: View {
       } else {
         pageContext
       }
+    }
+  }
+
+  // MARK: Eigenes CSS
+
+  /// The whole chain with the project's own Sass.
+  private func runCssCheck() async {
+    cssChecking = true
+    let environment = await AppServices.current()
+    cssCheck = await ScssCheck.check(project: project.path, runtime: environment.runtime)
+    cssChecking = false
+  }
+
+  private func openCssTab(_ tab: String) {
+    cssOpenTabs = VariablesPlace.adding(cssOpenTabs, tab)
+    cssActiveTab = tab
+  }
+
+  /// Every file operation rewrites the load order in custom.scss: its draft is read again (kept and
+  /// flagged when it has edits), and the check runs.
+  private func afterCssFileOp() async {
+    await model.reloadFiles()
+    await model.reloadScss(after: .stylesheets)
+    await runCssCheck()
+  }
+
+  private func applyCssOrder(_ next: [String]) async {
+    do {
+      try await StyleSheets.setImportOrder(next, project: project.path)
+      await afterCssFileOp()
+    } catch {
+      Announce.post(StylesModel.message(error))
     }
   }
 
@@ -158,6 +197,7 @@ struct StylesPage: View {
   private func save() async -> Bool {
     let saved = await model.save(from: tab)
     savedRound += 1
+    if tab == .customCss { await runCssCheck() }
     return saved
   }
 
@@ -194,11 +234,10 @@ struct StylesPage: View {
         case .variables:
           VariablesTab(model: model, notes: AnyView(notes), place: variablesPlace, scrollTarget: $varScroll)
         case .customCss:
-          ContentUnavailableView {
-            Label(tab.title, systemImage: ProjectPage.styles.symbol)
-          } description: {
-            Text(L10n.t("shell.page.pending"))
-          }
+          CssTab(model: model, notes: AnyView(notes), openTabs: $cssOpenTabs, activeTab: $cssActiveTab, check: $cssCheck, checking: $cssChecking,
+                 runCheck: runCssCheck)
+            // Checked on arrival too: an error made outside the app is worth seeing before the next edit.
+            .task { await runCssCheck() }
         }
       }
       .accessibilityElement(children: .contain)
