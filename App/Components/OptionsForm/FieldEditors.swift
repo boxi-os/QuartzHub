@@ -1,3 +1,4 @@
+import AppKit
 import QuartzHubCore
 import SwiftUI
 
@@ -339,7 +340,9 @@ struct CommitField: View {
       }
     }
     .focused($focused)
-    .onChange(of: focused) { _, now in if !now { finish() } }
+    .onChange(of: focused) { _, now in
+      if now { if multiline { Self.typeVerbatim() } } else { finish() }
+    }
     // The page's new value has arrived: the draft has done its job. A draft that still is the
     // old value goes too, focused or not: Return keeps the focus here (in QuartzControl it blurred
     // the field), and a value reset from outside ("Plugin-Wortlaut") came back when the field was
@@ -350,6 +353,19 @@ struct CommitField: View {
     }
     .onDisappear(perform: finish)
     .onChange(of: insertion) { _, next in if let next { insert(next.text) } }
+  }
+
+  /// What a multi-line field holds is code (JSON, HTML, Markdown), typed as it is: with the
+  /// system's smart quotes, `"b"` arrived as „b“ and was no JSON, and an HTML attribute got the
+  /// same (measured 2026-11-09). `.autocorrectionDisabled()` does not reach these switches; the
+  /// focused text view is the window's first responder, and they are set there, as `CodeEditor`
+  /// sets them on its own view.
+  private static func typeVerbatim() {
+    guard let view = NSApp.keyWindow?.firstResponder as? NSTextView else { return }
+    view.isAutomaticQuoteSubstitutionEnabled = false
+    view.isAutomaticDashSubstitutionEnabled = false
+    view.isAutomaticTextReplacementEnabled = false
+    view.isAutomaticSpellingCorrectionEnabled = false
   }
 
   private func insert(_ piece: String) {
