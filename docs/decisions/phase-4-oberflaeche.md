@@ -825,3 +825,29 @@ Gefunden in der laufenden App:
   Listenabschnitts und erbt dessen eine Zeile. `.lineLimit(nil)` am Popover behebt das.
 - Ein abgebrochenes Umbenennen ließ die neue Kennung im Feld stehen.
 - Das rote Problem-Abzeichen war auf einer ausgewählten Zeile kaum lesbar; jetzt ist es gefüllt.
+
+**Oberfläche, Teil 2: der Feld-Editor** (`FormFieldsEditor.swift`, Vorbild `FormFieldsEditor.tsx`).
+Die Felder stehen als Zeilen untereinander im Teil „Felder“. Eine Zeile klappt auf und zeigt, was
+ihr Typ liest; den Rest zeigt das Schema des Plugins (`fieldVariant`). Umsortieren geht auf allen
+Wegen der Konvention: Ziehen (`draggable`/`dropDestination`), die Pfeile, das Kontextmenü,
+Anordnen ▸ Nach oben/unten für das offene Feld und die Bedienungshilfe-Aktionen. Die Kennungen der
+Zeilen zählen Plätze; die offene Zeile wandert beim Verschieben und Entfernen mit. Solange das
+Formular die Felder seiner Vorlage nimmt, sind sie bearbeitbar wie eigene: Die erste Änderung
+schreibt die ganze Liste. Neu sind Seitenumbrüche, Bedingungen (`ConditionEditor`) und die Optionen
+einer Auswahl.
+
+Gemessen an der gui-test-Kopie, Hell und Dunkel; nach jedem Rückweg über „Felder der Vorlage …
+nehmen“ war die Config byte-gleich:
+- „Name“ nach unten: Die vier Felder der Vorlage werden eigene, in neuer Reihenfolge;
+- `name` → `vorname`, Breite „Halb“ (die Zeile zeigt „· ½“);
+- eine Auswahlliste angelegt (`auswahl`, zwei Möglichkeiten) und mit ⌥⌘↑ zweimal vor „Nachricht“
+  geschoben. Bei „Nachricht“ „Nur zeigen, wenn … Auswahlliste“ gibt `equals: a`, mit „Möglichkeit 2“
+  `equals: [a, b]`;
+- ein Seitenumbruch am Ende: quartz-forms meldet „ein Seitenumbruch steht zwischen Feldern, nicht
+  am Anfang oder Ende“ an der Zeile und am Teil. Zweimal ⌥⌘↑ nimmt die Meldung weg, die offene Zeile
+  wandert mit. Entfernen fragt „Seine Felder gehören dann zum Schritt davor.“;
+- „Noch etwas?“ mit der Maus auf die erste Zeile gezogen.
+
+Gefunden in der laufenden App: Name, Typ und Abzeichen in einer Zeile kürzten die Namen in der
+Breite des Inspektors auf „Nach…“; der Typ steht jetzt darunter. In drei Spalten waren zwei
+Kacheln von „Feld hinzufügen“ abgeschnitten; es sind jetzt zwei Spalten.

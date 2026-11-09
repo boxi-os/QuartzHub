@@ -157,9 +157,13 @@ struct FormInspector: View {
   }
 
   @ViewBuilder private var fields: some View {
-    if let schema = formSchema, let field = schema.fields.first(where: { $0.key == "fields" }) {
-      ObjectBlock(fields: [field], values: def, onValue: { next in Task { await setKey("fields", next["fields"]) } },
-                  context: context(), root: OptionRoot(flat: true))
+    let installed = state.schema?.packageVersion
+    FormFieldsEditor(def: def, fields: FormsOptions.fields(def), schema: formSchema, languages: languages,
+                     anonymous: effective["anonymous"] == .bool(true),
+                     fieldMessages: view.messages { $0.form == id }.problems.filter { $0.field != nil },
+                     olderPlugin: installed.flatMap { SemVer.isNewer(FormsOptions.layoutSince, than: $0) ? $0 : nil },
+                     projectPath: model.project.path) { next in
+      Task { await setKey("fields", .array(next.map(JSONValue.object))) }
     }
     if let templateName, def["fields"]?.arrayValue != nil {
       Button(L10n.t("formsEditor.templateFieldsBack", ["template": FormsView.templateName(templateName)])) {

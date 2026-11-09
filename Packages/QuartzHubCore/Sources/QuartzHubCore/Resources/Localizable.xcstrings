@@ -8594,6 +8594,23 @@
         }
       }
     },
+    "formsEditor.fieldCollapsed" : {
+      "comment" : "Plugins › Formulare › Felder: what a screen reader says of a closed field row",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zugeklappt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "collapsed"
+          }
+        }
+      }
+    },
     "formsEditor.fieldCount" : {
       "localizations" : {
         "de" : {
@@ -8630,6 +8647,23 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "formsEditor.fieldExpanded" : {
+      "comment" : "Plugins › Formulare › Felder: what a screen reader says of an open field row",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aufgeklappt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "expanded"
           }
         }
       }
