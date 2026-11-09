@@ -104,6 +104,35 @@ const messages = [
 const entryKeys = [[{ de: {}, en: {} }, 'de'], [{ 'de-DE': {} }, 'de'], [{ DE: {} }, 'de'], [{ 'de-AT': {}, de: {} }, 'de'], [{}, 'fr'], [{ en_US: {} }, 'en-gb']]
   .map(([texts, code]) => ({ texts, code, key: f.entryKey(texts, code) }))
 
+// ── keys (FormsKeys.tsx) ────────────────────────────────────────────────────────────────────────
+const keysFile = join(control, 'src/routes/Plugins/FormsKeys.tsx')
+const keysLib = await loadQuartzControl(control, 'src/routes/Plugins/FormsKeys.tsx', {
+  react: 'export const useState = (v) => [v, () => {}]; export default {}',
+  'react-i18next': 'export const useTranslation = () => ({ t: (k) => k })',
+  'lucide-react': 'export const FileUp = null, KeyRound = null, Trash2 = null',
+  '../../components/ui': 'const C = () => null; export const Button = C, Field = C, IconButton = C, SegmentedControl = C, TextInput = C',
+  '../../components/ErrorSurface': 'export const formatIpcError = String',
+  '../../utils/confirm': 'export const confirmDialog = async () => false',
+  '../ProjectLayout': 'export const useProject = () => ({})'
+}, { expose: ['withoutKey'] })
+// The name rule stands inside the component; it is read from the file, not copied.
+const nameRule = /const nameProblem = (.*)\n/.exec(readFileSync(keysFile, 'utf8'))?.[1]
+if (!nameRule) throw new Error('FormsKeys.tsx: nameProblem not found')
+const nameProblemOf = new Function('name', 'keys', `return ${nameRule}`)
+const keyOptions = [
+  {},
+  { keys: { a: { file: 'k/a.asc' }, b: { armored: 'x' } }, forms: { f1: { encryption: { mode: 'required' } }, f2: { encryption: { mode: 'optional', keys: ['a'] } },
+    f3: { encryption: { mode: 'off', keys: ['a'] } }, f4: {}, f5: { encryption: { mode: 'required', keys: ['b', 'a', 5] } }, f6: 'x' } },
+  { keys: { a: {} }, forms: { g: { encryption: { mode: 'required', keys: ['a'], showFingerprint: false } } }, layoutForm: 'g' },
+  { forms: { h: { encryption: { mode: 'required', keys: 'a' } } } },
+  { keys: [1], forms: [] }
+]
+const keys = keyOptions.flatMap((options) => ['a', 'b', 'c'].map((name) => ({
+  options, name, using: keysLib.formsUsingKey(options, name), without: keysLib.withoutKey(options, name)
+})))
+const keyNames = ['', 'owner', 'a-b_C9', 'a b', 'ä', 'x'.repeat(64), 'x'.repeat(65), 'taken', 'Taken', 'a.b']
+  .map((name) => ({ name, problem: nameProblemOf(name, [['taken', {}]]) }))
+
 // ── the schema's parts ──────────────────────────────────────────────────────────────────────────
 const formSchema = f.formSchema(schema)
 const schemaParts = {
@@ -122,6 +151,6 @@ writeFileSync(join(out, 'cases.json'), JSON.stringify({
     sections: f.SECTIONS, fieldGroups: f.FIELD_GROUPS, sameShape: f.SAME_SHAPE, inputKeys: f.INPUT_KEYS, personalAutocomplete: f.PERSONAL_AUTOCOMPLETE,
     controllerTypes: f.CONTROLLER_TYPES, formKeys: [...f.FORM_KEYS], relayOwnWords: [...f.RELAY_OWN_WORDS]
   },
-  forms, texts, ids, names, freeIds, freeNames, newForms, fields, renamedConditions, showIfValues, messages, entryKeys, schemaParts
+  forms, texts, ids, names, freeIds, freeNames, newForms, fields, renamedConditions, showIfValues, messages, entryKeys, schemaParts, keys, keyNames
 }, null, 1) + '\n')
 console.log(`forms-options: ${forms.length} option sets, ${fields.length} fields, ${messages.length} messages`)

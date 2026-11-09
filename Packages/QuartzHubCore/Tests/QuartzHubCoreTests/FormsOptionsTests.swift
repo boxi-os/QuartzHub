@@ -121,6 +121,22 @@ import Testing
     }
   }
 
+  @Test func keysAsQuartzControlTakesThemOut() throws {
+    let golden = try #require(Self.golden)
+    let keys = golden["keys"]?.arrayValue ?? []
+    #expect(keys.count == 15)
+    for item in keys {
+      let options = item["options"]?.objectValue ?? JSONObject()
+      let name = item["name"]!.stringValue!
+      #expect(FormsOptions.formsUsingKey(options, name: name).map(JSONValue.string) == item["using"]?.arrayValue, "\(Self.c(item))")
+      #expect(Self.c(FormsOptions.withoutKey(options, name: name)) == Self.c(item["without"]), "\(Self.c(item))")
+    }
+    for item in golden["keyNames"]?.arrayValue ?? [] {
+      let problem = FormsOptions.keyNameProblem(item["name"]!.stringValue!, existing: ["taken"])
+      #expect(problem.map { JSONValue.string($0.rawValue) } ?? .null == item["problem"], "\(Self.c(item))")
+    }
+  }
+
   @Test func fieldsAndConditionsAsQuartzControlReadsThem() throws {
     let golden = try #require(Self.golden)
     let items = try #require(golden["fields"]?.arrayValue)

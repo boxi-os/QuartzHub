@@ -325,6 +325,47 @@ public enum FormsOptions {
     return Embed(codeBlock: "```\(lang)\n\(id)\n```", placeholder: "{{form:\(id)}}", frontmatter: "\(key): \(id)")
   }
 
+  // ── keys (FormsKeys.tsx) ──────────────────────────────────────────────────────────────────────
+
+  /// The forms that encrypt to a key: every encrypting form without a list of its own, and those that name it.
+  public static func formsUsingKey(_ options: JSONObject?, name: String) -> [String] {
+    forms(options).filter { form in
+      guard encryptionMode(form.def) != "off" else { return false }
+      guard case .array(let keys)? = form.def["encryption"]?.objectValue?["keys"] else { return true }
+      return keys.contains(.string(name))
+    }.map(\.id)
+  }
+
+  /// Takes a key out of `keys` and out of every form's own list; a list left empty goes (= all keys).
+  public static func withoutKey(_ options: JSONObject, name: String) -> JSONObject {
+    var keys = options["keys"]?.objectValue ?? JSONObject()
+    keys[name] = nil
+    var next = options
+    next["keys"] = .object(keys)
+    guard options["forms"]?.objectValue != nil else { return next }
+    let list = forms(options).map { form -> (String, JSONObject) in
+      guard var encryption = form.def["encryption"]?.objectValue, case .array(let own)? = encryption["keys"],
+            own.contains(.string(name)) else { return (form.id, form.def) }
+      let rest = own.filter { $0 != .string(name) }
+      encryption["keys"] = rest.isEmpty ? nil : .array(rest)
+      var def = form.def
+      def["encryption"] = .object(encryption)
+      return (form.id, def)
+    }
+    next["forms"] = .object(JSONObject(list.map { ($0.0, .object($0.1)) }))
+    return next
+  }
+
+  public enum KeyNameProblem: String, Sendable { case empty, pattern, taken }
+
+  /// A key's name: `/^[A-Za-z0-9_-]{1,64}$/`, not one that is there.
+  public static func keyNameProblem(_ name: String, existing: [String]) -> KeyNameProblem? {
+    if name.isEmpty { return .empty }
+    let units = Array(name.utf16)
+    guard units.count <= 64, units.allSatisfy({ ascii($0, upper: true) || $0 == 0x5F || $0 == 0x2D }) else { return .pattern }
+    return existing.contains { $0.utf16.elementsEqual(name.utf16) } ? .taken : nil
+  }
+
   // ── fields ─────────────────────────────────────────────────────────────────────────────────────
 
   /// The field types by the group the "add field" tiles show them in.

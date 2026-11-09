@@ -118,6 +118,13 @@ const duplicates = board.map((_, i) => {
   }
 })
 const positionMap = utils.buildPositionMap(board)
+// placeComponent: every entry into every position at the end, and a few at a place and with a group.
+const places = [
+  ...board.flatMap((_, i) => utils.POSITIONS.map((position) => ({ index: i, position }))),
+  { index: 0, position: 'header', insertIndex: 0 }, { index: 4, position: 'header', insertIndex: 1, group: null },
+  { index: 1, position: 'header', insertIndex: 9, group: 'g' }, { index: 3, position: 'left', insertIndex: -1 },
+  { index: 6, position: 'footer', insertIndex: 0, group: 'neu' }
+].map((c) => ({ ...c, layouts: utils.placeComponent(board, positionMap, c.index, c.position, c.insertIndex, c.group).map((p) => p.layout ?? null) }))
 const ranks = Object.fromEntries(utils.duplicateRanks(board))
 const refs = board.map((_, i) => utils.componentRef(board, i))
 
@@ -126,7 +133,7 @@ writeFileSync(join(out, 'schema.json'), JSON.stringify(configSchema, null, 1) + 
 writeFileSync(join(out, 'cases.json'), JSON.stringify({
   keys, noEffect, roots,
   classes: { plugins, styled: [...styled], slugs, unique, perEntry, withs },
-  board, duplicates, positionMap, ranks, refs,
+  board, duplicates, positionMap, ranks, refs, places,
   variantPositions: Object.fromEntries(variants.NAV_VARIANTS.map((v) => [v.value, v.position])),
   readAgainst: variants.NAVIGATIONS_READ_AGAINST, sameCode: variants.NAVIGATIONS_SAME_CODE
 }, null, 1) + '\n')

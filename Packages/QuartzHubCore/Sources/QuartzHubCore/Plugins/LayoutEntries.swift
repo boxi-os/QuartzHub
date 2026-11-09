@@ -66,6 +66,51 @@ public enum LayoutEntries {
     return (plugins[index].name, duplicateRanks(plugins)[index] ?? 1)
   }
 
+  /// `placeComponent`: the entry at `index` moved into `position` (at `insertIndex`, else at the
+  /// end), every position it left and the one it joined renumbered in steps of ten. `group`: a
+  /// group's name makes it a member, `.some(nil)` takes it out of any group, nil leaves the group
+  /// alone. An entry in no position's list simply joins; one without a layout block is left as it is.
+  public static func place(_ plugins: [PluginEntry], index: Int, position: String, insertIndex: Int? = nil,
+                           group: String?? = nil) -> [PluginEntry] {
+    let positions = positionMap(plugins)
+    var next = positions
+    var touched = [position]
+    for pos in Self.positions where positions[pos]?.contains(index) == true {
+      next[pos] = positions[pos]?.filter { $0 != index }
+      if !touched.contains(pos) { touched.append(pos) }
+    }
+    var target = next[position] ?? []
+    let wanted = insertIndex ?? target.count
+    // `splice(Math.min(i, length), 0, x)`: a negative start counts from the end.
+    let at = wanted < 0 ? max(target.count + wanted, 0) : min(wanted, target.count)
+    target.insert(index, at: at)
+    next[position] = target
+    var renumbered: [Int: (position: String, priority: Double)] = [:]
+    for pos in touched {
+      for (i, entry) in (next[pos] ?? []).enumerated() { renumbered[entry] = (pos, Double((i + 1) * 10)) }
+    }
+    return plugins.enumerated().map { i, plugin in
+      guard let update = renumbered[i], truthy(plugin.object["layout"]) else { return plugin }
+      var layout = LayoutBoxes.spread(plugin.object["layout"])
+      layout["position"] = .string(update.position)
+      layout["priority"] = .number(update.priority)
+      if i == index, let group {
+        layout["group"] = group.map(JSONValue.string)
+      }
+      var object = plugin.object
+      object["layout"] = .object(layout)
+      return PluginEntry(object: object)
+    }
+  }
+
+  private static func truthy(_ value: JSONValue?) -> Bool {
+    switch value {
+    case nil, .null?, .bool(false)?, .number(0)?, .string("")?: false
+    case .number(let n)?: !n.isNaN
+    default: true
+    }
+  }
+
   /// `duplicateEntry`: a copy with its own layout. A navigation's `id` stays behind (two with the
   /// same one share element ids and their stored state), and a navigation or a box gets a class of
   /// its own. What a copy does not inherit is listed here and nowhere else.

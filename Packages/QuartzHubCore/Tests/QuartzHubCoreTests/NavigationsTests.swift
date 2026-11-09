@@ -101,6 +101,21 @@ import Testing
     }
   }
 
+  @Test func placingRenumbersAsTheBoardDoes() throws {
+    let golden = try #require(Self.golden)
+    let board = Self.entries(golden["board"])
+    let places = try #require(golden["places"]?.arrayValue)
+    #expect(places.count == 71)
+    for item in places {
+      let index = Int(item["index"]!.numberValue!)
+      let group: String?? = switch item["group"] { case nil: nil; case .null?: .some(nil); case .string(let g)?: .some(g); default: nil }
+      let mine = LayoutEntries.place(board, index: index, position: item["position"]!.stringValue!,
+                                     insertIndex: item["insertIndex"]?.numberValue.map { Int($0) }, group: group)
+      let layouts = mine.map { $0.object["layout"] ?? .null }
+      #expect(layouts == item["layouts"]?.arrayValue, "\(JSJSON.compact(item.objectValue.map { o in var c = o; c["layouts"] = nil; return .object(c) } ?? .null))")
+    }
+  }
+
   @Test func duplicatingRenumbersAsTheBoardDoes() throws {
     let golden = try #require(Self.golden)
     let board = Self.entries(golden["board"])

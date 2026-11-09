@@ -4919,5 +4919,584 @@
    "language": "__undefined",
    "nothing": "__undefined"
   }
- }
+ },
+ "keys": [
+  {
+   "options": {},
+   "name": "a",
+   "using": [],
+   "without": {
+    "keys": {}
+   }
+  },
+  {
+   "options": {},
+   "name": "b",
+   "using": [],
+   "without": {
+    "keys": {}
+   }
+  },
+  {
+   "options": {},
+   "name": "c",
+   "using": [],
+   "without": {
+    "keys": {}
+   }
+  },
+  {
+   "options": {
+    "keys": {
+     "a": {
+      "file": "k/a.asc"
+     },
+     "b": {
+      "armored": "x"
+     }
+    },
+    "forms": {
+     "f1": {
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "f2": {
+      "encryption": {
+       "mode": "optional",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f3": {
+      "encryption": {
+       "mode": "off",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f4": {},
+     "f5": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "b",
+        "a",
+        5
+       ]
+      }
+     },
+     "f6": "x"
+    }
+   },
+   "name": "a",
+   "using": [
+    "f1",
+    "f2",
+    "f5"
+   ],
+   "without": {
+    "keys": {
+     "b": {
+      "armored": "x"
+     }
+    },
+    "forms": {
+     "f1": {
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "f2": {
+      "encryption": {
+       "mode": "optional"
+      }
+     },
+     "f3": {
+      "encryption": {
+       "mode": "off"
+      }
+     },
+     "f4": {},
+     "f5": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "b",
+        5
+       ]
+      }
+     },
+     "f6": {}
+    }
+   }
+  },
+  {
+   "options": {
+    "keys": {
+     "a": {
+      "file": "k/a.asc"
+     },
+     "b": {
+      "armored": "x"
+     }
+    },
+    "forms": {
+     "f1": {
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "f2": {
+      "encryption": {
+       "mode": "optional",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f3": {
+      "encryption": {
+       "mode": "off",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f4": {},
+     "f5": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "b",
+        "a",
+        5
+       ]
+      }
+     },
+     "f6": "x"
+    }
+   },
+   "name": "b",
+   "using": [
+    "f1",
+    "f5"
+   ],
+   "without": {
+    "keys": {
+     "a": {
+      "file": "k/a.asc"
+     }
+    },
+    "forms": {
+     "f1": {
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "f2": {
+      "encryption": {
+       "mode": "optional",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f3": {
+      "encryption": {
+       "mode": "off",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f4": {},
+     "f5": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "a",
+        5
+       ]
+      }
+     },
+     "f6": {}
+    }
+   }
+  },
+  {
+   "options": {
+    "keys": {
+     "a": {
+      "file": "k/a.asc"
+     },
+     "b": {
+      "armored": "x"
+     }
+    },
+    "forms": {
+     "f1": {
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "f2": {
+      "encryption": {
+       "mode": "optional",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f3": {
+      "encryption": {
+       "mode": "off",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f4": {},
+     "f5": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "b",
+        "a",
+        5
+       ]
+      }
+     },
+     "f6": "x"
+    }
+   },
+   "name": "c",
+   "using": [
+    "f1"
+   ],
+   "without": {
+    "keys": {
+     "a": {
+      "file": "k/a.asc"
+     },
+     "b": {
+      "armored": "x"
+     }
+    },
+    "forms": {
+     "f1": {
+      "encryption": {
+       "mode": "required"
+      }
+     },
+     "f2": {
+      "encryption": {
+       "mode": "optional",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f3": {
+      "encryption": {
+       "mode": "off",
+       "keys": [
+        "a"
+       ]
+      }
+     },
+     "f4": {},
+     "f5": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "b",
+        "a",
+        5
+       ]
+      }
+     },
+     "f6": {}
+    }
+   }
+  },
+  {
+   "options": {
+    "keys": {
+     "a": {}
+    },
+    "forms": {
+     "g": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "a"
+       ],
+       "showFingerprint": false
+      }
+     }
+    },
+    "layoutForm": "g"
+   },
+   "name": "a",
+   "using": [
+    "g"
+   ],
+   "without": {
+    "keys": {},
+    "forms": {
+     "g": {
+      "encryption": {
+       "mode": "required",
+       "showFingerprint": false
+      }
+     }
+    },
+    "layoutForm": "g"
+   }
+  },
+  {
+   "options": {
+    "keys": {
+     "a": {}
+    },
+    "forms": {
+     "g": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "a"
+       ],
+       "showFingerprint": false
+      }
+     }
+    },
+    "layoutForm": "g"
+   },
+   "name": "b",
+   "using": [],
+   "without": {
+    "keys": {
+     "a": {}
+    },
+    "forms": {
+     "g": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "a"
+       ],
+       "showFingerprint": false
+      }
+     }
+    },
+    "layoutForm": "g"
+   }
+  },
+  {
+   "options": {
+    "keys": {
+     "a": {}
+    },
+    "forms": {
+     "g": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "a"
+       ],
+       "showFingerprint": false
+      }
+     }
+    },
+    "layoutForm": "g"
+   },
+   "name": "c",
+   "using": [],
+   "without": {
+    "keys": {
+     "a": {}
+    },
+    "forms": {
+     "g": {
+      "encryption": {
+       "mode": "required",
+       "keys": [
+        "a"
+       ],
+       "showFingerprint": false
+      }
+     }
+    },
+    "layoutForm": "g"
+   }
+  },
+  {
+   "options": {
+    "forms": {
+     "h": {
+      "encryption": {
+       "mode": "required",
+       "keys": "a"
+      }
+     }
+    }
+   },
+   "name": "a",
+   "using": [
+    "h"
+   ],
+   "without": {
+    "forms": {
+     "h": {
+      "encryption": {
+       "mode": "required",
+       "keys": "a"
+      }
+     }
+    },
+    "keys": {}
+   }
+  },
+  {
+   "options": {
+    "forms": {
+     "h": {
+      "encryption": {
+       "mode": "required",
+       "keys": "a"
+      }
+     }
+    }
+   },
+   "name": "b",
+   "using": [
+    "h"
+   ],
+   "without": {
+    "forms": {
+     "h": {
+      "encryption": {
+       "mode": "required",
+       "keys": "a"
+      }
+     }
+    },
+    "keys": {}
+   }
+  },
+  {
+   "options": {
+    "forms": {
+     "h": {
+      "encryption": {
+       "mode": "required",
+       "keys": "a"
+      }
+     }
+    }
+   },
+   "name": "c",
+   "using": [
+    "h"
+   ],
+   "without": {
+    "forms": {
+     "h": {
+      "encryption": {
+       "mode": "required",
+       "keys": "a"
+      }
+     }
+    },
+    "keys": {}
+   }
+  },
+  {
+   "options": {
+    "keys": [
+     1
+    ],
+    "forms": []
+   },
+   "name": "a",
+   "using": [],
+   "without": {
+    "keys": {},
+    "forms": []
+   }
+  },
+  {
+   "options": {
+    "keys": [
+     1
+    ],
+    "forms": []
+   },
+   "name": "b",
+   "using": [],
+   "without": {
+    "keys": {},
+    "forms": []
+   }
+  },
+  {
+   "options": {
+    "keys": [
+     1
+    ],
+    "forms": []
+   },
+   "name": "c",
+   "using": [],
+   "without": {
+    "keys": {},
+    "forms": []
+   }
+  }
+ ],
+ "keyNames": [
+  {
+   "name": "",
+   "problem": "empty"
+  },
+  {
+   "name": "owner",
+   "problem": null
+  },
+  {
+   "name": "a-b_C9",
+   "problem": null
+  },
+  {
+   "name": "a b",
+   "problem": "pattern"
+  },
+  {
+   "name": "ä",
+   "problem": "pattern"
+  },
+  {
+   "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "problem": null
+  },
+  {
+   "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "problem": "pattern"
+  },
+  {
+   "name": "taken",
+   "problem": "taken"
+  },
+  {
+   "name": "Taken",
+   "problem": null
+  },
+  {
+   "name": "a.b",
+   "problem": "pattern"
+  }
+ ]
 }
