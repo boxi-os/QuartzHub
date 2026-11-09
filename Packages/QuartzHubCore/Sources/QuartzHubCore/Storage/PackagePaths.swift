@@ -37,7 +37,12 @@ public enum PackagePaths {
 /// Node's error for a failed file call, as `String(err)` prints it: `Error: ENOENT: no such file or
 /// directory, stat '/x'`. Only the codes the ports meet. Without a path where Node names none
 /// (`readFileSync` on a folder: `EISDIR: illegal operation on a directory, read`).
-struct NodeFileError: Error, CustomStringConvertible {
+/// `LocalizedError`: shown through `localizedDescription`, as the app shows any error, it read
+/// „(QuartzHubCore.NodeFileError-Fehler 1.)“ instead of Node's text, which QuartzControl shows
+/// (measured 2026-11-09 with quartz/static/images a file).
+struct NodeFileError: Error, CustomStringConvertible, LocalizedError {
+  var errorDescription: String? { description }
+
   let code: Int32
   let syscall: String
   var path: String?
