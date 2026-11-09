@@ -5498,5 +5498,134 @@
    "name": "a.b",
    "problem": "pattern"
   }
+ ],
+ "recipientNames": [
+  {
+   "name": "",
+   "ok": false
+  },
+  {
+   "name": "kontakt",
+   "ok": true
+  },
+  {
+   "name": "TestKontakt",
+   "ok": true
+  },
+  {
+   "name": "a.b_c-d",
+   "ok": true
+  },
+  {
+   "name": "-a",
+   "ok": false
+  },
+  {
+   "name": ".a",
+   "ok": false
+  },
+  {
+   "name": "_a",
+   "ok": false
+  },
+  {
+   "name": "a b",
+   "ok": false
+  },
+  {
+   "name": "ä",
+   "ok": false
+  },
+  {
+   "name": "KK",
+   "ok": false
+  },
+  {
+   "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "ok": true
+  },
+  {
+   "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "ok": false
+  },
+  {
+   "name": "9",
+   "ok": true
+  }
+ ],
+ "exampleAddresses": [
+  {
+   "address": "a@example.org",
+   "example": true
+  },
+  {
+   "address": "A@EXAMPLE.ORG",
+   "example": true
+  },
+  {
+   "address": "a@example",
+   "example": false
+  },
+  {
+   "address": "a@examples.org",
+   "example": false
+  },
+  {
+   "address": "a@sub.example.org",
+   "example": false
+  },
+  {
+   "address": "a@eKxample.org",
+   "example": false
+  },
+  {
+   "address": "x@example.com",
+   "example": true
+  }
+ ],
+ "originTexts": [
+  {
+   "text": "",
+   "origins": []
+  },
+  {
+   "text": "https://a.org",
+   "origins": [
+    "https://a.org"
+   ]
+  },
+  {
+   "text": " https://a.org, https://b.org ",
+   "origins": [
+    "https://a.org",
+    "https://b.org"
+   ]
+  },
+  {
+   "text": "a,,b",
+   "origins": [
+    "a",
+    "b"
+   ]
+  },
+  {
+   "text": "a b c\td",
+   "origins": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ]
+  },
+  {
+   "text": ",",
+   "origins": []
+  },
+  {
+   "text": "ab",
+   "origins": [
+    "ab"
+   ]
+  }
  ]
 }

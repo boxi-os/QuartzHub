@@ -133,6 +133,23 @@ const keys = keyOptions.flatMap((options) => ['a', 'b', 'c'].map((name) => ({
 const keyNames = ['', 'owner', 'a-b_C9', 'a b', 'ä', 'x'.repeat(64), 'x'.repeat(65), 'taken', 'Taken', 'a.b']
   .map((name) => ({ name, problem: nameProblemOf(name, [['taken', {}]]) }))
 
+// ── the relay's rules (FormsRelay.tsx), read from the file ──────────────────────────────────────
+const relayText = readFileSync(join(control, 'src/routes/Plugins/FormsRelay.tsx'), 'utf8')
+const literal = (re, what) => {
+  const m = re.exec(relayText)
+  if (!m) throw new Error(`FormsRelay.tsx: ${what} not found`)
+  return new Function(`return ${m[1]}`)()
+}
+const recipientRule = literal(/const RECIPIENT_NAME = (\/.*\/[a-z]*)\n/, 'RECIPIENT_NAME')
+const exampleRule = literal(/if \((\/@example[^/]*\/[a-z]*)\.test\(address\)\)/, 'the example address')
+const originSplit = literal(/allowedOrigins: v\s*\.split\((\/[^/]*\/)\)/, 'the origins split')
+const recipientNames = ['', 'kontakt', 'TestKontakt', 'a.b_c-d', '-a', '.a', '_a', 'a b', 'ä', 'K\u212A', 'x'.repeat(64), 'x'.repeat(65), '9']
+  .map((name) => ({ name, ok: recipientRule.test(name) }))
+const exampleAddresses = ['a@example.org', 'A@EXAMPLE.ORG', 'a@example', 'a@examples.org', 'a@sub.example.org', 'a@e\u212Axample.org', 'x@example.com']
+  .map((address) => ({ address, example: exampleRule.test(address) }))
+const originTexts = ['', 'https://a.org', ' https://a.org, https://b.org ', 'a,,b', 'a\u00a0b\u2028c\td', ',', 'a\u0085b']
+  .map((text) => ({ text, origins: text.split(originSplit).map((o) => o.trim()).filter(Boolean) }))
+
 // ── the schema's parts ──────────────────────────────────────────────────────────────────────────
 const formSchema = f.formSchema(schema)
 const schemaParts = {
@@ -151,6 +168,6 @@ writeFileSync(join(out, 'cases.json'), JSON.stringify({
     sections: f.SECTIONS, fieldGroups: f.FIELD_GROUPS, sameShape: f.SAME_SHAPE, inputKeys: f.INPUT_KEYS, personalAutocomplete: f.PERSONAL_AUTOCOMPLETE,
     controllerTypes: f.CONTROLLER_TYPES, formKeys: [...f.FORM_KEYS], relayOwnWords: [...f.RELAY_OWN_WORDS]
   },
-  forms, texts, ids, names, freeIds, freeNames, newForms, fields, renamedConditions, showIfValues, messages, entryKeys, schemaParts, keys, keyNames
+  forms, texts, ids, names, freeIds, freeNames, newForms, fields, renamedConditions, showIfValues, messages, entryKeys, schemaParts, keys, keyNames, recipientNames, exampleAddresses, originTexts
 }, null, 1) + '\n')
 console.log(`forms-options: ${forms.length} option sets, ${fields.length} fields, ${messages.length} messages`)

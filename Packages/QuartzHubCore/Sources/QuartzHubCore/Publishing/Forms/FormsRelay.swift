@@ -11,6 +11,14 @@ public struct RelayUploadResult: Equatable, Sendable {
   public var configReadable: Bool?
   public var check: RelayCheck?
   public var countersOpen: String?
+
+  public init(success: Bool, output: String, configReadable: Bool? = nil, check: RelayCheck? = nil, countersOpen: String? = nil) {
+    self.success = success
+    self.output = output
+    self.configReadable = configReadable
+    self.check = check
+    self.countersOpen = countersOpen
+  }
 }
 
 /// A site target whose rsync --delete would remove the relay (`RelayConflict`).

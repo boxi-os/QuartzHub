@@ -366,6 +366,37 @@ public enum FormsOptions {
     return existing.contains { $0.utf16.elementsEqual(name.utf16) } ? .taken : nil
   }
 
+  // ── the relay (FormsRelay.tsx) ──────────────────────────────────────────────────────────────────
+
+  /// A recipient name the relay maps to an address: `/^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/`.
+  public static func isRecipientName(_ name: String) -> Bool {
+    let units = Array(name.utf16)
+    guard let first = units.first, ascii(first, upper: true), units.count <= 64 else { return false }
+    return units.dropFirst().allSatisfy { ascii($0, upper: true) || $0 == 0x5F || $0 == 0x2E || $0 == 0x2D }
+  }
+
+  /// `/@example\./i`: the relay reads such an address as its template's placeholder, i.e. as missing.
+  /// The i flag without u folds ASCII only.
+  public static func isExampleAddress(_ address: String) -> Bool {
+    let folded = String(decoding: address.utf16.map { (0x41...0x5A).contains($0) ? $0 + 0x20 : $0 }, as: UTF16.self)
+    return JSText.includes(folded, "@example.")
+  }
+
+  /// "Erlaubte Origins" as typed: `split(/[,\s]+/)`, trimmed, the empty ones left out.
+  public static func origins(_ text: String) -> [String] {
+    var out: [String] = []
+    var current: [UInt16] = []
+    for unit in text.utf16 {
+      if unit == 0x2C || ReadmeText.isSpace(unit) {
+        if !current.isEmpty { out.append(String(decoding: current, as: UTF16.self)); current = [] }
+      } else {
+        current.append(unit)
+      }
+    }
+    if !current.isEmpty { out.append(String(decoding: current, as: UTF16.self)) }
+    return out
+  }
+
   // ── fields ─────────────────────────────────────────────────────────────────────────────────────
 
   /// The field types by the group the "add field" tiles show them in.

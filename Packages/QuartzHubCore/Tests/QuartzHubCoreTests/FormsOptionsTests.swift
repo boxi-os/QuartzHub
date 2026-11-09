@@ -137,6 +137,20 @@ import Testing
     }
   }
 
+  @Test func theRelaysRulesAsQuartzControlHasThem() throws {
+    let golden = try #require(Self.golden)
+    for item in golden["recipientNames"]?.arrayValue ?? [] {
+      #expect(FormsOptions.isRecipientName(item["name"]!.stringValue!) == item["ok"]?.boolValue, "\(Self.c(item))")
+    }
+    for item in golden["exampleAddresses"]?.arrayValue ?? [] {
+      #expect(FormsOptions.isExampleAddress(item["address"]!.stringValue!) == item["example"]?.boolValue, "\(Self.c(item))")
+    }
+    for item in golden["originTexts"]?.arrayValue ?? [] {
+      #expect(FormsOptions.origins(item["text"]!.stringValue!).map(JSONValue.string) == item["origins"]?.arrayValue, "\(Self.c(item))")
+    }
+    #expect((golden["recipientNames"]?.arrayValue?.count ?? 0) == 13)
+  }
+
   @Test func fieldsAndConditionsAsQuartzControlReadsThem() throws {
     let golden = try #require(Self.golden)
     let items = try #require(golden["fields"]?.arrayValue)
