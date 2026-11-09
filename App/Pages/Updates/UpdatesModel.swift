@@ -101,7 +101,9 @@ final class UpdatesModel {
       coreResult = Outcome(title: result.success ? L10n.t("updates.core.done") : L10n.t("updates.core.failed"), success: result.success,
                            output: result.output, snapshotId: result.snapshotId, conflicts: result.conflicts ?? [])
     } catch {
-      coreResult = Outcome(title: L10n.t("updates.core.failed"), success: false, output: error.localizedDescription)
+      // The core's errors carry their sentence as `description`; `localizedDescription` gave
+      // "Der Vorgang konnte nicht abgeschlossen werden. (…SnapshotStore.Failure-Fehler 1.)" (measured).
+      coreResult = Outcome(title: L10n.t("updates.core.failed"), success: false, output: String(describing: error))
     }
     coreBusy = false
     if let title = coreResult?.title { Announce.post(title) }
@@ -123,7 +125,7 @@ final class UpdatesModel {
         : result.sentences.joined(separator: " ")
       if !said.isEmpty { Announce.post(said) }
     } catch {
-      coreResult = Outcome(success: false, output: error.localizedDescription)
+      coreResult = Outcome(success: false, output: String(describing: error))
     }
     coreBusy = false
     await reload()

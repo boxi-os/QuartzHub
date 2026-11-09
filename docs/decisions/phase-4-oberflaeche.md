@@ -956,6 +956,13 @@ werden“; jetzt kommt erst der Satz. Die Sätze des Katalogs enden mit zwei Zei
 Kasten als leere Zeilen standen; sie werden für die Anzeige weggelassen. Sieben Texte des Kerns, die
 hier erscheinen, sagten „lässt sich“ oder „ließ sich“.
 
+Nachtrag (2026-11-09, beim Portieren von Snapshots): Ein geworfener Fehler stand als
+`localizedDescription` im Kasten, bei den Fehlertypen des Kerns also „Der Vorgang konnte nicht
+abgeschlossen werden. (QuartzHubCore.SnapshotStore.Failure-Fehler 1.)“. Gemessen mit einem
+schreibgeschützten Snapshot-Speicher, an dem der Lauf vor dem Fetch scheitert. Jetzt
+`String(describing:)` wie im Rest der App: „Der Projektstand konnte nicht erfasst werden:“ und gits
+Grund.
+
 ### Snapshots
 
 Vorbild `Backups.tsx`, Dienste `SnapshotStore` und `ContentBackups` aus Phase 3; keine neue Logik
