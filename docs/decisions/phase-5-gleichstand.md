@@ -458,3 +458,43 @@ Ein Befund, behoben:
 
 Auf `Netz` gestellt: „Installation läuft“ (nur während npm), „Kern-Update angefangen“ und „Nicht
 prüfbar“ (beide aus der Update-Prüfung gegen GitHub).
+
+## Vorschau & Build an der App gemessen
+
+Fünfter Durchgang, am 2026-11-09, mit dem Klon und dem Testprojekt aus „Übersicht an der App
+gemessen“. Ein belegter Port war ein Python-`http.server` auf 127.0.0.1:8080; der fremde Server ein
+`npx quartz build --serve --port 8090 --wsPort 3091`, aus dem Terminal in der gui-test-Kopie
+gestartet, die das Profil nicht kennt. Beide danach beendet, alle Ports zu.
+
+- **Server:** Starten, „Gestartet vor 13 Sekunden · WS-Port 3001 · PID 13564 · lädt automatisch
+  neu“, Neustarten (neue PID), Stoppen (Port zu). „Kopieren“ legt die Adresse in die Zwischenablage.
+  „Vorschau neu laden“ ruft die Seite neu ab (ein weiteres „[200] /“ im Server-Protokoll). Bei
+  laufendem Server sind Port, WS-Port und Remote-Host grau, „Zum Ändern zuerst den Server stoppen.“
+- **Tunnel:** Remote-Host „tunnel.example.invalid“: Die Adresse zeigt ihn, der Hinweis wechselt auf
+  „Mit Remote-Dev-Host weicht der Server nicht aus …“. Mit belegtem 8080 endet der Start in „Fehler“
+  mit „Belegte Ports: 8080. …“; ohne Host startet er auf 8081.
+- **Liste:** „Von QuartzHub“ mit Projektname, „Außerhalb gestartet“ mit dem Seitentitel und PID, „Port
+  8080 ist belegt, aber von keinem erkennbaren Quartz-Server …“. Beenden fragt mit dem Ordner des
+  Servers und „Abbrechen“ zuerst; danach ist Port 8090 frei.
+- **Build:** „Jetzt bauen“ zeigt „Baue…“ und „Build läuft seit 0:02 · liest die Notizen“, danach
+  „Erfolgreich in 12,2s“ und „475 Dateien · 32 MB“ (475 Dateien auf der Platte). „Ordner öffnen“ zeigt
+  `public/` im Finder. „Auswählen“ mit einem Ordner aus drei Textdateien: Pfad in
+  `project-prefs.json`, „Achtung: In diesem Ordner liegen 3 Dateien …“; „Jetzt bauen“ fragt „In „…“
+  bauen?“, Escape lässt die Dateien liegen. „Zurücksetzen“ schreibt `"outputDir": ""`.
+- **Testprojekt ohne index.md:** „Im Content-Ordner fehlt die index.md. …“ mit „Startseite anlegen →“,
+  das Konfiguration ▸ Website öffnet, mit Rückweg-Leiste.
+
+Zwei Befunde, behoben:
+
+- **Ein beendeter fremder Server blieb in der Liste,** als „Projekt unbekannt … antwortet nicht“, bis
+  zum nächsten Aktualisieren. Die Liste las sofort nach dem Signal neu, als der Kindprozess den Port
+  noch hielt. Jetzt liest sie eine Sekunde später ein zweites Mal, wie schon bei eigenen Servern.
+  Nachmessung: Liste leer. Der Fall selbst trat beim zweiten Versuch nicht wieder auf; der erste
+  Durchlauf fand den Prozess dort schon nicht mehr.
+- **„Zuletzt gebaut in 13 Sekunden“:** Übersicht und Vorschau & Build rechneten das Alter mit der Zeit
+  des letzten 30-Sekunden-Takts. Neu gezeichnet zwischen zwei Takten, war ein eben gewählter Ordner
+  „neuer als jetzt“. Jetzt zählt die Zeit des Zeichnens. Nachmessung: 15 Sekunden nach dem Öffnen
+  eine Datei angelegt, Ordner gewählt: „vor 4 Sekunden“.
+
+Nicht gemessen: „Im Browser öffnen“ (öffnet den Browser), eine Suche, die `ps` oder `lsof` nicht
+beantworten (unvollständig oder unmöglich), und ein Beenden, das scheitert.
