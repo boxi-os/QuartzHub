@@ -229,7 +229,7 @@ struct OverviewTab: View {
           framePill(name, nil, facts)
           Text(kind == "own" ? L10n.t("layoutEditor.overview.frameKind.own") : kind == "plugin" ? L10n.t("layoutEditor.overview.frameKind.plugin")
                : L10n.t("layoutEditor.overview.frameKind.builtin")).font(.caption).foregroundStyle(.secondary)
-          if users.isEmpty { WordBadge(text: L10n.t("layoutEditor.overview.unassigned")).foregroundStyle(.orange) }
+          if users.isEmpty { WordBadge(text: L10n.t("layoutEditor.overview.unassigned"), tint: .orange) }
         }
         if !users.isEmpty {
           HStack(spacing: 6) { ForEach(users, id: \.self) { type in Button(LayoutWords.pageType(type)) { openPageType(type, nil) }.controlSize(.small) } }

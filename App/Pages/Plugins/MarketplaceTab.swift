@@ -169,8 +169,8 @@ struct MarketplaceTab: View {
         }
       }
       Spacer()
-      if installed { WordBadge(text: L10n.t("pluginsMarketplace.installed")).foregroundStyle(.green) }
-      if !installed, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived")).foregroundStyle(.orange) }
+      if installed { WordBadge(text: L10n.t("pluginsMarketplace.installed"), tint: .green) }
+      if !installed, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived"), tint: .orange) }
       Text(verbatim: "★ \(plugin.stars ?? 0)")
         .font(.caption).foregroundStyle(.secondary).monospacedDigit()
         .frame(minWidth: 40, alignment: .trailing)
@@ -204,8 +204,8 @@ struct MarketplaceInspector: View {
             Label(plugin.name, systemImage: "storefront").font(.headline)
               .accessibilityIdentifier("marketplace.inspector.name")
             Spacer()
-            if installed { WordBadge(text: L10n.t("pluginsMarketplace.installed")).foregroundStyle(.green) }
-            if !installed, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived")).foregroundStyle(.orange) }
+            if installed { WordBadge(text: L10n.t("pluginsMarketplace.installed"), tint: .green) }
+            if !installed, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived"), tint: .orange) }
           }
           // Not a file path: the repository on github.com.
           if let url = URL(string: plugin.url) {

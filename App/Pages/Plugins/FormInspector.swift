@@ -45,7 +45,7 @@ struct FormInspector: View {
           // the list row and the Relay section said, both out of sight.
           if FormsOptions.transportKind(def, options) == "relay", let relay = state.relay, RelayWords.outdated(relay) {
             HStack {
-              WordBadge(text: L10n.t("formsEditor.relay.panelChanged")).foregroundStyle(.orange)
+              WordBadge(text: L10n.t("formsEditor.relay.panelChanged"), tint: .orange)
               Button { selection = "section:relay" } label: { Label(L10n.t("formsEditor.sections.relay"), systemImage: "server.rack") }
             }
           }

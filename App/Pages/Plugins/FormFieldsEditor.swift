@@ -123,7 +123,7 @@ struct FormFieldsEditor: View {
         if !problems.isEmpty { FormsView.problemBadge(problems.count) }
         if let condition { WordBadge(text: L10n.t("formsEditor.conditionalBadge")).help(condition).accessibilityLabel(condition) }
         if required && !optionalByAnonymous { WordBadge(text: L10n.t("formsEditor.requiredBadge")) }
-        if optionalByAnonymous { WordBadge(text: L10n.t("formsEditor.optionalByAnonymousBadge")).foregroundStyle(.orange) }
+        if optionalByAnonymous { WordBadge(text: L10n.t("formsEditor.optionalByAnonymousBadge"), tint: .orange) }
         iconButton(L10n.t("pluginsInstalled.moveUp", ["name": label]), "arrow.up", disabled: i == 0) { move(i, to: i - 1) }
         iconButton(L10n.t("pluginsInstalled.moveDown", ["name": label]), "arrow.down", disabled: i == fields.count - 1) { move(i, to: i + 1) }
         iconButton(L10n.t("common.removeNamed", ["name": label]), "trash", disabled: false) { Task { await remove(i) } }

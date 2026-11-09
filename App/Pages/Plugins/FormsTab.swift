@@ -385,7 +385,7 @@ struct FormsTab: View {
       }
       Spacer()
       if problems > 0 { FormsView.problemBadge(problems) }
-      if view.layoutForm == id { WordBadge(text: L10n.t("formsEditor.layoutBadge")).foregroundStyle(.green) }
+      if view.layoutForm == id { WordBadge(text: L10n.t("formsEditor.layoutBadge"), tint: .green) }
       if FormsOptions.isAnonymous(def) { WordBadge(text: L10n.t("formsEditor.anonymousBadge")) }
       Button { Task { await duplicate(id) } } label: {
         Label(L10n.t("formsEditor.duplicateNamed", ["name": id]), systemImage: "plus.square.on.square").labelStyle(.iconOnly)

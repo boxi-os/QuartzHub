@@ -29,7 +29,7 @@ struct PluginInspector: View {
             .accessibilityIdentifier("plugins.inspector.name")
           HStack(spacing: 6) {
             if item.frame != nil { WordBadge(text: L10n.t("pluginsInstalled.frameBadge")) }
-            if model.outdated.contains(item.entry.name) { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable")).foregroundStyle(.orange) }
+            if model.outdated.contains(item.entry.name) { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable"), tint: .orange) }
             if model.savedIndex == item.index { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
           }
           Note(L10n.t("plugins.savesImmediately"))

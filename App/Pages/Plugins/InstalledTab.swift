@@ -320,7 +320,7 @@ private struct PluginRow: View {
         HStack(spacing: 6) {
           Text(item.displayName).fontWeight(.medium)
           if item.frame != nil { WordBadge(text: L10n.t("pluginsInstalled.frameBadge")) }
-          if outdated { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable")).foregroundStyle(.orange) }
+          if outdated { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable"), tint: .orange) }
           if saved { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
         }
         Text(item.frame != nil ? L10n.t("pluginsInstalled.frameSource") : item.sourceLabel)

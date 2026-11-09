@@ -420,7 +420,7 @@ private struct OrderRow: View {
         .toggleStyle(.checkbox)
         .disabled(missing)
         .padding(.leading, PageOrderWords.indent(page?.depth ?? 1))
-        if missing { WordBadge(text: L10n.t("documents.pages.missingBadge")).foregroundStyle(.orange) }
+        if missing { WordBadge(text: L10n.t("documents.pages.missingBadge"), tint: .orange) }
       }
       Spacer()
       if entry.slug == nil || missing {

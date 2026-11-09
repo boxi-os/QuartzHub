@@ -240,8 +240,8 @@ struct MultilanguageTab: View {
         Text(sub.joined(separator: " · ")).font(.callout).foregroundStyle(.secondary)
       }
       Spacer()
-      if isDefault { WordBadge(text: L10n.t("multilanguageEditor.defaultBadge")).foregroundStyle(.green) }
-      if !published { WordBadge(text: L10n.t("multilanguageEditor.unpublishedBadge")).foregroundStyle(.orange) }
+      if isDefault { WordBadge(text: L10n.t("multilanguageEditor.defaultBadge"), tint: .green) }
+      if !published { WordBadge(text: L10n.t("multilanguageEditor.unpublishedBadge"), tint: .orange) }
       // The last language cannot go: without one the plugin falls back to `en`.
       if languages.count > 1 {
         Button { Task { await remove(language) } } label: {
