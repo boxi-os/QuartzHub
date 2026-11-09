@@ -112,6 +112,7 @@ struct ProjectWindow: View {
     case .styles: StylesPage(project: project)
     case .layout: LayoutPage(project: project)
     case .templates: TemplatesPage(project: project)
+    case .publish: PublishPage(project: project)
     default: PendingPage(page: page)
     }
   }

@@ -8,10 +8,10 @@ import SwiftUI
 /// edited in a sheet with its own.
 struct SettingsWindow: View {
   /// Which tab is open. Veröffentlichen's "Zugänge verwalten" sets it before it opens the window.
-  @AppStorage(SettingsTab.key) private var tab = SettingsTab.general.rawValue
+  @Bindable private var tab = SettingsTab.State.shared
 
   var body: some View {
-    TabView(selection: $tab) {
+    TabView(selection: $tab.selected) {
       GeneralSettings()
         .frame(height: 540)
         .tabItem { Label(L10n.t("shell.settings.general"), systemImage: "gearshape") }
@@ -36,7 +36,14 @@ struct SettingsWindow: View {
 
 enum SettingsTab: String {
   case general, connections, runtime, maintenance
-  static let key = "settings.tab"
+
+  /// For the process only, not stored: a stored tab opened every later start on it, and the UI
+  /// test, which shares the app's defaults, found no "Allgemein" (measured).
+  @MainActor @Observable
+  final class State {
+    static let shared = State()
+    var selected = SettingsTab.general.rawValue
+  }
 }
 
 /// Reads the settings once and writes one field per change.

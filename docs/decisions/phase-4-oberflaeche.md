@@ -1574,8 +1574,10 @@ Veröffentlichen, wo ein Zugang mitten im Anlegen eines Ziels entsteht.
   anderen Zugang entfällt, weil das Sheet den Wechsel nicht zulässt.
 - **Welche Projekte einen Zugang nutzen**, zählt die Liste über alle Projekte im Profil, wie
   QuartzControls `connections:usage`: ein Zugang gilt für die App, seine Ziele für ein Projekt.
-- **Der Reiter lässt sich von außen wählen** (`@AppStorage("settings.tab")`), damit
-  Veröffentlichens „Zugänge verwalten“ ihn öffnet.
+- **Der Reiter lässt sich von außen wählen** (`SettingsTab.State`, nur im Prozess), damit
+  Veröffentlichens „Zugänge verwalten“ ihn öffnet. Zuerst stand er in `@AppStorage`: Dann öffnete
+  jeder spätere Start auf dem zuletzt gewählten Reiter, und der Rauchtest, der die Voreinstellungen
+  der App teilt, fand „Allgemein“ nicht mehr (gemessen).
 - **Ohne Schlüsselbund ansehen:** Mit `-QHMemorySecrets YES` (nur Debug) hält `AppDeploy.secrets`
   die Geheimnisse im Speicher des Prozesses; beim Beenden sind sie weg. Alle Stellen der App, die
   `Connections` bilden, gehen jetzt durch `AppDeploy.connections()`.
@@ -1586,3 +1588,53 @@ Veröffentlichen, wo ein Zugang mitten im Anlegen eines Ziels entsteht.
   (Host „  debian.local “ wird gekürzt gespeichert, kein Geheimnis), ein FTP-Zugang ohne FTPS mit
   Passwort (Warnung im Sheet, „unverschlüsselt“ in der Liste), die Frage beim Löschen mit
   „Abbrechen“ zuerst. **Nicht gemessen:** ein GitHub-Token speichern und prüfen, das fragt GitHub.
+
+### Veröffentlichen
+
+QuartzControls `Publish/index.tsx` mit `DocumentFields.tsx` und `GithubPages.tsx`, auf vier Dateien
+unter `App/Pages/Publish/`: `PublishModel` (ein Modell je Projekt), `PublishPage`, `TargetSheet`
+(das Zielformular), `GitHubPagesSection`, dazu `PublishWords` mit den ausgeschriebenen Schlüsseln.
+Der Kern war mit Punkt 8 und 9 fertig; `AppDeploy` kennt jetzt alle sieben Adapter.
+
+- **Mitte und Inspektor:** In der Mitte die Ziele als Liste, darunter für das gewählte Ziel
+  GitHub Pages (nur bei einem GitHub-Branch), „Änderungen“, „Veröffentlichen“ und zuletzt die
+  Dateiliste, die Hunderte Zeilen lang werden kann. Der Inspektor zeigt das gewählte Ziel: wohin,
+  Zugang, Host-Key, Ausschlüsse, Bearbeiten und Löschen. Der Knopf „Jetzt veröffentlichen“ bleibt in
+  der Mitte, weil der Inspektor für das ganze Fenster ausgeblendet werden kann.
+- **Das Zielformular ist ein Sheet** mit eigenem „Speichern“, ein neuer Zugang darin ein Sheet
+  darüber (`ConnectionSheet`), danach sofort der Zugang des Ziels. „Abbrechen“ fragt nur bei
+  Änderungen; Seitenleiste und Fenster sind während des Sheets gesperrt, die Frage beim Verlassen
+  entfällt damit. Das Ziel behält unbekannte Felder seiner `destination`, nur ein Typwechsel beginnt
+  sie neu.
+- **Ein Modell je Projekt** (`PublishModel.shared`): Ein Upload oder ein Export läuft Minuten und
+  gehört dem Projekt. Der Diff gehört dem gewählten Ziel und wird von Hand geholt, wie in
+  QuartzControl (für rsync fragt er den Server). Ein Wechsel des Ziels leert Diff und Ergebnis,
+  ein laufender Lauf behält sein Ziel.
+- **Gemessen, behoben:** Bei 474 Dateien hing die Anzeige einem Ordner-Deploy rund 30 s hinterher;
+  die Dateien lagen längst im Ordner. Jede Fortschrittsmeldung zeichnete alle Zeilen der Dateiliste
+  neu, weil sie den Laufzustand lasen. Jetzt lesen die Zeilen nur `running`, der Fortschritt steht in
+  einer eigenen Ansicht und kommt höchstens zehnmal je Sekunde an. Derselbe Lauf endet in der
+  Anzeige nach 2 s.
+- **Gemessen, behoben:** Nach „Speichern“ eines neuen Ziels setzte die gemerkte Auswahl der Seite
+  (`@SceneStorage`) das alte Ziel zurück. Das Sheet meldet die gespeicherte Kennung jetzt der Seite.
+- **„Jetzt bauen“** sagt das Ergebnis mit Vorschau & Builds Zeile („Erfolgreich in 13,7s“);
+  QuartzControl sagte bei einem gescheiterten Build nichts.
+- **Ohne Netz ansehen:** Unter `-QHNoUpdateCheck YES` exportiert das Ziel „Dokument“ ohne das, was
+  die Seiten von außen laden (`outside: false`, wie `qh-check export-document`).
+- **Texte:** 14 übernommene Texte geändert, darunter „QuartzHub“ statt „QuartzControl“, drei Hinweise
+  auf zwei Sätze, „credential“ heißt im Englischen „connection“ wie in den Einstellungen,
+  `rsyncBlocked.not-installed` ohne den Debian-Befehl. Neu: `targetForm.connectionGone` für einen
+  Zugang, den es nicht mehr gibt.
+- **Gemessen** an einer APFS-Kopie von gui-test mit Wegwerf-Profil, Dunkel und Hell, 1400 × 860 und
+  1000 × 700, Deutsch und Englisch:
+  - Ordner-Ziel im Scratchpad angelegt (Ausschluss `static/icon.png`), gebaut, Diff „Neu: 474“,
+    `404.html` für den Lauf abgewählt: Frage „473 Datei(en) werden hochgeladen“, im Ordner 473
+    Dateien ohne die beiden; Diff danach „Neu: 1“. „Alles neu hochladen“ bietet wieder 474 an.
+  - Dokument-Ziel mit einem Buch über `animation/`: Diff „Neu: 2“, Export ohne Netz in 3 s
+    (PDF 34 Seiten, ePub 6 Kapitel), Diff danach „Geändert: 2“.
+  - GitHub-Branch-Ziel ohne Token: die Karte sagt es, ohne GitHub zu fragen.
+  - Neuer SFTP-Zugang aus dem Zielformular: danach gewählt, rsync gesperrt mit „braucht einen
+    bestätigten Host-Key“. „Zugänge verwalten“ öffnet die Einstellungen auf „Zugänge“.
+- **Nicht gemessen**, weil es ins Netz geht: SFTP, rsync, FTP, Webhook, Git-Branch-Push, GitHub
+  Pages mit Token. Auch nicht: „Export abbrechen“ (der Export dauerte 3 s), ein eingefügter
+  privater Schlüssel im Passwortfeld.

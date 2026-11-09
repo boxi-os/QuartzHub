@@ -37497,13 +37497,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Achtung: Bei GitLab veröffentlicht der Branch allein noch nichts. Dort muss ein CI-Job die Dateien als „public“-Artefakt ausliefern. Der Push funktioniert trotzdem."
+            "value" : "Bei GitLab veröffentlicht der Branch allein noch nichts, dort muss ein CI-Job die Dateien als „public“-Artefakt ausliefern. Der Push funktioniert trotzdem."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Note: on GitLab the branch alone publishes nothing. A CI job has to ship the files as a “public” artifact. The push works regardless."
+            "value" : "On GitLab the branch alone publishes nothing; a CI job has to ship the files as a “public” artifact. The push works regardless."
           }
         }
       }
@@ -37545,13 +37545,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieses Veröffentlichungsziel wirklich löschen? Der hinterlegte Zugang bleibt bestehen."
+            "value" : "Dieses Veröffentlichungsziel wirklich löschen? Der Zugang, den es nutzt, bleibt bestehen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Really delete this publish target? The credential it uses stays."
+            "value" : "Really delete this publish target? The connection it uses stays."
           }
         }
       }
@@ -37641,13 +37641,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Am geöffneten Ziel gibt es ungespeicherte Änderungen. Wer jetzt wechselt, verliert sie."
+            "value" : "Das Ziel hat ungespeicherte Änderungen. Wenn du es jetzt schließt, gehen sie verloren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The open target has unsaved changes. Switching now loses them."
+            "value" : "The target has unsaved changes. Closing it now loses them."
           }
         }
       }
@@ -37977,13 +37977,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Art des Zugangs ergibt sich aus der Art des Ziels: dieses Ziel braucht einen {{kind}}-Zugang. Andere Zugänge legst du in den QuartzControl-Einstellungen an."
+            "value" : "Welcher Zugang passt, ergibt sich aus der Art des Ziels: Dieses braucht einen {{kind}}-Zugang."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The kind of credential follows from the kind of target: this one needs a {{kind}} credential. Other credentials are created in the QuartzControl settings."
+            "value" : "The kind of target decides the kind of connection: this one needs a {{kind}} connection."
           }
         }
       }
@@ -37993,13 +37993,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Zugang ist ein Account bei einem Anbieter und wird global in QuartzControl eingerichtet. Ein Ziel gehört zu diesem Projekt und sagt, wohin das Ergebnis soll."
+            "value" : "Ein Zugang ist ein Account bei einem Anbieter und gilt für alle Projekte in QuartzHub. Ein Ziel gehört zu diesem Projekt und sagt, wohin das Ergebnis soll."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A credential is an account at a provider and is set up globally in QuartzControl. A target belongs to this project and says where the result goes."
+            "value" : "A connection is an account at a provider and applies to every project in QuartzHub. A target belongs to this project and says where the result goes."
           }
         }
       }
@@ -38249,13 +38249,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "+ Neuer {{kind}}-Zugang"
+            "value" : "Neuer {{kind}}-Zugang …"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "+ New {{kind}} credential"
+            "value" : "New {{kind}} connection …"
           }
         }
       }
@@ -38329,13 +38329,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Noch kein Veröffentlichungsziel angelegt. Über „+ Neues Ziel“ eines anlegen, z. B. GitHub Pages, einen Webspace per SFTP oder einen lokalen Ordner."
+            "value" : "Noch kein Veröffentlichungsziel angelegt. Über „Neues Ziel“ legst du eines an, z. B. GitHub Pages, einen Webspace per SFTP oder einen lokalen Ordner."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No publish target yet. Create one via “+ New target”, e.g. GitHub Pages, a webspace over SFTP, or a local folder."
+            "value" : "No publish target yet. Create one with “New target”, e.g. GitHub Pages, a webspace over SFTP, or a local folder."
           }
         }
       }
@@ -38425,13 +38425,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Domain wird bei GitHub gespeichert, nicht im Branch. Anders als eine CNAME-Datei überlebt sie damit jedes Deploy, das den Branch vollständig ersetzt. HTTPS lässt sich erst erzwingen, wenn GitHub das Zertifikat ausgestellt hat; das dauert nach dem Setzen der Domain einige Minuten."
+            "value" : "Die Domain wird bei GitHub gespeichert, nicht im Branch, und überlebt damit jedes Deploy, das den Branch ersetzt. HTTPS kann erst erzwungen werden, wenn GitHub das Zertifikat ausgestellt hat, einige Minuten nach dem Setzen der Domain."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The domain is stored by GitHub, not in the branch. Unlike a CNAME file it therefore survives every deploy that replaces the branch wholesale. HTTPS can only be enforced once GitHub has issued the certificate, which takes a few minutes after setting the domain."
+            "value" : "The domain is stored by GitHub, not in the branch, so it survives every deploy that replaces the branch. HTTPS can only be enforced once GitHub has issued the certificate, a few minutes after setting the domain."
           }
         }
       }
@@ -38777,13 +38777,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auf diesem Rechner ist kein rsync installiert. Unter Debian und Ubuntu: sudo apt install rsync. SFTP überträgt bis dahin dieselben Dateien, nur ohne den Abgleich mit dem Server."
+            "value" : "Auf diesem Mac ist kein rsync zu finden. SFTP überträgt dieselben Dateien, nur ohne den Abgleich mit dem Server."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No rsync is installed on this machine. On Debian and Ubuntu: sudo apt install rsync. Until then SFTP transfers the same files, just without asking the server what it has."
+            "value" : "No rsync was found on this Mac. SFTP transfers the same files, just without asking the server what it has."
           }
         }
       }
@@ -38825,13 +38825,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "rsync fragt den Server selbst, was dort liegt. Der Diff stimmt also auch dann, wenn dort jemand von Hand etwas geändert hat. Setzt voraus, dass rsync auf dem Server installiert ist."
+            "value" : "rsync fragt den Server selbst, was dort liegt, der Diff stimmt also auch nach Änderungen von Hand. Auf dem Server muss rsync installiert sein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "rsync asks the server what is actually there. So the diff is right even if someone changed something by hand. Requires rsync on the server."
+            "value" : "rsync asks the server what is actually there, so the diff is right even after changes by hand. rsync has to be installed on the server."
           }
         }
       }
@@ -38927,7 +38927,24 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Credential"
+            "value" : "Connection"
+          }
+        }
+      }
+    },
+    "publish.targetForm.connectionGone" : {
+      "comment" : "Publish ▸ target sheet: the connection picker when the target names a connection that is not in the list",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "— Zugang fehlt —"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "— connection missing —"
           }
         }
       }
@@ -39177,13 +39194,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Ziel beschreibt, wohin dieses Projekt veröffentlicht: Pfad, Löschverhalten und welcher Zugang dafür benutzt wird. Der Zugang selbst wird global in QuartzControl eingerichtet und kann von mehreren Projekten benutzt werden."
+            "value" : "Ein Ziel sagt, wohin dieses Projekt veröffentlicht, wie gelöscht wird und mit welchem Zugang. Den Zugang selbst richtest du einmal in QuartzHub ein, mehrere Projekte können ihn nutzen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A target describes where this project publishes to: path, deletion behaviour and which credential it uses. The credential itself is set up globally in QuartzControl and can be shared by several projects."
+            "value" : "A target says where this project publishes to, how deletion works and which connection it uses. The connection itself is set up once in QuartzHub and can be shared by several projects."
           }
         }
       }
@@ -39311,7 +39328,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "— pick a credential —"
+            "value" : "— Choose a connection —"
           }
         }
       }
@@ -39705,13 +39722,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verwirft, was QuartzControl zuletzt an dieses Ziel geschickt hat. Danach bietet die Vorschau wieder den ganzen Build an. Für alles, was QuartzControl nicht sehen kann: eine von Hand gelöschte Datei auf dem Server, eine abgebrochene Übertragung, eine Wiederherstellung durch den Anbieter."
+            "value" : "Verwirft, was QuartzHub zuletzt an dieses Ziel geschickt hat, danach bietet die Vorschau wieder den ganzen Build an. Für alles, was QuartzHub nicht sehen kann, etwa eine von Hand gelöschte Datei auf dem Server oder eine abgebrochene Übertragung."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Discards what QuartzControl last sent to this target. The preview then offers the whole build again. For everything QuartzControl cannot see: a file deleted on the server by hand, an interrupted transfer, a restore by the provider."
+            "value" : "Discards what QuartzHub last sent to this target; the preview then offers the whole build again. For what QuartzHub cannot see, such as a file deleted on the server by hand or an interrupted transfer."
           }
         }
       }

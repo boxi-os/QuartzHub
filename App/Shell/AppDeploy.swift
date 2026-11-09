@@ -18,6 +18,16 @@ enum AppDeploy {
     Connections(profile: AppProfile.own, secrets: secrets)
   }
 
+  /// For looking at the app without the network (DEBUG, `-QHNoUpdateCheck YES`): a document is
+  /// exported without what its pages load from outside, as `qh-check export-document` does.
+  static var offline: Bool {
+    #if DEBUG
+    return UserDefaults.standard.bool(forKey: "QHNoUpdateCheck")
+    #else
+    return false
+    #endif
+  }
+
   static func make(project: String, environment: ToolEnvironment,
                    progress: @escaping @Sendable (String, Int, Int, String?) -> Void = { _, _, _, _ in }) -> Deploy {
     let connections = connections()
@@ -29,7 +39,7 @@ enum AppDeploy {
       "ftp": FTPAdapter(connections: connections, runtime: environment.runtime),
       "git-branch": GitBranchAdapter(environment: environment, token: connections.gitToken),
       "webhook": WebhookAdapter(),
-      "document": DocumentAdapter(runtime: environment.runtime),
+      "document": DocumentAdapter(runtime: environment.runtime, outside: !offline),
     ], progress: progress)
   }
 

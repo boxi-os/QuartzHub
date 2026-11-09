@@ -295,7 +295,7 @@ nach Abhängigkeit:
   Konfiguration, Reiter Website: `ProjectImageBox` und `ContentIndexPage` im Kern (golden
   gemessen; Helfer `content-files` mit dem globby des Projekts), in der App ⌘S und die Frage beim
   Verlassen (`UnsavedGuard`: Seitenleiste, Link, Fenster schließen, Beenden); Reiter
-  Übersetzungen über `LocaleFiles`. Konfiguration fertig. Plugins läuft: Installiert mit der Options-Form, der Marktplatz, die Vorschau neben den Editoren, Navigationen, Zusätzliche Inhalte (dazu der Code-Editor aus 4b, `CodeEditor` mit `CodeColors` im Kern), Mehrsprachigkeit und Formulare fertig; Plugins fertig. Updates, Snapshots und Git-Sync fertig; Stile, Layout und Vorlagen fertig, als Nächstes Veröffentlichen.
+  Übersetzungen über `LocaleFiles`. Konfiguration fertig. Plugins läuft: Installiert mit der Options-Form, der Marktplatz, die Vorschau neben den Editoren, Navigationen, Zusätzliche Inhalte (dazu der Code-Editor aus 4b, `CodeEditor` mit `CodeColors` im Kern), Mehrsprachigkeit und Formulare fertig; Plugins fertig. Updates, Snapshots und Git-Sync fertig; Stile, Layout, Vorlagen und Veröffentlichen fertig, als Nächstes Dokumente.
 - **Grundgerüst:**
   - Fenster, Sidebar-Gruppen (`ProjectLayout.tsx`), Startseite, Einstellungen, Menü mit
     Speichern-Befehl

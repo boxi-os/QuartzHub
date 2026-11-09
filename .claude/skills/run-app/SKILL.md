@@ -24,7 +24,7 @@ Updates; ohne ihn geht jedes Öffnen der Übersicht per `git ls-remote` ins Netz
 QuartzControl-Profil an, solange QuartzHubs eigenes keine `projects.json` hat**; „Übernehmen“ liest
 dann den echten Schlüsselbund-Eintrag. Zum bloßen Ansehen `-QHMigrationSource ""` setzen. Die
 Übernahme-Tasten im Dialog: System Events findet den Button im Sheet nicht über `entire contents`;
-Return löst „Übernehmen“ aus (Standardtaste). Für das Release-Paket: `scripts/package.sh`, dann
+Return löst „Übernehmen“ aus (Standardtaste). Nur Debug: `-QHNoUpdateCheck YES` (kein Netz für Prüfungen, Basis-Template, Dokument-Export) und `-QHMemorySecrets YES` (Zugänge und Token nur im Speicher, nie im Schlüsselbund; beim Beenden weg). Für das Release-Paket: `scripts/package.sh`, dann
 `build/package/QuartzHub.app`.
 
 Beenden: `pkill -x QuartzHub`.
