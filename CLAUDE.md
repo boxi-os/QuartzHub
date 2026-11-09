@@ -96,6 +96,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Dienst (Prozessstarter, …)
 - [`phase-4-oberflaeche.md`](docs/decisions/phase-4-oberflaeche.md) — die Oberfläche: Fenstermodell,
   Seiten, was der UI-Test dabei lernte
+- [`phase-5-gleichstand.md`](docs/decisions/phase-5-gleichstand.md) — was beim Schließen der Lücken gemessen und
+  entschieden wurde
 - [`gleichstand.md`](docs/gleichstand.md) — jede Funktion von QuartzControl 1.3 und ob QuartzHub sie hat
   und an der App gemessen ist (Phase 5)
 

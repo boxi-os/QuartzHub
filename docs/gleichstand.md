@@ -62,7 +62,8 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    eine Entscheidung dagegen steht noch nirgends.
 5. **Band „Zugangsdaten nicht sicher speicherbar“** im Fenster „Projekte“. Eine Ablehnung des
    Schlüsselbunds meldet erst der Zugriff.
-6. **Der Fehler beim Leeren des Theme-Doku-Caches** wird verworfen (`SettingsWindow.swift`).
+6. ~~Der Fehler beim Leeren des Theme-Doku-Caches~~: kein Fall, QuartzControls Dienst scheitert nie
+   (gelesen am 2026-11-09; die Zeile steht jetzt auf `anders`).
 7. **Projektbild und Pfad im Kopf der Seitenleiste.**
 8. **Die Rollposition je Seite** (QuartzControls `useRestoreScroll`).
 9. **Ein Eintrag unter „Handlungsbedarf“ führt auf den richtigen Reiter:** `ProjectAttention.Issue.tab`
@@ -75,9 +76,8 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
 12. **Frames: einen Bereich mit der Tastatur setzen oder verschieben.** Die Entscheidung 4b
     („die Tastatur verschiebt über den Inspektor“) ist auf der Bühne umgesetzt, im Frame-Editor
     nicht.
-13. **Aufräumen beim Start und Abbrechen beim Beenden:** `SiteCopy.sweep`,
-    `FormsRelay.sweepTempDirs` und `ExportBook.cancelAll()` gibt es im Kern, die App ruft keinen
-    davon auf. Daher die liegengebliebenen `quartzhub-export-…`-Kopien im Temp-Ordner.
+13. ~~Aufräumen beim Start und Abbrechen beim Beenden~~: angeschlossen am 2026-11-09
+    (`App/Shell/ServerLifecycle.swift`); das Aufräumen beim Start ist gemessen.
 
 ## Wie weiter
 

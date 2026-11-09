@@ -86,6 +86,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // After the window: the question runs code that signals processes, and nothing of that is
     // worth losing the window over.
     DispatchQueue.main.async { self.askAboutOrphans() }
+    // What a previous run left in the temporary folder after a crash or a quit mid-run: the
+    // export's site copies and its windows' rule folders, and the relay's folders with config.php
+    // and the relay secret in them. Both leave anything younger than an hour, which may be a second
+    // instance's (QuartzControl's `sweepExportTempDirs` and `sweepRelayTempDirs` at the same point).
+    Task.detached(priority: .utility) {
+      SiteCopy.sweep()
+      FormsRelay.sweepTempDirs()
+    }
+  }
+
+  /// QuartzControl's `will-quit`: the relay folders a run still holds go now, not an hour after the
+  /// next start; they carry the secret. A running export is told to stop, so it closes its window.
+  func applicationWillTerminate(_ notification: Notification) {
+    FormsRelay.removeOpenTempDirs()
+    ExportBook.cancelAll()
   }
 
   private func askAboutOrphans() {
