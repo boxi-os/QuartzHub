@@ -680,3 +680,89 @@ Vier Befunde, behoben:
 Hell geprüft (Liste, Inspektor mit „wirkt nicht“). Nicht gemessen: der Sprung der Vorschau auf eine Seite
 mit dem Eintrag und „Eigene Klasse vergeben“; beide gibt es nur auf Reitern, deren Einträge Seiten kennen
 oder keine eigene Klasse haben (Zusätzliche Inhalte, Formulare).
+
+## Plugins ▸ Zusätzliche Inhalte an der App gemessen
+
+Neunter Durchgang, am 2026-11-09, am selben gui-test-Klon in 1200×800, ohne Netz; der Dev-Server lief
+lokal auf Port 8080 und ist danach beendet. `quartz/static` und die Config waren gesichert und sind
+zurückgestellt (`diff -r` und `cmp` gleich). Für die Fehlerfälle wurde die Config vorübergehend
+geändert, für „Konfiguration nicht schreibbar“ der Projektordner des Klons kurz auf 555 gesetzt. Eine
+leere Testdatei (`notiz-neu.md` aus dem Klon) liegt im Papierkorb des Macs.
+
+- **Liste:** „7 Boxen“, „Text · Linke Seitenleiste · Nur Desktop“, „Datei
+  quartz/static/snippets/sidebar-note.md · …“, „Text · Nach dem Inhalt · Nur Mobil“. Ohne `layout`:
+  „Text · nicht platziert“, im Inspektor „nicht platziert“. „Box aktiv“ aus: Abzeichen „aus“ und
+  `enabled: false`; zurück, die Datei ist byte-gleich.
+- **Wo das Plugin abbricht** (installiert 0.4.2, ein Wert, der kein Text ist): in der Liste „Fehler:
+  „html“ ohne Wert · Text · …“, im Inspektor „„html“ hat keinen Wert, und quartz-layout-box bricht daran
+  mit einem Fehler ab. …“, für `byLang.en` „Für en hat „html“ keinen Wert …“. Ein `html` mit eigenem
+  Text in `byLang.en` einer Datei-Box: „Für en gilt eine eigene Angabe unter „Je Sprache und Seite“ …“,
+  und `sidebar-note.en.md` steht danach „von keiner Box benutzt“.
+- **Snippet-Feld:** die Dateiwahl schreibt `file: import-note.html`, die Liste zieht mit. „Neu“ legt
+  `neu-schnipsel.md` an (0 Byte), wählt sie und öffnet den Editor. „Importieren…“ mit einem Namen, den
+  es gibt: „„import-note.html“ gibt es in quartz/static/snippets schon. Ersetzen?“ mit „Vorhandene
+  verwenden“, „Ersetzen“, „Abbrechen“; „Vorhandene verwenden“ wählt die Datei. Getippt zeigt der Editor
+  „Ungespeichert“; „Schließen“ fragt „Änderungen an „neu-schnipsel.md“ verwerfen?“, „Abbrechen“ behält
+  den Text, „Verwerfen“ lässt die Datei bei 0 Byte.
+- **„Bild einfügen…“** mit einem Bild, das es gibt: Frage, „Vorhandene verwenden“ setzt `<img
+  src="{{root}}/static/images/testbild.png" alt="">` ein und speichert. Eine SVG-Datei: „Die SVG-Datei
+  als Code einfügen?“, „Als Code einfügen“ setzt `<svg … class="svg-kreis">` ohne `onload` und
+  `<script>` ein, darunter „2 Stellen aus dem SVG-Code entfernt, …“. Das Kopieren eines neuen Bilds lief
+  über „Bild hinzufügen“ (derselbe Kern-Aufruf), nicht über das Feld.
+- **Dateien:** „Neue Datei“ legt `testnotiz.md` an; mit einem vergebenen Namen kommt dieselbe Frage,
+  „Abbrechen“ lässt alles, wie es war. „Datei hinzufügen“ kopiert `import-note.html` byte-gleich,
+  angesagt „„import-note.html“ hinzugefügt.“ „Bild hinzufügen“ legt `quartz/static/images` an (vorher
+  „Den Ordner gibt es noch nicht; die erste Datei legt ihn an.“), ein zweites Mal kommt die Frage.
+  Umbenennen auf einen vergebenen Namen: „„sidebar-note.md“ gibt es in diesem Ordner schon. …“; sonst
+  „„testnotiz.md“ heißt jetzt „notiz-neu.md“.“ Ein Bild, das eine Box zeigt, fragt vorher („Benutzt von
+  Über diese Website. Diese Verweise stehen im Text, QuartzHub ändert sie nicht. …“), danach steht es
+  „von keiner Box benutzt“. Papierkorb: „Benutzt von Über dieses Handbuch. Dort fehlt die Datei danach.“
+  bei einer benutzten Datei, ohne den Satz bei einer unbenutzten; angesagt „… liegt im Papierkorb.“
+  Mit nicht schreibbarer Config heißt die umbenannte Datei wieder wie vorher: „„import-x.html“ heißt
+  wieder „import-note.html“: … (Meldung oben).“ „renameStuck“ (auch das Zurückbenennen scheitert) ist
+  nicht ausgelöst.
+- **Projektbild:** `icon.png` und `icon-dark.png` mit `{{root}}/static/icon.png`, Schloss und „benutzt von
+  mark“, ohne Umbenennen und Papierkorb.
+- **Ordner:** `images` als Verknüpfung: „Der Ordner liegt hinter einer Verknüpfung. Lesen funktioniert,
+  QuartzHub ändert hier nichts.“, ohne Buttons. Ein `dir: ../aussen`: „QuartzHub liest und schreibt in
+  diesem Ordner nicht.“
+- **„Auf der Bühne zeigen“** nach einem Kaltstart: Layout ▸ Komponenten mit „quartz-layout-box #2“ im
+  Inspektor, der Rückweg führt auf den Reiter mit derselben Box. „Alle Optionen in der Plugin-Liste“:
+  Installiert mit „quartz-layout-box #2“, zurück ebenso.
+- **Vorschau:** „Über diese Website“ und „Über dieses Handbuch“ teilen `layout-box-note`: „„Über diese
+  Website“ teilt seine CSS-Klasse mit anderen Einträgen. Markiert ist jeder davon, auf dieser Seite 2.“
+  „Eigene Klasse vergeben“ schreibt `className: layout-box-note layout-box-ueber-diese-website`, angesagt
+  „… hat jetzt die Klasse layout-box-ueber-diese-website.“, danach „Markiert: „Über diese Website“.“ Auf
+  einer 404-Seite: „„Weiterlesen“ kommt auf dieser Seite nicht vor.“ Der Sprung zu einer Seite mit dem
+  Eintrag kommt hier nicht: Nur Formulare gibt der Vorschau die Seiten eines Eintrags mit (`pages:`).
+
+Sieben Befunde, behoben:
+
+- **Der Hinweis nannte eine Gruppe, die es nicht gibt:** „Je Seite und Sprache“; quartz-layout-box nennt
+  sie „Je Sprache und Seite“. Und die Bild-Frage nannte „Vorhandenes verwenden“ neben dem Button
+  „Vorhandene verwenden“. Beides kam so aus QuartzControl 1.3.
+- **Die Bild-Frage unter der Liste nannte den Ordner doppelt:** „„images/testbild.png“ gibt es in
+  quartz/static/images schon“ (in QuartzControl ebenso). Jetzt „„testbild.png“ gibt es in …“.
+- **Ein Snippet aus dem Feld fehlte unter „Dateien“:** „Neu“ und „Importieren…“ in der Box schreiben die
+  Datei und nennen sie, die Liste darunter las aber nur beim eigenen Tun neu. Jetzt gehören die Dateien
+  der Boxen zu ihrem Schlüssel; nachgemessen mit `fokus-test.md`, „benutzt von Über dieses Handbuch“.
+- **Die Zeile „Neu“ zerfiel im Inspektor:** „Name des neuen Snippets“ stand über drei Zeilen neben dem
+  Feld, das Feld zeigte „z. B. hinw“. Der Fokus kam nie im Feld an; was man tippte, ging in die Suche
+  der Optionen oder ins Leere (auch unter „Dateien“). Jetzt ist das Etikett nur für VoiceOver, wo die
+  Zeile nicht passt, steht der Name über Format und Button, und der Fokus wird einen Takt später
+  gesetzt. Nachgemessen an beiden Stellen.
+- **`quartz/static/images` als Datei** zeigte „Der Vorgang konnte nicht abgeschlossen werden.
+  (QuartzHubCore.NodeFileError-Fehler 1.)“. `NodeFileError` ist jetzt ein `LocalizedError` und liest
+  sich wie in QuartzControl: „Error: ENOTDIR: not a directory, scandir '…/quartz/static/images'“. Wie
+  dort leert der Fehler die ganze Liste der Dateien.
+- **Der leere Zustand „nicht installiert“** war so schmal wie sein Text, wie bei Navigationen.
+- **Der Satz neben „Eigene Klasse vergeben“** brach nach einer Zeile ab („Markiert ist jeder…“): Die
+  Vorschau bekommt hier bei 1200×800 nur ihre 310 pt, die Website hielt 160 davon. Jetzt gibt sie bis
+  120 pt nach. Eine größere Vorschau (360 pt) ließ von der Liste der Boxen eine Zeile; verworfen.
+  Nachgemessen: zwei Zeilen, ganz.
+
+Hell geprüft (Liste, Inspektor einer Datei-Box, Dateien). Nebenbei, nicht behoben: Nach „Eigene Klasse
+vergeben“ sagt die Vorschau vor dem Neubau kurz „„Über diese Website“ kommt auf dieser Seite nicht vor.“
+an. Die Frage vor dem Umbenennen eines benutzten Bilds hat drei Sätze. Die Meldung bei nicht
+schreibbarer Config ist Nodes Text („Error: EACCES: permission denied, open '…'“), wie die schon
+gesammelten Parser-Meldungen.
