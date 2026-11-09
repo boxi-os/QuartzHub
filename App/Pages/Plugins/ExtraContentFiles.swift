@@ -63,7 +63,15 @@ struct ExtraContentFiles: View {
       .padding(.vertical, 10)
       .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .task(id: "\(projectPath)\n\(dirs.joined(separator: "\n"))\n\(reload)") { await load(dirs) }
+    // The files the boxes name are part of the key: "Neu" and "Importieren…" in a box's own field
+    // write a file and name it, and without them the list went on without the new file
+    // (measured 2026-11-09).
+    .task(id: "\(projectPath)\n\(dirs.joined(separator: "\n"))\n\(namedFiles)\n\(reload)") { await load(dirs) }
+  }
+
+  /// Every snippet file a box renders, as folder and name.
+  private var namedFiles: String {
+    boxes.flatMap { LayoutBoxes.snippetRefs($0.plugin.object["options"]).map { "\($0.dir)/\($0.file)" } }.joined(separator: "\n")
   }
 
   private func load(_ dirs: [String]) async {
@@ -168,7 +176,9 @@ struct ExtraContentFiles: View {
       let project = projectPath
       var result = try await Task.detached { try Snippets().importImage(project: project, source: source, name: nil, overwrite: false) }.value
       if case .exists(let path) = result {
-        guard await replaceOrKeep(path, LayoutBoxes.imagesDir) == .confirm else { return }
+        // The name alone: with the folder named after it, the question read „„images/x.png“ gibt
+        // es in quartz/static/images schon“, the folder twice (measured 2026-11-09).
+        guard await replaceOrKeep(String(path.dropFirst("images/".count)), LayoutBoxes.imagesDir) == .confirm else { return }
         result = try await Task.detached { try Snippets().importImage(project: project, source: source, name: nil, overwrite: true) }.value
       }
       if case .written(let path) = result {
