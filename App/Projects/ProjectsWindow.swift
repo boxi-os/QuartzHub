@@ -12,6 +12,7 @@ struct ProjectsWindow: View {
   static let sceneID = "projects"
 
   @State private var model = ProjectsModel.shared
+  @State private var monitor = BuildMonitor.shared
   @State private var selection: String?
   @State private var query = ""
   @State private var failure: String?
@@ -73,6 +74,13 @@ struct ProjectsWindow: View {
         await model.checkEnvironment()
       }
       .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+        Task { await model.reload() }
+      }
+      // A server started or stopped in a project window: QuartzControl read the list again on
+      // every return to its start page, this window stays open beside the project, so the badge
+      // follows the server instead (measured 2026-11-09: without this it came only after QuartzHub
+      // had lost and regained focus).
+      .onChange(of: monitor.settledServers) {
         Task { await model.reload() }
       }
       .onChange(of: model.request, initial: true) { _, request in
