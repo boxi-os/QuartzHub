@@ -1411,3 +1411,25 @@ Vault-Link beim Sync.
   Goldens, nicht behoben, weil QuartzControl nur kritische Fixes bekommt.
 - Gegenproben (4, jede lässt einen Test scheitern; die vierte erst, nachdem das Brett einen
   Seitentyp bekam, den keine Liste kennt).
+
+### Layout: Bühne nach Proportionen und Frame-Editor (`StageGeometry`, `FrameEditing`)
+
+- **`stageGeometry.ts` und `defaultFrame.ts` ganz**, dazu die Hilfen von `FrameBuilder.tsx` auf
+  Modulebene (Namen, Überlappung, Warnungen je Breakpoint, `withPlacement`). Die Spalten werden
+  bei der Bezugsbreite der Ansicht (1456/1000/390 px) in Pixel aufgelöst und als Anteile gezeichnet,
+  Abstände und Innenränder als Prozent der Bühnenbreite; QuartzControls `cqw` ist hier eine Zahl,
+  die die Ansicht mit der Breite malnimmt. Der kleine `calc()`-Leser ist Zeichen für Zeichen
+  übernommen (ein Vorzeichen an der Zahl gehört zu ihr, `+`/`-` nur mit Leerraum davor, `1.` und `.5`).
+- **Was die Komponente selbst tat** (Spanne, Sichtbarkeit, Ablegen, Kanten ziehen, auf einen anderen
+  Breakpoint kopieren, Bereich löschen), steht als reine Funktion auf dem JSON der Datei
+  (`FrameEditing`) und ist von Hand geprüft. Das Ziehen einer Kante bekommt von der Ansicht die
+  nächste Rasterlinie und wächst nur bis zur letzten freien davor, wie dort.
+- **Gemessen** mit `scripts/stage-geometry-golden.mjs`: 94 Längen (47 Werte in zwei Bezügen),
+  28 Spursätze, gui-tests fünf Frames, ein erfundenes mit Überlappung, einem Bereich außerhalb,
+  versteckten Gruppenbereichen und zwei einfachen Bereichen auf einem Slot, und der leere Entwurf;
+  je Breakpoint Bühne, Warnungen, jede Zelle, Überlappungen und `fitsGrid`; Quartz' Frame mit
+  Quartz' Maßen und mit gemessenen, deren Spalten nicht passen. Gleich.
+- **Bewusst anders:** Ein Schlüssel, der im Entwurf auf `undefined` stand und wiederkommt, steht
+  hier am Ende des Objekts statt an seiner alten Stelle (der Entwurf ist JSON, nicht ein
+  JavaScript-Objekt). Die Datei sagt dasselbe, nur die Reihenfolge der Schlüssel kann abweichen.
+- Gegenproben (5, jede lässt einen Test scheitern).
