@@ -6487,13 +6487,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für {{lang}} hat „{{key}}“ keinen Wert, und quartz-layout-box bricht auf diesen Seiten mit einem Fehler ab. Gib unter „Je Seite und Sprache“ einen Text ein oder entferne die Angabe."
+            "value" : "Für {{lang}} hat „{{key}}“ keinen Wert, und quartz-layout-box bricht auf diesen Seiten mit einem Fehler ab. Gib unter „Je Sprache und Seite“ einen Text ein oder entferne die Angabe."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For {{lang}}, “{{key}}” has no value, and quartz-layout-box fails with an error on those pages. Enter a text under “Per page and language” or remove the entry."
+            "value" : "For {{lang}}, “{{key}}” has no value, and quartz-layout-box fails with an error on those pages. Enter a text under “Per language and page” or remove the entry."
           }
         }
       }
@@ -7279,13 +7279,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für {{langs}} gilt eine eigene Angabe unter „Je Seite und Sprache“; sie geht diesem Inhalt vor."
+            "value" : "Für {{langs}} gilt eine eigene Angabe unter „Je Sprache und Seite“; sie geht diesem Inhalt vor."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For {{langs}} an entry of its own under “Per page and language” applies; it comes before this content."
+            "value" : "For {{langs}} an entry of its own under “Per language and page” applies; it comes before this content."
           }
         }
       }
@@ -42834,7 +42834,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ gibt es unter quartz/static schon. Ersetzen?\n\nErsetzen überschreibt die Datei, und jedes Snippet, das sie zeigt, zeigt danach das neue Bild. „Vorhandenes verwenden“ fügt einen Verweis auf die Datei ein, die schon da ist."
+            "value" : "„{{name}}“ gibt es unter quartz/static schon. Ersetzen?\n\nErsetzen überschreibt die Datei, und jedes Snippet, das sie zeigt, zeigt danach das neue Bild. „Vorhandene verwenden“ fügt einen Verweis auf die Datei ein, die schon da ist."
           }
         },
         "en" : {
