@@ -413,7 +413,10 @@ struct StageTab: View {
       }
     }
     .padding(4)
-    .frame(maxWidth: .infinity, minHeight: 40, alignment: .topLeading)
+    // The whole area below its name is the drop target, as QuartzControl's `flex-1`: on the stage a
+    // row is as tall as its tallest area, and a drop into the empty rest of a short column hit
+    // nothing at all (measured 2026-11-10, „graph“ onto the left sidebar below its three chips).
+    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity, alignment: .topLeading)
     .background(RoundedRectangle(cornerRadius: 6).fill(Color.secondary.opacity(0.05)))
     .dropDestination(for: String.self) { items, _ in
       drop(items.first, onto: .area(position: position, group: group, name: areaName), facts)
@@ -477,7 +480,10 @@ struct StageTab: View {
       position = p
       group = g
       insertAt = nil
-      targetName = areaName
+      // QuartzControl's `describeDragId`: an area bound to a group by its own name, a plain one by
+      // its position's word. A frame area's name is an identifier ("left"), and it was said as
+      // "graph eingeschaltet und bei left abgelegt." (measured 2026-11-10).
+      targetName = g == nil ? LayoutWords.position(p) : areaName
     case .tray:
       return false
     }
@@ -565,17 +571,27 @@ struct StageTab: View {
               }
               .fixedSize()
             }
+            // Labelled like the pickers above: outside a Form a TextField shows no title, and the two
+            // fields read "0.75rem" and "10" with nothing saying what they are (measured 2026-11-10).
             FlowLayout(spacing: 12, minItem: 0, stretch: false) {
-              TextField(L10n.t("layoutEditor.groupsPanel.gap"), text: Binding(get: { group["gap"]?.stringValue ?? "" }, set: { update(name, "gap", .string($0)) }),
-                        prompt: Text(verbatim: "0.5rem"))
-                .frame(width: 180)
-              TextField(L10n.t("layoutEditor.groupsPanel.priority"), text: Binding(
-                get: { group["priority"]?.numberValue.map { JSJSON.compact(.number($0)) } ?? "" },
-                set: { raw in
-                  let trimmed = raw.trimmingCharacters(in: .whitespaces)
-                  if trimmed.isEmpty { update(name, "priority", nil) } else if let n = Double(trimmed), n.isFinite { update(name, "priority", .number(n)) }
-                }), prompt: Text(L10n.t("layoutEditor.groupsPanel.priorityPlaceholder")))
-                .frame(width: 180)
+              LabeledContent(L10n.t("layoutEditor.groupsPanel.gap")) {
+                TextField(L10n.t("layoutEditor.groupsPanel.gap"), text: Binding(get: { group["gap"]?.stringValue ?? "" }, set: { update(name, "gap", .string($0)) }),
+                          prompt: Text(verbatim: "0.5rem"))
+                  .labelsHidden()
+                  .frame(width: 140)
+              }
+              .fixedSize()
+              LabeledContent(L10n.t("layoutEditor.groupsPanel.priority")) {
+                TextField(L10n.t("layoutEditor.groupsPanel.priority"), text: Binding(
+                  get: { group["priority"]?.numberValue.map { JSJSON.compact(.number($0)) } ?? "" },
+                  set: { raw in
+                    let trimmed = raw.trimmingCharacters(in: .whitespaces)
+                    if trimmed.isEmpty { update(name, "priority", nil) } else if let n = Double(trimmed), n.isFinite { update(name, "priority", .number(n)) }
+                  }), prompt: Text(L10n.t("layoutEditor.groupsPanel.priorityPlaceholder")))
+                  .labelsHidden()
+                  .frame(width: 140)
+              }
+              .fixedSize()
             }
           }
           .padding(8)

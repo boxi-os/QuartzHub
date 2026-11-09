@@ -25,6 +25,16 @@ enum LayoutWords {
     }
   }
 
+  /// The visibility in the inspector's words; nil for "Immer", the case that needs no mention.
+  /// For VoiceOver, which read the raw value ("desktop-only") before (measured 2026-11-10).
+  static func display(_ value: JSONValue?) -> String? {
+    switch value {
+    case .string("desktop-only")?: L10n.t("layoutEditor.displayDesktopOnly")
+    case .string("mobile-only")?: L10n.t("layoutEditor.displayMobileOnly")
+    default: nil
+    }
+  }
+
   static func condition(_ condition: String) -> String {
     switch condition {
     case "not-index": L10n.t("layoutEditor.inspector.conditionNotIndex")
@@ -131,7 +141,17 @@ struct ComponentChip: View {
     .help(hiddenReason.map { "\(label) (\($0))" } ?? label)
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(hiddenReason.map { "\(label) (\($0))" } ?? label)
-    .accessibilityValue([layout?["display"]?.stringValue, hiddenOnTypes, group].compactMap { $0 }.joined(separator: ", "))
+    // What the marks say, in their words: the raw `display` was read out as "all" and
+    // "desktop-only" (measured 2026-11-10), and the condition and "aus" were not read at all.
+    .accessibilityValue([
+      plugin.enabled ? nil : L10n.t("layoutEditor.componentPill.off"),
+      LayoutWords.display(layout?["display"]),
+      layout?["condition"]?.stringValue.map(LayoutWords.condition),
+      hiddenOnTypes,
+      // Named as a group: after "Ausgeblendet auf: 404-Seite" a bare "custom-8" was heard as one
+      // more page type.
+      group.map { L10n.t("layoutEditor.overview.flexGroup", ["name": $0]) },
+    ].compactMap { $0 }.joined(separator: ", "))
     .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
   }
 
@@ -194,6 +214,6 @@ struct ComponentPill: View {
     .buttonStyle(.plain)
     .help(struckReason ?? label)
     .accessibilityLabel(struckReason.map { "\(label) – \($0)" } ?? label)
-    .accessibilityValue([layout?["display"]?.stringValue, layout?["condition"]?.stringValue.map(LayoutWords.condition)].compactMap { $0 }.joined(separator: ", "))
+    .accessibilityValue([LayoutWords.display(layout?["display"]), layout?["condition"]?.stringValue.map(LayoutWords.condition)].compactMap { $0 }.joined(separator: ", "))
   }
 }

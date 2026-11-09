@@ -82,7 +82,6 @@ struct LayoutPage: View {
           if tab == .frames {
             if model.frameSavedAt != nil, model.frameSavedAt == model.draft {
               Text(L10n.t("layoutEditor.frameBuilder.saved")).foregroundStyle(.green)
-              if model.frameSavedWasEdit { Text(L10n.t("devServer.staleHint")).font(.caption).foregroundStyle(.secondary) }
             } else if model.draftDirty {
               UnsavedBadge().accessibilityIdentifier("layout.unsaved")
             }

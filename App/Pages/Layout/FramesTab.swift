@@ -27,6 +27,9 @@ struct FramesTab: View {
             .accessibilityIdentifier("layout.frames.message")
         }
         head
+        // A brand-new frame needs no restart: the server has never loaded it.
+        DevServerRestartHint(project: model.project,
+                             show: model.frameSavedWasEdit && model.frameSavedAt != nil && model.frameSavedAt == model.draft)
         if let draft = model.draft {
           editor(draft)
         } else {
@@ -618,6 +621,8 @@ struct BreakpointWidthsSection: View {
         }
         if !valid { Text(L10n.t("layoutEditor.breakpoints.invalid")).font(.caption).foregroundStyle(.red) }
         if saved && !changed { Text(L10n.t("layoutEditor.breakpoints.saved")).font(.caption).foregroundStyle(.green) }
+        // The widths rewrite every frame's CSS, which a running server does not reload.
+        DevServerRestartHint(project: model.project, show: saved && !changed && !model.frames.isEmpty)
         if let error { Text(error).font(.caption).foregroundStyle(.red).textSelection(.enabled) }
       }
       .padding(.top, 6)
