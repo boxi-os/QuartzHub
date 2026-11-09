@@ -15989,6 +15989,23 @@
         }
       }
     },
+    "gitSync.branchLabel" : {
+      "comment" : "Git-Sync, Stand des Repositorys: the checked-out branch",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Branch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Branch"
+          }
+        }
+      }
+    },
     "gitSync.changes" : {
       "localizations" : {
         "de" : {
@@ -16025,6 +16042,23 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "gitSync.changesTitle" : {
+      "comment" : "Git-Sync: heading of the list of changed files",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokale Änderungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local changes"
           }
         }
       }
@@ -16069,7 +16103,7 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Die {{count}} lokale Änderung wird committet."
+                  "value" : "Die eine lokale Änderung wird committet."
                 }
               },
               "other" : {
@@ -16087,7 +16121,7 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} local change goes into the commit."
+                  "value" : "The one local change goes into the commit."
                 }
               },
               "other" : {
@@ -16253,6 +16287,23 @@
         }
       }
     },
+    "gitSync.createRepo.output" : {
+      "comment" : "Git-Sync, Repository anlegen: accessibility label of the answer",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antwort von GitHub"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub's answer"
+          }
+        }
+      }
+    },
     "gitSync.createRepo.private" : {
       "localizations" : {
         "de" : {
@@ -16322,13 +16373,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieses Projekt steht gerade auf einem einzelnen Commit statt auf einem Branch („detached HEAD“). Push und Pull haben so kein Ziel. Wechsle mit git checkout auf einen Branch, bevor du synchronisierst."
+            "value" : "Dieses Projekt steht gerade auf einem einzelnen Commit statt auf einem Branch („detached HEAD“), so haben Push und Pull kein Ziel. Wechsle mit git checkout auf einen Branch, bevor du synchronisierst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This project currently sits on a single commit rather than on a branch (“detached HEAD”). Push and pull have no target that way. Check out a branch with git checkout before syncing."
+            "value" : "This project currently sits on a single commit rather than on a branch (“detached HEAD”), so push and pull have no target. Check out a branch with git checkout before syncing."
           }
         }
       }
@@ -16557,6 +16608,23 @@
         }
       }
     },
+    "gitSync.localLabel" : {
+      "comment" : "Git-Sync, Stand des Repositorys: local changes and conflicts",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arbeitsbereich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Working tree"
+          }
+        }
+      }
+    },
     "gitSync.moreChanges" : {
       "localizations" : {
         "de" : {
@@ -16658,13 +16726,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieser Branch hat keine Entsprechung auf dem Server. Es lässt sich deshalb nicht sagen, wie viele Commits fehlen. Der erste Push legt sie an."
+            "value" : "Dieser Branch hat noch keine Entsprechung auf dem Server, deshalb ist unbekannt, wie viele Commits fehlen. Der erste Push legt sie an."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This branch has no counterpart on the server. So there is no way to say how many commits are missing. The first push creates it."
+            "value" : "This branch has no counterpart on the server yet, so how many commits are missing is unknown. The first push creates it."
           }
         }
       }
@@ -16697,6 +16765,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open on GitHub"
+          }
+        }
+      }
+    },
+    "gitSync.output" : {
+      "comment" : "Git-Sync: accessibility label of the run's output",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabe von Git-Sync"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Git-Sync output"
           }
         }
       }
@@ -16786,13 +16871,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git konnte den Stand dieses Projekts nicht lesen. Ob es ein Repository ist, lässt sich damit nicht sagen. Das sagt git:"
+            "value" : "git konnte den Stand dieses Projekts nicht lesen. Ob es ein Repository ist, bleibt damit offen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git could not read the state of this project, so whether it is a repository cannot be told. This is what git says:"
+            "value" : "git could not read the state of this project. Whether it is a repository remains open."
           }
         }
       }
@@ -16809,6 +16894,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Refresh"
+          }
+        }
+      }
+    },
+    "gitSync.remoteStateLabel" : {
+      "comment" : "Git-Sync, Stand des Repositorys: commits ahead or behind the upstream",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgleich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync state"
           }
         }
       }
@@ -16889,6 +16991,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Up to date with the remote"
+          }
+        }
+      }
+    },
+    "gitSync.upstreamLabel" : {
+      "comment" : "Git-Sync, Stand des Repositorys: the branch on the server it follows",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upstream"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upstream"
           }
         }
       }

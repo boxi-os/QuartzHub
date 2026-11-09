@@ -108,7 +108,7 @@ struct UpdatesPage: View {
       }
 
       if let result = model.coreResult {
-        OutcomeTitle(outcome: result)
+        OutcomeTitle(title: result.title, success: result.success)
         if !result.conflicts.isEmpty {
           VStack(alignment: .leading, spacing: 2) {
             Text(L10n.t("updates.core.conflictHeading")).fontWeight(.medium)
@@ -118,7 +118,7 @@ struct UpdatesPage: View {
           }
           .accessibilityElement(children: .combine)
         }
-        RunOutput(outcome: result, label: L10n.t("updates.core.output"), identifier: "updates.coreOutput")
+        RunOutput(text: result.output, label: L10n.t("updates.core.output"), identifier: "updates.coreOutput")
         if let snapshotId = result.snapshotId {
           // After a failed merge the way back to the state before it is the one thing needed.
           Button(L10n.t("updates.core.openSnapshot")) {
@@ -190,8 +190,8 @@ struct UpdatesPage: View {
         checkingLine
       }
       if let result = model.pluginResult {
-        OutcomeTitle(outcome: result)
-        RunOutput(outcome: result, label: L10n.t("updates.plugins.output"), identifier: "updates.pluginOutput")
+        OutcomeTitle(title: result.title, success: result.success)
+        RunOutput(text: result.output, label: L10n.t("updates.plugins.output"), identifier: "updates.pluginOutput")
       }
     } header: {
       SectionHeader(title: L10n.t("updates.plugins.heading"), symbol: ProjectPage.plugins.symbol) {
@@ -255,46 +255,5 @@ struct UpdatesPage: View {
   static func short(_ commit: String?) -> String {
     guard let commit, !commit.isEmpty else { return "—" }
     return String(commit.prefix(7))
-  }
-}
-
-/// QuartzHub's sentence about a run, above the files and the text.
-private struct OutcomeTitle: View {
-  let outcome: UpdatesModel.Outcome
-
-  var body: some View {
-    if let title = outcome.title {
-      Label(title, systemImage: outcome.success ? "checkmark.circle.fill" : "xmark.octagon.fill")
-        .foregroundStyle(outcome.success ? .green : .red)
-    }
-  }
-}
-
-/// git's and npm's text, selectable. Trailing blank lines are left out: the catalog's sentences
-/// end in two line breaks so that git's text stands apart from them.
-private struct RunOutput: View {
-  let outcome: UpdatesModel.Outcome
-  let label: String
-  let identifier: String
-
-  private var text: String {
-    String(outcome.output.reversed().drop { $0.isWhitespace }.reversed())
-  }
-
-  var body: some View {
-    if !text.isEmpty {
-      ScrollView {
-        Text(verbatim: text)
-          .font(.system(.caption, design: .monospaced))
-          .textSelection(.enabled)
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .padding(8)
-      }
-      .frame(maxHeight: 224)
-      .background(RoundedRectangle(cornerRadius: 6).fill(.background.secondary))
-      .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
-      .accessibilityLabel(label)
-      .accessibilityIdentifier(identifier)
-    }
   }
 }

@@ -1024,3 +1024,64 @@ es nicht). Texte: zwei sagten „lässt sich“, „Wähle links“ stimmt mit d
 
 Nicht gemessen: ein Wiederherstellen, das `package.json` zurückholt und dann `npm install` ruft
 (Netz).
+
+### Git-Sync
+
+Vorbild `GitSync.tsx`, Dienste `GitStatus`, `Sync`, `GitHubAPI` und für „Merge abbrechen“
+`CoreUpdate.abort` aus Phase 3; keine neue Logik im Kern. Eine gruppierte Form: Stand des
+Repositorys, das Repository auf GitHub (nur ohne `origin`), der Sync, zuletzt die Liste der
+geänderten Dateien. Die Liste steht unten, weil sie bis zu 500 Zeilen lang wird und den Sync sonst
+aus dem Fenster schöbe; in QuartzControl stand sie in der Statuskarte. „Aktualisieren“ ist in der
+Symbolleiste. Der Inspektor zeigt den Kontext der Seite; auszuwählen gibt es nichts.
+
+- **Das Modell gehört dem Projekt** (`GitSyncModel.shared`), wie auf Updates: Ein Push oder Pull
+  spricht mit einem anderen Rechner. Gemessen: die Seite während eines Pushs verlassen und wieder
+  geöffnet, „Push läuft…“ steht noch da. Das Ergebnis des Laufs bleibt; der Satz nach „Merge
+  abbrechen“ gehört dem Moment und geht mit dem nächsten Schritt (Aktualisieren, Sync, erneutes
+  Öffnen), wie QuartzControls `abortNote`.
+- **Commit und Nachricht je Fenster** (`@SceneStorage("sync.commit")`, `"sync.message"`), wie
+  QuartzControls `useStickyState`.
+- **Der Satz nach „Repository anlegen“ steht beim `origin`**, nicht in der Karte: Die verschwindet
+  mit dem `origin`, das sie gerade gesetzt hat. In QuartzControl ging die Erfolgsmeldung so mit der
+  Karte unter.
+- **Die Ausgabe-Box ist ein gemeinsamer Baustein** (`App/Components/RunOutput.swift`, mit
+  `OutcomeTitle`), aus Updates herausgezogen.
+
+Gemessen an einer APFS-Kopie von gui-test, deren `origin` auf ein lokales Bare-Repository zeigt (kein
+Netz, nichts erreicht GitHub), in Hell, in Dunkel und in 1000×700:
+- Push mit eigener Nachricht: 89 Änderungen in einem Commit mit dieser Nachricht, das Remote auf
+  demselben Commit, danach „Keine lokalen Änderungen“ und „Auf dem Stand des Remotes“;
+- ein Commit am Remote, nach `git fetch` „1 Commit noch nicht geholt“; Pull mit einer lokalen Datei:
+  Merge-Commit, die Zeile vom Remote im README;
+- ein Konflikt (dieselbe Zeile lokal und am Remote): „Fehlgeschlagen.“, „1 Konflikt“, das Band
+  „Ein Merge ist angefangen …“ mit „Merge abbrechen“; der Abbruch räumt das Band ab, sein Satz steht
+  darunter;
+- ohne `origin`: die Karte „Repository auf GitHub anlegen“ ohne Token gesperrt und lesbar, Name
+  vorbelegt, die drei Buttons gesperrt; die Warnung zum Pull-Branch auf einem anderen Branch als
+  `v5`; detached HEAD mit Hinweis und ohne Warnung; Commit aus mit seinem Hinweis;
+- ein unlesbarer Index (`chmod 000 .git/index`): der Lesefehler mit gits Text, die Buttons offen
+  („kann nicht sagen“ ist nicht „nein“);
+- ein Remote mit einem `pre-receive`-Hook, der 8 s wartet: „Push läuft…“ mit gesperrten Buttons;
+  der erste Push eines Branchs ohne Upstream legt ihn an;
+- ein Ordner ohne `.git`: „kein Git-Repository“, die Buttons gesperrt mit Hinweis, und das Öffnen
+  legt kein `.quartz-gui/` an.
+
+Texte: zwei sagten „lässt sich“, zwei Hinweise hatten drei Sätze, und die Einzahl von
+`gitSync.commitHint` hieß „Die 1 lokale Änderung wird committet.“
+
+**Befund, nicht behoben, beide Apps: Ein abgebrochener Merge nach einem Pull löscht den Content-Ordner
+im Arbeitsbereich.** `quartz sync` nimmt den Content-Ordner vor dem Pull weg (`stashContentFolder`)
+und legt ihn danach zurück; `git pull --autostash` hält dazwischen sein Fehlen als Löschung aller
+Content-Dateien fest. Scheitert der Pull an einem Konflikt, bleibt dieser Autostash am Merge hängen,
+und `git merge --abort` spielt ihn ein („Applied autostash.“): Alle Content-Dateien sind von der
+Platte gelöscht, im Repository nur als Änderung. Gemessen an der Kopie (228 Löschungen nach dem
+Abbruch, Zeitstempel von Pull und Abbruch getrennt) und mit reinem git nachgestellt. Ein weiterer
+Sync mit Commit würde die Löschung committen und per Force-Push hochladen (gefolgert, nicht
+gemessen). QuartzControl kennt
+`autostash` nirgends; der Abbruch ist derselbe wie auf Updates.
+
+Wie in QuartzControl holt die Seite nichts vom Server: „Auf dem Stand des Remotes“ heißt „auf dem
+Stand des letzten Fetch“ (gemessen: ein Commit am Remote, die Seite blieb grün bis `git fetch`).
+
+Nicht gemessen: Push mit Token zu GitHub, „Repository anlegen“ (Netz) und ein Content-Ordner als
+Vault-Link beim Sync.
