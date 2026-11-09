@@ -44,6 +44,10 @@ struct LayoutPage: View {
   }
 
   var body: some View {
+    // The selection is read here, in the page's own body: read only inside the inspector, a
+    // selection handed over from the Plugins page on the first visit never reached it, and the
+    // inspector stayed on the summary (measured 2026-11-09, three of three cold starts).
+    let chosen = selected
     PageScaffold(page: .layout) {
       VStack(spacing: 0) {
         // Three tabs and the inspector are wider than the smallest window: there they become a menu.
@@ -98,7 +102,7 @@ struct LayoutPage: View {
         }
       }
     } inspector: {
-      inspector
+      inspector(selected: chosen)
     }
   }
 
@@ -133,7 +137,7 @@ struct LayoutPage: View {
     }
   }
 
-  @ViewBuilder private var inspector: some View {
+  @ViewBuilder private func inspector(selected: String) -> some View {
     if tab == .frames {
       FrameAreaInspector(model: model, areaId: selectedArea, breakpoint: frameBreakpoint, selectedArea: $selectedArea)
         .id(selectedArea)
