@@ -210,7 +210,8 @@ struct FormsRelaySection: View {
       }
       VStack(alignment: .leading, spacing: 4) {
         row(L10n.t("formsEditor.relay.subdir"), hint: L10n.t("formsEditor.relay.subdirHint")) {
-          CommitField(name: L10n.t("formsEditor.relay.subdir"), text: subdir, placeholder: "forms") { raw in
+          CommitField(name: L10n.t("formsEditor.relay.subdir"), text: subdir, placeholder: "forms",
+                      revert: { subdirInvalid = false }) { raw in
             let next = RemotePath.relaySubdir(raw)
             subdirInvalid = next == nil
             if let next { Task { await save(["subdir": .string(next)]) } }
@@ -234,6 +235,7 @@ struct FormsRelaySection: View {
         HStack {
           Text(verbatim: transportUrl.isEmpty ? L10n.t("formsEditor.noUrl") : transportUrl)
             .font(.system(.callout, design: .monospaced)).textSelection(.enabled).fixedSize(horizontal: false, vertical: true)
+            .verbatimLineBreaks()
           Spacer()
           Button { selection = "section:transport" } label: { Label(L10n.t("formsEditor.sections.transport"), systemImage: "paperplane") }
         }
@@ -241,6 +243,7 @@ struct FormsRelaySection: View {
           VStack(alignment: .leading, spacing: 2) {
             Button(L10n.t("formsEditor.relay.useUrl")) { Task { await useUrl(suggestedUrl) } }
             Text(verbatim: suggestedUrl).font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary).textSelection(.enabled)
+              .verbatimLineBreaks()
           }
         }
         Text(L10n.t("formsEditor.relay.urlHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
@@ -278,7 +281,9 @@ struct FormsRelaySection: View {
                     hint: captcha.global.map { L10n.t("formsEditor.relay.captchaSecretHint", ["provider": $0]) } ?? L10n.t("formsEditor.relay.captchaUnused"),
                     isSet: r.secrets.captchaSecret, needed: captcha.global != nil, disabled: !r.secrets.storageAvailable,
                     note: savedNote("captcha", r, L10n.t("formsEditor.relay.secretSetAnnounce"), L10n.t("formsEditor.relay.secretSetPending"))) { value in
-            Task { await saveSecrets(RelaySecretsChange(captchaSecret: .set(value)), said: nil, row: "captcha", r: r) }
+            Task { await saveSecrets(RelaySecretsChange(captchaSecret: .set(value)),
+                                     said: rowSaid(r, L10n.t("formsEditor.relay.secretSetAnnounce"), L10n.t("formsEditor.relay.secretSetPending")),
+                                     row: "captcha", r: r) }
           } remove: {
             pending["captcha"] = nil
             Task { await saveSecrets(RelaySecretsChange(captchaSecret: .remove), said: L10n.t("formsEditor.relay.secretRemovedAnnounce"), row: nil, r: r) }
@@ -291,7 +296,9 @@ struct FormsRelaySection: View {
                     hint: need.map { L10n.t("formsEditor.relay.captchaSecretForHint", ["provider": $0.provider]) } ?? L10n.t("formsEditor.relay.captchaUnused"),
                     isSet: r.secrets.captchaSecrets.contains(id), needed: need != nil, disabled: !r.secrets.storageAvailable,
                     note: savedNote("captcha:\(id)", r, L10n.t("formsEditor.relay.secretSetAnnounce"), L10n.t("formsEditor.relay.secretSetPending"))) { value in
-            Task { await saveSecrets(RelaySecretsChange(captchaSecrets: JSONObject([(id, .string(value))])), said: nil, row: "captcha:\(id)", r: r) }
+            Task { await saveSecrets(RelaySecretsChange(captchaSecrets: JSONObject([(id, .string(value))])),
+                                     said: rowSaid(r, L10n.t("formsEditor.relay.secretSetAnnounce"), L10n.t("formsEditor.relay.secretSetPending")),
+                                     row: "captcha:\(id)", r: r) }
           } remove: {
             pending["captcha:\(id)"] = nil
             Task { await saveSecrets(RelaySecretsChange(captchaSecrets: JSONObject([(id, .null)])), said: L10n.t("formsEditor.relay.secretRemovedAnnounce"), row: nil, r: r) }
@@ -422,7 +429,8 @@ struct FormsRelaySection: View {
     let draft = drafts[name] ?? ""
     return VStack(alignment: .leading, spacing: 4) {
       HStack(spacing: 6) {
-        Text(verbatim: name).font(.system(.body, design: .monospaced))
+        // The name first; the badges wrap. Squeezed, "probeempf" read "probe-empf".
+        Text(verbatim: name).font(.system(.body, design: .monospaced)).verbatimLineBreaks().layoutPriority(1)
         WordBadge(text: set ? L10n.t("formsEditor.relay.addressSet") : L10n.t("formsEditor.relay.addressMissing"))
           .foregroundStyle(set ? .green : .red)
         if !used { WordBadge(text: L10n.t("formsEditor.relay.unusedName")) }
@@ -453,7 +461,10 @@ struct FormsRelaySection: View {
             return
           }
           drafts[name] = ""
-          Task { await saveSecrets(RelaySecretsChange(recipients: JSONObject([(name, .string(draft))])), said: nil, row: "recipient:\(name)", r: r) }
+          Task { await saveSecrets(RelaySecretsChange(recipients: JSONObject([(name, .string(draft))])),
+                                   said: rowSaid(r, L10n.t("formsEditor.relay.addressSetAnnounce", ["name": name]),
+                                                 L10n.t("formsEditor.relay.addressSetPending", ["name": name])),
+                                   row: "recipient:\(name)", r: r) }
         }
         .disabled(!draft.contains("@") || !r.secrets.storageAvailable)
       }
@@ -461,6 +472,13 @@ struct FormsRelaySection: View {
                            L10n.t("formsEditor.relay.addressSetPending", ["name": name]))
       if !note.isEmpty { Text(note).font(.caption).foregroundStyle(.green) }
     }
+  }
+
+  /// The row's note as it will read once saved, said at the save: QuartzControl's note was a
+  /// status line, read out when it appeared; here it was only shown (measured 2026-11-09). A saved
+  /// secret changes config.php, so an uploaded relay is outdated after it (`RelayWords.outdated`).
+  private func rowSaid(_ r: RelayState, _ set: String, _ setPending: String) -> String {
+    r.lastUpload != nil && r.hashProblem == nil ? setPending : set
   }
 
   /// What saving a secret in a row did, until the next upload; asked of the state read after the save.
@@ -511,7 +529,8 @@ struct FormsRelaySection: View {
       try AppDeploy.connections().saveRelaySecrets(model.project.id, change)
       message = nil
       result = nil
-      if let row { pending[row] = (r.lastUpload?["at"]?.stringValue ?? "", r) } else if let said { Announce.post(said) }
+      if let row { pending[row] = (r.lastUpload?["at"]?.stringValue ?? "", r) }
+      if let said { Announce.post(said) }
       state.relayRound += 1
     } catch {
       message = error.message

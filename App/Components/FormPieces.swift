@@ -65,6 +65,14 @@ struct SectionHeader<Badge: View>: View {
   }
 }
 
+extension View {
+  /// A URL, a name or a path breaks by character, never with a hyphen that is not in it: Text
+  /// hyphenates by the interface language, and the relay's address read „quartz-mac.bor-kel.net“,
+  /// a recipient „probe-empf“ (measured 2026-11-09, rendered both ways). „zxx“ is the code for no
+  /// linguistic content.
+  func verbatimLineBreaks() -> some View { typesettingLanguage(.init(identifier: "zxx")) }
+}
+
 struct Note: View {
   let text: String
   init(_ text: String) { self.text = text }

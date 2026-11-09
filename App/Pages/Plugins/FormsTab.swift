@@ -301,6 +301,8 @@ struct FormsTab: View {
       } description: {
         Text(L10n.t("formsEditor.notInstalledText"))
       }
+      // The whole column: at its text's width, the tab picker above moved to the left.
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
   }
 

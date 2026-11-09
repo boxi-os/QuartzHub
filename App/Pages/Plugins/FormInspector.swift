@@ -108,11 +108,17 @@ struct FormInspector: View {
         VStack(alignment: .leading, spacing: 14) { content() }
           .padding(.top, 6)
       } label: {
-        HStack {
-          Label(title, systemImage: symbol).fontWeight(.medium)
-          Spacer()
-          if count > 0 { FormsView.problemBadge(count) }
+        // The whole head folds, as QuartzControl's did: the system's label left only the chevron
+        // to click (measured 2026-11-09).
+        Button { setOpen(part, !isOpen(part)) } label: {
+          HStack {
+            Label(title, systemImage: symbol).fontWeight(.medium)
+            Spacer()
+            if count > 0 { FormsView.problemBadge(count) }
+          }
+          .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
       }
       .accessibilityIdentifier("forms.part.\(part.rawValue)")
     }
@@ -138,12 +144,18 @@ struct FormInspector: View {
     let success = def["success"]?.objectValue ?? JSONObject()
     let mode = success["mode"] == .string("redirect") ? "redirect" : "inline"
     row(L10n.t("formsEditor.afterSending"), hint: nil) {
-      Picker(L10n.t("formsEditor.afterSending"), selection: Binding(get: { mode }, set: { m in Task { await setSuccess(["mode": .string(m)]) } })) {
+      // A menu where the two do not fit side by side: at 282 pt the segments widened the inspector
+      // by 22 pt whenever a form was chosen, and the middle column jumped (measured 2026-11-09 at
+      // 1200×800). Radio buttons inside the inspector's form showed one of the two.
+      let picker = Picker(L10n.t("formsEditor.afterSending"), selection: Binding(get: { mode }, set: { m in Task { await setSuccess(["mode": .string(m)]) } })) {
         Text(L10n.t("formsEditor.successModes.inline")).tag("inline")
         Text(L10n.t("formsEditor.successModes.redirect")).tag("redirect")
       }
-      .pickerStyle(.segmented)
       .labelsHidden()
+      ViewThatFits(in: .horizontal) {
+        picker.pickerStyle(.segmented).fixedSize()
+        picker.pickerStyle(.menu).fixedSize()
+      }
     }
     if mode == "inline" {
       FormTextField(label: L10n.t("formsEditor.successText"), hint: L10n.t("formsEditor.successTextHint"), value: success["text"],
@@ -661,8 +673,10 @@ struct SlugField: View {
     let unknown = !value.isEmpty && !slugs.isEmpty && !slugs.contains(value)
     let matches = slugs.filter { text.isEmpty || $0.localizedCaseInsensitiveContains(text) }
     // An empty suggestion list shows nothing at all, so while typing the line under the field says
-    // what QuartzControl's list said when it came up empty (`emptyText`).
-    let noMatch = focused && !text.isEmpty && !slugs.isEmpty && matches.isEmpty
+    // what QuartzControl's list said when it came up empty (`emptyText`). Only while typing: Return
+    // keeps the focus here, and "Keine passende Seite" then hid that the build will stop
+    // (QuartzControl's hint follows the written value; measured 2026-11-09).
+    let noMatch = focused && text != value && !text.isEmpty && !slugs.isEmpty && matches.isEmpty
     VStack(alignment: .leading, spacing: 4) {
       Text(L10n.t("formsEditor.successSlug"))
       TextField(L10n.t("formsEditor.successSlug"), text: Binding(get: { text }, set: { next in

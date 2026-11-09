@@ -319,6 +319,9 @@ struct CommitField: View {
   var monospaced = false
   /// Text to put in: at the cursor of a multi-line field, otherwise at the end; written at once.
   var insertion: CodeInsertion?
+  /// The written value typed back in: nothing to write, but an error the page showed for the
+  /// text before is no longer true (the relay's subfolder kept "ohne „.“ und „..“" under „forms“).
+  var revert: (() -> Void)?
   let commit: (String) -> Bool
 
   @State private var draft: String?
@@ -401,6 +404,7 @@ struct CommitField: View {
     guard let typed = draft, typed != committed else { return }
     if typed == text {
       draft = nil
+      revert?()
     } else if commit(typed) {
       committed = typed
     }
