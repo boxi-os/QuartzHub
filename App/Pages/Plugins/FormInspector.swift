@@ -666,6 +666,7 @@ struct FormsSectionInspector: View {
   let id: String
   let view: FormsView
   @Bindable var model: PluginsModel
+  let state: FormsState
 
   var body: some View {
     let keys = FormsOptions.sections.first { $0.id == id }?.keys ?? []
@@ -683,7 +684,11 @@ struct FormsSectionInspector: View {
         FormMessages(problems: messages.problems, hints: messages.hints)
       }
       if id == "layout" { layout(view) }
-      if keys.count == 1, let sole = soleSchema(keys[0]) {
+      if id == "keys" {
+        FormsKeysSection(view: view, model: model, state: state)
+      } else if id == "texts" {
+        FormsTextsSection(view: view, model: model, state: state)
+      } else if keys.count == 1, let sole = soleSchema(keys[0]) {
         let key = keys[0]
         OptionsForm(schema: sole, values: options[key]?.objectValue ?? JSONObject(),
                     onChange: { next in Task { await FormsTab.update(model) { current in
@@ -742,6 +747,7 @@ struct FormsSectionInspector: View {
         .labelsHidden()
         Text(L10n.t("formsEditor.layoutFormHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
       }
+      FormsPositionField(view: view, model: model)
     }
   }
 }

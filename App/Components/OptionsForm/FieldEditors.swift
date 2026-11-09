@@ -340,9 +340,12 @@ struct CommitField: View {
     }
     .focused($focused)
     .onChange(of: focused) { _, now in if !now { finish() } }
-    // The page's new value has arrived: the draft has done its job.
-    .onChange(of: text) { _, _ in
-      if !focused { draft = nil }
+    // The page's new value has arrived: the draft has done its job. A draft that still is the
+    // old value goes too, focused or not: Return keeps the focus here (in QuartzControl it blurred
+    // the field), and a value reset from outside ("Plugin-Wortlaut") came back when the field was
+    // left, written from the stale draft.
+    .onChange(of: text) { old, _ in
+      if !focused || draft == old { draft = nil }
       committed = nil
     }
     .onDisappear(perform: finish)

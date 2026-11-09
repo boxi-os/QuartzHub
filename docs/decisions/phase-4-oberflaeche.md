@@ -851,3 +851,34 @@ nehmen“ war die Config byte-gleich:
 Gefunden in der laufenden App: Name, Typ und Abzeichen in einer Zeile kürzten die Namen in der
 Breite des Inspektors auf „Nach…“; der Typ steht jetzt darunter. In drei Spalten waren zwei
 Kacheln von „Feld hinzufügen“ abgeschnitten; es sind jetzt zwei Spalten.
+
+**Oberfläche, Teil 3: Schlüssel, Texte, Position.** Zwei Regeln sind dafür in den Kern gekommen,
+beide gegen QuartzControls eigenen Code gemessen:
+- `FormsOptions.formsUsingKey`, `withoutKey` und `keyNameProblem` aus `FormsKeys.tsx`
+  (`forms-options-golden.mjs`, 15 Fälle, die Namensregel aus der Datei gelesen). Drei Gegenproben
+  schlugen an: eine geleerte Liste bleibt stehen, ein ausgeschaltetes Formular zählt mit, 65
+  Zeichen.
+- `LayoutEntries.place` ist `placeComponent` des Layout-Bretts (`navigations-golden.mjs`, 71 Fälle
+  auf demselben Brett). Drei Gegenproben: die verlassene Position nicht neu nummeriert, die Gruppe
+  ignoriert, ein Eintrag ohne Layout-Block bekommt einen.
+
+Den Bereich „Texte“ füllt der Wortlaut des installierten Plugins (`FormsCLI.texts`); was man
+einträgt, wird ohne Trimmen geschrieben. Bei „Schlüssel“ liest das Plugin jeden Schlüssel selbst.
+Ein eingefügter Schlüssel wird erst nach dieser Prüfung gespeichert, und zwar nur sein Block.
+
+Gemessen an der gui-test-Kopie, Hell und Dunkel:
+- denselben Schlüssel als `zweit` eingefügt: Er wurde geprüft und als `armored` geschrieben, mit
+  Fingerabdruck und Nutzer-ID. Beim Entfernen nennt die Rückfrage `kontakt`. Danach war die Config
+  byte-gleich;
+- `submit` auf „Absenden“ und „Plugin-Wortlaut“: Danach steht wieder `texts: {}`, byte-gleich;
+- Position „Nach dem Inhalt“ → „Fußzeile“: Beide Positionen sind in Zehnern neu nummeriert. Die
+  Config ist danach aus der Sicherung zurückgeholt, weil der Rückweg die Nachbarn anders nummeriert;
+- „Auf der Bühne zeigen“ öffnet Layout.
+
+Nicht gemessen: Schlüssel aus einer Datei (Dateidialog).
+
+Gefunden in der laufenden App: Nach „Plugin-Wortlaut“ kam „Absenden“ zurück, sobald man den
+Bereich verließ. Return lässt in SwiftUI den Fokus im Feld (in QuartzControl nahm es ihn weg), und
+`CommitField` hielt den Entwurf, solange das Feld fokussiert war; beim Verschwinden schrieb es ihn.
+Jetzt fällt ein Entwurf weg, der noch dem alten Wert gleicht, wenn der Wert von außen kommt. Das
+betrifft jedes Textfeld der Options-Form.
