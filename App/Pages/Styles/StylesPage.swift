@@ -17,6 +17,15 @@ struct StylesPage: View {
   @SceneStorage("styles.theme.selected") private var themeSelected: String?
   @SceneStorage("styles.themeCatalog.query") private var themeQuery = ""
   @State private var themeCatalog: ThemeMarketplace.Catalog?
+  @SceneStorage("styles.vars.selected") private var varSelected: String?
+  @SceneStorage("styles.vars.openGroups") private var varOpenGroups = "baseColors"
+  @SceneStorage("styles.allVars.open") private var varAllOpen = false
+  @SceneStorage("styles.allVars.query") private var varQuery = ""
+  @SceneStorage("styles.allVars.onlyChanged") private var varOnlyChanged = false
+  @SceneStorage("styles.allVars.kind") private var varKind = "all"
+  @SceneStorage("styles.allVars.openGroups") private var varOpenBrowseGroups = ""
+  @SceneStorage("styles.vars.darkOpen") private var varDarkOpen = ""
+  @State private var varScroll: String?
   @Environment(\.unsavedGuard) private var unsaved
 
   init(project: ProjectContext) {
@@ -78,10 +87,32 @@ struct StylesPage: View {
         ThemeInspector(id: themeSelected, listing: themeCatalog?.themes.first { $0.id == themeSelected }, model: model,
                        active: active == themeSelected) { id in activateTheme(id) }
           .id(themeSelected)
+      } else if tab == .variables, let varSelected, model.config != nil {
+        VariableInspector(key: varSelected, model: model, darkOpen: VariablesPlace.lines(varDarkOpen).contains(varSelected),
+                          setDarkOpen: { open in
+                            let has = VariablesPlace.lines(varDarkOpen).contains(varSelected)
+                            if open != has { varDarkOpen = VariablesPlace.toggled(varDarkOpen, varSelected) }
+                          }, navigate: navigateToVariable)
+          .id(varSelected)
       } else {
         pageContext
       }
     }
+  }
+
+  private var variablesPlace: VariablesPlace {
+    VariablesPlace(selected: $varSelected, openGroups: $varOpenGroups, allOpen: $varAllOpen, query: $varQuery, onlyChanged: $varOnlyChanged,
+                   kind: $varKind, openBrowseGroups: $varOpenBrowseGroups, darkOpen: $varDarkOpen)
+  }
+
+  /// A chip in the inspector jumps to a variable: select it, open its group, put its name in the
+  /// search, and scroll to its row.
+  private func navigateToVariable(_ key: String) {
+    varSelected = key
+    if let def = CssVariables.definition(key) { varOpenGroups = VariablesPlace.adding(varOpenGroups, def.group) }
+    varAllOpen = true
+    varQuery = key
+    varScroll = key
   }
 
   /// The catalog's "install" from the inspector: the same as the tab's.
@@ -102,7 +133,25 @@ struct StylesPage: View {
     InspectorPageContext(page: .styles) {
       if model.config != nil {
         Section { Text(cascadeLine).foregroundStyle(.secondary) }
+        if tab == .variables { variablesSummary }
       }
+    }
+  }
+
+  /// The Variablen tab with nothing selected: what there is, and the user's own changes to jump to.
+  @ViewBuilder private var variablesSummary: some View {
+    let curated = Set(CssVariables.all.map(\.key))
+    let extra = VariableResolve.allKnownKeys(model.context).filter { !curated.contains($0) }.count
+    let changed = model.overrides.map(\.key).sorted()
+    Section(L10n.t("styles.variables.panelEmptyTitle")) {
+      Note(L10n.t("styles.variables.panelEmptyText"))
+      LabeledContent(L10n.t("styles.variables.summaryMain"), value: String(CssVariables.all.count))
+      LabeledContent(L10n.t("styles.variables.summaryAll"), value: String(extra))
+      LabeledContent(L10n.t("styles.variables.summaryChanged"), value: String(changed.count))
+      ForEach(changed.prefix(24), id: \.self) { key in
+        Button("--\(key)") { navigateToVariable(key) }.buttonStyle(.link).font(.system(.callout, design: .monospaced))
+      }
+      if changed.count > 24 { Note(L10n.t("styles.variables.moreKeys", count: changed.count - 24)) }
     }
   }
 
@@ -142,7 +191,9 @@ struct StylesPage: View {
         case .theme:
           ThemeTab(model: model, notes: AnyView(notes), goTo: { tabID = $0.rawValue }, selection: $themeSelected, query: $themeQuery,
                    catalog: $themeCatalog)
-        case .variables, .customCss:
+        case .variables:
+          VariablesTab(model: model, notes: AnyView(notes), place: variablesPlace, scrollTarget: $varScroll)
+        case .customCss:
           ContentUnavailableView {
             Label(tab.title, systemImage: ProjectPage.styles.symbol)
           } description: {

@@ -167,6 +167,16 @@ final class StylesModel {
     overrides = next
   }
 
+  /// One variable's override in place, a new one at the end, nil takes it out (an object's keys
+  /// in JavaScript).
+  func setOverride(_ key: String, _ value: VariableResolve.Override?) {
+    if let index = overrides.firstIndex(where: { $0.key == key }) {
+      if let value { overrides[index].value = value } else { overrides.remove(at: index) }
+    } else if let value {
+      overrides.append((key, value))
+    }
+  }
+
   func setScssContent(_ content: String) {
     scss?.content = content
   }

@@ -1279,3 +1279,36 @@ Vault-Link beim Sync.
   Dunkelmodus gleich“ nimmt die dunkle Hälfte weg, statt sie zu setzen.
 - Gegenproben (9, jede lässt einen Test scheitern; eine war erst ungefangen und bekam ihren Fall:
   eine Variable ohne Farbe, die in Dunkel anders ist).
+
+### Stile: Variablen
+
+- **Wie dort:** die Hauptvariablen nach den Gruppen des Katalogs (Grundfarben offen, die anderen
+  zu, mit Anzahl und „n geändert“), darunter alle Theme- und Build-Variablen, ohne Suche nach
+  Namensanfang gruppiert (eine Gruppe mit einer einzigen Variablen geht nach „Einzelne
+  Variablen“), mit Suche auf 150 begrenzt, dazu „Nur geänderte“ und der Filter Farben/Andere. Die
+  Zeile: zwei Farbflecken auf dem Seitengrund der Website, Name, Wert, „n abhängig“, Herkunft, und
+  Zurücksetzen bzw. Entfernen einer eigenen Variablen (fragt). Die gewählte Variable steht im
+  Inspektor (in QuartzControl in der rechten Spalte): Wert in beiden Modi, Herkunft und Kette,
+  „Verwendet diese Variablen“ und „Wird verwendet von“ als Sprünge, die Felder, „Im Dunkelmodus
+  abweichend“, Zurücksetzen. Ohne Auswahl zeigt der Inspektor die Zahlen und die eigenen Änderungen
+  zum Anspringen. Wo man war (Auswahl, offene Gruppen, Suche, Filter) hält `@SceneStorage`.
+- **Ein Sprung** wählt die Variable, öffnet ihre Gruppe, setzt die Suche und scrollt zur Zeile.
+  Zwei Dinge aus dem ersten Bau: In einer `Form` sucht `scrollTo` die ID des `ForEach`, nicht die
+  eines `.id`-Modifiers (mit diesem scrollte nichts), und es braucht einen Augenblick, bis die eben
+  geöffnete Gruppe ihre Zeilen hat. `listRowBackground` erreicht Zeilen in einer
+  `DisclosureGroup` nicht; die Hervorhebung liegt deshalb an der Zeile selbst (gesehen).
+- **Die Farben-Frage** wird je Graph einmal gestellt, nicht je Tastendruck, und ohne die eigenen
+  Änderungen außer denen eigener Variablen, wie dort (eine Zeile darf beim Tippen nicht aus dem
+  Filter fallen).
+- **Gemessen** an der gui-test-Kopie, Dunkel, 1400×860:
+  - Ohne Theme: 64 Hauptvariablen, 151 weitere, 67 geänderte; `--secondary` im Inspektor mit
+    „Von dir geändert. Ursprung: Letzter Build“, der Kette und sieben Abhängigen. Der Sprung zu
+    `--link-color` landet dort.
+  - `--dark` hell auf `#222222` geändert und mit ⌘S gespeichert: In `_quartzcontrol.scss` kommt
+    genau eine Regel dazu, `:root:not([saved-theme="dark"]) { --dark: #222222; }` (umgestelltes
+    Projekt, Hell und Dunkel verschieden: „nur hell“).
+  - Mit Theme minimal: 1143 weitere Variablen, die Werte des Themes mit „Community-Theme“, die
+    Präfixgruppen zugeklappt.
+- **Nicht gemessen:** die Suche mit ihrer Grenze von 150 und das Entfernen einer eigenen Variablen
+  in der laufenden App (beides über die Kernfunktionen getestet, nicht geklickt), die Zeit je
+  Tastendruck mit allen Gruppen offen.
