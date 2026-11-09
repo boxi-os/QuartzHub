@@ -177,13 +177,17 @@ struct EditorPreview: View {
       }
       .clipShape(RoundedRectangle(cornerRadius: 6))
       .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
-      .frame(minHeight: 240)
+      .frame(minHeight: 160)
+      // The sentence first, the site takes what is left: with 240 pt for the site, a sentence on
+      // two lines ran out of the pane's 365 pt at 1200×800 and its second line was cut off
+      // (measured 2026-11-09).
       HStack(spacing: 8) {
         if let sentence { Text(sentence).font(.callout).foregroundStyle(.secondary) }
         if let highlight, highlight.matches > 1, let onAssignClass {
           Button(L10n.t("sitePreview.assignClass"), action: onAssignClass)
         }
       }
+      .layoutPriority(1)
     }
   }
 
