@@ -312,22 +312,43 @@ struct NewSnippetRow: View {
   @FocusState private var focused: Bool
 
   var body: some View {
-    HStack(spacing: 6) {
-      TextField(L10n.t("snippets.newName"), text: $name, prompt: Text(L10n.t("snippets.newNamePlaceholder")))
-        .textFieldStyle(.roundedBorder)
-        .focused($focused)
-        .onAppear { focused = true }
-        .frame(maxWidth: 170)
-        .onSubmit(create)
-      Picker(L10n.t("snippets.newFormat"), selection: $fileExtension) {
-        Text(L10n.t("snippets.formatMarkdown")).tag(".md")
-        Text(L10n.t("snippets.formatHtml")).tag(".html")
+    // Side by side where there is room (the files below the list), the name above the rest where
+    // there is not (the inspector, about 270 pt): there all three in a row left the field the width
+    // of "z. B. hinw" (measured 2026-11-09).
+    ViewThatFits(in: .horizontal) {
+      HStack(spacing: 6) {
+        field.frame(minWidth: 140, maxWidth: 170)
+        controls
       }
-      .labelsHidden()
-      .fixedSize()
-      Button(L10n.t("snippets.create"), action: create)
-        .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+      VStack(alignment: .leading, spacing: 6) {
+        field
+        HStack(spacing: 6) { controls }
+      }
     }
+  }
+
+  private var field: some View {
+    // The label is for VoiceOver only: in the inspector's form it stood beside the field, over
+    // three lines.
+    TextField(L10n.t("snippets.newName"), text: $name, prompt: Text(L10n.t("snippets.newNamePlaceholder")))
+      .labelsHidden()
+      .textFieldStyle(.roundedBorder)
+      .focused($focused)
+      // A turn later: set in the same pass as the row appears, the focus did not arrive, and what
+      // was typed next went to the options search or nowhere (measured 2026-11-09).
+      .onAppear { DispatchQueue.main.async { focused = true } }
+      .onSubmit(create)
+  }
+
+  @ViewBuilder private var controls: some View {
+    Picker(L10n.t("snippets.newFormat"), selection: $fileExtension) {
+      Text(L10n.t("snippets.formatMarkdown")).tag(".md")
+      Text(L10n.t("snippets.formatHtml")).tag(".html")
+    }
+    .labelsHidden()
+    .fixedSize()
+    Button(L10n.t("snippets.create"), action: create)
+      .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
   }
 }
 
