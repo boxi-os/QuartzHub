@@ -41,6 +41,23 @@
         }
       }
     },
+    "backups.compareHeading" : {
+      "comment" : "Snapshots, inspector: heading over the files that differ",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergleich mit dem heutigen Stand"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compared with the current state"
+          }
+        }
+      }
+    },
     "backups.comparing" : {
       "localizations" : {
         "de" : {
@@ -94,7 +111,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diesen beiseitegelegten Content-Ordner endgültig löschen ({{size}})?\n\nEs ist die einzige Kopie: In den Snapshots ist er nicht enthalten, und rückgängig machen lässt sich das nicht."
+            "value" : "Diesen beiseitegelegten Content-Ordner endgültig löschen ({{size}})?\n\nEs ist die einzige Kopie: In den Snapshots ist er nicht enthalten, und das kann nicht rückgängig gemacht werden."
           }
         },
         "en" : {
@@ -156,15 +173,39 @@
     "backups.confirmRestoreFiles" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} ausgewählte Datei(en) auf den Stand dieses Snapshots zurücksetzen?\n\nVom aktuellen Stand wird vorher automatisch ein Snapshot angelegt."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} ausgewählte Datei auf den Stand dieses Snapshots zurücksetzen?\n\nVom aktuellen Stand wird vorher automatisch ein Snapshot angelegt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} ausgewählte Dateien auf den Stand dieses Snapshots zurücksetzen?\n\nVom aktuellen Stand wird vorher automatisch ein Snapshot angelegt."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset {{count}} selected file(s) to this snapshot?\n\nA snapshot of the current state is taken first."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Reset {{count}} selected file to this snapshot?\n\nA snapshot of the current state is taken first."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Reset {{count}} selected files to this snapshot?\n\nA snapshot of the current state is taken first."
+                }
+              }
+            }
           }
         }
       }
@@ -238,7 +279,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dein Content-Ordner ist mit einem Vault außerhalb des Projekts verknüpft. Dieser lässt sich nicht mitsichern."
+            "value" : "Dein Content-Ordner ist mit einem Vault außerhalb des Projekts verknüpft. Dieser kann nicht mitgesichert werden."
           }
         },
         "en" : {
@@ -277,6 +318,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Snapshot taken."
+          }
+        }
+      }
+    },
+    "backups.createdAt" : {
+      "comment" : "Snapshots, inspector: when the open snapshot was taken (shown under its name)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angelegt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Created"
+          }
+        }
+      }
+    },
+    "backups.diffLabel" : {
+      "comment" : "Snapshots, diff sheet: accessibility label of the diff text",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterschied zum Snapshot"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changes since the snapshot"
           }
         }
       }
@@ -397,6 +472,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Include the content folder"
+          }
+        }
+      }
+    },
+    "backups.kind" : {
+      "comment" : "Snapshots, inspector: what made the snapshot (Von dir, Vor Kern-Update, …)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anlass"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reason"
           }
         }
       }
@@ -630,13 +722,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Snapshot sichert: Konfiguration, Plugin-Sperrdatei, Layout-Frames, eigene Stylesheets, Übersetzungen und Veröffentlichungsziele. Nicht enthalten sind node_modules, der Build-Ordner und installierte Plugin-Dateien. Diese entstehen beim nächsten Build ohnehin neu."
+            "value" : "Ein Snapshot sichert Konfiguration, Plugin-Sperrdatei, Layout-Frames, eigene Stylesheets, Übersetzungen und Veröffentlichungsziele. node_modules, der Build-Ordner und installierte Plugin-Dateien sind nicht enthalten, sie entstehen beim nächsten Build neu."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A snapshot captures: the configuration, the plugin lockfile, layout frames, your own stylesheets, translations and publish targets. Not included are node_modules, the build folder and installed plugin files. The next build produces those anyway."
+            "value" : "A snapshot captures the configuration, the plugin lockfile, layout frames, your own stylesheets, translations and publish targets. node_modules, the build folder and installed plugin files are not included; the next build produces them anew."
           }
         }
       }
@@ -678,13 +770,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links einen Snapshot: Hier steht dann, welche Dateien sich seitdem geändert haben, und du kannst alles oder einzelne Dateien wiederherstellen."
+            "value" : "Wähle einen Snapshot in der Liste: Hier steht dann, welche Dateien sich seitdem geändert haben, und du kannst alles oder einzelne Dateien wiederherstellen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pick a snapshot on the left: this panel then lists the files that have changed since, and you can restore all of them or a few."
+            "value" : "Pick a snapshot in the list: this panel then shows the files that have changed since, and you can restore all of them or a few."
           }
         }
       }
@@ -813,6 +905,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restored."
+          }
+        }
+      }
+    },
+    "backups.restoring" : {
+      "comment" : "Snapshots, inspector: next to the restore buttons while a restore runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird wiederhergestellt…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restoring…"
+          }
+        }
+      }
+    },
+    "backups.showDiff" : {
+      "comment" : "Snapshots, inspector: icon button next to a changed file, opens its diff",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterschied in {{path}} anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show the changes in {{path}}"
           }
         }
       }

@@ -10,8 +10,10 @@ struct UpdatesPage: View {
   @State private var model: UpdatesModel
   @Environment(\.openPage) private var openPage
   @Environment(\.unsavedGuard) private var unsaved
-  /// Read by the Snapshots page: the snapshot to open there (QuartzControl's `backups.open`).
-  @SceneStorage("backups.open") private var snapshotToOpen = ""
+  /// Read by the Snapshots page: the snapshot to open there (QuartzControl's `backups.open`). The
+  /// same type as there: one key declared as `String` here and `String?` there left the whole
+  /// window blank on opening Snapshots, sidebar included (measured).
+  @SceneStorage("backups.open") private var snapshotToOpen: String?
 
   init(project: ProjectContext) {
     self.project = project

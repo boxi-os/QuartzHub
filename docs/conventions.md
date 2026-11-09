@@ -73,6 +73,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   (`accessibilityIdentifier`) sitzen an einem konkreten Element, nicht an einem `Form`: dessen
   Kennung kommt im Bedienungshilfe-Baum nicht an. Eine Kennung an einem Stack braucht
   `accessibilityElement(children: .contain)`, sonst bekommt jedes Kind sie.
+- **Ein `@SceneStorage`-Schlüssel hat einen Typ**, auch über Seiten hinweg; und kein
+  `fixedSize(vertical:)` an umbrechendem Text außerhalb einer Scrollansicht. Beides ließ das ganze
+  Fenster leer, ohne Meldung (decisions/phase-4-oberflaeche.md, Snapshots).
 - **Was ohne Zutun erscheint, wird angesagt (QC)**, hier über `AccessibilityNotification`.
 - **Ein deaktiviertes Control muss noch lesbar sein; was nicht wirkt, sagt das mit einem Wort,
   nicht nur mit Grau. (QC)**

@@ -97,6 +97,7 @@ struct ProjectWindow: View {
     case .plugins: PluginsPage(project: project)
     case .server: BuildServerPage(project: project)
     case .updates: UpdatesPage(project: project)
+    case .backups: SnapshotsPage(project: project)
     default: PendingPage(page: page)
     }
   }

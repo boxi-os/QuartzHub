@@ -955,3 +955,65 @@ Gefunden in der laufenden App: Die Konfliktliste stand über dem Satz „konnte 
 werden“; jetzt kommt erst der Satz. Die Sätze des Katalogs enden mit zwei Zeilenumbrüchen, die im
 Kasten als leere Zeilen standen; sie werden für die Anzeige weggelassen. Sieben Texte des Kerns, die
 hier erscheinen, sagten „lässt sich“ oder „ließ sich“.
+
+### Snapshots
+
+Vorbild `Backups.tsx`, Dienste `SnapshotStore` und `ContentBackups` aus Phase 3; keine neue Logik
+im Kern. In der Mitte ein neuer Snapshot (Name, „Snapshot anlegen“, „Content-Ordner mitsichern“),
+die Liste und darunter die beiseitegelegten Content-Ordner. Der offene Snapshot steht im Inspektor:
+Vergleich mit dem heutigen Stand, Auswahl einzelner Dateien, „Auch den Projekt-Commit …
+zurücksetzen“, Wiederherstellen, Export, Löschen. Ohne Auswahl fasst der Inspektor den Speicher
+zusammen (Anzahl, neuester, ältester, Content-Ordner).
+
+- **Das Modell gehört dem Projekt** (`SnapshotsModel.shared`), wie auf Updates: Ein Wiederherstellen,
+  das `package.json` zurückholt, ruft `npm install` und kann dauern. Die letzte Meldung gehört
+  dagegen dem Besuch, der sie auslöste, und ist beim nächsten Öffnen weg.
+- **Der Unterschied einer Datei öffnet sich in einem Sheet**, nicht im Inspektor: Der ist für gits
+  Zeilen zu schmal. QuartzControl zeigte ihn im rechten Panel.
+- **Der Vault-Satz nach dem Wiederherstellen erscheint.** Der Kern hängt
+  `main.snapshotVaultUntouched` an gits Text; QuartzControl zeigte bei Erfolg nur „Wiederhergestellt.“
+  und verschluckte ihn. Hier steht er darunter.
+- **Der Projekt-Commit wird beim Öffnen eines Snapshots neu gelesen**, nicht nur beim Öffnen der
+  Seite. Gemessen: ein Commit, nachdem die Seite offen war, und der Schalter fehlte, bis die Seite
+  neu geladen wurde.
+- **Export über `NSSavePanel` als Sheet**; den letzten Ordner merkt sich das Panel selbst
+  (QuartzControls `saveDialogStartDirectory` braucht es nicht).
+- **Die alten Config-Backups werden beim Öffnen übernommen**, wie in QuartzControl
+  (`migrateConfigBackups`). Ohne `.quartz-gui/backups/` schreibt das Öffnen nichts (gelesen, nicht
+  gemessen: die Umbenennung scheitert zuerst, und ohne Store kopiert `withIndex` nichts).
+
+Zwei Fehler, die das ganze Fenster leerten (Seitenleiste, Symbolleiste und Inspektor eingeschlossen,
+der Bedienungshilfe-Baum ohne ein Element, die App ohne Last und ohne Meldung). Eingegrenzt durch
+Halbieren der Seite, je mit Gegenprobe:
+- **Ein `@SceneStorage`-Schlüssel mit zwei Typen.** Updates führte `backups.open` als `String`, diese
+  Seite als `String?`. Schon eine Seite aus nur einem Text blieb leer, auch wenn Updates in diesem
+  Lauf nie offen war. Beide als `String?`: Die Seite zeichnet.
+- **`fixedSize(horizontal: false, vertical: true)` an umbrechendem Text außerhalb einer
+  Scrollansicht.** Der Kopf über der Liste trug es an drei Hinweisen. Ohne es zeichnet die Seite, mit
+  ihm bleibt das Fenster leer. In einer `Form` oder `List` (Updates, Inspektor) schadet es nicht.
+
+Gemessen an einem Wegwerf-Projekt (Git, echter Content-Ordner, zwei alte Config-Backups, zwei
+beiseitegelegte Content-Ordner, einer davon als Link auf einen Vault), in Hell, in Dunkel und in
+1000×700:
+- die Übernahme: zwei Config-Backups derselben Woche, einer bleibt („Altes Config-Backup“), wie es
+  QuartzControls Ausdünnung will;
+- ein Snapshot mit Namen; der Vergleich nach einer geänderten, einer gelöschten und einer neuen Datei
+  mit Commit (drei Dateien, richtiger Status, Unterschied nur bei der geänderten);
+- „Auswahl wiederherstellen“ mit einer Datei (Frage im Singular, nur README.md zurück, vorher ein
+  Snapshot „Vor Wiederherstellung“); „Abbrechen“ ändert nichts;
+- „Alles wiederherstellen“ mit dem Projekt-Commit: HEAD zurück auf den aufgezeichneten Commit,
+  die neue Datei weg, die gelöschte wieder da, Arbeitsbereich sauber;
+- der Link von Updates: Ein Kern-Update ohne Netz legt einen Snapshot an und scheitert am Fetch, der
+  Link öffnet genau diesen Snapshot;
+- Export als ZIP über das Sheet, Löschen eines Snapshots aus dem Inspektor;
+- den Link auf den Vault wieder eingesetzt (der bisherige Ordner geht beiseite), der Schalter aus,
+  gesperrt und lesbar, der Vault-Hinweis im Vergleich; „Alles wiederherstellen“ lässt den Vault
+  unberührt und sagt es; einen beiseitegelegten Ordner gelöscht (die Frage nennt die Größe).
+
+Gefunden in der laufenden App außerdem: die zwei Wiederherstellen-Buttons nebeneinander waren im
+Inspektor abgeschnitten, jetzt untereinander; ein falscher SF-Symbolname (`folder.badge.clock`, gibt
+es nicht). Texte: zwei sagten „lässt sich“, „Wähle links“ stimmt mit dem Inspektor nicht mehr,
+„Datei(en)“ ist jetzt ein Plural, und der Hinweis unter „Neuer Snapshot“ hatte drei Sätze.
+
+Nicht gemessen: ein Wiederherstellen, das `package.json` zurückholt und dann `npm install` ruft
+(Netz).
