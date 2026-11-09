@@ -1210,3 +1210,20 @@ Vault-Link beim Sync.
   QuartzControls `createStyleFileNow` und `StyleFiles.create` schreiben erst die Datei und lesen
   dann die Reihenfolge, in der die verwaiste Zeile damit wieder gilt. Ob Sass das zweimalige
   `@use` derselben Datei annimmt, ist nicht gemessen.
+
+### Stile: Style Settings schreiben und lesen (`StyleSettingsValues`)
+
+- **Ein Port von `styleSettings.ts`** mit der Gruppierung aus `StyleSettingsForm.tsx`: der Schlüssel
+  `<blockId>@@<id>` mit `@@light`/`@@dark`, die Paare, die eine gewählte Farbe ergibt (drei für
+  `hsl-split`, beide Modi für eine Theme-Farbe ohne Modus), alle Schlüssel eines Felds für
+  „Zurücksetzen“, das Zurücklesen in den Farbwähler (mit dem Vorgabewert des Themes, wenn nichts
+  gespeichert ist), ein Patch auf `styleSettings` (leer heißt entfernen), die brauchbaren Felder,
+  die Suche und die Gruppen nach den Überschriften des Themes.
+- **Gemessen gegen QuartzControls Code:** `scripts/style-settings-golden.mjs` lädt `styleSettings.ts`
+  und `buildGroups` aus dem Formular (React und die UI-Bausteine durch Platzhalter ersetzt). Die
+  Schemas: Ultra Lobster (176 Felder, die Kopie in QuartzControls Profil, `theme-docs/`, also die
+  Doku eines veröffentlichten Themes), Tokyo Night aus `Fixtures/themes` und erfundene Felder jeder
+  Art und jedes Formats. 209 Felder mit Schlüsseln, je Farbe acht Hex-Werte in drei Modi, das
+  Zurücklesen aus drei Wertesätzen (gültig, schief, leer), 15 Gruppierungen mit Suche, 240 Fälle
+  `hslToHex`. Alles gleich.
+- Gegenproben (16, jede lässt einen Test scheitern).
