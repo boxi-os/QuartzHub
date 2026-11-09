@@ -19,6 +19,12 @@ struct PreviewHighlight: Equatable {
   }
 }
 
+/// A page the editor sends the preview to ("In der Vorschau zeigen"); a new `nonce` goes again.
+struct PreviewGoTo: Equatable {
+  var page: String
+  var nonce = UUID()
+}
+
 /// The project's real site beside a plugin editor (QuartzControl's `components/SitePreview.tsx`):
 /// the dev server's page, rendered at a real device width and scaled into the column, with the
 /// selected component marked by QuartzControl's own script (`PreviewScript`).
@@ -31,6 +37,7 @@ struct EditorPreview: View {
   let hint: String?
   let highlight: PreviewHighlight?
   var onAssignClass: (() -> Void)?
+  var goTo: PreviewGoTo?
 
   @SceneStorage private var page: String
   @SceneStorage private var modeID: String
@@ -48,11 +55,13 @@ struct EditorPreview: View {
   static let desktopWidth = 1280.0
 
   /// `prefix`: one per editor, for the remembered page, width and zoom.
-  init(project: ProjectContext, prefix: String, hint: String? = nil, highlight: PreviewHighlight?, onAssignClass: (() -> Void)? = nil) {
+  init(project: ProjectContext, prefix: String, hint: String? = nil, highlight: PreviewHighlight?, onAssignClass: (() -> Void)? = nil,
+       goTo: PreviewGoTo? = nil) {
     self.project = project
     self.hint = hint
     self.highlight = highlight
     self.onAssignClass = onAssignClass
+    self.goTo = goTo
     _page = SceneStorage(wrappedValue: "", "\(prefix).previewPage")
     _modeID = SceneStorage(wrappedValue: PreviewWidth.Mode.desktop.rawValue, "\(prefix).previewMode")
     _zoom = SceneStorage(wrappedValue: false, "\(prefix).previewZoom")
@@ -103,6 +112,13 @@ struct EditorPreview: View {
       if selector != nil { hadSelection = true } else if hadSelection { decidedFor = nil }
     }
     .onChange(of: current) { _, report in decide(report) }
+    // A page asked for is the page: the jump to a page with the entry does not undo it.
+    .onChange(of: goTo) { _, target in
+      guard let target else { return }
+      page = target.page
+      draft = target.page
+      decidedFor = highlight?.selector
+    }
     .onChange(of: sentence) { _, text in if let text { Announce.post(text) } }
   }
 

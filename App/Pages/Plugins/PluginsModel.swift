@@ -196,7 +196,12 @@ final class PluginsModel {
 
   /// The visible half is a word beside the name; the spoken half names the entry, because
   /// "Gespeichert." alone says nothing about which one.
-  private func flagSaved(_ index: Int) {
+  /// Waits for the queued writes, for a reader of the file (the plugin's own check).
+  func waitForWrites() async {
+    await writes?.value
+  }
+
+  func flagSaved(_ index: Int) {
     savedIndex = index
     savedTimer?.cancel()
     savedTimer = Task {

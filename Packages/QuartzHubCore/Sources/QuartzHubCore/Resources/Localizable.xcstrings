@@ -8263,13 +8263,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eine Seite bindet das Formular mit einer dieser Zeilen ein. QuartzControl schreibt nichts in deine Seiten."
+            "value" : "Eine Seite bindet das Formular mit einer dieser Zeilen ein. QuartzHub schreibt nichts in deine Seiten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A page embeds the form with one of these lines. QuartzControl writes nothing into your pages."
+            "value" : "A page embeds the form with one of these lines. QuartzHub writes nothing into your pages."
           }
         }
       }
@@ -11071,13 +11071,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links ein Formular oder eine Einstellung."
+            "value" : "Wähle ein Formular oder eine Einstellung."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose a form or a setting on the left."
+            "value" : "Choose a form or a setting."
           }
         }
       }

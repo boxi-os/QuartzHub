@@ -48,6 +48,9 @@ struct PluginsPage: View {
   @SceneStorage("extraContent.selected") private var boxSelected: Int?
   /// `lang:<code>` or `section:<id>`.
   @SceneStorage("multilanguage.selected") private var languageSelected: String?
+  /// `form:<id>` or `section:<id>`.
+  @SceneStorage("forms.selected") private var formSelected: String?
+  @State private var forms = FormsState()
   /// quartz-multilanguage's schema: its groups are the rows of the tab and the panels of the inspector.
   @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
@@ -107,18 +110,18 @@ struct PluginsPage: View {
             let environment = await AppServices.current()
             multilanguageSchema = await PluginSchemaReader.shared.optionSchema(project: project.path, source: source, runtime: environment.runtime)
           }
+        case .forms:
+          FormsTab(model: model, state: forms, selection: $formSelected) {
+            if let entry = FormsOptions.entries(model.config?.plugins ?? []).first { showAllOptions(entry.plugin, index: entry.index) }
+          }
+          .accessibilityElement(children: .contain)
+          .accessibilityIdentifier("page.plugins.forms")
         case .marketplace:
           MarketplaceTab(model: marketplace, selection: $marketplaceSelected)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins.marketplace")
             // Asked when the tab is first shown, not with the page: the catalog is a GitHub request.
             .task { if marketplace.result == nil { await marketplace.load() } }
-        default:
-          ContentUnavailableView {
-            Label(tab.title, systemImage: ProjectPage.plugins.symbol)
-          } description: {
-            Text(L10n.t("shell.page.pending"))
-          }
         }
       }
       .task {
@@ -163,6 +166,17 @@ struct PluginsPage: View {
         } else {
           InspectorPageContext(page: .plugins) { MultilanguageOverview(view: view) }
         }
+      } else if tab == .forms, let entry = FormsOptions.entries(model.config?.plugins ?? []).first, let formSelected {
+        let view = FormsView(entry: entry, state: forms)
+        if formSelected.hasPrefix("form:"), let form = view.forms.first(where: { "form:\($0.id)" == formSelected }) {
+          FormInspector(id: form.id, def: form.def, view: view, model: model, state: forms, selection: $formSelected)
+            .id(formSelected)
+        } else if formSelected.hasPrefix("section:"), let section = view.sections.first(where: { "section:\($0.id)" == formSelected }) {
+          FormsSectionInspector(id: section.id, view: view, model: model)
+            .id(formSelected)
+        } else {
+          InspectorPageContext(page: .plugins) { FormsOverview() }
+        }
       } else if tab == .marketplace, let marketplaceSelected,
                 let plugin = marketplace.result?.plugins.first(where: { $0.fullName == marketplaceSelected }) {
         MarketplaceInspector(plugin: plugin, model: marketplace)
@@ -183,6 +197,7 @@ struct PluginsPage: View {
           if tab == .languages, let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first {
             MultilanguageOverview(view: MultilanguageView(entry: entry, schema: multilanguageSchema?.schema))
           }
+          if tab == .forms { FormsOverview() }
         }
       }
     }

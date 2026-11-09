@@ -792,3 +792,36 @@ ohne Sortieren, die Filter ohne ihren Schalter und der Helfer ohne die Datumsreg
 
 Abweichung: QuartzControl zeigte bei einem Scan, der scheitert, die Sätze von „Startseite
 anlegen“ („… deshalb ist keine Startseite angelegt“). Der Scan hat eigene Sätze.
+
+**Oberfläche, Teil 1: Liste und Formular.** Oben stehen der Eintrag mit „Eingeschaltet“ und
+„Alle Optionen“, das Urteil von quartz-forms (`FormsCLI.check`, 600 ms nach dem letzten Schreiben,
+nachdem die Warteschlange leer ist) und die Warnung, wenn eine Seite ein Formular nennt, das es
+nicht gibt. Die Liste hat zwei Abschnitte, die Formulare und die Einstellungen für alle. Darunter
+steht die Vorschau; sie markiert `form.quartz-form[data-form="<id>"]` und geht über „Zeigen“
+(`PreviewGoTo`, neu in `EditorPreview`) auf eine Seite, die das Formular einbindet. Im Inspektor
+stehen das Formular in Teilen zum Aufklappen (welche offen sind, gilt für alle Formulare je
+Fenster) oder ein Bereich. Jedes Schreiben geht gegen den neuesten Stand des Formulars; ein Wert,
+den die Vorlage schon gibt, wird nicht geschrieben. Der Feld-Editor, die eigenen Bereiche
+Schlüssel, Texte und Layout-Position und das Relay folgen; bis dahin zeigt „Felder“ den
+allgemeinen Listen-Editor, und die Zeile „Relay“ fehlt.
+
+Gemessen an der gui-test-Kopie, Hell und Dunkel; nach jedem Hin und Zurück war die Config
+byte-gleich:
+- Titel setzen und leeren;
+- `kontakt` → `kontakt-neu`: Die Rückfrage nennt `kontakt.md`. „Abbrechen“ schreibt nichts,
+  „Kennung ändern“ schreibt eine Zeile, und die Warnung über die unbekannte Kennung erscheint.
+  Zurück fragt nicht, weil keine Seite `kontakt-neu` nennt;
+- Neues Formular mit „Feedback“: quartz-forms meldet „recipient: das Relay braucht den Namen des
+  Empfängers“ an Zeile und Teil. Duplizieren und Entfernen (die Rückfrage sagt „Keine Seite bindet
+  es ein.“);
+- „Anonym“ ein (dann steht „wirkt nicht“ bei „Seite mitschicken“) und aus;
+  `showFingerprint: false` landet unter `encryption`;
+- „Kopieren“ beim Codeblock legt die drei Zeilen in die Zwischenablage.
+
+Gefunden in der laufenden App:
+- Die Kennung im Hinzufügen-Popover folgte der Vorlage nicht: Das Feld schreibt beim Fokussieren
+  seinen Wert zurück, und das zählte als getippt. Jetzt zählt nur ein geänderter Text.
+- Der Hinweis darunter war bei „Ziffern…“ abgeschnitten: Das Popover hängt am Kopf eines
+  Listenabschnitts und erbt dessen eine Zeile. `.lineLimit(nil)` am Popover behebt das.
+- Ein abgebrochenes Umbenennen ließ die neue Kennung im Feld stehen.
+- Das rote Problem-Abzeichen war auf einer ausgewählten Zeile kaum lesbar; jetzt ist es gefüllt.
