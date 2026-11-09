@@ -181,5 +181,11 @@ final class ServerDiscoveryModel {
       : L10n.t("buildServer.discovery.stopFailed", ["port": String(server.port)]))
     stopping = nil
     await scan(ports: ports)
+    // The signal is sent, not waited for: the scan right after it found the dying child still
+    // holding the port and listed it as "antwortet nicht" until the next scan (measured 2026-11-09).
+    // One more once it has gone, as for a server of this app (`settledServers`).
+    guard result.stopped else { return }
+    try? await Task.sleep(for: .seconds(1))
+    await scan(ports: ports)
   }
 }
