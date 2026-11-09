@@ -60,9 +60,10 @@ struct LocalizationTab: View {
         Picker(L10n.t("siteSettings.locale"), selection: $model.code) {
           ForEach(locales, id: \.self) { Text(verbatim: $0).tag($0) }
         }
+        // Named by its hidden title: an added label made VoiceOver read "Sprache der Website,
+        // Sprache der Website" (measured 2026-11-09).
         .labelsHidden()
         .fixedSize()
-        .accessibilityLabel(L10n.t("siteSettings.locale"))
         TextField(L10n.t("localization.searchPlaceholder"), text: $model.query, prompt: Text(L10n.t("localization.searchPlaceholder")))
           .labelsHidden()
           .textFieldStyle(.roundedBorder)
