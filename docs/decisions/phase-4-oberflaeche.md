@@ -1085,3 +1085,41 @@ Stand des letzten Fetch“ (gemessen: ein Commit am Remote, die Seite blieb grü
 
 Nicht gemessen: Push mit Token zu GitHub, „Repository anlegen“ (Netz) und ein Content-Ordner als
 Vault-Link beim Sync.
+
+### Stile: Farben ohne Browser (`CssColor`)
+
+- **Was QuartzControl den Browser fragte, fragt QuartzHub `CssColor`.** Die Stile-Seite las jede
+  Farbe über `fillStyle` eines Canvas (`probeColor` in `variableGraph.ts`): ob ein Wert eine Farbe
+  ist, welches Hex der Farbwähler bekommt, welches Alpha dazu. `CssColor` ist ein Leser für CSS
+  Color 4 in Swift: Hex, Namen, `rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`,
+  `color()` in allen Räumen, `color-mix()` mit Farbton-Methoden und `calc()` in den Kanälen (die
+  Themes schreiben `hsl(var(--h), calc(var(--s) * 1.01), …)`, und nach dem Einsetzen bleibt
+  `calc()` stehen).
+- **Gemessen gegen Chrome:** `scripts/css-color-golden.mjs` lässt QuartzControls `variableGraph.ts`
+  in Chrome laufen (playwright-core aus QuartzControl) und hält je Wert fest, was Canvas daraus
+  macht, `cssColorToHexAlpha`, `isDisplayableColor` und das Pixel über Weiß und über Schwarz. Die
+  Werte sind jeder helle und dunkle Wert der Variablen-Graphen aus `Fixtures/variable-graph`
+  (gui-test, mit dem Theme minimal, minimal allein, die erfundenen Ränder), jeder davon auch so,
+  wie QuartzControl ihn auflöst, die Paletten von gui-test und Example und erfundene Ränder: 1044
+  Werte, 391 davon Farben. Alles gleich, die Pixel auf ±2.
+- **Was Chrome anders rechnet, als man denkt:**
+  - `rgb()`, Hex und Namen hält Chrome in 8 Bit je Kanal, Alpha auch: `rgba(255, 0, 0, 0.5)` mit
+    Blau gemischt hat das Alpha 0,75098 (die Mitte von 128/255 und 1). `hsl()` und `hwb()` dagegen
+    mischt es ungerundet: `hsl(0, 0%, 15%)` in `color-mix()` hatte die Helligkeit von 15 %, nicht
+    die von 38/255.
+  - `hsl()` und `hwb()` rechnet Chrome in 32-Bit-Float nach der Formel aus CSS Color 4:
+    `hsl(254, 75%, 50%)` ist dort #4c20df, in Double #4d20df (0,2999998 gegen 0,3, mal 255).
+  - Das Alpha in `rgba()` schreibt Chrome mit zwei Nachkommastellen, wenn die dieselben 8 Bit
+    ergeben, sonst mit drei (`#fff8` ist 0,533). Eine Mischung in sRGB, `hsl` oder `hwb` kommt als
+    `color(srgb r g b / a)` mit sechs gültigen Stellen zurück, in Exponentenform als `1.00000e-7`.
+  - Ohne `in` mischt `color-mix()` in oklab. Ein Kommentar vor dem Wert macht ihn ungültig, einer
+    zwischen den Argumenten nicht.
+- **Übernommen, nicht behoben:** QuartzControl setzte das Canvas zuerst auf `#010203` und las eine
+  unveränderte Antwort als „keine Farbe“. `rgb(1, 2, 3)` ist dort also keine Farbe, und hier auch.
+- **Nicht gelesen**, obwohl Chrome sie liest: Systemfarben (`Canvas`, `ButtonText`; ihr Wert ist
+  der der Plattform) und relative Farben (`rgb(from red r g b)`). Kein Theme im Golden benutzt sie;
+  der Test nennt sie einzeln.
+- **Der Farbfleck** malt mit `CssColor.srgb`: die Farbe in sRGB, außerhalb des Raums ungekappt, damit
+  ein Display-P3-Bildschirm zeigt, was die Website zeigt. Der Test kappt wie Canvas und vergleicht.
+- Gegenproben (18, jede lässt einen Test scheitern; vier waren erst ungefangen und bekamen ihren
+  Fall: Farbton-Methode „longer“, „increasing“, „decreasing“, Alpha über 1 in `oklch()`).
