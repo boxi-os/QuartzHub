@@ -37,13 +37,16 @@ struct BuildServerPage: View {
 
   var body: some View {
     PageScaffold(page: .server) {
+      // The clock of the drawing, not of the last tick: drawn between two ticks, a folder written
+      // a moment ago was newer than the tick and read "in 13 Sekunden" (measured 2026-11-09).
       TimelineView(.periodic(from: .now, by: 30)) { context in
+        let now = max(context.date, Date())
         Form {
-          serverSection(now: context.date)
+          serverSection(now: now)
           DiscoveredServersSection(ports: [liveOptions.port, liveOptions.wsPort]) {
             Task { await BuildMonitor.shared.refresh(project.id, from: AppServices.shared.builds) }
           }
-          buildSection(now: context.date)
+          buildSection(now: now)
         }
         .formStyle(.grouped)
       }

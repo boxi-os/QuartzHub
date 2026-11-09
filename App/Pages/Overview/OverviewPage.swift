@@ -32,8 +32,10 @@ struct OverviewPage: View {
     PageScaffold(page: .overview) {
       // Relative ages ("vor 3 Minuten") are worked out when drawn; without a nudge they stay what
       // they were when something else last changed (QuartzControl measured "vor 1 Sekunde" 55 s on).
+      // The clock of the drawing, not of the last tick: something newer than the tick read "in 13
+      // Sekunden" (measured on Vorschau & Build, 2026-11-09).
       TimelineView(.periodic(from: .now, by: 30)) { context in
-        form(now: context.date)
+        form(now: max(context.date, Date()))
       }
       .toolbar { actions }
       .task { await model.load() }
