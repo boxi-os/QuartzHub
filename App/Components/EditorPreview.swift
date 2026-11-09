@@ -49,6 +49,7 @@ struct EditorPreview: View {
   @State private var reportFrame = ""
   @State private var starting = false
   @State private var hadSelection = false
+  @State private var sentenceRound = 0
   @State private var breakpoints = (tablet: FrameBreakpointWidths.defaults.tablet, mobile: FrameBreakpointWidths.defaults.mobile)
   @FocusState private var pageFocused: Bool
 
@@ -119,7 +120,19 @@ struct EditorPreview: View {
       draft = target.page
       decidedFor = highlight?.selector
     }
-    .onChange(of: sentence) { _, text in if let text { Announce.post(text) } }
+    // Said once it has held for a moment: a page's first report can come before its scripts have
+    // built what is marked (quartz-forms renders its forms on the page), and the jump to a page
+    // with a form was followed by „… kommt auf dieser Seite nicht vor.“, then „Markiert“
+    // (measured 2026-11-09).
+    .onChange(of: sentence) { _, text in
+      sentenceRound += 1
+      let round = sentenceRound
+      guard let text else { return }
+      Task { @MainActor in
+        try? await Task.sleep(for: .milliseconds(800))
+        if round == sentenceRound { Announce.post(text) }
+      }
+    }
   }
 
   @ViewBuilder private var content: some View {
@@ -141,6 +154,9 @@ struct EditorPreview: View {
         Text(verbatim: "\(base)/").foregroundStyle(.secondary).lineLimit(1)
         TextField(L10n.t("sitePreview.page"), text: $draft, prompt: Text(L10n.t("sitePreview.pagePlaceholder")))
           .textFieldStyle(.roundedBorder)
+          // With a prompt the title did not reach the accessibility tree: the field had only its
+          // placeholder, and filled it was read as "kontakt, Textfeld" (measured 2026-11-09).
+          .accessibilityLabel(L10n.t("sitePreview.page"))
           .focused($pageFocused)
           .onSubmit(commitPage)
           .onChange(of: pageFocused) { _, now in if !now { commitPage() } }
