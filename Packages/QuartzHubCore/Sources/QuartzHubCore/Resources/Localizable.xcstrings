@@ -34209,13 +34209,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Eine Angabe im Schema dieses Plugins versteht QuartzControl nicht"
+                  "value" : "Eine Angabe im Schema dieses Plugins versteht QuartzHub nicht"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} Angaben im Schema dieses Plugins versteht QuartzControl nicht"
+                  "value" : "{{count}} Angaben im Schema dieses Plugins versteht QuartzHub nicht"
                 }
               }
             }
@@ -34227,13 +34227,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "One statement in this plugin’s schema is not understood by QuartzControl"
+                  "value" : "One statement in this plugin’s schema is not understood by QuartzHub"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} statements in this plugin’s schema are not understood by QuartzControl"
+                  "value" : "{{count}} statements in this plugin’s schema are not understood by QuartzHub"
                 }
               }
             }
