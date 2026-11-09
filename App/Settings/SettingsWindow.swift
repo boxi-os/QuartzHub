@@ -187,6 +187,10 @@ private struct RuntimeSettings: View {
           model.update { $0.nodeRuntime = mode }
           AppServices.shared.reloadEnvironment()
           Task { await probe() }
+          // The Projects window's "Werkzeuge bereit · in QuartzHub: node …" too: QuartzControl's
+          // start page asked again on the way back from its settings, this window stays open and
+          // kept the old answer (measured 2026-11-09).
+          Task { await ProjectsModel.shared.checkEnvironment() }
         })) {
           Text(L10n.t("settings.runtime.embedded")).tag(SettingsFile.NodeRuntime.embedded)
           Text(L10n.t("settings.runtime.system")).tag(SettingsFile.NodeRuntime.system)
