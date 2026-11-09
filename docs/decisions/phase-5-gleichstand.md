@@ -801,3 +801,92 @@ vorübergehend geändert und sind zurückgestellt (`cmp` gleich).
 Ein Befund, behoben: Der leere Zustand war so schmal wie sein Text, wie bei Navigationen und
 Zusätzliche Inhalte; der Reiter-Wähler steht jetzt wieder in der Mitte. Hell geprüft (Liste, Inspektor
 einer Sprache). Die Vorschau dieses Reiters ist dieselbe wie auf den anderen.
+
+## Plugins ▸ Formulare an der App gemessen
+
+Elfter Durchgang, am 2026-11-09, am selben gui-test-Klon in 1200×800, ohne Netz. quartz-forms ist
+im Klon ein Link auf das echte Repo `~/Development/quartz-forms`; für die Messung zeigten Link,
+`source` und Lock auf eine Kopie im Scratchpad (Ordnername `quartz-forms`: unter einem anderen Namen
+hält der Reiter das Plugin für nicht installiert, die Kennung kommt aus dem Ordner). Danach Config und
+Lock aus der Sicherung (`cmp` gleich), der Link wieder auf das Repo, dessen `git status` leer blieb.
+Geheimnisse nur mit `-QHMemorySecrets`; Ziele gibt es im Testprofil keine, „Relay hochladen“ war
+gesperrt und wurde nicht gedrückt. Unter `content/` wurde nichts geschrieben. Testschlüssel mit gpg
+in einem eigenen Wegwerf-Schlüsselbund, danach gelöscht.
+
+- **Kopf und Liste:** „Eingeschaltet“ schreibt `enabled: false` und zurück; „Alle Optionen“ öffnet
+  „Installiert“ mit quartz-forms, der Rückweg behält die Auswahl. Abzeichen „Layout“, „anonym“,
+  „2 Probleme“; zwei Einträge von Hand: „Die Konfiguration nennt quartz-forms 2-mal. …“.
+- **Allgemein und Versand:** Titel, Betreff, Text je Sprache (`title: {de: …, en: …}`),
+  „Zu einer Seite wechseln“ mit Vorschlägen und „Keine Seite der Website hat diesen Slug. …“, eigener
+  Versandweg endpoint (format wirkt dann), „Neuer Empfänger …“ mit „@example.“-Warnung.
+- **Felder:** Skala, Eine Wahl, Einwilligung, Schlüssel des Besuchers (ein zweites gesperrt, die Hilfe
+  nennt den Grund). Bedingung auf die Skala; nach max 3 „„5“ (gibt es dort nicht)“, über der Skala
+  „„bewertung“ (steht nicht davor)“. Umsortieren über Kontextmenü und Bedienungshilfe-Aktion,
+  angesagt „„Eine Wahl“ steht jetzt an Stelle 3 von 3.“ Fassung 0.3.0 (nur die Versionsnummer der
+  Kopie): „Breite, Anordnung, Bedingungen und Seitenumbrüche gibt es ab quartz-forms 0.4.0 …“. Ohne
+  Felder: „Das Formular hat keine Felder. Ohne Feld bricht der Build ab.“
+- **Schlüssel:** aus einer Datei nach `quartz-forms/keys/probe.asc`, ein privater abgewiesen, bevor
+  etwas geschrieben ist, dieselbe Datei erneut fragt „… ersetzen?“; „läuft ab am 2027-01-15“,
+  „verschlüsselt für: kontakt“; ein kaputter Block „Nicht übernommen: …“; ohne `dist/cli.js`
+  „Konnte nicht geprüft werden: …“.
+- **Texte:** Suche, Ersatzsprache („Für „fr“ hat quartz-forms keinen eigenen Wortlaut; grau steht der
+  aus „en-US“.“, fr nur mit eingeschaltetem quartz-multilanguage), mehrere Einträge (de, de-DE),
+  unbekannter Text als Hinweis des Plugins. Die ältere Fassung lässt sich mit der Kopie nicht
+  nachstellen: ihr Code liefert die Texte trotz Versionsnummer.
+- **Relay:** Unterordner „..“ abgewiesen; Absender und „https://quartzmac.borkel.net eintragen“ in
+  `.quartz-gui/forms-relay.json`; Adressen und Captcha-Secret gespeichert, ersetzt, entfernt
+  (`relay-secrets.json` nur mit Namen); sendmail, Zähler-Ordner, 0644, `-f`; „Neues Secret erzeugen“
+  mit Rückfrage; „Noch nicht bereit: Kein Ziel gewählt. Kein Absender. …“; als Ordner gespeichert
+  (send.php, config.php, config.generated.php, counters/), mit Problemen abgewiesen.
+- **Vorschau:** „Zeigen“ und der Sprung von der Startseite auf /kontakt; „Neu suchen“.
+
+Zehn Befunde, behoben:
+
+1. Ein Teil im Inspektor klappte nur am Pfeil auf, in QuartzControl über die ganze Kopfzeile. Jetzt
+   faltet die Kopfzeile.
+2. Farbige Abzeichen blieben auf einer ausgewählten Zeile in ihrer Farbe: „Layout“ grün auf Blau, hell
+   kaum zu lesen. `WordBadge` nimmt die Farbe jetzt als `tint` und lässt sie auf einer Auswahl weg
+   (alle 13 Aufrufer).
+3. Nach Return in „Zielseite“ blieb „Keine passende Seite“ stehen, solange das Feld den Fokus hielt,
+   und verdeckte, dass der Build abbricht. Der Satz gilt nur noch beim Tippen.
+4. Wählte man ein Formular, wurde der Inspektor 22 pt breiter und die Mitte sprang: „Dank anzeigen |
+   Zu einer Seite wechseln“ ist 282 pt breit. Wo die Segmente nicht passen, steht ein Menü
+   (Optionsfelder zeigten in der Form nur eine der zwei Möglichkeiten).
+5. Die Adresse von send.php stand als „quartz-mac.bor-kel.net“ da, ein Empfänger als „probe-empf“:
+   Text trennt nach der Sprache der Oberfläche. `verbatimLineBreaks()` setzt die Satzsprache „zxx“
+   (kein sprachlicher Inhalt), dann bricht die Zeile ohne Bindestrich; nebeneinander gerendert
+   verglichen. Der Name hat dazu Vorrang vor den Abzeichen.
+6. Der Hinweis zum Unterordner blieb, wenn man wieder den gespeicherten Wert eintippte: `CommitField`
+   schreibt dann nichts. Es meldet das jetzt (`revert`). QuartzControl hat denselben Fehler
+   (`DraftInput` ruft `onCommit` nur bei einer Änderung); nicht kritisch, nur notiert.
+7. „Adresse für … gespeichert.“ und „Captcha-Secret gespeichert.“ standen nur da; in QuartzControl
+   ist die Zeile eine Statusmeldung und wird vorgelesen. Jetzt beim Speichern angesagt.
+8. Der leere Zustand „nicht installiert“ war so schmal wie sein Text, wie auf den anderen Reitern.
+9. Das Seitenfeld der Vorschau hatte keinen Namen, nur den Platzhalter; gefüllt las VoiceOver
+   „kontakt, Textfeld“. Gilt für alle Reiter mit Vorschau.
+10. Nach dem Sprung zu einer Seite mit dem Formular wurde „„Umfrage“ kommt auf dieser Seite nicht
+    vor.“ angesagt, dann „Markiert“: quartz-forms baut das Formular erst per Skript, der erste Bericht
+    der Seite findet es noch nicht. Der Satz unter der Vorschau wird jetzt erst angesagt, wenn er
+    sich 0,8 s gehalten hat. Das war auch der Nebenbefund nach „Eigene Klasse vergeben“.
+
+Kein Befund, aber beim Messen gelernt: Entfernen-Buttons per Bedienungshilfe gedrückt, während eine
+Rückfrage offen war, stellten die Rückfragen in eine Warteschlange, und jede spätere Bestätigung galt
+einer älteren mit dem alten Feldstand. Mit Maus oder Tastatur geht das nicht, die Rückfrage sperrt das
+Fenster.
+
+Offen geblieben (die Zeilen stehen weiter auf `gebaut`): der Grund bei nicht gebauten Seiten unter
+„Einbinden“ (bräuchte eine Seite unter `content/`), die ältere Fassung bei den Texten, Ziel und
+rsync beim Unterordner und der rsync-Konflikt (kein Ziel im Testprofil), Captcha-Secrets je
+Formular, „Noch nicht bereit“ mit Konflikt oder ohne verschlüsselte Ablage.
+
+Nebenbei aufgefallen, nicht behoben: Ein Reiterwechsel liest die Config nicht neu, die Prüfung des
+Plugins aber schon; nach einer Änderung von außen zeigten Hinweise und Editor kurz verschiedene
+Stände. „Ein eigener Text“ hängt als Satzteil am Hinweis der Texte (so auch QuartzControl). Der
+Platzhalter „neue Adresse, ersetzt die gespeicherte“ ist im Inspektor abgeschnitten. Getippte „-----“
+werden im Feld „Öffentlicher Schlüssel im Textformat“ zu Geviertstrichen (gehört zu den Ersetzungen in
+Texteditoren; eingefügter Text wird nicht ersetzt). Ist der Eintrag des Relays im Schlüsselbund weg,
+scheitert jedes Speichern mit „Die gespeicherten Zugangsdaten fehlen …“, und „Neues Secret erzeugen“
+hilft nicht; der Satz verweist auf Einstellungen ▸ Zugänge (ob das Relay dort zu heilen ist, nicht
+geprüft). „Geändert“ steht
+auch an Werten, die der Vorgabe gleichen, aber in der Config stehen (frontmatterKey `form`). Andere
+Monospace-Namen und -Pfade der App können ebenso getrennt werden; geprüft ist nur dieser Reiter.
