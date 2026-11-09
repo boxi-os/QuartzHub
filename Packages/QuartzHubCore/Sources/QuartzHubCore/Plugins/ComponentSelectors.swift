@@ -42,6 +42,49 @@ public enum ComponentSelectors {
     public var ownClass: Bool
   }
 
+  /// One choice of "Komponente wählen" on the CSS tab (`componentSelectors`).
+  public struct Option: Sendable, Equatable {
+    /// The plugin, as the Plugins page names it: what the reference stylesheets are read for.
+    public var plugin: String
+    public var name: String
+    public var selector: String
+    /// False for a plugin not in the table: the selector is its name, unchecked.
+    public var measured: Bool
+    /// For an instance's own class that copies carry too: `all` reaches the copies, `only` not.
+    public var reach: (kind: String, copies: Int)?
+
+    public static func == (a: Option, b: Option) -> Bool {
+      a.plugin == b.plugin && a.name == b.name && a.selector == b.selector && a.measured == b.measured
+        && a.reach?.kind == b.reach?.kind && a.reach?.copies == b.reach?.copies
+    }
+  }
+
+  /// One per selector, in the order the components are placed: the plugin's root, and for an
+  /// instance with a class of its own that class, with and without its copies where it has some.
+  public static func list(_ plugins: [PluginEntry]) -> [Option] {
+    var out: [Option] = []
+    var seen = Set<String>()
+    func add(_ option: Option) {
+      guard !seen.contains(option.selector) else { return }
+      seen.insert(option.selector)
+      out.append(option)
+    }
+    for (plugin, _) in LayoutEntries.components(plugins) {
+      let rootSelector = root[plugin.name]
+      add(Option(plugin: plugin.name, name: plugin.name, selector: rootSelector ?? ".\(plugin.name)", measured: rootSelector != nil))
+      guard instanceClass.contains(plugin.name), let own = InstanceClass.own(plugin) else { continue }
+      let name = "\(plugin.name) · \(own)"
+      let copies = copyClasses(own, plugins.filter { $0.name == plugin.name })
+      if copies.isEmpty {
+        add(Option(plugin: plugin.name, name: name, selector: ".\(own)", measured: true))
+        continue
+      }
+      add(Option(plugin: plugin.name, name: name, selector: ".\(own)", measured: true, reach: ("all", copies.count)))
+      add(Option(plugin: plugin.name, name: name, selector: ".\(own)\(notClasses(copies))", measured: true, reach: ("only", copies.count)))
+    }
+    return out
+  }
+
   /// `entrySelector`: the selector for one entry, for the preview's marks. nil for a plugin whose
   /// root has not been measured: marking the guess would mark nothing and look like "not on this
   /// page". A copy carries the original's class in front of its own, so the copies' own classes

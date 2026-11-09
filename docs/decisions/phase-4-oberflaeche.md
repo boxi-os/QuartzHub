@@ -1323,3 +1323,12 @@ Vault-Link beim Sync.
   HTML und Markdown, kein Parser: Ein Blockkommentar über mehrere Zeilen ist nur an seinen Marken
   gefärbt.
 - Gegenproben (4, jede lässt den Test scheitern).
+
+### Stile: „Komponente wählen“ (`ComponentSelectors.list`)
+
+- `componentSelectors` aus QuartzControls `src/data/componentSelectors.ts` für den CSS-Reiter: je
+  platzierter Komponente ihr Wurzel-Selektor, und für eine Instanz mit eigener Klasse diese Klasse,
+  mit und ohne ihre Kopien, wo sie welche hat. Gemessen im bestehenden `site-preview-golden.mjs`,
+  das dieselben Einträge jetzt auch durch `componentSelectors` schickt (dazu ein Plugin ohne
+  Layout-Block, das nicht erscheint). Gleich.
+- Gegenproben (3, jede lässt den Test scheitern).

@@ -88,4 +88,20 @@ import Testing
     #expect(PreviewScript.call(selector: ".a\"b", focus: true).hasSuffix(#")(".a\"b", true)"#))
     #expect(PreviewScript.call(selector: nil, focus: false).hasSuffix(")(null, false)"))
   }
+
+  /// "Komponente wählen" on the CSS tab: QuartzControl's componentSelectors on the same entries.
+  @Test func componentSelectorList() throws {
+    let plugins = try #require(Self.golden?["listPlugins"]?.arrayValue).compactMap { $0.objectValue.map(PluginEntry.init) }
+    let expected = try #require(Self.golden?["list"]?.arrayValue)
+    let got = ComponentSelectors.list(plugins)
+    #expect(got.count == expected.count)
+    for (option, want) in zip(got, expected) {
+      #expect(option.plugin == want["plugin"]?.stringValue)
+      #expect(option.name == want["name"]?.stringValue)
+      #expect(option.selector == want["selector"]?.stringValue)
+      #expect(option.measured == (want["measured"] == .bool(true)))
+      #expect(option.reach?.kind == want["reach"]?["kind"]?.stringValue)
+      #expect(option.reach.map { Double($0.copies) } == want["reach"]?["copies"]?.numberValue)
+    }
+  }
 }

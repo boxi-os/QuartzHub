@@ -53,6 +53,10 @@ const plugins = [
   { name: 'unknown-thing', source: 'x', enabled: true, layout: { position: 'left', priority: 1 } }
 ]
 const entries = plugins.map((p) => ({ entry: p, result: selectors.entrySelector(p, plugins) }))
+// What "Komponente wählen" on the CSS tab offers: one per selector, a placed component's root and
+// an instance's own class, with and without its copies. A plugin without a layout block is none.
+const listPlugins = [...plugins, { name: 'graph', source: '@quartz-community/graph', enabled: true }]
+const list = selectors.componentSelectors(listPlugins)
 
 // ── reports ─────────────────────────────────────────────────────────────────────────────────────
 const vp = { width: 1280, height: 640 }
@@ -90,7 +94,7 @@ for (const found of [0, 2]) for (const visible of [0, 1, 2]) {
 }
 
 mkdirSync(out, { recursive: true })
-writeFileSync(join(out, 'cases.json'), JSON.stringify({ entries, reports, zooms, nearest, same, sentences }, null, 1) + '\n')
+writeFileSync(join(out, 'cases.json'), JSON.stringify({ entries, listPlugins, list, reports, zooms, nearest, same, sentences }, null, 1) + '\n')
 
 // ── the script ──────────────────────────────────────────────────────────────────────────────────
 const source = highlight.previewScript.toString()
