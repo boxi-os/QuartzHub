@@ -3,26 +3,40 @@ import QuartzHubCore
 import SwiftUI
 
 /// QuartzHub ▸ Einstellungen… (⌘,): QuartzControl's settings page (`src/routes/Settings.tsx`) as
-/// the macOS settings window with three tabs. Every control writes at once (`SettingsStore`), as the
-/// page did; the one text field, the default folder, has its own "Speichern".
-///
-/// The GitHub token and the connections come with the Publish page, where they are used.
+/// the macOS settings window with four tabs. Every control writes at once (`SettingsStore`), as the
+/// page did; the one text field, the default folder, has its own "Speichern", and a connection is
+/// edited in a sheet with its own.
 struct SettingsWindow: View {
+  /// Which tab is open. Veröffentlichen's "Zugänge verwalten" sets it before it opens the window.
+  @AppStorage(SettingsTab.key) private var tab = SettingsTab.general.rawValue
+
   var body: some View {
-    TabView {
+    TabView(selection: $tab) {
       GeneralSettings()
         .frame(height: 540)
         .tabItem { Label(L10n.t("shell.settings.general"), systemImage: "gearshape") }
+        .tag(SettingsTab.general.rawValue)
+      ConnectionsSettings()
+        .frame(height: 600)
+        .tabItem { Label(L10n.t("settings.connections.title"), systemImage: "key") }
+        .tag(SettingsTab.connections.rawValue)
       RuntimeSettings()
         .frame(height: 470)
         .tabItem { Label(L10n.t("settings.runtime.title"), systemImage: "terminal") }
+        .tag(SettingsTab.runtime.rawValue)
       MaintenanceSettings()
         .frame(height: 430)
         .tabItem { Label(L10n.t("settings.maintenance.title"), systemImage: "externaldrive") }
+        .tag(SettingsTab.maintenance.rawValue)
     }
     .frame(width: 560)
     .followsLanguage()
   }
+}
+
+enum SettingsTab: String {
+  case general, connections, runtime, maintenance
+  static let key = "settings.tab"
 }
 
 /// Reads the settings once and writes one field per change.

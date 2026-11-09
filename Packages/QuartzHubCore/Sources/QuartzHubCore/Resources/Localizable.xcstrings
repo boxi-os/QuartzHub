@@ -2484,6 +2484,23 @@
         }
       }
     },
+    "common.editNamed" : {
+      "comment" : "Accessibility name of an Edit button in a list row",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„{{name}}“ bearbeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit “{{name}}”"
+          }
+        }
+      }
+    },
     "common.handbookFor" : {
       "localizations" : {
         "de" : {
@@ -37688,13 +37705,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Schlüssel bleibt im SSH-Agent des Systems; QuartzControl speichert dafür nichts. Vorausgesetzt wird eine gesetzte SSH_AUTH_SOCK-Umgebungsvariable."
+            "value" : "Der Schlüssel bleibt im SSH-Agent des Systems, QuartzHub speichert dafür nichts. Die Umgebungsvariable SSH_AUTH_SOCK muss gesetzt sein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The key stays in the system SSH agent; QuartzControl stores nothing for it. Requires SSH_AUTH_SOCK to be set."
+            "value" : "The key stays in the system SSH agent; QuartzHub stores nothing for it. SSH_AUTH_SOCK has to be set."
           }
         }
       }
@@ -37768,13 +37785,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zugangsdaten werden verschlüsselt im Schlüsselbund des Systems abgelegt und gelten global in QuartzControl, nicht nur für dieses Projekt."
+            "value" : "Zugangsdaten liegen verschlüsselt im Schlüsselbund und gelten für alle Projekte in QuartzHub, nicht nur für dieses."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Credentials are encrypted in the system keychain and apply globally in QuartzControl, not just to this project."
+            "value" : "Credentials are stored encrypted in the keychain and apply to every project in QuartzHub, not just this one."
           }
         }
       }
@@ -38152,13 +38169,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FTP überträgt Passwort und Dateien im Klartext. Ohne FTPS kann jeder im selben Netz mitlesen. Falls dein Anbieter es unterstützt, unbedingt aktivieren (oder besser SFTP nutzen)."
+            "value" : "FTP überträgt Passwort und Dateien im Klartext, jeder im selben Netz kann mitlesen. Schalte FTPS ein, wenn dein Anbieter es kann, oder nimm SFTP."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FTP sends the password and all files in the clear. Without FTPS anyone on the same network can read along. Enable it if your provider supports it (or use SFTP instead)."
+            "value" : "FTP sends the password and the files in the clear; anyone on the same network can read along. Turn on FTPS if your provider supports it, or use SFTP."
           }
         }
       }
@@ -39843,6 +39860,23 @@
         }
       }
     },
+    "settings.connections.add" : {
+      "comment" : "Settings ▸ Zugänge: label before the three buttons that add a connection of a kind",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neuer Zugang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New connection"
+          }
+        }
+      }
+    },
     "settings.connections.addFtp" : {
       "localizations" : {
         "de" : {
@@ -39896,7 +39930,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diesen Zugang löschen?\n\nDas hinterlegte Passwort bzw. der Key wird dabei mitgelöscht und lässt sich nicht wiederherstellen."
+            "value" : "Diesen Zugang löschen?\n\nDas hinterlegte Passwort bzw. der Schlüssel wird mitgelöscht und kann nicht wiederhergestellt werden."
           }
         },
         "en" : {
@@ -40000,13 +40034,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server-Logins und Build-Hooks, die du zum Veröffentlichen brauchst. Sie werden global in QuartzControl eingerichtet. Veröffentlichungsziele, die diese Zugänge nutzen, werden im Projekt definiert."
+            "value" : "Server-Logins und Build-Hooks zum Veröffentlichen. Sie gelten für alle Projekte in QuartzHub."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server logins and build hooks used for publishing. They are set up globally in QuartzControl. Publish targets that use them are defined in the project."
+            "value" : "Server logins and build hooks for publishing. They apply to every project in QuartzHub."
           }
         }
       }
@@ -40307,6 +40341,23 @@
         }
       }
     },
+    "settings.github.replaceToken" : {
+      "comment" : "Settings ▸ Zugänge ▸ GitHub: the token field when one is stored",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token ersetzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replace token"
+          }
+        }
+      }
+    },
     "settings.github.saveAndCheck" : {
       "localizations" : {
         "de" : {
@@ -40328,13 +40379,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für den Marktplatz genügt ein Token ganz ohne Berechtigungen. Zum Anlegen von Repositories und für GitHub Pages wird der Scope „repo“ benötigt. Der Token wird verschlüsselt im Schlüsselbund deines Systems abgelegt."
+            "value" : "Für den Marktplatz genügt ein Token ohne Berechtigungen, für Repositories und GitHub Pages braucht er den Scope „repo“. QuartzHub legt ihn verschlüsselt im Schlüsselbund ab."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For the marketplace a token with no permissions at all is enough. Creating repositories and configuring GitHub Pages needs the “repo” scope. The token is stored encrypted in your system keychain."
+            "value" : "For the marketplace a token without permissions is enough; creating repositories and GitHub Pages need the “repo” scope. QuartzHub stores it encrypted in the keychain."
           }
         }
       }

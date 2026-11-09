@@ -1560,3 +1560,29 @@ Beschreibung, denn auf der Seite wird nichts ausgewählt. Der Kern war mit Punkt
 - **Nicht gemessen**, weil es ins Netz geht: Theme, Plugins und Frames anwenden (npm und
   `quartz plugin add`), das Basis-Template von GitHub. Auch nicht: ein Ordner im alten Format, ein
   Seitenwechsel mitten im Import (der Import der fünf Teile dauerte eine Sekunde).
+
+### Einstellungen: Zugänge
+
+QuartzControls zwei Abschnitte `GithubSection` und `ConnectionsSection` (`Settings.tsx`) sind ein
+vierter Reiter „Zugänge“ im Einstellungsfenster. Das Formular eines Zugangs (`ConnectionForm.tsx`)
+gibt es einmal, in `App/Components/ConnectionForm.swift`: für die Einstellungen und für
+Veröffentlichen, wo ein Zugang mitten im Anlegen eines Ziels entsteht.
+
+- **Bearbeitet wird in einem Sheet**, nicht in einer Leiste neben der Liste: Das Einstellungsfenster
+  hat keinen Inspektor, und ein Sheet mit eigenem „Speichern“ ist der native Weg dafür. „Abbrechen“
+  verwirft ohne Frage, wie QuartzControls „Abbrechen“ im Formular. Die Frage beim Wechsel zu einem
+  anderen Zugang entfällt, weil das Sheet den Wechsel nicht zulässt.
+- **Welche Projekte einen Zugang nutzen**, zählt die Liste über alle Projekte im Profil, wie
+  QuartzControls `connections:usage`: ein Zugang gilt für die App, seine Ziele für ein Projekt.
+- **Der Reiter lässt sich von außen wählen** (`@AppStorage("settings.tab")`), damit
+  Veröffentlichens „Zugänge verwalten“ ihn öffnet.
+- **Ohne Schlüsselbund ansehen:** Mit `-QHMemorySecrets YES` (nur Debug) hält `AppDeploy.secrets`
+  die Geheimnisse im Speicher des Prozesses; beim Beenden sind sie weg. Alle Stellen der App, die
+  `Connections` bilden, gehen jetzt durch `AppDeploy.connections()`.
+- **Texte:** drei übernommene Texte sagen „QuartzHub“ statt „QuartzControl“; `ftpPlaintextWarning`,
+  `settings.github.scopeHint` und `settings.connections.description` haben zwei Sätze statt drei;
+  `confirmDelete` sagt „kann nicht wiederhergestellt werden“.
+- **Gemessen** an einem Wegwerf-Profil mit Geheimnissen im Speicher: ein SFTP-Zugang mit SSH-Agent
+  (Host „  debian.local “ wird gekürzt gespeichert, kein Geheimnis), ein FTP-Zugang ohne FTPS mit
+  Passwort (Warnung im Sheet, „unverschlüsselt“ in der Liste), die Frage beim Löschen mit
+  „Abbrechen“ zuerst. **Nicht gemessen:** ein GitHub-Token speichern und prüfen, das fragt GitHub.

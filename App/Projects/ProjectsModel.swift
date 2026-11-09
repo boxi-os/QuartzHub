@@ -27,7 +27,7 @@ final class ProjectsModel {
   private init() {
     let profile = AppProfile.own
     list = ProjectList(store: ProjectStore(profile: profile), builds: AppServices.shared.builds,
-                       connections: Connections(profile: profile, secrets: KeychainSecrets()))
+                       connections: AppDeploy.connections())
   }
 
   func row(_ id: String) -> ProjectOverview? { rows.first { $0.id == id } }
