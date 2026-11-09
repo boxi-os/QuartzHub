@@ -1493,6 +1493,11 @@ wie QuartzControl:
   `merge --abort` ohne englische Textvariablen (Apples git übersetzt nicht; QuartzControl hat den
   deutschen Fall gemessen).
 - **Preis:** Fixture 296 KB, der Test läuft 29 s.
+- **Nachtrag (2026-11-09, mit der Updates-Seite): das Schloss gilt für den Prozess.** Es hing an
+  der Instanz; QuartzControls `coreUpdatesRunning` steht auf Modulebene. Die Seite baut beim
+  erneuten Öffnen eine neue Instanz, während der erste Lauf weitergeht, und hätte so einen
+  zweiten neben ihm gestartet. `aSecondRunIsTurnedAway` fragt jetzt auch eine zweite Instanz;
+  Gegenprobe (das Schloss wieder an der Instanz) scheitert an beiden neuen Erwartungen.
 
 ### Plugin-Updates (`getPluginsUpdateStatus`, `updatePlugin` → `PluginUpdates`)
 

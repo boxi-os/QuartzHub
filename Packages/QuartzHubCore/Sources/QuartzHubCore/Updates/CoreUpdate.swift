@@ -56,8 +56,10 @@ public final class CoreUpdate: Sendable {
   let templateRepository: String
   let snapshot: SnapshotStore.Take
   let deadlines: Deadlines
-  /// A run or an abort per project at a time; a second one is answered at once, not queued.
-  private let running = Mutex<Set<String>>([])
+  /// A run or an abort per project at a time; a second one is answered at once, not queued. One
+  /// set for the process, as QuartzControl's module-level `coreUpdatesRunning`: a page that is left
+  /// and opened again makes a new instance while the first run goes on.
+  private static let running = Mutex<Set<String>>([])
 
   public init(environment: ToolEnvironment, snapshot: @escaping SnapshotStore.Take,
               templateRepository: String = ProjectCreator.templateRepository, deadlines: Deadlines = Deadlines()) {
@@ -92,8 +94,8 @@ public final class CoreUpdate: Sendable {
 
   func whileHolding<T>(_ project: String, busy: () -> T, _ body: () async throws -> T) async rethrows -> T {
     let key = ContentFolder.realPath(project) ?? FramePaths.resolve(project)
-    guard running.withLock({ $0.insert(key).inserted }) else { return busy() }
-    defer { _ = running.withLock { $0.remove(key) } }
+    guard Self.running.withLock({ $0.insert(key).inserted }) else { return busy() }
+    defer { _ = Self.running.withLock { $0.remove(key) } }
     return try await body()
   }
 

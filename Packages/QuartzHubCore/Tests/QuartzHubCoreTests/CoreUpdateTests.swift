@@ -178,7 +178,8 @@ import Testing
     }
   }
 
-  /// A second run or abort for the same project while one runs is answered at once.
+  /// A second run or abort for the same project while one runs is answered at once, also by
+  /// another instance (the Updates page makes a new one when it is opened again).
   @Test func aSecondRunIsTurnedAway() async throws {
     let harness = try Harness()
     final class Flags: @unchecked Sendable {
@@ -198,10 +199,15 @@ import Testing
     while !flags.started.withLock({ $0 }) { try await Task.sleep(for: .milliseconds(10)) }
     let second = try await service.run(project: project.path)
     let abort = try await service.abort(project: project.path)
+    let other = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in nil }, templateRepository: harness.path("nowhere.git"))
+    let fromOther = try await other.run(project: project.path)
+    let abortFromOther = try await other.abort(project: project.path)
     flags.release.withLock { $0 = true }
     _ = try await first.value
     #expect(second == CoreUpdate.Result(success: false, output: L10n.t("main.updateAlreadyRunning")))
     #expect(abort.sentences == [L10n.t("main.updateAlreadyRunning")])
+    #expect(fromOther == second)
+    #expect(abortFromOther.sentences == [L10n.t("main.updateAlreadyRunning")])
     #expect(try await service.abort(project: project.path).sentences != [L10n.t("main.updateAlreadyRunning")])
   }
 
