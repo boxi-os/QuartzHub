@@ -96,21 +96,27 @@ private struct GeneralSettings: View {
       }
 
       Section {
-        LabeledContent(L10n.t("settings.defaultProjectDirectory")) {
-            HStack {
-              TextField("", text: $directory, prompt: Text("~/Documents"))
-                .labelsHidden()
-                .onSubmit(saveDirectory)
-                .accessibilityIdentifier("settings.directory")
-              Button(L10n.t("common.select")) {
-                if let folder = ProjectsModel.pickFolder(start: directory.isEmpty ? nil : directory) {
-                  directory = folder
-                  saveDirectory()
-                }
+        // The label above, the field with a border across the row: as a labelled field of a
+        // grouped form it was plain and as wide as its text, invisible while empty (every new
+        // profile) and running out of the section to the left with a long path (measured
+        // 2026-11-09).
+        VStack(alignment: .leading, spacing: 6) {
+          Text(L10n.t("settings.defaultProjectDirectory"))
+          HStack {
+            TextField(L10n.t("settings.defaultProjectDirectory"), text: $directory, prompt: Text("~/Documents"))
+              .labelsHidden()
+              .textFieldStyle(.roundedBorder)
+              .onSubmit(saveDirectory)
+              .accessibilityIdentifier("settings.directory")
+            Button(L10n.t("common.select")) {
+              if let folder = ProjectsModel.pickFolder(start: directory.isEmpty ? nil : directory) {
+                directory = folder
+                saveDirectory()
               }
-              Button(saved ? L10n.t("common.saved") : L10n.t("common.save"), action: saveDirectory)
-                .disabled(directory == (model.file.defaultProjectDirectory ?? ""))
             }
+            Button(saved ? L10n.t("common.saved") : L10n.t("common.save"), action: saveDirectory)
+              .disabled(directory == (model.file.defaultProjectDirectory ?? ""))
+          }
         }
         if let directoryFailure {
           Text(directoryFailure).foregroundStyle(.red).font(.callout)

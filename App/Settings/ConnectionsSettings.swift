@@ -50,11 +50,15 @@ struct ConnectionsSettings: View {
           Button(L10n.t("settings.github.remove")) { model.removeGithub() }
         }
       }
-      LabeledContent(model.github?.hasSecret == true ? L10n.t("settings.github.replaceToken") : L10n.t("settings.github.token")) {
+      // As the default folder in Allgemein: a labelled field of a grouped form was plain and as
+      // wide as its prompt, "ghp_…" or a cut-off "gespeichert (zum Erse" (measured 2026-11-09).
+      VStack(alignment: .leading, spacing: 6) {
+        Text(model.github?.hasSecret == true ? L10n.t("settings.github.replaceToken") : L10n.t("settings.github.token"))
         HStack {
           SecureField(L10n.t("settings.github.token"), text: $token,
                       prompt: Text(model.github?.hasSecret == true ? L10n.t("settings.githubTokenStored") : "ghp_…"))
             .labelsHidden()
+            .textFieldStyle(.roundedBorder)
             .accessibilityIdentifier("settings.githubToken")
           Button(model.savingGithub ? L10n.t("common.saving") : L10n.t("settings.github.saveAndCheck")) {
             Task {
