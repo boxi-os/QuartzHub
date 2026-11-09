@@ -18,9 +18,10 @@ struct CssTab: View {
   let runCheck: () async -> Void
 
   @Environment(\.unsavedGuard) private var unsaved
-  @State private var insertion: CodeInsertion?
+  /// From the reference in the inspector too, so held by the page.
+  @Binding var insertion: CodeInsertion?
+  @Binding var component: String
   @State private var jump: CodeJump?
-  @State private var component = ""
   @State private var consolidating = false
   @State private var consolidated: String?
   @State private var actionError: String?

@@ -1361,3 +1361,29 @@ Vault-Link beim Sync.
 - **Nicht gemessen:** Zusammenlegen (die Kopien sind schon zusammengelegt), Importieren über den
   Dateidialog, Umbenennen, Verschieben, der Hinweis eines veralteten Entwurfs in der App (das Modell
   ist an der Logik von QuartzControl entlang gebaut, aber nicht geklickt).
+
+### Stile: Eigenes CSS, Nachschlagen und geltende Stile
+
+- **Im Inspektor unter der Ladereihenfolge**, wie dort in der rechten Spalte: die Original-Styles
+  der unter „Komponente wählen“ gewählten Komponente (nur lesend, „Extern öffnen“), die verfügbaren
+  CSS-Variablen (der Katalog und die eigenen, mit Suche durch die ganze Tabelle, höchstens 80) mit
+  den Callout-Grundgerüsten, und „Aktuell geltende Farben und Schriften“ (zu, mit den Familien in
+  der Zusammenfassung; offen die Farbtabelle zum Kopieren, die Schriften mit Schnitten, Probe und
+  dem Stand ihrer Dateien, die Lader mit den Anfragen). Jeder Klick in der Referenz fügt in den
+  Editor ein (der Name als `var(--name)`, ein Farbfeld als Wert, ein Callout-Typ als Grundgerüst),
+  ⌥-Klick kopiert.
+- **Die Probe zeigt die Schrift der Website:** Die Schriftdateien aus Projekt und Build
+  (`SiteFonts.previewFonts`) werden im Prozess bei CoreText angemeldet, eine Familie ist dann über
+  den PostScript-Namen ihres ersten Schnitts erreichbar; sonst eine hier installierte. Gesehen:
+  gui-tests Noto Sans und Noto Sans Mono in ihren eigenen Formen.
+- **Bewusst anders als QuartzControl:** Die generischen Familien von CSS (`ui-sans-serif`,
+  `system-ui`, `ui-monospace`, `serif` …) gelten als vorhanden und zeigen die passende
+  Systemschrift. QuartzControl maß „vorhanden“ an Chromes Canvas, das `ui-sans-serif` nicht kennt,
+  und nannte die Schriften des Themes minimal deshalb „Ersatzschrift“ (gesehen, mit derselben
+  Logik auch hier, vor der Änderung).
+- **Gemessen** an der gui-test-Kopie, Dunkel, 1400×860: mit minimal die Zusammenfassung
+  „ui-sans-serif · ui-monospace“ und die Lader; ohne Theme Noto mit Schnitten „400–700 · 400 · 600 ·
+  700 · kursiv“ und echter Probe; das Farbfeld von `--secondary` fügt `#399617` ans Ende des
+  Editors (kein gesetzter Cursor, also in eine eigene Zeile).
+- **Nicht gemessen:** die Original-Styles einer Komponente (gui-tests Plugins bringen in dieser
+  Kopie keine mit, die der Dienst fände; nicht geprüft), ⌥-Klick, das Callout-Grundgerüst in der App.

@@ -30,6 +30,9 @@ struct StylesPage: View {
   @SceneStorage("styles.css.activeTab") private var cssActiveTab = CssTab.mainTab
   @State private var cssCheck: ScssCheck.Result?
   @State private var cssChecking = false
+  @State private var cssInsertion: CodeInsertion?
+  @State private var cssComponent = ""
+  @State private var cssReferences: [StyleFiles.Reference] = []
   @Environment(\.unsavedGuard) private var unsaved
 
   init(project: ProjectContext) {
@@ -93,7 +96,11 @@ struct StylesPage: View {
           .id(themeSelected)
       } else if tab == .customCss, model.config != nil {
         CssFilesInspector(model: model, activeTab: cssActiveTab, open: openCssTab, afterFileOp: afterCssFileOp, applyOrder: applyCssOrder,
-                          extra: AnyView(EmptyView()))
+                          extra: AnyView(Group {
+                            PluginReferences(references: cssReferences)
+                            CssVariableReference(model: model, insert: { cssInsertion = CodeInsertion(text: $0) }, goToVariables: { tabID = StylesModel.Tab.variables.rawValue })
+                            ActiveStylesSection(model: model)
+                          }))
       } else if tab == .variables, let varSelected, model.config != nil {
         VariableInspector(key: varSelected, model: model, darkOpen: VariablesPlace.lines(varDarkOpen).contains(varSelected),
                           setDarkOpen: { open in
@@ -115,6 +122,14 @@ struct StylesPage: View {
     let environment = await AppServices.current()
     cssCheck = await ScssCheck.check(project: project.path, runtime: environment.runtime)
     cssChecking = false
+  }
+
+  /// The picked component's plugin's own stylesheets, read only.
+  private func loadCssReferences() async {
+    let plugin = ComponentSelectors.list(model.config?.plugins ?? []).first { $0.selector == cssComponent }?.plugin ?? ""
+    guard !plugin.isEmpty else { cssReferences = []; return }
+    let path = project.path
+    cssReferences = (try? await Task.detached { try StyleFiles.references(plugin: plugin, project: path) }.value) ?? []
   }
 
   private func openCssTab(_ tab: String) {
@@ -235,7 +250,8 @@ struct StylesPage: View {
           VariablesTab(model: model, notes: AnyView(notes), place: variablesPlace, scrollTarget: $varScroll)
         case .customCss:
           CssTab(model: model, notes: AnyView(notes), openTabs: $cssOpenTabs, activeTab: $cssActiveTab, check: $cssCheck, checking: $cssChecking,
-                 runCheck: runCssCheck)
+                 runCheck: runCssCheck, insertion: $cssInsertion, component: $cssComponent)
+            .task(id: cssComponent) { await loadCssReferences() }
             // Checked on arrival too: an error made outside the app is worth seeing before the next edit.
             .task { await runCssCheck() }
         }

@@ -44016,13 +44016,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl holt diese Schriften von Google ins Projekt, die Website liefert sie selbst aus: {{specs}}."
+            "value" : "QuartzHub holt diese Schriften von Google ins Projekt, die Website liefert sie selbst aus: {{specs}}."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl fetches these fonts from Google into the project, the site serves them itself: {{specs}}."
+            "value" : "QuartzHub fetches these fonts from Google into the project, the site serves them itself: {{specs}}."
           }
         }
       }
@@ -44128,13 +44128,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„Ersatzschrift“ heißt: Die Datei liegt weder im Projekt noch in dessen Build noch auf diesem Rechner, und QuartzControl lädt nichts aus dem Netz. Die Probe zeigt deshalb eine andere Schrift als die Website."
+            "value" : "„Ersatzschrift“ heißt: Die Datei liegt weder im Projekt noch in dessen Build noch auf diesem Rechner, und QuartzHub lädt nichts aus dem Netz. Die Probe zeigt deshalb eine andere Schrift als die Website."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“Fallback” means the file is neither in the project nor in its build nor on this machine, and QuartzControl fetches nothing from the network. The sample therefore shows a different font from the site."
+            "value" : "“Fallback” means the file is neither in the project nor in its build nor on this machine, and QuartzHub fetches nothing from the network. The sample therefore shows a different font from the site."
           }
         }
       }
