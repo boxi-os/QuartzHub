@@ -160,20 +160,25 @@ struct InstalledTab: View {
       let frames = groups.frames.filter(matches)
       if !frames.isEmpty {
         Section {
+          explanation(L10n.t("pluginsInstalled.framesDescription"))
           ForEach(frames) { row($0, in: nil) }
         } header: {
-          heading(L10n.t("pluginsInstalled.framesHeading"), "rectangle.split.3x3", L10n.t("pluginsInstalled.framesDescription"))
+          heading(L10n.t("pluginsInstalled.framesHeading"), "rectangle.split.3x3")
         }
       }
       if groups.components.contains(where: { $0.items.contains(where: matches) }) {
-        Section {} header: {
-          heading(L10n.t("pluginsInstalled.componentsHeading"), "square.stack.3d.up", L10n.t("pluginsInstalled.componentsDescription"))
+        Section {
+          explanation(L10n.t("pluginsInstalled.componentsDescription"))
+        } header: {
+          heading(L10n.t("pluginsInstalled.componentsHeading"), "square.stack.3d.up")
         }
         ForEach(groups.components) { sequence($0) }
       }
       if [groups.pageTypes, groups.processing].contains(where: { $0.items.contains(where: matches) }) {
-        Section {} header: {
-          heading(L10n.t("pluginsInstalled.processingHeading"), "gearshape.2", L10n.t("pluginsInstalled.processingDescription"))
+        Section {
+          explanation(L10n.t("pluginsInstalled.processingDescription"))
+        } header: {
+          heading(L10n.t("pluginsInstalled.processingHeading"), "gearshape.2")
         }
         sequence(groups.pageTypes)
         sequence(groups.processing)
@@ -184,12 +189,16 @@ struct InstalledTab: View {
     .focusedSceneValue(\.moveSelection, moveAction(sequences))
   }
 
-  private func heading(_ title: String, _ symbol: String, _ text: String) -> some View {
-    VStack(alignment: .leading, spacing: 2) {
-      Label(title, systemImage: symbol).font(.headline)
-      Text(text).font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-    }
-    .padding(.top, 8)
+  private func heading(_ title: String, _ symbol: String) -> some View {
+    Label(title, systemImage: symbol).font(.headline).padding(.top, 8)
+  }
+
+  /// What a group is, as the first row under its heading: a section header keeps one line, and
+  /// the longer texts ended in "…" (measured 2026-11-09, frames and maintenance at 1200 pt).
+  private func explanation(_ text: String) -> some View {
+    Text(text).font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+      .selectionDisabled()
+      .listRowSeparator(.hidden)
   }
 
   /// One sequence: dragged with the mouse, renumbered as a whole.
@@ -266,6 +275,7 @@ struct InstalledTab: View {
 
   private var maintenance: some View {
     Section {
+      explanation(L10n.t("pluginsInstalled.maintenanceDescription"))
       HStack {
         Button(model.maintenance == .install ? L10n.t("pluginsInstalled.installFromLockRunning") : L10n.t("pluginsInstalled.installFromLock")) {
           Task { await model.runMaintenance(.install, window: unsaved?.window) }
@@ -279,7 +289,7 @@ struct InstalledTab: View {
         Text(notice).foregroundStyle(.green)
       }
     } header: {
-      heading(L10n.t("pluginsInstalled.maintenanceHeading"), "wrench.and.screwdriver", L10n.t("pluginsInstalled.maintenanceDescription"))
+      heading(L10n.t("pluginsInstalled.maintenanceHeading"), "wrench.and.screwdriver")
     }
     .selectionDisabled()
   }
