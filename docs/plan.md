@@ -326,6 +326,9 @@ nach Abhängigkeit:
   `review-befund` abgearbeitet werden. Das Handbuch entsteht in einem neuen Vault
   `~/Obsidian/QuartzProjekte/QuartzHub-Handbuch` als Kopie von `QuartzControl-Handbuch`, mit eigenem
   Projekt; online erst nach Freigabe. Reihenfolge: Liste, Reviews, Handbuch, Release.
+- **Entscheidungen zu den Lücken (Nutzer, 2026-11-09):** Das Hilfe-Menü wie in QuartzControl,
+  alle Einträge. Zoom, Neu laden und Entwicklerwerkzeuge entfallen. Projektkopf in der
+  Seitenleiste, Rollposition je Seite und Rückweg-Links kommen.
 - **Gleichstand-Liste** aus den Routen, Kanälen (`shared/ipc-contract.ts`, 171 Kanäle) und
   Handbuch-Kapiteln von QuartzControl 1.3. Abgehakt wird nur, was an der gebauten App gemessen ist.
 - **Review-Runden** mit dem übernommenen Skill `review-befund`.

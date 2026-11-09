@@ -27278,13 +27278,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie werden normalerweise mit QuartzControl installiert. Eine Neuinstallation bringt sie zurück; online stehen sie unter https://github.com/boxi-os/QuartzControl."
+            "value" : "Sie werden normalerweise mit QuartzHub installiert. Eine Neuinstallation bringt sie zurück; online stehen sie unter https://github.com/boxi-os/QuartzHub."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "They are normally installed with QuartzControl. Reinstalling brings them back; online they are at https://github.com/boxi-os/QuartzControl."
+            "value" : "They are normally installed with QuartzHub. Reinstalling brings them back; online they are at https://github.com/boxi-os/QuartzHub."
           }
         }
       }
@@ -27359,13 +27359,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Datenordner von QuartzControl öffnen"
+            "value" : "Datenordner von QuartzHub öffnen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open QuartzControl’s data folder"
+            "value" : "Open QuartzHub’s data folder"
           }
         }
       }

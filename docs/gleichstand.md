@@ -56,10 +56,10 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
 1. **Handbuch-Links:** „Im Handbuch nachlesen“ im Kopf jeder Seite, auf der Startseite und
    Hilfe ▸ Handbuch. Kommt mit dem Handbuch (Phase 5).
 2. **Hinweis auf eine neuere Fassung** der App (`appUpdate:check`). Braucht einen Release-Kanal.
-3. **Das Hilfe-Menü:** Rückmeldung senden, Quartz-Dokumentation, Plugin-Katalog, Datenordner
-   öffnen, Lizenzen. Die Lizenztexte reisen im Paket mit, die App zeigt aber keinen Weg dorthin.
-4. **Darstellung ▸ Zoom, Neu laden, Entwicklerwerkzeuge:** Die letzten zwei gehören zu Electron;
-   eine Entscheidung dagegen steht noch nirgends.
+3. ~~Das Hilfe-Menü~~: gebaut am 2026-11-09 wie in QuartzControl (Nutzer: alles); Datenordner und
+   Lizenzen gemessen, die drei Web-Links nur im Menü gelesen. Rückmeldung kommt erst an, wenn das
+   Repo öffentlich ist.
+4. ~~Darstellung ▸ Zoom, Neu laden, Entwicklerwerkzeuge~~: entfallen (Nutzer, 2026-11-09).
 5. **Band „Zugangsdaten nicht sicher speicherbar“** im Fenster „Projekte“. Eine Ablehnung des
    Schlüsselbunds meldet erst der Zugriff.
 6. ~~Der Fehler beim Leeren des Theme-Doku-Caches~~: kein Fall, QuartzControls Dienst scheitert nie
