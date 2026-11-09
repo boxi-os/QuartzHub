@@ -55,6 +55,8 @@ struct ExtraContentTab: View {
       } description: {
         Text(L10n.t("extraContent.notInstalledText"))
       }
+      // The whole column: at its text's width, the tab picker above moved to the left.
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
     } else {
       VSplitView {
         list(boxes)
