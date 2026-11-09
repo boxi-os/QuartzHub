@@ -936,3 +936,66 @@ gelesen):
 
 Eine Abweichung ohne Entscheidung: Ohne hinzugefügte Plugins fehlt auf Updates „Alle aktualisieren“;
 in QuartzControl steht der Button grau da.
+
+## Layout an der App gemessen
+
+Dreizehnter Durchgang, am 2026-11-10, an der Layout-Kopie aus Phase 4 (`layout/proj`, APFS-Kopie
+von gui-test mit echtem Content-Ordner) in 1400×860, ohne Netz. Config, Lock, `authored-frames` und
+`layout-breakpoints.json` vorher gesichert und danach zurückgelegt (`cmp` und `diff -r` gleich).
+Gezogen wurde mit synthetischen Mausereignissen: SwiftUIs `draggable` startet erst mit einer
+Ereignisquelle `hidSystemState`, Klickzustand 1, einigen kleinen Anfangsschritten und Verweilen
+am Ziel (`drag3.swift` im Scratchpad); ohne das kam kein Zug zustande. Für den Neustart-Hinweis lief
+der Dev-Server der Kopie kurz (über die App gestartet und gestoppt).
+
+- **Seite und Übersicht:** Reiter, Seitentyp und Auswahl überstehen den Weg über die Seitenleiste.
+  „darkmode“ in der Tabelle öffnet die Bühne mit darkmode im Inspektor, der Frame-Chip „editorial“
+  den Frame-Editor mit Rückweg. Ohne `template` für Canvas-Seiten zeigt die Spalte den Frame
+  „canvas“ des Plugins und „?“ in den Zellen; Excalidraw liegt unter `.quartz/plugins` und zählt,
+  wie in QuartzControl, nicht. Die Tabelle scrollt seitlich bis „404-Seite“.
+- **Bühne:** Desktop, Tablet (rechte Leiste unter dem Inhalt), Mobil (einspaltig, „Nur Desktop“
+  gestrichelt). Aus dem Vorrat ein Duplikat und ein Einschalten, in den Vorrat ein Ausschalten und
+  ein entferntes Duplikat, jedes angesagt. Inspektor: „Nur Mobil“, eine eigene Bedingung, Gruppe
+  mit ihren Optionen, Optionen des Plugins, „In den Vorrat legen“ mit dem Satz für ein ganzes Plugin,
+  „Einschalten“ (ans Ende, wie QuartzControl), „Duplizieren“ und „Duplikat entfernen“. Flex-Gruppe
+  angelegt und eingestellt. Seitentyp: Frame wählen, „Minimal“ nennt die fehlenden Positionen,
+  „Anpassung entfernen“, ein toter Ausschluss mit Hinweis. „Leer: hierher ziehen“ in einer
+  geleerten Leiste.
+- **Frames:** Maße, Ausrichtung, Spur- und Zeilengrößen, „Spurgrößen zurücksetzen“, „Auf Tablet
+  kopieren“, benannte Grid-Lines, neue Breakpoint-Breiten (alle fünf Frames neu geschrieben).
+  Bereich: Name, Belegung, „Eigener Bereich“, eine überschneidende Spanne abgewiesen, „Sichtbar auf
+  Desktop“ aus, „Aus Raster lösen“, aus der Liste auf eine Zelle, ein Bereich mit Spanne 3 auf die
+  letzte Spalte gekürzt und angesagt, auf einen belegten Platz abgewiesen und angesagt, löschen mit
+  Rückfrage. Nicht gemessen: Frame anlegen, anpassen, duplizieren und löschen; das läuft über
+  `quartz plugin add/remove`.
+
+Fünf Befunde, behoben:
+
+1. **Ablagefläche zu klein.** In einer Spalte mit wenigen Chips nahm die leere Fläche darunter nichts
+   an; QuartzControl macht die ganze Fläche unter dem Namen zum Ziel (`flex-1`, dort mit Messung).
+   Jetzt füllt die Ablage ihren Kasten.
+2. **„bei left abgelegt“.** Ein Bereich ohne Gruppe hieß in der Ansage mit dem Namen aus dem Frame;
+   QuartzControl sagt die Position („bei Linke Seitenleiste abgelegt.“), nur ein Bereich mit eigener
+   Gruppe heißt nach sich.
+3. **Flex-Gruppen ohne Beschriftung.** Abstand und Priorität standen als „0.75rem“ und „10“ da; ein
+   `TextField` außerhalb eines `Form` zeigt seinen Titel nicht. Jetzt „Abstand“ und „Priorität“ davor.
+4. **Rohe Werte für VoiceOver.** Ein Chip las „all“ und „desktop-only“ vor, die Bedingung und „aus“
+   gar nicht, und die Gruppe hing so an „Ausgeblendet auf: 404-Seite“, dass „custom-8“ wie ein
+   weiterer Seitentyp klang. Jetzt „Nur Desktop“, die Bedingung, „aus“ und „Flex-Gruppe „custom-8““,
+   auf der Bühne und in der Zusammenfassung.
+5. **Neustart-Hinweis ohne Server.** Nach jedem Speichern eines bestehenden Frames stand „Der
+   laufende Dev-Server zeigt die Änderung erst nach einem Neustart.“ in der Symbolleiste, ohne
+   Abstand an „Gespeichert“, auch ohne laufenden Server; ein Neustart wurde nicht angeboten. Jetzt
+   QuartzControls `DevServerRestartHint` (`App/Components/DevServerRestartHint.swift`): nur mit
+   laufendem Server, mit „Dev-Server neu starten“, im Reiter Frames; auch nach den Breakpoints. Die
+   frühere Zeile „anders“ ist damit gemessen.
+
+Nebenbei, nicht behoben (QuartzControl verhält sich gleich, gegen dessen Code gelesen):
+
+- „Duplizieren“ im Inspektor und „Auf Tablet kopieren“ werden nicht angesagt.
+- Der rote Satz einer abgewiesenen Ablage steht oben über dem Editor, außer Sicht, während man unten
+  am Raster arbeitet; angesagt wird er.
+- Nach den Breakpoints steht oben noch „Dev-Server neu gestartet“ vom Frame davor, unten schon wieder
+  „… erst nach einem Neustart“.
+
+Nur QuartzHub: Ein Feld der Zeilenhöhen, durch das der Fokus nur lief, schreibt einen leeren Eintrag
+(`rowSizes: ['4rem', '']`); leer heißt „auto“, es ist also nur Rauschen in der Datei.
