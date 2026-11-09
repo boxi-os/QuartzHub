@@ -60,8 +60,8 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    Lizenzen gemessen, die drei Web-Links nur im Menü gelesen. Rückmeldung kommt erst an, wenn das
    Repo öffentlich ist.
 4. ~~Darstellung ▸ Zoom, Neu laden, Entwicklerwerkzeuge~~: entfallen (Nutzer, 2026-11-09).
-5. **Band „Zugangsdaten nicht sicher speicherbar“** im Fenster „Projekte“. Eine Ablehnung des
-   Schlüsselbunds meldet erst der Zugriff.
+5. ~~Band „Zugangsdaten nicht sicher speicherbar“~~: kein Fall auf macOS, QuartzControl zeigt es nur
+   unter Linux (gelesen am 2026-11-09; die Zeile steht jetzt auf `anders`).
 6. ~~Der Fehler beim Leeren des Theme-Doku-Caches~~: kein Fall, QuartzControls Dienst scheitert nie
    (gelesen am 2026-11-09; die Zeile steht jetzt auf `anders`).
 7. **Projektbild und Pfad im Kopf der Seitenleiste.**
