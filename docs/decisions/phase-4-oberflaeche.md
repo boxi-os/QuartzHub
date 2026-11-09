@@ -1480,3 +1480,48 @@ Vault-Link beim Sync.
   Mobil), 1 mit Bedingung, 8 ausgeschaltet, 7 Seitentypen, die alle abweichen, 5 eigene Frames, eines
   ohne Seitentyp (`boxi-test`); Canvas- und Excalidraw-Seiten zeigen die geleerten Seitenleisten.
   „Ausgeschaltet“ klappt die acht auf, „Tag-Seiten“ öffnet die Bühne auf Tag-Seiten mit Frame `index`.
+
+### Layout: Frames, der Frame-Editor
+
+- **Vorbild** `FrameBuilder.tsx`, `FramePreview.tsx`, `FrameBreakpoints.tsx`. Oben Frame-Wahl,
+  „Neuer Frame“, „Duplizieren“, Löschen und der Breakpoint; darunter die Einstellungen des
+  Breakpoints in einem Kasten, dann Vorrat und Raster, dann die Warnungen. **Der gewählte Bereich
+  steht im Inspektor** (Name, Belegung, eigener Bereich, Spannen, sichtbar, aus dem Raster lösen,
+  löschen), wie QuartzControls Seitenleiste seit 1.1. Ohne eigenes Frame Quartz' Standard zum
+  Ansehen, mit den Maßen aus der Sass des Projekts, und „Als eigenen Frame anpassen“.
+- **Das Raster** ist das Layout der Bühne mit 24 pt Mindestbreite je Spalte und eigenem Roller.
+  Bereiche werden auf Zellen gezogen oder zurück in den Vorrat; ein gewählter hat acht Griffe. Eine
+  Kante rastet auf der nächsten Linie ein, gemessen an den Zellen der Ansicht, und hält vor einem
+  anderen Bereich an (`FrameEditing.resized`); geschrieben und angesagt wird beim Loslassen.
+  **Anders als dort:** Escape bricht ein laufendes Ziehen nicht ab (die Geste von SwiftUI lässt
+  sich nicht von außen beenden).
+- **Zwei Dokumente auf einer Seite:** „Speichern“ und ⌘S schreiben auf dem Frames-Reiter das Frame,
+  sonst die Config. Die Frage beim Verlassen nennt beide und speichert, was geändert ist. Das ist
+  bewusst anders als dort: QuartzControl hielt einen Frame-Entwurf über das Verlassen hinweg fest,
+  hier fragt es wie jede Seite. Den Neustart-Hinweis für einen laufenden Dev-Server sagt
+  `devServer.staleHint` nach jedem Speichern eines bestehenden Frames, ohne zu prüfen, ob einer läuft.
+- **Übergabe aus der Plugins-Seite** jetzt über `LayoutHandOver`, nicht über die
+  `@SceneStorage`-Schlüssel der Seite: Diese Schlüssel standen auch im Projektfenster. Ob zwei
+  Eigenschaften eines Schlüssels in einer Szene einander stören, ist nicht gemessen; die Übergabe
+  braucht sie nicht, die Seite schreibt die Bitte beim Erscheinen selbst in ihre Schlüssel.
+- **Beim Ansehen gefunden und behoben:**
+  - Absturz beim Wechsel auf den Standard-Frame: Ein Binding las den Entwurf mit `!`, und SwiftUI
+    fragte es noch einmal ab, als es keinen mehr gab.
+  - Das Raster war im waagerechten Roller 600 pt breit: Dort schlägt niemand eine Breite vor, sie
+    wird jetzt gemessen.
+  - Bei 1000 × 700 schob die Bühne das Fenster über seinen Rahmen, die Seitenleiste lag halb
+    außerhalb. Gefunden durch Weglassen und Messen der Mitte über die Bedienungshilfen: Es waren die
+    zwei Zeilen der Flex-Gruppen. Sie brechen jetzt um, ebenso die Kopfzeilen; der Ansicht- und der
+    Breakpoint-Wähler werden schmaler (ohne Breiten, dann Menü). Ein Umbruch-Layout ohne
+    vorgeschlagene Breite meldet die Breite seines breitesten Elements, nicht 400 pt.
+  - Die Vorschau des Standard-Frames zeichnete die Seitenleisten eine Zeile hoch statt über fünf.
+- **Gemessen** an der gui-test-Kopie, Dunkel und Hell, 1400 × 860 und 1000 × 700: `editorial`
+  geöffnet über „Frame bearbeiten“, `custom-8` an der rechten Kante von 6 auf 4 Spalten gezogen,
+  ⌘S ändert in `frame.json` genau `colSpan`; zurückgezogen bis in die rechte Seitenleiste hält er
+  bei 6 an, gespeichert ist `frame.json` byte-gleich. In den Vorrat gezogen, erscheint die Warnung
+  „Auf Desktop ausgeblendet“; Verlassen fragt, „Änderungen verwerfen“ lässt die Datei, wie sie war.
+  „Im Layout-Editor“ für `focus` und „Auf der Bühne zeigen“ für `darkmode` auf der Plugins-Seite
+  landen richtig. Quartz' Standard in Desktop und Tablet.
+- **Nicht gemessen**, weil es `quartz plugin add`/`remove` aufruft: ein neues Frame speichern, ein
+  Frame löschen. Ebenso nicht: die Breakpoint-Breiten speichern (schreibt jedes Frame neu), benannte
+  Grid-Lines, „Auf Tablet kopieren“.

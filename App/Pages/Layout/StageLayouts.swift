@@ -42,7 +42,8 @@ struct StageGridLayout: Layout {
   }
 
   func geometry(_ proposal: ProposedViewSize, _ subviews: Subviews) -> Geometry {
-    let stage = max(proposal.width ?? 600, 1)
+    // Asked without a width (the split view sizing its columns): small, the stage takes what it is given.
+    let stage = max(proposal.width ?? max(CGFloat(minColumn) * CGFloat(max(weights.count, 1)), 280), 1)
     let scale = { (v: Double) in CGFloat(points ? v : v * stage) }
     let frame = stage * CGFloat(min(max(width, 0), 1))
     let padInline = scale(paddingInline)
@@ -150,7 +151,9 @@ struct FlowLayout: Layout {
   }
 
   func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-    let width = proposal.width ?? 400
+    // Asked without a width (a Form row's ideal size): as wide as the widest item, so the column
+    // around it does not grow for a line that would wrap anyway.
+    let width = proposal.width ?? subviews.map { max($0.sizeThatFits(.unspecified).width, minItem) }.max() ?? 0
     var height: CGFloat = 0
     for line in lines(width, subviews) where !line.isEmpty {
       height += line.map { subviews[$0].sizeThatFits(ProposedViewSize(width: itemWidth($0, line, width, subviews), height: nil)).height }.max() ?? 0

@@ -279,13 +279,8 @@ struct LayoutSummary: View {
     InspectorPageContext(page: .layout) {
       Section(L10n.t("layoutEditor.summary.title")) {
         LabeledContent(L10n.t("layoutEditor.pageType.label"), value: facts.pageType == nil ? L10n.t("layoutEditor.pageType.all") : facts.typeLabel)
-        LabeledContent(L10n.t("layoutEditor.summary.frame")) {
-          VStack(alignment: .trailing, spacing: 2) {
-            Text(LayoutWords.frame(facts.frameChoice.name))
-            Text(facts.pageType == nil ? L10n.t("layoutEditor.summary.frameAllPages") : origin).font(.caption).foregroundStyle(.secondary)
-              .multilineTextAlignment(.trailing)
-          }
-        }
+        LabeledContent(L10n.t("layoutEditor.summary.frame"), value: LayoutWords.frame(facts.frameChoice.name))
+        Note(facts.pageType == nil ? L10n.t("layoutEditor.summary.frameAllPages") : origin)
       }
       ForEach(LayoutEntries.positions, id: \.self) { position in
         let indices = facts.positions[position] ?? []

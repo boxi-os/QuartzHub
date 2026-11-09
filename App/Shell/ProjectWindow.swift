@@ -20,12 +20,10 @@ struct ProjectWindow: View {
   /// move it back, and a binding onto `pageID` left the list on the row clicked (measured).
   @State private var highlighted: ProjectPage?
 
-  /// The Layout page's "where was I", set before it opens on a component or a frame (QuartzControl's
-  /// `primeStickyState` from the Plugins page). The same keys and types as on `LayoutPage`.
-  @SceneStorage("layout.tab") private var layoutTab = "global"
-  @SceneStorage("layout.pageType") private var layoutPageType = ""
-  @SceneStorage("layout.selected") private var layoutSelected = ""
-  @SceneStorage("layout.frame") private var layoutFrame = ""
+  /// Where the Layout page is to open, handed over from the Plugins page. Not the page's own
+  /// `@SceneStorage` keys: two properties of one key in one scene undo each other's writes
+  /// (measured: the Layout page's tab picker stopped switching).
+  @State private var layoutHandOver = LayoutHandOver()
 
   private var current: ProjectPage { ProjectPage(rawValue: pageID) ?? .overview }
 
@@ -88,16 +86,9 @@ struct ProjectWindow: View {
     .navigationTitle(row.name)
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
     .environment(\.openPage, OpenPageAction { go(to: $0) })
+    .environment(\.layoutHandOver, layoutHandOver)
     .environment(\.openLayout, OpenLayoutAction { target in
-      switch target {
-      case .component(let plugins, let index):
-        layoutTab = "global"
-        layoutPageType = ""
-        layoutSelected = LayoutEntries.componentRef(plugins, index).map { "\($0.name)\n\($0.occurrence)" } ?? ""
-      case .frame(let id):
-        layoutTab = "frames"
-        layoutFrame = id
-      }
+      layoutHandOver.target = target
       go(to: .layout)
     })
     .environment(\.unsavedGuard, unsaved)
@@ -142,6 +133,13 @@ struct OpenPageAction {
 extension EnvironmentValues {
   @Entry var openPage = OpenPageAction { _ in }
   @Entry var openLayout = OpenLayoutAction { _ in }
+  @Entry var layoutHandOver: LayoutHandOver?
+}
+
+/// The Layout page's next place, until the page takes it.
+@MainActor @Observable
+final class LayoutHandOver {
+  var target: OpenLayoutAction.Target?
 }
 
 /// Opens the Layout page on a component of the stage ("Auf der Bühne zeigen") or on an own frame

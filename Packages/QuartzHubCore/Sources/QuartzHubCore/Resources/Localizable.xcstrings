@@ -19985,13 +19985,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ziehe einen Bereich auf eine freie Zelle, um ihn zu platzieren, oder einen platzierten zurück in diese Liste, um ihn wieder zu lösen. An den Rändern eines platzierten Bereichs stellst du ein, über wie viele Zeilen und Spalten er reicht. Ein Klick zeigt seine Einstellungen in der Seitenleiste; ein hier ausgeblendeter Bereich behält seine Spannen, ein nie platzierter hat keine."
+            "value" : "Ziehe einen Bereich auf eine freie Zelle oder zurück in diese Liste; an den Rändern eines gewählten Bereichs ziehst du seine Spannen. Ein Klick zeigt seine Einstellungen im Inspektor."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drag an area onto an open cell to place it, or drag a placed one back into this list to unplace it. Drag the edges of a placed area to set how many rows and columns it spans. A click shows its settings in the side panel; an area hidden here keeps its spans, one never placed has none."
+            "value" : "Drag an area onto an open cell or back into this list; drag the edges of a selected area to change its spans. A click shows its settings in the inspector."
           }
         }
       }
@@ -20008,6 +20008,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No plain area for: {{slots}}. Anything in that slot and in no area of its own renders on no page at all."
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.inspectorSaves" : {
+      "comment" : "Layout, Frames tab, inspector of an area: says that it does not write at once",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Änderungen gehen in den Entwurf des Frames; „Speichern“ schreibt ihn."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changes go into the frame’s draft; “Save” writes it."
           }
         }
       }

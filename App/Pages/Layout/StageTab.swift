@@ -134,7 +134,8 @@ struct StageTab: View {
       }
       .accessibilityElement(children: .combine)
       Divider()
-      HStack(spacing: 12) {
+      // Wraps: beside each other the two are wider than the middle of the smallest window.
+      FlowLayout(spacing: 12, minItem: 0, stretch: false) {
         Picker(L10n.t("layoutEditor.pageType.label"), selection: $storedPageType) {
           Text(L10n.t("layoutEditor.pageType.all")).tag("")
           ForEach(facts.pageTypes, id: \.self) { type in
@@ -144,21 +145,19 @@ struct StageTab: View {
         }
         .fixedSize()
         .accessibilityIdentifier("layout.pageType")
-        Picker(L10n.t("layoutEditor.stage.viewLabel"), selection: $breakpoint) {
-          ForEach(LayoutBoard.breakpoints, id: \.self) { bp in
-            Text(own == nil ? LayoutWords.breakpoint(bp) : "\(LayoutWords.breakpoint(bp)) · \(LayoutBoard.rangeLabel(bp, widths: model.widths))").tag(bp)
-          }
+        // With the widths, without, as a menu: whatever the middle of the window holds.
+        ViewThatFits(in: .horizontal) {
+          viewPicker(ranges: own != nil).pickerStyle(.segmented).fixedSize()
+          viewPicker(ranges: false).pickerStyle(.segmented).fixedSize()
+          viewPicker(ranges: own != nil).pickerStyle(.menu).fixedSize()
         }
-        .pickerStyle(.segmented)
-        .fixedSize()
-        .accessibilityIdentifier("layout.view")
       }
-      HStack(spacing: 12) {
+      FlowLayout(spacing: 12, minItem: 0, stretch: false) {
         if let type = facts.pageType {
           framePicker(facts, type)
         } else {
           Text(L10n.t("layoutEditor.pageType.allPagesFrame", ["name": LayoutWords.frame(facts.frameChoice.name)]))
-            .font(.callout).foregroundStyle(.secondary)
+            .font(.callout).foregroundStyle(.secondary).fixedSize()
         }
         if let own {
           Button { editFrame(own) } label: { Label(L10n.t("layoutEditor.stage.editFrame"), systemImage: "rectangle.split.3x3") }
@@ -175,6 +174,15 @@ struct StageTab: View {
     .padding(12)
     .background(RoundedRectangle(cornerRadius: 10).fill(Color.accentColor.opacity(0.06)))
     .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.accentColor.opacity(0.3)))
+  }
+
+  private func viewPicker(ranges: Bool) -> some View {
+    Picker(L10n.t("layoutEditor.stage.viewLabel"), selection: $breakpoint) {
+      ForEach(LayoutBoard.breakpoints, id: \.self) { bp in
+        Text(ranges ? "\(LayoutWords.breakpoint(bp)) · \(LayoutBoard.rangeLabel(bp, widths: model.widths))" : LayoutWords.breakpoint(bp)).tag(bp)
+      }
+    }
+    .accessibilityIdentifier("layout.view")
   }
 
   private func fact(_ symbol: String, _ label: String?, _ value: String) -> some View {
@@ -539,7 +547,7 @@ struct StageTab: View {
               } label: { Label(L10n.t("common.deleteNamed", ["name": name]), systemImage: "trash") }
                 .labelStyle(.iconOnly).buttonStyle(.borderless)
             }
-            HStack(alignment: .firstTextBaseline, spacing: 12) {
+            FlowLayout(spacing: 12, minItem: 0, stretch: false) {
               Picker(L10n.t("layoutEditor.groupsPanel.direction"), selection: Binding(get: { group["direction"]?.stringValue ?? "row" },
                                                                                       set: { update(name, "direction", .string($0)) })) {
                 Text(L10n.t("layoutEditor.groupsPanel.directionRow")).tag("row")
@@ -557,17 +565,17 @@ struct StageTab: View {
               }
               .fixedSize()
             }
-            HStack(alignment: .firstTextBaseline, spacing: 12) {
+            FlowLayout(spacing: 12, minItem: 0, stretch: false) {
               TextField(L10n.t("layoutEditor.groupsPanel.gap"), text: Binding(get: { group["gap"]?.stringValue ?? "" }, set: { update(name, "gap", .string($0)) }),
                         prompt: Text(verbatim: "0.5rem"))
-                .frame(maxWidth: 200)
+                .frame(width: 180)
               TextField(L10n.t("layoutEditor.groupsPanel.priority"), text: Binding(
                 get: { group["priority"]?.numberValue.map { JSJSON.compact(.number($0)) } ?? "" },
                 set: { raw in
                   let trimmed = raw.trimmingCharacters(in: .whitespaces)
                   if trimmed.isEmpty { update(name, "priority", nil) } else if let n = Double(trimmed), n.isFinite { update(name, "priority", .number(n)) }
                 }), prompt: Text(L10n.t("layoutEditor.groupsPanel.priorityPlaceholder")))
-                .frame(maxWidth: 200)
+                .frame(width: 180)
             }
           }
           .padding(8)
