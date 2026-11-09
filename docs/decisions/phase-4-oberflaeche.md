@@ -1387,3 +1387,27 @@ Vault-Link beim Sync.
   Editors (kein gesetzter Cursor, also in eine eigene Zeile).
 - **Nicht gemessen:** die Original-Styles einer Komponente (gui-tests Plugins bringen in dieser
   Kopie keine mit, die der Dienst fände; nicht geprüft), ⌥-Klick, das Callout-Grundgerüst in der App.
+
+### Layout: die Regeln der Bühne (`LayoutBoard`, `PageTypeOverride`, `LayoutStage`)
+
+- **Der Rest von `utils.ts`**, den die Plugin-Editoren nicht mit der Bühne teilen (`LayoutEntries`
+  hat den geteilten Teil): Seitentypen, Vorrat (`parkedIndices`), Gruppen-Namen, Gruppe,
+  Sichtbarkeit, Bedingung, Ein/Aus, `groupOptions`, eigene Optionen, eine Kopie aus dem Vorrat
+  (`appendDuplicateToPosition`). Dazu `pageTypeOverride.ts` ganz und aus `LayoutOverview.tsx`
+  `frameShape` und `stateOf`, die Zellen der Übersicht. Die Frames liest `FrameView`, typisiert und
+  so nachsichtig wie die Zugriffe des Renderers; geschrieben wird später weiter das JSON.
+- **Gemessen** mit `scripts/layout-board-golden.mjs` an gui-tests und Examples eigener Config
+  (`readConfig`, nur lesend) mit gui-tests fünf Frames und an einem erfundenen Brett mit den Rändern
+  (Duplikate, eine geparkte Komponente, ein ausgeschaltetes Duplikat, ein Layout als Liste, tote
+  Ausschlüsse, ein unbekanntes Template und ein unbekannter Seitentyp, `{}`). `stateOf` liegt in
+  der Komponente und ist im Skript wörtlich abgeschrieben, alles andere geladen. Gleich: 67
+  Komponenten mit je 25 Änderungen, 90 Kopien aus dem Vorrat, 24 Seitentypen mit 1.200 Anpassungen,
+  53 Zeilen der Übersicht, in denen alle acht Zustände vorkommen.
+- Was QuartzControl in `GlobalBoard.tsx` rechnete (warum eine Komponente fehlt, welcher Bereich
+  welche Komponenten hält, welche Positionen das Frame nicht hat), steht in `LayoutStage` und ist
+  von Hand geprüft.
+- **Ein `exclude`, das keine Liste ist,** liest hier als „schließt nichts aus“. QuartzControls
+  Bühne stürzt daran ab (`deadExcludes` ruft `.filter` auf einem Text); gefunden beim Bau des
+  Goldens, nicht behoben, weil QuartzControl nur kritische Fixes bekommt.
+- Gegenproben (4, jede lässt einen Test scheitern; die vierte erst, nachdem das Brett einen
+  Seitentyp bekam, den keine Liste kennt).
