@@ -17,13 +17,15 @@ struct LayoutPage: View {
   /// removal (docs/conventions.md, „Wo war ich“).
   @SceneStorage("layout.selected") private var selected = ""
   @State private var breakpoint = "desktop"
+  /// The frame the Frames tab opens on, by id; set by "Frame bearbeiten" and from the Plugins page.
+  @SceneStorage("layout.frame") private var openFrameId = ""
 
   init(project: ProjectContext) {
     self.project = project
     _model = State(initialValue: LayoutModel(project: project))
   }
 
-  static let tabs: [LayoutModel.Tab] = [.global]
+  static let tabs: [LayoutModel.Tab] = [.overview, .global]
 
   private var tab: LayoutModel.Tab {
     LayoutModel.Tab(rawValue: tabID).flatMap { Self.tabs.contains($0) ? $0 : nil } ?? .global
@@ -92,14 +94,27 @@ struct LayoutPage: View {
       ProgressView(L10n.t("layoutEditor.loading")).frame(maxWidth: .infinity, maxHeight: .infinity)
     } else {
       switch tab {
-      case .global, .overview, .frames:
+      case .overview:
+        OverviewTab(model: model, openPageType: { type, index in
+          pageType = type
+          selected = index.flatMap { LayoutEntries.componentRef(model.config?.plugins ?? [], $0) }.map { "\($0.name)\n\($0.occurrence)" } ?? ""
+          tabID = LayoutModel.Tab.global.rawValue
+        }, openFrame: { name in
+          openFrameId = model.frames.first { $0.frameName == name }?.id ?? ""
+          tabID = LayoutModel.Tab.frames.rawValue
+        })
+      case .global, .frames:
         StageTab(model: model, selected: $selected, storedPageType: $pageType, breakpoint: $breakpoint, editFrame: { _ in })
       }
     }
   }
 
   @ViewBuilder private var inspector: some View {
-    if let config = model.config {
+    if tab == .overview {
+      InspectorPageContext(page: .layout) {
+        Section { Note(L10n.t("layoutEditor.overview.inspectorHint")) }
+      }
+    } else if let config = model.config {
       let facts = StageFacts(model: model, config: config, storedPageType: pageType)
       if let index = StageTab.resolve(selected, config.plugins) {
         ComponentInspector(model: model, index: index, facts: facts, selected: $selected)

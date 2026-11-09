@@ -22325,18 +22325,35 @@
         }
       }
     },
-    "layoutEditor.overview.intro" : {
+    "layoutEditor.overview.inspectorHint" : {
+      "comment" : "Layout, Übersicht tab: the inspector's page context",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Komponenten werden einmal für alle Seiten platziert. Jeder Seitentyp wird in seinem zugeordneten Frame gebaut und kann einzelne Komponenten oder ganze Bereiche ausblenden. Der Frame entscheidet, für welche Bereiche er überhaupt Platz hat. Die Tabelle zeigt, was davon auf jedem Seitentyp ankommt."
+            "value" : "Ein Klick auf eine Komponente, einen Seitentyp oder einen Frame öffnet die Stelle, an der er eingestellt wird."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Components are placed once for all pages. Each page type is built in its assigned frame and can hide single components or whole areas. The frame decides which areas it has room for at all. The table shows what reaches each page type."
+            "value" : "Click a component, a page type or a frame to open the place where it is set."
+          }
+        }
+      }
+    },
+    "layoutEditor.overview.intro" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komponenten werden einmal für alle Seiten platziert; jeder Seitentyp wird in seinem Frame gebaut und kann Komponenten oder Bereiche ausblenden. Die Tabelle zeigt, was davon auf jedem Seitentyp ankommt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Components are placed once for all pages; each page type is built in its frame and can hide components or areas. The table shows what reaches each page type."
           }
         }
       }

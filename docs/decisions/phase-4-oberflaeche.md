@@ -1466,3 +1466,17 @@ Vault-Link beim Sync.
   schreibt `exclude: ["@quartz-community/search"]` und `right: []`, beides zurück und gespeichert ist
   die Datei byte-gleich; `reader-mode` mit der Maus auf `breadcrumbs` gezogen landet vor dem Inhalt
   an erster Stelle ohne Gruppe, beide Listen in Zehnern.
+
+### Layout: Übersicht
+
+- **Vorbild** `LayoutOverview.tsx`: fünf Kennzahlen als Schalter mit ihrem Panel darunter (eins
+  zur Zeit, „Wo war ich“), die Matrix Komponente × Seitentyp als SwiftUI-`Grid` in einem eigenen
+  waagerechten Roller, darunter die Legende. Die Zellen rechnet `LayoutStage.cell` (im Golden
+  gemessen). Jedes Zeichen trägt den Satz `overview.cellTitle` als Name für VoiceOver und als
+  Tooltip. Wege heraus wie dort: Komponente → Bühne „Alle Seiten“ mit ihr im Inspektor, Spaltenkopf
+  → Bühne auf dem Seitentyp, Frame → Frame-Editor.
+- **Text:** Die Einleitung hatte vier Sätze, jetzt zwei.
+- **Gemessen** an der gui-test-Kopie, Dunkel, 1400×860: 21 platziert (18 immer, 2 nur Desktop, 1 nur
+  Mobil), 1 mit Bedingung, 8 ausgeschaltet, 7 Seitentypen, die alle abweichen, 5 eigene Frames, eines
+  ohne Seitentyp (`boxi-test`); Canvas- und Excalidraw-Seiten zeigen die geleerten Seitenleisten.
+  „Ausgeschaltet“ klappt die acht auf, „Tag-Seiten“ öffnet die Bühne auf Tag-Seiten mit Frame `index`.
