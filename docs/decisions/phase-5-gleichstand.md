@@ -766,3 +766,38 @@ vergeben“ sagt die Vorschau vor dem Neubau kurz „„Über diese Website“ k
 an. Die Frage vor dem Umbenennen eines benutzten Bilds hat drei Sätze. Die Meldung bei nicht
 schreibbarer Config ist Nodes Text („Error: EACCES: permission denied, open '…'“), wie die schon
 gesammelten Parser-Meldungen.
+
+## Plugins ▸ Mehrsprachigkeit an der App gemessen
+
+Zehnter Durchgang, am 2026-11-09, am selben gui-test-Klon in 1200×800, ohne Netz. Config und die
+`package.json` von quartz-multilanguage (im Klon ein Ordner, kein Link) waren für die Hinweise
+vorübergehend geändert und sind zurückgestellt (`cmp` gleich).
+
+- **Kopf und Liste:** „quartz-multilanguage“ mit „Eingeschaltet“ schreibt `enabled: true`, zurück
+  byte-gleich. „2 Sprachen“, „Deutsch · de · de-DE“ mit „Standard“, „English · en · en-US“.
+- **Standardsprache:** bei English eingeschaltet schreibt `defaultLanguage: en`, angesagt „English ist
+  jetzt die Standardsprache.“; das Abzeichen wandert, bei English steht dann „Um das abzugeben, mache
+  eine andere Sprache zur Standardsprache.“
+- **Veröffentlichen:** Deutsch aus schreibt `publishLanguages: [en]`, Abzeichen „nicht
+  veröffentlicht“. Bei English steht „Die einzige veröffentlichte Sprache bleibt aktiv.“; ein Klick auf
+  den Schalter ändert nichts (`cmp` gleich).
+- **Reihenfolge:** die Bedienungshilfe-Aktion „Nach oben: English“, das Kontextmenü „Nach oben“ und
+  Ziehen mit der Maus tauschen die Einträge, je angesagt („English steht jetzt an Stelle 1 von 2.“);
+  hin und zurück ist die Datei byte-gleich.
+- **Einstellungen:** sechs Bereiche mit ihrer Zeile („Erkennung: Ordner, Suffix, Frontmatter“,
+  „Aufklappmenü · Eigenname“, „hreflang an · og:locale an“ …). Ohne Auswahl zeigt der Inspektor den
+  Überblick (Sprachen, Standardsprache, Veröffentlicht „alle“, Erkennung).
+- **Sprachwechsler:** „Steht im Bereich Kopfbereich.“; ohne `layout` „Steht noch nirgends auf der
+  Seite.“ „Auf der Bühne zeigen“ wählt quartz-multilanguage in Layout ▸ Komponenten, der Rückweg führt
+  auf denselben Bereich. „Alle Optionen“ wählt den Eintrag unter Installiert.
+- **Hinweise:** `defaultLanguage: xx`: „Die Standardsprache „xx“ ist keine der Sprachen. Das Plugin
+  nimmt deshalb die erste, Deutsch.“ Zwei Einträge: „Die Konfiguration nennt quartz-multilanguage 2-mal.
+  …“ Eine unlesbare `package.json`: „Die Beschreibung der Optionen konnte nicht gelesen werden: …“ und
+  „Ohne die Beschreibung des Plugins gibt es keine Gliederung. …“. Ohne `configSchema`, aber mit den
+  Typ-Dateien, gibt es nur den Bereich „Weitere Optionen“ und keinen Hinweis; so auch QuartzControl
+  (`!schema`).
+- **Nicht installiert:** „quartz-multilanguage ist nicht installiert“ mit Verweis auf den Marktplatz.
+
+Ein Befund, behoben: Der leere Zustand war so schmal wie sein Text, wie bei Navigationen und
+Zusätzliche Inhalte; der Reiter-Wähler steht jetzt wieder in der Mitte. Hell geprüft (Liste, Inspektor
+einer Sprache). Die Vorschau dieses Reiters ist dieselbe wie auf den anderen.
