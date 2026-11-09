@@ -513,23 +513,47 @@ private struct RecordEditor: View {
         .background(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
         .accessibilityElement(children: .contain)
       }
-      HStack {
-        if !offered.isEmpty {
-          Picker(L10n.t("pluginOptions.addLanguage"), selection: Binding(get: { "" }, set: { add($0, to: record) })) {
-            Text(L10n.t("pluginOptions.addLanguage")).tag("")
-            ForEach(offered, id: \.self) { Text(verbatim: $0).tag($0) }
-          }
-          .labelsHidden()
-          .fixedSize()
+      // In the inspector's width the three in a row squeezed the field to "Sch" and the button to
+      // "H…" (measured 2026-11-09): there the field and its button go below the language choice.
+      ViewThatFits(in: .horizontal) {
+        HStack {
+          languagePicker(offered, record)
+          keyRow(key, record)
         }
-        TextField(L10n.t("pluginOptions.entryKeyPlaceholder"), text: $draftKey, prompt: Text(L10n.t("pluginOptions.entryKeyPlaceholder")))
-          .labelsHidden().textFieldStyle(.roundedBorder).font(.system(.body, design: .monospaced)).frame(maxWidth: 130)
-          .onSubmit { add(key, to: record) }
-        Button(L10n.t("pluginOptions.addEntry")) { add(key, to: record) }
-          .disabled(key.isEmpty || record[key] != nil)
+        VStack(alignment: .leading, spacing: 6) {
+          languagePicker(offered, record)
+          keyRow(key, record)
+        }
       }
     }
   }
+
+  @ViewBuilder private func languagePicker(_ offered: [String], _ record: JSONObject) -> some View {
+    if !offered.isEmpty {
+      Picker(L10n.t("pluginOptions.addLanguage"), selection: Binding(get: { "" }, set: { add($0, to: record) })) {
+        Text(L10n.t("pluginOptions.addLanguage")).tag("")
+        ForEach(offered, id: \.self) { Text(verbatim: $0).tag($0) }
+      }
+      .labelsHidden()
+      .fixedSize()
+    }
+  }
+
+  private func keyRow(_ key: String, _ record: JSONObject) -> some View {
+    HStack {
+      TextField(L10n.t("pluginOptions.entryKeyPlaceholder"), text: $draftKey, prompt: Text(L10n.t("pluginOptions.entryKeyPlaceholder")))
+        .labelsHidden().textFieldStyle(.roundedBorder).font(.system(.body, design: .monospaced))
+        .frame(minWidth: 100, idealWidth: 130, maxWidth: 130)
+        .onSubmit { add(typedKey, to: record) }
+      Button(L10n.t("pluginOptions.addEntry")) { add(typedKey, to: record) }
+        .fixedSize()
+        .disabled(key.isEmpty || record[key] != nil)
+    }
+  }
+
+  /// Read when Return or the button acts, not taken from the last drawing: typed quickly, "fr"
+  /// arrived as "f" (measured 2026-11-09).
+  private var typedKey: String { draftKey.trimmingCharacters(in: .whitespacesAndNewlines) }
 
   private func add(_ key: String, to record: JSONObject) {
     guard !key.isEmpty, record[key] == nil else { return }
