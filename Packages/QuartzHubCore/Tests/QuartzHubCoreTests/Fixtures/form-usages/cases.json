@@ -1,0 +1,1647 @@
+{
+ "locale": "de-DE",
+ "slugs": [
+  {
+   "path": "Ordner/Umfrage Seite.md",
+   "slug": "ordner/umfrage-seite",
+   "slugPath": "ordner/umfrage-seite"
+  },
+  {
+   "path": "a/a.md",
+   "slug": "a/index",
+   "slugPath": "a/"
+  },
+  {
+   "path": "x/Y/y.md",
+   "slug": "x/y/index",
+   "slugPath": "x/y/"
+  },
+  {
+   "path": "_index.md",
+   "slug": "index",
+   "slugPath": ""
+  },
+  {
+   "path": "x/_index.md",
+   "slug": "x/index",
+   "slugPath": "x/"
+  },
+  {
+   "path": "x/_index",
+   "slug": "x/index",
+   "slugPath": "x/"
+  },
+  {
+   "path": "/lead/trail/",
+   "slug": "lead/trail",
+   "slugPath": "lead/trail"
+  },
+  {
+   "path": "a//b.md",
+   "slug": "a//b",
+   "slugPath": "a//b"
+  },
+  {
+   "path": "a b&c%d?e#f<g>h:i\"j|k*l.md",
+   "slug": "a-b-and-c-percentdefghijkl",
+   "slugPath": "a-b-and-c-percentdefghijkl"
+  },
+  {
+   "path": "x.png",
+   "slug": "x.png",
+   "slugPath": "x.png"
+  },
+  {
+   "path": "x.HTML",
+   "slug": "x.HTML",
+   "slugPath": "x.HTML"
+  },
+  {
+   "path": "x.html",
+   "slug": "x",
+   "slugPath": "x"
+  },
+  {
+   "path": "a.b.c",
+   "slug": "a.b.c",
+   "slugPath": "a.b.c"
+  },
+  {
+   "path": "noext",
+   "slug": "noext",
+   "slugPath": "noext"
+  },
+  {
+   "path": "dir/",
+   "slug": "dir",
+   "slugPath": "dir"
+  },
+  {
+   "path": "Über.md",
+   "slug": "über",
+   "slugPath": "über"
+  },
+  {
+   "path": "Über.md",
+   "slug": "über",
+   "slugPath": "über"
+  },
+  {
+   "path": "ΣΑΣ.md",
+   "slug": "σας",
+   "slugPath": "σας"
+  },
+  {
+   "path": "İstanbul.md",
+   "slug": "i̇stanbul",
+   "slugPath": "i̇stanbul"
+  },
+  {
+   "path": "tab\there.md",
+   "slug": "tab-here",
+   "slugPath": "tab-here"
+  },
+  {
+   "path": "nbsp x.md",
+   "slug": "nbsp-x",
+   "slugPath": "nbsp-x"
+  },
+  {
+   "path": "ls x.md",
+   "slug": "ls-x",
+   "slugPath": "ls-x"
+  },
+  {
+   "path": "kKx.md",
+   "slug": "kkx",
+   "slugPath": "kkx"
+  },
+  {
+   "path": "ü/Ü.md",
+   "slug": "ü/index",
+   "slugPath": "ü/"
+  },
+  {
+   "path": "x.md/",
+   "slug": "x",
+   "slugPath": "x"
+  },
+  {
+   "path": "x.Md",
+   "slug": "x.Md",
+   "slugPath": "x.Md"
+  },
+  {
+   "path": "emoji 😀.md",
+   "slug": "emoji-😀",
+   "slugPath": "emoji-😀"
+  },
+  {
+   "path": "",
+   "slug": "",
+   "slugPath": ""
+  },
+  {
+   "path": "/",
+   "slug": "",
+   "slugPath": ""
+  },
+  {
+   "path": "a.tar.gz",
+   "slug": "a.tar.gz",
+   "slugPath": "a.tar.gz"
+  },
+  {
+   "path": "Teil 10.md",
+   "slug": "teil-10",
+   "slugPath": "teil-10"
+  }
+ ],
+ "uses": [
+  {
+   "id": "fm-string",
+   "text": "---\nform: kontakt\ntitle: \"  Kontakt  \"\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "kontakt"
+    ],
+    "hidesLayout": false,
+    "title": "Kontakt",
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-list",
+   "text": "---\nform: [a, b, a, 5, \" c \"]\ntitle: 7\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "a",
+     "b",
+     "c"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-false",
+   "text": "---\nform: false\ndraft: true\npublish: \"true\"\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": true,
+    "draft": true,
+    "publish": true
+   }
+  },
+  {
+   "id": "fm-false-string",
+   "text": "---\nform: \"false\"\ndraft: \"yes\"\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "false"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-crlf",
+   "text": "---\r\nform: crlf\r\n---\r\nText",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "crlf"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-dots",
+   "text": "---\nform: dots\n...\nText",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "dots"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-trailing-space",
+   "text": "---\nform: ts\n---   \n\nText {{form:after}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "ts",
+     "after"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-no-newline-end",
+   "text": "---\nform: eof\n---",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "eof"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-text-after-dashes",
+   "text": "---\nform: x\n--- no\nform: y\n---\nBody",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-empty",
+   "text": "---\n---\n{{form:a}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "a"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-blank-yaml",
+   "text": "---\n\n---\n{{form:b}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "b"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-invalid",
+   "text": "---\nform: [unclosed\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-duplicate-key",
+   "text": "---\nform: a\nform: b\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-array-root",
+   "text": "---\n- form\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-date-title",
+   "text": "---\n%YAML 1.1\n--- !!map\ntitle: 2001-01-01\nform: d\n---\nText",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "d"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-timestamp-11",
+   "text": "---\ntitle: 2001-01-01\nform: t\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "t"
+    ],
+    "hidesLayout": false,
+    "title": "2001-01-01",
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-bom",
+   "text": "﻿---\nform: bom\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-custom-key",
+   "text": "---\nformular: eigen\nform: nicht\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "formular",
+   "answer": {
+    "forms": [
+     "eigen"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-nfd-pair",
+   "text": "---\nform: [\"Über\", \"Über\", \" Über\"]\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "Über",
+     "Über"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "fm-title-blank",
+   "text": "---\ntitle: \"   \"\nform: z\n---\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "z"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-basic",
+   "text": "Text\n\n```quartz-form\n\n  kontakt  \nrest\n```\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "kontakt"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-info",
+   "text": "```quartz-form extra words\nid1\n```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "id1"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-tilde",
+   "text": "~~~quartz-form\nid2\n~~~",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "id2"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-indent3",
+   "text": "   ```quartz-form\nid3\n   ```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "id3"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-indent4",
+   "text": "    ```quartz-form\nid4\n    ```\n{{form:p4}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "p4"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-unclosed",
+   "text": "```quartz-form\nopen\n{{form:inside}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "open"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-short-close",
+   "text": "````quartz-form\nlong\n```\nstill {{form:hidden}}\n````\n{{form:out}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "long",
+     "out"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-close-text",
+   "text": "```quartz-form\nidc\n``` x\n{{form:hidden2}}\n```\n{{form:out2}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "idc",
+     "out2"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-mixed-close",
+   "text": "```quartz-form\nmix\n~~~\n{{form:hidden3}}\n```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "mix"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-other-hides",
+   "text": "```js\n{{form:nope}}\n```\n{{form:yes}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "yes"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-empty-lang",
+   "text": "```\n{{form:nope}}\n```\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-custom",
+   "text": "```formular\neins\n```\n```quartz-form\nzwei\n```",
+   "codeBlockLang": "formular",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "eins"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-blank-block",
+   "text": "```quartz-form\n\n   \n```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-crlf",
+   "text": "```quartz-form\r\ncr\r\n```\r\n{{form:after}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "cr",
+     "after"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-cr-only",
+   "text": "```quartz-form\rcr-only\r```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-ls",
+   "text": "```quartz-form x\nls\n```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-nel",
+   "text": "```quartz-formx\nnel\n```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-nel-lang",
+   "text": "```quartz-form\nnel2\n```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "code-nbsp-lang",
+   "text": "``` quartz-form x\nnb\n```",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "nb"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "inline",
+   "text": "a `{{form:no}}` b ``{{form:no2}}`` c {{form:yes}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "yes"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "inline-multiline",
+   "text": "a `x\n{{form:no}}\ny` {{form:yes}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "yes"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "inline-unmatched",
+   "text": "a ` {{form:yes}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "yes"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "inline-mismatch",
+   "text": "a `` {{form:no}} ` `` {{form:yes}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "yes"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "ph-spaces",
+   "text": "{{ form:abc }} {{\tform:t\t}} {{ form:nb }} {{ form:ls}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "abc",
+     "t",
+     "nb",
+     "ls"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "ph-case",
+   "text": "{{FORM:Abc}} {{Form:abc}} %7b%7bFORM:enc%7d%7d %7B%7Bform:enc2%7D%7D",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "Abc",
+     "abc",
+     "enc",
+     "enc2"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "ph-invalid",
+   "text": "{{form:a_b}} {{form:}} {{form:a b}} {{form:ä}} {{form:kK}} {{ſorm:x}} %7B%7B form:x%7D%7D",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "ph-order",
+   "text": "---\nform: [z]\n---\n{{form:y}}\n```quartz-form\nx\n```\n{{form:z}} {{form:w}}",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "z",
+     "x",
+     "y",
+     "w"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "ph-nfd",
+   "text": "{{form:x}} Über",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [
+     "x"
+    ],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "nothing",
+   "text": "Nur Text.",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  },
+  {
+   "id": "empty",
+   "text": "",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "forms": [],
+    "hidesLayout": false,
+    "draft": false,
+    "publish": false
+   }
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "fallback",
+   "files": [
+    [
+     "kontakt.md",
+     "---\ntitle: Kontakt\nform: kontakt\n---\nText"
+    ],
+    [
+     "Teil 10.md",
+     "{{form:umfrage}}"
+    ],
+    [
+     "Teil 2.md",
+     "```quartz-form\numfrage\n```"
+    ],
+    [
+     "äpfel.md",
+     "{{form:kontakt}} {{form:unbekannt}}"
+    ],
+    [
+     "Zebra.md",
+     "---\nform: false\n---\n"
+    ],
+    [
+     "entwurf.md",
+     "---\ndraft: true\nform: kontakt\n---\n"
+    ],
+    [
+     "öffentlich.md",
+     "---\npublish: true\n---\n{{form:kontakt}}"
+    ],
+    [
+     "ohne.md",
+     "Nichts hier."
+    ],
+    [
+     "private/geheim.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "Ordner/Umfrage Seite.md",
+     "---\ntitle: \"  Umfrage  \"\n---\n{{ form:umfrage }}"
+    ],
+    [
+     "Ordner/Ordner.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "bild.png",
+     "p"
+    ],
+    [
+     "GROSS.MD",
+     "{{form:kontakt}}"
+    ],
+    [
+     ".hidden.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "Mappe.md/inner.md",
+     "{{form:x}}"
+    ]
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: [\"private\"]\nplugins:\n  []\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [
+     {
+      "file": "äpfel.md",
+      "slug": "äpfel",
+      "forms": [
+       "kontakt",
+       "unbekannt"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "entwurf.md",
+      "slug": "entwurf",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "kontakt.md",
+      "slug": "kontakt",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "title": "Kontakt"
+     },
+     {
+      "file": "Mappe.md/inner.md",
+      "slug": "mappe.md/inner",
+      "forms": [
+       "x"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "öffentlich.md",
+      "slug": "öffentlich",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "Ordner/Ordner.md",
+      "slug": "ordner/index",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "Ordner/Umfrage Seite.md",
+      "slug": "ordner/umfrage-seite",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false,
+      "title": "Umfrage"
+     },
+     {
+      "file": "Teil 2.md",
+      "slug": "teil-2",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "Teil 10.md",
+      "slug": "teil-10",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "Zebra.md",
+      "slug": "zebra",
+      "forms": [],
+      "hidesLayout": true
+     }
+    ],
+    "slugs": [
+     "äpfel",
+     "entwurf",
+     "kontakt",
+     "mappe.md/inner",
+     "öffentlich",
+     "ohne",
+     "ordner/index",
+     "ordner/umfrage-seite",
+     "teil-2",
+     "teil-10",
+     "zebra"
+    ],
+    "listSource": "fallback",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "quartz-filters",
+   "files": [
+    [
+     "kontakt.md",
+     "---\ntitle: Kontakt\nform: kontakt\n---\nText"
+    ],
+    [
+     "Teil 10.md",
+     "{{form:umfrage}}"
+    ],
+    [
+     "Teil 2.md",
+     "```quartz-form\numfrage\n```"
+    ],
+    [
+     "äpfel.md",
+     "{{form:kontakt}} {{form:unbekannt}}"
+    ],
+    [
+     "Zebra.md",
+     "---\nform: false\n---\n"
+    ],
+    [
+     "entwurf.md",
+     "---\ndraft: true\nform: kontakt\n---\n"
+    ],
+    [
+     "öffentlich.md",
+     "---\npublish: true\n---\n{{form:kontakt}}"
+    ],
+    [
+     "ohne.md",
+     "Nichts hier."
+    ],
+    [
+     "private/geheim.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "Ordner/Umfrage Seite.md",
+     "---\ntitle: \"  Umfrage  \"\n---\n{{ form:umfrage }}"
+    ],
+    [
+     "Ordner/Ordner.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "bild.png",
+     "p"
+    ],
+    [
+     "GROSS.MD",
+     "{{form:kontakt}}"
+    ],
+    [
+     ".hidden.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "Mappe.md/inner.md",
+     "{{form:x}}"
+    ]
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: [\"private\"]\nplugins:\n  - source: remove-draft\n    enabled: true\n  - source: explicit-publish\n    enabled: true\n",
+   "globby": true,
+   "codeBlockLang": "",
+   "frontmatterKey": "",
+   "answer": {
+    "pages": [
+     {
+      "file": "äpfel.md",
+      "slug": "äpfel",
+      "forms": [
+       "kontakt",
+       "unbekannt"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "entwurf.md",
+      "slug": "entwurf",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "draft"
+     },
+     {
+      "file": "kontakt.md",
+      "slug": "kontakt",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "title": "Kontakt",
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Mappe.md/inner.md",
+      "slug": "mappe.md/inner",
+      "forms": [
+       "x"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "öffentlich.md",
+      "slug": "öffentlich",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "Ordner/Ordner.md",
+      "slug": "ordner/index",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Ordner/Umfrage Seite.md",
+      "slug": "ordner/umfrage-seite",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false,
+      "title": "Umfrage",
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Teil 2.md",
+      "slug": "teil-2",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Teil 10.md",
+      "slug": "teil-10",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Zebra.md",
+      "slug": "zebra",
+      "forms": [],
+      "hidesLayout": true,
+      "unbuilt": "unpublished"
+     }
+    ],
+    "slugs": [
+     "äpfel",
+     "entwurf",
+     "kontakt",
+     "mappe.md/inner",
+     "öffentlich",
+     "ohne",
+     "ordner/index",
+     "ordner/umfrage-seite",
+     "teil-2",
+     "teil-10",
+     "zebra"
+    ],
+    "listSource": "quartz",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "quartz-filters-off",
+   "files": [
+    [
+     "kontakt.md",
+     "---\ntitle: Kontakt\nform: kontakt\n---\nText"
+    ],
+    [
+     "Teil 10.md",
+     "{{form:umfrage}}"
+    ],
+    [
+     "Teil 2.md",
+     "```quartz-form\numfrage\n```"
+    ],
+    [
+     "äpfel.md",
+     "{{form:kontakt}} {{form:unbekannt}}"
+    ],
+    [
+     "Zebra.md",
+     "---\nform: false\n---\n"
+    ],
+    [
+     "entwurf.md",
+     "---\ndraft: true\nform: kontakt\n---\n"
+    ],
+    [
+     "öffentlich.md",
+     "---\npublish: true\n---\n{{form:kontakt}}"
+    ],
+    [
+     "ohne.md",
+     "Nichts hier."
+    ],
+    [
+     "private/geheim.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "Ordner/Umfrage Seite.md",
+     "---\ntitle: \"  Umfrage  \"\n---\n{{ form:umfrage }}"
+    ],
+    [
+     "Ordner/Ordner.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "bild.png",
+     "p"
+    ],
+    [
+     "GROSS.MD",
+     "{{form:kontakt}}"
+    ],
+    [
+     ".hidden.md",
+     "{{form:kontakt}}"
+    ],
+    [
+     "Mappe.md/inner.md",
+     "{{form:x}}"
+    ]
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  - source: remove-draft\n    enabled: false\n  - source: explicit-publish\n    enabled: yes\n",
+   "globby": true,
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [
+     {
+      "file": "äpfel.md",
+      "slug": "äpfel",
+      "forms": [
+       "kontakt",
+       "unbekannt"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "entwurf.md",
+      "slug": "entwurf",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "kontakt.md",
+      "slug": "kontakt",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "title": "Kontakt",
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Mappe.md/inner.md",
+      "slug": "mappe.md/inner",
+      "forms": [
+       "x"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "öffentlich.md",
+      "slug": "öffentlich",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "Ordner/Ordner.md",
+      "slug": "ordner/index",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Ordner/Umfrage Seite.md",
+      "slug": "ordner/umfrage-seite",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false,
+      "title": "Umfrage",
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "private/geheim.md",
+      "slug": "private/geheim",
+      "forms": [
+       "kontakt"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Teil 2.md",
+      "slug": "teil-2",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Teil 10.md",
+      "slug": "teil-10",
+      "forms": [
+       "umfrage"
+      ],
+      "hidesLayout": false,
+      "unbuilt": "unpublished"
+     },
+     {
+      "file": "Zebra.md",
+      "slug": "zebra",
+      "forms": [],
+      "hidesLayout": true,
+      "unbuilt": "unpublished"
+     }
+    ],
+    "slugs": [
+     "äpfel",
+     "entwurf",
+     "kontakt",
+     "mappe.md/inner",
+     "öffentlich",
+     "ohne",
+     "ordner/index",
+     "ordner/umfrage-seite",
+     "private/geheim",
+     "teil-2",
+     "teil-10",
+     "zebra"
+    ],
+    "listSource": "quartz",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "custom-keys",
+   "files": [
+    [
+     "a.md",
+     "---\nformular: eins\nform: zwei\n---\n```formular\ndrei\n```\n```quartz-form\nvier\n```"
+    ]
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "codeBlockLang": "formular",
+   "frontmatterKey": "formular",
+   "answer": {
+    "pages": [
+     {
+      "file": "a.md",
+      "slug": "a",
+      "forms": [
+       "eins",
+       "drei"
+      ],
+      "hidesLayout": false
+     }
+    ],
+    "slugs": [
+     "a"
+    ],
+    "listSource": "fallback",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "gitignore",
+   "files": [
+    [
+     "geheim/g.md",
+     "{{form:g}}"
+    ],
+    [
+     "offen/o.md",
+     "{{form:o}}"
+    ],
+    [
+     ".gitignore",
+     "geheim/\n"
+    ]
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "globby": true,
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [
+     {
+      "file": "offen/o.md",
+      "slug": "offen/o",
+      "forms": [
+       "o"
+      ],
+      "hidesLayout": false
+     }
+    ],
+    "slugs": [
+     "offen/o"
+    ],
+    "listSource": "quartz",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "unreadable",
+   "files": [
+    [
+     "lesbar.md",
+     "{{form:a}}"
+    ],
+    [
+     "zu.md",
+     "{{form:b}}"
+    ]
+   ],
+   "unreadable": [
+    "zu.md"
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "globby": true,
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [
+     {
+      "file": "lesbar.md",
+      "slug": "lesbar",
+      "forms": [
+       "a"
+      ],
+      "hidesLayout": false
+     }
+    ],
+    "slugs": [
+     "lesbar",
+     "zu"
+    ],
+    "listSource": "quartz",
+    "unreadable": 1
+   }
+  },
+  {
+   "id": "no-content",
+   "files": null,
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [],
+    "slugs": [],
+    "listSource": "quartz",
+    "unreadable": 0,
+    "noContent": true
+   }
+  },
+  {
+   "id": "dangling-link",
+   "link": "../nirgends",
+   "files": null,
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [],
+    "slugs": [],
+    "listSource": "quartz",
+    "unreadable": 0,
+    "noContent": true
+   }
+  },
+  {
+   "id": "linked",
+   "link": "../vault",
+   "vault": [
+    [
+     "Gärten-Ü/a.md",
+     "{{form:g}}"
+    ],
+    [
+     "Über.md",
+     "---\ntitle: Über\nform: [u, g]\n---\n"
+    ]
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "globby": true,
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [
+     {
+      "file": "Gärten-Ü/a.md",
+      "slug": "gärten-ü/a",
+      "forms": [
+       "g"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "Über.md",
+      "slug": "über",
+      "forms": [
+       "u",
+       "g"
+      ],
+      "hidesLayout": false,
+      "title": "Über"
+     }
+    ],
+    "slugs": [
+     "gärten-ü/a",
+     "über"
+    ],
+    "listSource": "quartz",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "bad-config",
+   "files": [
+    [
+     "private/p.md",
+     "{{form:p}}"
+    ],
+    [
+     "a.md",
+     "{{form:a}}"
+    ]
+   ],
+   "config": "configuration: [unclosed\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [
+     {
+      "file": "a.md",
+      "slug": "a",
+      "forms": [
+       "a"
+      ],
+      "hidesLayout": false
+     },
+     {
+      "file": "private/p.md",
+      "slug": "private/p",
+      "forms": [
+       "p"
+      ],
+      "hidesLayout": false
+     }
+    ],
+    "slugs": [
+     "a",
+     "private/p"
+    ],
+    "listSource": "fallback",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "nothing",
+   "files": [
+    [
+     "a.md",
+     "a"
+    ],
+    [
+     "b/c.md",
+     "c"
+    ]
+   ],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [],
+    "slugs": [
+     "a",
+     "b/c"
+    ],
+    "listSource": "fallback",
+    "unreadable": 0
+   }
+  },
+  {
+   "id": "empty",
+   "files": [],
+   "config": "configuration:\n  pageTitle: Test\n  ignorePatterns: []\nplugins:\n  []\n",
+   "codeBlockLang": "quartz-form",
+   "frontmatterKey": "form",
+   "answer": {
+    "pages": [],
+    "slugs": [],
+    "listSource": "fallback",
+    "unreadable": 0
+   }
+  }
+ ]
+}

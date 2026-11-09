@@ -767,3 +767,28 @@ byte-gleich:
 
 Gefunden in der laufenden App: Die Code-Spalte brach „EN-GB“ in zwei Zeilen; sie ist jetzt
 einzeilig und so breit wie nötig.
+
+### Plugins: Formulare
+
+Vorbild `routes/Plugins/Forms.tsx` mit `FormFieldsEditor.tsx`, `FormText.tsx`, `FormsTexts.tsx`,
+`FormsKeys.tsx` und `FormsRelay.tsx`; die Regeln in `formsOptions.ts` (`FormsOptions`, gemessen
+mit `scripts/forms-options-golden.mjs`).
+
+**Wo ein Formular eingebettet ist** (`FormUsages`), gemessen mit `scripts/form-usages-golden.mjs`
+gegen QuartzControls `shared/formUsages.ts` und `contentService.formUsages`:
+- 31 Pfade durch `quartzSlug` und `slugPath`;
+- 50 Seiten durch `pageFormUse` (Frontmatter, Codeblöcke, Platzhalter, Inline-Code, CR, U+2028,
+  U+0085, NFC und NFD);
+- 12 kleine Projekte durch den ganzen Scan, mit und ohne globby, mit verlinktem Vault, einer
+  unlesbaren Datei und den Filtern remove-draft und explicit-publish.
+
+Die Frontmatter liest der Helfer `content-files` (`op: parse`) mit dem yaml-Paket, das
+QuartzControl nahm, alle Seiten in einem Aufruf. Ein Datum (ein Dokument mit `%YAML 1.1`) wird
+dabei `null`: JSON hätte es zum String gemacht, und der Scan hätte ihn als Titel gelesen. Die
+Regeln sind von Hand nachgebaut, wo ICU anders liest als V8: `.` hält bei U+0085 an, `(?i)` nimmt
+das Kelvin-Zeichen für ein k, Swifts `==` hält „ü“ und „ü“ für gleich. Sieben Gegenproben
+schlugen an: Swifts `==`, `(?i)`, das Zählen der unlesbaren Dateien, Swifts Kleinschreibung,
+ohne Sortieren, die Filter ohne ihren Schalter und der Helfer ohne die Datumsregel.
+
+Abweichung: QuartzControl zeigte bei einem Scan, der scheitert, die Sätze von „Startseite
+anlegen“ („… deshalb ist keine Startseite angelegt“). Der Scan hat eigene Sätze.

@@ -8,6 +8,8 @@
 //       → { source: "fallback", files }   no globby installed: the walk below, which reads no .gitignore
 //       → { broken: "…" }                 a globby that is there and does not load
 //   { "op": "frontmatter", "value": {…} } → { text }   yaml's stringify, as createIndexPage writes it
+//   { "op": "parse", "texts": ["…"] }      → { values }  yaml's parse of each front matter, null where
+//       it throws (FormUsages.swift: contentService.formUsages parses with `parseYaml` in a try)
 //
 // The project's globby runs in this short child process, not in QuartzHub: QuartzControl loaded it
 // into its main process, which held safeStorage. The half-unpacked check (npm still unpacking) is
@@ -16,7 +18,7 @@ import { readdir, realpath, stat } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { join, matchesGlob, posix, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { stringify } from 'yaml'
+import { parse, stringify } from 'yaml'
 import { runHelper } from './protocol'
 
 async function list(project: string, cwd: string, patterns: string[]): Promise<Record<string, unknown>> {
@@ -38,6 +40,19 @@ async function list(project: string, cwd: string, patterns: string[]): Promise<R
   return { source: 'quartz', files: files.map((p) => p.split(sep).join('/')) }
 }
 
+// What the answer keeps of a parsed value: JSON has no Date (a `%YAML 1.1` document has
+// timestamps), and JSON.stringify would make one a string, which the scan reads as a title or an
+// id. Everything the scan looks at is a string, a boolean or an array; a Date becomes null.
+function jsonSafe(value: unknown): unknown {
+  if (value === undefined || value instanceof Date) return null
+  if (Array.isArray(value)) return value.map(jsonSafe)
+  if (value && typeof value === 'object') {
+    if (value instanceof Map || value instanceof Set || ArrayBuffer.isView(value)) return {}
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, jsonSafe(v)]))
+  }
+  return value
+}
+
 runHelper(async (request) => {
   const r = request as { op?: string; project?: string; cwd?: string; patterns?: unknown; value?: unknown }
   switch (r.op) {
@@ -46,6 +61,19 @@ runHelper(async (request) => {
       return list(r.project, r.cwd, r.patterns.filter((p): p is string => typeof p === 'string'))
     case 'frontmatter':
       return { text: stringify(r.value) }
+    case 'parse': {
+      const texts = (request as { texts?: unknown }).texts
+      if (!Array.isArray(texts)) throw new Error('texts missing')
+      return {
+        values: texts.map((text) => {
+          try {
+            return typeof text === 'string' ? jsonSafe(parse(text)) : null
+          } catch {
+            return null
+          }
+        })
+      }
+    }
     default:
       throw new Error(`unknown op ${String(r.op)}`)
   }

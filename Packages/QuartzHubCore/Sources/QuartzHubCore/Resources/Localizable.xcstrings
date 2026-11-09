@@ -13914,6 +13914,57 @@
         }
       }
     },
+    "formsEditor.scanGlobbyBroken" : {
+      "comment" : "Plugins › Formulare: why the pages that embed a form could not be found",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Dateisuche von Quartz konnte im Projekt nicht geladen werden ({{message}}). Ein erneutes npm install im Projekt behebt das meist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz’s file search could not be loaded in the project ({{message}}). Running npm install in the project again usually fixes this."
+          }
+        }
+      }
+    },
+    "formsEditor.scanGlobbyUnpacking" : {
+      "comment" : "Plugins › Formulare: why the pages that embed a form could not be found",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Dateisuche von Quartz ist im Projekt nur halb installiert ({{name}}; npm läuft noch oder wurde abgebrochen)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz’s file search is only half installed in the project ({{name}}; npm is still running or was interrupted)."
+          }
+        }
+      }
+    },
+    "formsEditor.scanHelperBroken" : {
+      "comment" : "Plugins › Formulare: the content-files helper did not answer during the page search",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Teil von QuartzHub hat nicht geantwortet ({{reason}})."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A part of QuartzHub did not answer ({{reason}})."
+          }
+        }
+      }
+    },
     "formsEditor.scanning" : {
       "localizations" : {
         "de" : {
