@@ -66,9 +66,8 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    (gelesen am 2026-11-09; die Zeile steht jetzt auf `anders`).
 7. **Projektbild und Pfad im Kopf der Seitenleiste.**
 8. **Die Rollposition je Seite** (QuartzControls `useRestoreScroll`).
-9. **Ein Eintrag unter „Handlungsbedarf“ führt auf den richtigen Reiter:** `ProjectAttention.Issue.tab`
-   liest die App nicht, obwohl Konfiguration und Stile inzwischen Reiter haben. Die Phase-4-Doku
-   hatte das für später vorgesehen.
+9. ~~Ein Eintrag unter „Handlungsbedarf“ führt auf den richtigen Reiter~~: geschlossen und gemessen
+   am 2026-11-09, dazu „Konfiguration ›“ unter „Die Seite“.
 10. **Rückweg-Links** (`markReturn`): von den Plugin-Editoren zurück nach „Alle Optionen“ bzw. zur
     Bühne, von Snapshots zurück zu Updates. Für die Übersicht ist der Verzicht entschieden, für
     diese nicht.

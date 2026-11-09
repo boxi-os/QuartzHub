@@ -13,6 +13,11 @@ struct OverviewPage: View {
   @State private var model: OverviewModel
   @State private var monitor = BuildMonitor.shared
   @Environment(\.openPage) private var openPage
+  /// Read by Konfiguration and Stile: the tab an entry under "Handlungsbedarf" leads to
+  /// (QuartzControl's `config?tab=site`), the way Updates hands Snapshots its snapshot. The same
+  /// type as on those pages (a key with two types left the window blank, measured on Snapshots).
+  @SceneStorage("config.tab") private var configTab = ConfigPage.Tab.site.rawValue
+  @SceneStorage("styles.tab") private var stylesTab = StylesModel.Tab.basics.rawValue
 
   init(project: ProjectContext) {
     self.project = project
@@ -71,6 +76,18 @@ struct OverviewPage: View {
     .formStyle(.grouped)
   }
 
+  private func open(_ issue: ProjectAttention.Issue) {
+    guard let page = ProjectPage(rawValue: issue.page) else { return }
+    if let tab = issue.tab {
+      switch page {
+      case .config where ConfigPage.Tab(rawValue: tab) != nil: configTab = tab
+      case .styles where StylesModel.Tab(rawValue: tab) != nil: stylesTab = tab
+      default: break
+      }
+    }
+    openPage(page)
+  }
+
   @ViewBuilder private var attentionSection: some View {
     let issues = ProjectAttention.issues(model.attention)
     if !issues.isEmpty {
@@ -79,7 +96,7 @@ struct OverviewPage: View {
           IssueRow(issue: issue, installing: model.busy.contains(.install)) {
             Task { await model.installDependencies() }
           } open: {
-            ProjectPage(rawValue: issue.page).map { openPage($0) }
+            open(issue)
           }
         }
       } header: {
@@ -165,7 +182,7 @@ struct OverviewPage: View {
     } header: {
       SectionHeader(title: L10n.t("dashboard.site"), symbol: ProjectPage.config.symbol) { EmptyView() }
     } footer: {
-      PageLink(page: .config)
+      PageLink(page: .config, configTab: .site)
     }
   }
 
@@ -469,12 +486,19 @@ private struct IssueRow: View {
 /// The section's way to the page that owns it.
 private struct PageLink: View {
   let page: ProjectPage
+  /// "Die Seite" describes fields of Website, so it leads there rather than to whichever tab
+  /// Konfiguration last had open (QuartzControl's `config?tab=site`, its 28th review, finding 5).
+  var configTab: ConfigPage.Tab?
   @Environment(\.openPage) private var openPage
+  @SceneStorage("config.tab") private var storedConfigTab = ConfigPage.Tab.site.rawValue
 
   var body: some View {
     HStack {
       Spacer()
-      Button { openPage(page) } label: {
+      Button {
+        if let configTab { storedConfigTab = configTab.rawValue }
+        openPage(page)
+      } label: {
         Label(page.title, systemImage: "chevron.right").labelStyle(TrailingIcon())
       }
       .buttonStyle(.link)
