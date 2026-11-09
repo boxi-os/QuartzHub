@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-09 nach „Hülle und Menü“.
+gezählt, zuletzt am 2026-11-09 nach der Übersicht.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 114 | 72 | 17 | 9 | 4 | 216 |
+| Einrichtung | 135 | 48 | 17 | 12 | 4 | 216 |
 | Plugins und Wartung | 109 | 133 | 4 | 15 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 94 | 119 | 10 | 20 | 0 | 243 |
-| **Summe** | **317** | **324** | **31** | **44** | **4** | **720** |
+| **Summe** | **338** | **300** | **31** | **47** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -84,5 +84,5 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
 2. Die `gebaut`-Zeilen Seite für Seite an einer Kopie von gui-test messen und mit Beleg auf
    `gemessen` stellen; was dabei scheitert, wird ein Befund. Fertig: Fenster „Projekte“
    (2026-11-09, zwei Befunde behoben), Fenster „Einstellungen“ (2026-11-09, drei Befunde behoben),
-   Hülle und Menü (2026-11-09, ohne Befund).
+   Hülle und Menü (2026-11-09, ohne Befund), Übersicht (2026-11-09, ein Befund behoben).
 3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe.

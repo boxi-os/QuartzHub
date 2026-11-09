@@ -411,3 +411,50 @@ immer ohne Netz; der Dev-Server lief lokal auf Port 8080.
 
 Kein Befund, der hier zu beheben war. Nicht gemessen: eine abgelehnte Schlüsselbund-Abfrage bei der
 Übernahme (braucht den echten Eintrag von QuartzControl) und die drei Hilfe-Links ins Netz.
+
+## Übersicht an der App gemessen
+
+Vierter Durchgang, am 2026-11-09. Zwei Projekte im Wegwerf-Profil: ein APFS-Klon der gui-test-Kopie
+ohne Veröffentlichungsziele (`scratchpad/ov/proj`) und ein eigenes kleines Testprojekt
+(`scratchpad/ov/mini`: Config von gui-test, leere Abhängigkeiten, eine Notiz, ein frisches
+git-Repository ohne Remote). Unter `content/` des Klons wurde nichts geändert; die Fälle des
+Content-Ordners stehen im Testprojekt. Jede Änderung mit Sicherung und danach zurückgestellt; die Seite
+liest beim Erscheinen neu, also über eine andere Seite und zurück.
+
+- **Grundzustand gegen die Platte:** Titel, Basis-URL und Sprache wie in `quartz.config.yaml`;
+  „Eigener Ordner · 228 Dateien“ (229 Dateien, eine davon `.DS_Store`); Git „v5“, „↑ 0, ↓ 0“,
+  „90 noch nicht committete Änderungen“ wie `git status --porcelain`, letzter Commit mit Betreff,
+  Alter und Autor; „5 eigene Frames · 14 Stylesheets“, „CSS übersetzt“; Build „465 Dateien · 33 MB“
+  (465 Dateien, 32,5 MB). „Alles ok“ oben.
+- **Fünf Einträge auf einmal:** Zeile `baseUrl` entfernt, ein Frame-Ordner aus `authored-frames`
+  genommen, Syntaxfehler in `custom.scss`, `.git/MERGE_HEAD` angelegt, `node_modules/@clack/prompts`
+  beiseite. „Handlungsbedarf (5)“: „1 npm-Paket fehlt“ mit „Installieren“ (nicht geklickt), „1 eigener
+  Frame fehlt“, „Ein merge ist angefangen und nicht abgeschlossen“, „custom.scss · Zeile 30 · Expected
+  expression.“, „Keine Basis-URL gesetzt“. Darunter „nicht gesetzt“, „merge läuft“, „4 eigene
+  Frames“, „CSS-Fehler“.
+- **Einzeln:** README.md im Index als Konflikt (`git update-index` mit drei Stufen): „1 Datei im
+  Konflikt“. Abgeschnittene `package.json`: „Ob alle npm-Pakete installiert sind, konnte nicht geprüft
+  werden“, dazu „CSS ungeprüft“ und kein „Alles ok“. Kaputte `.git/index`: „Der Git-Stand konnte nicht
+  gelesen werden“ mit „fatal: .git/index: index file smaller than expected“; kaputtes `.git/HEAD`
+  dagegen liest git als „Kein Git-Repository“, wie in QuartzControl. Ohne `public/`: „Noch nie gebaut“.
+- **Testprojekt:** ohne index.md „Die Website hat keine Startseite“, „1 Datei“, Git „ohne
+  Remote-Branch“. Content als Verknüpfung: das Ziel mit Ketten-Symbol, wie QuartzControl. Ziel
+  entfernt: „Der Content-Ordner zeigt ins Leere“ mit dem Pfad, „Ziel fehlt“. Ohne Ordner: „Es gibt
+  keinen Content-Ordner“, „nicht vorhanden“. In Hell angesehen.
+- **Dev-Server:** Starten zeigt „Läuft“, die Adresse, „Gestartet vor 14 Sekunden · WebSocket 3001 ·
+  PID 3749“ (die PID aus `running-servers.json`); Neu starten gibt eine neue PID; Stoppen schließt den
+  Port und leert `running-servers.json`. „Snapshots ›“ öffnet Snapshots, „Projektordner öffnen“ den
+  Finder im Projektordner.
+
+Ein Befund, behoben:
+
+- **Ein Server-Fehler kam nie in den Handlungsbedarf.** Mit dem fehlenden Paket endete der Start mit
+  „Fehler“ und dem Grund im Abschnitt Dev-Server, der Handlungsbedarf blieb bei 5 und hätte ohne die
+  anderen Fehler „Alles ok“ gezeigt. Die Seite las den Server-Zustand nur für ihren Abschnitt; die
+  Regeln (`ProjectAttention`) bekamen immer „gestoppt“. QuartzControl gibt den Zustand mit
+  (`ProjectDashboard.tsx`, `serverError`). Jetzt bekommen die Regeln den Zustand aus dem BuildMonitor.
+  Nachmessung: „Handlungsbedarf (6)“ mit „Der Dev-Server ist mit einem Fehler beendet worden“; nach
+  einem guten Start und Stoppen wieder „Alles ok“.
+
+Auf `Netz` gestellt: „Installation läuft“ (nur während npm), „Kern-Update angefangen“ und „Nicht
+prüfbar“ (beide aus der Update-Prüfung gegen GitHub).
