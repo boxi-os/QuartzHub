@@ -29,6 +29,18 @@ import Testing
     #expect(Self.pieces("plain text, no tag", .html).isEmpty)
   }
 
+  @Test func stylesheets() {
+    #expect(Self.pieces(#"@use "./custom/layout";"#, .scss) == ["tag:@use", #"string:"./custom/layout""#])
+    #expect(Self.pieces("  color: var(--secondary); // note", .scss) == ["attribute:color", "code:--secondary", "comment:// note"])
+    #expect(Self.pieces("  --tpl-space: 2rem;", .scss) == ["attribute:--tpl-space", "code:--tpl-space"])
+    #expect(Self.pieces("a:hover { color: #fff; }", .scss) == ["entity:#fff"])
+    #expect(Self.pieces("$gap: 4px;", .scss) == ["code:$gap"])
+    #expect(Self.pieces("/* block */ h1 {", .scss) == ["comment:/* block */"])
+    // A .css file has no line comments, and a URL's // is none either.
+    #expect(Self.pieces("a // b", .css).isEmpty)
+    #expect(Self.pieces("src: url(https://x.org/a.woff2);", .scss) == ["attribute:src"])
+  }
+
   @Test func markdown() {
     #expect(Self.pieces("## Über uns", .markdown) == ["heading:## Über uns"])
     #expect(Self.pieces("#hashtag", .markdown).isEmpty)

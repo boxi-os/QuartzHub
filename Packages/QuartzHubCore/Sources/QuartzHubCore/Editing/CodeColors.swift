@@ -9,7 +9,7 @@ import Foundation
 /// where its marks stand; CodeMirror, which QuartzControl's snippet editor used, parsed the whole
 /// document. Later rules win over earlier ones.
 public enum CodeColors {
-  public enum Language: String, Sendable { case html, markdown }
+  public enum Language: String, Sendable { case html, markdown, scss, css }
 
   public enum Role: String, Sendable, CaseIterable {
     case tag, attribute, string, entity, comment, heading, strong, emphasis, code, link, marker, placeholder
@@ -44,7 +44,22 @@ public enum CodeColors {
   /// layout-box's `{{…}}` tokens, last: they stand inside strings and links too.
   private static let placeholder = rule(#"\{\{[^{}\n]*\}\}"#, .placeholder)
 
+  /// Stylesheets: at-rules, property names, Sass and custom properties, hex colours, strings,
+  /// comments last. QuartzControl used CodeMirror's Lezer grammars; this is coloured by line and
+  /// by pattern, and a block comment across lines only where its marks stand.
+  private static let styles: [Rule] = [
+    rule(#"@[A-Za-z][\w-]*"#, .tag),
+    rule(#"^\s*((?:--)?[A-Za-z_][\w-]*)(?=\s*:(?!:)[^{]*$)"#, .attribute, group: 1),
+    rule(#"\$[A-Za-z_][\w-]*|(?<![\w-])--[A-Za-z_][\w-]*"#, .code),
+    rule(#"#[0-9A-Fa-f]{3,8}\b"#, .entity),
+    rule(#""[^"\n]*"|'[^'\n]*'"#, .string)
+  ]
+  private static let blockComment = rule(#"/\*.*?(?:\*/|$)|^(?:(?!/\*).)*?\*/"#, .comment)
+
   private static let rules: [Language: [Rule]] = [
+    // Sass reads `//` as a comment in a .scss file and not in a .css one.
+    .scss: styles + [rule(#"(?<![:\w])//.*$"#, .comment), blockComment],
+    .css: styles + [blockComment],
     .html: tags + [placeholder],
     .markdown: [
       rule(#"^\s{0,3}(?:[-*+]|\d{1,9}[.)])(?=\s)"#, .marker),

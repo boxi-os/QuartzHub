@@ -1312,3 +1312,14 @@ Vault-Link beim Sync.
 - **Nicht gemessen:** die Suche mit ihrer Grenze von 150 und das Entfernen einer eigenen Variablen
   in der laufenden App (beides über die Kernfunktionen getestet, nicht geklickt), die Zeit je
   Tastendruck mit allen Gruppen offen.
+
+### Stile: SCSS und CSS im Code-Editor färben (`CodeColors`)
+
+- **Zwei Sprachen mehr** für den Färber aus 4b: At-Regeln, Eigenschaftsnamen (nicht der Selektor
+  `a:hover`: nach dem Doppelpunkt einer Eigenschaft steht keine `{` mehr), Sass- und
+  CSS-Variablen, Hex-Farben, Strings, Kommentare zuletzt. `//` ist nur in `.scss` ein Kommentar,
+  wie bei Sass, und nicht nach einem Doppelpunkt (`url(https://…)`; QuartzControls Lezer-Grammatik
+  färbte eine protokollrelative URL grau, hier bleibt sie ungefärbt). Nach Zeilen und Mustern wie
+  HTML und Markdown, kein Parser: Ein Blockkommentar über mehrere Zeilen ist nur an seinen Marken
+  gefärbt.
+- Gegenproben (4, jede lässt den Test scheitern).
