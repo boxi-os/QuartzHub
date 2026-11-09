@@ -99,7 +99,7 @@ struct ProjectWindow: View {
     .background(UnsavedWindowHook(unsaved: unsaved))
   }
 
-  /// The ported pages; the others are placeholders until Phase 4 reaches them.
+  /// Every page of the project, each a `PageScaffold` of its own.
   @ViewBuilder private func page(_ page: ProjectPage, _ project: ProjectContext) -> some View {
     switch page {
     case .overview: OverviewPage(project: project)
@@ -113,7 +113,7 @@ struct ProjectWindow: View {
     case .layout: LayoutPage(project: project)
     case .templates: TemplatesPage(project: project)
     case .publish: PublishPage(project: project)
-    default: PendingPage(page: page)
+    case .documents: DocumentsPage(project: project)
     }
   }
 

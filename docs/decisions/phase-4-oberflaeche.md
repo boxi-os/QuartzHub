@@ -1638,3 +1638,52 @@ Der Kern war mit Punkt 8 und 9 fertig; `AppDeploy` kennt jetzt alle sieben Adapt
 - **Nicht gemessen**, weil es ins Netz geht: SFTP, rsync, FTP, Webhook, Git-Branch-Push, GitHub
   Pages mit Token. Auch nicht: „Export abbrechen“ (der Export dauerte 3 s), ein eingefügter
   privater Schlüssel im Passwortfeld.
+
+### Dokumente
+
+QuartzControls `Documents/index.tsx` und `PageOrder.tsx`, auf zwei Dateien unter
+`App/Pages/Documents/`: `DocumentsModel` (Bücher, Entwurf, Seiten des Builds) und `DocumentsPage`.
+Der Kern war mit Punkt 9 fertig (`Books`, `BookFile`, `ExportBook.sitePages`).
+
+- **Mitte und Inspektor:** In der Mitte die Bücher, darunter die Seiten des gewählten Buchs; der
+  Inspektor hält Titel, Autor, Ordner, Deckblatt und die Einstellungen für PDF und Verweise. Beides
+  ist ein Entwurf: „Speichern“ und „Verwerfen“ stehen in der Symbolleiste wie auf Konfiguration,
+  dazu ⌘S. Ohne gemerkte Auswahl ist das erste Buch gewählt, wie auf Veröffentlichen.
+- **Jeder Weg vom offenen Buch fragt** mit den drei Antworten der Seitenleiste (`UnsavedGuard`):
+  ein anderes Buch, ein Klick ins Leere nach einem Buch, „Neues Buch“, eine andere Seite. Die Liste
+  hat ihre eigene Hervorhebung; „Abbrechen“ setzt sie zurück.
+- **Umsortieren** nach den drei Wegen (Ziehen, Anordnen ▸ ⌥⌘↑/⌥⌘↓, Kontextmenü und
+  Bedienungshilfe-Aktion), statt QuartzControls Pfeilknöpfen je Zeile. Die Zeilen der eigenen
+  Reihenfolge haben Kennungen der Seite, nicht der Datei; nach dem Speichern behält dieselbe
+  Reihenfolge ihre Kennungen und damit die Hervorhebung für ⌥⌘↑.
+- **Der Ordner wird gelesen, wenn das Tippen ruht** (500 ms), ein anderes Buch sofort, wie in
+  QuartzControl nach dessen Review N2. Gemessen an den Kopien des Builds im Temp-Ordner: „animation“
+  zügig getippt ergab eine Kopie; Gegenprobe, zwei Tasten mit 4 s Pause, ergab zwei.
+- **Abweichung:** Löschen eines anderen Buchs behält die Änderungen am offenen. QuartzControl las
+  das offene Buch danach neu aus der Liste und verwarf sie still (`reload(selectedId)`).
+- **Texte:** Neu `documents.saveInvalid` für ein Feld über den Grenzen der Buchdatei
+  (`BookFile.problem`). Geändert: `pagesLoading` („QuartzHub liest …“), `noSelection` („in der
+  Liste“ statt „links“), `pages.ownHint` (⌥⌘↑ und ⌥⌘↓ statt Pfeilen), `confirmDelete` als Frage und
+  Erklärung. Ungenutzt bleiben `documents.unsaved` (dafür `UnsavedBadge`) und `pages.dragRow`.
+- **Gemessen, behoben:** Bei 1000 × 700 auf Englisch schnitt die Zeile über der eigenen
+  Reihenfolge „Follow the navigation again“ ab; die Knöpfe rücken jetzt unter den Hinweis, wenn die
+  Zeile nicht reicht (`ViewThatFits`).
+- **Gemessen** an der Kopie von gui-test mit Wegwerf-Profil, Hell und Dunkel, 1400 × 860 und
+  1000 × 700, Deutsch und Englisch:
+  - Testbuch über `animation/`: der Navigation folgend 6 Seiten; „Eigene Reihenfolge“,
+    Zwischenüberschrift „Anhang“, mit ⌥⌘↑ zwei Plätze hoch, eine Seite abgewählt, ⌘S: die Datei hat
+    `order` mit der Überschrift an fünfter Stelle und die Seite unter `excluded`.
+  - Ziehen einer Zeile an die Spitze: nur von der freien Fläche der Zeile aus; vom Ankreuzfeld aus
+    zog es nicht.
+  - Neues Buch über die ganze Website: 138 Seiten, eingerückt nach Ordnertiefe.
+  - Untertitel geändert, „Neues Buch“: die Frage; „Änderungen verwerfen“ legte `neues-buch.json` an,
+    der Untertitel kam nicht in die Datei. Wechsel zum anderen Buch mit Änderungen, „Abbrechen“: die
+    Hervorhebung springt zurück, die Änderungen bleiben.
+  - `quartz-books/` schreibgeschützt (`chmod 555`), ⌘S: EACCES im Inspektor, die Seite bleibt
+    ungespeichert; Seitenleiste, „Speichern“ in der Frage: scheitert, die Seite bleibt offen. Wieder
+    beschreibbar: ⌘S schreibt, keine Temp-Datei bleibt liegen.
+  - Eine Seite, die der Build nicht hat: „fehlt im Build“, Ankreuzfeld gesperrt, entfernbar. Eine
+    Datei mit Konfliktmarken (`kaputt.json`): die Warnung unter den Büchern, die Datei unverändert.
+- **Nicht gemessen:** die Sprachwahl (gui-test hat eine Sprache, die Auswahl erscheint erst ab
+  zwei), „Aufnehmen“ einer Seite, die die Navigation nicht zeigt, und `documents.saveInvalid` (die
+  Felder müssten über 500 Zeichen lang sein).

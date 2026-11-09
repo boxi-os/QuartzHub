@@ -5366,13 +5366,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Buch „{{name}}“ löschen? Die Datei {{file}} wird entfernt; ein Ziel, das es exportiert, findet es danach nicht mehr."
+            "value" : "Buch „{{name}}“ löschen?\n\nDie Datei {{file}} wird entfernt. Ein Ziel, das das Buch exportiert, findet es danach nicht mehr."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete the book “{{name}}”? The file {{file}} is removed; a target that exports it no longer finds it."
+            "value" : "Delete the book “{{name}}”?\n\nThe file {{file}} is removed. A target that exports the book no longer finds it."
           }
         }
       }
@@ -5878,13 +5878,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle links ein Buch, dann stehen hier Titel, Autor und die Einstellungen für das PDF."
+            "value" : "Wähle in der Liste ein Buch, dann stehen hier Titel, Autor und die Einstellungen für das PDF."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pick a book on the left, and its title, author and PDF settings show here."
+            "value" : "Pick a book in the list, and its title, author and PDF settings show here."
           }
         }
       }
@@ -6102,13 +6102,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eigene Reihenfolge: ziehen oder mit den Pfeilen verschieben."
+            "value" : "Eigene Reihenfolge: Seiten ziehen oder mit ⌥⌘↑ und ⌥⌘↓ verschieben."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Own order: drag, or move with the arrows."
+            "value" : "Own order: drag pages, or move them with ⌥⌘↑ and ⌥⌘↓."
           }
         }
       }
@@ -6182,13 +6182,30 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl liest die Seiten aus dem Build …"
+            "value" : "QuartzHub liest die Seiten aus dem Build …"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl is reading the pages from the build …"
+            "value" : "QuartzHub is reading the pages from the build …"
+          }
+        }
+      }
+    },
+    "documents.saveInvalid" : {
+      "comment" : "Dokumente: Inspektor, wenn ein Feld des Buchs die Grenzen der Buchdatei überschreitet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Buch konnte nicht gespeichert werden: „{{field}}“ ist zu lang oder ungültig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The book could not be saved: “{{field}}” is too long or invalid."
           }
         }
       }
