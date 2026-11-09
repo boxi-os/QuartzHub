@@ -1227,3 +1227,40 @@ Vault-Link beim Sync.
   Zurücklesen aus drei Wertesätzen (gültig, schief, leer), 15 Gruppierungen mit Suche, 240 Fälle
   `hslToHex`. Alles gleich.
 - Gegenproben (16, jede lässt einen Test scheitern).
+
+### Stile: Community-Themes
+
+- **Wie dort:** das aktive Theme mit Deaktivieren und Wieder-aktivieren (der Eintrag bleibt mit
+  `enabled: false`, Theme und Einstellungen bleiben erhalten), „Als Preset speichern“, die
+  Style Settings des Themes, die Presets mit Anwenden und Löschen, der Katalog mit Suche und
+  „Neu laden“. Die Details eines Katalog-Themes und „Installieren & aktivieren“ stehen im
+  Inspektor (die Regel „rechts nur der Inspektor“), in QuartzControl klappte die Zeile auf.
+- **Die Style Settings** gruppieren nach den Überschriften des Themes, als `DisclosureGroup`, zu-
+  oder aufgeklappt, wie der Autor es vorgibt; eine Suche klappt alles auf. Jede Art hat ihr
+  Bedienelement (Schalter, Auswahl, Schieber mit Zahl, Text, Farbwähler, zwei für eine
+  Theme-Farbe), dazu „Zurücksetzen“, sobald ein Schlüssel des Felds gesetzt ist.
+- **Ein Fehler aus dem ersten Bau:** Das Namensfeld des Presets hing an einem optionalen Namen,
+  und nach dem Speichern stand es wieder da. Das Textfeld schreibt seinen Text beim Verschwinden
+  noch einmal zurück, und aus `nil` wurde wieder der getippte Name (gesehen, über die
+  Bedienungshilfen bestätigt). Jetzt sind „Feld offen“ und „Name“ zwei Zustände.
+- **Gemessen** an der gui-test-Kopie mit Theme minimal und mit ultra-lobster (beide installiert),
+  Dunkel, 1400×860:
+  - Der Katalog kam über `npm search` (177 Themes, 30 sichtbar, „147 weitere Treffer“); die
+    Details von cupertino aus seinem `theme.json` im Inspektor.
+  - Ultra Lobster mit der Doku aus QuartzControls Cache im Testprofil: „139 Optionen“, die Zahl,
+    die QuartzControls Doku nennt (176 im Original, 139 brauchbar), die Gruppen wie im Original
+    auf- und zugeklappt.
+  - Preset speichern schreibt `.quartz-gui/theme-presets.json` mit `createdAt` als
+    `toISOString` (der erste Bau schrieb es ohne „Z“), „Aktiv“ steht daneben; Löschen fragt,
+    danach ist die Datei inhaltlich wieder die vom Anfang.
+  - Deaktivieren und ⌘S: In der Config steht `enabled: false`, Theme und Modus bleiben.
+- **Nicht gemessen:** „Installieren & aktivieren“ und „Anwenden“ eines Presets (beide `npm
+  install`, Netz), „Doku neu laden“ gegen GitHub.
+- **Nebenbefund, nicht behoben (beide Apps):** Für minimal, das bekannteste Theme, gibt es keine
+  Doku. Seine drei `@settings`-Blöcke rücken mit Tabulatoren ein, und die Bibliothek `yaml` lehnt
+  das ab („Tabs are not allowed as indentation“), also fällt jeder Block weg und die Antwort ist
+  „keins“ (gemessen mit dem echten `theme.css` von kepano/obsidian-minimal, 267 KB). QuartzControls
+  `styleSettingsSchemaService` geht denselben Weg mit derselben Bibliothek. Der Reiter zeigt dann
+  nur die rohen Schalter.
+- **Nebenbefund:** `SyncTests.aSyncThatHangsEnds` flackert (ENOENT auf `askpass-path`, allein in
+  zwei von drei Läufen gescheitert); Sync ist in dieser Runde nicht angefasst.

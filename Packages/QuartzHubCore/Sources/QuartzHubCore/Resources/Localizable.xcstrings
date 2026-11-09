@@ -51553,13 +51553,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Theme-Liste konnte nicht geladen werden. Unten stehen nur ein paar bekannte Themes als Platzhalter. Mit „Neu laden“ nochmal versuchen."
+            "value" : "Die Theme-Liste konnte nicht geladen werden, unten stehen nur ein paar bekannte Themes als Platzhalter. „Neu laden“ versucht es noch einmal."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The theme list could not be loaded. What is listed below is a handful of well-known themes as a placeholder. Try “Reload”."
+            "value" : "The theme list could not be loaded, so only a few well-known themes stand below as placeholders. “Reload” tries again."
           }
         }
       }
@@ -51681,7 +51681,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preset „{{name}}“ löschen?\n\nDas eingestellte Theme bleibt, wie es ist; nur der gespeicherte Eintrag verschwindet. Zurückholen lässt er sich nicht."
+            "value" : "Preset „{{name}}“ löschen?\n\nDas eingestellte Theme bleibt, wie es ist; nur der gespeicherte Eintrag verschwindet. Er kann nicht zurückgeholt werden."
           }
         },
         "en" : {

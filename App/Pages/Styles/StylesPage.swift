@@ -14,6 +14,9 @@ struct StylesPage: View {
   @State private var migrateError: String?
   /// Bumped after every save, for what a tab reads again then.
   @State private var savedRound = 0
+  @SceneStorage("styles.theme.selected") private var themeSelected: String?
+  @SceneStorage("styles.themeCatalog.query") private var themeQuery = ""
+  @State private var themeCatalog: ThemeMarketplace.Catalog?
   @Environment(\.unsavedGuard) private var unsaved
 
   init(project: ProjectContext) {
@@ -70,10 +73,35 @@ struct StylesPage: View {
         }
       }
     } inspector: {
-      InspectorPageContext(page: .styles) {
-        if model.config != nil {
-          Section { Text(cascadeLine).foregroundStyle(.secondary) }
-        }
+      if tab == .theme, let themeSelected, let config = model.config {
+        let active = config.plugins.first(where: FontDelivery.isThemePlugin).flatMap { FontDelivery.enabled($0) ? $0.object["options"]?["theme"]?.stringValue : nil }
+        ThemeInspector(id: themeSelected, listing: themeCatalog?.themes.first { $0.id == themeSelected }, model: model,
+                       active: active == themeSelected) { id in activateTheme(id) }
+          .id(themeSelected)
+      } else {
+        pageContext
+      }
+    }
+  }
+
+  /// The catalog's "install" from the inspector: the same as the tab's.
+  private func activateTheme(_ id: String) {
+    guard var config = model.config else { return }
+    let index = config.plugins.firstIndex(where: FontDelivery.isThemePlugin)
+    var base = index.map { config.plugins[$0] } ?? PluginEntry(object: JSONObject([("name", .string(id)), ("source", .string("@quartz-themes/core")),
+                                                                                   ("enabled", .bool(true)), ("options", .object(JSONObject([("mode", .string("both"))])))]))
+    var options = base.object["options"]?.objectValue ?? JSONObject()
+    options["theme"] = .string(id)
+    base.object["enabled"] = .bool(true)
+    base.object["options"] = .object(options)
+    if let index { config.plugins[index] = base } else { config.plugins.append(base) }
+    model.setConfig(config)
+  }
+
+  private var pageContext: some View {
+    InspectorPageContext(page: .styles) {
+      if model.config != nil {
+        Section { Text(cascadeLine).foregroundStyle(.secondary) }
       }
     }
   }
@@ -111,7 +139,10 @@ struct StylesPage: View {
         switch tab {
         case .basics:
           BasicsTab(model: model, goTo: { tabID = $0.rawValue }, savedRound: savedRound, notes: AnyView(notes)) { _ = await save() }
-        case .theme, .variables, .customCss:
+        case .theme:
+          ThemeTab(model: model, notes: AnyView(notes), goTo: { tabID = $0.rawValue }, selection: $themeSelected, query: $themeQuery,
+                   catalog: $themeCatalog)
+        case .variables, .customCss:
           ContentUnavailableView {
             Label(tab.title, systemImage: ProjectPage.styles.symbol)
           } description: {
