@@ -108,3 +108,41 @@ Konfiguration schon ruft.
 Gemessen am 2026-11-09 an der gui-test-Kopie: Dunkel in 1400×860, Hell in 1000×700 (Thema über das
 Wegwerf-Profil), der Kopf mit dem Bild von gui-test und „/private/tmp/…pad/pub/proj“. Nicht
 gemessen: das Bild nach einer Änderung auf Konfiguration.
+
+## Rollposition je Seite
+
+QuartzControls `useRestoreScroll` merkte sich je Route, wie weit gescrollt war, solange die App
+lief, und setzte es beim Zurückkehren wieder, auch während die Seite noch nachlud. In QuartzHub
+baut jeder Besuch die Seite neu, sie stand also immer oben. Jetzt hängt `PageScaffold` jeder Seite
+`ScrollMemory` an, im Speicher je Projekt und Seite, nicht über einen Neustart.
+
+Was beim Bauen nicht so war wie gedacht, je gemessen:
+
+- **Welche Scrollansicht:** Eine Seite gibt ihre nicht heraus, also nimmt `ScrollMemory` die mit der
+  größten Überlappung mit dem Seitenrahmen. Ganz enthalten ist keine: Das Formular der Übersicht
+  reicht unter die Symbolleiste (1400×860, so groß wie das Fenster).
+- **Die alte Seite steht noch da:** Beim Wechsel war die Scrollansicht der verlassenen Seite einen
+  Moment im Fenster, die neue Seite hängte sich an sie und schrieb ihre Bewegungen unter dem
+  eigenen Schlüssel. Gesucht wird deshalb erst nach dem nächsten Durchlauf.
+- **Nur was der Nutzer scrollt, wird gespeichert:** SwiftUI setzt das Formular nach dem Erscheinen
+  noch einmal auf seinen oberen Rand (−52), und gespeichert löschte das die Stelle. Auch der Klick
+  in die Seitenleiste ist ein Ereignis, unter dem die neue Seite ihr erstes Layout macht. Es zählen
+  Rad, Ziehen und Tasten, die auf diese Scrollansicht zielen. Andere Bewegungen werden in den ersten
+  fünf Sekunden rückgängig gemacht, danach gehören sie der Seite.
+- **Fünf Sekunden, nicht anderthalb:** Plugins liest die Config länger als anderthalb Sekunden;
+  danach blieb die Liste oben.
+- **Eine Liste merkt sich die Zeile, nicht den Abstand:** Die Liste ist eine Outline-Ansicht, die
+  Höhen nicht gezeichneter Zeilen nur schätzt. Derselbe Abstand landete einen Abschnitt daneben
+  („Verarbeitung (25)“ statt „Navigationen (3)“). Gemerkt wird die oberste Zeile mit dem Anteil, wie
+  weit sie verdeckt ist, wiederhergestellt mit `scrollRowToVisible`. Die Zeile bestimmt
+  `rect(ofRow:)`, nicht `row(at:)`: Das antwortete in SwiftUIs Liste mit einer Zeile, die über dem
+  Punkt endete (Anteil 1,0), und die Liste lag zwei Zeilen daneben.
+
+Gemessen am 2026-11-09 an der gui-test-Kopie, 1400×860: Übersicht zwölf Radschritte hinab, Plugins
+zwölf hinab, Snapshots, zurück zur Übersicht: dieselbe Stelle („…vor 4 Wochen · boxi-os“, „Plugins“,
+„46 von 64 aktiv“); Plugins: dieselbe Stelle („Navigationen (3)“, „quartz-navigations … priority:
+20“). **Gegenprobe:** Snapshots, vorher nie gescrollt, öffnet oben.
+
+Nicht gemessen: Seiten, deren größte Scrollansicht ein Editor ist (Eigenes CSS, Zusätzliche
+Inhalte), und Seiten mit Reitern, die sich eine Position für alle Reiter teilen (wie in
+QuartzControl, dessen Schlüssel der Pfad ohne Reiter war).

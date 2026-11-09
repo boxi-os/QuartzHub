@@ -17,10 +17,13 @@ struct PageScaffold<Content: View, Inspector: View>: View {
   @ViewBuilder var inspector: () -> Inspector
 
   @SceneStorage("inspector.presented") private var inspectorPresented = true
+  @Environment(\.project) private var project
 
   var body: some View {
     content()
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+      // Back where it was left (ScrollMemory), per project and page.
+      .background(ScrollMemory(key: "\(project?.path ?? "")|\(page.rawValue)"))
       // The window's title is the project's name (ProjectWindow); the page is its subtitle.
       .navigationSubtitle(page.title)
       .inspectorColumn(isPresented: $inspectorPresented, content: inspector)
