@@ -288,7 +288,11 @@ private struct FoldGroup<Content: View>: View {
       VStack(alignment: .leading, spacing: 12) { content() }
         .padding(.top, 6)
     } label: {
+      // The whole band folds, as QuartzControl's `FoldBox` is one button; on its own, the
+      // disclosure group answered only its chevron (measured 2026-11-09).
       GroupTitle(title: title, aside: aside, mark: mark).fontWeight(.medium)
+        .contentShape(Rectangle())
+        .onTapGesture { binding.wrappedValue.toggle() }
     }
     if topLevel {
       Section { disclosure }
