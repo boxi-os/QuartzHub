@@ -659,6 +659,10 @@ struct SlugField: View {
   var body: some View {
     let text = draft ?? value
     let unknown = !value.isEmpty && !slugs.isEmpty && !slugs.contains(value)
+    let matches = slugs.filter { text.isEmpty || $0.localizedCaseInsensitiveContains(text) }
+    // An empty suggestion list shows nothing at all, so while typing the line under the field says
+    // what QuartzControl's list said when it came up empty (`emptyText`).
+    let noMatch = focused && !text.isEmpty && !slugs.isEmpty && matches.isEmpty
     VStack(alignment: .leading, spacing: 4) {
       Text(L10n.t("formsEditor.successSlug"))
       TextField(L10n.t("formsEditor.successSlug"), text: Binding(get: { text }, set: { next in
@@ -672,12 +676,14 @@ struct SlugField: View {
         .onChange(of: focused) { _, now in if !now { finish() } }
         .onChange(of: value) { _, _ in if !focused { draft = nil } }
         .textInputSuggestions {
-          ForEach(slugs.filter { text.isEmpty || $0.localizedCaseInsensitiveContains(text) }.prefix(40), id: \.self) { slug in
+          ForEach(matches.prefix(40), id: \.self) { slug in
             Text(slug).textInputCompletion(slug)
           }
         }
-      Text(unknown ? L10n.t("formsEditor.successSlugUnknown") : L10n.t("formsEditor.successSlugHint"))
-        .font(.caption).foregroundStyle(unknown ? .orange : .secondary).fixedSize(horizontal: false, vertical: true)
+      Text(noMatch ? L10n.t("formsEditor.noSuchPage")
+        : unknown ? L10n.t("formsEditor.successSlugUnknown") : L10n.t("formsEditor.successSlugHint"))
+        .font(.caption).foregroundStyle(noMatch || unknown ? .orange : .secondary).fixedSize(horizontal: false, vertical: true)
+        .accessibilityIdentifier("forms.successSlug.hint")
     }
   }
 

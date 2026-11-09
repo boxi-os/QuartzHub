@@ -71,7 +71,7 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
 10. **Rückweg-Links** (`markReturn`): von den Plugin-Editoren zurück nach „Alle Optionen“ bzw. zur
     Bühne, von Snapshots zurück zu Updates. Für die Übersicht ist der Verzicht entschieden, für
     diese nicht.
-11. **Formulare: „Keine passende Seite“** in den Vorschlägen der Zielseite.
+11. ~~Formulare: „Keine passende Seite“~~: geschlossen und gemessen am 2026-11-09.
 12. **Frames: einen Bereich mit der Tastatur setzen oder verschieben.** Die Entscheidung 4b
     („die Tastatur verschiebt über den Inspektor“) ist auf der Bühne umgesetzt, im Frame-Editor
     nicht.

@@ -60,3 +60,15 @@ Gemessen am 2026-11-09 an der gui-test-Kopie mit einer unvollständigen Regel in
 
 Nebenbei gesehen: Der Eintrag heißt „Dein CSS lässt sich nicht übersetzen“; das Projekt schreibt
 „konnte nicht … werden“. Nicht geändert.
+
+## „Keine passende Seite“
+
+QuartzControls Combobox für die Zielseite eines Formulars zeigte bei einer Eingabe ohne Treffer
+die leere Liste mit „Keine passende Seite“. `textInputSuggestions` zeigt bei null Vorschlägen gar
+nichts, die Eingabe blieb also ohne Antwort, bis das Feld verlassen und „Keine Seite der Website
+hat diesen Slug“ darunter stand. Jetzt sagt die Zeile unter dem Feld schon beim Tippen „Keine
+passende Seite“, solange keiner der Slugs den Text enthält.
+
+Gemessen am 2026-11-09 an der gui-test-Kopie (Formular „Kontakt“, Nach dem Senden „Zu einer Seite
+wechseln“, die Config danach zurückgesetzt): „xyzq“ getippt, die Zeile sagt „Keine passende Seite“;
+**Gegenprobe** „anim“: die Vorschläge erscheinen (`animation/…`, `quellen/artikel/css-animations-mdn` …).
