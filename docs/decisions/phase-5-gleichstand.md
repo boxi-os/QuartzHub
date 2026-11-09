@@ -312,3 +312,57 @@ Zwei Befunde, beide behoben:
 Nicht gemessen: das Werkzeug-Band (fehlend, kaputt, inkompatibel), weil es sich nur durch einen
 Eingriff in Runtime oder PATH herstellen ließe; was nach einem echten Anlegen oder Duplizieren
 kommt (Netz).
+
+## Fenster „Einstellungen“ an der App gemessen
+
+Zweiter Durchgang über die `gebaut`-Zeilen, am 2026-11-09. Wegwerf-Profil mit zwei Projekten
+(`alpha`, `zeta`) und darin vier Veröffentlichungszielen, dazu in `connections.json` ein
+GitHub-Eintrag mit `secretInKeychain`, aber ohne Geheimnis (`-QHMemorySecrets YES`), ein
+SSH-Zugang mit SSH-Agent und gemerktem Host-Key, ein FTP- und ein SSH-Zugang ohne Geheimnis; in
+`theme-docs/` drei `.json` und eine `notes.tmp`; `running-servers.json` kaputt. Dunkel, Hell und
+mit dem leeren Profil. Nichts davon ging ins Netz: Die Token-Prüfung endet ohne Geheimnis vor der
+Anfrage (`GitHubAPI.api`, 401 wie in QuartzControl), und das Zugangs-Sheet ruft nichts auf.
+
+- **Allgemein:** „relativ/ordner“ und „Speichern“ ergibt „Das ist kein vollständiger Pfad. …“,
+  `settings.json` bleibt unverändert. „~/Documents/QH Ü-Test“ und Return speichert
+  `/Users/…/Documents/QH Ü-Test` (Ü als NFC-Bytes, wie getippt), der Knopf sagt „Gespeichert.“. Ein
+  leeres Feld entfernt `defaultProjectDirectory`. „Auswählen“ öffnet den Ordnerdialog; ⇧⌘G zu
+  `home/p/alpha` und „Öffnen“ speichert den Pfad sofort. Die drei Wahlen unter „Beim Beenden“
+  schreiben `keep`, `stop`, `ask` und wechseln den Satz darunter. (Was beim Beenden passiert, ist in
+  „Hülle und Menü“ gemessen.)
+- **Zugänge:** Der GitHub-Eintrag zeigt „Abgelehnt“ mit Hinweis, „Erneut prüfen“ ebenso, „Token
+  entfernen“ nimmt den Eintrag aus der Datei, danach das leere Feld. Die Liste: „qchost@debian.invalid:22
+  · von 3 Projekten verwendet“, „von 1 Projekt verwendet“, „kein Passwort/Key“ bei den zwei ohne
+  Geheimnis. Löschen des genutzten Zugangs fragt „Dieser Zugang wird von 3 Projekten verwendet.“,
+  „Abbrechen“ zuerst; der ungenutzte wird nach „Diesen Zugang löschen?“ gelöscht. Das Sheet des
+  SSH-Zugangs zeigt „Host-Key bestätigt: SHA256:…“; „Host-Key vergessen“ fragt mit dem Host, danach
+  fehlt `hostKey` in der Datei und das Sheet sagt „Host-Key noch nicht bestätigt …“. Ein neuer
+  Webhook-Zugang speichert nur den Ursprung (`login: https://api.netlify.com`) in die Datei, die URL
+  ins Geheimnis. Leeres Profil: „Noch keine Zugänge angelegt.“
+- **Laufzeit:** „Im Einsatz: Node v24.22.2 und npm 11.19.1 aus QuartzHub.“, der Hinweis nennt das
+  Node des Rechners (v26.5.1). „Vom System“ schreibt `nodeRuntime: system` und zeigt „Im Einsatz:
+  Node v26.5.1 von diesem Rechner.“; zurück ebenso. git: „git 2.54.0 von diesem Rechner. …“.
+- **Daten & Wartung:** „4 Einträge · 16 kB“ (16.007 Bytes); „Cache leeren“ löscht die drei `.json`,
+  danach „1 Eintrag · 2 B“ für die `notes.tmp`. Leeres Profil: „0 Einträge · 0 B“, der Knopf grau.
+  Speicherort mit Pfad, „Im Finder zeigen“ öffnet `home` mit `einst` markiert. Versionszeile
+  „QuartzHub 0.1.0 · macOS Version 27.2 (Build 26B123)“. Nach einem Start mit kaputter
+  `running-servers.json` steht oben „Eine gespeicherte Datei war nicht lesbar“ mit dem Pfad der
+  beiseitegelegten Datei; ohne Vorfall in diesem Prozess (die Datei lag schon beim vorigen Start
+  beiseite) steht nichts.
+
+Drei Befunde, alle behoben:
+
+- **Das Feld für den Projektordner war unsichtbar, solange es leer war,** also in jedem neuen
+  Profil: Als beschriftetes Feld eines gruppierten Formulars war es randlos und so breit wie sein
+  Text, der Platzhalter „~/Documents“ erschien nicht. Mit einem langen Pfad lief es links aus dem
+  Abschnitt. Jetzt steht die Beschriftung darüber und das Feld mit Rahmen über die Zeile. Nachmessung:
+  leer mit Platzhalter, langer Pfad im Feld, Hell und Dunkel.
+- **Das Token-Feld** hatte dieselbe Form: so breit wie „ghp_…“, bei gespeichertem Token „gespeichert
+  (zum Erse“. Ebenso geändert, nachgemessen in Hell.
+- **Die Werkzeugzeile im Fenster „Projekte“ blieb nach dem Umschalten der Laufzeit stehen**
+  („in QuartzHub: node 24.22.2“ nach „Vom System“). Das Fenster prüfte nur beim Öffnen; QuartzControls
+  Startseite fragte bei der Rückkehr aus den Einstellungen neu. Jetzt lässt der Schalter das Fenster
+  neu prüfen. Nachmessung: „vom System: node 26.5.1, npm 11.17.0, git 2.54.0“ und zurück.
+
+Nicht gemessen: das mitgelieferte git mit Lizenz und Quelltext-Link (nur ohne git auf dem Rechner),
+ein Token speichern und prüfen (Netz).
