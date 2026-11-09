@@ -169,13 +169,7 @@ final class TemplatesModel {
     reset(nil, source: nil)
     planning = true
     defer { planning = false }
-    var finder = BuiltinTemplate(profile: AppProfile.own)
-    #if DEBUG
-    if UserDefaults.standard.bool(forKey: "QHNoUpdateCheck") {
-      finder = BuiltinTemplate(profile: AppProfile.own, fetch: { _, _, _ throws(FontService.FetchFailure) in throw .unreachable })
-    }
-    #endif
-    if let found = await finder.find() {
+    if let found = await BuiltinTemplate.app().find() {
       await load(found.path, source: found.source)
     } else {
       failure = L10n.t("templates.builtinMissing")
@@ -279,5 +273,15 @@ final class TemplatesModel {
     // What the project has now: the export's counts and the plan's.
     await inspect()
     await replan()
+  }
+}
+
+extension BuiltinTemplate {
+  /// The finder for QuartzHub's profile, for the Templates page and the create wizard. Without the
+  /// network when looking at the app (DEBUG, `-QHNoUpdateCheck YES`): the copy inside, since a
+  /// profile without a fresh download would otherwise fetch the package from GitHub.
+  static func app() -> BuiltinTemplate {
+    guard AppDeploy.offline else { return BuiltinTemplate(profile: AppProfile.own) }
+    return BuiltinTemplate(profile: AppProfile.own, fetch: { _, _, _ throws(FontService.FetchFailure) in throw .unreachable })
   }
 }

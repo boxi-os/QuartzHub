@@ -48,7 +48,7 @@ struct CreateProjectSheet: View {
     }
     .frame(width: 560)
     .interactiveDismissDisabled(busy)
-    .task { builtin = await BuiltinTemplate(profile: AppProfile.own).find() }
+    .task { builtin = await BuiltinTemplate.app().find() }
   }
 
   private var form: some View {
