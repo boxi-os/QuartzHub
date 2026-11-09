@@ -366,3 +366,48 @@ Drei Befunde, alle behoben:
 
 Nicht gemessen: das mitgelieferte git mit Lizenz und Quelltext-Link (nur ohne git auf dem Rechner),
 ein Token speichern und prüfen (Netz).
+
+## Hülle und Menü an der App gemessen
+
+Dritter Durchgang über die `gebaut`-Zeilen, am 2026-11-09, mit einem Wegwerf-Profil und der Kopie
+von gui-test (`scratchpad/pub/proj`; ihre Veröffentlichungsziele blieben unberührt). Gestartet wie
+immer ohne Netz; der Dev-Server lief lokal auf Port 8080.
+
+- **Menüs:** Die Menüleiste gelesen (QuartzHub, Ablage, Bearbeiten, Darstellung, Anordnen, Fenster,
+  Hilfe). „Über „QuartzHub““ zeigt Name, „Version 0.1.0 (1)“ und „GPL-3.0-or-later“. Darstellung ▸
+  Vollbildmodus geht in den Vollbildmodus (`AXFullScreen` wahr, die Seite füllt den Bildschirm),
+  „Vollbildmodus aus“ zurück; das Kürzel ist das von macOS 27 (Globus-F), nicht ⌃⌘F. Fenster: ⌘M legt
+  das Projektfenster ins Dock, sein Eintrag „gui-test (Übersicht)“ holt es zurück; „Zoomen“ macht es
+  bildschirmgroß (2560×1410) und wieder 1200×800; „Projekte“ holt das Fenster „Projekte“ nach vorn.
+  ⌘, öffnet die Einstellungen.
+- **Bearbeiten:** Im Feld „Seitentitel“ sind Ausschneiden, Kopieren, Einsetzen und Alles auswählen
+  aktiv, ohne Feld grau. Alles auswählen und Kopieren legt „gui-test“ in die Zwischenablage,
+  Ausschneiden und zweimal Einsetzen ergibt „gui-testgui-test“, Ablage ▸ Speichern wird aktiv.
+  Widerrufen nimmt ein getipptes Zeichen zurück, Wiederholen ist danach aktiv.
+- **Link auf der Seite:** Mit geändertem Titel fragt „Zu den Stilen“ (Konfiguration) wie die
+  Seitenleiste: Escape bleibt auf Konfiguration mit der Änderung, „Änderungen verwerfen“ geht zu Stile
+  mit der Rückweg-Leiste, `quartz.config.yaml` unverändert (SHA-1 gleich).
+- **Speichern scheitert:** Projektordner schreibgeschützt (`chmod a-w`), Titel geändert, Seitenleiste
+  „Plugins“, „Speichern“: Die Seite bleibt Konfiguration, die Änderung und „Nicht gespeichert“ bleiben,
+  oben steht der Fehler. Die Datei ist unverändert, kein neuer Snapshot.
+- **Konsole:** Dev-Server gestartet; die Konsole zeigt die Ausgabe ab „Quartz v5.0.0“. Nach Übersicht
+  und zurück steht dieselbe Ausgabe da, mit der ersten Zeile „Cleaned output directory `public`“.
+- **„Nicht mehr fragen“:** ⌘Q mit laufendem Server zeigt „Es laufen noch Dev-Server.“ mit
+  „gui-test — Port 8080“. Angekreuzt und „Server beenden“: `settings.json` bekommt
+  `"serversOnQuit": "stop"`, der Port ist zu, `running-servers.json` leer, die App beendet. Nächster
+  Start, Server gestartet, ⌘Q: keine Frage, der Server ist aus.
+- **Letzte Seite:** Mit `-NSQuitAlwaysKeepsWindows YES` (sonst schließt macOS die Fenster beim
+  Beenden, die Systemeinstellung ist Standard) Plugins geöffnet, beendet, ohne `-QHOpenProject` neu
+  gestartet: Das Fenster „gui-test“ kommt auf Plugins zurück. Ohne Wiederherstellung öffnet ein
+  Projekt auf der Übersicht.
+- **Nicht mehr in der Liste:** Bei offenem Projektfenster im Fenster „Projekte“ „Aus der Liste
+  entfernen“: Das Projektfenster heißt „QuartzHub“ und sagt „Dieses Projekt steht nicht mehr in der
+  Projektliste.“, „Projekte zeigen“ holt die Liste nach vorn.
+- **⌘O:** Öffnet aus jedem Fenster den Ordnerdialog; ⇧⌘G zum Projekt und „Öffnen“ nimmt es in die
+  Liste auf (Name nach dem Ordner) und öffnet sein Fenster.
+- **Übernahme „Später“:** Gefälschtes QuartzControl-Profil mit einem Projekt und Einstellungen, ohne
+  Geheimnis. Der Dialog zeigt „1 Projekt“ und „Einstellungen“; „Später“ schließt ihn, im eigenen Profil
+  liegt danach nur `running-servers.json`. Der nächste Start fragt wieder.
+
+Kein Befund, der hier zu beheben war. Nicht gemessen: eine abgelehnte Schlüsselbund-Abfrage bei der
+Übernahme (braucht den echten Eintrag von QuartzControl) und die drei Hilfe-Links ins Netz.
