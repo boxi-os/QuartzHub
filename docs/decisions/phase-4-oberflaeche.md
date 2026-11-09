@@ -882,3 +882,30 @@ Bereich verließ. Return lässt in SwiftUI den Fokus im Feld (in QuartzControl n
 `CommitField` hielt den Entwurf, solange das Feld fokussiert war; beim Verschwinden schrieb es ihn.
 Jetzt fällt ein Entwurf weg, der noch dem alten Wert gleicht, wenn der Wert von außen kommt. Das
 betrifft jedes Textfeld der Options-Form.
+
+**Oberfläche, Teil 4: das Relay** (`FormsRelaySection.swift`, Vorbild `FormsRelay.tsx`). Drei
+kleine Regeln von dort stehen im Kern und sind aus der Datei gelesen gemessen
+(`forms-options-golden.mjs`): der Name eines Empfängers, die Beispieladresse „@example.“ (nur
+ASCII wird gefaltet, wie V8 ohne u-Flag) und das Zerlegen der erlaubten Origins (U+0085 ist kein
+Leerraum). Gegenproben: 65 Zeichen, ohne Faltung, U+0085 als Leerraum.
+
+Das Hochladen geht durch `AppDeploy`, neu in `App/Shell`: die Verbindungen aus dem Schlüsselbund
+und die Adapter für Ordner, SFTP, rsync und FTP. Ein unbekannter SSH-Host wird gefragt wie in
+QuartzControls `hostVerifier.ts`, mit der sicheren Antwort zuerst. Dieselbe Fabrik braucht später
+„Veröffentlichen“.
+
+Gemessen an der gui-test-Kopie, Hell und Dunkel, ohne Netz:
+- die Zeile „Relay“ in der Liste, der Bereich, die Plakette „Relay seit dem Hochladen geändert“
+  oben im Formular;
+- die Empfänger-Auswahl mit „TestKontakt (Adresse fehlt)“, weil der Schlüsselbund des Testprofils
+  keine Adresse hat;
+- das Betreff-Präfix wird in `.quartz-gui/forms-relay.json` geschrieben. Die Datei bekommt dabei
+  die Form von `{ ...DEFAULT_RELAY, ...file.settings }` wie in QuartzControl: `targetId` steht am
+  Ende, `envelopeSender` kommt dazu. Danach ist sie aus der Sicherung zurückgeholt.
+
+Nicht gemessen: Hochladen, Entfernen und Prüfen am Server (Netz, nur auf Ansage), Export in einen
+Ordner (Dateidialog), Geheimnisse speichern (sie gingen in den echten Schlüsselbund).
+
+Gefunden in der laufenden App: Die drei Knöpfe unten waren nebeneinander auf „Relay…“, „Als O…“
+und „Vom…“ gekürzt; sie stehen jetzt untereinander. Zwölf Texte des Relays nannten QuartzControl
+oder sagten „lässt sich“, auch Meldungen des Kerns (`main.relay*`), die hier erscheinen.

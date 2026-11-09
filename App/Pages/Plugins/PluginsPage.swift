@@ -172,7 +172,7 @@ struct PluginsPage: View {
           FormInspector(id: form.id, def: form.def, view: view, model: model, state: forms, selection: $formSelected)
             .id(formSelected)
         } else if formSelected.hasPrefix("section:"), let section = view.sections.first(where: { "section:\($0.id)" == formSelected }) {
-          FormsSectionInspector(id: section.id, view: view, model: model, state: forms)
+          FormsSectionInspector(id: section.id, view: view, model: model, state: forms, selection: $formSelected)
             .id(formSelected)
         } else {
           InspectorPageContext(page: .plugins) { FormsOverview() }

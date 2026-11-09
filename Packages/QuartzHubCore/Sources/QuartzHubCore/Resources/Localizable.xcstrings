@@ -12401,13 +12401,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nur nötig, wenn PHP beim Hoster als Webserver-Benutzer läuft; dann können auch andere Accounts auf dem Server Adressen und Secret lesen, und wo PHP nicht läuft, jeder im Web. QuartzControl setzt die Rechte des Relays bei jedem Hochladen neu."
+            "value" : "Nur nötig, wenn PHP beim Hoster als Webserver-Benutzer läuft; dann können auch andere Accounts auf dem Server Adressen und Secret lesen, und wo PHP nicht läuft, jeder im Web. QuartzHub setzt die Rechte des Relays bei jedem Hochladen neu."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Only needed when the host runs PHP as the web server's user; other accounts on the server can then read the addresses and the secret too, and anyone on the web where PHP does not run. QuartzControl sets the relay's permissions again on every upload."
+            "value" : "Only needed when the host runs PHP as the web server's user; other accounts on the server can then read the addresses and the secret too, and anyone on the web where PHP does not run. QuartzHub sets the relay's permissions again on every upload."
           }
         }
       }
@@ -12769,13 +12769,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auf diesem System kann QuartzControl keine Zugangsdaten verschlüsselt speichern. Adressen und Secrets lassen sich deshalb nicht hinterlegen; „Als Ordner speichern“ schreibt Platzhalter."
+            "value" : "Auf diesem System kann QuartzHub keine Zugangsdaten verschlüsselt speichern. Adressen und Secrets können deshalb nicht hinterlegt werden; „Als Ordner speichern“ schreibt Platzhalter."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On this system QuartzControl cannot store credentials encrypted. Addresses and secrets therefore cannot be kept; “Save as folder” writes placeholders."
+            "value" : "On this system QuartzHub cannot store credentials encrypted. Addresses and secrets therefore cannot be kept; “Save as folder” writes placeholders."
           }
         }
       }
@@ -12897,13 +12897,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Namen kommen aus den Formularen. Die Adressen speichert QuartzControl verschlüsselt und schreibt sie nur in die config.php des Relays, nie auf die Website."
+            "value" : "Die Namen kommen aus den Formularen. Die Adressen speichert QuartzHub im Schlüsselbund und schreibt sie nur in die config.php des Relays, nie auf die Website."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The names come from the forms. QuartzControl stores the addresses encrypted and writes them only into the relay’s config.php, never onto the site."
+            "value" : "The names come from the forms. QuartzHub keeps the addresses in the keychain and writes them only into the relay’s config.php, never onto the site."
           }
         }
       }
@@ -12945,13 +12945,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Relay unter „{{target}}“, Ordner „{{subdir}}“, vom Server entfernen?\n\nFormulare, die dorthin senden, kommen danach nicht mehr an; die Adressen und Secrets bleiben in QuartzControl für das nächste Hochladen."
+            "value" : "Relay unter „{{target}}“, Ordner „{{subdir}}“, vom Server entfernen?\n\nFormulare, die dorthin senden, kommen danach nicht mehr an; die Adressen und Secrets bleiben in QuartzHub für das nächste Hochladen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remove the relay at “{{target}}”, folder “{{subdir}}”, from the server?\n\nForms that send there no longer arrive; the addresses and secrets stay in QuartzControl for the next upload."
+            "value" : "Remove the relay at “{{target}}”, folder “{{subdir}}”, from the server?\n\nForms that send there no longer arrive; the addresses and secrets stay in QuartzHub for the next upload."
           }
         }
       }
@@ -13409,13 +13409,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Unterordner muss ein eigener Ordner unter dem Pfad des Ziels sein, ohne „.“ und „..“. QuartzControl setzt beim Hochladen seine Rechte, die des Ziels bleiben, wie sie sind."
+            "value" : "Der Unterordner muss ein eigener Ordner unter dem Pfad des Ziels sein, ohne „.“ und „..“. QuartzHub setzt beim Hochladen seine Rechte, die des Ziels bleiben, wie sie sind."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The folder has to be one of its own below the target’s path, without “.” or “..”. QuartzControl sets its permissions when uploading and leaves the target’s as they are."
+            "value" : "The folder has to be one of its own below the target’s path, without “.” or “..”. QuartzHub sets its permissions when uploading and leaves the target’s as they are."
           }
         }
       }
@@ -13633,13 +13633,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dorthin senden die Formulare; eintragen oder ändern lässt sich die Adresse unter „Versand“. Der Vorschlag gilt, wenn das Ziel die Website selbst ist."
+            "value" : "Dorthin senden die Formulare; die Adresse trägst du unter „Versand“ ein. Der Vorschlag gilt, wenn das Ziel die Website selbst ist."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Where the forms send to; it is entered or changed under “Sending”. The suggestion holds when the target is the site itself."
+            "value" : "Where the forms send to; the address is entered under “Sending”. The suggestion holds when the target is the site itself."
           }
         }
       }
@@ -27784,13 +27784,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Ordner „{{path}}“ auf dem Weg zum Relay ist auf dem Server ein symbolischer Link, durch den QuartzControl nicht hochlädt. Lösche den Link auf dem Server oder wähle im Abschnitt „Relay“ einen anderen Unterordner."
+            "value" : "Der Ordner „{{path}}“ auf dem Weg zum Relay ist auf dem Server ein symbolischer Link, durch den QuartzHub nicht hochlädt. Lösche den Link auf dem Server oder wähle im Abschnitt „Relay“ einen anderen Unterordner."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The folder “{{path}}” on the way to the relay is a symbolic link on the server, which QuartzControl does not upload through. Delete the link on the server or choose another folder in the Relay section."
+            "value" : "The folder “{{path}}” on the way to the relay is a symbolic link on the server, which QuartzHub does not upload through. Delete the link on the server or choose another folder in the Relay section."
           }
         }
       }
@@ -27800,13 +27800,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ob der Ordner „{{path}}“ auf dem Weg zum Relay auf dem Server ein symbolischer Link ist, konnte nicht geprüft werden ({{reason}}). QuartzControl lädt das Relay erst hoch, wenn sich das prüfen lässt: Prüfe die Rechte dieses Ordners und der Ordner darüber."
+            "value" : "Ob der Ordner „{{path}}“ auf dem Weg zum Relay auf dem Server ein symbolischer Link ist, konnte nicht geprüft werden ({{reason}}). QuartzHub lädt das Relay erst hoch, wenn das geprüft werden kann: Prüfe die Rechte dieses Ordners und der Ordner darüber."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Whether the folder “{{path}}” on the way to the relay is a symbolic link on the server could not be checked ({{reason}}). QuartzControl uploads the relay only once it can check this: check the permissions of this folder and the folders above it."
+            "value" : "Whether the folder “{{path}}” on the way to the relay is a symbolic link on the server could not be checked ({{reason}}). QuartzHub uploads the relay only once it can check this: check the permissions of this folder and the folders above it."
           }
         }
       }
@@ -27832,13 +27832,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ob der Ordner „{{path}}“ auf dem Weg zum Relay auf dem Server ein symbolischer Link ist, konnte nicht geprüft werden ({{reason}}). Der Server lässt diesen Zugang nur schreiben, nicht lesen; für das Relay braucht QuartzControl einen Zugang, der auch lesen darf."
+            "value" : "Ob der Ordner „{{path}}“ auf dem Weg zum Relay auf dem Server ein symbolischer Link ist, konnte nicht geprüft werden ({{reason}}). Der Server lässt diesen Zugang nur schreiben, nicht lesen; für das Relay braucht QuartzHub einen Zugang, der auch lesen darf."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Whether the folder “{{path}}” on the way to the relay is a symbolic link on the server could not be checked ({{reason}}). The server lets this login write but not read; for the relay QuartzControl needs a login that may read as well."
+            "value" : "Whether the folder “{{path}}” on the way to the relay is a symbolic link on the server could not be checked ({{reason}}). The server lets this login write but not read; for the relay QuartzHub needs a login that may read as well."
           }
         }
       }
@@ -27912,13 +27912,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unter „{{path}}“ liegt seit dem Hochladen ein anderes Relay, etwa das eines anderen Projekts. QuartzControl löscht es nicht; soll es weg, lösche send.php, config.php und config.generated.php dort selbst."
+            "value" : "Unter „{{path}}“ liegt seit dem Hochladen ein anderes Relay, etwa das eines anderen Projekts. QuartzHub löscht es nicht; soll es weg, lösche send.php, config.php und config.generated.php dort selbst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Under “{{path}}” there is another relay since the upload, another project’s perhaps. QuartzControl does not delete it; if it is to go, delete send.php, config.php and config.generated.php there yourself."
+            "value" : "Under “{{path}}” there is another relay since the upload, another project’s perhaps. QuartzHub does not delete it; if it is to go, delete send.php, config.php and config.generated.php there yourself."
           }
         }
       }
@@ -27992,13 +27992,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ob unter „{{path}}“ noch das von hier hochgeladene Relay liegt, konnte nicht geprüft werden: config.generated.php trägt keine Kennung, die QuartzControl lesen kann. QuartzControl löscht dort nichts, ohne es zu wissen."
+            "value" : "Ob unter „{{path}}“ noch das von hier hochgeladene Relay liegt, konnte nicht geprüft werden: config.generated.php trägt keine Kennung, die QuartzHub lesen kann. QuartzHub löscht dort nichts, ohne es zu wissen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Whether the relay uploaded from here is still under “{{path}}” could not be checked: config.generated.php carries no mark QuartzControl can read. QuartzControl deletes nothing there without knowing."
+            "value" : "Whether the relay uploaded from here is still under “{{path}}” could not be checked: config.generated.php carries no mark QuartzHub can read. QuartzHub deletes nothing there without knowing."
           }
         }
       }
@@ -28104,13 +28104,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ob unter „{{path}}“ noch das von hier hochgeladene Relay liegt, konnte nicht geprüft werden: config.generated.php ist nicht lesbar ({{reason}}). QuartzControl löscht dort nichts, ohne es zu wissen."
+            "value" : "Ob unter „{{path}}“ noch das von hier hochgeladene Relay liegt, konnte nicht geprüft werden: config.generated.php ist nicht lesbar ({{reason}}). QuartzHub löscht dort nichts, ohne es zu wissen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Whether the relay uploaded from here is still under “{{path}}” could not be checked: config.generated.php cannot be read ({{reason}}). QuartzControl deletes nothing there without knowing."
+            "value" : "Whether the relay uploaded from here is still under “{{path}}” could not be checked: config.generated.php cannot be read ({{reason}}). QuartzHub deletes nothing there without knowing."
           }
         }
       }
@@ -28216,7 +28216,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Relay lässt sich nur über ein SFTP-, FTP- oder Ordner-Ziel hochladen, nicht über „{{type}}“."
+            "value" : "Das Relay kann nur über ein SFTP-, FTP- oder Ordner-Ziel hochgeladen werden, nicht über „{{type}}“."
           }
         },
         "en" : {

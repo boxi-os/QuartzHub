@@ -18,6 +18,11 @@ import SwiftUI
   var scanRound = 0
   /// "In der Vorschau zeigen".
   var goTo: PreviewGoTo?
+  /// The relay's state, asked with the check and after every change in its section; only while a
+  /// form sends through the relay.
+  var relay: RelayState?
+  var relayLoading = false
+  var relayRound = 0
 }
 
 /// What the Formulare tab shows of the plugin's options, in the words of its rows (QuartzControl's
@@ -34,9 +39,8 @@ import SwiftUI
   var ids: [String] { forms.map(\.id) }
   var layoutForm: String { options["layoutForm"]?.stringValue ?? "" }
   var usesRelay: Bool { forms.contains { FormsOptions.transportKind($0.def, options) == "relay" } }
-  /// The sections of the global settings. The relay has a panel of its own; until it is here, its
-  /// row is not shown.
-  var sections: [(id: String, keys: [String])] { FormsOptions.sections.filter { $0.id != "relay" } }
+  /// The sections of the global settings; the relay's only while a form sends through it.
+  var sections: [(id: String, keys: [String])] { FormsOptions.sections.filter { $0.id != "relay" || usesRelay } }
 
   func title(_ id: String, _ def: JSONObject) -> String {
     let text = FormsOptions.text(FormsOptions.effectiveForm(def)["title"], Self.lang)
@@ -118,6 +122,9 @@ import SwiftUI
       guard !layoutForm.isEmpty else { return L10n.t("formsEditor.noLayoutForm") }
       let position = LayoutEntries.layout(entry.plugin)?["position"]?.stringValue
       return "\(layoutForm) · \(position.map(InstalledTab.positionTitle) ?? L10n.t("formsEditor.notPlaced"))"
+    case "relay":
+      guard let relay = state.relay else { return state.relayLoading ? L10n.t("formsEditor.relay.loading") : "" }
+      return RelayWords.status(relay, dateOnly: true).text
     case "texts":
       let texts = options["texts"]?.objectValue ?? JSONObject()
       let count = texts.keys.reduce(0) { $0 + (texts[$1]?.objectValue?.count ?? 0) }
@@ -283,7 +290,8 @@ struct FormsTab: View {
           .frame(minHeight: 300)
       }
       .task(id: entry.plugin.source.map(JSJSON.compact) ?? "") { await loadSchema(entry) }
-      .task(id: JSJSON.compact(.object(entry.plugin.object))) { await check(entry) }
+      .task(id: JSJSON.compact(.object(entry.plugin.object))) { await check(entry, relay: view.usesRelay) }
+      .task(id: state.relayRound) { if state.relayRound > 0, view.usesRelay { await loadRelay(entry) } }
       .task(id: "\(view.options["codeBlockLang"].map(JSJSON.compact) ?? "")|\(view.options["frontmatterKey"].map(JSJSON.compact) ?? "")|\(state.scanRound)") {
         await scan(view)
       }
@@ -445,7 +453,17 @@ struct FormsTab: View {
   }
 
   /// The plugin's own verdict, a moment after the writes settle: it runs in a child process.
-  private func check(_ entry: FormsOptions.Entry) async {
+  private func loadRelay(_ entry: FormsOptions.Entry) async {
+    guard let source = PluginSource(entry.plugin.source) else { return }
+    state.relayLoading = true
+    let relay = await RelayWords.relay(model, source: source)
+    let next = await relay.state()
+    if Task.isCancelled { return }
+    state.relay = next
+    state.relayLoading = false
+  }
+
+  private func check(_ entry: FormsOptions.Entry, relay usesRelay: Bool) async {
     if state.check != nil {
       try? await Task.sleep(for: .milliseconds(600))
       if Task.isCancelled { return }
@@ -458,6 +476,8 @@ struct FormsTab: View {
     if Task.isCancelled { return }
     state.check = result
     state.checking = false
+    // The relay's state needs the plugin too (the hash of what it would write).
+    if usesRelay { await loadRelay(entry) } else { state.relay = nil }
   }
 
   private func scan(_ view: FormsView) async {

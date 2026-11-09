@@ -41,6 +41,14 @@ struct FormInspector: View {
           Label(view.title(id, def), systemImage: "list.clipboard").font(.headline).accessibilityIdentifier("forms.inspector.title")
           if model.savedIndex == view.entry.index { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
           Note(L10n.t("plugins.savesImmediately"))
+          // A change saved here reaches the server with the next upload of the relay, which only
+          // the list row and the Relay section said, both out of sight.
+          if FormsOptions.transportKind(def, options) == "relay", let relay = state.relay, RelayWords.outdated(relay) {
+            HStack {
+              WordBadge(text: L10n.t("formsEditor.relay.panelChanged")).foregroundStyle(.orange)
+              Button { selection = "section:relay" } label: { Label(L10n.t("formsEditor.sections.relay"), systemImage: "server.rack") }
+            }
+          }
         }
       }
       Section {
@@ -176,12 +184,25 @@ struct FormInspector: View {
     let kind = FormsOptions.transportKind(def, options)
     Note(L10n.t("formsEditor.sendsVia", ["kind": FormsView.kindLabel(kind)]))
     let role = kind == "relay" || kind == "mailto" || kind == "demo" ? kind : "none"
-    row(Self.recipientLabel(role), hint: Self.recipientHint(role), muted: role == "none" || role == "demo") {
-      CommitField(name: Self.recipientLabel(role), text: def["recipient"]?.stringValue ?? "",
-                  placeholder: role == "mailto" ? "name@example.org" : nil) { raw in
-        let v = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        Task { await setKey("recipient", v.isEmpty ? nil : .string(v)) }
-        return true
+    if role == "relay" {
+      let others = view.forms.filter { $0.id != id && FormsOptions.transportKind($0.def, options) == "relay" }
+        .compactMap { $0.def["recipient"]?.stringValue?.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }
+      RelayRecipientField(value: def["recipient"]?.stringValue ?? "", names: others + (state.relay?.secrets.recipients ?? []),
+                          stored: state.relay?.secrets.recipients, storageAvailable: state.relay?.secrets.storageAvailable ?? true,
+                          pick: { name in Task { await setKey("recipient", name.map(JSONValue.string)) } },
+                          saveAddress: { name, address in
+                            try AppDeploy.connections().saveRelaySecrets(model.project.id, RelaySecretsChange(recipients: JSONObject([(name, .string(address))])))
+                            Announce.post(L10n.t("formsEditor.relay.addressSetAnnounce", ["name": name]))
+                            state.relayRound += 1
+                          })
+    } else {
+      row(Self.recipientLabel(role), hint: Self.recipientHint(role), muted: role == "none" || role == "demo") {
+        CommitField(name: Self.recipientLabel(role), text: def["recipient"]?.stringValue ?? "",
+                    placeholder: role == "mailto" ? "name@example.org" : nil) { raw in
+          let v = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+          Task { await setKey("recipient", v.isEmpty ? nil : .string(v)) }
+          return true
+        }
       }
     }
     FormTextField(label: L10n.t("formsEditor.subject"), hint: L10n.t("formsEditor.subjectHint"), value: def["subject"],
@@ -504,8 +525,15 @@ struct FormInspector: View {
       }
     }
     selection = "form:\(to)"
-    if await FormsTab.update(model, { FormsOptions.rename($0, from: from, to: to) }) {
-      Announce.post(L10n.t("formsEditor.renamedAnnounce", ["from": from, "to": to]))
+    guard await FormsTab.update(model, { FormsOptions.rename($0, from: from, to: to) }) else { return }
+    Announce.post(L10n.t("formsEditor.renamedAnnounce", ["from": from, "to": to]))
+    // A captcha secret of the form's own is stored under its id; it goes along once the new id is
+    // in the file (nothing happens when there is none).
+    do {
+      try AppDeploy.connections().saveRelaySecrets(model.project.id, RelaySecretsChange(moveCaptchaSecret: (from, to)))
+      state.relayRound += 1
+    } catch {
+      Announce.post(error.message)
     }
   }
 }
@@ -667,6 +695,7 @@ struct FormsSectionInspector: View {
   let view: FormsView
   @Bindable var model: PluginsModel
   let state: FormsState
+  @Binding var selection: String?
 
   var body: some View {
     let keys = FormsOptions.sections.first { $0.id == id }?.keys ?? []
@@ -684,7 +713,9 @@ struct FormsSectionInspector: View {
         FormMessages(problems: messages.problems, hints: messages.hints)
       }
       if id == "layout" { layout(view) }
-      if id == "keys" {
+      if id == "relay" {
+        FormsRelaySection(view: view, model: model, state: state, selection: $selection)
+      } else if id == "keys" {
         FormsKeysSection(view: view, model: model, state: state)
       } else if id == "texts" {
         FormsTextsSection(view: view, model: model, state: state)
