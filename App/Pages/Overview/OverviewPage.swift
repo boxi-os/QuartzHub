@@ -88,8 +88,16 @@ struct OverviewPage: View {
     openPage(page)
   }
 
+  /// The page's reads with the server as it is now: the monitor follows it, the model never read it,
+  /// and a server that died on start left the band at "Alles ok" (measured 2026-11-09).
+  private var reads: ProjectAttention.Reads {
+    var reads = model.attention
+    reads.server = server
+    return reads
+  }
+
   @ViewBuilder private var attentionSection: some View {
-    let issues = ProjectAttention.issues(model.attention)
+    let issues = ProjectAttention.issues(reads)
     if !issues.isEmpty {
       Section {
         ForEach(issues) { issue in
@@ -107,7 +115,7 @@ struct OverviewPage: View {
         }
         .accessibilityIdentifier("overview.attention")
       }
-    } else if ProjectAttention.allGood(model.attention) {
+    } else if ProjectAttention.allGood(reads) {
       Section {
         Label(L10n.t("dashboard.attention.allGood"), systemImage: "checkmark.circle.fill")
           .foregroundStyle(.green)
