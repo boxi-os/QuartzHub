@@ -13,6 +13,11 @@ import Foundation
 public enum PageTypeOverride {
   public static let builtinFrames = ["default", "full-width", "minimal"]
 
+  /// What `layout.byPageType.<type>` holds, as it is; nil without a key.
+  public static func stored(_ config: QuartzConfig, _ pageType: String) -> JSONValue? {
+    GridFrameCss.member(config.layout?["byPageType"], pageType)
+  }
+
   /// `overrideOf`.
   public static func of(_ config: QuartzConfig, _ pageType: String) -> JSONObject {
     GridFrameCss.member(config.layout?["byPageType"], pageType)?.objectValue ?? JSONObject()

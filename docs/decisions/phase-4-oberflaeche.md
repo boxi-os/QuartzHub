@@ -1433,3 +1433,36 @@ Vault-Link beim Sync.
   hier am Ende des Objekts statt an seiner alten Stelle (der Entwurf ist JSON, nicht ein
   JavaScript-Objekt). Die Datei sagt dasselbe, nur die Reihenfolge der Schlüssel kann abweichen.
 - Gegenproben (5, jede lässt einen Test scheitern).
+
+### Layout: der Rahmen und die Bühne
+
+- **Vorbild** `routes/LayoutEditor/index.tsx`, `GlobalBoard.tsx`, `Inspector.tsx`, `LayoutSummary.tsx`,
+  `Palette.tsx`, `GroupsPanel.tsx`, `ComponentChip.tsx`. Ein Modell für die Seite: die Config für
+  Übersicht und Bühne mit „Speichern“ (⌘S) und der Frage beim Verlassen, die eigenen Frames mit
+  ihrem eigenen Speichern. „Wo war ich“: Reiter, Seitentyp und Auswahl (Name und Vorkommen) als
+  `@SceneStorage`; die Ansicht (Desktop/Tablet/Mobil) wie dort nicht.
+- **Die Bühne** ist ein eigenes SwiftUI-`Layout`: Spalten nach den Anteilen aus `StageGeometry`,
+  Abstände und Innenränder als Anteil der Breite, jede Zeile so hoch wie ihr Inhalt, nie breiter
+  als die Bezugsbreite der Ansicht. Quartz' Standard-Frame, die zwei einspaltigen und das Frame eines
+  Plugins (ein Satz statt eines Bilds) wie dort. Die Seitenleisten, die auf schmalen Ansichten zur
+  Zeile werden, brechen um.
+- **Ziehen** mit `draggable`/`dropDestination` (Entscheidung 4b): auf einen Chip davor, auf einen
+  Bereich ans Ende, auf den Vorrat ausschalten oder ein Duplikat entfernen; der Bereich entscheidet
+  die Gruppe. Jede Ablage wird mit den übernommenen `dnd.*`-Sätzen angesagt. **Die Tastatur geht
+  über den Inspektor** (Position, Früher/Später mit ⌥⌘↑/↓, In den Vorrat legen), wie QuartzControls
+  Seitenleiste seit 1.1. `LayoutEntries.place` nimmt dafür jetzt die Listen der Bühne, ohne die
+  geparkten Einträge, wie `placeComponent`; im Golden ergänzt (96 Ablagen, Gegenprobe: mit den
+  Listen aller Komponenten landen 62 anders).
+- **Im Inspektor** die gewählte Komponente mit ihren Optionen (dasselbe `OptionsForm` wie auf der
+  Plugins-Seite, es schreibt in den Entwurf, der Inspektor sagt das); ohne Auswahl die
+  Zusammenfassung des gezeigten Seitentyps.
+- **„Auf der Bühne zeigen“ und „Im Layout-Editor“** der Plugins-Seite öffnen Layout jetzt auf der
+  Komponente bzw. dem Frame (`OpenLayoutAction`, dieselben `@SceneStorage`-Schlüssel wie die
+  Seite, wie QuartzControls `primeStickyState`).
+- **Texte:** Zwei Hinweise nannten QuartzControls „Seitenleiste“ für das, was hier der Inspektor
+  ist (`pageType.scopeHint`, `componentPill.disabledHint`).
+- **Gemessen** an einer Kopie von gui-test, Dunkel, 1400×860: `search` „Später“ und ⌘S tauschen
+  genau zwei Prioritäten; auf Tag-Seiten `search` ausgeblendet und die rechte Seitenleiste geleert
+  schreibt `exclude: ["@quartz-community/search"]` und `right: []`, beides zurück und gespeichert ist
+  die Datei byte-gleich; `reader-mode` mit der Maus auf `breadcrumbs` gezogen landet vor dem Inhalt
+  an erster Stelle ohne Gruppe, beide Listen in Zehnern.

@@ -118,6 +118,22 @@ import Testing
     #expect(count == 90)
   }
 
+  @Test func aDropPlacesWithTheBoardsLists() throws {
+    var count = 0
+    for board in try Self.boards() {
+      let plugins = board.config.plugins
+      let positions = LayoutBoard.boardPositions(plugins, parked: LayoutBoard.parked(plugins))
+      for item in board.raw["places"]?.arrayValue ?? [] {
+        let group: String?? = switch item["group"] { case .string("keep")?: nil; case .string(let g)?: .some(g); default: .some(nil) }
+        let mine = LayoutEntries.place(plugins, index: Int(item["index"]!.numberValue!), position: item["position"]!.stringValue!,
+                                       insertIndex: item["insertIndex"]?.numberValue.map { Int($0) }, group: group, positions: positions)
+        #expect(JSONValue.array(mine.map(Self.layout)) == item["layouts"], "\(board.name) \(JSJSON.compact(item["index"]!)) \(item["position"]!.stringValue!)")
+        count += 1
+      }
+    }
+    #expect(count == 96)
+  }
+
   @Test func pageTypeOverridesAsQuartzControl() throws {
     var cases = 0
     for board in try Self.boards() {

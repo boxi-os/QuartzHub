@@ -20,6 +20,13 @@ struct ProjectWindow: View {
   /// move it back, and a binding onto `pageID` left the list on the row clicked (measured).
   @State private var highlighted: ProjectPage?
 
+  /// The Layout page's "where was I", set before it opens on a component or a frame (QuartzControl's
+  /// `primeStickyState` from the Plugins page). The same keys and types as on `LayoutPage`.
+  @SceneStorage("layout.tab") private var layoutTab = "global"
+  @SceneStorage("layout.pageType") private var layoutPageType = ""
+  @SceneStorage("layout.selected") private var layoutSelected = ""
+  @SceneStorage("layout.frame") private var layoutFrame = ""
+
   private var current: ProjectPage { ProjectPage(rawValue: pageID) ?? .overview }
 
   /// Every way to another page goes through here, so an edited page asks before it is left.
@@ -81,6 +88,18 @@ struct ProjectWindow: View {
     .navigationTitle(row.name)
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
     .environment(\.openPage, OpenPageAction { go(to: $0) })
+    .environment(\.openLayout, OpenLayoutAction { target in
+      switch target {
+      case .component(let plugins, let index):
+        layoutTab = "global"
+        layoutPageType = ""
+        layoutSelected = LayoutEntries.componentRef(plugins, index).map { "\($0.name)\n\($0.occurrence)" } ?? ""
+      case .frame(let id):
+        layoutTab = "frames"
+        layoutFrame = id
+      }
+      go(to: .layout)
+    })
     .environment(\.unsavedGuard, unsaved)
     .onChange(of: highlighted) { _, page in
       if let page { go(to: page) }
@@ -100,6 +119,7 @@ struct ProjectWindow: View {
     case .updates: UpdatesPage(project: project)
     case .backups: SnapshotsPage(project: project)
     case .styles: StylesPage(project: project)
+    case .layout: LayoutPage(project: project)
     default: PendingPage(page: page)
     }
   }
@@ -121,4 +141,17 @@ struct OpenPageAction {
 
 extension EnvironmentValues {
   @Entry var openPage = OpenPageAction { _ in }
+  @Entry var openLayout = OpenLayoutAction { _ in }
+}
+
+/// Opens the Layout page on a component of the stage ("Auf der Bühne zeigen") or on an own frame
+/// in the frame editor ("Im Layout-Editor").
+struct OpenLayoutAction {
+  enum Target {
+    case component([PluginEntry], Int)
+    case frame(String)
+  }
+
+  let open: (Target) -> Void
+  func callAsFunction(_ target: Target) { open(target) }
 }

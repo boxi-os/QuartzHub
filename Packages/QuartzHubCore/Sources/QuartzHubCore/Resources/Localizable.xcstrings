@@ -18889,13 +18889,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ausgeschaltet, wird nicht gebaut. Einschalten in der Seitenleiste."
+            "value" : "Ausgeschaltet, wird nicht gebaut. Einschalten im Inspektor."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Switched off, not built. Switch it on in the side panel."
+            "value" : "Switched off, not built. Switch it on in the inspector."
           }
         }
       }
@@ -21932,6 +21932,23 @@
         }
       }
     },
+    "layoutEditor.inspector.savesWithPage" : {
+      "comment" : "Layout, inspector of a component: says that it does not write at once",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Änderungen gehen in den Entwurf der Seite; „Speichern“ schreibt sie in die Datei."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changes go into the page’s draft; “Save” writes them to the file."
+          }
+        }
+      }
+    },
     "layoutEditor.inspector.shrink" : {
       "localizations" : {
         "de" : {
@@ -23273,13 +23290,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ausblenden und Leeren gelten nur für {{type}}. Was du verschiebst oder in der Seitenleiste einstellst, gilt für alle Seiten."
+            "value" : "Ausblenden und Leeren gelten nur für {{type}}. Was du verschiebst oder im Inspektor einstellst, gilt für alle Seiten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hiding and clearing apply to {{type}} only. What you move or set in the side panel applies to all pages."
+            "value" : "Hiding and clearing apply to {{type}} only. What you move or set in the inspector applies to all pages."
           }
         }
       }

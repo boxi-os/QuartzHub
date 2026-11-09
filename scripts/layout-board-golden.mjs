@@ -139,6 +139,13 @@ for (const { name, config, frames } of boards) {
       const r = utils.appendDuplicateToPosition(plugins, i, position, insertIndex, new Set(['nav-zwei-2']))
       appends.push({ index: i, position, insertIndex: insertIndex ?? null, layouts: r ? r.plugins.map((p) => p.layout ?? null) : null, copy: r ? r.plugins[r.newIndex] : null, newIndex: r ? r.newIndex : null })
     }
+  // placeComponent with the board's lists, which leave the parked entries out: what a drop does.
+  const board = utils.buildBoardPositionMap(plugins, parked)
+  const places = []
+  for (const i of items.slice(0, 8))
+    for (const [position, insertIndex, group] of [['footer', 0, null], ['left', 1, undefined], ['header', undefined, 'toolbar'], ['afterBody', 99, null]])
+      places.push({ index: i, position, insertIndex: insertIndex ?? null, group: group === undefined ? 'keep' : group,
+        layouts: utils.placeComponent(plugins, board, i, position, insertIndex, group).map((p) => p.layout ?? null) })
   const types = [...pageTypes, 'nonexistent']
   const firstOfName = utils.distinctComponentChips(plugins).map((c) => c.index)
   const typeCases = types.map((pt) => {
@@ -174,7 +181,7 @@ for (const { name, config, frames } of boards) {
     parked: [...parked],
     boardPositions: utils.buildBoardPositionMap(plugins, parked),
     groupNames: utils.groupNamesOf(config, frames),
-    perComponent, appends, typeCases,
+    perComponent, appends, places, typeCases,
     shapes: Object.fromEntries(names.map((n) => [n, shapeOf(n)])),
     cells: placed.map((i) => ({ index: i, states: pageTypes.map((pt) => stateOfCopied(config, shapes, i, pt)) })),
   })

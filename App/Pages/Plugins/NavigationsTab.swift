@@ -251,7 +251,7 @@ struct NavigationInspector: View {
   let label: String
   @Bindable var model: PluginsModel
   let showAllOptions: () -> Void
-  @Environment(\.openPage) private var openPage
+  @Environment(\.openLayout) private var openLayout
   @State private var schema: PluginOptionSchemaResult?
   @State private var loaded = false
 
@@ -292,7 +292,7 @@ struct NavigationInspector: View {
         }
         // Below each other: side by side, both were cut off in the inspector's width.
         VStack(alignment: .leading, spacing: 6) {
-          Button(L10n.t("pluginsInstalled.showOnStage")) { openPage(.layout) }
+          Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], item.index)) }
           Button(L10n.t("navigationsEditor.allOptions"), action: showAllOptions)
             .accessibilityIdentifier("navigations.allOptions")
         }

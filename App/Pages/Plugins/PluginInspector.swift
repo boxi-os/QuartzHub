@@ -10,7 +10,7 @@ import SwiftUI
 struct PluginInspector: View {
   let item: IndexedPlugin
   @Bindable var model: PluginsModel
-  @Environment(\.openPage) private var openPage
+  @Environment(\.openLayout) private var openLayout
   @Environment(\.openURL) private var openURL
 
   /// One choice for every plugin: whoever opens it wants to see placements.
@@ -56,7 +56,7 @@ struct PluginInspector: View {
       if item.frame != nil {
         Section {
           Note(L10n.t("pluginsInstalled.framesDescription"))
-          Button(L10n.t("pluginsInstalled.openInLayoutEditor")) { openPage(.layout) }
+          Button(L10n.t("pluginsInstalled.openInLayoutEditor")) { openLayout(.frame(item.frame?["id"]?.stringValue ?? "")) }
         }
       }
 
@@ -111,7 +111,7 @@ struct PluginInspector: View {
           }
         }
       }
-      Button(L10n.t("pluginsInstalled.showOnStage")) { openPage(.layout) }
+      Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], item.index)) }
     }
   }
 

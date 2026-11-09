@@ -241,7 +241,7 @@ struct BoxInspector: View {
   let label: String
   @Bindable var model: PluginsModel
   let showAllOptions: () -> Void
-  @Environment(\.openPage) private var openPage
+  @Environment(\.openLayout) private var openLayout
   @Environment(\.unsavedGuard) private var unsaved
   @State private var schema: PluginOptionSchemaResult?
   @State private var loaded = false
@@ -291,7 +291,7 @@ struct BoxInspector: View {
                     : L10n.t("extraContent.brokenLang", ["key": b.key, "lang": b.lang ?? ""]))
         }
         VStack(alignment: .leading, spacing: 6) {
-          Button(L10n.t("pluginsInstalled.showOnStage")) { openPage(.layout) }
+          Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], box.index)) }
           Button(L10n.t("extraContent.allOptions"), action: showAllOptions)
             .accessibilityIdentifier("extras.allOptions")
         }

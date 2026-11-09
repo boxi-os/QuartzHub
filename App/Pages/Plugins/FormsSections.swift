@@ -333,7 +333,7 @@ struct FormsTextsSection: View {
 struct FormsPositionField: View {
   let view: FormsView
   @Bindable var model: PluginsModel
-  @Environment(\.openPage) private var openPage
+  @Environment(\.openLayout) private var openLayout
 
   var body: some View {
     let position = LayoutEntries.layout(view.entry.plugin)?["position"]?.stringValue
@@ -350,7 +350,7 @@ struct FormsPositionField: View {
       if position == nil {
         Text(L10n.t("formsEditor.notPlacedHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
       } else {
-        Button(L10n.t("pluginsInstalled.showOnStage")) { openPage(.layout) }
+        Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], view.entry.index)) }
       }
     }
   }

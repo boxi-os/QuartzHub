@@ -70,9 +70,11 @@ public enum LayoutEntries {
   /// end), every position it left and the one it joined renumbered in steps of ten. `group`: a
   /// group's name makes it a member, `.some(nil)` takes it out of any group, nil leaves the group
   /// alone. An entry in no position's list simply joins; one without a layout block is left as it is.
+  /// `positions` are the lists as the board shows them (`LayoutBoard.boardPositions`, without the
+  /// parked entries); nil takes every component's.
   public static func place(_ plugins: [PluginEntry], index: Int, position: String, insertIndex: Int? = nil,
-                           group: String?? = nil) -> [PluginEntry] {
-    let positions = positionMap(plugins)
+                           group: String?? = nil, positions given: [String: [Int]]? = nil) -> [PluginEntry] {
+    let positions = given ?? positionMap(plugins)
     var next = positions
     var touched = [position]
     for pos in Self.positions where positions[pos]?.contains(index) == true {

@@ -186,7 +186,7 @@ struct SettingsGroupInspector: View {
   let group: MultilanguageOptions.SettingsGroup
   let view: MultilanguageView
   @Bindable var model: PluginsModel
-  @Environment(\.openPage) private var openPage
+  @Environment(\.openLayout) private var openLayout
 
   var body: some View {
     let schema = view.schema
@@ -209,7 +209,7 @@ struct SettingsGroupInspector: View {
             } else {
               Text(L10n.t("multilanguageEditor.switcherNotPlaced")).font(.callout).foregroundStyle(.secondary)
             }
-            Button(L10n.t("pluginsInstalled.showOnStage")) { openPage(.layout) }
+            Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], view.entry.index)) }
           }
         }
       }
