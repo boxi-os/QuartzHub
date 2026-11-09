@@ -890,3 +890,49 @@ hilft nicht; der Satz verweist auf Einstellungen ▸ Zugänge (ob das Relay dort
 geprüft). „Geändert“ steht
 auch an Werten, die der Vorgabe gleichen, aber in der Config stehen (frontmatterKey `form`). Andere
 Monospace-Namen und -Pfade der App können ebenso getrennt werden; geprüft ist nur dieser Reiter.
+
+## Updates, Snapshots und Git-Sync an der App gemessen
+
+Zwölfter Durchgang, am 2026-11-09, an den Wegwerf-Projekten aus Phase 4 in 1200×800, ohne Netz
+(`-QHNoUpdateCheck`): `upd` (zwei Plugin-Repos über `file://`) für Updates und Snapshots, die Kopie
+`sync` mit einem lokalen Bare-Repository als origin (`pre-receive` wartet 8 s) für Git-Sync. Von den 18
+Zeilen dieser drei Seiten, die noch `gebaut` hießen, sind 16 gemessen; alles in Dunkel und Hell. Beide Projekte stehen danach wieder wie vorher (Notiz,
+Lock-Datei, Snapshot-Speicher, HEAD und Remote-Branch, `content` ein echter Ordner).
+
+- **Updates:** Ohne Update-Notiz sagt der Kern „Nicht prüfbar“ (grau, „Installiert: — · Neueste
+  Version: —“), „Update durchführen“ bleibt an wie in QuartzControl. „Erneut prüfen“ liest neu: Aus
+  „Nicht abgeschlossen“ wurde nach dem Wegräumen der Notiz „Nicht prüfbar“, nach Leeren von `plugins`
+  in der Lock-Datei kam „Keine über den Marktplatz oder per Kommandozeile hinzugefügten Plugins
+  gefunden.“ Nicht gemessen: ein zweiter Lauf neben einem laufenden; ohne Netz hält ein Lauf am Fetch
+  sofort an.
+- **Snapshots:** Ohne Speicher „Snapshots (0)“ und „Noch keine Snapshots. …“, und das Ansehen legt
+  keinen an. „Content-Ordner mitsichern“ aus schreibt `includeContent: false`, der Snapshot danach hat
+  kein `content/index.md`; an, und der nächste hat es. Ohne Content-Ordner ist der Schalter gesperrt
+  und lesbar mit „Es gibt keinen Content-Ordner, den man mitsichern könnte.“ Ein eben angelegter
+  Snapshot: „Keine Unterschiede zum heutigen Stand.“ Der Inspektor ohne Auswahl: „2, davon 2 von
+  dir“, Neuester, Ältester, „wird mitgesichert“. Entwurf und offener Snapshot überstehen den Weg über
+  Updates.
+- **Git-Sync:** Letzter Commit mit Autor und Zeit, der Erklärsatz mit „v5“, „vorgemerkt“ nach
+  `git add`. 430 neue Dateien: „519 lokale Änderungen“, 500 Zeilen und „… und 19 weitere“ (ein neuer
+  Ordner zählt als ein Eintrag, wie `git status` ohne `-uall`). Mit einem GitHub-origin der Link „Auf
+  GitHub öffnen“, nicht geklickt. „Aktualisieren“ liest ohne Fetch neu. „Push + Pull“ ohne Commit
+  holte einen Remote-Commit von `v5` und pushte den Branch, die lokalen Änderungen blieben. Mit
+  `content` als Link auf eine Wegwerf-Kopie und Commit: „Erfolgreich.“, im Remote die Notizen als
+  Dateien, danach wieder der Link, die Kopie unverändert (`diff -r`).
+
+Kein Befund an QuartzHub; was auffiel, verhält sich in QuartzControl genauso (gegen dessen Code
+gelesen):
+
+- **Wiederherstellen löscht Notizen, die ein älterer Snapshot nicht kannte.** Ein Snapshot von
+  „mitsichern“ aus, später wieder an, dann „Alles wiederherstellen“ aus dem alten: Der Vergleich nennt
+  `content/index.md` „seitdem neu“, und `read-tree -u --reset` löschte den ganzen Content-Ordner.
+  Die Frage sagt „Dateien, die es damals nicht gab, werden dabei gelöscht“, und der Snapshot „Vor
+  Wiederherstellung“ holte ihn zurück; dass damit die Notizen gemeint sind, sagt sie nicht.
+- **Ein Content-Ordner als Link zählt in Git-Sync jede Notiz als gelöscht**, weil git dem Link nicht
+  folgt: vor dem Sync 139 statt 89 Änderungen, danach 229, und „Alle 229 lokalen Änderungen werden in
+  einem Commit zusammengefasst“ stimmt nicht.
+- „Kein Textunterschied (z. B. eine Binärdatei).“ erscheint bei einer Binärdatei nicht: git schreibt
+  „Binary files a/probe.bin and b/probe.bin differ“, und das Sheet zeigt diese Zeile.
+
+Eine Abweichung ohne Entscheidung: Ohne hinzugefügte Plugins fehlt auf Updates „Alle aktualisieren“;
+in QuartzControl steht der Button grau da.

@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-09 nach Plugins ▸ Formulare.
+gezählt, zuletzt am 2026-11-09 nach Updates, Snapshots und Git-Sync.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 174 | 9 | 17 | 12 | 4 | 216 |
-| Plugins und Wartung | 208 | 34 | 4 | 15 | 0 | 261 |
+| Plugins und Wartung | 224 | 18 | 4 | 15 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 94 | 119 | 10 | 20 | 0 | 243 |
-| **Summe** | **476** | **162** | **31** | **47** | **4** | **720** |
+| **Summe** | **492** | **146** | **31** | **47** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -89,5 +89,6 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    behoben), Plugins ▸ Installiert (2026-11-09, sechs Befunde behoben), Plugins ▸ Navigationen mit
    der Vorschau (2026-11-09, vier Befunde behoben), Plugins ▸ Zusätzliche Inhalte (2026-11-09,
    sieben Befunde behoben), Plugins ▸ Mehrsprachigkeit (2026-11-09, ein Befund behoben),
-   Plugins ▸ Formulare (2026-11-09, zehn Befunde behoben).
+   Plugins ▸ Formulare (2026-11-09, zehn Befunde behoben), Updates, Snapshots und Git-Sync
+   (2026-11-09, ohne Befund).
 3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe.
