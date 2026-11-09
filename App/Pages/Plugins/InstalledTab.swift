@@ -186,6 +186,10 @@ struct InstalledTab: View {
       if model.config != nil { maintenance }
     }
     .accessibilityIdentifier("plugins.list")
+    // Built anew once the config is there: opened with a search kept from before, the rows that
+    // arrived with the config kept the height of one line, the plugin's name without its source
+    // and summary (measured 2026-11-09; without a search they were right).
+    .id(model.config != nil)
     .focusedSceneValue(\.moveSelection, moveAction(sequences))
   }
 
