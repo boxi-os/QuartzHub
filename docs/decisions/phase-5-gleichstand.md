@@ -616,3 +616,67 @@ Sechs Befunde, behoben:
 Hell geprüft (Liste, Inspektor, die umbrechende Zeile). Nicht gemessen: „Repository auf GitHub öffnen“
 (öffnet den Browser), „Keine Plugins installiert.“, der Satz „Wirkt nur, wenn …“ einer Schema-Bedingung
 (gesehen nur der eigene Grund von layout-box) und die Abweisung während des Entfernens.
+
+## Plugins ▸ Navigationen und die Vorschau an der App gemessen
+
+Achter Durchgang, am 2026-11-09, am selben gui-test-Klon in 1200×800, ohne Netz; der Dev-Server lief
+lokal auf Port 8080 und ist danach beendet. Für den leeren Zustand, „nicht platziert“ und den
+Fassungshinweis wurden Config und `package.json` der Plugins vorübergehend geändert und danach
+zurückgestellt (`cmp` gleich). quartz-forms ist im Klon ein Link auf das echte Repo: Dafür stand
+während der Messung eine Kopie (`package.json`, `dist`, `types`) an seiner Stelle. Das Repo hat einmal
+eine geänderte `package.json` gesehen und ist zurückgestellt (`git status` sauber).
+
+- **Liste:** „2 Navigationen“, „Akkordeon #1 · Akkordeon · Linke Seitenleiste“, „Test #2 · Baum ·
+  Rechte Seitenleiste“. Ohne `layout`-Block: „Akkordeon · nicht platziert“, im Inspektor „nicht
+  platziert“. Aus: Abzeichen „aus“.
+- **„Navigation aktiv“** schreibt `enabled: false`, noch einmal zurück; die Datei ist danach byte-gleich.
+- **Optionen:** die Einstellungen der Variante oben („Einstellungen der Variante „Baum““), darunter die
+  Gruppen Seitenauswahl, Ausblenden, Reihenfolge, Beschriftung und Symbole, Auf dem Smartphone,
+  Technisches mit Anzahl und „· n geändert“. `persistState` aus und an: eine Zeile, danach byte-gleich.
+- **„wirkt nicht“:** bei „Test #2“ (Baum) stehen `align`, `trigger`, `chevrons`, `folderClick`,
+  `persistState` mit „wirkt nicht“ und dem Satz „Wirkt nur bei den Varianten …“, bei `chevrons` und
+  `persistState` mit „Bei „Baum“ nur, wenn auf dem Smartphone „Akkordeon“ gewählt ist.“ Mit `mobile:
+  accordion` in der Gruppe „Auf dem Smartphone“ fällt „wirkt nicht“ bei den beiden weg; Zurücksetzen nimmt
+  den Schlüssel heraus, die Datei ist byte-gleich.
+- **„Auf der Bühne zeigen“:** Layout ▸ Komponenten mit „Zurück zu „Plugins › Navigationen““ und
+  „quartz-navigations #2“ (bzw. #1) im Inspektor.
+- **Anlegen, Duplizieren, Entfernen:** „Neue Navigation“ ▸ Leiste: „Leiste #3 · Leiste · Kopfbereich“
+  (`nav-bar`, Priorität 80); Duplizieren nummeriert den Kopfbereich neu; Entfernen fragt „Navigation
+  „Leiste #4“ entfernen?“. Angesagt: „Navigation „Leiste“ angelegt, im Bereich Kopfbereich.“, „„Leiste
+  #3“ dupliziert.“, „„Leiste #4“ entfernt.“
+- **Nicht installiert** (Config ohne Einträge): „quartz-navigations ist nicht installiert“ mit dem
+  Verweis auf den Marktplatz.
+- **Andere Fassung:** mit `version` und `quartz.version` auf 0.9.9 sagen alle vier Editor-Reiter „Dieser
+  Editor kennt quartz-navigations 0.4.2 (quartz-layout-box 0.4.2, quartz-multilanguage 0.3.0,
+  quartz-forms 0.6.0), installiert ist 0.9.9. Angaben können deshalb abweichen.“ Die Fassung kommt wie in
+  QuartzControl zuerst aus `quartz.version`.
+- **Vorschau:** „Vorschau starten“ zeigt „Der Dev-Server startet…“ und „Vorschau beenden“, dann die
+  Website mit „Gerendert mit 1280 px Breite, gezeigt mit 52 %.“ und „Markiert: „Akkordeon #1“.“ Tablet
+  901 px (74 %), Mobil 390 px (100 %) mit „„Akkordeon #1“ steht auf dieser Seite, ist in dieser Ansicht
+  aber nicht zu sehen (etwa ausgeblendet oder in einer Schublade).“ (angesagt). Seite
+  `animation/view-transitions` mit Return lädt sie, die Markierung folgt; „Vorschau neu laden“ holt sie
+  noch einmal (zweiter Abruf im Server-Log). Mit Remote-Dev-Host `example.invalid` (Server mit
+  `--remoteDevHost example.invalid`): „Der Dev-Server läuft über einen entfernten Host und lässt sich
+  hier nicht einbetten. …“, ohne „Vorschau neu laden“. „Vorschau beenden“: Port frei, „… und der läuft
+  gerade nicht.“
+
+Vier Befunde, behoben:
+
+- **Eine Gruppe der Optionen klappte nur über ihren Pfeil auf**; ein Klick auf Titel oder Anzahl tat
+  nichts. In QuartzControl ist das ganze Band ein Button (`FoldBox`). Nachgemessen: Titel öffnet, Anzahl
+  schließt.
+- **„Auf der Bühne zeigen“ wählte beim ersten Besuch von Layout nichts**: der Inspektor blieb bei „Wähle
+  eine Komponente aus.“ Die Seite schrieb die Auswahl beim Erscheinen, ihr Body las sie aber nie, nur der
+  Inspektor-Abschluss in `PageScaffold`; der blieb auf dem alten Wert. Mit einem Protokoll-`onChange`
+  verschwand der Fehler, weil der Body den Wert dann las. Jetzt liest ihn der Body und reicht ihn weiter.
+  Vorher drei von drei Kaltstarts ohne Auswahl, nachher drei von drei mit; Wählen auf der Bühne
+  unverändert.
+- **Der leere Zustand „nicht installiert“ war so schmal wie sein Text**; der Reiter-Wähler darüber
+  rückte nach links. Jetzt füllt er die Spalte.
+- **Der Satz unter der Vorschau verlor seine zweite Zeile** an der Fensterkante (1200×800, Mobil): Für
+  die Website waren 240 pt fest. Jetzt bekommt der Satz zuerst Platz, die Website den Rest bis 160 pt.
+  Nachgemessen: ganz.
+
+Hell geprüft (Liste, Inspektor mit „wirkt nicht“). Nicht gemessen: der Sprung der Vorschau auf eine Seite
+mit dem Eintrag und „Eigene Klasse vergeben“; beide gibt es nur auf Reitern, deren Einträge Seiten kennen
+oder keine eigene Klasse haben (Zusätzliche Inhalte, Formulare).
