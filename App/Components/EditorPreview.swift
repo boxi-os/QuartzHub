@@ -177,10 +177,11 @@ struct EditorPreview: View {
       }
       .clipShape(RoundedRectangle(cornerRadius: 6))
       .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
-      .frame(minHeight: 160)
+      .frame(minHeight: 120)
       // The sentence first, the site takes what is left: with 240 pt for the site, a sentence on
-      // two lines ran out of the pane's 365 pt at 1200×800 and its second line was cut off
-      // (measured 2026-11-09).
+      // two lines ran out of the pane's 365 pt at 1200×800 and its second line was cut off; with
+      // 160 pt, beside "Eigene Klasse vergeben" in Zusätzliche Inhalte' 310 pt pane, it was cut
+      // after one (measured 2026-11-09). A larger pane there leaves the list of boxes one row.
       HStack(spacing: 8) {
         if let sentence { Text(sentence).font(.callout).foregroundStyle(.secondary) }
         if let highlight, highlight.matches > 1, let onAssignClass {
