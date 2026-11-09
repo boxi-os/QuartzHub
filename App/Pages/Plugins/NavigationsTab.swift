@@ -57,6 +57,8 @@ struct NavigationsTab: View {
       } description: {
         Text(L10n.t("navigationsEditor.notInstalledText"))
       }
+      // The whole column: at its text's width, the tab picker above moved to the left.
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
     } else {
       VSplitView {
         list(instances)
