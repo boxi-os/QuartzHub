@@ -18,12 +18,19 @@ struct PageScaffold<Content: View, Inspector: View>: View {
 
   @SceneStorage("inspector.presented") private var inspectorPresented = true
   @Environment(\.project) private var project
+  @Environment(\.returnLink) private var returnLink
+  @Environment(\.goToPage) private var goToPage
 
   var body: some View {
     content()
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
       // Back where it was left (ScrollMemory), per project and page.
       .background(ScrollMemory(key: "\(project?.path ?? "")|\(page.rawValue)"))
+      // The way back after a link (ReturnLink), above the middle column only: put around the
+      // whole page in the window, the page and the inspector both laid out under it (measured).
+      .safeAreaInset(edge: .top, spacing: 0) {
+        if let returnLink { ReturnLinkBar(link: returnLink, current: page, go: goToPage) }
+      }
       // The window's title is the project's name (ProjectWindow); the page is its subtitle.
       .navigationSubtitle(page.title)
       .inspectorColumn(isPresented: $inspectorPresented, content: inspector)

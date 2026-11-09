@@ -24,22 +24,36 @@ struct ProjectWindow: View {
   /// `@SceneStorage` keys: two properties of one key in one scene undo each other's writes
   /// (measured: the Layout page's tab picker stopped switching).
   @State private var layoutHandOver = LayoutHandOver()
+  /// The way back after a link on a page (QuartzControl's `markReturn`).
+  @State private var returnLink = ReturnLink()
 
   private var current: ProjectPage { ProjectPage(rawValue: pageID) ?? .overview }
 
   /// Every way to another page goes through here, so an edited page asks before it is left.
-  private func go(to page: ProjectPage) {
+  /// `done` runs once the page has changed, not when the question was answered with Abbrechen.
+  private func go(to page: ProjectPage, done: @escaping () -> Void = {}) {
     guard page.rawValue != pageID else { return }
     guard unsaved.dirty else {
       pageID = page.rawValue
+      done()
       return
     }
     Task {
       if await unsaved.confirmLeave() {
         pageID = page.rawValue
+        done()
       } else {
         highlighted = current
       }
+    }
+  }
+
+  /// A link on a page: to `page`, on `tab` when it names one, with the way back.
+  private func follow(to page: ProjectPage, tab: String?) {
+    let origin = current
+    go(to: page) {
+      if let tab { returnLink.send(page, tab: tab) }
+      returnLink.markPage(from: origin, to: ReturnLink.Place(page: page, tab: tab))
     }
   }
 
@@ -89,17 +103,29 @@ struct ProjectWindow: View {
     }
     .navigationTitle(row.name)
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
-    .environment(\.openPage, OpenPageAction { go(to: $0) })
+    .environment(\.openPage, OpenPageAction { follow(to: $0, tab: $1) })
     .environment(\.layoutHandOver, layoutHandOver)
     .environment(\.openLayout, OpenLayoutAction { target in
       layoutHandOver.target = target
-      go(to: .layout)
+      let origin = current
+      go(to: .layout) {
+        let tab: LayoutModel.Tab = switch target {
+        case .component: .global
+        case .frame: .frames
+        }
+        returnLink.markPage(from: origin, to: ReturnLink.Place(page: .layout, tab: tab.rawValue))
+      }
     })
+    .environment(\.returnLink, returnLink)
+    .environment(\.goToPage, GoToPageAction { go(to: $0, done: $1) })
     .environment(\.unsavedGuard, unsaved)
     .onChange(of: highlighted) { _, page in
       if let page { go(to: page) }
     }
-    .onChange(of: pageID, initial: true) { highlighted = current }
+    .onChange(of: pageID, initial: true) {
+      highlighted = current
+      returnLink.notePage(current)
+    }
     .background(UnsavedWindowHook(unsaved: unsaved))
   }
 
@@ -130,14 +156,22 @@ struct ProjectWindow: View {
   }
 }
 
-/// Moves the window to another page, for a link on a page (the overview's "Plugins ›").
+/// Moves the window to another page, for a link on a page (the overview's "Plugins ›"), on the
+/// tab the link names if it names one.
 struct OpenPageAction {
-  let open: (ProjectPage) -> Void
-  func callAsFunction(_ page: ProjectPage) { open(page) }
+  let open: (ProjectPage, String?) -> Void
+  func callAsFunction(_ page: ProjectPage, tab: String? = nil) { open(page, tab) }
+}
+
+/// The window's own way to a page, for the way back: `done` once the page has changed.
+struct GoToPageAction {
+  let go: (ProjectPage, @escaping () -> Void) -> Void
+  func callAsFunction(_ page: ProjectPage, done: @escaping () -> Void) { go(page, done) }
 }
 
 extension EnvironmentValues {
-  @Entry var openPage = OpenPageAction { _ in }
+  @Entry var goToPage = GoToPageAction { _, _ in }
+  @Entry var openPage = OpenPageAction { _, _ in }
   @Entry var openLayout = OpenLayoutAction { _ in }
   @Entry var layoutHandOver: LayoutHandOver?
 }

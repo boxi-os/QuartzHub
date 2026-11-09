@@ -34,14 +34,15 @@ zu `gemessen` mit dem Testnamen als Beleg.
 ## Stand am 2026-11-09 (Rohfassung)
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
-Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues.
+Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
+gezählt, zuletzt am 2026-11-09 nach dem Rückweg.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 56 | 122 | 14 | 8 | 16 | 216 |
-| Plugins und Wartung | 106 | 133 | 4 | 15 | 3 | 261 |
-| Gestaltung und Veröffentlichen | 91 | 118 | 10 | 20 | 2 | 241 |
-| **Summe** | **253** | **373** | **28** | **43** | **21** | **718** |
+| Einrichtung | 62 | 125 | 17 | 8 | 4 | 216 |
+| Plugins und Wartung | 109 | 133 | 4 | 15 | 0 | 261 |
+| Gestaltung und Veröffentlichen | 93 | 119 | 10 | 20 | 1 | 243 |
+| **Summe** | **264** | **377** | **31** | **43** | **5** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -68,9 +69,8 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
 8. ~~Die Rollposition je Seite~~: gebaut und gemessen am 2026-11-09.
 9. ~~Ein Eintrag unter „Handlungsbedarf“ führt auf den richtigen Reiter~~: geschlossen und gemessen
    am 2026-11-09, dazu „Konfiguration ›“ unter „Die Seite“.
-10. **Rückweg-Links** (`markReturn`): von den Plugin-Editoren zurück nach „Alle Optionen“ bzw. zur
-    Bühne, von Snapshots zurück zu Updates. Für die Übersicht ist der Verzicht entschieden, für
-    diese nicht.
+10. ~~Rückweg-Links~~ (`markReturn`): gebaut und gemessen am 2026-11-09, für alle Verweise
+    zwischen Seiten und Reitern wie in QuartzControl; von der Übersicht aus bleibt es beim Verzicht.
 11. ~~Formulare: „Keine passende Seite“~~: geschlossen und gemessen am 2026-11-09.
 12. **Frames: einen Bereich mit der Tastatur setzen oder verschieben.** Die Entscheidung 4b
     („die Tastatur verschiebt über den Inspektor“) ist auf der Bühne umgesetzt, im Frame-Editor

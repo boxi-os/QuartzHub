@@ -73,7 +73,7 @@ struct BuildServerPage: View {
       if model.missingIndex {
         HStack(alignment: .firstTextBaseline) {
           Text(L10n.t("buildServer.noIndex")).font(.callout).foregroundStyle(.orange)
-          Button(L10n.t("buildServer.noIndexLink")) { openPage(.config) }.buttonStyle(.link).font(.callout)
+          Button(L10n.t("buildServer.noIndexLink")) { openPage(.config, tab: ConfigPage.Tab.site.rawValue) }.buttonStyle(.link).font(.callout)
         }
       }
       if let activity, activity.kind != .build { ActivityLine(activity: activity) }

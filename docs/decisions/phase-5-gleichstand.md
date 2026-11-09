@@ -146,3 +146,58 @@ zwölf hinab, Snapshots, zurück zur Übersicht: dieselbe Stelle („…vor 4 Wo
 Nicht gemessen: Seiten, deren größte Scrollansicht ein Editor ist (Eigenes CSS, Zusätzliche
 Inhalte), und Seiten mit Reitern, die sich eine Position für alle Reiter teilen (wie in
 QuartzControl, dessen Schlüssel der Pfad ohne Reiter war).
+
+## Rückweg nach einem Verweis
+
+QuartzControls `state/returnLink.ts`: Schickt die App den Nutzer woandershin („Auf der Bühne
+zeigen“, „Alle Optionen in der Plugin-Liste“, „Zu den Snapshots“), steht über der Zielseite
+„‹ Zurück zu „Plugins › Zusätzliche Inhalte““. In Phase 4 war nur der Verzicht für die Übersicht
+entschieden; für die übrigen Verweise wollte der Nutzer ihn (2026-11-09).
+
+`App/Shell/ReturnLink.swift`, ein Objekt je Fenster, mit QuartzControls Regeln:
+
+- **Ein Ort ist eine Seite und, auf den vier Seiten mit Reitern, der Reiter.** Den Reiter kennt das
+  Fenster nicht: Eine zweite `@SceneStorage` mit dem Schlüssel der Seite im selben Fenster macht
+  deren Schreiben rückgängig (gemessen in Phase 4 am Layout). Jede Seite mit Reitern meldet ihn
+  deshalb mit `.returnTab(page:tab:)` und nimmt darüber auch den Reiter an, auf den sie
+  zurückgeschickt wird.
+- **Gesetzt wird ohne Zutun der Seiten.** `openPage` und `openLayout` setzen den Rückweg, sobald die
+  Seite gewechselt hat, nicht wenn die Frage nach ungespeicherten Änderungen mit Abbrechen endete.
+  Nur die Sprünge innerhalb einer Seite sagen es selbst: Plugins (alle vier „Alle Optionen“),
+  Layout (Übersicht ▸ Komponenten oder Frames, „Frame bearbeiten“).
+- **Lebensdauer:** Die Leiste steht, solange der Nutzer auf der Zielseite bleibt, über ihre Reiter
+  hinweg; nach einem Sprung innerhalb einer Seite nur auf dem Reiter, zu dem er führte. Jeder andere
+  Weg beendet sie. Zurück innerhalb einer Seite ist ein Reiterwechsel und fragt nichts, zwischen
+  Seiten fragt es wie die Seitenleiste.
+- **Von der Übersicht aus keiner**, wie in Phase 4 entschieden: Dort ist die Seitenleiste der Weg
+  zurück.
+- Dazu wie in QuartzControl: „Konfiguration“ beim fehlenden `index.md` auf Vorschau & Build führt
+  auf den Reiter Website (`openPage(_:tab:)`).
+
+Die Leiste sitzt in `PageScaffold` über der mittleren Spalte, nicht als `safeAreaInset` um die
+ganze Seite im Fenster: Dort lagen Seite und Inspektor darunter, der Reiter-Umschalter von Layout
+und der Kopf des Inspektors waren verdeckt (gesehen 1400×860).
+
+Gemessen am 2026-11-09 an der gui-test-Kopie, Dunkel in 1400×860:
+
+- Plugins ▸ Zusätzliche Inhalte, Box „mark“, „Auf der Bühne zeigen“: Layout ▸ Komponenten mit
+  „Zurück zu „Plugins › Zusätzliche Inhalte““; der Klick führt auf den Reiter, „mark“ gewählt, die
+  Leiste ist weg.
+- „Alle Optionen in der Plugin-Liste“: Installiert mit quartz-layout-box #1 im Inspektor und
+  derselben Leiste. **Gegenprobe:** von Hand auf Navigationen, die Leiste ist weg und kommt auf
+  Installiert nicht wieder.
+- Updates ▸ „Zu den Snapshots“: „Zurück zu „Updates““. **Gegenprobe:** über die Seitenleiste zu
+  Konfiguration und zurück zu Snapshots, keine Leiste.
+- Layout ▸ Übersicht, Spalte „Tag-Seiten“: Komponenten mit „Zurück zu „Layout › Übersicht““, der
+  Klick stellt den Reiter Übersicht wieder ein.
+
+Hell in 1000×700: Updates ▸ Snapshots mit der Leiste und zurück; **Gegenprobe:** „Konfiguration ›“
+auf der Übersicht öffnet Konfiguration ohne Leiste.
+
+Nicht gemessen: der Rückweg zwischen Seiten mit ungespeicherten Änderungen (die Frage), der Weg von
+Vorschau & Build auf Website (braucht ein Projekt ohne `index.md`) und der Verweis von
+Konfiguration zu den Stilen (erschien an gui-test nicht).
+
+Nebenbei gesehen: `CoexistenceBand` sitzt noch als `safeAreaInset` um die ganze Seite und dürfte
+Seite und Inspektor genauso verdecken; nicht geprüft, weil es dafür ein laufendes QuartzControl
+braucht. Nicht geändert.

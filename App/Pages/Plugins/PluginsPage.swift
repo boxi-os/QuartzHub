@@ -54,6 +54,7 @@ struct PluginsPage: View {
   /// quartz-multilanguage's schema: its groups are the rows of the tab and the panels of the inspector.
   @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
+  @Environment(\.returnLink) private var returnLink
 
   init(project: ProjectContext) {
     self.project = project
@@ -124,6 +125,7 @@ struct PluginsPage: View {
             .task { if marketplace.result == nil { await marketplace.load() } }
         }
       }
+      .returnTab(page: .plugins, tab: $tabID)
       .task {
         await model.load()
         let path = project.path
@@ -138,20 +140,14 @@ struct PluginsPage: View {
                 let item = NavigationInstance.all(model.config?.plugins ?? []).first(where: { $0.occurrence == navigationSelected }) {
         let count = NavigationInstance.all(model.config?.plugins ?? []).count
         NavigationInspector(item: item, label: item.label(among: count), model: model) {
-          // The plugin list knows the entry by its name and its number among the same-named.
-          let same = (model.config?.plugins ?? []).prefix(item.index + 1).filter { $0.name == item.entry.name }.count
-          selected = same == 1 ? item.entry.name : "\(item.entry.name)#\(same)"
-          tabID = Tab.installed.rawValue
+          showAllOptions(item.entry, index: item.index)
         }
         .id(item.occurrence)
       } else if tab == .extras, let boxSelected,
                 let box = LayoutBoxes.boxes(model.config?.plugins ?? []).first(where: { $0.occurrence == boxSelected }) {
         let boxes = LayoutBoxes.boxes(model.config?.plugins ?? [])
         BoxInspector(box: box, label: BoxLabels.label(box, among: boxes), model: model) {
-          // The plugin list knows the entry by its name and its number among the same-named.
-          let same = (model.config?.plugins ?? []).prefix(box.index + 1).filter { $0.name == box.plugin.name }.count
-          selected = same == 1 ? box.plugin.name : "\(box.plugin.name)#\(same)"
-          tabID = Tab.installed.rawValue
+          showAllOptions(box.plugin, index: box.index)
         }
         .id(box.occurrence)
       } else if tab == .languages, let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first,
@@ -203,11 +199,12 @@ struct PluginsPage: View {
     }
   }
 
-  /// „Alle Optionen in der Plugin-Liste“: the plugin list knows the entry by its name and its
-  /// number among the same-named.
+  /// „Alle Optionen in der Plugin-Liste“, from all four editors: the plugin list knows the entry by
+  /// its name and its number among the same-named. The way back leads to the editor.
   private func showAllOptions(_ plugin: PluginEntry, index: Int) {
     let same = (model.config?.plugins ?? []).prefix(index + 1).filter { $0.name == plugin.name }.count
     selected = same == 1 ? plugin.name : "\(plugin.name)#\(same)"
+    returnLink?.markTab(.plugins, to: Tab.installed.rawValue)
     tabID = Tab.installed.rawValue
   }
 
