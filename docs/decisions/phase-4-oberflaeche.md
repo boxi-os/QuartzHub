@@ -1123,3 +1123,24 @@ Vault-Link beim Sync.
   ein Display-P3-Bildschirm zeigt, was die Website zeigt. Der Test kappt wie Canvas und vergleicht.
 - Gegenproben (18, jede lässt einen Test scheitern; vier waren erst ungefangen und bekamen ihren
   Fall: Farbton-Methode „longer“, „increasing“, „decreasing“, Alpha über 1 in `oklch()`).
+
+### Stile: Variablen auflösen (`VariableResolve`)
+
+- **Der Rest von `variableGraph.ts`, dazu `swatch.ts`:** Wert heute, Wert ohne die eigene
+  Änderung, die Kette der Aliase (höchstens 20 Schritte, Halt bei einem Kreis), das Literal am Ende
+  mit eingesetzten Verweisen (`hsl(var(--h) …)`), Herkunft, Gruppe, „ist eine Farbe“ in beiden
+  Fragen (ohne und mit der eigenen Änderung), der Grund, auf dem ein Farbfleck liegt. Die eigenen
+  Änderungen behalten die Reihenfolge der Seite: In JavaScript behält ein Objekt sie, und die Liste
+  der bekannten Variablen folgt ihr.
+- **Gemessen gegen QuartzControls Code in Chrome:** `scripts/variable-resolve-golden.mjs`, zehn
+  Kontexte aus den Graphen von `Fixtures/variable-graph` (gui-test, mit minimal, minimal allein, die
+  Ränder, ein eigener Ausgabeordner, viele Build-Dateien, kein Graph), den Paletten von gui-test und
+  Example und eigenen Änderungen jeder Art: geänderte Farbe, nur hell, eigene Variable ohne
+  Grundlage, Alias, Kreis, eingebetteter Verweis mit und ohne Fallback, geleertes Paar, eine Farbe
+  über einem Wert, der keine ist, Verweise neun Ebenen tief. 4127 Zeilen, je Modus Wert, Grundwert,
+  Kette und Literal, dazu 32 getippte Werte. Alles gleich.
+- Gegenproben (21, 20 fangen; vier waren erst ungefangen und bekamen ihren Fall: ein `var()` mit
+  Fallback und etwas dahinter, die Tiefengrenze beim Einsetzen und bei Fallback-Ketten, eine
+  Farbe über einem Theme-Wert, der keine ist). Ungefangen bleibt die Tiefengrenze in
+  `resolvedValue`: Die von `substituteVars` greift eine Ebene früher, die zweite ist eine doppelte
+  Vorsicht aus QuartzControl.
