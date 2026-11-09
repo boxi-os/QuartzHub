@@ -1264,3 +1264,18 @@ Vault-Link beim Sync.
   nur die rohen Schalter.
 - **Nebenbefund:** `SyncTests.aSyncThatHangsEnds` flackert (ENOENT auf `askpass-path`, allein in
   zwei von drei Läufen gescheitert); Sync ist in dieser Runde nicht angefasst.
+
+### Stile: eine Variable bearbeiten (`VariableEditing`)
+
+- **Die inneren Funktionen von `VariableRow.tsx`** (`base`, `draft`, `setMode`, `followLight`, wann
+  zwei Felder stehen), von Hand portiert: Sie leben in einer React-Komponente, ein Golden über
+  QuartzControls Code ginge nur über die ganze Komponente. Jede Regel kam aus einem Review, und ihr
+  Fall ist ein Test: die dunkle Hälfte einer in den Modi verschiedenen Variablen bleibt erhalten
+  (1.0.1, gui-tests `--secondary`), im umgestellten Projekt wird eine helle Änderung „nur hell“
+  geschrieben, in einem nicht umgestellten mit expliziter dunkler Hälfte (siebenundvierzigstes
+  Review); eine dunkle Hälfte, die nur den Grundwert wiederholt, gilt als ungesetzt, verglichen als
+  CSS-Text (`#A1A1A1` gegen `#a1a1a1`, gui-tests `--gray`); ein geleertes helles Feld springt
+  nicht auf den Grundwert zurück; eine eigene Variable verschwindet nie durch eine Änderung; „im
+  Dunkelmodus gleich“ nimmt die dunkle Hälfte weg, statt sie zu setzen.
+- Gegenproben (9, jede lässt einen Test scheitern; eine war erst ungefangen und bekam ihren Fall:
+  eine Variable ohne Farbe, die in Dunkel anders ist).
