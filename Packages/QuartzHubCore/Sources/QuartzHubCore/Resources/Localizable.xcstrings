@@ -29246,7 +29246,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eine Datei aus dem Merge wurde inzwischen geändert, deshalb lässt sich das Update nicht abbrechen. Verwirf, was du seit dem Merge an ihr geändert hast (im Terminal: „git checkout -- <Datei>“), und brich dann erneut ab.\n\n"
+            "value" : "Eine Datei aus dem Merge wurde inzwischen geändert, deshalb kann das Update nicht abgebrochen werden. Verwirf, was du seit dem Merge an ihr geändert hast (im Terminal: „git checkout -- <Datei>“), und brich dann erneut ab.\n\n"
           }
         },
         "en" : {
@@ -29263,7 +29263,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "An Dateien aus dem Merge wurde inzwischen weitergearbeitet, deshalb lässt sich das Update nicht abbrechen: {{files}}. Verwirf, was du dort seitdem geändert hast (im Terminal je Datei: „git checkout -- <Datei>“), und brich dann erneut ab.\n\n"
+            "value" : "An Dateien aus dem Merge wurde inzwischen weitergearbeitet, deshalb kann das Update nicht abgebrochen werden: {{files}}. Verwirf, was du dort seitdem geändert hast (im Terminal je Datei: „git checkout -- <Datei>“), und brich dann erneut ab.\n\n"
           }
         },
         "en" : {
@@ -29280,7 +29280,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Dateien sind mit „git add -N“ nur angekündigt, deshalb lässt sich das Update nicht abbrechen: {{files}}. Nimm die Ankündigung zurück (im Terminal je Datei: „git rm --cached -- <Datei>“) und brich dann erneut ab; der Inhalt bleibt dabei im Ordner liegen.\n\n"
+            "value" : "Diese Dateien sind mit „git add -N“ nur angekündigt, deshalb kann das Update nicht abgebrochen werden: {{files}}. Nimm die Ankündigung zurück (im Terminal je Datei: „git rm --cached -- <Datei>“) und brich dann erneut ab; der Inhalt bleibt dabei im Ordner liegen.\n\n"
           }
         },
         "en" : {
@@ -29297,7 +29297,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Dateien hast du selbst vorgemerkt und danach weiter geändert, deshalb lässt sich das Update nicht abbrechen: {{files}}. Nimm dort nur die Vormerkung zurück (im Terminal je Datei: „git reset -- <Datei>“), deine Änderungen bleiben dabei erhalten, und brich dann erneut ab.\n\n"
+            "value" : "Diese Dateien hast du selbst vorgemerkt und danach weiter geändert, deshalb kann das Update nicht abgebrochen werden: {{files}}. Nimm dort nur die Vormerkung zurück (im Terminal je Datei: „git reset -- <Datei>“), deine Änderungen bleiben dabei erhalten, und brich dann erneut ab.\n\n"
           }
         },
         "en" : {
@@ -29331,7 +29331,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Dateien sind nicht mehr vorgemerkt, liegen aber noch im Projektordner, deshalb lässt sich das Update nicht abbrechen: {{files}}. Merke sie wieder vor (im Terminal je Datei: „git add -- <Datei>“) und brich dann erneut ab. Der Abbruch stellt darin danach den Stand von vor dem Merge wieder her, sichere also vorher, was du seitdem hineingeschrieben hast.\n\n"
+            "value" : "Diese Dateien sind nicht mehr vorgemerkt, liegen aber noch im Projektordner, deshalb kann das Update nicht abgebrochen werden: {{files}}. Merke sie wieder vor (im Terminal je Datei: „git add -- <Datei>“) und brich dann erneut ab. Der Abbruch stellt darin danach den Stand von vor dem Merge wieder her, sichere also vorher, was du seitdem hineingeschrieben hast.\n\n"
           }
         },
         "en" : {
@@ -29398,13 +29398,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für dieses Projekt läuft gerade ein Kern-Update. Warte, bis es abgeschlossen ist, und sieh dann noch einmal nach. Die Ausgabe des Laufs sieht nur, wer die Updates-Seite so lange offen lässt."
+            "value" : "Für dieses Projekt läuft gerade ein Kern-Update. Warte, bis es abgeschlossen ist, und sieh dann noch einmal nach."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A core update is already running for this project. Wait for it to complete and then look again. The run’s own output is only seen by whoever leaves the Updates page open until then."
+            "value" : "A core update is already running for this project. Wait for it to complete and then look again."
           }
         }
       }
@@ -29465,7 +29465,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Notiz zu diesem Update ließ sich nicht schreiben ({{reason}}). Das Update lief trotzdem zu Ende; der nächste Lauf kann deshalb noch einmal installieren oder „nichts zu tun“ melden."
+            "value" : "Die Notiz zu diesem Update konnte nicht geschrieben werden ({{reason}}). Das Update lief trotzdem zu Ende; der nächste Lauf kann deshalb noch einmal installieren oder „nichts zu tun“ melden."
           }
         },
         "en" : {
@@ -29499,7 +29499,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese eigenen Pakete trägt das Update nicht wieder ein: {{packages}}. Der Stand, auf den sich der Merkzettel aus dem letzten Lauf bezog, lässt sich in git nicht mehr nachlesen. Trage sie bei Bedarf selbst wieder ein."
+            "value" : "Diese eigenen Pakete trägt das Update nicht wieder ein: {{packages}}. Der Stand, auf den sich der Merkzettel aus dem letzten Lauf bezog, kann in git nicht mehr nachgelesen werden. Trage sie bei Bedarf selbst wieder ein."
           }
         },
         "en" : {
@@ -51591,6 +51591,40 @@
         }
       }
     },
+    "updates.core.done" : {
+      "comment" : "Updates page, Quartz core: above the output of a run that succeeded; also announced",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Kern-Update ist abgeschlossen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The core update is complete."
+          }
+        }
+      }
+    },
+    "updates.core.failed" : {
+      "comment" : "Updates page, Quartz core: above the output of a run that failed; also announced",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Kern-Update konnte nicht abgeschlossen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The core update could not be completed."
+          }
+        }
+      }
+    },
     "updates.core.heading" : {
       "localizations" : {
         "de" : {
@@ -51663,6 +51697,23 @@
         }
       }
     },
+    "updates.core.output" : {
+      "comment" : "Updates page, Quartz core: accessibility name of the output box",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabe des Kern-Updates"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Core update output"
+          }
+        }
+      }
+    },
     "updates.core.pendingDetail" : {
       "localizations" : {
         "de" : {
@@ -51727,6 +51778,40 @@
         }
       }
     },
+    "updates.core.running" : {
+      "comment" : "Updates page, Quartz core: next to the disabled button while a core update runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update läuft…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating…"
+          }
+        }
+      }
+    },
+    "updates.plugins.finished" : {
+      "comment" : "Updates page, Plugins: announced when a plugin update ends; the output says how it went",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Plugin-Update ist beendet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The plugin update has finished."
+          }
+        }
+      }
+    },
     "updates.plugins.heading" : {
       "localizations" : {
         "de" : {
@@ -51787,6 +51872,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No plugins added via the marketplace or command line were found."
+          }
+        }
+      }
+    },
+    "updates.plugins.output" : {
+      "comment" : "Updates page, Plugins: accessibility name of the output box",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabe des Plugin-Updates"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin update output"
+          }
+        }
+      }
+    },
+    "updates.plugins.running" : {
+      "comment" : "Updates page, Plugins: next to the button of the plugin update that runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird aktualisiert…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating…"
           }
         }
       }

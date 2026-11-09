@@ -909,3 +909,49 @@ Ordner (Dateidialog), Geheimnisse speichern (sie gingen in den echten Schlüssel
 Gefunden in der laufenden App: Die drei Knöpfe unten waren nebeneinander auf „Relay…“, „Als O…“
 und „Vom…“ gekürzt; sie stehen jetzt untereinander. Zwölf Texte des Relays nannten QuartzControl
 oder sagten „lässt sich“, auch Meldungen des Kerns (`main.relay*`), die hier erscheinen.
+
+### Updates
+
+Vorbild `Updates.tsx`, Dienste `CoreUpdate`, `PluginUpdates`, `GitStatus` aus Phase 3; keine neue
+Logik im Kern. Eine Form mit zwei Abschnitten, Kern und Plugins. Die Karte, die auf Snapshots
+verwies, ist der Seitenkontext im Inspektor; „Erneut prüfen“ steht in der Symbolleiste.
+
+- **Der Lauf gehört dem Projekt, nicht der Seite** (`UpdatesModel.shared`): Ein Kern-Update läuft
+  Minuten (Merge, `npm install`, Aufwärm-Build). In QuartzControl waren Ausgabe und „läuft“ weg,
+  sobald man die Seite verließ. Hier zeigt die wieder geöffnete Seite den Lauf noch laufend oder
+  sein Ende. Der letzte Satz von `main.updateAlreadyRunning` („Die Ausgabe des Laufs sieht nur, wer
+  …“) ist deshalb gestrichen.
+- **Dafür gilt das Schloss jetzt für den Prozess** (Nachtrag in `phase-3-dienste.md`, eigener
+  Commit): Es hing an der Instanz, und die wieder geöffnete Seite hätte neben dem ersten Lauf einen
+  zweiten gestartet.
+- **Ein Satz über dem Text von git und npm:** „Das Kern-Update ist abgeschlossen.“ bzw. „… konnte
+  nicht abgeschlossen werden.“, auch angesagt. Danach die Konfliktdateien, dann die Ausgabe. Das
+  Plugin-Update bekommt keinen solchen Satz: Die CLI endet mit 0, wenn einzelne Plugins scheitern;
+  angesagt wird nur „Das Plugin-Update ist beendet.“
+- **„Snapshot von vor dem Update öffnen“** setzt `@SceneStorage("backups.open")` und geht zu
+  Snapshots; die Seite Snapshots liest es, wenn sie portiert ist. Den Rückweg-Link
+  (`markReturn`) gibt es noch nicht.
+- **Ohne Netz ansehen:** Unter `-QHNoUpdateCheck YES` (nur Debug) darf git auf dieser Seite nur
+  `file://` erreichen (`GIT_ALLOW_PROTOCOL=file`). Die Prüfungen antworten sofort „Nicht prüfbar“,
+  ein Lauf endet am Fetch mit „transport 'https' not allowed“ (gemessen: 16 ms gegen eine nicht
+  erreichbare Adresse). Plugins mit `file://`-Quelle werden echt geprüft.
+
+Gemessen in Hell und Dunkel, groß und in 1000×700:
+- an der gui-test-Kopie: fünf Plugins „Nicht prüfbar“ mit „Aktualisieren“, sechs lokal. Ein Lauf
+  scheitert am Fetch, und die Kopie ist danach unverändert: Status, HEAD, Stash, `.git/config`,
+  Notiz und Snapshot-Zahl. Es entsteht kein Snapshot, weil sich seit dem letzten nichts geändert
+  hat (`SnapshotStore`, wie in QuartzControl), also auch kein Link;
+- an einem Wegwerf-Projekt mit zwei Plugin-Repos über `file://`: „Aktuell“ und ein veraltetes
+  Plugin; ein Lauf mit Snapshot-Link; Ausgabe und Link nach Übersicht und zurück noch da; der Link
+  öffnet Snapshots; ein Merge mit Konflikt zeigt das Banner, ein Lauf darin wird mit
+  `main.updateMergeUnfinished` und `README.md` abgewiesen; „Merge abbrechen“ räumt den Merge weg
+  und leert die Ausgabe; „Nicht abgeschlossen“ aus einer Notiz mit fehlendem Paket und einer nur
+  mit gescheitertem `npm install`.
+
+Nicht gemessen: ein echtes Kern-Update und ein Plugin-Update (`npx quartz plugin install
+--latest`). Beide brauchen Netz und passieren nur auf Ansage.
+
+Gefunden in der laufenden App: Die Konfliktliste stand über dem Satz „konnte nicht abgeschlossen
+werden“; jetzt kommt erst der Satz. Die Sätze des Katalogs enden mit zwei Zeilenumbrüchen, die im
+Kasten als leere Zeilen standen; sie werden für die Anzeige weggelassen. Sieben Texte des Kerns, die
+hier erscheinen, sagten „lässt sich“ oder „ließ sich“.
