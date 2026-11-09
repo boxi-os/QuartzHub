@@ -127,7 +127,11 @@ import Testing
     _ = await frames.add("/frame/one", project, true)
     _ = await frames.add("/frame/two", project, false)
     #expect(calls.all.last == ["pluginChange", "/frame/one"] && calls.all.count == 3)
-    #expect(seen.withLock { $0 } == [0, 1, 3])
+    // Deleting a frame always takes one, as QuartzControl's `deleteFrame` goes through
+    // `removePlugin` (measured 2026-11-09: the question promised one and none was taken).
+    _ = await frames.remove("frame-one", project)
+    #expect(calls.all.last == ["pluginChange", "frame-one"] && calls.all.count == 4)
+    #expect(seen.withLock { $0 } == [0, 1, 3, 5])
   }
 
   @Test func aSnapshotThatFailsStopsTheCommand() async throws {

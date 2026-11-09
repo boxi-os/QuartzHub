@@ -25,7 +25,8 @@ public struct LayoutFrames: Sendable {
 
   /// The two CLI calls a frame needs, injectable for the tests. `snapshot` is QuartzControl's
   /// `addPlugin` (with one) against `installPluginSource` (without, for a template import that
-  /// takes one for the whole import).
+  /// takes one for the whole import). Removing always takes one: QuartzControl's `deleteFrame`
+  /// goes through `removePlugin`, and the question before it says so.
   public struct Plugins: Sendable {
     public var add: @Sendable (_ source: String, _ project: String, _ snapshot: Bool) async -> PluginCommands.Result
     public var remove: @Sendable (_ name: String, _ project: String) async -> PluginCommands.Result
@@ -41,7 +42,9 @@ public struct LayoutFrames: Sendable {
         add: { source, project, withSnapshot in
           await PluginCommands.shared.add(source: source, project: project, environment: environment(), snapshot: withSnapshot ? snapshot : nil)
         },
-        remove: { name, project in await PluginCommands.shared.remove(name: name, project: project, environment: environment()) })
+        remove: { name, project in
+          await PluginCommands.shared.remove(name: name, project: project, environment: environment(), snapshot: snapshot)
+        })
     }
   }
 
