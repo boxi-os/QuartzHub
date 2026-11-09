@@ -1144,3 +1144,23 @@ Vault-Link beim Sync.
   Farbe über einem Theme-Wert, der keine ist). Ungefangen bleibt die Tiefengrenze in
   `resolvedValue`: Die von `substituteVars` greift eine Ebene früher, die zweite ist eine doppelte
   Vorsicht aus QuartzControl.
+
+### Stile: Woher die Schriften kommen (`FontDelivery`, `GoogleFontList`)
+
+- **Die Schrift-Logik des Reiters Basis:** `fontDelivery.ts` (welche drei Lader eine Webschrift
+  holen: Quartz selbst, das Plugin quartz-fonts, ein Community-Theme; die zwei Schalter; „Google,
+  aus dem Projekt“ auf dem Weg hinein und hinaus), `primaryFamily` und `summarizeFaces` aus
+  `fontSpec.ts`, `fontBuildState` aus `previewFonts.ts`, die fertigen Stylesheets aus `cssFixes.ts`,
+  dazu `activeThemeIdOf` und `familyOf` der Seite.
+- **Gemessen gegen QuartzControls Code:** `scripts/font-delivery-golden.mjs` lädt die Dateien in
+  Node (sie brauchen keinen Browser) und zeichnet 254 Configs auf: die von gui-test und Example und
+  erfundene über alles, was etwas entscheidet (`fontOrigin` fehlend, Google, lokal, unbekannt;
+  `cdnCaching` fehlend, an, aus; das Fonts-Plugin an, aus, mit eigenem `fontOrigin`, zweimal; ein
+  Theme mit und ohne seine Schriften, aus, mit einer Zahl als Theme, zwei Themes). Je Config die
+  Lader, beide Schalter in beide Richtungen, hinein mit sieben Stylesheet-Anfängen und hinaus, und
+  der Stand der Schriften mit vier Mengen von Schnitten und drei Antworten auf „gibt es einen
+  Build“. Alles gleich, die Configs mit Schlüsselreihenfolge.
+- **Die Liste der Google-Schriften** (1959 Familien vom 2026-11-05) schreibt dasselbe Skript aus
+  QuartzControls `src/data/googleFonts.ts` nach `GoogleFontList.swift`, als eine Zeichenkette mit
+  Tabulatoren, die beim ersten Gebrauch zerlegt wird.
+- Gegenproben (16, jede lässt einen Test scheitern).
