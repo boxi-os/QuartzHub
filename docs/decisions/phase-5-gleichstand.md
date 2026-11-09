@@ -94,3 +94,17 @@ Quartz-Dokumentation, Plugin-Katalog, —, Datenordner von QuartzHub öffnen, Li
 Events). „Datenordner …“ öffnete im Finder den mit `-QHProfileDir` gesetzten Ordner, „Lizenzen“ den
 Ordner im Repo. Nicht geklickt: die drei Web-Links (öffnen den Browser, also das Netz). Nicht
 gemessen: der Lizenzordner im Paket und der Dialog, wenn er fehlt.
+
+## Projektkopf in der Seitenleiste
+
+QuartzControls `ProjectLayout` zeigte über der Navigation eine Karte mit Projektbild, Name und
+Pfad; in QuartzHub stand der Name nur im Fenstertitel, der Pfad nur im Inspektor der Übersicht.
+Jetzt sitzt `SidebarProjectHeader` als `safeAreaInset` oben in der Seitenleiste: `ProjectAvatar`
+aus dem Fenster „Projekte“ (eigenes Bild oder Anfangsbuchstabe auf der Farbe der Kennung), der Name,
+darunter der Pfad, in der Mitte gekürzt (dort unterscheiden sich lange Pfade am wenigsten) und
+ganz als Tooltip. Ein neues Projektbild kommt über `ProjectsModel.reload()`, das die
+Konfiguration schon ruft.
+
+Gemessen am 2026-11-09 an der gui-test-Kopie: Dunkel in 1400×860, Hell in 1000×700 (Thema über das
+Wegwerf-Profil), der Kopf mit dem Bild von gui-test und „/private/tmp/…pad/pub/proj“. Nicht
+gemessen: das Bild nach einer Änderung auf Konfiguration.

@@ -75,6 +75,10 @@ struct ProjectWindow: View {
           }
         }
       }
+      // QuartzControl's card above the navigation: which project this window is, with its picture
+      // and where it lives. The name is in the title bar as well; the path is nowhere else but the
+      // overview's inspector.
+      .safeAreaInset(edge: .top, spacing: 0) { SidebarProjectHeader(row: row) }
       .navigationSplitViewColumnWidth(min: 180, ideal: 210, max: 280)
       .accessibilityLabel(L10n.t("projectLayout.navLabel"))
       .accessibilityIdentifier("sidebar")
@@ -154,4 +158,26 @@ struct OpenLayoutAction {
 
   let open: (Target) -> Void
   func callAsFunction(_ target: Target) { open(target) }
+}
+
+/// The project at the top of the sidebar: picture, name, path (QuartzControl's `ProjectLayout`).
+/// The path is cut in the middle, where a long one differs least, and is selectable in full.
+struct SidebarProjectHeader: View {
+  let row: ProjectOverview
+
+  var body: some View {
+    HStack(spacing: 10) {
+      ProjectAvatar(row: row, size: 32)
+      VStack(alignment: .leading, spacing: 1) {
+        Text(row.name).fontWeight(.semibold).lineLimit(1).truncationMode(.tail)
+        Text(row.path).font(.caption).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle)
+          .help(row.path)
+      }
+      Spacer(minLength: 0)
+    }
+    .padding(.horizontal, 12)
+    .padding(.vertical, 8)
+    .accessibilityElement(children: .combine)
+    .accessibilityIdentifier("sidebar.project")
+  }
 }

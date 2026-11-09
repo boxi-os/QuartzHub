@@ -64,7 +64,7 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    unter Linux (gelesen am 2026-11-09; die Zeile steht jetzt auf `anders`).
 6. ~~Der Fehler beim Leeren des Theme-Doku-Caches~~: kein Fall, QuartzControls Dienst scheitert nie
    (gelesen am 2026-11-09; die Zeile steht jetzt auf `anders`).
-7. **Projektbild und Pfad im Kopf der Seitenleiste.**
+7. ~~Projektbild und Pfad im Kopf der Seitenleiste~~: gebaut und gemessen am 2026-11-09.
 8. **Die Rollposition je Seite** (QuartzControls `useRestoreScroll`).
 9. ~~Ein Eintrag unter „Handlungsbedarf“ führt auf den richtigen Reiter~~: geschlossen und gemessen
    am 2026-11-09, dazu „Konfiguration ›“ unter „Die Seite“.
