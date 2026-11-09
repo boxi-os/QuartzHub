@@ -498,3 +498,45 @@ Zwei Befunde, behoben:
 
 Nicht gemessen: „Im Browser öffnen“ (öffnet den Browser), eine Suche, die `ps` oder `lsof` nicht
 beantworten (unvollständig oder unmöglich), und ein Beenden, das scheitert.
+
+## Konfiguration an der App gemessen
+
+Sechster Durchgang, am 2026-11-09, mit dem gui-test-Klon und dem Testprojekt aus „Übersicht an der
+App gemessen“. Bild, Content-Ordner und Sprachdateien wurden am Testprojekt geändert; was im Klon
+geändert wurde (Config, Sprachdateien), ist zurückgestellt.
+
+- **Website:** Titel-Zusatz „ · Testseite“, Basis-URL „example.org/sub“, beide Schalter aus, ⌘S:
+  `diff` zeigt genau `pageTitleSuffix`, `enableSPA: false`, `enablePopovers: false` und `baseUrl`.
+  `locale: xx-XX` in der Datei: das Feld sagt „xx-XX (nicht im Projekt)“. Kaputtes YAML: „quartz.config.yaml
+  konnte nicht gelesen werden.“ mit dem Grund, Speichern grau. Die Schalter und Felder haben keinen
+  eigenen Titel, aber ein verknüpftes Beschriftungs-Element (`AXTitleUIElement`): VoiceOver liest sie
+  mit Namen.
+- **Content-Ordner (Testprojekt):** „Echter Ordner, 1 Dateien“ mit „Keine Startseite …“ und
+  „Startseite anlegen…“. „Quelle ändern…“ auf einen Ordner mit zwei Notizen, „Verknüpfen“: `content`
+  ist danach ein Link, der alte Ordner liegt unter `.quartz-gui/content-backups/<Zeit>/content`,
+  `.gitignore` nennt `.quartz-gui/`; die Seite zeigt „Symbolischer Link, 2 Dateien“ und das Ziel.
+  „Startseite anlegen…“ sagt, dass die Datei im verknüpften Ordner landet, und legt dort `index.md` mit
+  Titel und Liste an; danach der Hinweis, dass die Liste ohne npm install die Ausschlussregeln nicht
+  kennt. „Quelle ändern…“ mit „Kopieren“: echter Ordner mit den Dateien, der Link ist als
+  `symlink.json` gesichert, der Vault unberührt. Link ins Leere: „(Ziel existiert nicht)“; ohne
+  Ordner: „Kein Content-Ordner gefunden.“
+- **Projektbild (Testprojekt):** wählen (128 × 128, „Liegt als quartz/static/icon.png im Projekt, 128 ×
+  128 Pixel.“, `project-icon.json` mit `custom: true`), dunkles wählen (`customDark: true`), hell ersetzen
+  (96 × 96), dunkles entfernen, hell entfernen (ohne ursprüngliches Bild ist `quartz/static` leer,
+  `project-icon.json` weg). Favicon-Plugin ausgeschaltet: „Das Favicon-Plugin ist ausgeschaltet.“;
+  Eintrag entfernt: „… nicht installiert.“; „Zu den Plugins“ öffnet Plugins. Im Klon: „Die Seite zeigt
+  ein Bild, das nicht in QuartzHub gewählt wurde …“ und „Angezeigt im Kopfbereich: Eine Layout-Box …“.
+- **Übersetzungen:** Reiter und Sprache bleiben über einen Seitenwechsel. Suche „callout.ti“ zeigt nur
+  `components.callout.tip`, „zzqq“ „Keine Treffer.“ `readingTime` trägt „JS“; ein abgebrochenes
+  Template ergibt beim Speichern den Fehler unter dem Eintrag, die Datei bleibt. Gesperrter Ordner: der
+  Fehler beim Speichern, „1 ungespeichert“ bleibt. Sprachwechsel mit „1 ungespeichert“ verwirft ohne
+  Frage, wie QuartzControl (`setEdits({})`). Testprojekt: „Keine Locale-Dateien gefunden …“.
+
+Zwei Befunde, behoben:
+
+- **Eine gesperrte Sprachdatei hieß „no such file or directory“.** `LocaleFiles.readText` warf bei
+  jedem Lesefehler ENOENT, weil `FileManager.contents` keinen Grund nennt; Node, also QuartzControl,
+  sagt EACCES. Jetzt liest es über `open` und reicht `errno` durch. Test `anUnreadableFileSaysWhy`
+  (Gegenprobe: ohne den Fix scheitert er). Nachmessung: „Error: EACCES: permission denied, open '…'“.
+- **Die Sprachauswahl hieß für VoiceOver doppelt** („Sprache der Website, Sprache der Website“): zum
+  versteckten Titel kam ein eigenes Label. Das Label ist weg, nachgemessen: einmal.
