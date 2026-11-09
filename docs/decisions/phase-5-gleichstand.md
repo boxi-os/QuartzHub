@@ -540,3 +540,79 @@ Zwei Befunde, behoben:
   (Gegenprobe: ohne den Fix scheitert er). Nachmessung: „Error: EACCES: permission denied, open '…'“.
 - **Die Sprachauswahl hieß für VoiceOver doppelt** („Sprache der Website, Sprache der Website“): zum
   versteckten Titel kam ein eigenes Label. Das Label ist weg, nachgemessen: einmal.
+
+## Plugins ▸ Installiert an der App gemessen
+
+Siebter Durchgang, am 2026-11-09, am gui-test-Klon aus „Übersicht an der App gemessen“ (64 Plugins,
+fünf eigene Frames), ohne Netz. Config, Lockfile, `.quartz/plugins`, `authored-frames` und die
+`package.json` von `description` waren vorher gesichert und sind danach zurückgestellt (`cmp` gleich).
+Ansagen mitgelesen über `kAXAnnouncementRequestedNotification`.
+
+- **Liste:** „46 von 64 aktiv“; „Eigene Frames“ (5, „Frame“, „7 Bereiche“), „Sichtbare Komponenten“ je
+  Position mit Rohschlüssel und Anzahl, nach `priority` (header 10–70, …), „Verarbeitung“ mit den
+  Seitentypen und „Transformer, Filter & Emitter“ (25) nach `order`. Inaktive Zeilen blasser. Bei 1200 pt
+  sind die Reiter ein Menü. Inspektor ohne Auswahl: Aktiv 46 von 64, 29, 30, 5.
+- **Suche und Filter:** „Inaktiv“ „18 von 64 angezeigt“ mit „Solange gefiltert wird, ist das
+  Umsortieren abgeschaltet.“; „Aktiv“ + „layout-box“ 7; „zzzq“ „Kein Plugin passt zu Filter und Suche.“
+  Gefiltert: kein Nach oben/unten im Kontextmenü, Anordnen grau, keine Bedienungshilfe-Aktion.
+- **Schalter:** „Plugin aktiv“ im Inspektor schreibt `enabled: false` (Snapshot `configChange`), der
+  Schalter der Zeile stellt zurück; die Datei ist danach byte-gleich.
+- **Umsortieren:** Kontextmenü „Nach oben“ an note-properties nummeriert afterBody in Zehnern
+  (10 … 80); die Bedienungshilfe-Aktion „Nach unten: note-properties“ stellt zurück; Ziehen von
+  quartz-forms unter note-properties schreibt 40/30/20 wie erwartet. Ansage „note-properties ist jetzt an
+  Position 4 von 8.“
+- **Platzierung:** `priority` 45 mit Return, `display` desktop-only, `groupOptions.grow` an: genau diese
+  Zeilen in der Datei, „Gespeichert“ an Zeile und Inspektor, Ansage „Einstellungen von darkmode
+  gespeichert.“ `condition` und `group` schnell nacheinander (Klick, tippen, Klick, tippen, Return):
+  beide in der Datei. Snapshots `configChange` werden wie in QuartzControl in einem Zeitfenster
+  zusammengefasst.
+- **Optionen:** explorer: „Leer setzen“ schreibt `title: ""` („leer gesetzt“, „Zurücksetzen“ nimmt es
+  heraus), Zurücksetzen von `folderClickBehavior` nimmt den Schlüssel heraus, das Feld zeigt „Vorgabe:
+  link“. quartz-layout-box: Suche ab acht Optionen („byLang“ „Ein Treffer“, „zzzq“ „Keine Option passt
+  zur Suche.“), „Selten gebraucht“, `file`/`dir` mit „wirkt nicht“ und dem Grund, Gruppen „2 · 1
+  geändert“; „Sprache hinzufügen“ en schreibt `byLang: en: {}`, darin „wie oben“, „„en“ entfernen“
+  nimmt es heraus. darkmode (ohne Schema): „Dieses Plugin hat keine Optionen.“; „Weitere Option
+  eintragen“ `foo` = `42` (Zahl), `obj` = `{"a": 1}`, `mix` = `[1, "a", null]`; „Diese Option ist bereits
+  gesetzt.“; die drei stehen unter „Unbekannte Schlüssel“; `mix` als Liste mit JSON-Feldern: ungültiges
+  JSON „Kein gültiges JSON – nicht gespeichert.“, Datei unverändert; Eintrag nach unten, entfernen,
+  hinzufügen. `description` ohne `optionSchema` und ohne `.d.ts`: „Das Plugin beschreibt seine Optionen
+  nicht. Die Felder kommen aus seinen Vorgaben.“; kaputte `package.json`: „Die Beschreibung der Optionen
+  konnte nicht gelesen werden: …“.
+- **Entfernen:** roam über das Kontextmenü: „Plugin „roam“ wirklich entfernen? Vorher wird automatisch
+  ein Snapshot angelegt.“, danach 63 Plugins, Snapshot `pluginChange` „@quartz-community/roam“. Während
+  des Laufs sind Schalter und Wartung grau; die Abweisung „Während ein Plugin entfernt wird …“ ist so über
+  diese Seite nicht auslösbar. Frame „drawing“: aus Config, Lockfile, `authored-frames` und
+  `.quartz/plugins` weg.
+- **Wartung:** ein verwaister Eintrag (Lockfile und Ordner, ohne Config-Eintrag): „Verwaiste
+  Plugin-Ordner entfernen“ fragt, danach „Verwaiste Plugin-Ordner entfernt.“ (angesagt); Lockfile und
+  Ordner sind danach gleich der Sicherung.
+- **Config unlesbar:** „quartz.config.yaml konnte nicht gelesen werden.“ mit dem Grund.
+- **Wo war ich:** Reiter Navigationen, Suche „search“, Filter Aktiv, Auswahl search, Platzierung offen;
+  ⌘Q und Neustart mit Fensterwiederherstellung: alles wieder da.
+
+Sechs Befunde, behoben:
+
+- **Die Erklärungen unter den Gruppen endeten in „…“** (Eigene Frames, Verarbeitung, Wartung): Sie
+  standen im Kopf des Abschnitts, der eine Zeile behält. Jetzt sind sie die erste Zeile des Abschnitts,
+  nicht wählbar. Nachgemessen: ganz.
+- **Geöffnet mit gespeicherter Suche, waren die Zeilen eine Zeile hoch** (nur der Name, ohne Quelle und
+  Kurzangabe; die Wartungs-Erklärung angeschnitten), reproduzierbar mit Seitenwechsel; ohne Suche
+  richtig. Die Liste wird neu aufgebaut, sobald die Config da ist. Nachgemessen: ganze Zeilen; Umsortieren
+  und Ansagen danach unverändert.
+- **Im mehrzeiligen Feld wurden Anführungszeichen typografisch**: `"b"` kam als „b“ an (kein JSON),
+  `title="q"` im `html` von layout-box ebenso. `.autocorrectionDisabled()` half nicht (gemessen); beim
+  Fokus werden an der Textansicht Anführungs-, Strich- und Textersetzung ausgeschaltet, wie im
+  Code-Editor. Nachgemessen: `<b title="q">x</b> -- a` steht so in der Datei.
+- **„Sprache hinzufügen | Schlüssel | Hinzufügen“ war im Inspektor gequetscht** („Sch“, „H…“). Jetzt
+  kommen Feld und Button darunter, wenn die Breite nicht reicht. Dabei gefunden: schnell getipptes „fr“
+  mit Return kam als „f“ an, weil die Aktion den Schlüssel aus dem letzten Zeichnen nahm; jetzt liest sie
+  das Feld. Nachgemessen: `byLang: fr: {}`.
+- **Ein Frame wurde ohne Snapshot gelöscht**, obwohl die Frage einen ankündigt; QuartzControls
+  `deleteFrame` geht über `removePlugin` mit Snapshot. Die CLI-Anbindung der Frame-Befehle reicht ihn
+  jetzt durch. Test `addAndRemoveTakeASnapshotFirstWhenAsked` (Gegenprobe: ohne den Fix scheitert er);
+  nachgemessen: Snapshot `pluginChange` „frame-editorial“.
+- **„… versteht QuartzControl nicht“** (Anzahl unverstandener Schema-Angaben) sagt jetzt QuartzHub.
+
+Hell geprüft (Liste, Inspektor, die umbrechende Zeile). Nicht gemessen: „Repository auf GitHub öffnen“
+(öffnet den Browser), „Keine Plugins installiert.“, der Satz „Wirkt nur, wenn …“ einer Schema-Bedingung
+(gesehen nur der eigene Grund von layout-box) und die Abweisung während des Entfernens.
