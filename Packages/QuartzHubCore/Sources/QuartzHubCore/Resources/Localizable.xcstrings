@@ -20019,13 +20019,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ziehe einen Bereich auf eine freie Zelle oder zurück in diese Liste; an den Rändern eines gewählten Bereichs ziehst du seine Spannen. Ein Klick zeigt seine Einstellungen im Inspektor."
+            "value" : "Ziehe einen Bereich auf eine freie Zelle oder zurück in diese Liste; an den Rändern eines gewählten Bereichs ziehst du seine Spannen. Ein Klick zeigt seine Einstellungen im Inspektor, dort platzierst und verschiebst du ihn auch mit der Tastatur."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drag an area onto an open cell or back into this list; drag the edges of a selected area to change its spans. A click shows its settings in the inspector."
+            "value" : "Drag an area onto an open cell or back into this list; drag the edges of a selected area to change its spans. A click shows its settings in the inspector, where you can also place and move it with the keyboard."
           }
         }
       }
@@ -20139,6 +20139,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Move area {{name}}"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.moveTo" : {
+      "comment" : "Layout ▸ Frames, inspector of a placed area: section heading above row and column of the new start",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben nach"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to"
           }
         }
       }
@@ -20443,6 +20460,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Place area {{name}}"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.placeAt" : {
+      "comment" : "Layout ▸ Frames, inspector of an area in the tray: section heading above row and column of its start",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Platzieren auf"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place at"
           }
         }
       }
@@ -20907,6 +20941,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quartz default"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.startCol" : {
+      "comment" : "Layout ▸ Frames, inspector: the column an area is to start in",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spalte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Column"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.startRow" : {
+      "comment" : "Layout ▸ Frames, inspector: the row an area is to start in",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row"
           }
         }
       }

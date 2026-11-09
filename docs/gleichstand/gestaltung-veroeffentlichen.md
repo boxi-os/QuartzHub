@@ -11,8 +11,8 @@ sind in Gebrauch; ungenutzt sind nur Beschriftungen ohne eigene Funktion
 (`themeEditor.fontMatches`/`fontNoGoogleMatch`/`fontNoLocalMatch`/`fontListFor` — QuartzHub nimmt
 `textInputSuggestions` ohne Trefferzahl; `themes.allDisabled`, `themes.catalog.github`,
 `layoutEditor.componentPill.dragHandle`, `…paletteDragName`, `…inspector.title`,
-`…frameBuilder.areaPanelEmpty`, Seitentitel/-beschreibungen) und zwei mit Funktion:
-`layoutEditor.frameBuilder.placeArea`/`moveArea` (siehe `fehlt` unter Layout: Frames).
+`…frameBuilder.areaPanelEmpty`, Seitentitel/-beschreibungen). `layoutEditor.frameBuilder.placeArea`/`moveArea`
+sind seit 2026-11-09 die Knöpfe im Inspektor (Layout: Frames).
 
 Pfad-Kürzel: `Packages/…` = `Packages/QuartzHubCore/Sources/QuartzHubCore`; QC = `~/Development/QuartzControl/src/routes/`, HB = Handbuch
 `~/Obsidian/QuartzProjekte/QuartzControl-Handbuch/`, QH = `~/Development/QuartzHub/`.
@@ -180,7 +180,7 @@ Pfad-Kürzel: `Packages/…` = `Packages/QuartzHubCore/Sources/QuartzHubCore`; Q
 | Bereich mit der Maus aus dem Vorrat auf eine Zelle ziehen (Spanne gekürzt, angesagt) | LayoutEditor/FrameBuilder.tsx (`dropNarrowed`) | 4-gestaltung/06-layout-frames.md | App/Pages/Layout/FramesTab.swift | gebaut | P4 beschreibt es („Bereiche werden auf Zellen gezogen“), nicht unter „Gemessen“ |
 | Spanne an der Kante ziehen, hält vor anderem Bereich | LayoutEditor/FrameBuilder.tsx | 4-gestaltung/06-layout-frames.md | App/Pages/Layout/FramesTab.swift | gemessen | P4: „`custom-8` an der rechten Kante von 6 auf 4 Spalten gezogen …; zurückgezogen bis in die rechte Seitenleiste hält er bei 6 an“ |
 | Escape bricht ein laufendes Ziehen ab | LayoutEditor/FrameBuilder.tsx | 4-gestaltung/06-layout-frames.md | App/Pages/Layout/FramesTab.swift | anders | P4: „Anders als dort: Escape bricht ein laufendes Ziehen nicht ab (die Geste von SwiftUI lässt sich nicht von außen beenden)“ |
-| Bereich mit der Tastatur platzieren oder verschieben | LayoutEditor/FrameBuilder.tsx (`placeArea`, `moveArea`, dnd-kit) | 4-gestaltung/06-layout-frames.md („Das geht auch mit der Tastatur“) | – | fehlt | Gesucht: Schlüssel `layoutEditor.frameBuilder.placeArea`/`moveArea` in `App/` (nicht verwendet); in `FramesTab.swift` `accessibilityAction`, `keyboardShortcut`, ein Knopf/Feld für Zeile und Spalte: nichts. Der Inspektor hat Spannen (Stepper), Sichtbar, „Aus Raster lösen“, Löschen, aber keine Position. P4 4b wollte „Die Tastatur verschiebt über den Inspektor“ |
+| Bereich mit der Tastatur platzieren oder verschieben | LayoutEditor/FrameBuilder.tsx (`placeArea`, `moveArea`, dnd-kit) | 4-gestaltung/06-layout-frames.md („Das geht auch mit der Tastatur“) | App/Pages/Layout/FramesTab.swift (`FrameAreaInspector`, `FramePlacing`) | gemessen | P5 „Frames mit der Tastatur“: im Inspektor „Verschieben nach“/„Platzieren auf“ mit Zeile, Spalte und Knopf (Entscheidung 4b statt dnd-kits Pfeilen); „right“ auf 2/3 abgelehnt, „right“ und „after-body“ getauscht, ein ausgeblendeter Bereich an seinem Platz wieder gezeigt (Dunkel 1400×860, Hell 1000×700) |
 | Bereich im Inspektor: Name, Belegung, Eigener Bereich | LayoutEditor/FrameBuilder.tsx | 4-gestaltung/06-layout-frames.md | App/Pages/Layout/FramesTab.swift | gebaut | keine Messung in P4 |
 | Zeilen-/Spalten-Spanne als Zahl, „Sichtbar auf“ | LayoutEditor/FrameBuilder.tsx | 4-gestaltung/06-layout-frames.md | App/Pages/Layout/FramesTab.swift | gebaut | keine Messung in P4 |
 | „Aus Raster lösen“, „Bereich löschen“ (fragt), „+ Bereich hinzufügen“ | LayoutEditor/FrameBuilder.tsx | 4-gestaltung/06-layout-frames.md | App/Pages/Layout/FramesTab.swift | gebaut | keine Messung in P4 |

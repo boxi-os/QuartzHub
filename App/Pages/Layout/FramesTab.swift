@@ -436,31 +436,19 @@ struct FramesTab: View {
       .onGeometryChange(for: CGRect.self) { $0.frame(in: .named("board")) } action: { cells["\(row):\(col)"] = $0 }
       .dropDestination(for: String.self) { items, _ in
         guard let id = Self.areaId(items.first), let current = model.draft else { return false }
-        let before = FrameView(current).placement(breakpoint, id)
-        if let before, !before.hidden, before.row == row, before.col == col { return true }
-        switch FrameEditing.dropping(current, breakpoint, id, row: row, col: col) {
-        case .success(let next)?:
+        switch FramePlacing.place(current, breakpoint, id, row: row, col: col) {
+        case .unchanged:
+          return true
+        case .placed(let next, let sentence):
           set(next)
           selectedArea = id
-          let name = FrameView(next).areas.first { $0.id == id }?.name ?? id
-          let landed = FrameView(next).placement(breakpoint, id)
-          var cut: [String] = []
-          if let before, let landed, landed.colSpan < before.colSpan {
-            cut.append(L10n.t("layoutEditor.frameBuilder.colSpanCut", ["now": String(landed.colSpan), "before": String(before.colSpan)]))
-          }
-          if let before, let landed, landed.rowSpan < before.rowSpan {
-            cut.append(L10n.t("layoutEditor.frameBuilder.rowSpanCut", ["now": String(landed.rowSpan), "before": String(before.rowSpan)]))
-          }
-          let target = L10n.t("layoutEditor.frameBuilder.cellName", ["row": String(row), "col": String(col)])
-          Announce.post(cut.isEmpty ? L10n.t("dnd.dropped", ["name": name, "target": target])
-                        : L10n.t("layoutEditor.frameBuilder.dropNarrowed", ["name": name, "target": target, "changes": cut.joined(separator: ", ")]))
+          Announce.post(sentence)
           return true
-        case .failure?:
-          let name = FrameView(current).areas.first { $0.id == id }?.name ?? id
+        case .refused(let sentence):
           model.frameMessage = L10n.t("layoutEditor.frameBuilder.overlapError")
-          Announce.post(L10n.t("layoutEditor.frameBuilder.dropRefused", ["name": name]))
+          Announce.post(sentence)
           return false
-        case nil:
+        case .unknown:
           return false
         }
       }
@@ -646,8 +634,64 @@ struct BreakpointWidthsSection: View {
   }
 }
 
+/// An area put on a cell, by a drop on the board or from the inspector: one rule (`handleDrop`,
+/// spans cut at the grid's edge, refused over another area) and one sentence for both.
+@MainActor enum FramePlacing {
+  enum Outcome {
+    /// Already shown there.
+    case unchanged
+    case placed(JSONValue, String)
+    case refused(String)
+    /// No such area.
+    case unknown
+  }
+
+  static func place(_ draft: JSONValue, _ bp: String, _ id: String, row: Int, col: Int) -> Outcome {
+    let before = FrameView(draft).placement(bp, id)
+    if let before, !before.hidden, before.row == row, before.col == col { return .unchanged }
+    let name = FrameView(draft).areas.first { $0.id == id }?.name ?? id
+    switch FrameEditing.dropping(draft, bp, id, row: row, col: col) {
+    case .success(let next)?:
+      let landed = FrameView(next).placement(bp, id)
+      var cut: [String] = []
+      if let before, let landed, landed.colSpan < before.colSpan {
+        cut.append(L10n.t("layoutEditor.frameBuilder.colSpanCut", ["now": String(landed.colSpan), "before": String(before.colSpan)]))
+      }
+      if let before, let landed, landed.rowSpan < before.rowSpan {
+        cut.append(L10n.t("layoutEditor.frameBuilder.rowSpanCut", ["now": String(landed.rowSpan), "before": String(before.rowSpan)]))
+      }
+      let target = L10n.t("layoutEditor.frameBuilder.cellName", ["row": String(row), "col": String(col)])
+      return .placed(next, cut.isEmpty ? L10n.t("dnd.dropped", ["name": name, "target": target])
+                     : L10n.t("layoutEditor.frameBuilder.dropNarrowed", ["name": name, "target": target, "changes": cut.joined(separator: ", ")]))
+    case .failure?:
+      return .refused(L10n.t("layoutEditor.frameBuilder.dropRefused", ["name": name]))
+    case nil:
+      return .unknown
+    }
+  }
+
+  /// Where an area from the tray is offered first: its own place on this breakpoint if it has one,
+  /// else the first cell, row by row, where it fits as it would land.
+  static func offer(_ draft: JSONValue, _ bp: String, _ id: String) -> (row: Int, col: Int) {
+    let view = FrameView(draft)
+    if let p = view.placement(bp, id) { return (p.row, p.col) }
+    let layout = view.layout(bp)
+    for row in 1...max(layout.rows, 1) {
+      for col in 1...max(layout.cols, 1) where FrameEditing.landing(draft, bp, id, row: row, col: col)?.refused == false {
+        return (row, col)
+      }
+    }
+    return (1, 1)
+  }
+}
+
 /// The selected area in the inspector (QuartzControl's `areaForm`): wherever it lies, on the grid
 /// or in the tray, with what describes a placement only where it has one.
+///
+/// "Platzieren auf" / "Verschieben nach" is the keyboard's way onto and across the grid, where
+/// QuartzControl had dnd-kit's arrows on the board (decision 4b, docs/decisions/phase-4-oberflaeche.md;
+/// gap 12 of docs/gleichstand.md). Row and column are picked first and applied together, so a move
+/// can jump over another area instead of being refused halfway.
 struct FrameAreaInspector: View {
   @Bindable var model: LayoutModel
   let areaId: String
@@ -656,6 +700,8 @@ struct FrameAreaInspector: View {
   @Environment(\.unsavedGuard) private var unsaved
   @State private var nameDraft: String?
   @State private var refusal: String?
+  /// The cell picked under "Platzieren auf" / "Verschieben nach", until it is applied.
+  @State private var target: (row: Int, col: Int)?
 
   var body: some View {
     if let draft = model.draft, let area = FrameView(draft).areas.first(where: { $0.id == areaId }) {
@@ -705,6 +751,7 @@ struct FrameAreaInspector: View {
               }))
           }
         }
+        position(draft, area, layout, placement)
         Section {
           HStack {
             if placement != nil {
@@ -721,6 +768,43 @@ struct FrameAreaInspector: View {
         Section { Note(L10n.t("layoutEditor.frameBuilder.framePanelHint")) }
       }
     }
+  }
+
+  /// Row and column of the start, then one button: "Bereich … verschieben" for an area shown on
+  /// the grid, "Bereich … platzieren" for one in the tray (placed but hidden counts as in the tray,
+  /// as on the board: placing shows it).
+  private func position(_ draft: JSONValue, _ area: FrameView.Area, _ layout: FrameView.Layout, _ placement: FrameView.Placement?) -> some View {
+    let shown = placement.map { !$0.hidden } ?? false
+    let offered = FramePlacing.offer(draft, breakpoint, area.id)
+    let row = min(target?.row ?? offered.row, max(layout.rows, 1))
+    let col = min(target?.col ?? offered.col, max(layout.cols, 1))
+    let unchanged = shown && placement?.row == row && placement?.col == col
+    let heading = shown ? L10n.t("layoutEditor.frameBuilder.moveTo") : L10n.t("layoutEditor.frameBuilder.placeAt")
+    let action = shown ? L10n.t("layoutEditor.frameBuilder.moveArea", ["name": area.name]) : L10n.t("layoutEditor.frameBuilder.placeArea", ["name": area.name])
+    return Section(heading) {
+      Picker(L10n.t("layoutEditor.frameBuilder.startRow"), selection: Binding(get: { row }, set: { target = ($0, col) })) {
+        ForEach(1...max(layout.rows, 1), id: \.self) { Text(verbatim: String($0)).tag($0) }
+      }
+      .accessibilityIdentifier("layout.frames.startRow")
+      Picker(L10n.t("layoutEditor.frameBuilder.startCol"), selection: Binding(get: { col }, set: { target = (row, $0) })) {
+        ForEach(1...max(layout.cols, 1), id: \.self) { Text(verbatim: String($0)).tag($0) }
+      }
+      .accessibilityIdentifier("layout.frames.startCol")
+      Button(action) {
+        switch FramePlacing.place(draft, breakpoint, area.id, row: row, col: col) {
+        case .placed(let next, let sentence):
+          set(next)
+          Announce.post(sentence)
+        case .refused(let sentence):
+          refuse(sentence)
+        case .unchanged, .unknown:
+          break
+        }
+      }
+      .disabled(unchanged)
+      .accessibilityIdentifier("layout.frames.place")
+    }
+    .onChange(of: "\(area.id)|\(breakpoint)|\(placement.map { "\($0.row):\($0.col):\($0.hidden)" } ?? "-")") { target = nil }
   }
 
   private func set(_ next: JSONValue) {

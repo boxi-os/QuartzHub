@@ -201,3 +201,44 @@ Konfiguration zu den Stilen (erschien an gui-test nicht).
 Nebenbei gesehen: `CoexistenceBand` sitzt noch als `safeAreaInset` um die ganze Seite und dürfte
 Seite und Inspektor genauso verdecken; nicht geprüft, weil es dafür ein laufendes QuartzControl
 braucht. Nicht geändert.
+
+## Frames mit der Tastatur
+
+QuartzControl platzierte und verschob einen Bereich im Frame-Editor auch mit der Tastatur: dnd-kits
+Griff aufnehmen, Pfeile, ablegen (`placeArea`, `moveArea`; Handbuch „Das geht auch mit der
+Tastatur“). Die Entscheidung 4b gibt der Tastatur dafür in Raster und Board den Inspektor; auf der
+Bühne war das gebaut, im Frame-Editor fehlte es (Lücke 12).
+
+Jetzt hat der Inspektor eines Bereichs unter den Spannen einen Abschnitt mit Zeile, Spalte und
+einem Knopf (`App/Pages/Layout/FramesTab.swift`):
+
+- **„Verschieben nach“** mit „Bereich … verschieben“ für einen Bereich im Raster. Der Knopf ist
+  aus, solange Zeile und Spalte sein jetziger Platz sind.
+- **„Platzieren auf“** mit „Bereich … platzieren“ für einen Bereich im Vorrat. Angeboten wird sein
+  eigener Platz, wenn er nur ausgeblendet ist (Platzieren zeigt ihn dann wieder, wie das Ablegen
+  auf dem Raster), sonst die erste Zelle Zeile für Zeile, auf der er landen darf.
+- **Erst wählen, dann anwenden:** Zeile und Spalte gelten zusammen. So springt ein Bereich über
+  einen anderen hinweg, statt auf halbem Weg abgelehnt zu werden, was bei zwei sofort wirkenden
+  Wählern passiert wäre.
+- **Eine Regel mit dem Ablegen:** Beide Wege gehen durch `FramePlacing.place`, also
+  `FrameEditing.dropping` (Spannen am Rasterrand gekürzt, abgelehnt über einem anderen Bereich),
+  und sagen denselben Satz an (`dnd.dropped`, `dropNarrowed`, `dropRefused`). Eine Ablehnung steht
+  im Inspektor wie die der Spannen.
+
+Gemessen am 2026-11-09 an der gui-test-Kopie, Frame „boxi-test“ (5 × 3, alle Zellen belegt).
+Zeile und Spalte wurden über die Tastatur im Menü des Wählers gesetzt (Ziffer, Return), der Knopf
+geklickt:
+
+- **Dunkel, 1400 × 860:** „right“ (4/3) nach Zeile 2: **abgelehnt** mit „right bleibt, wo es war:
+  Dort überschneidet es sich mit einem bestehenden Bereich.“ Dann „right“ aus dem Raster gelöst,
+  „after-body“ von 4/2 nach 4/3 verschoben. „right“ im Vorrat bot 4/2 an, „Platzieren“ legte ihn
+  dorthin. Raster und „Beginnt in Zeile 4, Spalte 2“ stimmen überein.
+- **Hell, 1000 × 700:** „Sichtbar auf Desktop“ für „right“ aus. Der Vorrat zeigt „right
+  ausgeblendet“, der Inspektor „Platzieren auf“ mit 4/3; „Platzieren“ zeigt ihn dort wieder, und
+  der Abschnitt heißt danach „Verschieben nach“.
+- Nichts gespeichert. Alle `frame.json` der Kopie sind byte-gleich, in der Kopie wurde nichts
+  geschrieben.
+
+Nicht gemessen: Tab bis zu den Wählern, das hängt an der Systemeinstellung
+„Tastaturnavigation“ und ist dieselbe wie bei jedem Formular des Inspektors; die Ansage mit
+VoiceOver.

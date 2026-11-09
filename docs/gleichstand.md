@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-09 nach dem Rückweg.
+gezählt, zuletzt am 2026-11-09 nach den Frames mit der Tastatur.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 62 | 125 | 17 | 8 | 4 | 216 |
 | Plugins und Wartung | 109 | 133 | 4 | 15 | 0 | 261 |
-| Gestaltung und Veröffentlichen | 93 | 119 | 10 | 20 | 1 | 243 |
-| **Summe** | **264** | **377** | **31** | **43** | **5** | **720** |
+| Gestaltung und Veröffentlichen | 94 | 119 | 10 | 20 | 0 | 243 |
+| **Summe** | **265** | **377** | **31** | **43** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -72,9 +72,8 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
 10. ~~Rückweg-Links~~ (`markReturn`): gebaut und gemessen am 2026-11-09, für alle Verweise
     zwischen Seiten und Reitern wie in QuartzControl; von der Übersicht aus bleibt es beim Verzicht.
 11. ~~Formulare: „Keine passende Seite“~~: geschlossen und gemessen am 2026-11-09.
-12. **Frames: einen Bereich mit der Tastatur setzen oder verschieben.** Die Entscheidung 4b
-    („die Tastatur verschiebt über den Inspektor“) ist auf der Bühne umgesetzt, im Frame-Editor
-    nicht.
+12. ~~Frames: einen Bereich mit der Tastatur setzen oder verschieben~~: gebaut und gemessen am
+    2026-11-09, im Inspektor nach der Entscheidung 4b („Verschieben nach“, „Platzieren auf“).
 13. ~~Aufräumen beim Start und Abbrechen beim Beenden~~: angeschlossen am 2026-11-09
     (`App/Shell/ServerLifecycle.swift`); das Aufräumen beim Start ist gemessen.
 
