@@ -111,6 +111,7 @@ struct ProjectWindow: View {
     case .backups: SnapshotsPage(project: project)
     case .styles: StylesPage(project: project)
     case .layout: LayoutPage(project: project)
+    case .templates: TemplatesPage(project: project)
     default: PendingPage(page: page)
     }
   }

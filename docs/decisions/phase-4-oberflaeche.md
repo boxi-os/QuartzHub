@@ -1525,3 +1525,38 @@ Vault-Link beim Sync.
 - **Nicht gemessen**, weil es `quartz plugin add`/`remove` aufruft: ein neues Frame speichern, ein
   Frame löschen. Ebenso nicht: die Breakpoint-Breiten speichern (schreibt jedes Frame neu), benannte
   Grid-Lines, „Auf Tablet kopieren“.
+
+### Vorlagen
+
+QuartzControls `Templates.tsx` als eine gruppierte Form: oben „Vorlage erstellen“, darunter
+„Vorlage anwenden“, beides in der Mitte wie dort. Der Inspektor zeigt den Kontext der Seite und ihre
+Beschreibung, denn auf der Seite wird nichts ausgewählt. Der Kern war mit Punkt 6 fertig
+(`TemplatePackage`, `BuiltinTemplate`, `ImportWarnings`); die Seite liest ihn nur.
+
+- **Ein Modell je Projekt** (`TemplatesModel.shared`), wie Updates: QuartzControl hielt Name,
+  Beschreibung und Auswahl in `useStickyState` (Lebensdauer des Renderers, je Projekt). Ein Import,
+  der Pakete installiert, läuft Minuten; er gehört dem Modell, die wieder geöffnete Seite zeigt ihn
+  laufen oder sein Ende. Beim Öffnen wird das Projekt neu gelesen und ein geladenes Paket neu
+  geplant, nach dem Import ebenso. Die Haken bleiben dabei, wo sie waren.
+- **Die Sätze** (`statsSummary`, `planSummary`, `planNotes`) stehen in `TemplateWords`, mit
+  ausgeschriebenen Schlüsseln. `templates.stats.<id>.<key>` fragte QuartzControl zuerst; davon gibt
+  es im Katalog keinen, also nur der gemeinsame Schlüssel. Gegen QuartzControls Funktionen gemessen
+  sind sie nicht, nur am Bildschirm gegen den Plan gelesen.
+- **Das Speicherfenster** schlägt den Namen ohne Endung vor: Mit „proj.qtpl“ als Vorschlag schrieb
+  es `proj.qtpl.qtpl` (gemessen). `qtpl` ist dem System kein bekannter Typ, das Fenster hängt die
+  Endung an. Ohne Endung vorgeschlagen, und auch mit „zwei.qtpl“ getippt, entsteht genau eine.
+- **Basis-Template ohne Netz:** Mit `-QHNoUpdateCheck YES` (nur Debug) scheitert das Laden von GitHub
+  sofort, die Seite nimmt die Fassung in QuartzHub.
+- **Texte:** sechs übernommene Texte sagen „QuartzHub“ statt „QuartzControl“; `baselineHint` hat
+  zwei Sätze statt drei und sagt „konnte nicht festgestellt werden“.
+- **Gemessen** an einer APFS-Kopie von gui-test, Dunkel und Hell, 1400 × 860 und 1000 × 700,
+  Deutsch und Englisch: Die Bausteine zeigen dieselben Zahlen wie das Projekt (58 Plugins, 41 aktiv;
+  5 Frames; 67 Variablen). Export in den Scratchpad: 1,8 MB, zwölf Teile, Manifest „QuartzHub“.
+  Basis-Template geladen: angehakt sind nur die Gestaltungs-Bausteine, die Hinweise stehen darunter.
+  Angewendet ohne Theme und Frames mit „Vorlage gewinnt“: ein Snapshot, ersetzte Stylesheets,
+  Content unberührt, „Fertig: alles übernommen“; neu geplant zeigt CSS-Variablen „ändert nichts“.
+  „Abbrechen“ in der Frage: kein Snapshot, Config und custom.scss byte-gleich. „Projekt gewinnt“
+  stellt Zusammenfassungen und Hinweis um.
+- **Nicht gemessen**, weil es ins Netz geht: Theme, Plugins und Frames anwenden (npm und
+  `quartz plugin add`), das Basis-Template von GitHub. Auch nicht: ein Ordner im alten Format, ein
+  Seitenwechsel mitten im Import (der Import der fünf Teile dauerte eine Sekunde).

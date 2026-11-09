@@ -46719,13 +46719,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Für eine Sprache lässt sich nicht feststellen, was du geändert hast. Die Vergleichsbasis entsteht erst, wenn du einen Text in QuartzControl bearbeitest. Nimm „Alle Texte“, wenn sie dabei sein soll."
+                  "value" : "Für eine Sprache konnte nicht festgestellt werden, was du geändert hast: Die Vergleichsbasis entsteht erst, wenn du einen Text in QuartzHub bearbeitest. Nimm „Alle Texte“, wenn sie dabei sein soll."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Für {{count}} Sprachen lässt sich nicht feststellen, was du geändert hast. Die Vergleichsbasis entsteht erst, wenn du einen Text in QuartzControl bearbeitest. Nimm „Alle Texte“, wenn eine davon dabei sein soll."
+                  "value" : "Für {{count}} Sprachen konnte nicht festgestellt werden, was du geändert hast: Die Vergleichsbasis entsteht erst, wenn du einen Text in QuartzHub bearbeitest. Nimm „Alle Texte“, wenn eine davon dabei sein soll."
                 }
               }
             }
@@ -46737,13 +46737,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "For one language there is no way to tell what you changed. The comparison baseline is created the first time you edit a text in QuartzControl. Pick “All texts” if it should be included."
+                  "value" : "For one language QuartzHub could not tell what you changed: the comparison baseline is created the first time you edit a text in QuartzHub. Pick “All texts” if it should be included."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "For {{count}} languages there is no way to tell what you changed. The comparison baseline is created the first time you edit a text in QuartzControl. Pick “All texts” if one of them should be included."
+                  "value" : "For {{count}} languages QuartzHub could not tell what you changed: the comparison baseline is created the first time you edit a text in QuartzHub. Pick “All texts” if one of them should be included."
                 }
               }
             }
@@ -46756,13 +46756,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basis-Template, die Fassung aus QuartzControl (GitHub nicht erreichbar)"
+            "value" : "Basis-Template, die Fassung aus QuartzHub (GitHub nicht erreichbar)"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basic template, the version inside QuartzControl (GitHub not reachable)"
+            "value" : "Basic template, the version inside QuartzHub (GitHub not reachable)"
           }
         }
       }
@@ -46788,13 +46788,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Basis-Template konnte weder geladen noch in QuartzControl gefunden werden."
+            "value" : "Das Basis-Template konnte weder geladen noch in QuartzHub gefunden werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The basic template could neither be downloaded nor found inside QuartzControl."
+            "value" : "The basic template could neither be downloaded nor found inside QuartzHub."
           }
         }
       }
@@ -48359,13 +48359,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Das Projektbild bleibt: Du hast es in QuartzControl gewählt, die Vorlage ersetzt es nicht."
+                  "value" : "Das Projektbild bleibt: Du hast es in QuartzHub gewählt, die Vorlage ersetzt es nicht."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Die Projektbilder bleiben: Du hast sie in QuartzControl gewählt, die Vorlage ersetzt sie nicht."
+                  "value" : "Die Projektbilder bleiben: Du hast sie in QuartzHub gewählt, die Vorlage ersetzt sie nicht."
                 }
               }
             }
@@ -48377,13 +48377,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "The project picture stays: you chose it in QuartzControl, and the template does not replace it."
+                  "value" : "The project picture stays: you chose it in QuartzHub, and the template does not replace it."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "The project pictures stay: you chose them in QuartzControl, and the template does not replace them."
+                  "value" : "The project pictures stay: you chose them in QuartzHub, and the template does not replace them."
                 }
               }
             }
@@ -48439,13 +48439,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} ist nicht das Bild von Quartz und wurde nicht in QuartzControl gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. Es bleibt, weil „Projekt gewinnt“ gewählt ist."
+                  "value" : "{{names}} ist nicht das Bild von Quartz und wurde nicht in QuartzHub gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. Es bleibt, weil „Projekt gewinnt“ gewählt ist."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} wurden nicht in QuartzControl gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. Sie bleiben, weil „Projekt gewinnt“ gewählt ist."
+                  "value" : "{{names}} wurden nicht in QuartzHub gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. Sie bleiben, weil „Projekt gewinnt“ gewählt ist."
                 }
               }
             }
@@ -48457,13 +48457,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} is not Quartz’s picture and was not chosen in QuartzControl, perhaps on another computer or by an earlier template. It stays, because “Project wins” is selected."
+                  "value" : "{{names}} is not Quartz’s picture and was not chosen in QuartzHub, perhaps on another computer or by an earlier template. It stays, because “Project wins” is selected."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} were not chosen in QuartzControl, perhaps on another computer or by an earlier template. They stay, because “Project wins” is selected."
+                  "value" : "{{names}} were not chosen in QuartzHub, perhaps on another computer or by an earlier template. They stay, because “Project wins” is selected."
                 }
               }
             }
@@ -48479,13 +48479,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} ist nicht das Bild von Quartz und wurde nicht in QuartzControl gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. „Vorlage gewinnt“ ersetzt es; „Projekt gewinnt“ behält es."
+                  "value" : "{{names}} ist nicht das Bild von Quartz und wurde nicht in QuartzHub gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. „Vorlage gewinnt“ ersetzt es; „Projekt gewinnt“ behält es."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} wurden nicht in QuartzControl gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. „Vorlage gewinnt“ ersetzt sie; „Projekt gewinnt“ behält sie."
+                  "value" : "{{names}} wurden nicht in QuartzHub gewählt, vielleicht auf einem anderen Rechner oder mit einer früheren Vorlage. „Vorlage gewinnt“ ersetzt sie; „Projekt gewinnt“ behält sie."
                 }
               }
             }
@@ -48497,13 +48497,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} is not Quartz’s picture and was not chosen in QuartzControl, perhaps on another computer or by an earlier template. “Template wins” replaces it; “Project wins” keeps it."
+                  "value" : "{{names}} is not Quartz’s picture and was not chosen in QuartzHub, perhaps on another computer or by an earlier template. “Template wins” replaces it; “Project wins” keeps it."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{names}} were not chosen in QuartzControl, perhaps on another computer or by an earlier template. “Template wins” replaces them; “Project wins” keeps them."
+                  "value" : "{{names}} were not chosen in QuartzHub, perhaps on another computer or by an earlier template. “Template wins” replaces them; “Project wins” keeps them."
                 }
               }
             }
