@@ -454,7 +454,11 @@ private struct BookInspector: View {
   let onDelete: (Book) -> Void
 
   var body: some View {
-    if let draft = Binding($model.draft) {
+    if let current = model.draft {
+      // Not `Binding($model.draft)`, which force-unwraps: deleting the open book left the rows
+      // below reading it once more after the draft was gone, and QuartzHub crashed in
+      // `BindingOperations.ForceUnwrapping` (measured 2026-11-10). A write after that is dropped.
+      let draft = Binding<BookDraft>(get: { model.draft ?? current }, set: { if model.draft != nil { model.draft = $0 } })
       Form {
         if let error = model.saveError {
           Section {
