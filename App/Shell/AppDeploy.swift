@@ -18,6 +18,17 @@ enum AppDeploy {
     Connections(profile: AppProfile.own, secrets: secrets)
   }
 
+  /// Bumped after every write to the connections. QuartzControl's settings were a route in the
+  /// one window, so a page showing a connection was mounted again after an edit; here the settings
+  /// are a window of their own beside the project, and the publish page kept saying "keine URL
+  /// hinterlegt" after the URL was saved (measured 2026-11-11). A reader watches `value`.
+  @MainActor @Observable
+  final class ConnectionsVersion {
+    static let shared = ConnectionsVersion()
+    private(set) var value = 0
+    func bump() { value += 1 }
+  }
+
   /// For looking at the app without the network (DEBUG, `-QHNoUpdateCheck YES`): a document is
   /// exported without what its pages load from outside, as `qh-check export-document` does.
   static var offline: Bool {

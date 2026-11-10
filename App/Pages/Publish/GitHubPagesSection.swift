@@ -40,7 +40,8 @@ struct GitHubPagesSection: View {
           .controlSize(.small)
       }
     }
-    .task(id: "\(project)|\(branch)") { await load() }
+    // The token is a connection: saved or removed in the settings window, the card asks again.
+    .task(id: "\(project)|\(branch)|\(AppDeploy.ConnectionsVersion.shared.value)") { await load() }
   }
 
   private func state(_ info: GitHubAPI.PagesInfo) -> some View {

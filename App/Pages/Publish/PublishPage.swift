@@ -48,6 +48,7 @@ struct PublishPage: View {
         model.select(id)
       }
       .onChange(of: model.targets.map(\.id)) { _, _ in pickDefault() }
+      .onChange(of: AppDeploy.ConnectionsVersion.shared.value) { _, _ in model.reloadConnections() }
       .sheet(item: $editing) { item in TargetSheet(model: model, draft: item.value) { selectedId = $0 } }
     } inspector: {
       if let target = model.selected {

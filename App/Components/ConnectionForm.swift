@@ -287,6 +287,7 @@ struct ConnectionSheet: View {
   private func save() {
     do {
       let saved = try AppDeploy.connections().save(draft.input)
+      AppDeploy.ConnectionsVersion.shared.bump()
       onSaved(saved)
       dismiss()
     } catch {

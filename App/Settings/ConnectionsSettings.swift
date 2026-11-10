@@ -23,7 +23,7 @@ struct ConnectionsSettings: View {
       connectionsSection
     }
     .formStyle(.grouped)
-    .task { await model.reload() }
+    .task(id: AppDeploy.ConnectionsVersion.shared.value) { await model.reload() }
     .sheet(item: $editing) { editing in
       ConnectionSheet(title: editing.existing?.name ?? L10n.t("settings.connections.newHeading", ["kind": ConnectionWords.kind(editing.draft.kind)]),
                       existing: editing.existing, usage: editing.existing.map { model.usage[$0.id] ?? 0 } ?? 0,
@@ -236,6 +236,7 @@ final class ConnectionsSettingsModel {
     defer { savingGithub = false }
     do {
       try store.save(SaveConnectionInput(id: github?.id, kind: .github, name: "GitHub", secret: token))
+      AppDeploy.ConnectionsVersion.shared.bump()
       githubFailure = nil
     } catch {
       githubFailure = error.message
@@ -249,6 +250,7 @@ final class ConnectionsSettingsModel {
     guard let github else { return }
     do {
       try store.delete(github.id)
+      AppDeploy.ConnectionsVersion.shared.bump()
       githubFailure = nil
     } catch {
       githubFailure = error.message
@@ -266,6 +268,7 @@ final class ConnectionsSettingsModel {
                             window: NSApp.keyWindow) else { return }
     do {
       try store.delete(connection.id)
+      AppDeploy.ConnectionsVersion.shared.bump()
       failure = nil
     } catch {
       failure = error.message
@@ -281,6 +284,7 @@ final class ConnectionsSettingsModel {
                             window: NSApp.keyWindow) else { return false }
     do {
       try store.forgetHostKey(connection.id)
+      AppDeploy.ConnectionsVersion.shared.bump()
       failure = nil
     } catch {
       failure = error.message

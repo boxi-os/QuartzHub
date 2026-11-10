@@ -326,6 +326,7 @@ final class PublishModel {
     } catch {
       failure = error.message
     }
+    AppDeploy.ConnectionsVersion.shared.bump()
     reloadConnections()
   }
 
