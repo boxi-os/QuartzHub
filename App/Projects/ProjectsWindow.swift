@@ -44,7 +44,7 @@ struct ProjectsWindow: View {
       .navigationTitle(L10n.t("shell.projects.title"))
       .inspectorColumn(isPresented: $inspectorPresented) {
         if let id = selection, let row = model.row(id) {
-          ProjectInspector(row: row, open: { open(row) }, duplicate: { duplicating = row }, remove: { removing = row })
+          ProjectInspector(row: row, open: { open(row) }, duplicate: { duplicating = row }, remove: { askRemove(row) })
         } else {
           ProjectsContext()
         }
@@ -162,7 +162,7 @@ struct ProjectsWindow: View {
         Button(L10n.t("home.duplicate.action") + "…") { duplicating = row }
           .disabled(row.missing || !row.isQuartzProject)
         Divider()
-        Button(L10n.t("home.confirmRemoveAction") + "…") { removing = row }
+        Button(L10n.t("home.confirmRemoveAction") + "…") { askRemove(row) }
       }
     } primaryAction: { ids in
       if let id = ids.first, let row = model.row(id) { open(row) }
@@ -211,6 +211,17 @@ struct ProjectsWindow: View {
   }
 
   /// QuartzControl's four questions: whether a dev server is stopped and relay secrets go with it.
+  /// The question names what removing deletes, so it is asked of a fresh row: relay secrets saved
+  /// in a project window change no file this window watches, and while QuartzHub stayed active the
+  /// row still said "none" although removing deletes them (measured 2026-11-10). QuartzControl read
+  /// the list again on every return to its start page.
+  private func askRemove(_ row: ProjectOverview) {
+    Task {
+      await model.reload()
+      removing = model.row(row.id) ?? row
+    }
+  }
+
   private var removeQuestion: String {
     guard let row = removing else { return "" }
     let name = ["name": row.name]

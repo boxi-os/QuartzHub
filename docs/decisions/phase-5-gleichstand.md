@@ -1575,3 +1575,24 @@ zeigt den Pfad, den Satz und „Schließen“, in Hell und Dunkel. Die Liste sag
 „geändert“: Sie ist der Vergleich vom Zeitpunkt der Auswahl, das Sheet fragt git neu.
 
 Kein Befund.
+
+## Fenster „Projekte“: Entfernen mit Relay-Geheimnissen
+
+Am 2026-11-10, an einem APFS-Klon der pub-Kopie (`$S/rel`) mit eigenem Wegwerf-Profil. Die Ziele
+des Klons sind drei erfundene SFTP-Ziele auf einer erfundenen Verbindung (Host
+`relay-probe.invalid`); quartz-forms zeigt mit Link, `source` und Lock auf die Kopie im Scratchpad,
+nicht auf das Repo. Geheimnisse nur mit `-QHMemorySecrets`. Hochgeladen wurde nichts.
+
+Nach dem Speichern einer Empfänger-Adresse im Projektfenster fragte „Aus der Liste entfernen…“ im
+Fenster „Projekte“ nur „„proj“ aus der Liste entfernen? Der Ordner auf der Festplatte bleibt
+unangetastet.“, obwohl `ProjectList.remove` die Relay-Geheimnisse löscht. Nach einem Wechsel zum
+Finder und zurück kam die Fassung mit „Die Empfänger-Adressen und Captcha-Secrets des
+Formular-Relays löscht QuartzHub dabei; …“. Ursache: Das Fenster liest seine Zeilen beim
+Aktivwerden und bei Serverwechseln neu; ein gespeichertes Geheimnis ist keins von beiden.
+QuartzControl las die Liste bei jeder Rückkehr auf die Startseite, dort trat das nicht auf.
+
+Behoben: Beide Wege zur Frage (Inspektor und Kontextmenü) lesen die Zeilen jetzt erst neu und
+fragen dann (`askRemove`). Gegenprobe nach einem Neustart ohne Geheimnisse: Adresse gespeichert,
+ohne QuartzHub zu verlassen gefragt, jetzt mit dem Satz über die Geheimnisse; abgebrochen, das
+Projekt blieb in der Liste. Offen bleibt die vierte Fassung (laufender Server und Geheimnisse): Der
+Server zeigt gui-test, und dessen Seiten laden KaTeX vom CDN.
