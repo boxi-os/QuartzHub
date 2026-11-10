@@ -1212,3 +1212,34 @@ Nebenbei, nicht behoben:
 
 Nicht gemessen: Ersatzsätze für Formular, Video und Leinwand, weil kein Buch mit solchen Seiten
 exportiert wurde. Ebenso nicht „Keine fremden Ressourcen“ mit Netz und epubcheck (VM).
+
+## Frames anlegen und löschen an der App gemessen
+
+Am 2026-11-10 an der Layout-Kopie (`layout/proj`) in 1400×860, mit Freigabe des Nutzers für
+`quartz plugin add/remove` (bei einem Frame ein lokaler Ordner, kein Netz). quartz-forms war für
+den Lauf auf eine Kopie umgebogen, weil `regeneratePluginIndex` alle Plugins liest. Config, Lock,
+`package.json`, `.quartz-gui` und die Liste unter `.quartz/plugins` vorher gesichert und danach
+zurückgelegt (`cmp`, `diff -r`, `git status` gleich). In Hell, die Ablehnung zusätzlich in Dunkel.
+
+- **Neuer Frame:** ohne Namen „Bitte einen Frame-Namen vergeben.“, mit einem vergebenen Namen
+  „Dieser Name ist bereits vergeben …“; beide schreiben nichts. Mit Namen: Ordner unter
+  `authored-frames`, Symlink unter `.quartz/plugins`, Eintrag in Config und Lock in derselben Form
+  wie die vorhandenen Frames.
+- **Duplizieren:** „Probe Frame-kopie“ als Entwurf, gespeichert wie ein neuer Frame.
+- **Als eigenen Frame anpassen:** Entwurf „standard“ mit den Maßen des Projekts (320px · 1fr ·
+  320px, 5px, 1500px) und den Breakpoints des Projekts, wie der Satz darüber sagt.
+- **Löschen:** fragt mit Namen; danach sind Ordner, Symlink, Config- und Lock-Eintrag weg, Lock und
+  `index.ts` byte-gleich mit vorher. Ein Seitentyp, der den Frame benutzte (404, von Hand auf ihn
+  gestellt), behält den Namen in der Config. Die Übersicht zeigt ihn als Chip, der nichts öffnet,
+  und rechnet die Zellen mit dem Standard-Frame. So macht es auch QuartzControl
+  (`frameShape`/`openable` in `LayoutOverview.tsx`).
+
+Ohne Befund. Nebenbei, nicht behoben:
+
+- Einmal hatte ein Duplikat ein Leerzeichen am Ende des Namens („Probe Frame-kopie “); `duplicate`
+  hängt keins an. Nachgestellt in drei Versuchen nicht: mit und ohne Fokus im Namensfeld, nach
+  Tippen und nach Speichern. Wie QuartzControl trimmt QuartzHub den Namen beim Speichern nicht.
+- Die Frage beim Verlassen eines nie gespeicherten Frames sagt „Der Frame bleibt, wie er zuletzt
+  gespeichert wurde.“ (QuartzControl ebenso).
+- Messwerkzeug: Die Tippsuche in einem geöffneten Picker-Menü traf das Ziel nicht; das Menüelement
+  über die Bedienungshilfen drücken ging (`menupick.swift`).
