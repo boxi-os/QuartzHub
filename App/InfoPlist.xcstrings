@@ -1,0 +1,23 @@
+{
+  "sourceLanguage" : "de",
+  "strings" : {
+    "NSLocalNetworkUsageDescription" : {
+      "comment" : "macOS question when QuartzHub first reaches a server on the local network (SFTP, rsync, FTP); the value in project.yml is the German one",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub verbindet sich mit Servern in deinem Netzwerk, etwa wenn du per SFTP, rsync oder FTP veröffentlichst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub connects to servers on your network, for example when you publish over SFTP, rsync or FTP."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -47,6 +47,10 @@ targets:
         CFBundleLocalizations: [de, en]
         LSApplicationCategoryType: public.app-category.developer-tools
         NSHumanReadableCopyright: "GPL-3.0-or-later"
+        # The sentence under macOS's local network question; without it the question has no
+        # reason, and a refusal shows up only as ssh's "No route to host". Translated in
+        # App/InfoPlist.xcstrings (macOS reads it from the bundle, not from QuartzHub's catalog).
+        NSLocalNetworkUsageDescription: "QuartzHub verbindet sich mit Servern in deinem Netzwerk, etwa wenn du per SFTP, rsync oder FTP veröffentlichst."
     settings:
       base:
         # Not boxi_os: CFBundleIdentifier allows letters, digits, hyphen and period only. Same form
