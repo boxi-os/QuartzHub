@@ -108,12 +108,12 @@ public enum ExportBook {
     if pageItems.isEmpty { throw PublishFailure(L10n.t("main.exportNoPages")) }
     // With an own order the navigation only decides what is new; saying the order came from it
     // would describe the wrong book.
-    report.append(book.order == nil ? sourceLine(nav.source, count: pageItems.count) : L10n.t("main.exportReportOwnOrder", ["count": String(pageItems.count)]))
+    report.append(book.order == nil ? sourceLine(nav.source, count: pageItems.count) : L10n.t("main.exportReportOwnOrder", ["count": String(pageItems.count)], count: pageItems.count))
     if !resolved.missing.isEmpty {
-      report.append(L10n.t("main.exportReportMissing", ["count": String(resolved.missing.count), "pages": resolved.missing.prefix(5).joined(separator: ", ")]))
+      report.append(L10n.t("main.exportReportMissing", ["count": String(resolved.missing.count), "pages": resolved.missing.prefix(5).joined(separator: ", ")], count: resolved.missing.count))
     }
     if !resolved.appended.isEmpty {
-      report.append(L10n.t("main.exportReportAppended", ["count": String(resolved.appended.count), "pages": resolved.appended.prefix(5).joined(separator: ", ")]))
+      report.append(L10n.t("main.exportReportAppended", ["count": String(resolved.appended.count), "pages": resolved.appended.prefix(5).joined(separator: ", ")], count: resolved.appended.count))
     }
 
     let configLocale = config?.configuration["locale"]?.stringValue ?? ""
@@ -129,8 +129,8 @@ public enum ExportBook {
     }
     var items = resolved.items
     let extras = ExportExtras.addBacklinksAndRegister(&pages, &items, backlinks: book.backlinks, tagIndex: book.tagIndex, facts: facts, lang: lang0)
-    if extras.backlinks > 0 { report.append(L10n.t("main.exportReportBacklinks", ["count": String(extras.backlinks)])) }
-    if extras.tags > 0 { report.append(L10n.t("main.exportReportRegister", ["count": String(extras.tags)])) }
+    if extras.backlinks > 0 { report.append(L10n.t("main.exportReportBacklinks", ["count": String(extras.backlinks)], count: extras.backlinks)) }
+    if extras.tags > 0 { report.append(L10n.t("main.exportReportRegister", ["count": String(extras.tags)], count: extras.tags)) }
     let stylesheets = try await window.evaluate("return [...document.querySelectorAll('head link[rel=\"stylesheet\"]')].map((l) => l.href);")
       .arrayValue?.compactMap(\.stringValue) ?? []
     let lang = lang0
@@ -141,10 +141,10 @@ public enum ExportBook {
     if coverFound.ownMissing { report.append(L10n.t("main.exportReportCoverMissing", ["file": book.coverImage])) }
     func sum(_ key: KeyPath<CollectedPage.Counts, Int>) -> Int { pages.reduce(0) { $0 + $1.counts[keyPath: key] } }
     let replaced = sum(\.forms) + sum(\.frames) + sum(\.media) + sum(\.canvases)
-    if replaced > 0 { report.append(L10n.t("main.exportReportReplaced", ["count": String(replaced)])) }
-    if sum(\.outsideLinks) > 0 { report.append(L10n.t("main.exportReportOutsideLinks", ["count": String(sum(\.outsideLinks))])) }
-    if sum(\.textLinks) > 0 { report.append(L10n.t("main.exportReportTextLinks", ["count": String(sum(\.textLinks))])) }
-    if sum(\.unrenderedDiagrams) > 0 { report.append(L10n.t("main.exportReportUnrendered", ["count": String(sum(\.unrenderedDiagrams))])) }
+    if replaced > 0 { report.append(L10n.t("main.exportReportReplaced", ["count": String(replaced)], count: replaced)) }
+    if sum(\.outsideLinks) > 0 { report.append(L10n.t("main.exportReportOutsideLinks", ["count": String(sum(\.outsideLinks))], count: sum(\.outsideLinks))) }
+    if sum(\.textLinks) > 0 { report.append(L10n.t("main.exportReportTextLinks", ["count": String(sum(\.textLinks))], count: sum(\.textLinks))) }
+    if sum(\.unrenderedDiagrams) > 0 { report.append(L10n.t("main.exportReportUnrendered", ["count": String(sum(\.unrenderedDiagrams))], count: sum(\.unrenderedDiagrams))) }
 
     var files: [ExportFile] = []
     let now = Date()
@@ -180,10 +180,10 @@ public enum ExportBook {
         files.append(ExportFile(name: "\(book.id).html", bytes: html.bytes))
         report.append(L10n.t("main.exportReportHtml", ["mb": ExportExtras.mb(html.bytes.count)]))
       }
-      if content.drawings.formulas > 0 { report.append(L10n.t("main.exportReportFormulas", ["count": String(content.drawings.formulas)])) }
-      if content.drawings.diagrams > 0 { report.append(L10n.t("main.exportReportDiagrams", ["count": String(content.drawings.diagrams)])) }
-      if content.counts.externalImages > 0 { report.append(L10n.t("main.exportReportExternalImages", ["count": String(content.counts.externalImages)])) }
-      if content.counts.unsupportedImages > 0 { report.append(L10n.t("main.exportReportUnsupportedImages", ["count": String(content.counts.unsupportedImages)])) }
+      if content.drawings.formulas > 0 { report.append(L10n.t("main.exportReportFormulas", ["count": String(content.drawings.formulas)], count: content.drawings.formulas)) }
+      if content.drawings.diagrams > 0 { report.append(L10n.t("main.exportReportDiagrams", ["count": String(content.drawings.diagrams)], count: content.drawings.diagrams)) }
+      if content.counts.externalImages > 0 { report.append(L10n.t("main.exportReportExternalImages", ["count": String(content.counts.externalImages)], count: content.counts.externalImages)) }
+      if content.counts.unsupportedImages > 0 { report.append(L10n.t("main.exportReportUnsupportedImages", ["count": String(content.counts.unsupportedImages)], count: content.counts.unsupportedImages)) }
     }
     report += networkLines(fetched: window.fetched, refused: window.refused)
     return ExportOutcome(files: files, report: report, missing: resolved.missing, appended: resolved.appended, pages: pageItems.count)
@@ -194,10 +194,10 @@ public enum ExportBook {
   nonisolated static func sourceLine(_ source: String, count: Int) -> String {
     let n = ["count": String(count)]
     switch source {
-    case "quartz-navigations": return L10n.t("main.exportReportSource_quartz-navigations", n)
-    case "explorer": return L10n.t("main.exportReportSource_explorer", n)
-    case "links": return L10n.t("main.exportReportSource_links", n)
-    default: return L10n.t("main.exportReportSource_contentIndex", n)
+    case "quartz-navigations": return L10n.t("main.exportReportSource_quartz-navigations", n, count: count)
+    case "explorer": return L10n.t("main.exportReportSource_explorer", n, count: count)
+    case "links": return L10n.t("main.exportReportSource_links", n, count: count)
+    default: return L10n.t("main.exportReportSource_contentIndex", n, count: count)
     }
   }
 
@@ -226,7 +226,7 @@ public enum ExportBook {
         let parts = key.components(separatedBy: " ")
         return parts.count > 1 ? parts[1] : "undefined"
       })
-      lines.append(L10n.t("main.exportReportRefused", ["count": String(refused.reduce(0) { $0 + $1.count }), "hosts": hosts.prefix(6).joined(separator: ", ")]))
+      lines.append(L10n.t("main.exportReportRefused", ["count": String(refused.reduce(0) { $0 + $1.count }), "hosts": hosts.prefix(6).joined(separator: ", ")], count: refused.reduce(0) { $0 + $1.count }))
     }
     return lines
   }

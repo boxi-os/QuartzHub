@@ -25672,15 +25672,39 @@
     "main.exportReportAppended" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} neue Seiten wurden am Ende angefügt: {{pages}}"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} neue Seite wurde am Ende angefügt: {{pages}}"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} neue Seiten wurden am Ende angefügt: {{pages}}"
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} new pages were appended at the end: {{pages}}"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} new page was appended at the end: {{pages}}"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} new pages were appended at the end: {{pages}}"
+                }
+              }
+            }
           }
         }
       }
@@ -25688,15 +25712,39 @@
     "main.exportReportBacklinks" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Verweise auf diese Seite stehen am Ende der Seiten."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Verweis auf diese Seite steht am Ende der Seiten."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Verweise auf diese Seite stehen am Ende der Seiten."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} links to this page stand at the end of the pages."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} link to this page stands at the end of the pages."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} links to this page stand at the end of the pages."
+                }
+              }
+            }
           }
         }
       }
@@ -25720,15 +25768,39 @@
     "main.exportReportDiagrams" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} Diagramme als Bild."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Diagramm als Bild."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Diagramme als Bild."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} diagrams as pictures."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} diagram as a picture."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} diagrams as pictures."
+                }
+              }
+            }
           }
         }
       }
@@ -25752,15 +25824,39 @@
     "main.exportReportExternalImages" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} Bilder von anderen Websites stehen als Link im Dokument."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Bild von einer anderen Website steht als Link im Dokument."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Bilder von anderen Websites stehen als Link im Dokument."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} pictures from other sites stand as a link in the document."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} picture from another site stands as a link in the document."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} pictures from other sites stand as a link in the document."
+                }
+              }
+            }
           }
         }
       }
@@ -25768,15 +25864,39 @@
     "main.exportReportFormulas" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} Formeln als Bild."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Formel als Bild."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Formeln als Bild."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} formulas as pictures."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} formula as a picture."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} formulas as pictures."
+                }
+              }
+            }
           }
         }
       }
@@ -25800,15 +25920,39 @@
     "main.exportReportMissing" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Seiten der eigenen Reihenfolge gibt es im Build nicht mehr: {{pages}}"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seite der eigenen Reihenfolge gibt es im Build nicht mehr: {{pages}}"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seiten der eigenen Reihenfolge gibt es im Build nicht mehr: {{pages}}"
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} pages of the own order are no longer in the build: {{pages}}"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} page of the own order is no longer in the build: {{pages}}"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} pages of the own order are no longer in the build: {{pages}}"
+                }
+              }
+            }
           }
         }
       }
@@ -25832,15 +25976,39 @@
     "main.exportReportOutsideLinks" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Verweise auf Seiten außerhalb des Buchs führen auf die veröffentlichte Website."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Verweis auf eine Seite außerhalb des Buchs führt auf die veröffentlichte Website."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Verweise auf Seiten außerhalb des Buchs führen auf die veröffentlichte Website."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} links to pages outside the book lead to the published site."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} link to a page outside the book leads to the published site."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} links to pages outside the book lead to the published site."
+                }
+              }
+            }
           }
         }
       }
@@ -25848,15 +26016,39 @@
     "main.exportReportOwnOrder" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Seiten in der eigenen Reihenfolge des Buchs."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seite in der eigenen Reihenfolge des Buchs."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seiten in der eigenen Reihenfolge des Buchs."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} pages in the book’s own order."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} page in the book’s own order."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} pages in the book’s own order."
+                }
+              }
+            }
           }
         }
       }
@@ -25880,15 +26072,39 @@
     "main.exportReportRefused" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Anfragen der Website wurden nicht geladen (Skripte, Rahmen, Statistik): {{hosts}}"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Anfrage der Website wurde nicht geladen (Skripte, Rahmen, Statistik): {{hosts}}"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Anfragen der Website wurden nicht geladen (Skripte, Rahmen, Statistik): {{hosts}}"
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} requests of the site were not loaded (scripts, frames, statistics): {{hosts}}"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} request of the site was not loaded (scripts, frames, statistics): {{hosts}}"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} requests of the site were not loaded (scripts, frames, statistics): {{hosts}}"
+                }
+              }
+            }
           }
         }
       }
@@ -25896,15 +26112,39 @@
     "main.exportReportRegister" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Register mit {{count}} Schlagwörtern am Ende."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Register mit {{count}} Schlagwort am Ende."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Register mit {{count}} Schlagwörtern am Ende."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Register of {{count}} tags at the end."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Register of {{count}} tag at the end."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Register of {{count}} tags at the end."
+                }
+              }
+            }
           }
         }
       }
@@ -25912,15 +26152,39 @@
     "main.exportReportReplaced" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Formulare, eingebettete Inhalte, Videos oder Leinwände wurden durch einen Satz mit Adresse ersetzt."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Formular, eingebetteter Inhalt, Video oder Leinwand wurde durch einen Satz mit Adresse ersetzt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Formulare, eingebettete Inhalte, Videos oder Leinwände wurden durch einen Satz mit Adresse ersetzt."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} forms, embedded content, videos or canvases were replaced by a sentence with the address."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} form, embedded content, video or canvas was replaced by a sentence with the address."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} forms, embedded content, videos or canvases were replaced by a sentence with the address."
+                }
+              }
+            }
           }
         }
       }
@@ -25928,15 +26192,39 @@
     "main.exportReportSource_contentIndex" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Seiten. Die Startseite zeigt keine Navigation: Reihenfolge wie im Explorer ohne eigene Einstellungen, Ordner zuerst, dann nach Titel."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seite. Die Startseite zeigt keine Navigation: Reihenfolge wie im Explorer ohne eigene Einstellungen, Ordner zuerst, dann nach Titel."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seiten. Die Startseite zeigt keine Navigation: Reihenfolge wie im Explorer ohne eigene Einstellungen, Ordner zuerst, dann nach Titel."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} pages. The start page shows no navigation: order as in the Explorer without own settings, folders first, then by title."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} page. The start page shows no navigation: order as in the Explorer without own settings, folders first, then by title."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} pages. The start page shows no navigation: order as in the Explorer without own settings, folders first, then by title."
+                }
+              }
+            }
           }
         }
       }
@@ -25944,15 +26232,39 @@
     "main.exportReportSource_explorer" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Seiten, Reihenfolge aus dem Explorer der Website."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seite, Reihenfolge aus dem Explorer der Website."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seiten, Reihenfolge aus dem Explorer der Website."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} pages, order from the site’s Explorer."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} page, order from the site’s Explorer."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} pages, order from the site’s Explorer."
+                }
+              }
+            }
           }
         }
       }
@@ -25960,15 +26272,39 @@
     "main.exportReportSource_links" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Seiten, Reihenfolge aus der größten Linkliste der Startseite (weder Explorer noch quartz-navigations gefunden)."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seite, Reihenfolge aus der größten Linkliste der Startseite (weder Explorer noch quartz-navigations gefunden)."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seiten, Reihenfolge aus der größten Linkliste der Startseite (weder Explorer noch quartz-navigations gefunden)."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} pages, order from the largest list of links on the start page (neither Explorer nor quartz-navigations found)."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} page, order from the largest list of links on the start page (neither Explorer nor quartz-navigations found)."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} pages, order from the largest list of links on the start page (neither Explorer nor quartz-navigations found)."
+                }
+              }
+            }
           }
         }
       }
@@ -25976,15 +26312,39 @@
     "main.exportReportSource_quartz-navigations" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Seiten, Reihenfolge aus der Navigation der Website (quartz-navigations)."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seite, Reihenfolge aus der Navigation der Website (quartz-navigations)."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seiten, Reihenfolge aus der Navigation der Website (quartz-navigations)."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} pages, order from the site’s navigation (quartz-navigations)."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} page, order from the site’s navigation (quartz-navigations)."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} pages, order from the site’s navigation (quartz-navigations)."
+                }
+              }
+            }
           }
         }
       }
@@ -25992,15 +26352,39 @@
     "main.exportReportTextLinks" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Verweise auf Seiten außerhalb des Buchs sind Text geblieben."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Verweis auf eine Seite außerhalb des Buchs ist Text geblieben."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Verweise auf Seiten außerhalb des Buchs sind Text geblieben."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} links to pages outside the book stayed text."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} link to a page outside the book stayed text."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} links to pages outside the book stayed text."
+                }
+              }
+            }
           }
         }
       }
@@ -26024,15 +26408,39 @@
     "main.exportReportUnrendered" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Diagramme waren nach 15 Sekunden nicht gezeichnet und stehen als Quelltext im Dokument."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Diagramm war nach 15 Sekunden nicht gezeichnet und steht als Quelltext im Dokument."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Diagramme waren nach 15 Sekunden nicht gezeichnet und stehen als Quelltext im Dokument."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} diagrams were not drawn after 15 seconds and stand as source in the document."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} diagram was not drawn after 15 seconds and stands as source in the document."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} diagrams were not drawn after 15 seconds and stand as source in the document."
+                }
+              }
+            }
           }
         }
       }
@@ -26040,15 +26448,39 @@
     "main.exportReportUnsupportedImages" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} Bilder in einem Format, das ePub nicht kennt, stehen als Text im Dokument."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Bild in einem Format, das ePub nicht kennt, steht als Text im Dokument."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} Bilder in einem Format, das ePub nicht kennt, stehen als Text im Dokument."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ePub/HTML: {{count}} pictures in a format ePub does not know stand as text in the document."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} picture in a format ePub does not know stands as text in the document."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ePub/HTML: {{count}} pictures in a format ePub does not know stand as text in the document."
+                }
+              }
+            }
           }
         }
       }

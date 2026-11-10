@@ -32,6 +32,11 @@ import Testing
     #expect(ExportBook.sourceLine("links", count: 3) == L10n.t("main.exportReportSource_links", ["count": "3"]))
     #expect(ExportBook.sourceLine("contentIndex", count: 3) == L10n.t("main.exportReportSource_contentIndex", ["count": "3"]))
     #expect(ExportBook.sourceLine("explorer", count: 3) != ExportBook.sourceLine("links", count: 3))
+    // One page is "1 Seite", not "1 Seiten" (measured in the report, 2026-11-10).
+    #expect(L10n.t(in: "de", "main.exportReportSource_explorer", ["count": "1"], count: 1).hasPrefix("1 Seite,"))
+    #expect(L10n.t(in: "en", "main.exportReportSource_explorer", ["count": "1"], count: 1).hasPrefix("1 page,"))
+    #expect(L10n.t(in: "de", "main.exportReportMissing", ["count": "1", "pages": "a/b"], count: 1)
+      == "1 Seite der eigenen Reihenfolge gibt es im Build nicht mehr: a/b")
   }
 
   @Test func networkSentences() {
