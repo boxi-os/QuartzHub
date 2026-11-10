@@ -1639,3 +1639,30 @@ unter `private/` steht nicht in der Liste („Gesucht in den Seiten, die Quartz 
 des Formulars zählt danach „auf 3 Seiten“, die nicht gebauten mit.
 
 Kein Befund.
+
+## Update-Prüfung mit Netz an der App gemessen
+
+Am 2026-11-10, mit Freigabe für Läufe, die nur lesen oder holen. Am Relay-Klon (`$S/rel`, erfundene
+Ziele), ohne `-QHNoUpdateCheck`. Gefragt wurden GitHub per `git ls-remote` (Kern
+`jackyzha0/quartz`, die `github:`-Plugins) und `git fetch` in den Klon; aktualisiert wurde nichts,
+„Update durchführen“ und „Aktualisieren“ blieben ungedrückt.
+
+- **Übersicht:** „Kern-Update verfügbar“, „2 Plugin-Updates verfügbar“.
+- **Updates:** „Installiert: 97a2d05 · Neueste Version: 7cfb079 · 157 Commits fehlen“;
+  `git rev-list --count 97a2d05..7cfb079` im Klon gibt auch 157. Plugins: quartz-betterbases,
+  quartz-layout-box, quartz-navigations „… → … · Aktuell“, quartz-multilanguage „b7f89a8 →
+  4d74d9f“ mit „Aktualisieren“ (ein eigenes `git ls-remote` gibt 4d74d9f), excalidraw ebenso
+  dahinter; Frames und quartz-forms „Lokal“.
+- **Plugins ▸ Installiert:** „Update verfügbar“ an quartz-multilanguage und an beiden
+  excalidraw-Einträgen, im Inspektor „Update verfügbar 2“.
+- **Nicht prüfbar:** Die Kern-Prüfung fragt fest `github.com/jackyzha0/quartz`, nicht das Remote
+  des Projekts; ein umgebogenes `quartz-upstream` änderte nichts. Gestartet mit `open --env
+  GIT_CONFIG_COUNT=1 --env GIT_CONFIG_KEY_0=url.https://quartz-probe.invalid/.insteadOf --env
+  GIT_CONFIG_VALUE_0=https://github.com/` (gilt nur für die Kindprozesse dieser App, `~/.gitconfig`
+  bleibt): Übersicht „Nicht prüfbar · 11 Plugins geprüft · 5 Prüfungen fehlgeschlagen“, Updates
+  „Installiert: — · Neueste Version: —“ und je Plugin „… → — · Nicht prüfbar“. „Update
+  durchführen“ und „Aktualisieren“ bleiben dabei aktiv, wie in QuartzControl (`Updates.tsx`: nur
+  ein sicheres „Aktuell“ sperrt).
+
+Kein Befund. Offen: der Eintrag „Kern-Update angefangen, nicht fertig“ (braucht ein
+abgebrochenes Update).
