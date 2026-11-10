@@ -1855,3 +1855,44 @@ die Webroot `/srv/qc/www` schreiben (qchost, 755), daher ging SFTP nach `/home/b
 
 Danach auf der VM `/srv/qc/www/qhrelay` (per FTP) und `/home/boxi/qhrelay-sftp` gelöscht. Kein
 Befund.
+
+## Branch-Deploy und Webhook ohne Netz an der App gemessen
+
+2026-11-11, auf dem Wegwerf-Projekt `neu-probe` (Scratch-Profil, Geheimnisse nur im Speicher).
+Beide Zeilen standen auf `Netz`, brauchen aber keins: `origin` wurde ein lokales Bare-Repo
+(`main` aus `v5`, `origin/HEAD` → `main`), der Webhook ging an einen HTTPS-Server auf
+`127.0.0.1:8443` mit selbst signiertem Zertifikat.
+
+- **Branch-Deploy:** Der Diff gegen den noch fehlenden `gh-pages` nennt „Neu: 62“ (so viele Dateien
+  hat `public/`). „Jetzt veröffentlichen“ fragt „Auf den Branch „gh-pages“ veröffentlichen? Der
+  Branch wird dabei vollständig durch den aktuellen Build ersetzt (force-push).“, dann
+  „Veröffentlichung erfolgreich.“ mit gits Ausgabe bis `* [new branch] … -> gh-pages`. Im Bare-Repo
+  ein Commit ohne Eltern, „Deploy 2026-11-10T23:06:28.558Z“; im Projekt kein neuer Branch, kein
+  Worktree. Ein zweiter Lauf ohne Änderung: „Keine Änderungen gegenüber dem veröffentlichten
+  Stand, Push übersprungen.“, kein neuer Commit. Nach einer geänderten, einer neuen und einer
+  gelöschten Datei sagt der Diff „Neu: 1 · Geändert: 1 · Entfernt: 1“, der Lauf
+  `+ f2c6a85...644ef53 … -> gh-pages (forced update)`, der Branch hat wieder genau einen Commit.
+- **Geschützte Branches:** Ein Ziel auf `main` (Standard von `origin`) und eines auf `v5`
+  (ausgecheckt) lehnt schon der Diff ab: „„main“ ist der aktuelle bzw. der Standard-Branch dieses
+  Repositorys. … Bitte einen eigenen Branch wie „gh-pages“ verwenden.“ Ohne Diff bleibt „Jetzt
+  veröffentlichen“ gesperrt, wie in QuartzControl (`canDeploy = !!activeTarget && (!hasFileDiff ||
+  !!diff)`); die Prüfung im Lauf selbst ist von der Oberfläche aus nicht erreichbar.
+- **Webhook:** Statt der Dateiliste die Erklärung „Ein Webhook lädt keine Dateien hoch …“, die
+  Frage „Webhook „Webhook-Probe“ auslösen? Dabei werden keine Dateien übertragen. Der Anbieter
+  wird nur aufgefordert, selbst zu bauen.“ Ausgabe: „POST https://127.0.0.1:8443 fehlgeschlagen.
+  TypeError: fetch failed“, ohne Pfad und Abfrage der URL (sie hatte `/hooks/geheimtoken-1234567`).
+  Der Server sah keine Anfrage: URLSession bricht am Zertifikat ab. Eine Antwort 2xx braucht ein
+  Zertifikat, dem macOS traut; dafür wäre der Schlüsselbund nötig, der hier unangetastet blieb. Im
+  Kern ist sie gemessen (P3 8a). Das Feld für die URL ist wie in QuartzControl kein Passwortfeld
+  (dort mit Begründung im Kommentar); `connections.json` hält nur den Origin.
+
+**Befund, behoben:** Die URL wurde im Fenster „Zugänge“ gespeichert, das Projektfenster daneben
+zeigte weiter „keine URL hinterlegt“ und im Inspektor „(kein Passwort/Key hinterlegt)“, bis zum
+nächsten Lauf. In QuartzControl waren die Einstellungen eine Route im selben Fenster, die Seite
+wurde nach dem Bearbeiten neu gemountet; hier sind es zwei Fenster. Jetzt erhöht jedes Schreiben
+der Zugänge (Formular, Löschen, Host-Key vergessen, GitHub-Token) einen Zähler
+(`AppDeploy.ConnectionsVersion`); die Seite „Veröffentlichen“ liest dann die Zugänge neu, der
+Abschnitt GitHub Pages fragt neu, und das Fenster „Zugänge“ liest neu, wenn das Projektfenster
+etwas ändert. Gegenprobe: vor dem Fix blieb der Satz stehen; danach stand ohne Klick ins
+Projektfenster „POST → https://127.0.0.1:8443“, und nach dem Löschen des Zugangs wieder „keine URL
+hinterlegt“.
