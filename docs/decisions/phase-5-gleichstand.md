@@ -1666,3 +1666,23 @@ Ziele), ohne `-QHNoUpdateCheck`. Gefragt wurden GitHub per `git ls-remote` (Kern
 
 Kein Befund. Offen: der Eintrag „Kern-Update angefangen, nicht fertig“ (braucht ein
 abgebrochenes Update).
+
+## Marktplatz mit Netz an der App gemessen
+
+Am 2026-11-10, am Relay-Klon, mit `-QHNoUpdateCheck` (der Katalog hängt nicht daran). Gelesen
+wurde die GitHub-API ohne Token.
+
+- **Katalog:** 46 Einträge, „Installiert“ an 44 (alle außer fonts und
+  obsidian-plugin-ttrpg-tools-maps), Sterne je Zeile; im Inspektor „46 Plugins im Katalog, 44
+  davon in diesem Projekt.“ „Archiviert“ kommt im Katalog gerade nicht vor.
+- **Suche:** „font“ lässt nur „fonts“ stehen.
+- **README:** Das README von quartz-community/fonts lädt und ist gerendert (Überschriften, Links,
+  Codeblöcke). Die Codeblöcke sind im Inspektor rechts abgeschnitten, scrollen aber seitlich
+  (`ScrollView(.horizontal)`), wie in QuartzControl (`overflow-x-auto`).
+- **Installieren:** „Installieren“ bei fonts. Nach rund 20 s „fonts installiert.“; in der Config
+  `source: github:quartz-community/fonts` mit `order: 60`, im Lock Commit 727cdfe, ein Snapshot
+  `pluginChange … github:quartz-community/fonts`, das Abzeichen wechselt auf „Installiert“.
+
+Kein Befund. Nicht gemessen: „Plugin von GitHub hinzufügen“. Das Hinzufügen von
+`quartz-community/obsidian-plugin-ttrpg-tools-maps` hat die Freigabeprüfung von Claude Code
+abgelehnt; es wurde nicht ausgelöst.
