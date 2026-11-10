@@ -1711,3 +1711,23 @@ Kein Befund. Nebenbei: „1 npm-Paket fehlt“ steht über „Ohne sie baut Quar
 Satz hat keinen Plural und sagt „sie“ auch bei einem Paket, wortgleich mit QuartzControl.
 Nicht gemessen: „Plugin von GitHub hinzufügen“. Die Freigabeprüfung von Claude Code hat es auch
 nach der Freigabe des Nutzers abgelehnt.
+
+## Anlegen und Duplizieren mit Netz an der App gemessen
+
+Am 2026-11-10, mit einem Wegwerf-Profil, dessen Standard-Projektverzeichnis ein Scratch-Ordner
+war.
+
+- **Anlegen:** „Neues Quartz-Projekt“ mit dem vorgegebenen Ordner, Name `neu-probe`, Grundgerüst
+  „default“, leerer Content-Ordner, Basis-Template mit Beispielseiten. „Erstelle… (dauert ca. ein
+  bis zwei Minuten)“, nach gut einer Minute ging das Projektfenster auf. Im Ordner: Quartz auf
+  7cfb079 (`upstream` jackyzha0/quartz), `locale: de-DE` (Sprache der App), `baseUrl: localhost`,
+  die vier Frames des Basis-Templates, quartz-layout-box, -multilanguage, -navigations und
+  quartz-forms von GitHub, 22 Seiten unter `content/`, die Stylesheets mit den verwalteten Blöcken.
+  Ohne Warnung kommt keine Abschlussseite; „Warnungen bzw. Fehler der Vorlage“ und „Zum Projekt“
+  sind deshalb nicht gesehen.
+- **Duplizieren:** an `neu-probe`, „Leer beginnen (nur eine Startseite)“, Name `neu-probe-2`. Nach
+  rund 15 s ging das Fenster des Duplikats auf: `node_modules` frisch von `npm install`, die vier
+  Plugins neu geholt, die Frame-Links in `.quartz/plugins` zeigen auf die Frames des Duplikats,
+  `content/` hat nur `index.md`.
+
+Kein Befund.
