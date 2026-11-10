@@ -47403,6 +47403,23 @@
         }
       }
     },
+    "templates.builtinBundledCurrent" : {
+      "comment" : "Templates ▸ Vorlage anwenden, under the package after „Basis-Template“: GitHub answered with a copy that is not newer than the one inside the app",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basis-Template, die Fassung aus QuartzHub (auf GitHub keine neuere)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basic template, the version inside QuartzHub (no newer one on GitHub)"
+          }
+        }
+      }
+    },
     "templates.builtinDownloaded" : {
       "localizations" : {
         "de" : {

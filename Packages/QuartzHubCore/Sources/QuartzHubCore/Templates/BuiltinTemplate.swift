@@ -20,6 +20,10 @@ public struct BuiltinTemplate: Sendable {
     public var source: Source
     /// Markdown files in the package's content part, 0 when it has none.
     public var pages: Int
+    /// For `.bundled`: GitHub delivered a readable copy, just not a newer one. Without it the
+    /// page said "GitHub nicht erreichbar" on a tie (measured 2026-11-10; QuartzControl says the
+    /// same). Not part of the source, which stays QuartzControl's two values.
+    public var downloadNotNewer: Bool = false
   }
 
   public static let url = "https://raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl"
@@ -122,7 +126,7 @@ public struct BuiltinTemplate: Sendable {
     if let downloaded, shipped == nil || downloaded.createdAt > shipped!.createdAt {
       return Found(path: cached, source: .downloaded, pages: downloaded.pages)
     }
-    if let shipped { return Found(path: bundled, source: .bundled, pages: shipped.pages) }
+    if let shipped { return Found(path: bundled, source: .bundled, pages: shipped.pages, downloadNotNewer: downloaded != nil) }
     return nil
   }
 }

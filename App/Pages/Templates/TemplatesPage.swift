@@ -196,7 +196,7 @@ struct TemplatesPage: View {
   private func sourceLine(_ path: String) -> String {
     switch model.builtinSource {
     case .downloaded: L10n.t("templates.builtinDownloaded")
-    case .bundled: L10n.t("templates.builtinBundled")
+    case .bundled: model.builtinDownloadNotNewer ? L10n.t("templates.builtinBundledCurrent") : L10n.t("templates.builtinBundled")
     case nil: path
     }
   }

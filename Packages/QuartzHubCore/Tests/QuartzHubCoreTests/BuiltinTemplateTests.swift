@@ -11,6 +11,27 @@ import Testing
 @Suite(.serialized) struct BuiltinTemplateTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/builtin-template")
 
+  /// The bundled copy wins a tie, but GitHub did answer: the page must not say it was unreachable
+  /// (measured 2026-11-10, both copies the same file).
+  @Test func aTieIsNotAnUnreachableGitHub() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = TemplatePackageTests.realpath(scratch.path)
+    let shipped = try Posix.read(BuiltinTemplate.bundledCopy)
+    let bundled = "\(work)/resources/qc-basic.qtpl"
+    try Posix.mkdirs(NodePath.dirname(bundled))
+    try Posix.write(bundled, shipped)
+    let answering: FontService.Fetch = { _, _, _ throws(FontService.FetchFailure) in
+      FontService.Response(status: 200, headers: [:], body: shipped)
+    }
+    let silent: FontService.Fetch = { _, _, _ throws(FontService.FetchFailure) in throw .unreachable }
+    let tie = await BuiltinTemplate(profile: ProfileDirectory("\(work)/a"), bundled: bundled, fetch: answering).find()
+    #expect(tie?.source == .bundled)
+    #expect(tie?.downloadNotNewer == true)
+    let offline = await BuiltinTemplate(profile: ProfileDirectory("\(work)/b"), bundled: bundled, fetch: silent).find()
+    #expect(offline?.source == .bundled)
+    #expect(offline?.downloadNotNewer == false)
+  }
+
   @Test func findsAsQuartzControl() async throws {
     let scratch = try HostPathTests.Scratch(umlaut: true)
     let work = TemplatePackageTests.realpath(scratch.path)

@@ -68,6 +68,8 @@ final class TemplatesModel {
   /// Where the package came from when it is the built-in one: its path is the profile's cache or
   /// the app's resources, which says nothing to anyone.
   var builtinSource: BuiltinTemplate.Source?
+  /// The built-in package is the app's own although GitHub answered: its copy was not newer.
+  var builtinDownloadNotNewer = false
   var plan: TemplatePackage.Plan?
   var unreadable = false
   var importSelected: [String] = []
@@ -171,6 +173,7 @@ final class TemplatesModel {
     defer { planning = false }
     if let found = await BuiltinTemplate.app().find() {
       await load(found.path, source: found.source)
+      builtinDownloadNotNewer = found.downloadNotNewer
     } else {
       failure = L10n.t("templates.builtinMissing")
     }
@@ -179,6 +182,7 @@ final class TemplatesModel {
   private func reset(_ path: String?, source: BuiltinTemplate.Source?) {
     packagePath = path
     builtinSource = source
+    builtinDownloadNotNewer = false
     warnings = nil
     failure = nil
     progress = nil

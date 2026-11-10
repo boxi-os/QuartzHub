@@ -1731,3 +1731,38 @@ war.
   `content/` hat nur `index.md`.
 
 Kein Befund.
+
+## Vorlagen mit Netz an der App gemessen
+
+Am 2026-11-10, an den beiden frisch angelegten Projekten im Scratchpad, ohne `-QHNoUpdateCheck`.
+
+**Basis-Template von GitHub, ein Befund, behoben.** „Basis-Template“ holte
+`raw.githubusercontent.com/boxi-os/quartzcontrol-templates/main/qc-basic.qtpl` ins Profil
+(`templates/qc-basic.qtpl`). Die Seite sagte trotzdem „Basis-Template, die Fassung aus QuartzHub
+(GitHub nicht erreichbar)“. Die beiden Kopien sind dieselbe Datei (md5 gleich, `createdAt`
+2026-11-05T22:34:29.737Z), und bei Gleichstand gewinnt mit Absicht die Kopie in der App
+(QuartzControls `getBuiltinTemplate`: „A tie is the same package in both places“). Der Satz nannte
+aber einen falschen Grund. QuartzControl hat dieselbe Regel und denselben Satz; nicht kritisch,
+dort nur notiert.
+
+Behoben: `BuiltinTemplate.Found` sagt jetzt mit `downloadNotNewer`, dass GitHub eine lesbare
+Kopie geliefert hat, nur keine neuere. `source` behält QuartzControls zwei Werte, die Golden Files
+gelten weiter. Die Seite sagt dann „Basis-Template, die Fassung aus QuartzHub (auf GitHub keine
+neuere)“, in Hell und Dunkel gesehen. Der Test `aTieIsNotAnUnreachableGitHub` prüft Gleichstand
+und Funkstille; ohne die Angabe scheitert er (Gegenprobe). Eine Kopie von GitHub, die älter als
+einen Tag ist und nicht erneuert werden konnte, zählt dabei weiter als Antwort von GitHub, wie
+„von GitHub geladen“. Nicht gesehen: eine neuere Fassung auf GitHub („von GitHub geladen“).
+
+**Theme, Plugins und Frames anwenden.** Auf `neu-probe-2`, das aus demselben Template stammt:
+„7 Baustein(e) anwenden? …“, Snapshot `styleChange … Basis-Template`, „Fertig: alles übernommen,
+nichts blieb offen.“, aber nichts neu installiert, weil alles schon gleich war. Deshalb ein
+drittes Projekt `ohne-vorlage`, ohne Basis-Template angelegt (keine Plugins unter
+`.quartz/plugins`), und das Template darauf angewendet:
+- mit der Vorauswahl (ohne Inhalt, Layout, Plugins, Übersetzungen, Presets): die vier Frames
+  registriert (Links in `.quartz/plugins`, Einträge in der Config), das Theme
+  `@quartz-themes/minimal` per npm installiert, in der Config `theme: minimal` statt
+  `tokyo-night`;
+- dann mit „Plugins“: „8 Baustein(e) anwenden?“, danach quartz-forms, -layout-box,
+  -multilanguage und -navigations von GitHub geklont.
+
+Sonst kein Befund.
