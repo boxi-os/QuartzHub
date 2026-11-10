@@ -1283,3 +1283,51 @@ an ihm; VoiceOver liest es. Ohne Befund. Nebenbei, nicht behoben:
   gleich; ein falsch geschriebener Name einer schon geholten Familie bleibt so ohne Satz.
 - Nicht gemessen: „Theme-Schriften“ und „vom Theme“ (brauchen ein Theme, also `npm install`),
   „n ungenutzte Schriftdateien“ ohne entfernte Familie, „Die Datei nennt kein ‚weight‘“.
+
+## Themes mit npm an der App gemessen
+
+Am 2026-11-10 an der Stile-Kopie (`styles/proj`) in 1400×860, Dunkel, mit Freigabe des Nutzers für
+`npm install`. `package.json`, `package-lock.json`, `node_modules` (APFS-Klon), Config, Lock,
+`quartz/` und `.quartz-gui` sowie das Testprofil vorher gesichert und danach zurückgelegt (`diff -r`
+leer, `git status` gleich). Ob npm lief, zeigt sein Log unter `~/.npm/_logs` (`argv`, `exit 0`).
+
+- **Wieder aktivieren:** minimal stand mit `enabled: false`; der Knopf und ⌘S ändern nur `enabled`.
+- **Theme-Schriften (Basis):** an nimmt `themeFonts: false` heraus, und die Zeile „Community-Theme:
+  lädt seine Schriften von unpkg.com.“ erscheint; aus schreibt es an dieselbe Stelle zurück. „Wird
+  vom aktiven Theme überschrieben“ stand mit minimal an allen drei Schriftfeldern.
+- **Installieren & aktivieren:** nord aus dem Katalog (Suche „nord“: nord, obsidian-nord), npm
+  `install @quartz-themes/core @quartz-themes/nord` in rund 3 s. `package.json` bekommt nord, und
+  npm hebt dabei core von `^2.0.0` auf `^2.0.1` (npm, nicht QuartzHub; QuartzControl ruft dasselbe).
+  Gespeichert ist `theme: nord`, `mode` und `themeFonts` bleiben wie bei QuartzControls
+  `{...base.options, theme}`. nord hat keine Style Settings: „Das Theme nord bietet keine eigenen
+  Farbeinstellungen an.“, ohne Sprung, wie QuartzControl (Theme.tsx:260); „Zu den Variablen →“
+  steht in beiden Apps unter den Style Settings und springt zum Reiter Variablen.
+- **Preset anwenden:** bei aktivem nord „Basis — dunkel“: npm `install @quartz-themes/core
+  @quartz-themes/minimal`, danach die Optionen des Presets (`theme: minimal`, `mode: dark`,
+  `fonts`). Ist das Theme des Presets aktiv, steht „Aktiv“ statt „Anwenden“; das vergleicht in
+  beiden Apps `options.theme`, also stehen beide minimal-Presets auf „Aktiv“.
+- **Style Settings von ultra-lobster** (installiert über den Katalog): „139 Optionen“; die Suche
+  „gap“ lässt „Column gap“ in seiner Gruppe; ein gesetzter Wert zeigt „Zurücksetzen“, das ihn
+  wieder nimmt. „Doku neu laden“ schreibt `theme-docs/ultra-lobster.json` im Profil neu: dieselben
+  139 Felder, nur `repo` ist upstream umgezogen (`7368697661/…` → `ble-ss/Ultra-Lobster`).
+
+**Befund, behoben (c45b5e8):** Ein Zahlenfeld der Style Settings verlor nach jeder Taste den
+Fokus (Bedienungshilfen: nach „2“ hatte das Fenster den Fokus, die „4“ ging verloren), und eine
+aufgeklappte Gruppe klappte bei jeder Änderung darin wieder zu. Ursache: `StyleSettingsValues.Group`
+nahm `ObjectIdentifier(self)` als Kennung, und `groups()` baut bei jedem Zeichnen neue Objekte;
+SwiftUI baute damit jede Zeile neu. QuartzControl schlüsselt die Gruppen nach Position
+(`key={i}`). Jetzt ist die Kennung der Platz im Baum („/0/2“); die Suche behält alle Überschriften,
+also bleibt er gleich. Nachher gemessen: „Canvas“ bleibt beim Umschalten darin offen, das Feld
+behält den Fokus über drei Tasten. Test `aGroupKeepsItsIdAcrossRendersAndSearches`, Gegenprobe mit
+`UUID()` als Kennung lässt ihn scheitern.
+
+Nebenbei, nicht behoben:
+
+- Return in einem leeren Zahlenfeld schreibt `styleSettings: {}` in die Config, ohne dass sich ein
+  Wert ändert: SwiftUIs Feld meldet den leeren Text, und `apply` legt das Objekt an. QuartzControl
+  schreibt dasselbe `{}`, aber nur bei einer echten Eingabe. Quartz liest `{}` wie kein Eintrag.
+- Der Inspektor zeigt nach „Preset anwenden“ weiter das zuvor installierte Katalog-Theme (nord) mit
+  „Installieren & aktivieren“ und der alten Erfolgsmeldung, obwohl nord nicht mehr aktiv ist.
+- `ServerScanTests.aPortNobodyHoldsIsClosedAndAPortSomeoneHoldsIsOpen` scheiterte einmal im vollen
+  Lauf (der Port war nach dem Belegen nicht offen); allein läuft die Suite grün.
+- Nicht gemessen: „Katalog nicht ladbar“ (braucht einen gescheiterten `npm search`).
