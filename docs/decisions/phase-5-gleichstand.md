@@ -1525,3 +1525,21 @@ mindestens das KaTeX-Stylesheet geholt. Nur Abrufe, hochgeladen wurde nichts. We
 exportieren will, braucht einen Build ohne diese Verweise (wie `cdn-build.mjs` für die Kerntests).
 Deshalb offen: die Ersatzsätze für Formular, Video und Leinwand und das Zählen fremder Anfragen an
 der App (im Kern gemessen, P3 9b), ePub mit epubcheck (VM).
+
+## Einstellungen ▸ Laufzeit: git an der App gemessen
+
+Am 2026-11-10, an der styles-Kopie mit Wegwerf-Profil. Auf diesem Rechner liegt nur `/usr/bin/git`
+(Xcode). Ohne Eingriff steht dort „git 2.54.0 von diesem Rechner. QuartzHub bringt zwar eines mit,
+benutzt es aber nur, wenn keines installiert ist. …“. Für den anderen Fall wurde die App mit
+`open --env DEVELOPER_DIR=/nonexistent` gestartet: Xcodes git antwortet dann mit „missing
+DEVELOPER_DIR path“, `xcode-select -p` aber nicht mit einem Fehler, also gilt es nicht als
+Platzhalter, und `GitRuntime.resolve` fällt auf das mitgelieferte zurück. Dann steht dort
+„git 2.53.0 aus QuartzHub. Auf diesem Rechner ist keines installiert, deshalb wird das
+mitgelieferte benutzt.“, darunter „git steht unter der GPL v2; der vollständige Lizenztext liegt
+in QuartzHub.“ und der Link „Quelltext ansehen“ auf `https://github.com/git/git/tree/v2.53.0`
+(über die Bedienungshilfen gelesen, nicht geklickt). In Hell und Dunkel gesehen; Hell über die
+eigene Einstellung im Wegwerf-Profil, danach zurückgestellt. Der Lizenztext liegt im Release-Paket
+(`Contents/Resources/licenses/git-LICENSE.txt`, `package.sh`), nicht im Debug-Bau.
+
+Kein Befund. Das Werkzeug-Band mit fehlendem oder kaputtem git bleibt offen: Dafür müsste auch das
+mitgelieferte fehlen.
