@@ -1243,3 +1243,43 @@ Ohne Befund. Nebenbei, nicht behoben:
   gespeichert wurde.“ (QuartzControl ebenso).
 - Messwerkzeug: Die Tippsuche in einem geöffneten Picker-Menü traf das Ziel nicht; das Menüelement
   über die Bedienungshilfen drücken ging (`menupick.swift`).
+
+## Stile mit Google Fonts an der App gemessen
+
+Am 2026-11-10 an der Stile-Kopie (`styles/proj`) in 1400×860, mit Freigabe des Nutzers für Google
+Fonts, in Dunkel, die Hinweise auch in Hell. quartz-forms war für den Lauf auf eine Kopie umgebogen.
+Config, Lock, `quartz/styles`, `quartz/static` und `.quartz-gui` vorher gesichert und danach
+zurückgelegt (`cmp`, `diff -r`, `git status` gleich). Tippen in die Schriftfelder kam diesmal an:
+erst auf das Feld klicken, dann `keystroke` in einem eigenen Aufruf.
+
+- **Schriftfelder:** „lora“ schlägt Lora, Explora, Grandiflora One mit Kategorie vor und sagt
+  „Google unterscheidet Groß- und Kleinschreibung. Gemeint ist vermutlich „Lora“.“; „Quatschfont
+  Sans“ sagt „Diesen Namen führt Google nicht (Liste vom 2026-11-05) …“. Bei lokaler Quelle kommen
+  die Familien des Projekts mit ihrer Datei. Ein eigener Wert für `--headerFont` auf Variablen graut
+  das Feld aus, mit „Die Variable --headerFont im Projekt überschreibt diese Schrift …“ und einem
+  Sprung zurück.
+- **Speichern holt bei Google:** Quatschfont Sans: „Google kennt diese Schrift nicht und hat sie
+  stillschweigend weggelassen …“, keine Datei; Lora: sieben Dateien, kein eigener Satz (wie in
+  QuartzControl); zurück auf Noto Sans: „Nicht mehr gewählt und aus dem Projekt entfernt: Lora
+  (7 Dateien).“ Der verwaltete Block kommt jedes Mal neu von Google, mit Googles heutigen
+  `unicode-range`-Werten.
+- **Auslieferung:** Schalter an setzt beim Fonts-Plugin `fontOrigin: selfHosted`. Aus: der Kern auf
+  `googleFonts`/`cdnCaching: true`, „Die lokalen Kopien der Google-Schriften sind entfernt
+  (20 Dateien) …“; die drei eigenen `noto-sans-*.woff2` bleiben. Wieder an holt dieselben 20
+  Dateien. Mit `fontOrigin: googleFonts` von Hand erscheint „Jetzt ins Projekt holen“ mit Warnung;
+  der Knopf schreibt `local`, die Warnung geht.
+- **Font-Quelle:** „Eigene lokale Schriftart“ gespeichert nimmt die 20 Google-Dateien weg, die Config
+  bleibt gleich (wie in QuartzControl unterscheidet nur der verwaltete Block die beiden Quellen).
+  Zurück auf Google holt sie wieder.
+
+Der Schalter „lokal ausliefern“ hat keinen eigenen Titel, sein Label hängt über `AXTitleUIElement`
+an ihm; VoiceOver liest es. Ohne Befund. Nebenbei, nicht behoben:
+
+- Beim Wechsel auf „Eigene lokale Schriftart“ sagt die Meldung „… die Website lädt sie jetzt von
+  Google“, obwohl dann nichts mehr von Google kommt (QuartzControl ebenso, derselbe Schlüssel
+  `styles.googleFontsDropped` für beide Wege).
+- Kein Hinweis zur Schreibweise bei „noto sans“: Das Projekt deklariert Noto Sans selbst, und dazu
+  zählt auch der verwaltete Google-Block. Absicht in QuartzControl (dreiunddreißigstes Review), hier
+  gleich; ein falsch geschriebener Name einer schon geholten Familie bleibt so ohne Satz.
+- Nicht gemessen: „Theme-Schriften“ und „vom Theme“ (brauchen ein Theme, also `npm install`),
+  „n ungenutzte Schriftdateien“ ohne entfernte Familie, „Die Datei nennt kein ‚weight‘“.
