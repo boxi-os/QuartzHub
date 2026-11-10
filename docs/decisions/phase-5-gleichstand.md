@@ -1562,3 +1562,16 @@ Schalter anlegte, habe ich danach entfernt.
 
 Kein Befund. „Während ein Plugin entfernt wird …“ bleibt offen (die Felder sind dabei grau, die
 Abweisung ist auf dieser Seite nicht auslösbar).
+
+## Snapshots: leerer Unterschied an der App gemessen
+
+Am 2026-11-10, am Mini-Projekt aus „Plugins ▸ Installiert: leere Liste …“. Der Satz „Kein
+Textunterschied (z. B. eine Binärdatei).“ kommt nur, wenn `git diff --cached <snapshot> -- <pfad>`
+nichts ausgibt; eine Binärdatei gibt „Binary files … differ“ aus (gemessen am 2026-11-09). Die
+leere Ausgabe ist so nachgestellt: einen Snapshot angelegt, `content/notiz.md` geändert, den
+Snapshot gewählt („1 Datei unterscheidet sich“, „content/notiz.md, geändert“), die Datei auf
+der Platte zurückgesetzt und dann „Unterschied in content/notiz.md anzeigen“ gedrückt. Das Sheet
+zeigt den Pfad, den Satz und „Schließen“, in Hell und Dunkel. Die Liste sagt dabei weiter
+„geändert“: Sie ist der Vergleich vom Zeitpunkt der Auswahl, das Sheet fragt git neu.
+
+Kein Befund.

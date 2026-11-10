@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-10 nach den Schema-Bedingungen der Plugins.
+gezählt, zuletzt am 2026-11-10 nach dem leeren Unterschied der Snapshots.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 175 | 8 | 17 | 12 | 4 | 216 |
-| Plugins und Wartung | 226 | 16 | 4 | 15 | 0 | 261 |
+| Plugins und Wartung | 227 | 15 | 4 | 15 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 216 | 8 | 9 | 10 | 0 | 243 |
-| **Summe** | **617** | **32** | **30** | **37** | **4** | **720** |
+| **Summe** | **618** | **31** | **30** | **37** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -95,5 +95,5 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    Veröffentlichen ohne Netz (2026-11-10, zwei Befunde behoben), Dokumente und Export
    (2026-11-10, drei Befunde behoben, einer davon ein Absturz), Export ohne Netz
    (2026-11-10, zwei Befunde behoben), Frames anlegen und löschen mit `quartz plugin add`
-   (2026-11-10, ohne Befund), Stile mit Google Fonts (2026-11-10, ohne Befund), Themes und Presets mit `npm install` (2026-11-10, ein Befund behoben: c45b5e8), SFTP, rsync und FTP gegen debian-vm (2026-11-10, ein Befund behoben: 06be3b7), Grenzfälle der Vorlagen mit gebauten Paketen (2026-11-10, ohne Befund), Grenzfälle der Stile (2026-11-10, ohne Befund), Dokumente mit Navigation und Sprache (2026-11-10, ohne Befund), git in den Einstellungen (2026-11-10, ohne Befund), Plugins mit leerer Liste und Schema-Bedingungen (2026-11-10, ohne Befund).
+   (2026-11-10, ohne Befund), Stile mit Google Fonts (2026-11-10, ohne Befund), Themes und Presets mit `npm install` (2026-11-10, ein Befund behoben: c45b5e8), SFTP, rsync und FTP gegen debian-vm (2026-11-10, ein Befund behoben: 06be3b7), Grenzfälle der Vorlagen mit gebauten Paketen (2026-11-10, ohne Befund), Grenzfälle der Stile (2026-11-10, ohne Befund), Dokumente mit Navigation und Sprache (2026-11-10, ohne Befund), git in den Einstellungen (2026-11-10, ohne Befund), Plugins mit leerer Liste und Schema-Bedingungen (2026-11-10, ohne Befund), der leere Unterschied der Snapshots (2026-11-10, ohne Befund).
 3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe.
