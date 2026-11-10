@@ -37,7 +37,16 @@ struct PublishPage: View {
         await model.appear()
         pickDefault()
       }
-      .onChange(of: selectedId) { _, id in model.select(id) }
+      .onChange(of: selectedId) { old, id in
+        // A click on the list's empty space cleared the selection: the page below the list went
+        // and the inspector said "Noch kein Ziel … Lege eins an" beside two targets (measured
+        // 2026-11-10). QuartzControl always has one selected; a deleted target is not kept.
+        if id == nil, let old, model.targets.contains(where: { $0.id == old }) {
+          selectedId = old
+          return
+        }
+        model.select(id)
+      }
       .onChange(of: model.targets.map(\.id)) { _, _ in pickDefault() }
       .sheet(item: $editing) { item in TargetSheet(model: model, draft: item.value) { selectedId = $0 } }
     } inspector: {

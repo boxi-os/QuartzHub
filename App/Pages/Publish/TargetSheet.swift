@@ -377,6 +377,8 @@ struct TargetSheet: View {
                   Announce.post(L10n.t("publish.targetForm.linkCopied"))
                 }
                 .controlSize(.small)
+                // Three of them in a row, each "Kopieren" alone (measured 2026-11-10).
+                .accessibilityLabel("\(L10n.t("publish.targetForm.copyLink")): \(PublishWords.downloadLink(format))")
               }
             }
             .padding(.leading, 20)
