@@ -1543,3 +1543,22 @@ eigene Einstellung im Wegwerf-Profil, danach zurückgestellt. Der Lizenztext lie
 
 Kein Befund. Das Werkzeug-Band mit fehlendem oder kaputtem git bleibt offen: Dafür müsste auch das
 mitgelieferte fehlen.
+
+## Plugins ▸ Installiert: leere Liste und Schema-Bedingungen
+
+Am 2026-11-10. **Leere Liste:** ein Mini-Projekt im Scratchpad (die `configuration` von gui-test,
+`plugins: []`, eine Notiz) zeigt „Keine Plugins installiert.“, „0 von 0 aktiv“ und im Inspektor
+„Aktiv 0 von 0“, darunter weiter die Wartung. In Hell (eigene Einstellung im Wegwerf-Profil) und
+Dunkel gesehen.
+
+**Schema-Bedingungen:** an der styles-Kopie (gui-test). quartz-multilanguage hat zwei Optionen mit
+`x-quartz-when`. `switcher.separator` (`"style": "links"`) steht bei der Vorgabe mit „wirkt
+nicht“ und „Wirkt nur, wenn „style“ auf Links steht.“ Das Feld `style` hat keinen Titel und heißt
+deshalb mit seinem Schlüssel; der Wert kommt aus dem deutschen Enum-Text. `seo.xDefault`
+(`"hreflang": true`) hat bei eingeschaltetem `hreflang` keinen Satz; nach dem Ausschalten steht
+dort „Wirkt nur, wenn „hreflang“ eingeschaltet ist.“, in der Config `hreflang: false`. Das
+Wiedereinschalten machte die Config byte-gleich mit der Sicherung; den einen Snapshot, den der
+Schalter anlegte, habe ich danach entfernt.
+
+Kein Befund. „Während ein Plugin entfernt wird …“ bleibt offen (die Felder sind dabei grau, die
+Abweisung ist auf dieser Seite nicht auslösbar).
