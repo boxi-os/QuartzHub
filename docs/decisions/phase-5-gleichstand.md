@@ -1049,3 +1049,24 @@ Nebenbei, nicht behoben:
   sind Fassungen von QuartzControl gemeint, das sagt er nicht.
 - Messwerkzeug: Synthetische Klicks fokussierten Editor und Felder auf dieser Seite nicht immer;
   `AXFocused` über die Bedienungshilfen setzen ging (`focusarea.swift`, `focusfield.swift`).
+
+## Vorlagen an der App gemessen
+
+Fünfzehnter Durchgang, am 2026-11-10, an der Vorlagen-Kopie aus Phase 4 (`tpl/proj`) in 1400×860,
+ohne Netz, hell. Angewendet wurde nichts: Ein Paket kann Plugins hinzufügen, und das läuft über
+`quartz plugin add`. Gespeichert wurde eine Vorlage nach `tpl/out/messung.qtpl` und danach gelöscht.
+
+- **Erstellen:** Name „Messvorlage“ und Beschreibung landen in `manifest.json`; ohne „Inhalt“ fehlt
+  der Baustein; „Alle Texte (1293)“ statt „Nur deine Änderungen (11)“ gibt 30 Sprachen mit 1293
+  Einträgen, darüber der Hinweis, dass für 29 Sprachen die Vergleichsbasis fehlt.
+- **Anwenden:** Vier Pakete aus `~/Documents/QuartzProjekte` über „Vorlage wählen…“ geladen, nur
+  gelesen. Der Plan sagt, welche Plugins eingeschaltet werden, welche Schriftdateien gehen, und bei
+  quartz-forms, was das Projekt behält und welches Formular es schon hat.
+
+Kein Befund. Offen bleiben die Zeilen, die ein gebautes Paket oder ein Anwenden bräuchten:
+Obergrenzen, verknüpfter Content-Ordner, Pfade außerhalb des Projekts, ungültige Frames und
+unbekannte Bausteine, ein Seitenwechsel während des Imports; dazu die Plan-Sätze für ausgeschaltete
+Plugins und fehlende CSS-Variablen, die in keinem der vier Pakete vorkamen.
+
+Messwerkzeug: Die Felder für Name und Beschreibung haben ihren Namen über das Titel-Element (wie
+Schalter im `Form`), nicht als Beschreibung; `focusfield.swift` nimmt deshalb auch die Kennung.
