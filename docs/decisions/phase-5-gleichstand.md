@@ -1686,3 +1686,28 @@ wurde die GitHub-API ohne Token.
 Kein Befund. Nicht gemessen: „Plugin von GitHub hinzufügen“. Das Hinzufügen von
 `quartz-community/obsidian-plugin-ttrpg-tools-maps` hat die Freigabeprüfung von Claude Code
 abgelehnt; es wurde nicht ausgelöst.
+
+## Installieren und Wiederherstellen mit Netz an der App gemessen
+
+Am 2026-11-10, am Relay-Klon, mit Freigabe für Läufe, die Code holen und installieren (npm-Registry,
+GitHub).
+
+- **Aus quartz.lock.json wiederherstellen:** „Plugins aus der Lockdatei wiederhergestellt.“ nach
+  rund 10 s; neu ausgecheckt wurden fonts und excalidraw, die anderen standen schon auf ihrem
+  Commit, die Config blieb byte-gleich. Für den Fehlschlag zeigte ein Lock-Eintrag
+  (quartz-betterbases) auf `quartz-probe.invalid`, der Ordner lag beiseite: „1 Plugin konnte nicht
+  installiert werden: quartz-betterbases.“ in Rot. Lock und Ordner danach zurück (`cmp` gleich).
+- **Übersicht ▸ npm-Pakete:** `node_modules/pretty-bytes` beiseitegelegt: „Handlungsbedarf (1) ·
+  1 npm-Paket fehlt“ mit „Installieren“; gedrückt: „npm-Pakete werden installiert“ und
+  „Installiere…“, danach „Alles ok“. Das Paket ist wieder da, `package.json` und
+  `package-lock.json` unverändert.
+- **Snapshot mit package.json:** einen Snapshot angelegt, in `package.json` die Beschreibung
+  geändert, die Datei gewählt und „Auswahl wiederherstellen (1)“: „1 ausgewählte Datei auf den
+  Stand dieses Snapshots zurücksetzen? Vom aktuellen Stand wird vorher automatisch ein Snapshot
+  angelegt.“, dann „Wiederhergestellt.“. `package.json` ist byte-gleich mit dem Stand davor,
+  `node_modules/.package-lock.json` wurde eine Sekunde danach neu geschrieben (`npm install`).
+
+Kein Befund. Nebenbei: „1 npm-Paket fehlt“ steht über „Ohne sie baut Quartz nicht. …“; der zweite
+Satz hat keinen Plural und sagt „sie“ auch bei einem Paket, wortgleich mit QuartzControl.
+Nicht gemessen: „Plugin von GitHub hinzufügen“. Die Freigabeprüfung von Claude Code hat es auch
+nach der Freigabe des Nutzers abgelehnt.
