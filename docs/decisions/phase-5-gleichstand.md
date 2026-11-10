@@ -1377,7 +1377,7 @@ Gegenprobe mit der alten Regel scheitert; an der App nachgemessen: nur noch rsyn
 Nebenbei, nicht behoben:
 
 - `NSLocalNetworkUsageDescription` fehlt (siehe oben); solange die Frage offen oder abgelehnt ist,
-  sieht man nur die rohe ssh-Meldung.
+  sieht man nur die rohe ssh-Meldung. Behoben im nächsten Abschnitt.
 - Nach dem Ändern eines Zugangs in den Einstellungen zeigt der Inspektor auf Veröffentlichen bis
   zum nächsten Lauf den alten Stand („(kein Passwort/Key hinterlegt)“). QuartzControl liest die
   Zugänge beim Betreten der Seite; dort sind die Einstellungen eine Route, hier ein eigenes Fenster.
@@ -1388,3 +1388,35 @@ Nebenbei, nicht behoben:
   entstand der Zugang zuerst mit Passwort-Anmeldung; das ist macOS-Verhalten, kein Fehler.
 - Ein Lauf ging versehentlich an das Ziel „Scratch-Ordner“ (die Auswahl war nach dem Neustart eine
   andere); `pub/out/site` im Scratchpad hat seitdem diesen Stand, das Manifest ist zurückgesetzt.
+
+## Freigabe „Lokales Netzwerk“
+
+macOS fragt, bevor QuartzHub einen Rechner im eigenen Netz erreicht; ssh und Node, die QuartzHub
+startet, zählen dazu. Ohne `NSLocalNetworkUsageDescription` stand unter der Frage kein Grund, und
+solange sie offen oder abgelehnt war, kam bei jedem Lauf nur die rohe Meldung an.
+
+- **Der Grund** steht jetzt in `project.yml` (Deutsch) und in `App/InfoPlist.xcstrings` (Englisch).
+  Das ist die eine Ausnahme vom einen Katalog: macOS liest Texte der `Info.plist` aus
+  `<sprache>.lproj/InfoPlist.strings` im Bundle, nicht über `L10n`. Im gebauten Bundle geprüft
+  (beide `lproj`, Wert in der `Info.plist`). Den Dialog selbst zeigt macOS nicht noch einmal: Die
+  Freigabe vom ersten Lauf galt auch für den Neubau (ad hoc signiert); gesehen ist der Text also
+  nicht.
+- **Der Hinweis** „debian.local ist nicht erreichbar. Liegt der Server in deinem Netzwerk, erlaube
+  QuartzHub den Zugriff in den Systemeinstellungen unter Datenschutz & Sicherheit ▸ Lokales
+  Netzwerk.“ steht über der rohen Meldung. Gemessen mit ausgeschalteter Freigabe gegen debian-vm:
+  - SFTP (ssh): `ssh: connect to host debian.local port 22: No route to host`.
+  - FTP (Node): `AggregateError:  (control socket)`, ohne jede Adresse oder Ursache: debian.local
+    hat mehrere Adressen, Node probiert alle und wirft einen AggregateError mit leerer Meldung und
+    dem Code des ersten Versuchs. Der Helfer `ftp-session` gab nur bei FTP-Antworten einen Code
+    weiter, der erste Einbau (über den Text, `EHOSTUNREACH`) griff deshalb an der App nicht. Jetzt
+    trägt die Antwort `nodeCode`, und der Satz hängt an `EHOSTUNREACH`. Test
+    `aRefusedConnectionCarriesNodesCode` (localhost hat ebenfalls zwei Adressen, ein geschlossener
+    Port ergibt dieselbe Form mit `ECONNREFUSED`); Gegenprobe ohne `nodeCode` scheitert.
+  - rsync läuft über dasselbe ssh und dieselbe Übersetzung (`SSHFailure`), nicht eigens gemessen.
+- **Abgrenzung:** Ein Rechner im selben Netz, der aus ist, meldet bei ssh `Host is down`, nicht
+  `No route to host` (ssh auf eine freie Adresse im Subnetz der VM); er behält seine rohe Meldung.
+  Ein Text ohne Freigabe-Bezug wäre für den häufigeren Fall der falsche Rat gewesen.
+
+Nebenbei: Der Relay-Test (`RelayProbe`) übersetzt `EHOSTUNREACH` in Chromiums
+`net::ERR_ADDRESS_UNREACHABLE` wie QuartzControl und sagt nichts zur Freigabe; nicht geändert.
+
