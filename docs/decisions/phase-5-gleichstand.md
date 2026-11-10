@@ -1151,13 +1151,17 @@ Behoben:
   Mehrzahl ist QuartzControls Wortlaut. Ein Test prüft „1 Seite“, die Gegenprobe ohne die
   Katalog-Änderung scheitert.
 
-Offen, zur Entscheidung:
+Entschieden mit dem Nutzer (2026-11-10), eine Abweichung von QuartzControl:
 
-- **Das Deckblatt läuft bei kleineren Formaten über.** `.cover { height: 230mm }` passt nur in A4
-  hoch (257 mm Satzspiegel). In A5 quer (108 mm) steht das Bild abgeschnitten auf Seite 1, Titel,
-  Untertitel und Datum auf Seite 2, mit Fußzeile. Ebenso betroffen sind A4 quer, A5 hoch und
-  Letter quer. QuartzControl hat dieselbe Zeile (`documentHtml.ts`), und die Golden Files halten
-  sie für alle Formate fest. Eine Korrektur wäre eine Abweichung von QuartzControl.
+- **Das Deckblatt richtet sich nach dem Papier.** `.cover { height: 230mm }` passte nur in A4 hoch
+  (257 mm Satzspiegel). In A5 quer (108 mm) stand das Bild abgeschnitten auf Seite 1, Titel,
+  Untertitel und Datum auf Seite 2, mit Fußzeile. Auch A4 quer, A5 hoch und Letter quer liefen über.
+  QuartzControl hat dieselbe Zeile (`documentHtml.ts`). Jetzt ist die Höhe der Satzspiegel des
+  Papiers minus dieselben 27 mm (`DocumentHTML.coverHeightMM`). A4 hoch bleibt damit QuartzControls
+  230 mm, byte-gleich. Die Golden-Tests erwarten QuartzControls Ausgabe mit genau dieser einen
+  Ersetzung, ein Test hält die Höhen je Format fest; mit der alten Zeile scheitern 14 Prüfungen.
+  An der App: A5 quer, A4 quer, Letter quer und A4 hoch haben das Deckblatt ganz auf Seite 1, ohne
+  Fußzeile.
 
 Nebenbei, nicht behoben:
 
