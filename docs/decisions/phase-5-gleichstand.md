@@ -1766,3 +1766,21 @@ drittes Projekt `ohne-vorlage`, ohne Basis-Template angelegt (keine Plugins unte
   -multilanguage und -navigations von GitHub geklont.
 
 Sonst kein Befund.
+
+## Projektbild im Kopfbereich mit Installation gemessen
+
+Am 2026-11-10, an einem vierten Projekt `ohne-box` (ohne Basis-Template angelegt, also ohne
+quartz-layout-box). Konfiguration ▸ Projektbild: „Im Kopfbereich der Website zeigen“ ist ohne Bild
+gesperrt („Erst ein eigenes Projektbild wählen.“). Ein Bild gewählt (ein Systemsymbol als PNG,
+256 × 256): „Liegt als quartz/static/icon.png im Projekt, 256 × 256 Pixel.“ und „Braucht das Plugin
+quartz-layout-box, QuartzHub bietet beim Einschalten an, es zu installieren.“ Eingeschaltet: „Plugin
+quartz-layout-box installieren? Das Bild im Kopfbereich wird damit gebaut. Vorher speichert
+QuartzHub die ungespeicherten Änderungen dieser Seite.“; „Installieren“ holte es von GitHub. Danach
+steht der Schalter an, „Als Link zur Startseite, im dunklen Modus mit dem dunklen Bild.“, und die
+Seite sagt „Nicht gespeichert“: Der Eintrag für den Kopfbereich ist ein Entwurf, wie in
+QuartzControl („saved with the page's Save button like every other field“). Nach ⌘S steht in der
+Config ein zweiter layout-box-Eintrag mit `<img src="{{root}}/static/icon.png" …>` und
+`position: header`.
+
+Kein Befund. Nebenbei gesehen, gleich in beiden Apps: Ohne Basis-Template bleibt die Sprache der
+Website `en-US` von `quartz create`; nach der App-Sprache gesetzt wird sie nur nach einem Template.
