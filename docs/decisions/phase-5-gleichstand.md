@@ -999,3 +999,53 @@ Nebenbei, nicht behoben (QuartzControl verhält sich gleich, gegen dessen Code g
 
 Nur QuartzHub: Ein Feld der Zeilenhöhen, durch das der Fokus nur lief, schreibt einen leeren Eintrag
 (`rowSizes: ['4rem', '']`); leer heißt „auto“, es ist also nur Rauschen in der Datei.
+
+## Stile an der App gemessen
+
+Vierzehnter Durchgang, am 2026-11-10, an der Stile-Kopie aus Phase 4 (`styles/proj`, gui-test mit
+Fonts-Plugin) in 1400×860, ohne Netz, in Dunkel. Config, Lock, `quartz/styles`, `.quartz-gui` und
+das gebaute Stylesheet vorher gesichert und danach zurückgelegt (`cmp`, `diff -r`; `git status`
+danach wie davor). Gespeichert wurde nur, was die Config nicht berührt: In dieser Kopie steht die
+Font-Quelle auf Google mit lokaler Auslieferung, und jedes Speichern der Config holt dann die
+Schriften erneut von Google. Deshalb sind Community-Themes (Katalog und Theme brauchen Netz oder
+ein aktives Theme) und die Schriftfelder offen geblieben.
+
+- **Seite:** Ein Entwurf übersteht den Reiterwechsel, das Verlassen fragt, der Inspektor nennt die
+  Kaskade („Kein Community-Theme aktiv … 68 Variable(n) überschrieben“). Die gelöschte Zeile
+  `@use "./quartzcontrol";` kommt beim Speichern zurück, mit Satz.
+- **Basis:** Umschalten auf „Eigene lokale Schriftart“ mit seinem Satz (nicht gespeichert); ohne
+  Basis-URL und mit lokaler Auslieferung die rote Warnung; Schriftimport mit „weight 400 aus der
+  Datei gelesen“, ohne die Config zu ändern.
+- **Variablen:** Filter, Teilen und Zusammenführen der Modi, Zurücksetzen, Entfernen einer eigenen
+  Variable mit Rückfrage, der Hinweis auf custom.scss, ohne Build-Output und „Neu einlesen“,
+  „nicht auflösbar (eine Variable darin hat hier keinen Wert)“ an einer Probe im gebauten CSS.
+- **Eigenes CSS:** Umbenennen, Nach oben/unten, Einbinden einer fremden Datei, Importieren, die
+  verwaltete Datei mit Warnung, der veraltete Entwurf (Entwurf in `_quartzcontrol.scss`, dann ein
+  Schriftimport) mit „Von Festplatte neu laden“, „Komponente wählen“, das Nachschlagen (Suche,
+  `var(--…)`, Wert, ⌥-Klick kopiert), Callout-Grundgerüste, Original-Styles eines Plugins, Kopieren
+  aus „Aktuell geltende Farben und Schriften“.
+
+Vier Befunde, behoben:
+
+1. **Absturz bei ⌘Z.** Im Editor getippt, Reiter gewechselt, zurück, ⌘Z: QuartzHub stürzte in
+   `-[_NSUndoStack popAndInvoke]` ab (Bericht `QuartzHub-2026-11-10-005913.ips`). Der `NSTextView`
+   legte seine Schritte in den Undo-Manager des Fensters, und die überlebten den abgebauten Editor.
+   Jetzt hat jeder `CodeEditor` einen eigenen (`undoManager(for:)`), der beim Abbau geleert wird;
+   derselbe Ablauf läuft durch, ⌘Z und ⇧⌘Z im Editor wirken weiter. Betrifft jeden Code-Editor der App.
+2. **„Seit 1.1“** im Hinweis auf custom.scss: eine Versionsnummer von QuartzControl. Jetzt ohne.
+3. **Verschieben ohne Ziel:** Nach oben/unten sagte nur den Dateinamen. Jetzt „„foundation.scss“
+   steht jetzt an Stelle 1 von 14 in der Ladereihenfolge.“ (QuartzControl sagt hier nichts.)
+4. **Namenlose Farbfelder** bei den Callout-Typen: drei Knöpfe je Zeile ohne Namen. Jetzt
+   „[!note] --color: Wert einfügen“.
+
+Nebenbei, nicht behoben:
+
+- Eine Änderung von außen an custom.scss wird beim Speichern eines Entwurfs ohne Hinweis
+  überschrieben; der Schutz gilt nur für QuartzHubs eigene Schreiber (in QuartzControl ebenso).
+- Einmal zeichnete der Editor von Eigenes CSS nichts, obwohl die Bedienungshilfen den Text lasen;
+  in fünf Versuchen danach nicht wieder nachzustellen.
+- Die Gruppe „Callout-Typen“ im Inspektor klappt nur am Pfeil auf, nicht an der Beschriftung.
+- Der Satz zum Zusammenlegen alter Vorlagen-Stylesheets spricht von „bis 1.0“ und „seit 1.1“; da
+  sind Fassungen von QuartzControl gemeint, das sagt er nicht.
+- Messwerkzeug: Synthetische Klicks fokussierten Editor und Felder auf dieser Seite nicht immer;
+  `AXFocused` über die Bedienungshilfen setzen ging (`focusarea.swift`, `focusfield.swift`).

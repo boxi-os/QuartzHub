@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-10 nach Layout.
+gezählt, zuletzt am 2026-11-10 nach Stile.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 174 | 9 | 17 | 12 | 4 | 216 |
 | Plugins und Wartung | 224 | 18 | 4 | 15 | 0 | 261 |
-| Gestaltung und Veröffentlichen | 122 | 92 | 9 | 20 | 0 | 243 |
-| **Summe** | **520** | **119** | **30** | **47** | **4** | **720** |
+| Gestaltung und Veröffentlichen | 144 | 70 | 9 | 20 | 0 | 243 |
+| **Summe** | **542** | **97** | **30** | **47** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -90,5 +90,6 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    der Vorschau (2026-11-09, vier Befunde behoben), Plugins ▸ Zusätzliche Inhalte (2026-11-09,
    sieben Befunde behoben), Plugins ▸ Mehrsprachigkeit (2026-11-09, ein Befund behoben),
    Plugins ▸ Formulare (2026-11-09, zehn Befunde behoben), Updates, Snapshots und Git-Sync
-   (2026-11-09, ohne Befund), Layout (2026-11-10, fünf Befunde behoben).
+   (2026-11-09, ohne Befund), Layout (2026-11-10, fünf Befunde behoben),
+   Stile (2026-11-10, vier Befunde behoben, einer davon ein Absturz).
 3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe.
