@@ -1331,3 +1331,60 @@ Nebenbei, nicht behoben:
 - `ServerScanTests.aPortNobodyHoldsIsClosedAndAPortSomeoneHoldsIsOpen` scheiterte einmal im vollen
   Lauf (der Port war nach dem Belegen nicht offen); allein läuft die Suite grün.
 - Nicht gemessen: „Katalog nicht ladbar“ (braucht einen gescheiterten `npm search`).
+
+## Veröffentlichen gegen debian-vm gemessen
+
+Am 2026-11-10 an der Publish-Kopie (`pub/proj`, 465 Dateien in `public/`), Dunkel, mit Freigabe des
+Nutzers für SFTP, rsync und FTP gegen debian-vm. Vorher `.quartz-gui`, Testprofil und Config
+gesichert, die Ziele auf Testbuch und Scratch-Ordner gefiltert, quartz-forms auf die Kopie
+umgebogen; danach alles zurück (`diff -r` leer, `git status` gleich), auf der VM die Testordner
+gelöscht. Einen eigenen Testschlüssel bei `qchost` einzutragen hat die Rechteprüfung abgelehnt;
+SFTP und rsync liefen deshalb als `boxi` mit dessen Schlüsseldatei (die App bekommt nur den Pfad),
+FTP als `qchost` mit dem Testpasswort, Geheimnisse nur im Speicher (`-QHMemorySecrets`).
+
+- **macOS fragt nach dem lokalen Netz.** Der erste Lauf scheiterte sofort mit `ssh: connect to host
+  debian.local port 22: No route to host`, dazu die Systemfrage „Darf „QuartzHub“ nach Geräten in
+  lokalen Netzwerken suchen?“. Erst nach „Erlauben“ (durch den Nutzer) erreichen die Kindprozesse
+  der App die VM; das Terminal hatte die Freigabe schon. `project.yml` setzt keinen
+  `NSLocalNetworkUsageDescription`, der Dialog zeigt also nur den Systemsatz.
+- **SFTP:** Ziel und Zugang im Formular angelegt; der erste Kontakt fragt „debian.local ist zum
+  ersten Mal kontaktiert worden.“ mit dem Fingerprint, der `ssh-keyscan` entspricht. „Verbinden und
+  merken“ legt `hostKey` (fingerprint, blob) am Zugang ab, der Inspektor zeigt „Host-Key bestätigt“
+  mit „Host-Key vergessen“. 465 Dateien, alle sha-256-gleich, 644 und Ordner 775 (umask der VM).
+  `~/.ssh/id_ed25519` wird wie in QuartzControl zum absoluten Pfad.
+- **rsync:** erst wählbar, wenn der Zugang eine Schlüsseldatei hat (mit Passwort: „rsync ist mit
+  Passwort-Anmeldung nicht möglich …“). 465 Dateien, gleich, Ordner 755. Nach Änderungen von Hand
+  sagt der Diff vom Server „Geändert: 1 · Entfernt: 3“; der Lauf löscht die fremden Dateien, auch
+  aus einem Ordner von boxi mit 555 (rsync gibt sich selbst Schreibrecht).
+- **FTP:** als qchost mit relativem Pfad `qhp5-ftp`, der ab dem Anmeldeverzeichnis zählt: 465
+  Dateien, gleich, 644/755. Ohne FTPS steht die Warnung zum Klartext am Zugang. Mit FTPS gegen
+  vsftpd ohne TLS: `FTPError: 530 Please login with USER and PASS.`, roh wie bei QuartzControl
+  (`${output}\n${String(err)}`, auch mit derselben leeren ersten Zeile). Ein FTPS-Lauf mit TLS ist
+  nicht gemessen.
+- **Nicht löschbare Datei** (Ordner von root im Ziel, bei SFTP und FTP dazu ein Eintrag im
+  Manifest): SFTP „gesperrt/alt.html konnte auf dem Server nicht gelöscht werden (delete:
+  Permission denied …). Der nächste Upload versucht es wieder.“, FTP ebenso mit „550 Delete
+  operation failed“; der Eintrag bleibt im Manifest, der Lauf zählt als erfolgreich.
+
+**Befund, behoben (06be3b7):** Bei rsync stand über `delete_file: unlink(gesperrt/alt.html)
+failed: Permission denied (13)` der Satz „Der Server hat die Anmeldung als boxi@debian.local
+abgelehnt … Prüfe, ob genau dieser Schlüssel …“, obwohl die Anmeldung geklappt hatte.
+`SSHFailure` nahm jedes „Permission denied (“ für ssh's abgelehnte Anmeldung; QuartzControl prüft
+„(publickey“, was einen Server nur mit Passwort verfehlt. Jetzt muss die Klammer Namen von
+Anmeldeverfahren enthalten. Test `aRefusedDeletionIsNotARefusedLogin` mit der Ausgabe von der VM,
+Gegenprobe mit der alten Regel scheitert; an der App nachgemessen: nur noch rsyncs eigene Zeilen.
+
+Nebenbei, nicht behoben:
+
+- `NSLocalNetworkUsageDescription` fehlt (siehe oben); solange die Frage offen oder abgelehnt ist,
+  sieht man nur die rohe ssh-Meldung.
+- Nach dem Ändern eines Zugangs in den Einstellungen zeigt der Inspektor auf Veröffentlichen bis
+  zum nächsten Lauf den alten Stand („(kein Passwort/Key hinterlegt)“). QuartzControl liest die
+  Zugänge beim Betreten der Seite; dort sind die Einstellungen eine Route, hier ein eigenes Fenster.
+- „von 2 Projekten verwendet“ an einem Zugang, den zwei Ziele desselben Projekts nutzen: gezählt
+  werden Ziele. QuartzControl zählt genauso (`usage.length`) mit demselben Text.
+- Ohne gewähltes Ziel sagt der Inspektor „Noch kein Ziel … Lege eins an“, obwohl es Ziele gibt.
+- Eine Return-Taste bei geschlossenem Menü speichert das Zugangsformular (Standardtaste), so
+  entstand der Zugang zuerst mit Passwort-Anmeldung; das ist macOS-Verhalten, kein Fehler.
+- Ein Lauf ging versehentlich an das Ziel „Scratch-Ordner“ (die Auswahl war nach dem Neustart eine
+  andere); `pub/out/site` im Scratchpad hat seitdem diesen Stand, das Manifest ist zurückgesetzt.
