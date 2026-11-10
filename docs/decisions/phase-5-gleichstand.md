@@ -1625,3 +1625,17 @@ hochladen“ und „Lesbar machen und neu hochladen“, beide nicht gedrückt.
 Kein Befund auf dieser Seite. Offen: „keine verschlüsselte Ablage“ (mit `-QHMemorySecrets` gibt es
 immer eine). Messwerkzeug: Die Verbindung braucht eine UUID als Kennung; mit „probe-conn“ wies
 „dort ausschließen“ mit „Das Feld „connectionId“ ist ungültig.“ ab, richtig so.
+
+## Plugins ▸ Formulare: nicht gebaute Seiten
+
+Am 2026-11-10, am Klon aus „Fenster „Projekte“: Entfernen mit Relay-Geheimnissen“. Dessen
+`content/` ist ein echter Ordner (APFS-Klon der pub-Kopie, kein Link in den Vault); dort kamen drei
+Seiten mit `{{form:kontakt}}` dazu: `entwurf.md` (`draft: true`), `ohne.md` (ohne `publish`) und
+`private/geheim.md` (gui-test ignoriert `private`). Nach „Neu suchen“ unter „Steht auf“: „Entwurf
+· entwurf.md · Entwurf, wird nicht gebaut“, „Kontakt · kontakt.md · Zeigen“. Mit explicit-publish
+eingeschaltet (Config des Klons) dazu „Ohne Freigabe · ohne.md · ohne „publish: true“, wird nicht
+gebaut“; `kontakt.md` hat `publish: true` und behält „Zeigen“, der Entwurf bleibt Entwurf. Die Seite
+unter `private/` steht nicht in der Liste („Gesucht in den Seiten, die Quartz baut.“). Die Zeile
+des Formulars zählt danach „auf 3 Seiten“, die nicht gebauten mit.
+
+Kein Befund.
