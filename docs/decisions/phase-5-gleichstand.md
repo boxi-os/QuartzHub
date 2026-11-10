@@ -1596,3 +1596,32 @@ fragen dann (`askRemove`). Gegenprobe nach einem Neustart ohne Geheimnisse: Adre
 ohne QuartzHub zu verlassen gefragt, jetzt mit dem Satz über die Geheimnisse; abgebrochen, das
 Projekt blieb in der Liste. Offen bleibt die vierte Fassung (laufender Server und Geheimnisse): Der
 Server zeigt gui-test, und dessen Seiten laden KaTeX vom CDN.
+
+## Plugins ▸ Formulare: Relay mit erfundenen Zielen
+
+Am 2026-11-10, am selben Klon wie „Fenster „Projekte“: Entfernen mit Relay-Geheimnissen“: drei
+erfundene SFTP-Ziele auf der Verbindung `relay-probe.invalid` („Probe Website“ `/www` mit rsync und
+„Gelöschtes entfernen“, „Probe Relay“ `/www` mit sftp, „Probe Relay rsync“ `/relay` mit rsync). Der
+Zustand des Relays entsteht lokal (quartz-forms in ein Temp-Verzeichnis); ins Netz gehen nur „Relay
+hochladen“ und „Lesbar machen und neu hochladen“, beide nicht gedrückt.
+
+- **Konflikt:** mit „Probe Relay“ und Unterordner `forms` steht unter dem Unterordner „Das Ziel
+  „Probe Website“ überträgt per rsync und löscht, was der Build nicht hat, also auch „forms“.“ und
+  „Noch nicht bereit: … Ein Website-Ziel würde das Relay löschen.“ „„forms“ dort ausschließen“
+  schreibt `excludes: ["forms"]` in das Website-Ziel; danach sind beide Sätze weg.
+- **Ziel und rsync:** „Probe Relay rsync“ gewählt (`targetId` in `forms-relay.json`). „for ms“ gibt
+  „Einen Unterordner mit Leerzeichen kann rsync nicht sicher übertragen, und das Ziel lädt mit rsync
+  hoch. …“, „form$s“ „Einen Unterordner mit „$“ …“. Der Satz sperrt das Hochladen nicht, auch in
+  QuartzControl nicht (`canUpload` in `FormsRelay.tsx`); die Abweisung kommt erst beim Hochladen.
+- **Secret je Formular:** „kontakt“ bekam in der Config einen eigenen Anbieter (`spam: {captcha:
+  turnstile, captchaSiteKey: …}`). Dann steht „Captcha-Secret für „kontakt““ mit „Dieses Formular hat
+  unter „Spamschutz“ einen eigenen Anbieter oder Site-Key (turnstile), also auch ein eigenes
+  Secret.“, das Secret für alle entfällt, und „Noch nicht bereit“ nennt „Captcha-Secret fehlt für
+  kontakt.“. Gespeichert („gesetzt“, „Captcha-Secret gespeichert.“, in `relay-secrets.json` nur
+  `captchaSecrets: ["kontakt"]`), entfernt ohne Rückfrage, danach wieder „fehlt“.
+- Eine Empfänger-Adresse unter „@example.“ wird abgewiesen („Eine Adresse unter „@example.“ hält
+  das Relay für den Platzhalter …“), wie am 2026-11-09; das kostete hier einen Versuch.
+
+Kein Befund auf dieser Seite. Offen: „keine verschlüsselte Ablage“ (mit `-QHMemorySecrets` gibt es
+immer eine). Messwerkzeug: Die Verbindung braucht eine UUID als Kennung; mit „probe-conn“ wies
+„dort ausschließen“ mit „Das Feld „connectionId“ ist ungültig.“ ab, richtig so.
