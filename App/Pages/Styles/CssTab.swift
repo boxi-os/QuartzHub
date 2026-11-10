@@ -510,7 +510,9 @@ struct CssFilesInspector: View {
     guard let from = order.firstIndex(of: file.relativePath), order.indices.contains(from + delta) else { return }
     order.swapAt(from, from + delta)
     await applyOrder(order)
-    Announce.post(file.name)
+    // Where it went, as every other move in QuartzHub; the bare file name said nothing about that
+    // (measured 2026-11-10).
+    Announce.post(L10n.t("styleEditor.files.movedAnnounce", ["name": file.name, "n": String(from + delta + 1), "count": String(order.count)]))
   }
 
   private func delete(_ file: StyleFiles.File) async {

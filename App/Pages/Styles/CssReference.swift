@@ -141,6 +141,9 @@ struct CssVariableReference: View {
         }
         .buttonStyle(.plain)
         .help(L10n.t("styleEditor.cssVars.insertValueHint", ["value": literal]))
+        // A swatch is a picture; without this the three buttons of every row had no name at all
+        // (measured 2026-11-10 through the accessibility tree).
+        .accessibilityLabel(L10n.t("styleEditor.cssVars.insertCalloutValueLabel", ["callout": "[!\(callout.type)]", "name": name]))
       }
       Button("[!\(callout.type)]") {
         var lines = [".callout[data-callout=\"\(callout.type)\"] {", "  --color: \(callout.color);", "  --border: \(callout.border);"]

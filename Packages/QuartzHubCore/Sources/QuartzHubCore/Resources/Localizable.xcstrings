@@ -43894,6 +43894,23 @@
         }
       }
     },
+    "styleEditor.cssVars.insertCalloutValueLabel" : {
+      "comment" : "Stile ▸ Eigenes CSS, inspector, Callout-Typen: accessible name of a colour swatch, e.g. [!warning] --color",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{callout}} {{name}}: Wert einfügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{callout}} {{name}}: insert the value"
+          }
+        }
+      }
+    },
     "styleEditor.cssVars.insertHint" : {
       "localizations" : {
         "de" : {
@@ -44579,6 +44596,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Move up"
+          }
+        }
+      }
+    },
+    "styleEditor.files.movedAnnounce" : {
+      "comment" : "Stile ▸ Eigenes CSS: announced after Nach oben/Nach unten in the load order",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„{{name}}“ steht jetzt an Stelle {{n}} von {{count}} in der Ladereihenfolge."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“{{name}}” is now at position {{n}} of {{count}} in the load order."
           }
         }
       }
@@ -45792,13 +45826,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "custom.scss setzt {{names}} auch selbst. Seit 1.1 steht seine Regel nach denen dieser Seite und gewinnt, wo beide gleich spezifisch sind – die Website zeigt dann den Wert aus custom.scss, nicht den hier."
+                  "value" : "custom.scss setzt {{names}} auch selbst. Seine Regel steht nach denen dieser Seite und gewinnt, wo beide gleich spezifisch sind – die Website zeigt dann den Wert aus custom.scss, nicht den hier."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "custom.scss setzt {{count}} dieser Variablen auch selbst: {{names}}. Seit 1.1 steht seine Regel nach denen dieser Seite und gewinnt, wo beide gleich spezifisch sind – die Website zeigt dann die Werte aus custom.scss, nicht die hier."
+                  "value" : "custom.scss setzt {{count}} dieser Variablen auch selbst: {{names}}. Seine Regel steht nach denen dieser Seite und gewinnt, wo beide gleich spezifisch sind – die Website zeigt dann die Werte aus custom.scss, nicht die hier."
                 }
               }
             }
@@ -45810,13 +45844,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "custom.scss sets {{names}} itself as well. Since 1.1 its rule comes after this page’s and wins where both are equally specific – the site then shows the value from custom.scss, not the one here."
+                  "value" : "custom.scss sets {{names}} itself as well. Its rule comes after this page’s and wins where both are equally specific – the site then shows the value from custom.scss, not the one here."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "custom.scss sets {{count}} of these variables itself as well: {{names}}. Since 1.1 its rule comes after this page’s and wins where both are equally specific – the site then shows the values from custom.scss, not the ones here."
+                  "value" : "custom.scss sets {{count}} of these variables itself as well: {{names}}. Its rule comes after this page’s and wins where both are equally specific – the site then shows the values from custom.scss, not the ones here."
                 }
               }
             }
