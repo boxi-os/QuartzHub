@@ -1420,3 +1420,34 @@ solange sie offen oder abgelehnt war, kam bei jedem Lauf nur die rohe Meldung an
 Nebenbei: Der Relay-Test (`RelayProbe`) übersetzt `EHOSTUNREACH` in Chromiums
 `net::ERR_ADDRESS_UNREACHABLE` wie QuartzControl und sagt nichts zur Freigabe; nicht geändert.
 
+
+## Vorlagen: Grenzfälle an der App gemessen
+
+Nachtrag zu „Vorlagen an der App gemessen“, am 2026-11-10, an derselben Kopie (`tpl/proj`), ohne
+Netz, hell. Die Fälle, die kein vorhandenes Paket enthielt, kamen aus gebauten Paketen im
+Scratchpad (`tpl/grenz/`), geladen über „Vorlage wählen…“:
+
+- **`grenzfaelle.qtpl`**: ein Frame mit zwei Bereichen „header“, ein Plugin-Eintrag
+  `created-modified-date` mit `enabled: false`, ein Stylesheet mit `var(--tpl-fehlt)`, je ein Pfad
+  mit `..` in Inhalt, Eigenem CSS und Statischen Dateien, dazu ein Baustein `zukunft`. Der Plan
+  nennt jeden Fall mit QuartzControls Satz: „1 Frame nicht lesbar“ mit Grund, „Schaltet
+  „created-modified-date“ aus.“, die fehlende Variable, dreimal „Wird abgelehnt: … würde außerhalb
+  des Projekts geschrieben werden.“ und die unbekannten Bausteine. Ohne `source.projectName` steht
+  „aus dem Projekt „unbekannt““, wie dort (`templates.unknownProject`).
+- **Ordner im alten Format** (`manifest.json` mit `categories`, `colors.json`): Abzeichen „Altes
+  Format“, Farben als „1 wird ersetzt“.
+- **Verknüpfter Content-Ordner:** `content` der Kopie kurz als Symlink; „Inhalt, ändert nichts“ mit
+  „Wird übersprungen: Der Content-Ordner dieses Projekts ist ein Link …“. Danach zurückgestellt.
+- **Seitenwechsel im Import:** Ein reiner Farb-Import ist in unter einer Sekunde fertig, ein Inhalt
+  mit 4000 Dateien in rund 1,4 s; beides zu kurz. Mit 400 MB Zufallsbytes in der Kopie braucht der
+  Snapshot davor rund 10 s. 0,57 s nach „Anwenden“ zu Stile und zurück: „Wird angewendet…“ und
+  „Snapshot wird angelegt…“, danach „Fertig: alles übernommen, nichts blieb offen.“ Die Config war
+  8,6 s nach der Rückkehr geschrieben, der Lauf also wirklich noch offen.
+- **Obergrenzen:** Mit 27 MB unter `quartz/static` fehlt „Statische Dateien“ in „Vorlage
+  erstellen“, mit 106 MB im Content „Inhalt“; beide Male „11 von 11 Bausteinen“ und kein Satz.
+  QuartzControl tut dasselbe: `inspectProject` fängt den Fehler von `collect` ab und lässt den
+  Baustein weg. Gleichstand, aber der Satz „eine Vorlage ist keine Mediathek“ erscheint so in
+  keiner der beiden Apps (Nebenbefund, nicht geändert).
+
+Kein Befund. Aufgeräumt: Config und Ziele md5-gleich mit der Sicherung, die großen Dateien und
+`content/importlauf/` gelöscht, die drei Snapshots des Durchgangs entfernt.
