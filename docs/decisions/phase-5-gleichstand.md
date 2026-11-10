@@ -1070,3 +1070,54 @@ Plugins und fehlende CSS-Variablen, die in keinem der vier Pakete vorkamen.
 
 Messwerkzeug: Die Felder für Name und Beschreibung haben ihren Namen über das Titel-Element (wie
 Schalter im `Form`), nicht als Beschreibung; `focusfield.swift` nimmt deshalb auch die Kennung.
+
+## Veröffentlichen an der App gemessen
+
+Sechzehnter Durchgang, am 2026-11-10, an der Veröffentlichen-Kopie aus Phase 4 (`pub/proj`) in
+1400×860, dunkel, ein Blick hell. Ohne Netz: Die echten Ziele der Kopie (borkel.net, GitHub, Ordner
+auf dem Schreibtisch) waren für den Durchgang aus `publish-targets.json` genommen. Im Wegwerf-Profil
+standen dazu erfundene Zugänge mit Hosts unter `.invalid` (Passwort, Schlüsseltext, gespeicherter
+Host-Key, FTP ohne Passwort, Webhook ohne URL). Gelaufen ist nur das Ordner-Ziel in den Scratchpad.
+`quartz-forms` zeigte für den Durchgang auf eine Kopie. Danach war alles zurückgesetzt.
+
+- **Formular:** Bearbeiten und Speichern, Abbrechen mit und ohne Änderung. Der Remote-Pfad lehnt
+  leer, „/“ mit Löschen, `..` und für rsync Leerzeichen und `$` mit QuartzControls Sätzen ab.
+  Die drei Anbieter haben ihre Hinweise, und ein eigener Branch bleibt beim Anbieterwechsel.
+- **rsync:** Gesperrt mit Grund für „kein Zugang“, „Host-Key nicht bestätigt“, „Passwort“ und
+  „Schlüsseltext“, frei mit gespeichertem Host-Key. „rsync fehlt“ ist nicht gemessen, weil macOS
+  rsync mitbringt.
+- **Inspektor:** Die Warnung „kein Passwort“ und der Host-Key-Zustand. „Host-Key vergessen“ fragt
+  mit dem Host und entfernt `hostKey` aus dem Profil.
+- **Löschen und Webhook:** Ziel löschen fragt, und der Zugang bleibt. Ein Webhook ohne URL zeigt
+  „keine URL hinterlegt“. Die Frage vor dem Auslösen ist gesehen und abgebrochen worden.
+- **Ordner-Ziel:** Der Zielordner fehlt, oder er hat nur eine `.DS_Store`: Beide Läufe brechen mit
+  ihrem Satz ab und legen nichts an. Mit Löschen an verschwinden 14 entfernte Dateien. Mit Löschen
+  aus bleibt `404.html`, und der Hinweis steht unter dem Knopf.
+- **Seite:** Die Basis-URL-Warnung bei `localhost`. Der Ausgabeordner ist mit Vorschau & Build
+  geteilt, in beide Richtungen; „../x“ wird abgelehnt. Ist `origin` nicht auf github.com, sagt die
+  GitHub-Pages-Karte das, ohne GitHub zu fragen.
+
+Zwei Befunde, behoben:
+
+- **Escape verwarf ein geändertes Ziel ohne Frage.** Der Knopf „Abbrechen“ fragte, Escape schloss
+  das Sheet selbst (zweimal gesehen). Das Sheet hält jetzt still (`interactiveDismissDisabled`),
+  solange der Entwurf vom geöffneten abweicht. Dann kommt Escape beim Abbrechen-Knopf an und
+  fragt. Unverändert schließt es weiter still.
+- **Die Frage vor dem Lauf zählte falsch, wenn Löschen aus ist.** Sie sagte in Rot „1 Datei(en)
+  werden auf dem Server gelöscht“, der Lauf löschte nichts. Gezählt wird jetzt nach der Regel des
+  Laufs (`deleteRemoved == true`). Danach hieß es „0 … gelöscht“, nicht rot; mit Löschen an wieder
+  „1 … gelöscht“ in Rot. QuartzControl zählt genauso falsch (`Publish/index.tsx`), dort nicht
+  behoben, weil es kein kritischer Fehler ist.
+
+Nebenbei, nicht behoben:
+
+- Ein Webhook-Zugang ohne URL bekommt „(kein Passwort/Key hinterlegt)“. In QuartzControl ist
+  das genauso.
+- Ein SFTP-Ziel auf rsync behält `transfer: rsync`, wenn der Host-Key danach vergessen wird. Der
+  Inspektor sagt nicht, dass rsync jetzt gesperrt ist.
+- Die Frage vor dem Lauf sagt auch bei einem Ordner-Ziel „auf dem Server“.
+- Im Inspektor heißt die Zeile mit den Ausschlüssen „Nie veröffentlichen (ein Pfad pro Zeile)“,
+  die Werte stehen dort mit Kommas. In QuartzControl ist das genauso.
+
+Noch offen bleiben die Netz-Zeilen (SFTP, rsync, FTP, Host-Key-Dialog, Branch-Push, Webhook
+auslösen, GitHub Pages mit Token, nicht löschbare Dateien auf dem Server).
