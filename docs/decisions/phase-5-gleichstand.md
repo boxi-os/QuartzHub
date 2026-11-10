@@ -1784,3 +1784,33 @@ Config ein zweiter layout-box-Eintrag mit `<img src="{{root}}/static/icon.png" �
 
 Kein Befund. Nebenbei gesehen, gleich in beiden Apps: Ohne Basis-Template bleibt die Sprache der
 Website `en-US` von `quartz create`; nach der App-Sprache gesetzt wird sie nur nach einem Template.
+
+## Export mit KaTeX und Mermaid vom CDN an der App gemessen
+
+Am 2026-11-10, am Relay-Klon, ohne `-QHNoUpdateCheck`, mit Freigabe für Abrufe vom CDN. Neu im
+Klon: `content/formel.md` (Inline `$a^2 + b^2 = c^2$` und eine Blockformel), ein Buch
+`quartz-books/cdn.json` mit leerem `root` und ein Dokument-Ziel „CDN-Probe“ nach
+`$S/rel/out/doc` (PDF, ePub, HTML). Weil `root` leer war, nahm das Buch die ganze Website.
+
+„Jetzt bauen“ („Erfolgreich in 12,1s“), Diff „Neu: 3“, „Jetzt exportieren“ ohne Rückfrage, nach
+rund 25 s „Export erfolgreich.“:
+
+- „124 Seiten in der eigenen Reihenfolge des Buchs.“ (121 am Ende angefügt)
+- „2 Formulare, eingebettete Inhalte, Videos oder Leinwände wurden durch einen Satz mit Adresse
+  ersetzt.“; im HTML „Hier steht auf der Website ein Formular: https://quartzmac.borkel.net/…“
+- „PDF: 324 Seiten, Lesezeichen 10/33/112/323/630/35, 3.5 MB.“, „ePub: 124 Kapitel, 0 Bilder,
+  1.9 MB.“, „HTML: eine Datei, 3.7 MB.“
+- „ePub/HTML: 2 Formeln als Bild.“, „ePub/HTML: 11 Diagramme als Bild.“ (im ePub
+  `OEBPS/images/f0001.png`, `f0002.png`, `d0001.png` … `d0011.png`)
+- „Stylesheets, Schriften oder Bilder kamen aus dem Netz: cdn.jsdelivr.net, fonts.googleapis.com,
+  cdnjs.cloudflare.com“
+- „128 Anfragen der Website wurden nicht geladen (Skripte, Rahmen, Statistik): cdn.jsdelivr.net,
+  quartzmac.borkel.net, challenges.cloudflare.com“
+
+Im PDF (Seite 4) ist die Formel von KaTeX gesetzt; das Bild im ePub zeigt dieselbe Blockformel. Ein
+Diagramm von `grundlagen/farben` steht im PDF (Seite 15) und im ePub gleich da. Dort überdeckt der
+innere Rahmen die zweite Zeile des äußeren Untergraph-Titels („alles beschreiben“). Das ist in
+beiden Formaten gleich, kommt also aus Mermaids Layout und nicht vom Export; nur notiert.
+
+Kein Befund. Offen: Video und Leinwand als Ersatzsatz (kommen in gui-test nicht vor), epubcheck
+(VM).
