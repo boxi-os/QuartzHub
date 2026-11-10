@@ -35,7 +35,20 @@ public enum SSHFailure {
     if JSText.test(output, "port \\d+: Connection refused") {
       return "\(L10n.t("main.sshPortRefused", ["host": connection.host, "port": String(connection.port)]))\n\n\(raw)"
     }
+    if unreachable(output) {
+      return "\(L10n.t("main.hostUnreachableLocalNetwork", ["host": connection.host]))\n\n\(raw)"
+    }
     return nil
+  }
+
+  /// A connection the system would not route: ssh's "No route to host", Node's "connect
+  /// EHOSTUNREACH" (the FTP helper). On debian-vm (2026-11-10) that was what every run got while
+  /// macOS had not yet been allowed to let QuartzHub reach the local network, with no word about
+  /// the permission. A host on the network that is off says "Host is down" (measured with ssh to an
+  /// unused address in the same subnet), so the sentence names the permission and not a dead host.
+  /// QuartzControl has no sentence for it.
+  public static func unreachable(_ output: String) -> Bool {
+    JSText.includes(output, "No route to host") || JSText.includes(output, "EHOSTUNREACH")
   }
 
   /// ssh's refused login, "user@host: Permission denied (publickey,password).": the parentheses

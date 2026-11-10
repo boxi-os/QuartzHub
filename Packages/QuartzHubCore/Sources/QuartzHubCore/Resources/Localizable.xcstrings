@@ -27676,6 +27676,23 @@
         }
       }
     },
+    "main.hostUnreachableLocalNetwork" : {
+      "comment" : "Publishing - SFTP, rsync, FTP: ssh's \"No route to host\" or Node's EHOSTUNREACH, which is what macOS answers while QuartzHub may not reach the local network (a host that is off says \"Host is down\")",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{host}} ist nicht erreichbar. Liegt der Server in deinem Netzwerk, erlaube QuartzHub den Zugriff in den Systemeinstellungen unter Datenschutz & Sicherheit ▸ Lokales Netzwerk."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{host}} cannot be reached. If the server is on your network, allow QuartzHub access in System Settings under Privacy & Security ▸ Local Network."
+          }
+        }
+      }
+    },
     "main.indexPageExists" : {
       "localizations" : {
         "de" : {

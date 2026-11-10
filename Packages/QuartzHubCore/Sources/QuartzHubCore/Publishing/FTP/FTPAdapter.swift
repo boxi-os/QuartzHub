@@ -270,7 +270,9 @@ public struct FTPAdapter: DeployAdapter {
       }
       let silent = JSText.test((error as? FTPSession.Failure)?.message ?? "", #"\ATimeout \((control|data) socket\)\z"#)
         ? "\(L10n.t("main.sshSilent", ["host": connection.host, "seconds": String(Self.timeoutSeconds)]))\n\n" : ""
-      return DeployResult(success: false, output: "\(output)\n\(silent)\(text)")
+      let unreachable = SSHFailure.unreachable((error as? FTPSession.Failure)?.message ?? "")
+        ? "\(L10n.t("main.hostUnreachableLocalNetwork", ["host": connection.host]))\n\n" : ""
+      return DeployResult(success: false, output: "\(output)\n\(silent)\(unreachable)\(text)")
     }
   }
 }
