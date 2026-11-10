@@ -69,6 +69,27 @@ struct StyleSettingsValuesTests {
     }
   }
 
+  /// SwiftUI keeps a row's focus and a group's open state only while the group's id stays.
+  @Test func aGroupKeepsItsIdAcrossRendersAndSearches() throws {
+    let (_, schemas) = try Self.load()
+    let fields = StyleSettingsValues.usable(schemas["lobster"] ?? [], shippedClassKeys: [])
+    func ids(_ groups: [StyleSettingsValues.Group]) -> [String: String] {
+      var out: [String: String] = [:]
+      func walk(_ group: StyleSettingsValues.Group) {
+        out[group.id] = group.heading?.title ?? "(root)"
+        group.children.forEach(walk)
+      }
+      groups.forEach(walk)
+      return out
+    }
+    let first = ids(StyleSettingsValues.groups(fields))
+    #expect(first.count > 10)
+    #expect(ids(StyleSettingsValues.groups(fields)) == first)
+    let searched = ids(StyleSettingsValues.groups(StyleSettingsValues.filter(fields, query: "gap")))
+    #expect(!searched.isEmpty)
+    for (id, title) in searched { #expect(first[id] == title, "\(id)") }
+  }
+
   @Test func hslToHex() throws {
     let (cases, _) = try Self.load()
     for entry in cases["hsl"]?.arrayValue ?? [] {

@@ -219,9 +219,14 @@ public enum StyleSettingsValues {
     public let heading: Field?
     public internal(set) var fields: [Field] = []
     public internal(set) var children: [Group] = []
-    public var id: ObjectIdentifier { ObjectIdentifier(self) }
+    /// The group's place in the tree ("", "/0", "/0/2"), the same on every render and under a
+    /// search, which keeps every heading. QuartzControl keys the groups by position too
+    /// (`key={i}`). An object identity was new on every render, so after each change SwiftUI
+    /// rebuilt every row: the field being typed in lost focus after one key, and an opened group
+    /// closed again (measured at the app, 2026-11-10).
+    public let id: String
 
-    init(heading: Field?) { self.heading = heading }
+    init(heading: Field?, id: String) { self.heading = heading; self.id = id }
 
     /// Recursive: a search that empties a section leaves sub-groups that are empty themselves.
     public var hasAnyField: Bool { !fields.isEmpty || children.contains { $0.hasAnyField } }
@@ -229,13 +234,14 @@ public enum StyleSettingsValues {
 
   /// The theme author's headings and their levels are the grouping, as Style Settings renders it.
   public static func groups(_ fields: [Field]) -> [Group] {
-    let root = Group(heading: nil)
+    let root = Group(heading: nil, id: "")
     var stack: [(level: Double, group: Group)] = [(0, root)]
     for field in fields {
       if field.kind == "heading" {
         let level = field.level ?? 1
         while stack.count > 1 && stack[stack.count - 1].level >= level { stack.removeLast() }
-        let group = Group(heading: field)
+        let parent = stack[stack.count - 1].group
+        let group = Group(heading: field, id: "\(parent.id)/\(parent.children.count)")
         stack[stack.count - 1].group.children.append(group)
         stack.append((level, group))
       } else {
