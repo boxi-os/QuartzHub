@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-10 nach Dokumente und Export.
+gezählt, zuletzt am 2026-11-10 nach dem Export ohne Netz.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 174 | 9 | 17 | 12 | 4 | 216 |
 | Plugins und Wartung | 224 | 18 | 4 | 15 | 0 | 261 |
-| Gestaltung und Veröffentlichen | 175 | 39 | 9 | 20 | 0 | 243 |
-| **Summe** | **573** | **66** | **30** | **47** | **4** | **720** |
+| Gestaltung und Veröffentlichen | 183 | 31 | 9 | 20 | 0 | 243 |
+| **Summe** | **581** | **58** | **30** | **47** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -93,5 +93,6 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    (2026-11-09, ohne Befund), Layout (2026-11-10, fünf Befunde behoben),
    Stile (2026-11-10, vier Befunde behoben, einer davon ein Absturz), Vorlagen (2026-11-10, ohne Befund),
    Veröffentlichen ohne Netz (2026-11-10, zwei Befunde behoben), Dokumente und Export
-   (2026-11-10, drei Befunde behoben, einer davon ein Absturz).
+   (2026-11-10, drei Befunde behoben, einer davon ein Absturz), Export ohne Netz
+   (2026-11-10, zwei Befunde behoben).
 3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe.

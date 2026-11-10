@@ -1174,3 +1174,41 @@ Nebenbei, nicht behoben:
 Nicht gemessen: Seiten aufnehmen, die die Navigation nicht zeigt, weil gui-test keine hat. Die
 Sprachwahl nicht, weil gui-test nur eine Sprache hat. Ebenso nicht die HTML-Datei, die
 Ablehnungen vor dem Export und „Dokumente mit hochladen“.
+
+## Export ohne Netz an der App gemessen
+
+Achtzehnter Durchgang, am 2026-11-10, an derselben Kopie. Es gab nur das Dokument-Ziel und das
+Ordner-Ziel im Scratchpad. Zurückgesetzt wurden danach Ziele, Exportordner, Zielordner, Manifest
+und der Zeitstempel von `public/index.html`.
+
+- **HTML:** Eine Datei mit 0,2 MB, ohne Skripte und Stylesheets. Das Deckblatt steckt als `data:`
+  darin; nach außen zeigen nur die Verweise auf die Website.
+- **Ablehnungen:** Ein Zielordner in `public/` und der Projektordner werden schon beim Diff
+  abgelehnt, und der Knopf ist dann gesperrt. Beim Projektordner greift zuerst die Prüfung
+  „Build-Ordner oder umgekehrt“, vor der eigenen für das Projekt (wie in QuartzControl). Fehlt
+  der Ordner darüber oder das Buch, bricht der Lauf mit einem Satz ab. Das Formular nennt ein
+  fehlendes Buch.
+- **PDF:** Lesezeichen, `/Lang` und „Titel im Fenster“ aus dem App-Export gelesen.
+- **Dokumente mit hochladen:** Die Dokumente landen unter `downloads/` im Ordner-Ziel. Ist der
+  Build neuer, steht „… ist älter als der Build …“ je Datei. „Kopieren“ legt den Markdown-Link in
+  die Zwischenablage.
+- **⌘Q während eines Exports:** QuartzHub beendet sich ohne Frage und ohne Absturz und schreibt
+  nichts.
+
+Behoben:
+
+- **Ein Klick auf die leere Liste hob die Auswahl auf.** Danach fehlte alles unter der Liste, und
+  der Inspektor sagte „Noch kein Ziel … Lege eins an“, obwohl zwei Ziele da waren. In QuartzControl
+  ist immer ein Ziel gewählt. Jetzt bleibt die Auswahl, solange ihr Ziel existiert. Gegenprobe
+  am alten Bau: derselbe Klick, kein Ziel gewählt.
+- **Drei Knöpfe hießen für VoiceOver nur „Kopieren“.** Jetzt heißen sie „Kopieren: Als PDF
+  herunterladen“ usw., gelesen über die Bedienungshilfen. QuartzControl hat dort nur „Kopieren“.
+
+Nebenbei, nicht behoben:
+
+- Nach ⌘Q während eines Exports bleibt die Website-Kopie (32 MB) mit ihrem Regel-Ordner im
+  Temp-Ordner. Der Start räumt sie erst nach einer Stunde.
+- Ein leerer Ordner `.quartz-gui/staging/` bleibt nach einem Lauf mit „Dokumente mit hochladen“.
+
+Nicht gemessen: Ersatzsätze für Formular, Video und Leinwand, weil kein Buch mit solchen Seiten
+exportiert wurde. Ebenso nicht „Keine fremden Ressourcen“ mit Netz und epubcheck (VM).
