@@ -1121,3 +1121,52 @@ Nebenbei, nicht behoben:
 
 Noch offen bleiben die Netz-Zeilen (SFTP, rsync, FTP, Host-Key-Dialog, Branch-Push, Webhook
 auslösen, GitHub Pages mit Token, nicht löschbare Dateien auf dem Server).
+
+## Dokumente und Export an der App gemessen
+
+Siebzehnter Durchgang, am 2026-11-10, an derselben Kopie (`pub/proj`) mit dem Testbuch. Exportiert
+wurde über das Dokument-Ziel in den Scratchpad, ohne Netz. Die echten Ziele waren wieder aus der
+Datei genommen. Danach waren Buchdateien, Exportordner und Ziele zurückgesetzt.
+
+- **Seiten:** „Wieder der Navigation folgen“ und „Verwerfen“ in beide Richtungen. Eine Seite, die
+  in `order` fehlt, steht unter „Neu in der Navigation“, und der Export hängt sie an.
+- **Inspektor:** Deckblatt, Papierformat, Querformat, Rückverweise, Register und „Als Text“ landen
+  in der Datei, und der Export folgt ihnen. Getestet wurde mit `bases-beispiele`, weil `animation`
+  keine Tags hat; das Register steht im PDF mit Seitenzahlen. 510 Zeichen im Untertitel lehnt
+  QuartzHub mit dem Satz aus QuartzControl ab.
+- **Wege:** „Zu Veröffentlichen“ hat einen Rückweg. Ohne Build steht „Zu Vorschau & Build“, so
+  gemessen mit dem Ausgabeordner „nicht-da“.
+- **Export:** Ein Abbruch nach 0,7 s schreibt nichts (gleiche Prüfsumme). Der Bericht nennt alles,
+  was die Einstellungen versprechen.
+
+Behoben:
+
+- **Absturz beim Löschen des offenen Buchs.** Der Inspektor band seine Zeilen mit
+  `Binding($model.draft)`, das ein Optional erzwungen auspackt. Nach „Buch löschen“ las eine Zeile
+  die Bindung noch einmal, und QuartzHub stürzte in `BindingOperations.ForceUnwrapping` ab
+  (`QuartzHub-2026-11-10-063329.ips`). Jetzt fällt die Bindung auf den Entwurf zurück, mit dem sie
+  gebaut wurde. Danach lief das Löschen des offenen Buchs ohne Absturz. Die Form kam in der App
+  nur hier vor.
+- **„1 Seiten“ im Bericht.** Die 18 zählenden Sätze haben jetzt eine Einzahl, de und en. Die
+  Mehrzahl ist QuartzControls Wortlaut. Ein Test prüft „1 Seite“, die Gegenprobe ohne die
+  Katalog-Änderung scheitert.
+
+Offen, zur Entscheidung:
+
+- **Das Deckblatt läuft bei kleineren Formaten über.** `.cover { height: 230mm }` passt nur in A4
+  hoch (257 mm Satzspiegel). In A5 quer (108 mm) steht das Bild abgeschnitten auf Seite 1, Titel,
+  Untertitel und Datum auf Seite 2, mit Fußzeile. Ebenso betroffen sind A4 quer, A5 hoch und
+  Letter quer. QuartzControl hat dieselbe Zeile (`documentHtml.ts`), und die Golden Files halten
+  sie für alle Formate fest. Eine Korrektur wäre eine Abweichung von QuartzControl.
+
+Nebenbei, nicht behoben:
+
+- Nach einem Abbruch steht in Rot „Veröffentlichung fehlgeschlagen.“ In QuartzControl ist das
+  genauso.
+- Beim Exportieren heißt der Knopf „Speichere…“.
+- Ein Kerntest scheiterte einmal in vier Läufen. Welcher es war, ist nicht festgehalten; die
+  drei Läufe danach waren grün.
+
+Nicht gemessen: Seiten aufnehmen, die die Navigation nicht zeigt, weil gui-test keine hat. Die
+Sprachwahl nicht, weil gui-test nur eine Sprache hat. Ebenso nicht die HTML-Datei, die
+Ablehnungen vor dem Export und „Dokumente mit hochladen“.
