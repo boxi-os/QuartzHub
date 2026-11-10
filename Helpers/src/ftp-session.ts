@@ -4,8 +4,10 @@
 //
 // The one exception to protocol.ts: a deploy run is one session of many calls, so this helper
 // lives for that run. One JSON object per line on stdin, `{ id, op, args }`, one answer per line
-// on stdout, `{ id, ok: true, value }` or `{ id, ok: false, error: { ftp, code, message } }`
-// (`ftp` for basic-ftp's FTPError: a reply of the server). It ends with "close" or the end of stdin.
+// on stdout, `{ id, ok: true, value }` or `{ id, ok: false, error: { ftp, code, message, nodeCode } }`
+// (`ftp` for basic-ftp's FTPError: a reply of the server; `nodeCode` Node's code of anything else,
+// which is all a refused connection to a host with several addresses says: Node's AggregateError
+// has an empty message and the first attempt's code). It ends with "close" or the end of stdin.
 import { createInterface } from 'node:readline'
 import { Writable } from 'node:stream'
 import { Client, FTPError } from 'basic-ftp'
@@ -61,7 +63,8 @@ lines.on('line', (line) => {
     } catch (error) {
       const ftp = error instanceof FTPError
       process.stdout.write(`${JSON.stringify({ id: request.id, ok: false, error: {
-        ftp, code: ftp ? (error as FTPError).code : null, message: error instanceof Error ? error.message : String(error), text: String(error)
+        ftp, code: ftp ? (error as FTPError).code : null, message: error instanceof Error ? error.message : String(error), text: String(error),
+        nodeCode: !ftp && typeof (error as { code?: unknown })?.code === 'string' ? (error as { code: string }).code : null
       } })}\n`)
     }
     if (request.op === 'close') process.exit(0)

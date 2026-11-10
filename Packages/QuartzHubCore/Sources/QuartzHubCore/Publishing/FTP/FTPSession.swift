@@ -24,6 +24,9 @@ public final class FTPSession: @unchecked Sendable {
     public let message: String
     /// `String(err)`: "Error: Timeout (control socket)".
     public let text: String
+    /// Node's `err.code` ("EHOSTUNREACH"). A host with several addresses that refuses on all of
+    /// them says only "AggregateError:  (control socket)"; the code is the first attempt's.
+    public var nodeCode: String? = nil
     public var description: String { message }
   }
 
@@ -138,7 +141,7 @@ public final class FTPSession: @unchecked Sendable {
     let message = error["message"]?.stringValue ?? ""
     let text = error["text"]?.stringValue ?? message
     if error["ftp"] == .bool(true) { throw FTPError(code: Int(error["code"]?.numberValue ?? 0), message: message, text: text) }
-    throw Failure(message: message, text: text)
+    throw Failure(message: message, text: text, nodeCode: error["nodeCode"]?.stringValue)
   }
 
   // MARK: basic-ftp's calls

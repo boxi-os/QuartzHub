@@ -68,3 +68,22 @@ struct FTPSessionTests {
     }
   }
 }
+
+/// Without the VM: what a refused connection says. "localhost" has two addresses, so Node answers
+/// with an AggregateError whose message is empty; its code is all there is to read. On debian-vm,
+/// with the local network not allowed, the same form carried EHOSTUNREACH (2026-11-10).
+@Suite(.enabled(if: HelperRuntime.available && FileManager.default.fileExists(atPath: "\(HelperRuntime.runtime.helpers)/ftp-session.cjs"),
+                "Runtime/ und Helpers/dist"))
+struct FTPSessionFailureTests {
+  @Test func aRefusedConnectionCarriesNodesCode() async throws {
+    let ftp = try FTPSession.start(runtime: HelperRuntime.runtime)
+    do {
+      try await ftp.access(host: "localhost", port: LocalSSHD.freePort(), user: "u", password: nil, secure: false, ca: nil)
+      Issue.record("connected")
+    } catch let failure as FTPSession.Failure {
+      #expect(failure.nodeCode == "ECONNREFUSED", "\(failure)")
+      #expect(failure.text == "AggregateError:  (control socket)", "\(failure.text)")
+    }
+    await ftp.close()
+  }
+}

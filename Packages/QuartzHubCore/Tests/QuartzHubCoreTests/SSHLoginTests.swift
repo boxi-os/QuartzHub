@@ -143,8 +143,8 @@ import Testing
     }
   }
 
-  /// What a run got on debian-vm while macOS had not allowed the local network (ssh, and Node's
-  /// words for the FTP helper), against a host that is merely off.
+  /// What a run got on debian-vm while macOS had not allowed the local network, against a host
+  /// that is merely off.
   @Test func anUnroutedHostNamesTheLocalNetworkPermission() {
     var object = JSONObject([("id", .string("x")), ("kind", .string("ssh")), ("host", .string("debian.local")),
                              ("port", .number(22)), ("username", .string("boxi"))])
@@ -153,7 +153,6 @@ import Testing
     let unrouted = "ssh: connect to host debian.local port 22: No route to host"
     #expect(SSHFailure.translate(unrouted, connection: connection)
       == "\(L10n.t("main.hostUnreachableLocalNetwork", ["host": "debian.local"]))\n\n\(unrouted)")
-    #expect(SSHFailure.unreachable("connect EHOSTUNREACH 192.168.64.6:21"))
     #expect(SSHFailure.translate("ssh: connect to host 192.168.64.250 port 22: Host is down", connection: connection) == nil)
   }
 

@@ -41,14 +41,14 @@ public enum SSHFailure {
     return nil
   }
 
-  /// A connection the system would not route: ssh's "No route to host", Node's "connect
-  /// EHOSTUNREACH" (the FTP helper). On debian-vm (2026-11-10) that was what every run got while
-  /// macOS had not yet been allowed to let QuartzHub reach the local network, with no word about
-  /// the permission. A host on the network that is off says "Host is down" (measured with ssh to an
-  /// unused address in the same subnet), so the sentence names the permission and not a dead host.
-  /// QuartzControl has no sentence for it.
+  /// A connection the system would not route, ssh's "No route to host". On debian-vm (2026-11-10)
+  /// that was what every run got while macOS had not allowed QuartzHub onto the local network, with
+  /// no word about the permission. A host on the network that is off says "Host is down" (measured
+  /// with ssh to an unused address in the same subnet), so the sentence names the permission and
+  /// not a dead host. The FTP adapter says the same for Node's EHOSTUNREACH. QuartzControl has no
+  /// sentence for it.
   public static func unreachable(_ output: String) -> Bool {
-    JSText.includes(output, "No route to host") || JSText.includes(output, "EHOSTUNREACH")
+    JSText.includes(output, "No route to host")
   }
 
   /// ssh's refused login, "user@host: Permission denied (publickey,password).": the parentheses
