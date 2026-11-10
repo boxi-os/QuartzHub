@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-10 nach den Grenzfällen der Vorlagen.
+gezählt, zuletzt am 2026-11-10 nach den Grenzfällen der Stile.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 174 | 9 | 17 | 12 | 4 | 216 |
 | Plugins und Wartung | 224 | 18 | 4 | 15 | 0 | 261 |
-| Gestaltung und Veröffentlichen | 208 | 16 | 9 | 10 | 0 | 243 |
-| **Summe** | **606** | **43** | **30** | **37** | **4** | **720** |
+| Gestaltung und Veröffentlichen | 214 | 10 | 9 | 10 | 0 | 243 |
+| **Summe** | **612** | **37** | **30** | **37** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -95,5 +95,5 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    Veröffentlichen ohne Netz (2026-11-10, zwei Befunde behoben), Dokumente und Export
    (2026-11-10, drei Befunde behoben, einer davon ein Absturz), Export ohne Netz
    (2026-11-10, zwei Befunde behoben), Frames anlegen und löschen mit `quartz plugin add`
-   (2026-11-10, ohne Befund), Stile mit Google Fonts (2026-11-10, ohne Befund), Themes und Presets mit `npm install` (2026-11-10, ein Befund behoben: c45b5e8), SFTP, rsync und FTP gegen debian-vm (2026-11-10, ein Befund behoben: 06be3b7), Grenzfälle der Vorlagen mit gebauten Paketen (2026-11-10, ohne Befund).
+   (2026-11-10, ohne Befund), Stile mit Google Fonts (2026-11-10, ohne Befund), Themes und Presets mit `npm install` (2026-11-10, ein Befund behoben: c45b5e8), SFTP, rsync und FTP gegen debian-vm (2026-11-10, ein Befund behoben: 06be3b7), Grenzfälle der Vorlagen mit gebauten Paketen (2026-11-10, ohne Befund), Grenzfälle der Stile (2026-11-10, ohne Befund).
 3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe.

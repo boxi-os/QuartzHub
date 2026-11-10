@@ -1451,3 +1451,46 @@ Scratchpad (`tpl/grenz/`), geladen über „Vorlage wählen…“:
 
 Kein Befund. Aufgeräumt: Config und Ziele md5-gleich mit der Sicherung, die großen Dateien und
 `content/importlauf/` gelöscht, die drei Snapshots des Durchgangs entfernt.
+
+## Stile: Grenzfälle an der App gemessen
+
+Nachtrag zu „Stile an der App gemessen“, am 2026-11-10, an derselben Kopie (`styles/proj`), ohne
+Netz, in Dunkel. `quartz/styles`, `.quartz-gui` und die Config vorher gesichert und danach
+zurückgelegt (`diff -r`, `cmp`); gespeichert wurde nichts, was die Config berührt (sie holt in dieser
+Kopie bei jedem Speichern die Google-Schriften neu).
+
+- **Verschachtelter Import-Block:** In custom.scss ein `Quartz-GUI`-Importblock innerhalb eines
+  `QuartzControl`-Blocks, beide mit `@use "./custom/callouts-2"`. Die Prüfung meldet `There's already
+  a module with namespace "callouts-2".` mit QuartzControls Satz und „Ladereihenfolge neu
+  schreiben“; der Link macht custom.scss wieder byte-gleich mit dem Stand davor, danach „SCSS
+  kompiliert fehlerfrei.“ In der ersten Messung hieß das „nicht nachstellbar“; es braucht kein
+  Projekt von 1.0, nur den Block.
+- **Zusammenlegen:** Die 30 Stylesheets des Stands vor 1.1 kamen aus QuartzControls
+  `minimal-lesbar.qtpl` im Commit 57b0f843, als Paket nur mit „Eigenes CSS“ über Vorlagen
+  eingespielt (der Plan sagte vorher „10 Stylesheets aus der Aufteilung von 1.1 lädt das Projekt
+  danach nicht mehr …“). Danach der Hinweis mit „Zusammenlegen“, die Frage, ein Snapshot
+  `styleMigration`, 13 Dateien in der Ladereihenfolge, und die liegengebliebenen Dateien der 1.1-Form
+  weichen als `-2` aus, mit je einem Satz. Das mit dem Sass des Projekts übersetzte CSS hat vorher und
+  nachher dieselben Zeilen (sortiert gleich), nur in anderer Reihenfolge: QuartzControl legt als reine
+  Verkettung nach Bereichen zusammen und hat dort am gerenderten Ergebnis „kein Wert anders“ gemessen
+  (`styles-and-fonts.md`, „Bestehende Projekte zusammenlegen“); der Kern ist gegen dessen Funktion
+  über `style-files-golden.mjs` geprüft.
+- **Nicht schreibbarer Wert:** `3px; color: red` als eigener Wert von `--tpl-accent-bar`, Speichern:
+  „Nichts wurde gespeichert: …“, Stylesheet und Config md5-gleich.
+- **Ladefehler:** custom.scss mit `chmod 000`: „Die Stile konnten nicht geladen werden.“, darunter
+  `Error: EACCES: permission denied, open '…'`.
+- **Schrift ohne Gewicht:** eine Systemschrift mit `usWeightClass` 0 (außerhalb 1…1000, so liest
+  der Kern kein Gewicht) importiert, „Direkt verwenden für“ leer: der Satz „Die Datei nennt kein
+  „weight“ …“, die Regel ohne `font-weight`, die Config unverändert.
+- **Suche über 150:** 160 eigene Variablen `--grenz-NNN` im `css-vars`-Block, Suche „grenz“: 150
+  Zeilen und „10 weitere Treffer. Weiter tippen zum Eingrenzen.“
+- **Anspringen ohne Auswahl:** `--tpl-accent-bar` unter „Von dir geändert“: Suche, Auswahl und
+  Inspektor folgen.
+
+Kein Befund. Offen bleiben „Extern öffnen“ (öffnet CotEditor, in dem gerade eigene Dokumente
+offen waren), „nur in einem Selektor“ (eine solche Variable steht nicht in der Liste), der
+Theme-Katalog ohne Netz und die Meldung „n ungenutzte Schriftdateien“ (braucht ein Speichern mit
+Google-Schriften).
+
+Messwerkzeug: Tastenanschläge ohne Fokus im Suchfeld gingen an die Tippsuche der Seitenleiste
+(„grenz“ sprang auf Git-Sync); vor dem Tippen `focused.swift` fragen.
