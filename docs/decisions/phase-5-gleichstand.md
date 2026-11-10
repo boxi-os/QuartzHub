@@ -1814,3 +1814,44 @@ beiden Formaten gleich, kommt also aus Mermaids Layout und nicht vom Export; nur
 
 Kein Befund. Offen: Video und Leinwand als Ersatzsatz (kommen in gui-test nicht vor), epubcheck
 (VM).
+
+## Relay auf debian-vm an der App gemessen
+
+Am 2026-11-10, mit Freigabe des Nutzers für das Relay auf debian-vm, am Relay-Klon. Die
+Formular-Config zeigte vorher auf `quartzmac.borkel.net`; `transport.url` wurde im Klon auf
+`https://debian.local:8441/qhrelay/send.php` gestellt, damit die Prüfung nach dem Hochladen nur die
+VM fragt („Vorschlag übernehmen“ mit borkel.net blieb ungedrückt). Zugänge: FTP als `qchost`
+(Passwort nur im Speicher) und SSH als `boxi` mit Schlüsseldatei (ein eigener Testschlüssel bei
+qchost wurde schon früher abgelehnt, siehe „Veröffentlichen gegen debian-vm“). `boxi` darf nicht in
+die Webroot `/srv/qc/www` schreiben (qchost, 755), daher ging SFTP nach `/home/boxi`.
+
+- **FTP:** Ziel „VM FTP“ (`/srv/qc/www`), Unterordner `qhrelay`, Absender `qchost@debian.local`,
+  Origins `https://debian.local:8441`, Adresse für TestKontakt und ein Captcha-Secret. „Relay
+  hochladen“: „Fertig. ↑ config.generated.php ↑ config.php ↑ counters/.htaccess ↑
+  counters/qf-probe.count ↑ send.php“, „hochgeladen am 10.11.2026, 23:47, aktuell“. Auf der VM
+  `config.php` 600, die anderen 644, Ordner 755.
+- **Prüfung:** beim ersten Mal „Das Relay konnte nicht geprüft werden: Nach 10 Sekunden kam keine
+  Antwort.“, obwohl `curl` in 50 ms ein 500 bekam und ein URLSession-Skript im Terminal sofort
+  -1202 (Zertifikat). Beim zweiten Hochladen kam sofort „Das Zertifikat des Servers wird nicht
+  anerkannt (net::ERR_CERT_AUTHORITY_INVALID). Browser lehnen dort auch das Formular ab.“ Die 10 s
+  ließen sich nicht wiederholen; vermutlich die erste Verbindung des neu gebauten, ad hoc
+  signierten Bundles ins lokale Netz. Die übrigen Urteile (kein PHP, 500, Origin …) brauchen ein
+  Zertifikat, dem die App traut; der Schlüsselbund blieb unangetastet. Im Kern sind sie gegen einen
+  Testserver gemessen (P3 8c).
+- **SFTP:** Zugang „VM SSH (boxi)“ im Formular angelegt („Privater Schlüssel“, `~/.ssh/id_ed25519`
+  wird absolut), Ziel „VM SFTP“ (`/home/boxi`), Unterordner `qhrelay-sftp`. Nach dem Zielwechsel
+  sagt der Status „Ziel, Zugang oder Ordner geändert seit dem Hochladen …“. Beim Hochladen:
+  „debian.local ist zum ersten Mal kontaktiert worden.“ mit `SHA256:VCnLelM4…`, gleich
+  `ssh-keyscan`; „Verbinden und merken“ legt `hostKey` am Zugang ab, dann dieselben fünf Dateien,
+  `config.php` 600.
+- **Entfernen:** „Relay unter „VM SFTP“, Ordner „qhrelay-sftp“, vom Server entfernen? Formulare, die
+  dorthin senden, kommen danach nicht mehr an; …“, dann „✗ config.generated.php ✗ config.php ✗
+  send.php“ und „Der Ordner „qhrelay-sftp/counters“ bleibt mit den Zählern des Servers liegen; …“,
+  Status „am 10.11.2026, 23:52 vom Server entfernt“. Für den verweigerten Fall per FTP (`SITE
+  CHMOD 555` auf den Ordner): je Datei „… konnte auf dem Server nicht gelöscht werden (550 Delete
+  operation failed).“ und „Das Relay ist damit nicht vom Server entfernt. Lösche diese Dateien dort
+  selbst, oder erlaube dem Zugang das Löschen in diesem Ordner und versuche es noch einmal.“, der
+  Status bleibt „hochgeladen am …, aktuell“. Nach `SITE CHMOD 755` entfernt.
+
+Danach auf der VM `/srv/qc/www/qhrelay` (per FTP) und `/home/boxi/qhrelay-sftp` gelöscht. Kein
+Befund.

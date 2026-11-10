@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-10 nach dem Export mit CDN.
+gezählt, zuletzt am 2026-11-10 nach dem Relay auf debian-vm.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 182 | 8 | 17 | 5 | 4 | 216 |
-| Plugins und Wartung | 237 | 10 | 4 | 10 | 0 | 261 |
+| Plugins und Wartung | 239 | 10 | 4 | 8 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 220 | 7 | 9 | 7 | 0 | 243 |
-| **Summe** | **639** | **25** | **30** | **22** | **4** | **720** |
+| **Summe** | **641** | **25** | **30** | **20** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -96,4 +96,4 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    (2026-11-10, drei Befunde behoben, einer davon ein Absturz), Export ohne Netz
    (2026-11-10, zwei Befunde behoben), Frames anlegen und löschen mit `quartz plugin add`
    (2026-11-10, ohne Befund), Stile mit Google Fonts (2026-11-10, ohne Befund), Themes und Presets mit `npm install` (2026-11-10, ein Befund behoben: c45b5e8), SFTP, rsync und FTP gegen debian-vm (2026-11-10, ein Befund behoben: 06be3b7), Grenzfälle der Vorlagen mit gebauten Paketen (2026-11-10, ohne Befund), Grenzfälle der Stile (2026-11-10, ohne Befund), Dokumente mit Navigation und Sprache (2026-11-10, ohne Befund), git in den Einstellungen (2026-11-10, ohne Befund), Plugins mit leerer Liste und Schema-Bedingungen (2026-11-10, ohne Befund), der leere Unterschied der Snapshots (2026-11-10, ohne Befund), Relay mit erfundenen Zielen und das Entfernen mit Relay-Geheimnissen (2026-11-10, ein Befund behoben: 6afee3c), nicht gebaute Seiten der Formulare (2026-11-10, ohne Befund).
-3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe. Freigegeben am 2026-11-10: erst die, die nur lesen oder holen, dann das Relay auf debian-vm; was bei GitHub schreibt, nur mit einem Test-Repo. Gemessen: Update-Prüfung (2026-11-10, ohne Befund), Marktplatz (2026-11-10, ohne Befund), Installieren und Wiederherstellen (2026-11-10, ohne Befund), Anlegen und Duplizieren (2026-11-10, ohne Befund), Vorlagen (2026-11-10, ein Befund behoben: 44cbfa3), Projektbild im Kopfbereich (2026-11-10, ohne Befund), Export mit KaTeX und Mermaid vom CDN (2026-11-10, ohne Befund).
+3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe. Freigegeben am 2026-11-10: erst die, die nur lesen oder holen, dann das Relay auf debian-vm; was bei GitHub schreibt, nur mit einem Test-Repo. Gemessen: Update-Prüfung (2026-11-10, ohne Befund), Marktplatz (2026-11-10, ohne Befund), Installieren und Wiederherstellen (2026-11-10, ohne Befund), Anlegen und Duplizieren (2026-11-10, ohne Befund), Vorlagen (2026-11-10, ein Befund behoben: 44cbfa3), Projektbild im Kopfbereich (2026-11-10, ohne Befund), Export mit KaTeX und Mermaid vom CDN (2026-11-10, ohne Befund), Relay auf debian-vm (2026-11-10, ohne Befund).
