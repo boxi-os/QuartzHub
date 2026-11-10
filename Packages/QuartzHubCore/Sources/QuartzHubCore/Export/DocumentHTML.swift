@@ -109,6 +109,18 @@ public enum DocumentHTML {
     }
   }
 
+  /// The cover's height. QuartzControl sets 230 mm for every paper, which is the A4 portrait text
+  /// area (257 mm) less 27 mm. In A5 landscape (108 mm) the cover then ran onto a second page: the
+  /// picture cut off at the foot of the first, title and date on the second, under a footer
+  /// (measured 2026-11-10; A4 landscape, A5 portrait and Letter landscape overflow too). The same
+  /// 27 mm come off each paper's text area instead, so A4 portrait stays QuartzControl's 230 mm.
+  /// A decision against QuartzControl, in decisions/phase-5-gleichstand.md.
+  public static func coverHeightMM(_ pageSize: String, landscape: Bool) -> Double {
+    let p = paper(pageSize)
+    let height = landscape ? p.w : p.h
+    return JS.round((height - marginMM.top - marginMM.bottom - 27) * 10) / 10
+  }
+
   public static func printCss(pageSize: String, landscape: Bool, title: String) -> String {
     let p = paper(pageSize)
     let (w, h) = landscape ? (p.h, p.w) : (p.w, p.h)
@@ -156,7 +168,7 @@ body.pdf .qc-diagram svg { height: auto; }
 body.pdf .qc-diagram svg:not([style*="max-width"]) { max-width: 100%; }
 body.pdf .qc-replaced { font-style: italic; color: #555; }
 body.pdf .qc-unlinked { color: inherit; }
-.cover { height: 230mm; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.cover { height: \(n(coverHeightMM(pageSize, landscape: landscape)))mm; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
 .cover img { width: 28mm; height: 28mm; object-fit: contain; margin-bottom: 10mm; }
 .cover p { margin: 0; }
 .cover-title { font-size: 34pt; font-weight: 700; line-height: 1.1; margin: 0 0 4mm !important; }

@@ -62,13 +62,35 @@ import Testing
     return facts
   }
 
+  /// QuartzControl's output with QuartzHub's one deviation: the cover's height follows the paper
+  /// (`DocumentHTML.coverHeightMM`). A4 portrait is left as QuartzControl wrote it.
+  static func ownCover(_ qc: String, _ size: String, _ landscape: Bool) -> String {
+    if size == "A4" && !landscape { return qc }
+    let own = JSJSON.numberToString(DocumentHTML.coverHeightMM(size, landscape: landscape))
+    return qc.replacingOccurrences(of: ".cover { height: 230mm;", with: ".cover { height: \(own)mm;")
+  }
+
+  /// The text area less QuartzControl's 27 mm: A4 portrait is its 230 mm, the others fit their page
+  /// (measured: in A5 landscape a 230 mm cover ran onto a second page).
+  @Test func coverFitsItsPaper() {
+    #expect(DocumentHTML.coverHeightMM("A4", landscape: false) == 230)
+    #expect(DocumentHTML.coverHeightMM("A4", landscape: true) == 143)
+    #expect(DocumentHTML.coverHeightMM("A5", landscape: false) == 143)
+    #expect(DocumentHTML.coverHeightMM("A5", landscape: true) == 81)
+    #expect(DocumentHTML.coverHeightMM("Letter", landscape: false) == 212.4)
+    #expect(DocumentHTML.coverHeightMM("Letter", landscape: true) == 148.9)
+    #expect(DocumentHTML.printCss(pageSize: "A5", landscape: true, title: "T").contains(".cover { height: 81mm;"))
+    #expect(DocumentHTML.printCss(pageSize: "A4", landscape: false, title: "T").contains(".cover { height: 230mm;"))
+  }
+
   @Test func printsAsQuartzControl() {
     for w in Self.golden["widths"]!.arrayValue! {
       #expect(DocumentHTML.printWidthPx(w["size"]!.stringValue!, landscape: w["landscape"]!.boolValue!) == Int(w["result"]!.numberValue!))
     }
     for c in Self.golden["css"]!.arrayValue! {
-      let css = DocumentHTML.printCss(pageSize: c["pageSize"]!.stringValue!, landscape: c["landscape"]!.boolValue!, title: c["title"]!.stringValue!)
-      #expect(css == c["result"]!.stringValue!, "\(c["title"]!) \(c["pageSize"]!)")
+      let size = c["pageSize"]!.stringValue!, landscape = c["landscape"]!.boolValue!
+      let css = DocumentHTML.printCss(pageSize: size, landscape: landscape, title: c["title"]!.stringValue!)
+      #expect(css == Self.ownCover(c["result"]!.stringValue!, size, landscape), "\(c["title"]!) \(c["pageSize"]!)")
     }
     let constants = Self.golden["constants"]!
     #expect(constants["PAGE_PLACEHOLDER"] == .string(DocumentHTML.pagePlaceholder))
@@ -88,7 +110,7 @@ import Testing
       let patch = variant["patch"]!.objectValue!
       for key in patch.keys { input[key] = patch[key]! }
       let html = DocumentHTML.document(Self.parts(.object(input)))
-      let expected = Self.texts(variant["result"]!.stringValue!)
+      let expected = Self.ownCover(Self.texts(variant["result"]!.stringValue!), input["pageSize"]!.stringValue!, input["landscape"]!.boolValue!)
       #expect(html == expected, "\(JSJSON.compact(.object(patch)))")
     }
   }
