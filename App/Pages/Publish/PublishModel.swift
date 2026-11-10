@@ -237,9 +237,13 @@ final class PublishModel {
       guard await Confirm.ask(question, detail: detail, confirm: L10n.t("publish.confirmDeployAction"), window: window) else { return }
     default:
       let entries = (diff ?? []).filter { !isExcluded($0.path) }
-      let deletions = entries.filter { $0.status == .removed }.count
+      // Removed files are deleted only where the target says so, by the rule the run itself reads
+      // (`DeployContext.deleteRemoved`). With deleting off, the question said "1 Datei(en) werden
+      // auf dem Server gelöscht" in red, and the run then deleted nothing (measured 2026-11-10).
+      let removed = entries.filter { $0.status == .removed }.count
+      let deletions = d["deleteRemoved"] == .bool(true) ? removed : 0
       let (question, detail) = Confirm.split(L10n.t("publish.confirmDeployConnection", [
-        "target": target.name, "uploads": String(entries.count - deletions), "deletions": String(deletions),
+        "target": target.name, "uploads": String(entries.count - removed), "deletions": String(deletions),
       ]))
       guard await Confirm.ask(question, detail: detail, confirm: L10n.t("publish.confirmDeployAction"), destructive: deletions > 0,
                               window: window) else { return }

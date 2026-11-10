@@ -154,6 +154,9 @@ struct TargetSheet: View {
       .padding(16)
     }
     .frame(width: 560, height: 640)
+    // Escape closed the sheet by itself, past "Abbrechen" and its question, and a changed draft
+    // was gone without a word (measured 2026-11-10). Held, Escape reaches the cancel button.
+    .interactiveDismissDisabled(draft != opened)
     .sheet(item: $newConnection) { item in
       ConnectionSheet(title: L10n.t("settings.connections.newHeading", ["kind": ConnectionWords.kind(item.value.kind)]),
                       explainer: L10n.t("publish.connectionForm.explainer"), draft: item.value) { saved in
