@@ -83,6 +83,10 @@ struct CodeEditor: NSViewRepresentable {
     return scroll
   }
 
+  static func dismantleNSView(_ scroll: NSScrollView, coordinator: Coordinator) {
+    coordinator.undo.removeAllActions()
+  }
+
   func updateNSView(_ scroll: NSScrollView, context: Context) {
     let coordinator = context.coordinator
     coordinator.parent = self
@@ -104,6 +108,11 @@ struct CodeEditor: NSViewRepresentable {
 
     var parent: CodeEditor
     weak var view: NSTextView?
+    /// The editor's own history, gone with it. With the window's (NSTextView's default) a step
+    /// typed before a tab switch outlived its text view, and ⌘Z after the switch called it on the
+    /// freed view: QuartzHub crashed in `-[_NSUndoStack popAndInvoke]` (measured 2026-11-10,
+    /// Stile ▸ Eigenes CSS, typed, Basis, back, ⌘Z).
+    let undo = UndoManager()
     var lastInsertion: CodeInsertion?
     var lastJump: CodeJump?
     /// The user has set a cursor (typed, clicked, moved it); an outside change resets it.
@@ -112,6 +121,8 @@ struct CodeEditor: NSViewRepresentable {
     private var applying = false
 
     init(_ parent: CodeEditor) { self.parent = parent }
+
+    func undoManager(for view: NSTextView) -> UndoManager? { undo }
 
     func replace(with text: String) {
       guard let view else { return }
