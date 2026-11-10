@@ -1494,3 +1494,34 @@ Google-Schriften).
 
 Messwerkzeug: Tastenanschläge ohne Fokus im Suchfeld gingen an die Tippsuche der Seitenleiste
 („grenz“ sprang auf Git-Sync); vor dem Tippen `focused.swift` fragen.
+
+## Dokumente: Navigation und Sprache an der App gemessen
+
+Nachtrag zu „Dokumente und Export an der App gemessen“, am 2026-11-10, an APFS-Klonen von
+navigations-testprojekt und Example im Scratchpad. Die Symlinks unter `.quartz/plugins` (Frames und
+`quartz-navigations`) zeigten in den Klonen auf die Originale und wurden vorher auf Kopien
+umgebogen; Example hatte ein GitHub-Pages-Ziel, das aus der Kopie genommen wurde. Example-`content`
+ist ein Link in den Vault; geschrieben wurde dort nichts.
+
+- **Seiten ohne Navigation:** navigations-testprojekt nimmt seine Reihenfolge aus
+  quartz-navigations. Ein neues Buch zeigt unter „Diese Seiten zeigt die Website nicht in ihrer
+  Navigation. …“ die Seiten aus `ausgeblendeter-ordner/`, `optionen/` und andere; nach „Eigene
+  Reihenfolge“ hat jede „Aufnehmen: <Titel>“. „Versteckt per navHide“ aufgenommen und gespeichert:
+  der 43. Eintrag in `order`.
+- **Sprache:** Example (de/en) zeigt „Hauptsprache der Website (Deutsch)“, „Deutsch“ und
+  „English“. Mit „English“ sind alle 137 Einträge Seiten unter `en/`; gespeichert `"language":
+  "en"`. Exportiert wurde nicht (siehe unten).
+
+Kein Befund.
+
+**Nicht ohne Netz, wie vorher angenommen:** Ein Export der pub-Kopie mit einem Buch an der Wurzel
+lief durch alle 137 Seiten und wurde nach 29 abgebrochen („Der Export wurde abgebrochen. Es wurde
+nichts geschrieben.“, die Dateien danach gleich; der Abbruch griff erst nach rund 10 s). Dabei fiel
+auf: Das Exportfenster lässt nach QuartzControls Regel fremde Stylesheets, Schriften, Bilder und
+Mermaid-Skripte durch, und jede gebaute Seite von gui-test bindet `katex.min.css` von jsdelivr ein,
+die Seiten mit Diagrammen Mermaid von cdnjs. Dieser Export hat also wahrscheinlich bei jsdelivr und
+cdnjs geladen, und die Export-Durchgänge vorher an dieser Kopie, die oben „ohne Netz“ heißen, haben
+mindestens das KaTeX-Stylesheet geholt. Nur Abrufe, hochgeladen wurde nichts. Wer künftig ohne Netz
+exportieren will, braucht einen Build ohne diese Verweise (wie `cdn-build.mjs` für die Kerntests).
+Deshalb offen: die Ersatzsätze für Formular, Video und Leinwand und das Zählen fremder Anfragen an
+der App (im Kern gemessen, P3 9b), ePub mit epubcheck (VM).
