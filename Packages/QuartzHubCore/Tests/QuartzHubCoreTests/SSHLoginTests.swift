@@ -122,6 +122,27 @@ import Testing
       == L10n.t("main.rsyncHostKeyMismatch", ["host": "127.0.0.1", "expected": other.hostKey.fingerprint, "received": sshd.hostKey.fingerprint]))
   }
 
+  /// rsync's errno after a login that worked is not a refused login: the run below is from
+  /// debian-vm (rsync 3.5.0, a folder owned by root in the target, 2026-11-10).
+  @Test func aRefusedDeletionIsNotARefusedLogin() {
+    var object = JSONObject([("id", .string("x")), ("kind", .string("ssh")), ("host", .string("debian.local")),
+                             ("port", .number(22)), ("username", .string("boxi"))])
+    object["authMethod"] = .string("privateKey")
+    object["keyPath"] = .string("/Users/boxi/.ssh/id_ed25519")
+    let connection = Connection(stored: StoredConnection(object: object))
+    let deletion = """
+      rsync: [generator] delete_file: unlink(gesperrt/alt.html) failed: Permission denied (13)
+      cannot delete non-empty directory: gesperrt
+      .d..t.... ./
+      """
+    #expect(SSHFailure.translate(deletion, connection: connection) == nil)
+    let who = ["user": "boxi", "host": "debian.local", "identity": "/Users/boxi/.ssh/id_ed25519"]
+    for refused in ["boxi@debian.local: Permission denied (publickey).", "boxi@debian.local: Permission denied (password).",
+                    "boxi@debian.local: Permission denied (publickey,password,keyboard-interactive)."] {
+      #expect(SSHFailure.translate(refused, connection: connection)?.hasPrefix(L10n.t("main.rsyncKeyRejected", who)) == true, "\(refused)")
+    }
+  }
+
   @Test func aRefusedPortIsASentence() async throws {
     var object = JSONObject([("id", .string("x")), ("kind", .string("ssh")), ("host", .string("127.0.0.1")),
                              ("port", .number(Double(LocalSSHD.freePort()))), ("username", .string("u"))])

@@ -26,7 +26,7 @@ public enum SSHFailure {
       guard connection.authMethod == .agent else { return nil }
       return "\(L10n.t("main.sshTooManyKeys", ["user": connection.username, "host": connection.host]))\n\n\(raw)"
     }
-    if JSText.includes(output, "Permission denied (") {
+    if refusedLogin(output) {
       return "\(loginRefused(connection))\n\n\(raw)"
     }
     if JSText.test(output, "Timeout, server .* not responding") {
@@ -36,6 +36,16 @@ public enum SSHFailure {
       return "\(L10n.t("main.sshPortRefused", ["host": connection.host, "port": String(connection.port)]))\n\n\(raw)"
     }
     return nil
+  }
+
+  /// ssh's refused login, "user@host: Permission denied (publickey,password).": the parentheses
+  /// hold the methods the server offered. QuartzControl matches "Permission denied (publickey"
+  /// only; a password-only server says "(password)", so this takes any list of method names, but
+  /// not rsync's errno, "unlink(gesperrt/alt.html) failed: Permission denied (13)". That line,
+  /// from a folder owned by root on debian-vm (2026-11-10), was reported as the server refusing the
+  /// key the run had just logged in with.
+  static func refusedLogin(_ output: String) -> Bool {
+    JSText.test(output, #"Permission denied \([a-z-]+(?:,[a-z-]+)*\)"#)
   }
 
   /// Which sentence a refused login gets: the advice about a key's .pub file fits only a key file.
