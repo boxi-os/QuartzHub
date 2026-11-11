@@ -7,11 +7,12 @@
 //   { "op": "write", "text": "…", "configuration": {…}, "theme": {…}, "plugins": [{…}], "layout"?: {…} }
 //       → { text } — or { errors } / { notAMapping: true } when the file on disk cannot take it
 //
-// `write` is writeConfigNow from QuartzControl's configService.ts, operation for operation (same
-// library, same calls, lineWidth 120), so a file written by either app reads the same in the other
-// and a save changes in the file exactly what it changed there. What configService does around it
+// `write` is writeConfigNow from QuartzControl's configService.ts (same library, lineWidth 120), so
+// a file written by either app reads the same in the other. One deviation: an unchanged value
+// keeps its node, so a save no longer takes comments, flow style or anchors out of what it did not
+// change (`syncMapping`; Review 2026-11-11 (2), nebenbei 1). What configService does around it
 // moves to Swift (ConfigFile): the file itself, the lock, the frame paths, the sentences.
-import { parseDocument, Document, isMap } from 'yaml'
+import { parseDocument, Document, isAlias, isMap } from 'yaml'
 import { runHelper } from './protocol'
 
 function errorsOf(doc: Document): { message: string; line?: number; col?: number }[] {
@@ -53,7 +54,17 @@ function revive(incoming: unknown, existing: unknown): unknown {
 // save forever. This reconciles a mapping node with the incoming object: keys absent from `next`
 // are deleted, the rest are set field-by-field so surrounding YAML comments stay intact.
 // `keep` exempts keys that live under the same node but are managed elsewhere. (configService.ts)
-function syncMapping(doc: Document, nodePath: string[], next: Record<string, unknown>, keep: string[] = []): void {
+//
+// Deviation from configService: a value that has not changed is left alone, and a mapping goes
+// down key by key. setIn replaces a collection node and the comments inside it, so every save
+// took the comments out of `configuration.links`, `.contentIndex` and `.drafts`, the blocks
+// `plugin doctor --fix` writes with "comments are kept" (Review 2026-11-11 (2), nebenbei 1). The
+// values written are the same.
+//
+// `ordered`: the keys end in `next`'s order, as when QuartzControl replaced the whole value (every
+// level below `configuration`'s own keys, and `layout.groups`/`byPageType`); the pairs move with
+// their comments.
+function syncMapping(doc: Document, nodePath: string[], next: Record<string, unknown>, keep: string[] = [], ordered = false): void {
   const node = doc.getIn(nodePath)
   if (isMap(node)) {
     const exempt = new Set(keep)
@@ -63,8 +74,27 @@ function syncMapping(doc: Document, nodePath: string[], next: Record<string, unk
     for (const key of stale) doc.deleteIn([...nodePath, key])
   }
   for (const [key, value] of Object.entries(next)) {
-    doc.setIn([...nodePath, key], value)
+    const path = [...nodePath, key]
+    const current = doc.getIn(path)
+    if (isPlainObject(value) && isMap(current) && !isAlias(current)) {
+      syncMapping(doc, path, value, [], true)
+    } else if (!(doc.hasIn(path) && same(current, value))) {
+      doc.setIn(path, value)
+    }
   }
+  const synced = doc.getIn(nodePath)
+  if (ordered && isMap(synced)) {
+    const order = Object.keys(next)
+    synced.items.sort((a, b) => order.indexOf(String(a.key)) - order.indexOf(String(b.key)))
+  }
+}
+
+// The node already holds this value: the same scalar or the same collection, as JSON sees it. An
+// alias never counts: its anchor may just have been changed, and the alias would follow it.
+function same(node: unknown, value: unknown): boolean {
+  if (isAlias(node)) return false
+  const held = node !== null && typeof node === 'object' && 'toJSON' in node ? (node as { toJSON(): unknown }).toJSON() : node
+  return JSON.stringify(held) === JSON.stringify(value)
 }
 
 function object(raw: unknown, name: string): Record<string, unknown> {
@@ -107,8 +137,12 @@ function write(r: Record<string, unknown>, text: string): Record<string, unknown
   // Only when the config carries a layout: every save round-trips what it loaded.
   if (r.layout !== undefined && r.layout !== null) {
     const layout = revive(object(r.layout, 'layout'), held.layout) as Record<string, unknown>
-    doc.setIn(['layout', 'groups'], layout.groups ?? {})
-    doc.setIn(['layout', 'byPageType'], layout.byPageType ?? {})
+    // Key by key, as `configuration`: a comment inside a page type's entry survived no save.
+    for (const key of ['groups', 'byPageType']) {
+      const value = layout[key] ?? {}
+      if (isPlainObject(value) && isMap(doc.getIn(['layout', key]))) syncMapping(doc, ['layout', key], value, [], true)
+      else doc.setIn(['layout', key], value)
+    }
     // Quartz 5.1's `layout.sidebars` ({ left, right }: fit | scroll | static). Not in
     // QuartzControl's writeConfigNow, which knew only the two keys above: written when the layout
     // carries it, removed when a layout read with it comes back without (decisions/phase-5-gleichstand.md).

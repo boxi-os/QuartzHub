@@ -1,0 +1,24 @@
+configuration:
+  pageTitle: Kette
+  sizes: [ 1, .inf, -0 ]
+  shared: &s
+    a: 1
+    b: [ x, y ]
+  again:
+    a: 2
+    b:
+      - x
+      - y
+  list: &l [ 1, 2 ]
+  listAgain:
+    - 1
+    - 2
+plugins:
+  - source: a
+    enabled: true
+    options: &a1
+      deep:
+        n: .nan
+  - source: b
+    enabled: false
+    options: *a1

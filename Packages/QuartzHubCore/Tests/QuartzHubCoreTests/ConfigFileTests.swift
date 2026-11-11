@@ -43,6 +43,48 @@ struct ConfigFileTests {
 
   // MARK: golden
 
+  /// Deviation from QuartzControl (Review 2026-11-11 (2), nebenbei 1): an unchanged value keeps its
+  /// node, so a comment inside `configuration.theme`, a flow list and an anchor stay as written,
+  /// where QuartzControl's setIn wrote them anew. The values read back are the same.
+  static let keepsWhatQuartzControlRewrote: Set<String> = ["special-unchanged", "anchors-unchanged", "anchors-edited"]
+
+  /// Review 2026-11-11 (2), nebenbei 1: comments inside Quartz 5.1's blocks (`plugin doctor --fix`
+  /// writes them "comments are kept") and inside a page type's entry survive a save, whether the
+  /// change is elsewhere or right beside them; a removed key still goes.
+  @Test func commentsInsideNestedBlocksStay() async throws {
+    let project = try project("""
+      configuration:
+        pageTitle: A
+        links:
+          # comment-in-links
+          markdownLinkResolution: shortest
+          lazyLoad: true
+        drafts:
+          enabled: true # comment-in-drafts
+      plugins: []
+      layout:
+        groups: {}
+        byPageType:
+          tag:
+            # comment-in-tag
+            exclude: [a]
+            sidebars: { left: static }
+
+      """)
+    var config = try await read(project)
+    var value = config.jsonValue
+    Self.apply(.object(JSONObject([("set", .array([.string("configuration"), .string("pageTitle")])), ("value", .string("B"))])), to: &value)
+    Self.apply(.object(JSONObject([("set", .array([.string("configuration"), .string("links"), .string("lazyLoad")])), ("value", .bool(false))])), to: &value)
+    Self.apply(.object(JSONObject([("set", .array([.string("layout"), .string("byPageType"), .string("tag"), .string("exclude")])), ("value", .array([.string("b")]))])), to: &value)
+    config = try #require(QuartzConfig(jsonValue: value))
+    try await write(config, project)
+    let text = try fileText(project)
+    for comment in ["# comment-in-links", "# comment-in-drafts", "# comment-in-tag"] { #expect(text.contains(comment), "\(comment)\n\(text)") }
+    let reread = try await read(project).jsonValue
+    #expect(reread["configuration"]?["links"]?["lazyLoad"] == .bool(false))
+    #expect(reread["layout"]?["byPageType"]?["tag"]?["exclude"] == .array([.string("b")]))
+  }
+
   @Test func thereAreCases() {
     #expect(Self.cases.count >= 15, "scripts/config-golden.mjs")
   }
@@ -76,7 +118,14 @@ struct ConfigFileTests {
       try await write(changed, project)
       #expect(error == nil, "QuartzControl refused to write \(name)")
       let written = try Posix.read(ConfigFile.path(project: project))
-      #expect(written == fixture("expected.yaml"), "\(name)")
+      if Self.keepsWhatQuartzControlRewrote.contains(name) {
+        // The text is QuartzHub's own; what it says is QuartzControl's.
+        #expect(written == fixture("expected-quartzhub.yaml"), "\(name)")
+        let theirs = try self.project(String(decoding: fixture("expected.yaml")!, as: UTF8.self), name: "QuartzControl-\u{DC}ber")
+        #expect(try await read(project).jsonValue == (try await read(theirs)).jsonValue, "\(name): values")
+      } else {
+        #expect(written == fixture("expected.yaml"), "\(name)")
+      }
     } catch let failure as ConfigFile.Failure {
       #expect(error?["during"] == .string("write"), "\(failure)")
       #expect(Self.describe(failure) == error.map(Self.describe), "\(name)")
