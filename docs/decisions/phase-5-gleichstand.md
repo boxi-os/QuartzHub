@@ -2642,3 +2642,32 @@ an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwer
   QuartzControls `menu.ts`), Datenordner und Lizenzen, die Adresse des laufenden Dev-Servers,
   „Repository auf GitHub öffnen“ im Inspektor und im Kontextmenü, „Extern öffnen“ in Eigenes CSS.
   QuartzHub blieb jedes Mal vorn.
+- **Entfernen, vierte Fassung.** Am Relay-Klon mit laufendem Dev-Server und Relay-Geheimnissen
+  fragt „Aus der Liste entfernen…“ mit `home.confirmRemoveRunningRelay`. Danach war Port 8080 frei,
+  die Projekt-ID nicht mehr in `relay-secrets.json` (nur gezählt, nicht gelesen), der Ordner da.
+- **Werkzeug-Band.** Eine Kopie des Debug-Baus mit einer kaputten Node in `Contents/Resources`
+  (ein Skript mit Exit 134; `RuntimeLocation` nimmt das Paket, sobald es vollständig ist) zeigt
+  „node — gefunden, lässt sich aber nicht ausführen“, ebenso npm. Nach dem Reparieren nimmt
+  „Erneut prüfen“ das Band ohne Neustart weg. „fehlt“ und „inkompatibel“ sind hier nicht
+  herstellbar: Homebrews node und npm und `/usr/bin/git` liegen auf dem PATH.
+- **Ersatzsatz für Video und Leinwand.** Am Relay-Klon `content/qh-probe/` mit `![[clip.mp4]]` und
+  einer `.canvas` (canvas-page), danach wieder entfernt. Export „CDN-Probe“ ohne Netz: 4 statt 2
+  Ersetzungen; das Video nennt seine Quelle, die Leinwand ihre Seite, wie `pageScripts.ts`.
+- **Formular-Texte, ältere Fassung.** quartz-forms 0.5.8 per `git archive` aus dem Repo (nur
+  gelesen) in die Forms-Kopie, danach zurück auf 0.6.0: der Hinweis „ab quartz-forms 0.5.9;
+  installiert ist 0.5.8“ und darunter die rohe Option `texts`.
+- **„nicht auflösbar (nur in einem Selektor gesetzt)“** verlangt eine Variable ohne Wert in beiden
+  Modi. Eine Variable nur unter `:root[saved-theme="dark"]` zeigt ihren Wert auch hell, in beiden
+  Apps (`info[mode] ?? info.light ?? info.dark`; der Kern gibt an der Kopie dasselbe wie
+  QuartzControls `variableGraphService`); eine nur in `.klasse` gesetzte liest kein Graph. Jede
+  Hauptvariable hat einen Vorgabewert aus Palette oder Schrift: an einem echten Projekt nicht
+  herstellbar. Neue Namen kommen aus dem letzten Build; die Probe erschien erst nach „Jetzt bauen“.
+- **Nicht auslösbar, deshalb `anders`:** „Während ein Plugin entfernt wird …“ (alles hängt an
+  `busy`, auch „Nach oben/unten“ im Menü) und „Zweiter Lauf“ beim Core-Update (das Projektmodell
+  hält `coreBusy` über das Verlassen der Seite hinweg). QuartzControl ließ beides zu und wies es im
+  Hauptprozess ab; die Abweisungen bleiben hier als Sicherung.
+- **Kein Fall auf macOS:** die fehlende verschlüsselte Ablage beim Relay (`storageAvailable: true`).
+- **Nebenbefund:** `SiteFonts` sucht die Schriftregeln des Builds in `public/index.css`. Quartz
+  5.1 schreibt `index-<hash>.css` (an der Kopie `index-935eccdc.css`), die Datei wird also nie
+  gefunden, und `SiteFonts.swift:120` hält jedes 5.1-Projekt für ungebaut. Der Variablen-Graph
+  liest alle CSS-Dateien und ist nicht betroffen.
