@@ -75,6 +75,8 @@ final class PluginsModel {
   private(set) var features = QuartzFeatures()
   /// Quartz's own check (`plugin doctor`, 5.1), read after every reload; nil before and on 5.0.
   private(set) var doctor: PluginDoctorReport?
+  /// Doctor's whole answer, for the sentence that says it could not check.
+  private(set) var doctorOutput = ""
   private var doctorRun = 0
 
   private var writes: Task<Void, Never>?
@@ -119,6 +121,15 @@ final class PluginsModel {
     let result = await PluginCommands.shared.doctor(project: project.path, fix: false, environment: environment)
     guard run == doctorRun else { return }
     doctor = PluginDoctorReport.parse(result.output)
+    doctorOutput = result.output
+  }
+
+  /// Doctor ran but never got to checking (a crash, its deadline): no findings mean nothing.
+  var doctorFailed: Bool { doctor.map { !$0.ran } ?? false }
+
+  /// What doctor says about no plugin on the list: the lock file, an entry without a source.
+  var doctorGeneral: [PluginDoctorReport.Finding] {
+    doctor?.unassigned(names: items.map(\.entry.name)) ?? []
   }
 
   func findings(_ item: IndexedPlugin) -> [PluginDoctorReport.Finding] {

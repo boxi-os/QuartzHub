@@ -22,13 +22,19 @@ public struct PluginDoctorReport: Equatable, Sendable {
   }
 
   public var findings: [Finding]
+  /// Doctor got as far as its first line, `Checking plugins (Quartz …)...`. Without it, no
+  /// findings mean "could not check", not "nothing to say" (Review 2026-11-11 (2), N2: a crashed
+  /// or timed-out run read like a clean one).
+  public var ran: Bool
 
-  public init(findings: [Finding]) {
+  public init(findings: [Finding], ran: Bool = true) {
     self.findings = findings
+    self.ran = ran
   }
 
   public static func parse(_ output: String) -> PluginDoctorReport {
     let plain = output.replacing(/\x1b\[[0-9;]*m/, with: "")
+    let ran = plain.contains("Checking plugins (")
     var findings: [Finding] = []
     for raw in plain.split(separator: "\n", omittingEmptySubsequences: false) {
       let line = String(raw)
@@ -46,7 +52,20 @@ public struct PluginDoctorReport: Equatable, Sendable {
         findings.append(Finding(severity: severity, subject: nil, message: body))
       }
     }
-    return PluginDoctorReport(findings: findings)
+    return PluginDoctorReport(findings: findings, ran: ran)
+  }
+
+  /// An error that is not one of QuartzHub's intended duplicates: the next build may fail on it.
+  public var hasErrors: Bool {
+    findings.contains { finding in
+      finding.severity == .error && !Self.instancePlugins.contains { Self.matches(finding, $0) && Self.intended(finding, of: $0) }
+    }
+  }
+
+  /// The findings no plugin of `names` owns: a broken `quartz.lock.json`, an entry `plugins[3]`
+  /// without a source. A plugin page that sorts findings to plugins would drop them.
+  public func unassigned(names: [String]) -> [Finding] {
+    findings.filter { finding in !names.contains { Self.matches(finding, $0) } }
   }
 
   /// The plugins QuartzHub enters more than once on purpose, one entry per navigation or box.
@@ -75,17 +94,20 @@ public struct PluginDoctorReport: Equatable, Sendable {
   /// its last segment, as QuartzHub does.
   public func findings(for name: String) -> [Finding] {
     guard !name.isEmpty else { return [] }
-    let names = { (label: Substring) in label == name || label.hasSuffix("/\(name)") }
-    return findings.filter { finding in
-      if let subject = finding.subject { return names(Substring(subject)) }
-      // "<label>[@<version>] requires …": the version goes, a scope's leading "@" stays.
-      guard var label = finding.message.split(separator: " ", maxSplits: 1).first else { return false }
-      if let at = label.lastIndex(of: "@"), at != label.startIndex { label = label[..<at] }
-      return names(label)
-    }.map { finding in
+    return findings.filter { Self.matches($0, name) }.map { finding in
       var marked = finding
       marked.intended = Self.intended(finding, of: name)
       return marked
     }
+  }
+
+  static func matches(_ finding: Finding, _ name: String) -> Bool {
+    guard !name.isEmpty else { return false }
+    let names = { (label: Substring) in label == name || label.hasSuffix("/\(name)") }
+    if let subject = finding.subject { return names(Substring(subject)) }
+    // "<label>[@<version>] requires …": the version goes, a scope's leading "@" stays.
+    guard var label = finding.message.split(separator: " ", maxSplits: 1).first else { return false }
+    if let at = label.lastIndex(of: "@"), at != label.startIndex { label = label[..<at] }
+    return names(label)
   }
 }

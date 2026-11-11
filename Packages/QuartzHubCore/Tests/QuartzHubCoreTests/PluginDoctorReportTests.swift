@@ -51,4 +51,32 @@ import Testing
     #expect(report.findings(for: "explorer").isEmpty)
     #expect(report.findings(for: "").isEmpty)
   }
+
+  /// Review 2026-11-11 (2), N2: a run that never got to its first line is "could not check", and
+  /// findings without a plugin are kept for the page to show.
+  @Test func aRunThatDidNotCheckAndFindingsWithoutAPlugin() throws {
+    #expect(PluginDoctorReport.parse(String(decoding: try Posix.read(Self.fixture), as: UTF8.self)).ran)
+    let crashed = PluginDoctorReport.parse("Error: Cannot find module '/x/quartz/bootstrap-cli.mjs'\n")
+    #expect(!crashed.ran && crashed.findings.isEmpty)
+    #expect(!PluginDoctorReport.parse("").ran)
+    let broken = PluginDoctorReport.parse("""
+      Checking plugins (Quartz 5.1.0)...
+
+      ✗ quartz.lock.json: is not valid JSON
+      ✗ plugins[3]: has no source
+      ⚠ crawl-links: is built into Quartz now (configuration.links); this entry is applied automatically
+      """)
+    #expect(broken.ran)
+    #expect(broken.unassigned(names: ["crawl-links", "quartz-layout-box"]).map(\.subject) == ["quartz.lock.json", "plugins[3]"])
+  }
+
+  /// After a core update: QuartzHub's intended duplicates and warnings are no reason to say the
+  /// next build may fail; any other error is.
+  @Test func errorsBesidesTheIntendedOnes() {
+    let twice = "✗ quartz-layout-box: configured twice (also as github:boxi-os/quartz-layout-box) — both copies would be loaded\n"
+    let warning = "⚠ crawl-links: is built into Quartz now (configuration.links); this entry is applied automatically\n"
+    #expect(!PluginDoctorReport.parse(twice + warning).hasErrors)
+    #expect(PluginDoctorReport.parse(twice + "✗ obsidian-plugin-excalidraw: configured twice (also as x) — both copies would be loaded\n").hasErrors)
+    #expect(PluginDoctorReport.parse(twice + "✗ quartz.lock.json: is not valid JSON\n").hasErrors)
+  }
 }

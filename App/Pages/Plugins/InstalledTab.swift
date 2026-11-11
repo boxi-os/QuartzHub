@@ -147,6 +147,25 @@ struct InstalledTab: View {
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("plugins.markdownOrder")
       }
+      if model.doctorFailed {
+        // Review 2026-11-11 (2), N2: without this the tab looked like a clean check.
+        VStack(alignment: .leading, spacing: 2) {
+          Label(L10n.t("pluginsInstalled.doctorFailed"), systemImage: "exclamationmark.triangle.fill")
+            .foregroundStyle(.orange)
+          Text(model.doctorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
+            .font(.caption.monospaced()).foregroundStyle(.secondary).textSelection(.enabled).lineLimit(4)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("plugins.doctorFailed")
+      }
+      ForEach(Array(model.doctorGeneral.enumerated()), id: \.offset) { _, finding in
+        Label([finding.subject, finding.message].compactMap { $0 }.joined(separator: ": "),
+              systemImage: finding.severity == .error ? "xmark.octagon.fill" : "exclamationmark.triangle.fill")
+          .foregroundStyle(finding.severity == .error ? .red : .orange)
+          .textSelection(.enabled)
+          .help(finding.hint ?? "")
+          .accessibilityIdentifier("plugins.doctorGeneral")
+      }
       if let message = model.message {
         Text(message).foregroundStyle(.red).textSelection(.enabled).lineLimit(8)
       } else if model.refused {

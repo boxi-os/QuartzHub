@@ -156,9 +156,12 @@ struct UpdatesPage: View {
   @ViewBuilder private func afterUpdate(_ doctor: String) -> some View {
     VStack(alignment: .leading, spacing: 6) {
       Text(L10n.t("updates.core.doctorHeading")).fontWeight(.medium)
-      Note(L10n.t("updates.core.doctorHint"))
+      let report = PluginDoctorReport.parse(doctor)
+      // Review 2026-11-11 (2), N2: "only warns" stood above Quartz's errors as well.
+      Note(!report.ran ? L10n.t("updates.core.doctorFailed")
+           : report.hasErrors ? L10n.t("updates.core.doctorErrors") : L10n.t("updates.core.doctorHint"))
       RunOutput(text: doctor, label: L10n.t("updates.core.doctorHeading"), identifier: "updates.doctorAfter")
-      let intended = PluginDoctorReport.parse(doctor).intendedPlugins
+      let intended = report.intendedPlugins
       if !intended.isEmpty { Note(L10n.t("updates.core.doctorIntended", ["names": intended.joined(separator: ", ")])) }
       BuiltinMigration(project: project, pending: model.pendingMigrations) { await model.checkAfterUpdate() }
       if model.markdownOrderProblem {

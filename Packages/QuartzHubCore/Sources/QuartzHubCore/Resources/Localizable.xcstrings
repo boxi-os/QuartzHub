@@ -36564,6 +36564,23 @@
         }
       }
     },
+    "pluginsInstalled.doctorFailed" : {
+      "comment" : "Plugins ▸ Installiert, above the list: plugin doctor did not get to checking",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz konnte die Plugins nicht prüfen. Ohne diese Prüfung fehlen hier Quartz’ Hinweise."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz could not check the plugins. Without that check, Quartz’s notes are missing here."
+          }
+        }
+      }
+    },
     "pluginsInstalled.doctorFooter" : {
       "comment" : "Plugins ▸ Installiert, Quartz 5.1: inspector footer",
       "localizations" : {
@@ -54614,6 +54631,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conflicts in these files (aside from the locale files .gitattributes protects):"
+          }
+        }
+      }
+    },
+    "updates.core.doctorErrors" : {
+      "comment" : "Updates, after a core update: plugin doctor reported errors other than QuartzHub's intended duplicates",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz meldet Fehler, an denen der nächste Build scheitern kann. Einzelheiten je Plugin stehen auf der Seite Plugins."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz reports errors the next build may fail on. Details per plugin are on the Plugins page."
+          }
+        }
+      }
+    },
+    "updates.core.doctorFailed" : {
+      "comment" : "Updates, after a core update: plugin doctor did not get to checking",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz konnte die Plugins nicht prüfen; die Ausgabe steht darunter."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz could not check the plugins; its output is below."
           }
         }
       }
