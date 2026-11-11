@@ -55,9 +55,15 @@ public final class FTPSession: @unchecked Sendable {
     var secrets: [String] = []
   }
 
+  /// The helper's rule (`ftp-session.ts`): after "PASS " always, elsewhere only from 8 characters
+  /// on, so a short password does not turn every word it matches into "***" (Review 2026-11-11 (2),
+  /// nebenbei 7).
   func redact(_ text: String) -> String {
     let secrets = state.withLock { $0.secrets }
-    return secrets.filter { !$0.isEmpty }.reduce(text) { $0.replacingOccurrences(of: $1, with: "***", options: .literal) }
+    return secrets.filter { !$0.isEmpty }.reduce(text) { text, secret in
+      let command = text.replacingOccurrences(of: "PASS \(secret)", with: "PASS ***", options: .literal)
+      return JSText.length(secret) >= 8 ? command.replacingOccurrences(of: secret, with: "***", options: .literal) : command
+    }
   }
 
   private init(process: LaunchedProcess, input: Int32, output: Int32, errors: Int32) {

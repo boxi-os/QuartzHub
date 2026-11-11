@@ -59,4 +59,25 @@ struct FTPRedactionTests {
     #expect(!shown.isEmpty)
     #expect(!shown.contains("qh-geheim-7Xq"), "\(shown)")
   }
+
+  /// Review 2026-11-11 (2), nebenbei 7: a short password is not an oracle. With "no" the server's
+  /// "530 no" stays readable, and the redaction still takes it out of the refused command.
+  @Test func aShortPasswordDoesNotBlankEveryWord() async throws {
+    let (port, done) = try Self.greeter()
+    defer { done() }
+    let ftp = try FTPSession.start(runtime: HelperRuntime.runtime)
+    var shown = ""
+    do {
+      try await ftp.access(host: "127.0.0.1", port: port, user: "u", password: "no", secure: false, ca: nil)
+      Issue.record("logged in")
+    } catch let failure as FTPSession.Failure {
+      shown = failure.message + "\n" + failure.text
+    } catch let error as FTPSession.FTPError {
+      shown = error.message + "\n" + error.text
+    }
+    #expect(shown.contains("530 no"), "\(shown)")
+    #expect(ftp.redact("Invalid command: Contains control characters. (PASS no)") == "Invalid command: Contains control characters. (PASS ***)")
+    #expect(ftp.redact("Socket.<anonymous>") == "Socket.<anonymous>")
+    await ftp.close()
+  }
 }

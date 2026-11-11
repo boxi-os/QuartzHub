@@ -19,10 +19,20 @@ const client = new Client(TIMEOUT_MS)
 // refuses ("Invalid command: Contains control characters. (PASS …)"), and an error thrown outside
 // a call ends the process with Node's report on stderr, which QuartzHub shows (measured
 // 2026-11-11 with a password that ended in a newline).
+//
+// Where it stands after "PASS " it goes whatever its length; elsewhere only from 8 characters
+// on. Every occurrence of a short one made the redaction an oracle: password "no" turned the
+// server's "530 no" into "530 ***" (Review 2026-11-11 (2), nebenbei 7). FTPSession.redact is the
+// same rule on the Swift side.
 const secrets: string[] = []
+const MIN_FREE = 8
 function redact(text: string): string {
   let out = text
-  for (const secret of secrets) if (secret) out = out.split(secret).join('***')
+  for (const secret of secrets) {
+    if (!secret) continue
+    out = out.split(`PASS ${secret}`).join('PASS ***')
+    if (secret.length >= MIN_FREE) out = out.split(secret).join('***')
+  }
   return out
 }
 function die(error: unknown): never {
