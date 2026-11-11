@@ -40,6 +40,17 @@ final class UpdatesModel {
   private var round = 0
   var checking: Bool { checks > 0 }
 
+  /// package.json's version at HEAD and at the newest upstream commit.
+  var versions: CoreUpdate.Versions?
+  /// While behind: the release notes between the two, from upstream's CHANGELOG.md.
+  var notesAhead: [ReleaseNotes.Section] = []
+  /// After a run that changed the version: what came with it (`npx quartz upgrade` shows the same).
+  var notesDone: [ReleaseNotes.Section] = []
+  /// After a run on a Quartz with `plugin doctor` (5.1): its check, read only.
+  var doctorAfter: String?
+  var pendingMigrations: [String] = []
+  var markdownOrderProblem = false
+
   var coreBusy = false
   var coreResult: Outcome?
   var pluginRun: PluginRun?
@@ -84,6 +95,31 @@ final class UpdatesModel {
     let answers = await (core, plugins, git)
     guard mine == round else { return }
     (self.core, self.plugins, self.git) = answers
+    let latest = answers.0.latestCommit
+    let versions = await updater.versions(project: path, latestCommit: latest)
+    var ahead: [ReleaseNotes.Section] = []
+    if answers.0.state == .behind, let installed = versions.installed, let newest = versions.latest, installed != newest {
+      ahead = await updater.releaseNotes(project: path, revision: latest, from: installed, to: newest)
+    }
+    guard mine == round else { return }
+    (self.versions, notesAhead) = (versions, ahead)
+  }
+
+  /// Quartz's check after the update, and what QuartzHub offers from it: the move of the built-in
+  /// plugins' entries and the Markdown order (both also on the Plugins page).
+  func checkAfterUpdate() async {
+    let path = path
+    guard QuartzFeatures.read(project: path).builtins else {
+      (doctorAfter, pendingMigrations, markdownOrderProblem) = (nil, [], false)
+      return
+    }
+    let environment = await environment()
+    let doctor = await PluginCommands.shared.doctor(project: path, fix: false, environment: environment)
+    doctorAfter = doctor.output
+    if let config = try? await ConfigFile.read(project: path, runtime: environment.runtime) {
+      pendingMigrations = BuiltinProcessing.pendingMigrations(config.plugins).map { config.plugins[$0].name }
+      markdownOrderProblem = BuiltinProcessing.markdownOrderProblem(config.plugins) != nil
+    }
   }
 
   // MARK: The core
@@ -95,9 +131,15 @@ final class UpdatesModel {
     guard await Confirm.ask(question, detail: detail, confirm: L10n.t("updates.core.runUpdate"), window: window) else { return }
     coreBusy = true
     coreResult = nil
+    (notesDone, doctorAfter, pendingMigrations, markdownOrderProblem) = ([], nil, [], false)
     let updater = updater(await environment())
+    let fromVersion = await updater.versions(project: path, latestCommit: "").installed
     do {
       let result = try await updater.run(project: path)
+      if result.success, let from = fromVersion, let to = await updater.versions(project: path, latestCommit: "").installed, from != to {
+        notesDone = await updater.releaseNotes(project: path, revision: "HEAD", from: from, to: to)
+      }
+      if result.success { await checkAfterUpdate() }
       coreResult = Outcome(title: result.success ? L10n.t("updates.core.done") : L10n.t("updates.core.failed"), success: result.success,
                            output: result.output, snapshotId: result.snapshotId, conflicts: result.conflicts ?? [])
     } catch {

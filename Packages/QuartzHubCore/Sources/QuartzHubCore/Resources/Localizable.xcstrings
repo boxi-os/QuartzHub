@@ -54380,6 +54380,40 @@
         }
       }
     },
+    "updates.core.doctorHeading" : {
+      "comment" : "Updates ▸ Quartz-Kern, Quartz 5.1: plugin doctor output after a run",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz' Prüfung nach dem Update"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz's check after the update"
+          }
+        }
+      }
+    },
+    "updates.core.doctorHint" : {
+      "comment" : "Updates ▸ Quartz-Kern, Quartz 5.1: under the heading",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz baut alte Einträge weiter und warnt nur. Einzelheiten je Plugin stehen auf der Seite Plugins."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz keeps building old entries and only warns. Details per plugin are on the Plugins page."
+          }
+        }
+      }
+    },
     "updates.core.done" : {
       "comment" : "Updates page, Quartz core: above the output of a run that succeeded; also announced",
       "localizations" : {
@@ -54470,6 +54504,23 @@
         }
       }
     },
+    "updates.core.openPlugins" : {
+      "comment" : "Updates ▸ Quartz-Kern, Quartz 5.1: link after the check",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu den Plugins"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Plugins"
+          }
+        }
+      }
+    },
     "updates.core.openSnapshot" : {
       "localizations" : {
         "de" : {
@@ -54551,6 +54602,23 @@
         }
       }
     },
+    "updates.core.releaseNotes" : {
+      "comment" : "Updates ▸ Quartz-Kern, Quartz 5.1: folded release notes from CHANGELOG.md",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu in Quartz {{versions}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New in Quartz {{versions}}"
+          }
+        }
+      }
+    },
     "updates.core.runUpdate" : {
       "localizations" : {
         "de" : {
@@ -54580,6 +54648,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Updating…"
+          }
+        }
+      }
+    },
+    "updates.core.versions" : {
+      "comment" : "Updates ▸ Quartz-Kern, Quartz 5.1: status line when both package.json versions are known",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installiert: Quartz {{current}} ({{currentCommit}}) · Neueste Version: Quartz {{latest}} ({{latestCommit}})"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installed: Quartz {{current}} ({{currentCommit}}) · Latest: Quartz {{latest}} ({{latestCommit}})"
           }
         }
       }

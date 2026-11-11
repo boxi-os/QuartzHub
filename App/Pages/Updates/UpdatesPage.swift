@@ -107,6 +107,10 @@ struct UpdatesPage: View {
         }
       }
 
+      if !model.notesAhead.isEmpty, model.coreResult == nil {
+        ReleaseNotesView(sections: model.notesAhead, identifier: "updates.notesAhead")
+      }
+
       if let result = model.coreResult {
         OutcomeTitle(title: result.title, success: result.success)
         if !result.conflicts.isEmpty {
@@ -127,12 +131,30 @@ struct UpdatesPage: View {
           }
           .buttonStyle(.link)
         }
+        if !model.notesDone.isEmpty { ReleaseNotesView(sections: model.notesDone, identifier: "updates.notesDone") }
+        if let doctor = model.doctorAfter { afterUpdate(doctor) }
       }
     } header: {
       SectionHeader(title: L10n.t("updates.core.heading"), symbol: "shippingbox") {
         if let core = model.core { stateBadge(core.state) }
       }
     }
+  }
+
+  /// Quartz's check after the update, with what can be done about it here.
+  @ViewBuilder private func afterUpdate(_ doctor: String) -> some View {
+    VStack(alignment: .leading, spacing: 6) {
+      Text(L10n.t("updates.core.doctorHeading")).fontWeight(.medium)
+      Note(L10n.t("updates.core.doctorHint"))
+      RunOutput(text: doctor, label: L10n.t("updates.core.doctorHeading"), identifier: "updates.doctorAfter")
+      BuiltinMigration(project: project, pending: model.pendingMigrations) { await model.checkAfterUpdate() }
+      if model.markdownOrderProblem {
+        Label(L10n.t("pluginsInstalled.markdownOrder"), systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+      }
+      Button(L10n.t("updates.core.openPlugins")) { openPage(.plugins) }.buttonStyle(.link)
+    }
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("updates.afterUpdate")
   }
 
   private var checkingLine: some View {
@@ -143,7 +165,13 @@ struct UpdatesPage: View {
   }
 
   private func commitsLine(_ core: CoreUpdate.Status) -> String {
-    var line = L10n.t("updates.core.commits", ["current": Self.short(core.currentCommit), "latest": Self.short(core.latestCommit)])
+    var line: String
+    if let installed = model.versions?.installed, let latest = model.versions?.latest {
+      line = L10n.t("updates.core.versions", ["current": installed, "currentCommit": Self.short(core.currentCommit),
+                                              "latest": latest, "latestCommit": Self.short(core.latestCommit)])
+    } else {
+      line = L10n.t("updates.core.commits", ["current": Self.short(core.currentCommit), "latest": Self.short(core.latestCommit)])
+    }
     // Asked of the number, not the state: "pending" wins over "behind", and a project half updated
     // and behind should say both. `> 0` because "upToDate" carries a zero.
     if let missing = core.missingCommits, missing > 0 {
@@ -255,5 +283,41 @@ struct UpdatesPage: View {
   static func short(_ commit: String?) -> String {
     guard let commit, !commit.isEmpty else { return "—" }
     return String(commit.prefix(7))
+  }
+}
+
+/// Quartz's release notes between two versions, as its CHANGELOG.md has them (Markdown left as
+/// text), folded: they run to a few hundred lines from 5.0 to 5.1.
+private struct ReleaseNotesView: View {
+  let sections: [ReleaseNotes.Section]
+  let identifier: String
+  @State private var open = false
+
+  /// Inline Markdown (code, emphasis, links) as text, line breaks kept; a changesets heading
+  /// ("### Minor Changes") loses its hashes. What does not parse stays the plain text.
+  static func rendered(_ body: String) -> AttributedString {
+    let text = body.replacing(#/(?m)^#{1,6} /#, with: "")
+    return (try? AttributedString(markdown: text, options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)))
+      ?? AttributedString(text)
+  }
+
+  var body: some View {
+    DisclosureGroup(isExpanded: $open) {
+      ScrollView {
+        VStack(alignment: .leading, spacing: 10) {
+          ForEach(sections, id: \.version) { section in
+            Text(verbatim: "Quartz \(section.version)").font(.headline)
+            Text(Self.rendered(section.body)).font(.callout).textSelection(.enabled)
+          }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(8)
+      }
+      .frame(maxHeight: 320)
+      .background(RoundedRectangle(cornerRadius: 6).fill(.background.secondary))
+    } label: {
+      Text(L10n.t("updates.core.releaseNotes", ["versions": sections.map(\.version).joined(separator: ", ")]))
+    }
+    .accessibilityIdentifier(identifier)
   }
 }
