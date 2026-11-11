@@ -240,6 +240,7 @@ extension Error {
       {"id":"hoch","name":"Hoch","destination":{"type":"sftp","transfer":"rsync","remotePath":"www/../..","deleteRemoved":false}},
       {"id":"wurzel","name":"Wurzel","destination":{"type":"sftp","transfer":"rsync","remotePath":"~/","deleteRemoved":true}},
       {"id":"relativ","name":"Relativ","destination":{"type":"folder","path":"site","deleteRemoved":true}},
+      {"id":"zweig","name":"Zweig","destination":{"type":"git-branch","provider":"github","branch":"--upload-pack=touch pwned; false"}},
       {"id":"gut","name":"Gut","destination":{"type":"sftp","transfer":"rsync","remotePath":"httpdocs","deleteRemoved":true}},
       {"id":"ordner","name":"Ordner","destination":{"type":"folder","path":"/tmp/qh-nie","deleteRemoved":false}}
     ]
@@ -249,7 +250,7 @@ extension Error {
     let profile = TestFolder.make("qh-deploy-location-profile")
     defer { try? FileManager.default.removeItem(atPath: profile) }
     let deploy = Deploy(project: project, connections: Connections(profile: ProfileDirectory(profile), secrets: MemorySecrets()),
-                        adapters: ["rsync": recorder, "sftp": recorder, "ftp": recorder, "folder": recorder])
+                        adapters: ["rsync": recorder, "sftp": recorder, "ftp": recorder, "folder": recorder, "git-branch": recorder])
 
     let refused = [
       "leer": L10n.t("main.deployEmptyPath"),
@@ -258,6 +259,7 @@ extension Error {
       "hoch": L10n.t("main.deployTraversalPath", ["path": "www/../.."]),
       "wurzel": L10n.t("main.deployWholeRoot", ["path": "~/"]),
       "relativ": L10n.t("main.deployFolderPath", ["path": "site"]),
+      "zweig": L10n.t("main.deployBadBranch", ["branch": "--upload-pack=touch pwned; false"]),
     ]
     for (id, message) in refused {
       await #expect(throws: PublishFailure(message), "\(id)") { try await deploy.preview(id) }

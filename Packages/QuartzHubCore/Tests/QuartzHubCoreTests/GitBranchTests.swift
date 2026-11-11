@@ -92,6 +92,31 @@ import Testing
     }
   }
 
+  /// Review 2026-11-11, N2: a branch from the file reached `git fetch origin <branch>`, and with a
+  /// path remote `--upload-pack=…` ran a command. The adapter refuses the name before any git.
+  @Test func aBranchThatIsAnOptionNeverReachesGit() async throws {
+    let root = TemplatePackageTests.realpath(TestFolder.make("qh-git-branch-option"))
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let environment = ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_CONFIG_NOSYSTEM": "1"],
+                                      hostPath: HostPath(entries: ["/usr/bin", "/bin"], source: .inherited, added: []),
+                                      nodeMode: .system, runtime: .repository, git: nil, bundledGitFailure: nil)
+    let project = "\(root)/p", pwned = "\(root)/pwned"
+    try Posix.mkdirs(project)
+    try Posix.mkdirs("\(root)/build")
+    for args in [["init", "-q", "--bare", "\(root)/origin.git"], ["-C", project, "init", "-q"], ["-C", project, "remote", "add", "origin", "\(root)/origin.git"]] {
+      #expect(await ProcessRunner.run(environment.command("git", args, in: root)).success)
+    }
+    let branch = "--upload-pack=touch \(pwned); false"
+    let target = PublishTarget(object: JSONObject([("id", .string("t")), ("name", .string("T")),
+                                                   ("destination", .object(JSONObject([("type", .string("git-branch")), ("provider", .string("github")), ("branch", .string(branch))])))]))
+    let adapter = GitBranchAdapter(environment: environment, token: { nil })
+    let context = DeployContext(project: project, target: target, buildDir: "\(root)/build")
+    await #expect(throws: PublishFailure(L10n.t("main.deployBadBranch", ["branch": branch]))) { try await adapter.preview(context) }
+    let run = try? await adapter.run(context, excluding: [])
+    #expect(run == nil || run?.success == false)
+    #expect(!FileManager.default.fileExists(atPath: pwned))
+  }
+
   @Test func readsNameStatusAsQuartzControl() {
     let raw = "M\0ä.html\0A\0neu ö.html\0D\0alt\0T\0link\0R100\0a\0b\0\0\0X\0y\0"
     #expect(GitBranchAdapter.parseNameStatus(raw) == [

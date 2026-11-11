@@ -24865,6 +24865,23 @@
         }
       }
     },
+    "main.deployBadBranch" : {
+      "comment" : "Deploy refused: a git-branch target read from publish-targets.json has an invalid branch",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Branch „{{branch}}“ dieses Ziels ist kein gültiger Branch-Name. Trage ihn unter „Veröffentlichen“ neu ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The branch “{{branch}}” of this target is not a valid branch name. Enter it again under “Publish”."
+          }
+        }
+      }
+    },
     "main.deployDeleteRefused" : {
       "localizations" : {
         "de" : {

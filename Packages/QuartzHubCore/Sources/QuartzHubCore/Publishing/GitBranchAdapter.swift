@@ -59,7 +59,8 @@ public struct GitBranchAdapter: DeployAdapter {
 
     // With the credential: a private repo would otherwise say "no such branch", and the deploy
     // would push a first root commit over an existing branch without the lease.
-    let (fetch, _) = await git(["fetch", "origin", branch], in: context.project, auth.variables)
+    // A full refspec behind "--": the name is never an option, and never a tag of that name.
+    let (fetch, _) = await git(["fetch", "origin", "--", "refs/heads/\(branch)"], in: context.project, auth.variables)
     var remoteTip = ""
     if fetch.success {
       remoteTip = JS.trim((await git(["rev-parse", "FETCH_HEAD"], in: context.project)).0.stdout)
@@ -126,6 +127,10 @@ public struct GitBranchAdapter: DeployAdapter {
 
   func branch(_ context: DeployContext) throws -> String {
     guard context.destination["type"] == .string("git-branch") else { throw PublishFailure(L10n.t("main.deployWrongType", ["adapter": "Branch"])) }
+    // Deploy checks it too; this adapter is also called on its own.
+    guard SavePublishTargetInput.isBranchName(context.destination["branch"]) else {
+      throw PublishFailure(L10n.t("main.deployBadBranch", ["branch": JS.string(context.destination["branch"] ?? .string(""))]))
+    }
     return JS.string(context.destination["branch"])
   }
 

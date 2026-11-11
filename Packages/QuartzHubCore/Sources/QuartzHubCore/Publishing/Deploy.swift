@@ -114,6 +114,10 @@ public struct Deploy: Sendable {
       case .wholeRoot?: return L10n.t("main.deployWholeRoot", ["path": path])
       case nil: return nil
       }
+    case "git-branch":
+      // It reaches `git fetch` and `git push`; one starting with "-" would be an option there
+      // (review 2026-11-11, N2).
+      return SavePublishTargetInput.isBranchName(d["branch"]) ? nil : L10n.t("main.deployBadBranch", ["branch": JS.string(d["branch"] ?? .string(""))])
     case "folder", "document":
       return SavePublishTargetInput.isAbsolutePath(d["path"]) ? nil : L10n.t("main.deployFolderPath", ["path": JS.string(d["path"] ?? .string(""))])
     default:

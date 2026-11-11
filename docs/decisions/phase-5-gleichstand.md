@@ -1943,3 +1943,15 @@ Dokument einen Pfad, der nicht mit „/“ beginnt (`main.deployFolderPath`). Ge
 `DeployLocationTests` und einem Adapter, der Aufrufe mitschreibt: Mit dem alten Code erreichten fünf
 von sechs kaputten Zielen den Adapter, jetzt keines; zwei gültige erreichen ihn weiter. Der Branch
 eines Branch-Ziels folgt mit N2.
+
+### N2: Der Branch eines Ziels wird nie eine Option
+
+Der Branch eines Branch-Ziels wurde nur beim Speichern geprüft; aus der Datei gelesen erreichte er
+`git fetch origin <branch>`, und mit einem Pfad-Remote führte `--upload-pack=…` einen Befehl aus
+(gemessen vom Review mit `/usr/bin/git`; QuartzControl 1.3 identisch, `gitBranch.ts`). Jetzt prüfen
+`Deploy.locationProblem` und der Adapter selbst den Namen mit derselben Regel wie das Formular
+(`isBranchName`: beginnt mit Buchstabe oder Ziffer), und `fetch` bekommt `-- refs/heads/<branch>`.
+Gemessen mit `GitBranchTests.aBranchThatIsAnOptionNeverReachesGit` (lokales `origin` als Pfad):
+mit dem alten Adapter legte die Vorschau die Datei an, jetzt nicht. Die volle Refspec allein hätte
+schon gereicht (git: „invalid refspec“); `fetch -- refs/heads/gh-pages` liefert `FETCH_HEAD` wie
+zuvor, und die 15 Golden-Schritte aus QuartzControl laufen unverändert.
