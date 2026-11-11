@@ -223,6 +223,9 @@ public struct RelaySecretInfo: Equatable, Sendable {
   public let captchaSecret: Bool
   public let captchaSecrets: [String]
   public let fingerprint: String?
+  /// The file names secrets in the Keychain and the Keychain has none (another Mac, deleted by
+  /// hand): no name counts as set until they are entered again.
+  public var missing = false
 }
 
 /// The connections store (`connectionsService.ts`): one list in the profile's `connections.json`,
@@ -452,8 +455,16 @@ public struct Connections: Sendable {
     return JSONMap(.object(JSONObject()))
   }
 
+  /// The names from the file, checked against the Keychain: the section said "Adresse gesetzt"
+  /// for addresses the Keychain no longer had (2026-11-11). A Keychain that cannot be read is not
+  /// "gone": the names stay, and the upload says what failed.
   public func relaySecretInfo(_ projectId: String) -> RelaySecretInfo {
     let entry = readRelayStore()[projectId]
+    if let entry, entry.secretInKeychain, (try? secrets.read(account: Self.relayAccount(projectId)).map { _ in true } ?? false) == false {
+      var info = RelaySecretInfo(stored: true, recipients: [], captchaSecret: false, captchaSecrets: [], fingerprint: entry.fingerprint)
+      info.missing = true
+      return info
+    }
     return RelaySecretInfo(stored: entry != nil, recipients: entry?.recipients ?? [], captchaSecret: entry?.captchaSecret ?? false,
                            captchaSecrets: entry?.captchaSecrets ?? [], fingerprint: entry?.fingerprint)
   }

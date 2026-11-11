@@ -195,6 +195,7 @@ struct FormsRelaySection: View {
           .fixedSize(horizontal: false, vertical: true)
       }
       if !r.secrets.storageAvailable { Warning(L10n.t("formsEditor.relay.noStorage")) }
+      if r.secrets.missing { Warning(L10n.t("relay.secretsMissing")) }
       if let message { ErrorLine(message) }
     }
 

@@ -182,6 +182,29 @@ import Testing
     #expect(after.secret != before.secret && !after.secret.isEmpty)
   }
 
+  /// The section's badges come from `relaySecretInfo`: with the Keychain item gone no address
+  /// counts as set, with a Keychain that refuses to be read the names stay (2026-11-11: "Adresse
+  /// gesetzt" and "gesetzt" in green while the upload said the secrets were missing).
+  @Test func relaySecretsGoneFromTheKeychainShowNoNames() throws {
+    let root = TestFolder.make("qh-connections-relay-info")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let secrets = MemorySecrets()
+    let store = Connections(profile: ProfileDirectory(root), secrets: secrets)
+    try store.saveRelaySecrets("p1", RelaySecretsChange(recipients: JSONObject([("Kontakt", .string("a@b.org"))]), captchaSecret: .set("c")))
+    var info = store.relaySecretInfo("p1")
+    #expect(info.recipients == ["Kontakt"] && info.captchaSecret && !info.missing)
+    secrets.fail(with: .denied)
+    info = store.relaySecretInfo("p1")
+    #expect(info.recipients == ["Kontakt"] && info.captchaSecret && !info.missing)
+    secrets.fail(with: nil)
+    try secrets.delete(account: Connections.relayAccount("p1"))
+    info = store.relaySecretInfo("p1")
+    #expect(info.recipients.isEmpty && !info.captchaSecret && info.missing && info.stored)
+    try store.saveRelaySecrets("p1", RelaySecretsChange(recipients: JSONObject([("Kontakt", .string("n@b.org"))])))
+    info = store.relaySecretInfo("p1")
+    #expect(info.recipients == ["Kontakt"] && !info.captchaSecret && !info.missing)
+  }
+
   /// A password or token is one line: a pasted line break at the end goes, any other control
   /// character is refused before it reaches the Keychain; a key pasted as text keeps its lines
   /// (measured 2026-11-11: basic-ftp refused "PASS" with a trailing newline).

@@ -37,6 +37,8 @@ public struct RelayState: Equatable, Sendable {
     public let captchaSecret: Bool
     public let captchaSecrets: [String]
     public let storageAvailable: Bool
+    /// `RelaySecretInfo.missing`.
+    public var missing = false
   }
 
   public struct Target: Equatable, Sendable {
@@ -311,7 +313,7 @@ public struct FormsRelay: Sendable {
     let operatorChanged = last?["operator"].map { $0 != .string(Self.operatorStamp(settings, info.fingerprint)) } ?? false
     return RelayState(settings: settings, lastUpload: last, removedAt: last == nil ? file.removedAt : nil,
                       secrets: .init(stored: info.stored, recipients: info.recipients, captchaSecret: info.captchaSecret,
-                                     captchaSecrets: info.captchaSecrets, storageAvailable: true),
+                                     captchaSecrets: info.captchaSecrets, storageAvailable: true, missing: info.missing),
                       targets: choices, conflict: conflict, currentHash: currentHash, hashProblem: hashProblem, siteOrigin: siteOrigin,
                       relayForms: forms, recipientNames: recipients, moved: moved, configModeChanged: configModeChanged, operatorChanged: operatorChanged)
   }
