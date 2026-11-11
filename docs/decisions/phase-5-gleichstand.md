@@ -2691,3 +2691,17 @@ an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwer
   genannte Programm im `ServerScan.System.live` fehlen (`couldNotStart(.notFound)`), sonst läuft
   alles echt. Ohne ps: „nicht möglich“. Ohne lsof bleibt QuartzHubs eigener Server gefunden, weil
   er seine Ports in den Flags trägt; „unvollständig“ kam erst mit einem fremden Server ohne Flags.
+- **ePub in Apple Books.** Der Export „CDN-Probe“ unter neuem Namen in Books (das Buch bleibt in
+  der Bibliothek des Nutzers, mit seiner Zustimmung): Inhaltsverzeichnis mit zwei Ebenen und
+  Seitenzahlen, Sprung zum Kapitel, Fußnote als Einblendung mit Rücksprüngen. Nebenbei gesehen,
+  geerbt (das ePub ist Byte für Byte QuartzControls, Phase 3, 9a): der Kapiteltitel steht über
+  der eigenen H1 der Seite ein zweites Mal, und zwei Fußnoten-Verweise direkt hintereinander lesen
+  sich als eine Zahl („23“ für 2 und 3).
+- **GitHub-Token.** Gezählt am anonymen Kontingent (`/rate_limit`, zählt selbst nicht): ohne
+  Token kostet jedes Laden des Katalogs eine Anfrage, mit Token (der Nutzer trug ihn im
+  Wegwerf-Profil ein, `-QHMemorySecrets`) weder Katalog noch README.
+- **FTPS mit TLS** gegen all-inkl, Zugang „qh-test (FTP)“ (FTPS an), ein zweites Ziel nach
+  `/qhp5-ftps` ohne Löschen: 364 Dateien in 11,4 s, Stichproben über HTTPS sha-256-gleich. Der
+  erste Versuch mit dem alten Benutzer: „FTPError: 530 Login incorrect.“, roh wie QuartzControl.
+  Den Benutzernamen im Zugang zu ändern und mit „unverändert lassen“ zu speichern behielt das
+  eingetragene Passwort.
