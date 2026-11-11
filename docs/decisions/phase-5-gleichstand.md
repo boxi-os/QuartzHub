@@ -2536,3 +2536,61 @@ Testläufe mit Größe, einer ohne, dann der eigene Start; der alte Weg verlor d
 und an der App: Nach einem Scratch-Start mit `-QHWindowSize 1300x800` standen die drei Rahmen des
 Nutzers unverändert unter `QHUserWindowFrames`. Den eigenen Start mit dem echten Profil habe ich
 nicht gemacht (Regel: nur Scratch-Profile); den deckt der Test.
+
+## Quartz 5.1 (2026-11-11)
+
+Quartz 5.1.0 ist am 2026-11-09 erschienen, und QuartzHub klont beim Anlegen den Standard-Branch:
+Jedes neue Projekt ist ein 5.1-Projekt. Gemessen an einer entschärften Kopie von gui-test, die der
+Nutzer über die Seite Updates auf 5.1 gehoben hat (5.0.0 9be7a33 → 7cfb079, 157 Commits), und an
+einem lokalen Klon davon auf 5.0.0. Entscheidung des Nutzers: alle Punkte vor dem Release, und das
+Umstellen der alten Plugin-Einträge wird angeboten, nicht automatisch gemacht (Quartz selbst warnt
+nach `npx quartz upgrade` nur).
+
+- **Was ein Projekt kann, liest QuartzHub aus dem Projekt** (`QuartzFeatures`): die eingebaute
+  Verarbeitung an `quartz/plugins/builtins/index.ts`, `prefetch`, `publishAssets`, `sidebars` und
+  die neuen Statistik-Felder an ihren Deklarationen in `quartz/cfg.ts`. Ein Checkout des
+  v5-Branchs zwischen zwei Releases hat den neuen Code unter der alten Versionsnummer.
+- **Eingebaute Verarbeitung** (`BuiltinProcessing`, Port von `planBuiltins` und
+  `findBuiltinMigrations`): crawl-links, remove-draft und content-index sind Teil von Quartz
+  (`configuration.links`/`drafts`/`contentIndex`, dazu `frontmatter`). Ein alter Eintrag wirkt
+  weiter, ein ausgeschalteter schaltet die Verarbeitung ab. Ohne Eintrag lässt 5.1 Entwürfe
+  weg, 5.0 nicht: `FormUsages` fragt deshalb den Plan (vorher galt eine Entwurfsseite ohne
+  remove-draft als veröffentlicht).
+- **„Konfiguration umstellen“** ist Quartz' `plugin doctor --fix` mit Snapshot davor. An der
+  Kopie: drei Einträge entfernt, ihre Optionen in `configuration.*`, Kommentare erhalten, danach
+  2 statt 5 Warnungen im Build, gleiche 479 Dateien, `contentIndex.json`, Sitemap und RSS da.
+- **Quartz' eigene Prüfung auf der Plugin-Seite** (`plugin doctor` ohne --fix, 0,7 s,
+  `PluginDoctorReport`): veraltete Plugins (hard-line-breaks), `quartzVersion`, fehlende Pakete,
+  abgelehnte Optionen. QuartzHub baut die semver-Bereiche nicht nach, es fragt das Programm des
+  Projekts. „configured twice“ fällt für quartz-layout-box und quartz-navigations weg: ein
+  Eintrag je Box ist QuartzHubs Bauart, und der 5.1-Build rendert einmal je Eintrag.
+- **Eigene Frames brauchen ein Einstiegsmodul.** 5.0 schluckte den gescheiterten Import still, 5.1
+  meldete je Frame und Build „failed to load its entry module“ (5 Fehler an gui-test). Jetzt
+  `quartz.category: "component"` und ein leeres `dist/index.js`: 0 Fehler, die Startseite rendert
+  weiter mit „editorial“. QuartzControl schreibt beides nicht; die Golden-Tests nehmen die zwei
+  Zusätze heraus (`LayoutFramesTests.quartzControlsForm`).
+- **GitHub- vor Obsidian-Markdown.** 5.1 verlangt GFM zuerst (30, dann 40); 5.0, QuartzControls
+  Grundvorlage und gui-test hatten es umgekehrt, und weder das Kern-Update noch doctor sagt es.
+  Die Plugin-Seite warnt und tauscht.
+- **Konfiguration:** „Seiten vorab laden“, „Dateien veröffentlichen“, Abschnitt „Verarbeitung“
+  (Links, Entwürfe, Inhaltsindex, Frontmatter), umamis `script` und PostHogs neue Felder.
+- **Layout:** `layout.sidebars` und `byPageType.<typ>.sidebars`. Der Schreiber (`yaml-edit`)
+  kannte unter `layout:` nur `groups` und `byPageType`, und `PageTypeOverride.customizes` ließ
+  einen Seitentyp, der nur `sidebars` setzt, beim nächsten Schreiben fallen; beides weicht jetzt
+  bewusst von QuartzControl ab. Quartz setzt die Modi nur im Standard-Frame um (`data-sidebar-mode`
+  im DefaultFrame): An gui-test, wo jeder Seitentyp einen eigenen Frame hat, trug keine Seite das
+  Attribut, mit Standard-Frame für Tags schon. Das Frame-Modul bleibt die Abschrift; die Bühne sagt,
+  wann die Einstellung nicht wirkt.
+- **Updates:** Versionen statt nur Hashes, „Neu in Quartz …“ aus dem CHANGELOG.md des Projekts
+  (Port von `changelogSections`), nach einem Lauf die Notes und doctor; `quartz info` im
+  Inspektor. Der Teil nach einem Lauf ist an der App nicht gemessen (der Lauf ist Sache des
+  Nutzers), seine Teile an der 5.1-Kopie schon.
+- **Anlegen:** Vorlage `docs` (beide Seitenleisten `static`), mit QuartzHubs Argumenten gemessen.
+- **Ohne Änderung:** `contentIndex.json` hat dasselbe Format (Export an der Kopie: PDF, ePub mit 139
+  Kapiteln, HTML); das Options-Schema der 5.1-Plugins liest QuartzHub ganz (339 Optionen, 0
+  unsichtbar; 5.0: 340); `defaultDateType` ist aus `configuration` verschwunden, QuartzHub nutzte es
+  nie; GitHub Pages lädt die fertige Ausgabe hoch, die strengere CI-Regel trifft es nicht.
+- **Offen, Entscheidung des Nutzers:** die Grundvorlage qc-basic (GFM/OFM-Reihenfolge, alte
+  Einträge) liegt im öffentlichen Repo `boxi-os/quartzcontrol-templates`, das beide Apps lesen;
+  QuartzControl 1.3 hat dieselben Lücken (Frames ohne Einstiegsmodul, Entwürfe in FormUsages,
+  `layout.sidebars`).

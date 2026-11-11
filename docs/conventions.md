@@ -60,6 +60,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   bewusst von QuartzControl 1.3 ab (Review 2026-11-11, H1).
 - **Startschalter kommen nur aus den Startargumenten** (`LaunchArgument`), nie aus dem
   Defaults-Bereich der App; der Release-Bau kennt nur sein Bundle (Review 2026-11-11, N4).
+- **Was der Quartz eines Projekts kann, liest QuartzHub aus dem Projekt** (`QuartzFeatures`: die
+  Datei, die Deklaration), nicht aus der Versionsnummer; was Quartz selbst prüft (`plugin doctor`,
+  `quartz info`), fragt QuartzHub Quartz (decisions/phase-5-gleichstand.md, Quartz 5.1).
 - **Jede Dekompression bekommt eine Obergrenze, und die Datei selbst liefert sie nicht. (QC)**
 - **Ja/Nein-Fragen sind native Dialoge, die sichere Antwort zuerst, der bestätigende Button nach
   der Aktion benannt. (QC)** In SwiftUI `confirmationDialog`/`alert` mit `role: .cancel`.
