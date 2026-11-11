@@ -171,6 +171,46 @@ import Testing
     #expect(calls().contains("git-receive-pack"), "\(calls())")
   }
 
+  /// The project's hooks do not run on the calls that carry the token, neither in .git/hooks nor
+  /// in a hooks folder the repository names (husky), and the deploy still lands (review
+  /// 2026-11-11, nebenbei 7).
+  @Test func theProjectsHooksDoNotSeeTheDeploy() async throws {
+    let root = TemplatePackageTests.realpath(TestFolder.make("qh-git-branch-hooks"))
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let environment = ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_CONFIG_NOSYSTEM": "1",
+                                             "GIT_CONFIG_GLOBAL": "/dev/null"],
+                                      hostPath: HostPath(entries: ["/usr/bin", "/bin"], source: .inherited, added: []),
+                                      nodeMode: .system, runtime: .repository, git: nil, bundledGitFailure: nil)
+    let project = "\(root)/p", origin = "\(root)/origin.git", ran = "\(root)/ran"
+    try Posix.mkdirs("\(root)/build")
+    try Posix.write("\(root)/build/index.html", Data("x".utf8))
+    for args in [["init", "-q", "--bare", origin], ["init", "-q", project], ["-C", project, "remote", "add", "origin", origin],
+                 ["-C", project, "-c", "user.name=T", "-c", "user.email=t@example.org", "commit", "-q", "--allow-empty", "-m", "x"]] {
+      #expect(await ProcessRunner.run(environment.command("git", args, in: root)).success)
+    }
+    let script = Data("#!/bin/sh\necho \"$(basename \"$0\") $*\" >> '\(ran)'\n".utf8)
+    for dir in ["\(project)/.git/hooks", "\(project)/.husky"] {
+      try Posix.mkdirs(dir)
+      for hook in ["pre-push", "reference-transaction"] {
+        try Posix.write("\(dir)/\(hook)", script)
+        #expect(chmod("\(dir)/\(hook)", 0o755) == 0)
+      }
+    }
+    let target = PublishTarget(object: JSONObject([("id", .string("t")), ("name", .string("T")),
+                                                   ("destination", .object(JSONObject([("type", .string("git-branch")), ("provider", .string("github")), ("branch", .string("gh-pages"))])))]))
+    let adapter = GitBranchAdapter(environment: environment, token: { nil })
+    let context = DeployContext(project: project, target: target, buildDir: "\(root)/build")
+    for husky in [false, true] {
+      if husky { #expect(await ProcessRunner.run(environment.command("git", ["-C", project, "config", "core.hooksPath", ".husky"], in: root)).success) }
+      try Posix.write("\(root)/build/index.html", Data("x \(husky)".utf8))
+      let run = try await adapter.run(context, excluding: [])
+      #expect(run.success, "\(run.output)")
+      #expect(!Posix.exists(ran), "\((try? String(decoding: Posix.read(ran), as: UTF8.self)) ?? "")")
+    }
+    let published = await ProcessRunner.run(environment.command("git", ["--git-dir", origin, "show", "gh-pages:index.html"], in: root))
+    #expect(published.stdout == "x true")
+  }
+
   @Test func readsNameStatusAsQuartzControl() {
     let raw = "M\0ä.html\0A\0neu ö.html\0D\0alt\0T\0link\0R100\0a\0b\0\0\0X\0y\0"
     #expect(GitBranchAdapter.parseNameStatus(raw) == [

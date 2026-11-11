@@ -2155,3 +2155,20 @@ schreibt; damit verschwand auch der Grund, wenn er scheiterte. Gemessen mit eine
 `Helpers/src/sass-check.ts`: vorher Exit 1 ohne ein Wort, jetzt Exit 1 mit esbuilds Meldung
 (`Unexpected "="`, Datei und Zeile) und „Helferbau gescheitert: scripts/build-helpers.sh“. Ein
 intakter Bau bleibt still wie bisher.
+
+### 7. Der Branch-Deploy lässt keine Hooks des Projekts laufen
+
+`QH_GIT_TOKEN` stand in der Umgebung von `git fetch` und `git push` des Branch-Ziels und damit auch
+in der eines `pre-push`- oder `reference-transaction`-Hooks des Projekts (wie `QC_GIT_TOKEN` in
+QuartzControl). Den Token aus der Umgebung in eine Datei zu legen hilft nicht: Ein Hook sieht
+`GIT_ASKPASS` und kann den Helfer selbst fragen. Deshalb laufen beim Branch-Deploy gar keine Hooks
+(`core.hooksPath=/dev/null` über `GIT_CONFIG_COUNT`, damit argv mit dem Unterbefehl beginnt, den eine
+Fristmeldung nennt); der Branch trägt nur erzeugte Ausgabe, kein Hook der Quellen ist für ihn
+gedacht. Damit weicht QuartzHub bewusst von QuartzControl ab. Git-Sync behält die Hooks: Dort sind
+sie der Arbeitsablauf des Nutzers, und `quartz sync` ist Quartz' eigener Befehl.
+
+Gemessen mit Hooks in `.git/hooks` und in `.husky` (`core.hooksPath` im Repo, wie husky es setzt),
+zwei Deploys an ein lokales Bare-Repo (`theProjectsHooksDoNotSeeTheDeploy`). Vorher liefen
+`pre-push` und `reference-transaction` bei beiden Läufen, jetzt keiner, und der Branch hält den
+zweiten Build. Ein erster Entwurf schaltete die Hooks nur für Fetch und Push ab; der Test zeigte,
+dass `reference-transaction` auch bei `worktree add` und den anderen lokalen Schritten läuft.

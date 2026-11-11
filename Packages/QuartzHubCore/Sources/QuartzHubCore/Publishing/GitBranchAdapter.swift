@@ -42,8 +42,17 @@ public struct GitBranchAdapter: DeployAdapter {
     let description: String
   }
 
+  /// No hook of the project runs for a deploy: on fetch and push one (pre-push,
+  /// reference-transaction) would get the token in its environment and could ask `GIT_ASKPASS`
+  /// for it, and the branch holds only generated output, so no hook of the sources is meant for it
+  /// (review 2026-11-11, nebenbei 7; QuartzControl ran them). Git-Sync keeps them: there they are
+  /// the user's own workflow. Through the environment rather than `-c`, so argv still starts with
+  /// the subcommand that a timeout sentence names.
+  static let withoutHooks = ["GIT_CONFIG_COUNT": "1", "GIT_CONFIG_KEY_0": "core.hooksPath", "GIT_CONFIG_VALUE_0": "/dev/null"]
+
   func git(_ arguments: [String], in directory: String, _ extra: [String: String] = [:], timeout: Duration? = nil) async -> (CommandResult, String) {
-    let command = environment.command("git", arguments, in: directory, timeout: timeout ?? deadlines.local).adding(extra)
+    let command = environment.command("git", arguments, in: directory, timeout: timeout ?? deadlines.local)
+      .adding(Self.withoutHooks).adding(extra)
     let result = await ProcessRunner.run(command)
     return (result, result.report(for: command))
   }
@@ -74,7 +83,8 @@ public struct GitBranchAdapter: DeployAdapter {
     // With the credential: a private repo would otherwise say "no such branch", and the deploy
     // would push a first root commit over an existing branch without the lease.
     // A full refspec behind "--": the name is never an option, and never a tag of that name.
-    let (fetch, fetchText) = await git(["fetch", "origin", "--", "refs/heads/\(branch)"], in: context.project, auth.variables,
+    let (fetch, fetchText) = await git(["fetch", "origin", "--", "refs/heads/\(branch)"], in: context.project,
+                                       auth.variables,
                                        timeout: deadlines.fetch)
     // A fetch that never answered says nothing about the branch; the push would only hang as well.
     if fetch.termination == .timedOut || fetch.termination == .cancelled { throw GitError(description: fetchText) }
