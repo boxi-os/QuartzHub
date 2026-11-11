@@ -1928,9 +1928,15 @@ Nutzer trug das Token selbst ein.
   werden. GitHub stellt das Zertifikat für eine eigene Domain erst …“ mit GitHubs „The certificate
   does not exist yet“.
 
+- **Abgelehntes Token** (danach, ein erfundenes `github_pat_…` unter „Token ersetzen“): „Abgelehnt“
+  mit „GitHub akzeptiert diesen Token nicht. Er ist abgelaufen oder wurde zurückgezogen.“;
+  „Erneut prüfen“ zeigt kurz „Prüfe…“ mit gesperrtem Knopf. Die Pages-Karte zeigt dann GitHubs
+  „Bad credentials“ wörtlich in Rot, wie QuartzControls `getPagesInfo` (`result.message`); ein
+  englischer Satz auf einer deutschen Seite (geerbt, Nebenbefund).
+
 Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), eine eigene Domain und „HTTPS
 erzwingen“ (bräuchten einen DNS-Eintrag des Nutzers), „Repository anlegen“ (bräuchte ein Token für
-alle Repos), die Token-Zustände „abgelehnt“ und „unbekannt“.
+alle Repos), der Token-Zustand „unbekannt“ (GitHub nicht erreichbar).
 
 ## Review 2026-11-11: die Befunde
 
