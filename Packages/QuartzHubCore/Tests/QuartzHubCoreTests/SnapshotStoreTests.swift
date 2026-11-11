@@ -395,13 +395,19 @@ import Testing
       for i in 0 ..< rounds {
         let answer = await Self.quartzControl(h, "create", p, [.string("manual"), .string("QC \(i)")])
         if let error = answer["error"] { failures.append(JSJSON.compact(error)) }
+        // QuartzControl checks neither commit-tree nor update-ref: a failure comes back as a result
+        // whose commit is git's error text.
+        if let commit = answer["result"]?["commit"]?.stringValue, commit.wholeMatch(of: /[0-9a-f]{40}/) == nil {
+          failures.append("QC \(i): \(commit)")
+        }
       }
       return failures
     }()
     let (a, b) = await (ours, theirs)
     #expect(a.isEmpty, "QuartzHub: \(a)")
     #expect(b.isEmpty, "QuartzControl: \(b)")
-    #expect(await h.store.list(project: p).count == 1 + 2 * rounds)
+    let listed = await h.store.list(project: p)
+    #expect(listed.count == 1 + 2 * rounds, "\(listed.map { "\($0.id) \($0.label)" })")
     let fsck = await ProcessRunner.run(h.environment.command("git", ["--git-dir", h.path("p/.quartz-gui/snapshots.git"), "fsck", "--no-dangling"]))
     #expect(fsck.success, "\(fsck.output)")
   }
@@ -426,6 +432,31 @@ import Testing
     #expect(try Posix.read("\(store)/index") != index, "written back once the lock is free")
     let leftovers = try FileManager.default.contentsOfDirectory(atPath: store).filter { $0.hasPrefix("qh-index-") }
     #expect(leftovers.isEmpty, "\(leftovers)")
+  }
+
+  /// Putting the copy back never holds the store's index.lock, not even for a moment: QuartzControl's
+  /// `write-tree` takes that lock as well, and meeting it took git's error for a tree and answered
+  /// with a snapshot that names nothing (bothAppsAtOnce, QC 4 missing, 2026-11-11). Watched from a
+  /// thread of its own while the store writes and puts back twenty times.
+  @Test func puttingTheIndexBackTakesNoLock() async throws {
+    let h = try Harness()
+    h.box.now.withLock { $0 = Date() }
+    let p = try await Self.project(h)
+    _ = try await h.store.create(project: p, kind: "manual", label: "Anfang")
+    let lock = h.path("p/.quartz-gui/snapshots.git/index.lock")
+    let watching = Mutex(true), seen = Mutex(0)
+    let watcher = Thread {
+      while watching.withLock({ $0 }) { if access(lock, F_OK) == 0 { seen.withLock { $0 += 1 } } }
+    }
+    watcher.start()
+    for i in 0 ..< 20 {
+      try Harness.write(h.path("p/content/neu.md"), "\(i)\n")
+      _ = try await h.store.create(project: p, kind: "manual", label: "\(i)")
+    }
+    watching.withLock { $0 = false }
+    #expect(seen.withLock { $0 } == 0)
+    let staged = await ProcessRunner.run(h.environment.command("git", ["--git-dir", h.path("p/.quartz-gui/snapshots.git"), "ls-files", "--", "content/neu.md"]))
+    #expect(staged.stdout == "content/neu.md\n", "the index was put back: \(staged.output)")
   }
 
   /// A copy a crash left behind goes after an hour, a younger one stays.

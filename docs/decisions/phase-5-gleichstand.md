@@ -2198,6 +2198,22 @@ Danach drei Nebenbefunde dieses Laufs:
   als `<not evaluated>` gemeldet). Nicht nachgestellt: 120 Wiederholungen unter 40 Lastprozessen
   grün, und 4000 SIGTERMs an die Gruppe desselben Skripts beendeten die Shell immer mit SIGTERM.
   Der Test wartet jetzt getrennt, damit das nächste Scheitern seinen Wert nennt.
+- **Behoben: Ein Snapshot aus QuartzControl ging verloren, während QuartzHub schrieb.**
+  `SnapshotStoreTests.bothAppsAtOnce` (je acht Snapshots aus beiden Apps zugleich) scheiterte in
+  2 von 15 vollen Läufen und einmal nach 114 Wiederholungen unter Last. Beide Male fehlte „QC 4“,
+  ohne Fehler und ohne unerreichbaren Commit. Ursache: QuartzHub schrieb seine Index-Kopie über
+  `index.lock` zurück, und QuartzControls `write-tree` nimmt dieselbe Sperre (gemessen: „fatal:
+  Unable to create … index.lock“, Exit 128). QuartzControl liest den Tree aus stdout und stderr
+  zusammen und prüft weder `commit-tree` noch `update-ref`. Aus der Fehlermeldung wurde ein „Tree“,
+  und zurück kam ein Snapshot mit Erfolg, den es nicht gibt. Traf die Sperre stattdessen `git add`,
+  meldete QuartzControl wenigstens einen Fehler. QuartzHub setzt die Kopie jetzt ohne die Sperre per
+  `rename` ein, wie git selbst einen Index einsetzt. Hält jemand die Sperre, bleibt QuartzControls
+  Index wie bisher. Gemessen mit `puttingTheIndexBackTakesNoLock`: Ein eigener Thread sah die
+  Sperre bei 20 Snapshots am alten Code 4217 Mal, jetzt nie, und der Index kommt weiter zurück
+  (Gegenprobe ohne `rename` rot). Danach `bothAppsAtOnce` 300 Wiederholungen unter Last und zehn
+  volle Läufe, alle grün. Der Test prüft jetzt auch, dass QuartzControls Antwort einen echten
+  Commit nennt. Dass `createSnapshot` diese Schritte nicht prüft, bleibt QuartzControls Fehler
+  (für `fix/1.3.x` nicht kritisch: allein serialisiert QuartzControl seine Schritte).
 
 ## Review 2026-11-11: die Befunde
 

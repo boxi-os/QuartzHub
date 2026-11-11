@@ -16,8 +16,11 @@ import Foundation
 ///   ("Unable to create index.lock"). Here every operation starts from a copy of that index
 ///   (`GIT_INDEX_FILE`), because the index decides what a snapshot holds: `git add -A` keeps a file
 ///   the store already tracks even after the project's `.gitignore` names it (golden step "stays
-///   tracked"). Afterwards the copy goes back the way git writes an index, through `index.lock`,
-///   and only when nobody holds that lock; otherwise QuartzControl's index stays.
+///   tracked"). Afterwards the copy goes back by a rename, as git puts an index in place, but
+///   without taking `index.lock`: QuartzControl's `write-tree` takes that lock too, and meeting it,
+///   took git's error for a tree and answered with a snapshot that names nothing (about one in ten
+///   full test runs, 2026-11-11). While someone holds the lock, QuartzControl's index stays; one
+///   that started writing before the rename replaces ours, as its own next snapshot would.
 /// - **Unreachable objects are pruned after ten minutes, not at once** (`gc --prune=10.minutes.ago`
 ///   after a delete and the thinning). An object one app has just written is unreachable until its
 ///   ref exists, and QuartzControl's `--prune=now` in the other app would take it. The objects of a
@@ -190,13 +193,7 @@ public struct SnapshotStore: Sendable {
     if manager.fileExists(atPath: shared) { try? Posix.copyFile(shared, op.index) }
     defer {
       if manager.fileExists(atPath: op.index) {
-        let lock = "\(op.store)/index.lock"
-        let fd = open(lock, O_CREAT | O_EXCL | O_WRONLY, 0o644)
-        if fd >= 0 {
-          close(fd)
-          rename(op.index, shared)
-          unlink(lock)
-        }
+        if !manager.fileExists(atPath: "\(op.store)/index.lock") { rename(op.index, shared) }
         try? manager.removeItem(atPath: op.index)
       }
     }
