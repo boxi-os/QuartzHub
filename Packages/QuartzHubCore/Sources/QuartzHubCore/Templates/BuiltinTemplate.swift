@@ -34,7 +34,7 @@ public struct BuiltinTemplate: Sendable {
   static let maxAge: TimeInterval = 24 * 60 * 60
   static let timeout: Duration = .seconds(15)
   /// A design and, here, its manual; anything larger is not that.
-  static let maxBytes = 25 * 1024 * 1024
+  public static let maxBytes = 25 * 1024 * 1024
 
   /// The repository's `Resources/templates/qc-basic.qtpl`, for the tests and for a development
   /// build without the network; nil in a release build, which ships none (review 2026-11-11, N4:
@@ -54,7 +54,7 @@ public struct BuiltinTemplate: Sendable {
   let fetch: FontService.Fetch
   let now: @Sendable () -> Date
 
-  public init(profile: ProfileDirectory = .quartzHub, bundled: String? = nil, fetch: @escaping FontService.Fetch = FontService.liveFetch,
+  public init(profile: ProfileDirectory = .quartzHub, bundled: String? = nil, fetch: @escaping FontService.Fetch = FontService.limitedFetch(BuiltinTemplate.maxBytes),
               now: @escaping @Sendable () -> Date = { Date() }) {
     self.profile = profile
     self.bundled = bundled

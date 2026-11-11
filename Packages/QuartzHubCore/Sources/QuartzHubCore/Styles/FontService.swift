@@ -62,6 +62,48 @@ public struct FontService: Sendable {
     }
   }
 
+  /// `liveFetch` that stops reading once the body passes `limit` bytes (Content-Length first, then
+  /// as it arrives) and fails as unreachable. Checked only after the download, a larger file
+  /// was limited by nothing but the deadline (Review 2026-11-11 (2), nebenbei 15: the basic
+  /// template, since fec5d18 the only way to it).
+  public static func limitedFetch(_ limit: Int) -> Fetch {
+    { url, userAgent, timeout throws(FetchFailure) in
+      Offline.registerForShared()
+      guard let target = URL(string: url) else { throw .unreachable }
+      var mutable = URLRequest(url: target)
+      if let userAgent { mutable.setValue(userAgent, forHTTPHeaderField: "User-Agent") }
+      let request = mutable
+      do {
+        return try await withThrowingTaskGroup(of: Response.self) { group in
+          group.addTask {
+            let (bytes, response) = try await URLSession.shared.bytes(for: request)
+            guard let http = response as? HTTPURLResponse else { throw FetchFailure.unreachable }
+            if http.expectedContentLength > Int64(limit) { throw FetchFailure.unreachable }
+            var body = Data()
+            for try await byte in bytes {
+              body.append(byte)
+              if body.count > limit { throw FetchFailure.unreachable }
+            }
+            var headers: [String: String] = [:]
+            for (key, value) in http.allHeaderFields { headers[String(describing: key).lowercased()] = String(describing: value) }
+            return Response(status: http.statusCode, headers: headers, body: body)
+          }
+          group.addTask {
+            try await Task.sleep(for: timeout)
+            throw FetchFailure.timedOut
+          }
+          let first = try await group.next()!
+          group.cancelAll()
+          return first
+        }
+      } catch let failure as FetchFailure {
+        throw failure
+      } catch {
+        throw .unreachable
+      }
+    }
+  }
+
   let fetch: Fetch
   let readConfig: LayoutFrames.ReadConfig
   let timeout: Duration
