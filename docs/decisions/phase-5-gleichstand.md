@@ -2172,3 +2172,14 @@ zwei Deploys an ein lokales Bare-Repo (`theProjectsHooksDoNotSeeTheDeploy`). Vor
 `pre-push` und `reference-transaction` bei beiden Läufen, jetzt keiner, und der Branch hält den
 zweiten Build. Ein erster Entwurf schaltete die Hooks nur für Fetch und Push ab; der Test zeigte,
 dass `reference-transaction` auch bei `worktree add` und den anderen lokalen Schritten läuft.
+
+### 8. Die Webhook-Schwärzung findet den Token in jeder Schreibweise
+
+`WebhookAdapter.redact` suchte die Teile der URL nur so, wie die URL sie hält (Pfad kodiert,
+Query-Werte dekodiert); ein Anbieter, der den Token anders zurückgibt, wurde nicht geschwärzt. Jetzt
+sucht sie jeden Teil wie gehalten, dekodiert und neu kodiert (`encodeURIComponent`, Escapes groß
+und klein), die längste Schreibweise zuerst. Gemessen mit einem Token mit „/“ und „ä“ und einem
+Query-Wert mit „+“ und „=“ (`aTokenEchoedInAnotherSpellingIsRedacted`): Der alte Code ließ den
+dekodierten Pfad, die kleinen Escapes und den kodierten Query-Wert stehen, der neue keinen. Die 17
+Fälle gegen QuartzControls `webhook.ts` bleiben gleich; ein kurzes Wort des Pfads („build“) bleibt
+stehen.

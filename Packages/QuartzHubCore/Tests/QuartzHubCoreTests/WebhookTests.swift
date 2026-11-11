@@ -93,4 +93,18 @@ final class HookNet: URLProtocol, @unchecked Sendable {
     }
     #expect(try await adapter.preview(DeployContext(project: "/p", target: target, buildDir: "/b")).isEmpty)
   }
+
+  /// A provider that echoes the token decoded or encoded another way is redacted too (review
+  /// 2026-11-11, nebenbei 8). The token has a "/" and an "ä", so its spellings differ.
+  @Test func aTokenEchoedInAnotherSpellingIsRedacted() async throws {
+    let token = "Ab12/Cd34-äx"
+    let secret = "https://hooks.example.org/build/\(ContentIndexPage.encodeURIComponent(token))?key=\(ContentIndexPage.encodeURIComponent("k/ey+wert=1"))"
+    let parts = WebURL(secret).parts!
+    let echo = "path \(token) | upper Ab12%2FCd34-%C3%A4x | lower Ab12%2fCd34-%c3%a4x | query k/ey+wert=1 | k%2Fey%2Bwert%3D1"
+    let redacted = WebhookAdapter.redact(echo, parts)
+    for leaked in ["Ab12", "Cd34", "ey+wert", "ey%2B"] { #expect(!redacted.contains(leaked), "\(redacted)") }
+    #expect(redacted.contains("path ") && redacted.contains("| query "), "\(redacted)")
+    // A short ordinary word of the path stays.
+    #expect(WebhookAdapter.redact("build ok", parts) == "build ok")
+  }
 }

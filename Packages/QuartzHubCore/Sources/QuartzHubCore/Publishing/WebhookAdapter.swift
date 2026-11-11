@@ -35,10 +35,28 @@ public struct WebhookAdapter: DeployAdapter {
   static func redact(_ text: String, _ secret: WebURL.Parts) -> String {
     let parts = (JSText.split(secret.pathname, "/") + secret.searchParamValues
       + [JSText.replaceAll(secret.hash, #"\A#"#, with: ""), secret.username, secret.password])
-      .filter { JSText.length($0) >= minSecretSegment }
     var out = text
-    for part in parts { out = JSText.split(out, part).joined(separator: L10n.t("main.webhookRedacted")) }
+    for part in spellings(parts) { out = JSText.split(out, part).joined(separator: L10n.t("main.webhookRedacted")) }
     return out
+  }
+
+  /// Each part as the URL holds it, decoded, and encoded again with upper- and lower-case escapes:
+  /// a provider that echoes the token in another spelling is redacted as well (review 2026-11-11,
+  /// nebenbei 8; QuartzControl looked for the URL's spelling only). Longest first, so a shorter
+  /// spelling never cuts into a longer one.
+  static func spellings(_ parts: [String]) -> [String] {
+    var seen = Set<String>(), out: [String] = []
+    for part in parts {
+      let decoded = WebURL.percentDecode(part)
+      let encoded = ContentIndexPage.encodeURIComponent(decoded)
+      // Every "%" in it starts an escape, so the two characters after one are its hex digits.
+      let pieces = encoded.split(separator: "%", omittingEmptySubsequences: false)
+      let lower = ([String(pieces[0])] + pieces.dropFirst().map { $0.prefix(2).lowercased() + $0.dropFirst(2) }).joined(separator: "%")
+      for spelling in [part, decoded, encoded, lower] where JSText.length(spelling) >= minSecretSegment && seen.insert(spelling).inserted {
+        out.append(spelling)
+      }
+    }
+    return out.sorted { JSText.length($0) > JSText.length($1) }
   }
 
   /// Nothing local to compare: the page reads an empty diff here as "no file list", not as "all
