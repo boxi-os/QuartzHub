@@ -39,10 +39,10 @@ gezählt, zuletzt am 2026-11-11 nach Branch-Deploy und Webhook ohne Netz.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 182 | 8 | 17 | 5 | 4 | 216 |
-| Plugins und Wartung | 239 | 10 | 4 | 8 | 0 | 261 |
-| Gestaltung und Veröffentlichen | 222 | 7 | 9 | 5 | 0 | 243 |
-| **Summe** | **643** | **25** | **30** | **18** | **4** | **720** |
+| Einrichtung | 183 | 8 | 17 | 4 | 4 | 216 |
+| Plugins und Wartung | 240 | 10 | 4 | 7 | 0 | 261 |
+| Gestaltung und Veröffentlichen | 224 | 7 | 9 | 3 | 0 | 243 |
+| **Summe** | **647** | **25** | **30** | **14** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
@@ -96,4 +96,4 @@ vorgesehen; die übrigen sind beim Zusammenstellen aufgefallen.
    (2026-11-10, drei Befunde behoben, einer davon ein Absturz), Export ohne Netz
    (2026-11-10, zwei Befunde behoben), Frames anlegen und löschen mit `quartz plugin add`
    (2026-11-10, ohne Befund), Stile mit Google Fonts (2026-11-10, ohne Befund), Themes und Presets mit `npm install` (2026-11-10, ein Befund behoben: c45b5e8), SFTP, rsync und FTP gegen debian-vm (2026-11-10, ein Befund behoben: 06be3b7), Grenzfälle der Vorlagen mit gebauten Paketen (2026-11-10, ohne Befund), Grenzfälle der Stile (2026-11-10, ohne Befund), Dokumente mit Navigation und Sprache (2026-11-10, ohne Befund), git in den Einstellungen (2026-11-10, ohne Befund), Plugins mit leerer Liste und Schema-Bedingungen (2026-11-10, ohne Befund), der leere Unterschied der Snapshots (2026-11-10, ohne Befund), Relay mit erfundenen Zielen und das Entfernen mit Relay-Geheimnissen (2026-11-10, ein Befund behoben: 6afee3c), nicht gebaute Seiten der Formulare (2026-11-10, ohne Befund).
-3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe. Freigegeben am 2026-11-10: erst die, die nur lesen oder holen, dann das Relay auf debian-vm; was bei GitHub schreibt, nur mit einem Test-Repo. Gemessen: Update-Prüfung (2026-11-10, ohne Befund), Marktplatz (2026-11-10, ohne Befund), Installieren und Wiederherstellen (2026-11-10, ohne Befund), Anlegen und Duplizieren (2026-11-10, ohne Befund), Vorlagen (2026-11-10, ein Befund behoben: 44cbfa3), Projektbild im Kopfbereich (2026-11-10, ohne Befund), Export mit KaTeX und Mermaid vom CDN (2026-11-10, ohne Befund), Relay auf debian-vm (2026-11-10, ohne Befund), Branch-Deploy und Webhook ohne Netz gegen ein lokales Bare-Repo und einen lokalen HTTPS-Server (2026-11-11, ein Befund behoben).
+3. Die `Netz`-Zeilen gesammelt, je Lauf mit Freigabe. Freigegeben am 2026-11-10: erst die, die nur lesen oder holen, dann das Relay auf debian-vm; was bei GitHub schreibt, nur mit einem Test-Repo. Gemessen: Update-Prüfung (2026-11-10, ohne Befund), Marktplatz (2026-11-10, ohne Befund), Installieren und Wiederherstellen (2026-11-10, ohne Befund), Anlegen und Duplizieren (2026-11-10, ohne Befund), Vorlagen (2026-11-10, ein Befund behoben: 44cbfa3), Projektbild im Kopfbereich (2026-11-10, ohne Befund), Export mit KaTeX und Mermaid vom CDN (2026-11-10, ohne Befund), Relay auf debian-vm (2026-11-10, ohne Befund), Branch-Deploy und Webhook ohne Netz gegen ein lokales Bare-Repo und einen lokalen HTTPS-Server (2026-11-11, ein Befund behoben). GitHub mit Test-Repo: Token, Push, Branch-Deploy, Pages (2026-11-11, ohne Befund, ein geerbter Nebenbefund).

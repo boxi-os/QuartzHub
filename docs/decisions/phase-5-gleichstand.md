@@ -1897,6 +1897,41 @@ etwas ändert. Gegenprobe: vor dem Fix blieb der Satz stehen; danach stand ohne 
 Projektfenster „POST → https://127.0.0.1:8443“, und nach dem Löschen des Zugangs wieder „keine URL
 hinterlegt“.
 
+## GitHub mit Test-Repo an der App gemessen
+
+Am 2026-11-11 mit dem öffentlichen, leeren Repo `boxi-os/test-repo`, das der Nutzer dafür
+angelegt hat, und einem fein abgestuften Token nur für dieses Repo (Contents, Pages und
+Administration je Lesen und Schreiben). Das Projekt war eine Kopie des Vorlagen-Projekts
+`neu-probe` (`gh-probe`, nur das Ziel „Branch-Probe“ auf `gh-pages` behalten, `origin` auf das
+Test-Repo, eine eigene git-Identität mit der Noreply-Adresse des Nutzers, `baseUrl`
+`boxi-os.github.io/test-repo`); die App lief mit Scratch-Profil und `-QHMemorySecrets YES`, der
+Nutzer trug das Token selbst ein.
+
+- **Token:** „Gültig @boxi-os“. Der Hinweis darunter nennt nur den Scope „repo“ klassischer Tokens;
+  für ein fein abgestuftes stimmt er nicht (Nebenbefund).
+- **Push über Git-Sync:** „Erfolgreich.“, 50 Dateien in einem Commit, Upstream danach `origin/v5`
+  und „Auf dem Stand des Remotes“; `git ls-remote` von außen zeigt denselben Commit, Autor und
+  Committer mit der Noreply-Adresse. Kein Token in den Logs, im Profil oder in `.git/config`; der
+  Askpass-Ordner des Laufs ist weg. Neun `qh-git-*`-Ordner in `$TMPDIR` stammen aus Testläufen der
+  Nacht (Nebenbefund).
+- **Branch-Deploy:** Frage wie ohne Netz, dann `[new branch]` `gh-pages` als Root-Commit
+  (`aaf01e1`, ohne Eltern), danach „Keine Änderungen seit dem letzten Deploy.“; der Worktree ist
+  wieder abgemeldet.
+- **Pages:** Vor dem Deploy „noch keine Pages eingerichtet“. GitHub legte Pages beim ersten Push
+  von `gh-pages` selbst an, darum lief „Auf „gh-pages“ stellen“ den Zweig mit PUT: „Quelle gesetzt:
+  gh-pages (/)“, Zustand „Veröffentlicht“ mit `https://boxi-os.github.io/test-repo/`, auch nach
+  „Status neu laden“; die Seite und eine Unterseite liefern 200. Das fein abgestufte Token reichte,
+  ein 403 kam nicht.
+- **Geerbt, Nebenbefund:** Der Knopf schickt wie QuartzControls `GithubPages.tsx` immer die Domain
+  (leer) und `https_enforced`, auch wenn das Häkchen ohne Domain gesperrt ist. Die Ausgabe sagt
+  dann „Eigene Domain entfernt.“, obwohl keine gesetzt war, und „HTTPS konnte noch nicht erzwungen
+  werden. GitHub stellt das Zertifikat für eine eigene Domain erst …“ mit GitHubs „The certificate
+  does not exist yet“.
+
+Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), eine eigene Domain und „HTTPS
+erzwingen“ (bräuchten einen DNS-Eintrag des Nutzers), „Repository anlegen“ (bräuchte ein Token für
+alle Repos), die Token-Zustände „abgelehnt“ und „unbekannt“.
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
