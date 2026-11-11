@@ -221,6 +221,15 @@ import Testing
     #expect(throws: PublishFailure(L10n.t("main.connectionSecretControl"))) {
       try store.save(SaveConnectionInput(kind: .ftp, name: "F2", host: "h", port: 21, username: "u", secure: true, secret: "pa\nss"))
     }
+    #expect(throws: PublishFailure(L10n.t("main.connectionSecretControl"))) {
+      try store.save(SaveConnectionInput(kind: .ssh, name: "S2", host: "h", port: 22, username: "u", authMethod: .password, secret: "pa\0ss"))
+    }
+    // Review 2026-11-11 (2), N4: a tab, the joiner of an emoji sequence, a soft hyphen go through.
+    let family = "\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467}"
+    for (index, secret) in ["pa\tss", "x\(family)y", "Trenn\u{AD}zeichen"].enumerated() {
+      let saved = try store.save(SaveConnectionInput(kind: .ftp, name: "U\(index)", host: "h", port: 21, username: "u", secure: true, secret: secret))
+      #expect(try store.secret(saved.id) == secret)
+    }
     let key = "-----BEGIN OPENSSH PRIVATE KEY-----\nabc\n-----END OPENSSH PRIVATE KEY-----\n"
     let keyed = try store.save(SaveConnectionInput(kind: .ssh, name: "K", host: "h", port: 22, username: "u", authMethod: .privateKey, secret: key))
     #expect(try store.secret(keyed.id) == key)

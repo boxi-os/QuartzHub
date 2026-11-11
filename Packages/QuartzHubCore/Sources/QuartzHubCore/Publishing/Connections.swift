@@ -154,10 +154,14 @@ public struct SaveConnectionInput: Equatable, Sendable {
     return copy
   }
 
-  /// A one-line secret that still holds a control character after `normalized`.
+  /// A one-line secret that still holds a line break or NUL after `normalized`: what basic-ftp
+  /// refuses in `PASS` (`\r`, `\n`, `\0`, `FtpContext.js`) and what would end the askpass line
+  /// early. Not every control character: a tab or the joiner inside an emoji sequence (Cc, Cf)
+  /// went through QuartzControl and both protocols, and refusing it made such a password
+  /// impossible to enter again (Review 2026-11-11 (2), N4).
   public var secretHasControlCharacter: Bool {
     guard isOneLineSecret, let secret = normalized.secret else { return false }
-    return secret.unicodeScalars.contains { CharacterSet.controlCharacters.contains($0) }
+    return secret.unicodeScalars.contains { $0 == "\r" || $0 == "\n" || $0 == "\0" }
   }
 
   public var problem: String? {
