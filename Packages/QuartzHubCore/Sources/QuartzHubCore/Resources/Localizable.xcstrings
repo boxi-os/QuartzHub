@@ -30084,6 +30084,23 @@
         }
       }
     },
+    "main.sshUnsafeLogin" : {
+      "comment" : "SSH/rsync refused: a connection's host or user would be read as an option",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Host „{{host}}“ oder Benutzer „{{user}}“ dieses Zugangs ist ungültig: Er darf nicht mit „-“ beginnen und keine Leerzeichen enthalten. Trage ihn unter Einstellungen ▸ Zugänge neu ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Host “{{host}}” or user “{{user}}” of this connection is not valid: it must not start with “-” or contain spaces. Enter it again under Settings ▸ Connections."
+          }
+        }
+      }
+    },
     "main.stagingDocumentMissing" : {
       "localizations" : {
         "de" : {

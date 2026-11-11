@@ -134,6 +134,12 @@ public struct SaveConnectionInput: Equatable, Sendable {
   /// form and `save` share here (in QuartzControl it guarded the IPC boundary). Lengths count UTF-16
   /// units, as zod does. One rule more than the schema: an SSH or FTP connection needs a host;
   /// QuartzControl's service failed on a missing one with a TypeError.
+  /// A host or user name that no ssh, rsync or FTP command line can mistake for something else:
+  /// no leading "-", no blank or control character.
+  public static func isLoginWord(_ text: String) -> Bool {
+    !JSText.startsWith(text, "-") && !text.unicodeScalars.contains { CharacterSet.whitespacesAndNewlines.contains($0) || CharacterSet.controlCharacters.contains($0) }
+  }
+
   public var problem: String? {
     let length = { (text: String) in JSText.length(text) }
     if length(name) < 1 || length(name) > 200 { return "name" }
@@ -141,6 +147,9 @@ public struct SaveConnectionInput: Equatable, Sendable {
     if (kind == .ssh || kind == .ftp) && host == nil { return "host" }
     if let port, port < 1 || port > 65535 { return "port" }
     if let username, length(username) > 255 { return "username" }
+    // ssh and rsync would read a leading "-" as an option (review 2026-11-11, N1).
+    if let host, !Self.isLoginWord(JS.trim(host)) { return "host" }
+    if kind == .ssh, let username, !username.isEmpty, !Self.isLoginWord(username) { return "username" }
     if let keyPath, length(keyPath) < 1 || length(keyPath) > 4096 || !JSText.startsWith(keyPath, "/") { return "keyPath" }
     if let login, length(login) > 255 { return "login" }
     if let secret, length(secret) > 100_000 { return "secret" }

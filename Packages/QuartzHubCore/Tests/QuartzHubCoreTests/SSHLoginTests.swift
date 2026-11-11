@@ -228,4 +228,42 @@ import Testing
     #expect(RsyncSupport.blockReason(make("agent", nil, pinned), rsyncAvailable: true) == nil)
     #expect(RsyncSupport.blockReason(make("privateKey", "/k", pinned), rsyncAvailable: nil) == nil)
   }
+
+  /// Review 2026-11-11, N1: a host "-oProxyCommand=…" from the settings or from QuartzControl's
+  /// file ran a local command at the host-key probe. Refused before ssh starts; the form refuses it
+  /// on saving.
+  @Test func aHostThatIsAnOptionNeverReachesSsh() async throws {
+    let dir = TestFolder.make("qh-ssh-option")
+    defer { try? FileManager.default.removeItem(atPath: dir) }
+    let pwned = "\(dir)/pwned"
+    let make = { (host: String, user: String) -> Connection in
+      Connection(stored: StoredConnection(object: JSONObject([("id", .string("x")), ("kind", .string("ssh")), ("host", .string(host)),
+                                                             ("port", .number(22)), ("username", .string(user)), ("authMethod", .string("agent"))])))
+    }
+    let bad = make("-oProxyCommand=touch \(pwned)", "u")
+    let environment = try await LocalSSHD().environment
+    let message = L10n.t("main.sshUnsafeLogin", ["host": bad.host, "user": "u"])
+    #expect(await SSHLogin.probe(bad, environment: environment, configFile: Self.none) == .failed(message))
+    #expect(throws: PublishFailure(message)) {
+      try SSHLogin.prepare(bad, secret: nil, hostKey: PinnedHostKey(fingerprint: "SHA256:x", blob: "AAAA", type: "ssh-ed25519"),
+                           environment: ["SSH_AUTH_SOCK": "/tmp/none"])
+    }
+    // rsync gets "user@host:": a user "-e…" would be its option.
+    let badUser = make("h", "-esh -c id")
+    #expect(throws: PublishFailure(L10n.t("main.sshUnsafeLogin", ["host": "h", "user": "-esh -c id"]))) { try RsyncAdapter.remoteSpec(badUser, "www") }
+    #expect(!FileManager.default.fileExists(atPath: pwned))
+
+    // The form: the same rule, before anything is stored. FTP users may hold a blank.
+    let input = { (kind: StoredConnection.Kind, host: String, user: String) in
+      SaveConnectionInput(kind: kind, name: "n", host: host, port: 22, username: user).problem
+    }
+    #expect(input(.ssh, "-oProxyCommand=x", "u") == "host")
+    #expect(input(.ssh, "host name", "u") == "host")
+    #expect(input(.ssh, "h", "-l") == "username")
+    #expect(input(.ftp, "-x", "u") == "host")
+    // The counter-check: ordinary names pass.
+    #expect(input(.ssh, "debian-vm.local", "boxi") == nil)
+    #expect(input(.ftp, "ftp.example.org", "web user") == nil)
+    #expect(try RsyncAdapter.remoteSpec(make("debian-vm", "boxi"), "www").hasPrefix("boxi@debian-vm:www"))
+  }
 }

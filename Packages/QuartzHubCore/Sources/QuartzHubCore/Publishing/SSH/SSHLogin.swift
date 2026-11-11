@@ -64,6 +64,7 @@ public struct SSHLogin: Sendable {
   /// socket); `configFile` replaces ~/.ssh/config (the tests' `/dev/null`).
   public static func prepare(_ connection: Connection, secret: String?, hostKey: PinnedHostKey, environment: [String: String],
                              configFile: String? = nil) throws(PublishFailure) -> SSHLogin {
+    try refuseUnsafe(connection)
     let directory = try temporaryFolder("qh-ssh")
     do {
       let knownHosts = "\(directory)/known_hosts"
@@ -135,7 +136,18 @@ public struct SSHLogin: Sendable {
 
   /// The key the server shows, the one ssh negotiates and would check later: ssh takes it into an
   /// empty known_hosts (`accept-new`) and is then refused every login method.
+  /// A connection from the settings or taken over from QuartzControl's file, where nothing
+  /// checked it: a host "-oProxyCommand=…" ran a command at the first contact (review 2026-11-11,
+  /// N1). The host also goes behind "--"; the user rides in rsync's "user@host:" and has no such
+  /// place, so both are checked.
+  static func refuseUnsafe(_ connection: Connection) throws(PublishFailure) {
+    guard SaveConnectionInput.isLoginWord(connection.host), SaveConnectionInput.isLoginWord(connection.username) else {
+      throw PublishFailure(L10n.t("main.sshUnsafeLogin", ["host": connection.host, "user": connection.username]))
+    }
+  }
+
   public static func probe(_ connection: Connection, environment: ToolEnvironment, configFile: String? = nil) async -> Probe {
+    do { try refuseUnsafe(connection) } catch { return .failed(error.message) }
     guard let directory = try? temporaryFolder("qh-ssh-probe") else { return .failed("mkdtemp") }
     defer { try? FileManager.default.removeItem(atPath: directory) }
     let knownHosts = "\(directory)/known_hosts"
@@ -145,7 +157,7 @@ public struct SSHLogin: Sendable {
                    "HostbasedAuthentication=no", "GSSAPIAuthentication=no", "IdentityAgent=none"] {
       options += ["-o", option]
     }
-    let command = environment.command("ssh", options + ["-l", connection.username, connection.host, "true"])
+    let command = environment.command("ssh", options + ["-l", connection.username, "--", connection.host, "true"])
     let result = await ProcessRunner.run(command)
     let line = String(decoding: (try? Posix.read(knownHosts)) ?? Data(), as: UTF8.self)
     let fields = JSText.split(JS.trim(line), " ")

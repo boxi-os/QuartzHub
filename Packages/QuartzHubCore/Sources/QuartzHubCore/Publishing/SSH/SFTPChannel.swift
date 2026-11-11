@@ -100,7 +100,7 @@ public final class SFTPChannel: @unchecked Sendable {
 
   /// `ssh <options> -s <host> sftp` with the login's environment, and the version exchange.
   public static func open(_ login: SSHLogin, environment: ToolEnvironment) async throws(Failure) -> SFTPChannel {
-    let command = environment.command("ssh", login.options + ["-o", "ClearAllForwardings=yes", "-s", login.host, "sftp"]).adding(login.variables)
+    let command = environment.command("ssh", login.options + ["-o", "ClearAllForwardings=yes", "-s", "--", login.host, "sftp"]).adding(login.variables)
     let launched: (LaunchedProcess, Int32, Int32, Int32)
     switch ProcessRunner.launchPiped(command) {
     case .success(let value): launched = value

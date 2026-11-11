@@ -128,6 +128,7 @@ public struct RsyncAdapter: DeployAdapter {
   static let nonEmptyFolder = #"(?m)^cannot delete non-empty directory: ([^\n\r\x{2028}\x{2029}]*)$"#
 
   static func remoteSpec(_ connection: Connection, _ remotePath: String) throws(PublishFailure) -> String {
+    try SSHLogin.refuseUnsafe(connection)
     if let unsafe = RemotePath.rsyncUnsafeChar(remotePath) {
       throw PublishFailure(JSText.test(unsafe, "[\(JSText.space)]") ? L10n.t("main.rsyncPathWithSpace") : L10n.t("main.rsyncPathWithSpecial", ["char": unsafe]))
     }

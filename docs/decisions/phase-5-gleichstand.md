@@ -1990,3 +1990,18 @@ Nicht umgesetzt, aus dem Vorschlag des Reviews: `npm install` aus dem Parken her
 ein Umbau von `CoreUpdate.merge` mit seinen 64 Golden-Schritten aus QuartzControl; mit Notiz und
 Frage kostet ein Abbruch nicht mehr den Link, nur ein laufender Dev-Server sieht während npm weiter
 keinen Inhalt (wie in QuartzControl).
+
+### N1: Host und Benutzer eines SSH-Zugangs werden nie eine Option
+
+QuartzHub spricht SFTP und rsync über das System-OpenSSH; QuartzControl 1.3 sprach SFTP über ssh2
+und hatte die Lücke nicht. Ein Host „-oProxyCommand=…“ (aus den Einstellungen oder aus
+QuartzControls `connections.json`, deren Übernahme ihn nicht prüft) führte bei der Host-Key-Probe
+einen lokalen Befehl aus. Jetzt gilt für Host und SSH-Benutzer eine Regel
+(`SaveConnectionInput.isLoginWord`: kein „-“ am Anfang, kein Leer- oder Steuerzeichen; ein
+FTP-Benutzer darf ein Leerzeichen haben). Sie greift beim Speichern und, für übernommene Zugänge,
+vor jedem ssh und rsync (`SSHLogin.refuseUnsafe`, Satz `main.sshUnsafeLogin`). Zusätzlich steht der
+Host hinter `--` (Probe und `ssh -s -- <host> sftp`; gemessen mit `/usr/bin/ssh` 10.5p1: „hostname
+contains invalid characters“, kein Befehl). rsyncs `user@host:` hat keinen solchen Platz, deshalb
+auch der Benutzer. Gemessen mit `SSHLoginTests.aHostThatIsAnOptionNeverReachesSsh`: mit dem alten
+Code legte die Probe die Datei an, `prepare` und `remoteSpec` nahmen beides an, und das Formular
+speicherte es; jetzt nichts davon, gewöhnliche Namen gehen weiter.
