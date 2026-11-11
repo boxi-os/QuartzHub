@@ -2687,3 +2687,7 @@ an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwer
   „Repository öffnen“ im Marktplatz; „5 ungenutzte Schriftdateien sind aus dem Projekt entfernt.“,
   erst mit einer statischen Schrift (Old Standard TT): bei einer variablen wie Noto Sans ist es eine
   Datei für alle Schnitte, da fällt beim Wechsel der Überschrift nichts weg.
+- **Serversuche ohne ps oder lsof (`-QHScanFails ps|lsof`, Debug).** Der Schalter lässt das
+  genannte Programm im `ServerScan.System.live` fehlen (`couldNotStart(.notFound)`), sonst läuft
+  alles echt. Ohne ps: „nicht möglich“. Ohne lsof bleibt QuartzHubs eigener Server gefunden, weil
+  er seine Ports in den Flags trägt; „unvollständig“ kam erst mit einem fremden Server ohne Flags.

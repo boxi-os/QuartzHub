@@ -102,8 +102,17 @@ public enum ServerScan {
       self.now = now
     }
 
-    public static let live = System(run: { await ProcessRunner.run($0) }, probeTCP: LiveProbes.tcp, fetchPage: LiveProbes.page,
-                                    signalTree: LiveProbes.signalTree, now: Date.init)
+    public static let live = System(run: { command in
+      #if DEBUG
+      // `-QHScanFails ps|lsof`: that program is missing, so a measurement sees the scan
+      // "nicht möglich" (ps) or "unvollständig" (lsof, with a server running) at the app; neither
+      // can be made without changing the system (2026-11-11).
+      if let missing = LaunchArgument.string("QHScanFails"), NodePath.basename(command.executable) == missing {
+        return CommandResult(termination: .couldNotStart(.notFound), output: "", stdout: "")
+      }
+      #endif
+      return await ProcessRunner.run(command)
+    }, probeTCP: LiveProbes.tcp, fetchPage: LiveProbes.page, signalTree: LiveProbes.signalTree, now: Date.init)
   }
 
   /// What quartz takes without the flags, the same two numbers QuartzHub passes.
