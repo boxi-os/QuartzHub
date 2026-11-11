@@ -61,6 +61,14 @@ import Testing
     #expect(plan.absorbedEntries == [0])
   }
 
+  /// Quartz takes the entry's `order` whenever the key is there (`!== undefined`), null included.
+  @Test func aNullOrderOfTheEntryIsTakenAsQuartzTakesIt() {
+    let crawl = Self.entry("@quartz-community/crawl-links", [("order", .null)])
+    #expect(BuiltinProcessing.plan(configuration: JSONObject(), plugins: [crawl])[.links].order == .null)
+    let without = Self.entry("@quartz-community/crawl-links", [])
+    #expect(BuiltinProcessing.plan(configuration: JSONObject(), plugins: [without])[.links].order != .null)
+  }
+
   @Test func configurationWinsOverAnAbsorbedEntry() {
     let crawl = Self.entry("@quartz-community/crawl-links", [("options", Self.object([("markdownLinkResolution", .string("absolute"))]))])
     let configuration = JSONObject([("links", Self.object([("markdownLinkResolution", .string("shortest"))]))])

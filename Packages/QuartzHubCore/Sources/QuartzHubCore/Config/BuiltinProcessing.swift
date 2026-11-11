@@ -240,7 +240,9 @@ public enum BuiltinProcessing {
         if entry.enabled {
           merge(&options, builtin.absorbedDefaults)
           if let own = entry.object["options"]?.objectValue { merge(&options, own) }
-          if let own = entry.object["order"], own != .null { order = own }
+          // `legacyEntry.order !== undefined`: a written `order: null` counts, as in Quartz
+          // (Review 2026-11-11 (2), nebenbei 6).
+          if let own = entry.object["order"] { order = own }
         } else if explicitEnabled == nil {
           enabled = false
           note = .disabledByEntry(plugin: shortName(entry))
