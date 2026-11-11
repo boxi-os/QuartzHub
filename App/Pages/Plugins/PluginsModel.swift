@@ -130,6 +130,24 @@ final class PluginsModel {
     features.builtins ? BuiltinProcessing.absorbing(item.entry) : nil
   }
 
+  /// GitHubFlavoredMarkdown after ObsidianFlavoredMarkdown, which Quartz 5.1 does not take.
+  var markdownOrderProblem: Bool {
+    guard features.builtins, let plugins = config?.plugins else { return false }
+    return BuiltinProcessing.markdownOrderProblem(plugins) != nil
+  }
+
+  func fixMarkdownOrder() async {
+    let done = await commit { plugins in
+      guard let problem = BuiltinProcessing.markdownOrderProblem(plugins) else { return plugins }
+      let fixed = BuiltinProcessing.fixedMarkdownOrder(plugins, gfm: problem.gfm, ofm: problem.ofm)
+      var next = plugins
+      next[problem.gfm].object["order"] = .number(fixed.gfm)
+      next[problem.ofm].object["order"] = .number(fixed.ofm)
+      return next
+    }
+    if done { Announce.post(L10n.t("pluginsInstalled.markdownOrderFixed")) }
+  }
+
   var pendingMigrations: [String] {
     guard features.builtins, let plugins = config?.plugins else { return [] }
     return BuiltinProcessing.pendingMigrations(plugins).map { plugins[$0].name }

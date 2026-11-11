@@ -36916,6 +36916,57 @@
         }
       }
     },
+    "pluginsInstalled.markdownOrder" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: warning above the list",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub-Markdown läuft hier nach Obsidian-Markdown. Quartz 5.1 verlangt die umgekehrte Reihenfolge."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub Markdown runs after Obsidian Markdown here. Quartz 5.1 requires the reverse order."
+          }
+        }
+      }
+    },
+    "pluginsInstalled.markdownOrderFix" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: button next to the warning",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reihenfolge tauschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swap the order"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.markdownOrderFixed" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: announced after the swap",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reihenfolge getauscht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order swapped."
+          }
+        }
+      }
+    },
     "pluginsInstalled.moveDown" : {
       "localizations" : {
         "de" : {

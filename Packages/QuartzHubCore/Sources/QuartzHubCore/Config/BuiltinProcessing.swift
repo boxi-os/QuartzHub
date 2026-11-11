@@ -186,6 +186,25 @@ public enum BuiltinProcessing {
     }
   }
 
+  /// GitHubFlavoredMarkdown has to run before ObsidianFlavoredMarkdown since Quartz 5.1 ("as the
+  /// default config does and 5.1 requires", CHANGELOG 5.1.0, 7236249); 5.0's templates and
+  /// QuartzControl's basic template had them the other way round (30 and 40), and neither the core
+  /// update nor `plugin doctor` changes or reports that. The indices of the two enabled entries
+  /// when they are in the wrong order, by their `order` or, without one, the plugins' own
+  /// defaults (30 and 40).
+  public static func markdownOrderProblem(_ plugins: [PluginEntry]) -> (gfm: Int, ofm: Int)? {
+    func index(_ name: String) -> Int? { plugins.indices.first { plugins[$0].enabled && officialPluginName(plugins[$0].source) == name } }
+    guard let gfm = index("github-flavored-markdown"), let ofm = index("obsidian-flavored-markdown") else { return nil }
+    let order = { (index: Int, fallback: Double) in plugins[index].object["order"]?.numberValue ?? fallback }
+    return order(gfm, 30) >= order(ofm, 40) ? (gfm, ofm) : nil
+  }
+
+  /// The two `order` values after the fix: the pair swapped where both had one, else 30 and 40.
+  public static func fixedMarkdownOrder(_ plugins: [PluginEntry], gfm: Int, ofm: Int) -> (gfm: Double, ofm: Double) {
+    if let a = plugins[gfm].object["order"]?.numberValue, let b = plugins[ofm].object["order"]?.numberValue, a != b { return (b, a) }
+    return (30, 40)
+  }
+
   /// `planBuiltins`. `providesOf` gives an enabled entry's `quartz.capabilities.provides`
   /// (`providedCapabilities`); nil when it declares none.
   public static func plan(configuration: JSONObject, plugins: [PluginEntry],

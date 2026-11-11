@@ -125,6 +125,28 @@ import Testing
     #expect(BuiltinProcessing.pendingMigrations(plugins) == [1, 3, 5])
   }
 
+  /// 5.1 needs GitHubFlavoredMarkdown first; gui-test and QuartzControl's basic template had 30/40
+  /// the other way round.
+  @Test func theMarkdownOrderOf50IsFound() {
+    let old = [Self.entry("@quartz-community/obsidian-flavored-markdown", [("order", .number(30))]),
+               Self.entry("github:quartz-community/github-flavored-markdown", [("order", .number(40))])]
+    let problem = BuiltinProcessing.markdownOrderProblem(old)
+    #expect(problem?.gfm == 1 && problem?.ofm == 0)
+    #expect(BuiltinProcessing.fixedMarkdownOrder(old, gfm: 1, ofm: 0) == (30, 40))
+    // 5.1's own order, defaults without `order`, and a pair with one switched off are fine.
+    let new = [Self.entry("@quartz-community/github-flavored-markdown", [("order", .number(30))]),
+               Self.entry("@quartz-community/obsidian-flavored-markdown", [("order", .number(40))])]
+    #expect(BuiltinProcessing.markdownOrderProblem(new) == nil)
+    #expect(BuiltinProcessing.markdownOrderProblem([Self.entry("@quartz-community/obsidian-flavored-markdown"),
+                                                    Self.entry("@quartz-community/github-flavored-markdown")]) == nil)
+    #expect(BuiltinProcessing.markdownOrderProblem([old[0], Self.entry("github:quartz-community/github-flavored-markdown", enabled: false, [("order", .number(40))])]) == nil)
+    // Equal orders leave it to the file's order, which Quartz does not promise: 30 and 40.
+    let tie = [Self.entry("@quartz-community/obsidian-flavored-markdown", [("order", .number(35))]),
+               Self.entry("@quartz-community/github-flavored-markdown", [("order", .number(35))])]
+    #expect(BuiltinProcessing.markdownOrderProblem(tie) != nil)
+    #expect(BuiltinProcessing.fixedMarkdownOrder(tie, gfm: 1, ofm: 0) == (30, 40))
+  }
+
   @Test func featuresAreReadFromTheProject() throws {
     let scratch = try HostPathTests.Scratch()
     let project = scratch.path

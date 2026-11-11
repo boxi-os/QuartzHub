@@ -133,6 +133,20 @@ struct InstalledTab: View {
           .accessibilityIdentifier("plugins.count")
       }
       if filtering { Note(L10n.t("pluginsInstalled.reorderDisabledByFilter")) }
+      if model.markdownOrderProblem {
+        HStack(alignment: .firstTextBaseline) {
+          // No fixedSize(vertical:) here: outside a scroll view it shifted the whole window
+          // (docs/conventions.md).
+          Label(L10n.t("pluginsInstalled.markdownOrder"), systemImage: "exclamationmark.triangle.fill")
+            .foregroundStyle(.orange)
+          Spacer()
+          Button(L10n.t("pluginsInstalled.markdownOrderFix")) { Task { await model.fixMarkdownOrder() } }
+            .disabled(!canReorder)
+            .accessibilityIdentifier("plugins.markdownOrderFix")
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("plugins.markdownOrder")
+      }
       if let message = model.message {
         Text(message).foregroundStyle(.red).textSelection(.enabled).lineLimit(8)
       } else if model.refused {
