@@ -3,8 +3,10 @@ import Foundation
 /// "No network" for a measurement (DEBUG, `-QHOffline YES`): every URLSession QuartzHub makes
 /// answers a request to another machine with `notConnectedToInternet`, what URLSession says with
 /// the Wi-Fi off. Loopback still answers, as it does then (the server scan asks localhost). npm,
-/// a child process, gets `npm_config_offline` (the theme catalog is `npm search`); git keeps the
-/// network.
+/// a child process, gets `npm_config_offline` (the theme catalog is `npm search`). Nothing else:
+/// git, WebKit (the export's KaTeX from jsdelivr), `npx quartz` with its plugin clones and the
+/// clone when creating a project keep the network, so a row measured with this switch is one
+/// that goes through URLSession or npm (Review 2026-11-11 (2), nebenbei 3).
 ///
 /// Turning the Wi-Fi off was the first idea and cannot work: the session that measures runs over
 /// the same network (2026-11-11, the marketplace and theme catalog rows of docs/gleichstand.md).

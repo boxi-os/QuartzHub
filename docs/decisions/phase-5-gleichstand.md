@@ -2685,6 +2685,11 @@ an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwer
 - **Ohne Netz (`-QHOffline`).** Das WLAN auszuschalten ging nicht: Die messende Sitzung läuft
   über dasselbe Netz. Der Schalter lässt im Debug-Bau jede URLSession mit
   `notConnectedToInternet` scheitern (Loopback bleibt), npm bekommt `npm_config_offline`.
+  **Nur diese beiden** (zweites Review, nebenbei 3): git, WebKit (der Export lädt KaTeX von
+  jsdelivr), `npx quartz` mit seinen Plugin-Klonen und `git clone` beim Anlegen gehen weiter ins
+  Netz. Die damit gemessenen Zeilen (Marktplatz, Themes, Schriften, Relay-Prüfung, Vorlage) laufen
+  alle über URLSession oder npm search; eine Messung von git oder dem Export „ohne Netz“ braucht
+  einen anderen Weg.
   - **Befund, behoben:** Der Marktplatz ohne Katalog ließ das ganze Projektfenster leer, nur die
     Titelzeile blieb; die Bedienungshilfe fand `sidebar.overview` bei y = −707. Ursache: der
     Hinweis „nicht erreichbar“ mit `fixedSize(horizontal: false, vertical: true)` im Kopf der
