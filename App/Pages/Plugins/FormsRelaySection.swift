@@ -150,6 +150,8 @@ struct FormsRelaySection: View {
   @State private var message: String?
   @State private var subdirInvalid = false
   @State private var drafts: [String: String] = [:]
+  /// A refused address, under its row: at the top of the inspector it was out of sight (2026-11-11).
+  @State private var rowProblems: [String: String] = [:]
   /// Rows whose secret was saved here, with the upload it was saved after: the row says so until
   /// the next upload.
   @State private var pending: [String: (at: String, before: RelayState)] = [:]
@@ -451,14 +453,18 @@ struct FormsRelaySection: View {
         }
       }
       HStack {
-        TextField(L10n.t("formsEditor.relay.addressFor", ["name": name]), text: Binding(get: { draft }, set: { drafts[name] = $0 }),
+        TextField(L10n.t("formsEditor.relay.addressFor", ["name": name]), text: Binding(get: { draft }, set: {
+          drafts[name] = $0
+          rowProblems[name] = nil
+        }),
                   prompt: Text(verbatim: set ? L10n.t("formsEditor.relay.replaceAddress") : "name@example.org"))
           .textFieldStyle(.roundedBorder).labelsHidden()
           .textContentType(.none)
           .disabled(!r.secrets.storageAvailable)
         Button(L10n.t("formsEditor.relay.saveAddress")) {
           if FormsOptions.isExampleAddress(draft) {
-            message = L10n.t("formsEditor.relay.exampleAddress")
+            rowProblems[name] = L10n.t("formsEditor.relay.exampleAddress")
+            Announce.post(L10n.t("formsEditor.relay.exampleAddress"))
             return
           }
           drafts[name] = ""
@@ -469,6 +475,7 @@ struct FormsRelaySection: View {
         }
         .disabled(!draft.contains("@") || !r.secrets.storageAvailable)
       }
+      if let problem = rowProblems[name] { ErrorLine(problem) }
       let note = savedNote("recipient:\(name)", r, L10n.t("formsEditor.relay.addressSetAnnounce", ["name": name]),
                            L10n.t("formsEditor.relay.addressSetPending", ["name": name]))
       if !note.isEmpty { Text(note).font(.caption).foregroundStyle(.green) }
