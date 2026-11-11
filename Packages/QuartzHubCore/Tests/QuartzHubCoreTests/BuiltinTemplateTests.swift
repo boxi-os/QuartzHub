@@ -11,6 +11,25 @@ import Testing
 @Suite(.serialized) struct BuiltinTemplateTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/builtin-template")
 
+  /// The copy inside the app makes a project for Quartz 5.1: no entry Quartz built in or calls
+  /// deprecated, GitHub-flavoured before Obsidian-flavoured Markdown (2026-11-11). The old package
+  /// (`Fixtures/templates/qc-basic-1.3.0.qtpl`) is the counter-check.
+  @Test func theShippedCopyIsForQuartz51() throws {
+    func entries(_ package: String) throws -> [PluginEntry] {
+      let files = try ZipArchive.read(contentsOf: package)
+      let part = try JSJSON.parse(try #require(files[TemplatePackage.partFile("plugins")]))
+      return (part["entries"]?.arrayValue ?? []).compactMap { $0.objectValue.map(PluginEntry.init(object:)) }
+    }
+    let shipped = try entries(BuiltinTemplate.bundledCopy)
+    let names = Set(shipped.map { BuiltinProcessing.officialPluginName($0.source) })
+    #expect(names.isDisjoint(with: ["crawl-links", "remove-draft", "content-index", "hard-line-breaks"]))
+    #expect(BuiltinProcessing.pendingMigrations(shipped).isEmpty)
+    #expect(BuiltinProcessing.markdownOrderProblem(shipped) == nil)
+    let old = try entries("\(NodePath.dirname(#filePath))/Fixtures/templates/qc-basic-1.3.0.qtpl")
+    #expect(!BuiltinProcessing.pendingMigrations(old).isEmpty)
+    #expect(BuiltinProcessing.markdownOrderProblem(old) != nil)
+  }
+
   /// The bundled copy wins a tie, but GitHub did answer: the page must not say it was unreachable
   /// (measured 2026-11-10, both copies the same file).
   @Test func aTieIsNotAnUnreachableGitHub() async throws {
@@ -101,7 +120,7 @@ import Testing
     }
   }
 
-  @Test func theCopyInTheRepositoryIsQuartzControls() throws {
+  @Test func theCopyInTheRepositoryReads() throws {
     let files = try ZipArchive.read(contentsOf: BuiltinTemplate.bundledCopy)
     #expect(files[TemplatePackage.manifestFile] != nil)
     #expect(BuiltinTemplate.countPages(files[TemplatePackage.partFile("content")]) == 22)

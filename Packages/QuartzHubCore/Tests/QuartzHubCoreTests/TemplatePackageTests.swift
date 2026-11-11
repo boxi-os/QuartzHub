@@ -14,7 +14,10 @@ import Testing
                              "Runtime/ oder Helpers/dist fehlt: scripts/fetch-runtime.sh, scripts/build-helpers.sh"))
 struct TemplatePackageTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/templates")
-  static let basic = NodePath.normalize("\(NodePath.dirname(#filePath))/../../../../Resources/templates/qc-basic.qtpl")
+  /// QuartzControl 1.3.0's qc-basic.qtpl, the package `scripts/templates-golden.mjs` imported (from
+  /// QuartzControl's `resources/templates`). The shipped copy moves on (Quartz 5.1); this one is the
+  /// input the recorded steps belong to.
+  static let basic = NodePath.normalize("\(NodePath.dirname(#filePath))/Fixtures/templates/qc-basic-1.3.0.qtpl")
 
   final class Recorder: Sendable {
     struct State {
