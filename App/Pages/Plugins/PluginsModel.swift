@@ -299,6 +299,14 @@ final class PluginsModel {
     let question = item.frame != nil ? L10n.t("pluginsInstalled.removeFrameConfirm", ["name": item.displayName])
       : L10n.t("pluginsInstalled.removeConfirm", ["name": item.displayName])
     guard await Confirm.ask(question, confirm: L10n.t("common.remove"), destructive: true, window: window) else { return }
+    // One of several entries with this name (two navigations, a second excalidraw): only this
+    // entry leaves the config, its directory and lockfile pin stay for the others. Quartz 5.1's
+    // `plugin remove` refuses a name that matches more than one entry, and with the same source
+    // twice the full source does not tell them apart either (measured on gui-test, 2026-11-11).
+    if item.frame == nil, item.of > 1 {
+      await commit { plugins in plugins.enumerated().filter { $0.offset != item.index }.map(\.element) }
+      return
+    }
     busy = true
     message = nil
     refused = false
