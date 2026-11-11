@@ -31236,13 +31236,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzHub kann die Projektliste, die Einstellungen und die Zugänge von QuartzControl übernehmen. QuartzControl bleibt dabei unverändert."
+            "value" : "QuartzHub kann die Projektliste, die Einstellungen und die Zugänge von QuartzControl übernehmen. Die Dateien von QuartzControl bleiben dabei unverändert."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzHub can take over the project list, the settings and the connections from QuartzControl. QuartzControl stays as it is."
+            "value" : "QuartzHub can take over the project list, the settings and the connections from QuartzControl. QuartzControl's files stay as they are."
           }
         }
       }
@@ -31444,13 +31444,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS fragt einmal, ob QuartzHub den Schlüsselbund-Eintrag „QuartzControl Safe Storage“ lesen darf."
+            "value" : "macOS fragt einmal, ob QuartzHub den Schlüsselbund-Eintrag „QuartzControl Safe Storage“ lesen darf. „Erlauben“ genügt, „Immer erlauben“ trägt QuartzHub dauerhaft in diesen Eintrag ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS asks once whether QuartzHub may read the keychain item “QuartzControl Safe Storage”."
+            "value" : "macOS asks once whether QuartzHub may read the keychain item “QuartzControl Safe Storage”. “Allow” is enough; “Always Allow” adds QuartzHub to that item for good."
           }
         }
       }
@@ -41161,13 +41161,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS fragt dabei, ob QuartzHub den Schlüsselbund-Eintrag von QuartzControl lesen darf."
+            "value" : "macOS fragt dabei, ob QuartzHub den Schlüsselbund-Eintrag von QuartzControl lesen darf. „Erlauben“ genügt, „Immer erlauben“ trägt QuartzHub dauerhaft in diesen Eintrag ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS asks whether QuartzHub may read QuartzControl's keychain item."
+            "value" : "macOS asks whether QuartzHub may read QuartzControl's keychain item. “Allow” is enough; “Always Allow” adds QuartzHub to that item for good."
           }
         }
       }

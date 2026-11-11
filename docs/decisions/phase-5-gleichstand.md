@@ -2112,3 +2112,15 @@ Jetzt zählt sie wie jede unlesbare Datei, und der Plan liest weiter
 (`relaySecretsThatAreNoObjectStillListTheLeftovers`: alter Code rot, ohne
 `legacy-publish-targets.json`; neuer Code grün). Seit N3 lässt eine unlesbare Datei die Übernahme
 ohnehin offen.
+
+### 4. „QuartzControl bleibt unverändert“ stimmt nur für die Dateien
+
+Der Übernahme-Dialog versprach „QuartzControl bleibt dabei unverändert“. Klickt der Nutzer im
+Systemdialog „Immer erlauben“, nimmt macOS QuartzHub in die Zugriffsliste des Eintrags
+„QuartzControl Safe Storage“ auf; das ist eine Änderung an QuartzControls Eintrag, wenn auch eine
+harmlose. Der Satz sagt jetzt „Die Dateien von QuartzControl bleiben dabei unverändert“, und der
+Hinweis zu den Geheimnissen (im Dialog und unter Einstellungen ▸ Zugänge) sagt, dass „Erlauben“
+genügt. Nicht gemessen: Den Systemdialog am echten Eintrag klickt nur der Nutzer, und dass „Immer
+erlauben“ die Zugriffsliste ändert, ist macOS' bekanntes Verhalten, nicht hier beobachtet.
+Angesehen mit einem Schein-Profil (ein Projekt, ein Zugang mit Geheimnis), Dunkel/Deutsch und
+Hell/Englisch, ohne „Übernehmen“ zu drücken.
