@@ -285,7 +285,7 @@ public struct SnapshotStore: Sendable {
       let isLink = settings(project: project).contentIsSymlink
       let dir = try QuartzGuiDirectory(project: project).create()
       // JSON.stringify(…, null, 2), no newline at the end.
-      try Posix.write("\(dir)/\(Self.settingsFile)", Data("{\n  \"includeContent\": \(isLink ? false : includeContent)\n}".utf8))
+      try JSONStore.writeAtomic(Data("{\n  \"includeContent\": \(isLink ? false : includeContent)\n}".utf8), to: "\(dir)/\(Self.settingsFile)")
       let settings = settings(project: project)
       try writeExcludes(project, settings)
       return settings

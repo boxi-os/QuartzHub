@@ -2076,3 +2076,19 @@ bleiben). Im echten `$TMPDIR` lagen drei solche Ordner aus Testläufen (nur `kno
 davon hatte die Gegenprobe zu N1 hinterlassen. Ein erster Testlauf mit dem globalen Aufräumen im
 Test brach einen parallel laufenden rsync-Test ab; der Test räumt deshalb nur seinen eigenen Ordner
 (`removeOpenTempDirs(only:)`).
+
+## Review 2026-11-11: die Nebenbei-Punkte
+
+Der Nutzer wählte nach den Befunden auch die elf Nebenbei-Punkte des Berichts aus. Je Punkt ein
+Commit oder, wo nichts zu ändern war, die Begründung hier.
+
+### 1. Manifeste, Marker und Snapshot-Einstellungen atomar
+
+`DeployManifests.write`, die beiden Marker von 1.1.1, das Manifest eines Dokument-Ziels in
+`Deploy` und `snapshot-settings.json` schrieben an Ort und Stelle (`O_TRUNC`, dann schreiben),
+wie QuartzControl. Ein Absturz dazwischen lässt ein halbes Manifest, das als „alles neu
+hochladen“ gelesen wird und vergisst, was noch zu löschen war. Jetzt über
+`JSONStore.writeAtomic` (Temp-Datei, `fsync`, `rename`); das Format bleibt QuartzControls.
+Gemessen mit einem zweiten harten Link auf das Manifest (`aManifestIsReplacedNotRewritten`): der
+alte Schreiber ändert den Link mit (Test rot), der neue ersetzt die Datei, und keine `.tmp-`-Datei
+bleibt liegen. Das Absturzfenster selbst ist nicht nachgestellt.

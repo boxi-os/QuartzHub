@@ -235,9 +235,9 @@ public struct Deploy: Sendable {
       let file = dir.deployManifest(manifestKey)
       if let remove {
         let object = JSONObject(remove.map { ($0, .string("remove")) })
-        try Posix.write(file, Data(JSJSON.stringify(.object(object)).utf8))
+        try JSONStore.writeAtomic(Data(JSJSON.stringify(.object(object)).utf8), to: file)
       } else if !Posix.exists(file) {
-        try Posix.write(file, Data("{}\n".utf8))
+        try JSONStore.writeAtomic(Data("{}\n".utf8), to: file)
       }
       let secret = try target.connectionId.flatMap { id throws(PublishFailure) in try connections.secret(id) }
       var object = target.object

@@ -160,6 +160,23 @@ import Testing
     let diff = try manifests.diff("t", buildDir: build)
     #expect(diff.map(\.status) == [.added, .removed] || diff.map(\.status) == [.removed, .added], "\(diff)")
   }
+
+  /// A record is replaced, never rewritten in place: a crash halfway leaves the old manifest, not
+  /// half of the new one (review 2026-11-11, nebenbei 1). A second hard link shows the difference,
+  /// since an in-place write changes it too.
+  @Test func aManifestIsReplacedNotRewritten() throws {
+    let root = TestFolder.make("qh-manifest-atomic")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let manifests = DeployManifests(project: root)
+    try manifests.write("t", DeployManifest(.object(JSONObject([("a.html", .string("old"))]))))
+    let path = "\(root)/.quartz-gui/deploy-manifest-t.json", held = "\(root)/held.json"
+    #expect(link(path, held) == 0)
+    try manifests.write("t", DeployManifest(.object(JSONObject([("a.html", .string("new"))]))))
+    #expect(manifests.read("t").paths == ["a.html"])
+    #expect(String(decoding: try Posix.read(held), as: UTF8.self).contains("old"))
+    #expect(String(decoding: try Posix.read(path), as: UTF8.self).contains("new"))
+    #expect((Posix.entries("\(root)/.quartz-gui") ?? []).allSatisfy { !$0.name.contains(".tmp-") })
+  }
 }
 
 extension DeployManifests {

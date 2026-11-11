@@ -21,8 +21,9 @@ public struct DeployDiffEntry: Equatable, Sendable {
 /// a server what it holds (rsync is the exception and keeps none), so "what was sent there" is the
 /// best answer.
 ///
-/// QuartzControl's form: written with a plain write, read with a bare parse; one that cannot be
-/// read means "upload everything". Read paths never create `.quartz-gui/`.
+/// QuartzControl's form, read with a bare parse; one that cannot be read means "upload everything".
+/// Written through a temp file with fsync and rename (QuartzControl wrote in place): a half manifest
+/// would also forget what was still to delete. Read paths never create `.quartz-gui/`.
 public struct DeployManifests: Sendable {
   public let project: String
   let now: @Sendable () -> Date
@@ -52,7 +53,7 @@ public struct DeployManifests: Sendable {
 
   func write(_ targetId: String, _ manifest: DeployManifest) throws {
     try directory.create()
-    try Posix.write(directory.deployManifest(targetId), Data(JSJSON.stringify(manifest.json).utf8))
+    try JSONStore.writeAtomic(Data(JSJSON.stringify(manifest.json).utf8), to: directory.deployManifest(targetId))
   }
 
   /// Throws the record away, so the next diff offers the whole build: when a target is pointed
@@ -72,7 +73,7 @@ public struct DeployManifests: Sendable {
   public func settleModes(_ targetId: String) throws {
     try directory.create()
     let marker = JSONObject([("mode", .string("0644")), ("at", .string(JS.isoString(now())))])
-    try Posix.write(modesMarker(targetId), Data(JSJSON.stringify(.object(marker)).utf8))
+    try JSONStore.writeAtomic(Data(JSJSON.stringify(.object(marker)).utf8), to: modesMarker(targetId))
   }
 
   /// Before 1.1.1, "~/blog" over SFTP against OpenSSH went into a folder "~" in the login
@@ -86,7 +87,7 @@ public struct DeployManifests: Sendable {
       try write(targetId, DeployManifest(.object(JSONObject(manifest.paths.map { ($0, .string("")) }))))
     }
     try directory.create()
-    try Posix.write(tildeMarker(targetId), Data(JSJSON.stringify(.object(JSONObject([("at", .string(JS.isoString(now())))]))).utf8))
+    try JSONStore.writeAtomic(Data(JSJSON.stringify(.object(JSONObject([("at", .string(JS.isoString(now())))]))).utf8), to: tildeMarker(targetId))
   }
 
   /// Every file below the build, relative, in the walk's order (each folder's names by their
