@@ -2083,6 +2083,24 @@ Lockfile `resolved` und Commit `56de4bb`. Ein Build danach: „Erfolgreich in 1,
 der Ausgabe meldet Quartz zum Frame `frame-index` der Vorlage „failed to load its entry module (only
 its components/frames were loaded)“, wie schon beim Build nach dem Anlegen; nicht untersucht.
 
+## Relay auf qh-test.borkel.net (all-inkl) an der App gemessen
+
+Am 2026-11-11, mit einer echten Subdomain des Nutzers mit Let's-Encrypt-Zertifikat und einem
+FTP-Zugang nur für deren Ordner (Passwort vom Nutzer eingetragen). Am Relay-Klon `$S/rel`:
+`baseUrl` und `transport.url` auf `qh-test.borkel.net`, `origin` entfernt, ein Ziel „qh-test“ (FTP,
+`/`, löscht nichts).
+
+- **Befund, behoben: das FTP-Passwort stand im Klartext in der Ausgabe.** Das Passwort endete
+  (beim Einfügen) auf einen Zeilenumbruch. basic-ftp lehnt `PASS …` mit Steuerzeichen ab und nennt
+  dabei den ganzen Befehl; der Fehler fällt außerhalb des Aufrufs, der Helfer starb, und QuartzHub
+  zeigte dessen stderr als „ftp-session ended: … Invalid command: Contains control characters.
+  (PASS <Passwort>)“. Jetzt schwärzt der Helfer das Passwort in jeder Antwort und fängt
+  ungefangene Fehler selbst (geschwärzter Bericht auf stderr), und `FTPSession` schwärzt es noch
+  einmal in Antworten und im stderr. `FTPRedactionTests` (ein Begrüßer auf 127.0.0.1, der auf
+  `USER` 331 antwortet, ein Passwort mit Zeilenumbruch): mit dem alten Helfer und der alten
+  `FTPSession` steht das Passwort in der Meldung, jetzt nicht. QuartzControls `ftp.ts` gibt
+  `err.message` ebenso weiter (gelesen, nicht gemessen).
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill

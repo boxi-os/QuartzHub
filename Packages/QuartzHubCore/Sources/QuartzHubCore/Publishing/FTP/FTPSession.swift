@@ -50,6 +50,14 @@ public final class FTPSession: @unchecked Sendable {
     var waiting: [Int: CheckedContinuation<JSONValue, any Error>] = [:]
     var ended: Failure?
     var stderr = Data()
+    /// The password of `access`, kept out of every message as the helper keeps it (the helper's
+    /// own report on a crash is its stderr, shown to the user).
+    var secrets: [String] = []
+  }
+
+  func redact(_ text: String) -> String {
+    let secrets = state.withLock { $0.secrets }
+    return secrets.filter { !$0.isEmpty }.reduce(text) { $0.replacingOccurrences(of: $1, with: "***", options: .literal) }
   }
 
   private init(process: LaunchedProcess, input: Int32, output: Int32, errors: Int32) {
@@ -100,7 +108,7 @@ public final class FTPSession: @unchecked Sendable {
       }
     }
     Darwin.close(fd)
-    let stderr = state.withLock { String(decoding: $0.stderr, as: UTF8.self) }
+    let stderr = redact(state.withLock { String(decoding: $0.stderr, as: UTF8.self) })
     let ended = Failure(message: "ftp-session ended: \(JS.trim(stderr))", text: "Error: ftp-session ended: \(JS.trim(stderr))")
     let waiting = state.withLock { state in
       state.ended = ended
@@ -138,8 +146,8 @@ public final class FTPSession: @unchecked Sendable {
     }
     if answer["ok"] == .bool(true) { return answer["value"] ?? .null }
     let error = answer["error"] ?? .null
-    let message = error["message"]?.stringValue ?? ""
-    let text = error["text"]?.stringValue ?? message
+    let message = redact(error["message"]?.stringValue ?? "")
+    let text = redact(error["text"]?.stringValue ?? message)
     if error["ftp"] == .bool(true) { throw FTPError(code: Int(error["code"]?.numberValue ?? 0), message: message, text: text) }
     throw Failure(message: message, text: text, nodeCode: error["nodeCode"]?.stringValue)
   }
@@ -149,7 +157,10 @@ public final class FTPSession: @unchecked Sendable {
   /// `access`; `ca` adds a trusted certificate for a test's server, as Node's `ca` option.
   public func access(host: String, port: Int, user: String, password: String?, secure: Bool, ca: String? = nil) async throws {
     var args: [(String, JSONValue)] = [("host", .string(host)), ("port", .number(Double(port))), ("user", .string(user)), ("secure", .bool(secure))]
-    if let password { args.append(("password", .string(password))) }
+    if let password {
+      args.append(("password", .string(password)))
+      state.withLock { $0.secrets += [password, JS.trim(password)] }
+    }
     if let ca { args.append(("ca", .string(ca))) }
     try await call("access", args)
   }

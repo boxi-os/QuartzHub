@@ -15,11 +15,29 @@ import { Client, FTPError } from 'basic-ftp'
 const TIMEOUT_MS = 30_000
 const client = new Client(TIMEOUT_MS)
 
+// The password never leaves this process in a message: basic-ftp names the whole command it
+// refuses ("Invalid command: Contains control characters. (PASS …)"), and an error thrown outside
+// a call ends the process with Node's report on stderr, which QuartzHub shows (measured
+// 2026-11-11 with a password that ended in a newline).
+const secrets: string[] = []
+function redact(text: string): string {
+  let out = text
+  for (const secret of secrets) if (secret) out = out.split(secret).join('***')
+  return out
+}
+function die(error: unknown): never {
+  process.stderr.write(`${redact(error instanceof Error ? (error.stack ?? String(error)) : String(error))}\n`)
+  process.exit(1)
+}
+process.on('uncaughtException', die)
+process.on('unhandledRejection', die)
+
 type Args = Record<string, unknown>
 
 async function run(op: string, a: Args): Promise<unknown> {
   switch (op) {
     case 'access': {
+      if (typeof a.password === 'string') secrets.push(a.password, a.password.trim())
       await client.access({ host: a.host as string, port: a.port as number, user: a.user as string, password: a.password as string | undefined,
         secure: a.secure as boolean, ...(a.ca ? { secureOptions: { ca: a.ca as string } } : {}) })
       return null
@@ -63,7 +81,7 @@ lines.on('line', (line) => {
     } catch (error) {
       const ftp = error instanceof FTPError
       process.stdout.write(`${JSON.stringify({ id: request.id, ok: false, error: {
-        ftp, code: ftp ? (error as FTPError).code : null, message: error instanceof Error ? error.message : String(error), text: String(error),
+        ftp, code: ftp ? (error as FTPError).code : null, message: redact(error instanceof Error ? error.message : String(error)), text: redact(String(error)),
         nodeCode: !ftp && typeof (error as { code?: unknown })?.code === 'string' ? (error as { code: string }).code : null
       } })}\n`)
     }
