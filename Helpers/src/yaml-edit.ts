@@ -109,6 +109,16 @@ function write(r: Record<string, unknown>, text: string): Record<string, unknown
     const layout = revive(object(r.layout, 'layout'), held.layout) as Record<string, unknown>
     doc.setIn(['layout', 'groups'], layout.groups ?? {})
     doc.setIn(['layout', 'byPageType'], layout.byPageType ?? {})
+    // Quartz 5.1's `layout.sidebars` ({ left, right }: fit | scroll | static). Not in
+    // QuartzControl's writeConfigNow, which knew only the two keys above: written when the layout
+    // carries it, removed when a layout read with it comes back without (decisions/phase-5-gleichstand.md).
+    const heldSidebars = isPlainObject(held.layout) ? held.layout.sidebars : undefined
+    if (layout.sidebars === undefined) {
+      if (doc.hasIn(['layout', 'sidebars'])) doc.deleteIn(['layout', 'sidebars'])
+    } else if (JSON.stringify(layout.sidebars) !== JSON.stringify(heldSidebars)) {
+      // Only a change is written: setIn replaces the node, and with it the comments inside.
+      doc.setIn(['layout', 'sidebars'], layout.sidebars)
+    }
   }
 
   // The Quartz CLI writes this file with lineWidth 120 (writeDataToFile in

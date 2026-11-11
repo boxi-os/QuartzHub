@@ -185,6 +185,25 @@ struct ConfigFileTests {
     #expect(try fileText(project) == "configuration:\n  pageTitle: a\n  ratio: 2\nplugins: []\n")
   }
 
+  /// Quartz 5.1's `layout.sidebars`, which QuartzControl's writer does not know: unchanged it
+  /// stays as it is (comment included), changed it is written, dropped it goes; groups and
+  /// byPageType as before.
+  @Test func layoutSidebarsAreWrittenBack() async throws {
+    let text = "plugins: []\nlayout:\n  # sidebars\n  sidebars:\n    left: scroll # links\n  groups: {}\n  byPageType: {}\n"
+    let project = try project(text)
+    var config = try await read(project)
+    try await write(config, project)
+    #expect(try fileText(project) == text)
+    config.layout?["sidebars"] = .object(JSONObject([("left", .string("static")), ("right", .string("fit"))]))
+    try await write(config, project)
+    var written = try await read(project)
+    #expect(written.layout?["sidebars"] == .object(JSONObject([("left", .string("static")), ("right", .string("fit"))])))
+    written.layout?["sidebars"] = nil
+    try await write(written, project)
+    #expect(try await read(project).layout?["sidebars"] == nil)
+    #expect(try fileText(project).contains("groups: {}"))
+  }
+
   @Test func aSaveNamesThisProjectsFrames() async throws {
     let project = try project("plugins:\n  - source: /Users/else/Original/.quartz-gui/authored-frames/frame-a\n    enabled: true\n" +
                               "  - source: /Users/else/Original/.quartz-gui/authored-frames/frame-b\n    enabled: true\n")
