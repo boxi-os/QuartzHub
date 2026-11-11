@@ -2117,6 +2117,45 @@ FTP-Zugang nur für deren Ordner (Passwort vom Nutzer eingetragen). Am Relay-Klo
   alter Code mit dem alten Satz und gescheitertem Speichern rot. An der App nach dem Neustart:
   „Adresse für „TestKontakt“ gespeichert.“, neuer Fingerabdruck, das alte Captcha-Secret ist mit weg.
 
+Die Urteile der Prüfung nach dem Hochladen, je mit geänderter `transport.url` und neuem Hochladen
+(kein Urteil brauchte eigene Dateien auf dem Server):
+
+- **ok:** „Das Relay antwortet unter https://qh-test.borkel.net/qhrelay/send.php.“ Von außen gibt
+  `config.php` 200 mit 0 Byte (PHP läuft als der Benutzer, 0600 reicht), `counters/` 403.
+- **Origin:** mit einer fremden Adresse in den Origins „Das Relay unter … nimmt keine Anfragen von
+  https://qh-test.borkel.net an, der Adresse aus der Basis-URL des Projekts. …“; danach zurück.
+- **Weiterleitung ohne Relay:** `…/qhrelay` (ohne `send.php`, Server antwortet 301): „Unter
+  https://qh-test.borkel.net/qhrelay leitet der Server auf https://qh-test.borkel.net/qhrelay/
+  weiter, und dort antwortet kein Relay. …“
+- **404:** `…/qhrelay/nix.php`: „Unter … antwortet kein Relay (HTTP 404). Stimmen Ziel, Unterordner
+  und Adresse von send.php?“
+- **403:** `…/qhrelay/counters/qf-probe.count` (vom `.htaccess` des Relays gesperrt): „Der Server
+  verweigert den Zugriff auf … (HTTP 403). Meist liegt das an den Rechten des Ordners oder an einer
+  Firewall des Hosters.“
+- **Befund, offen: jeder Zertifikatsfehler heißt in der App „keine verschlüsselte Verbindung“.**
+  `qh-nix.borkel.net` (die DNS-Wildcard greift, das Zertifikat nennt den Namen nicht): „Das Relay
+  konnte nicht geprüft werden: Mit dem Server kam keine verschlüsselte Verbindung zustande
+  (net::ERR_SSL_PROTOCOL_ERROR). Spricht er HTTPS?“, erwartet war ERR_CERT_COMMON_NAME_INVALID.
+  Ursache ist App Transport Security: Dieselbe Session (ephemeral, Delegate mit
+  `performDefaultHandling`) liefert als Skript -1202 mit Stream-Code -9843, in einem App-Bundle mit
+  Info.plist -1200 mit -9802, auch gegen badssl.com (abgelaufen, selbst signiert). Die
+  Unterscheidung in `unreachableReason` (Name, Datum, Aussteller) erreicht die App damit nie. Gegen
+  die VM (2026-11-10) kam ERR_CERT_AUTHORITY_INVALID, weil `anchors` dort die eigene Prüfung im
+  Delegate auslöste.
+- **Befund, offen: eine Relay-Adresse mit http:// zeigt eine englische Systemmeldung.** „Das Relay
+  konnte nicht geprüft werden: The resource could not be loaded because the App Transport Security
+  policy requires the use of a secure connection.“ (-1022). QuartzControl fragt über Chromium auch
+  http an; all-inkl antwortet dort 404 aus einem anderen Docroot. Webhooks betrifft es nicht, die
+  nehmen nur https.
+- **Nicht an der App:** 500 ohne Inhalt, kein PHP (samt „config.php lesbar machen und neu
+  hochladen“), fremdes Relay, PHP-Meldung, „File not found.“ und die Weiterleitung, die den POST
+  verliert, bräuchten eigene PHP- oder `.htaccess`-Dateien auf dem echten Host. Sie stehen als
+  QuartzControls Fälle in `RelayProbeTests` und auf debian-vm in `FormsRelayVMTests`.
+- **Entfernen:** „Relay unter „qh-test“, Ordner „qhrelay“, vom Server entfernen?“ mit Abbrechen
+  zuerst, dann „✗ config.generated.php ✗ config.php ✗ send.php“ und „Der Ordner
+  „qhrelay/counters“ bleibt …“, Status „am 11.11.2026 vom Server entfernt“; von außen geben die
+  drei Dateien 404.
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
