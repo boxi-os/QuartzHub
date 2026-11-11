@@ -66,9 +66,37 @@ import Testing
         case "takenClasses": got = Self.strings(try SiteFonts.takenClasses(project: project, prefixes: (args[0].arrayValue ?? []).compactMap(\.stringValue)))
         default: got = .null
         }
-        #expect(StyleFilesTests.masked(got, project) == answer["answer"], "\(name): \(call) \(args)")
+        var expected = answer["answer"]
+        // gui-test's build wrote `index-a4eb4042.css`; QuartzControl looked for `index.css` only and
+        // called it unbuilt. QuartzHub finds the hashed name (decided 2026-11-11).
+        if call == "readPreviewFonts", name == "gui-test", var object = expected?.objectValue {
+          #expect(object["built"] == .bool(false), "QuartzControl's answer changed")
+          object["built"] = .bool(true)
+          expected = .object(object)
+        }
+        #expect(StyleFilesTests.masked(got, project) == expected, "\(name): \(call) \(args)")
       }
     }
+  }
+
+  /// Quartz's hashed main stylesheet: its fonts count, `index.css` wins where it is there, and of
+  /// two hashed ones the newer does.
+  @Test func theHashedMainStylesheetIsTheBuilds() throws {
+    let project = "\(scratch.path)/hashed"
+    try Posix.mkdirs("\(project)/public")
+    let face = { (family: String) in Data("@font-face{font-family:\"\(family)\";src:url(static/fonts/x.woff2)}".utf8) }
+    try Posix.write("\(project)/public/index-0a1b2c3d.css", face("Alt Sans"))
+    let old = Date().addingTimeInterval(-60)
+    try FileManager.default.setAttributes([.modificationDate: old], ofItemAtPath: "\(project)/public/index-0a1b2c3d.css")
+    try Posix.write("\(project)/public/index-9f8e7d6c.css", face("Probe Sans"))
+    try Posix.write("\(project)/public/index-notahash.css", face("Fremd Sans"))
+    #expect(SiteFonts.faces(project: project).filter { $0.origin == "build" }.map(\.family) == ["Probe Sans"])
+    #expect(SiteFonts.previewFonts(project: project, families: []).built)
+    try Posix.write("\(project)/public/index.css", face("Plain Sans"))
+    #expect(SiteFonts.faces(project: project).filter { $0.origin == "build" }.map(\.family) == ["Plain Sans"])
+    let empty = "\(scratch.path)/unbuilt"
+    try Posix.mkdirs("\(empty)/public")
+    #expect(!SiteFonts.previewFonts(project: empty, families: []).built)
   }
 
   @Test func prefixesAreChecked() {

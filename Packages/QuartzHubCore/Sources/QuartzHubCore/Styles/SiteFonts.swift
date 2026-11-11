@@ -17,16 +17,36 @@ public enum SiteFonts {
     return files.filter { FileManager.default.fileExists(atPath: $0) }
   }
 
-  /// The build's stylesheets that can hold Quartz's @font-face rules: index.css and the Fonts
-  /// plugin's static/fonts/*.css.
+  /// The build's stylesheets that can hold Quartz's @font-face rules: the main stylesheet and the
+  /// Fonts plugin's static/fonts/*.css.
   static func buildStylesheets(_ project: String) -> [String] {
     let build = BuildOutputGuard.buildDirectory(project: project, outputDir: nil)
-    var files = [NodePath.join(build, "index.css")]
+    var files = mainStylesheet(build).map { [$0] } ?? []
     let fonts = NodePath.join(build, "static/fonts")
     if FileManager.default.fileExists(atPath: fonts) {
       files += LayoutFrames.directoryEntriesWithKind(fonts).filter { $0.kind == .file && JSText.endsWith($0.name, ".css") }.map { NodePath.join(fonts, $0.name) }
     }
     return files.filter { FileManager.default.fileExists(atPath: $0) }
+  }
+
+  /// Quartz names the main stylesheet `index-<hash>.css` when it hashes its resources
+  /// (`componentResources.ts`, `cssSlug`), else `index.css`. QuartzControl's `styleService.ts` read
+  /// only `index.css` and so never saw a hashed build's fonts, gui-test's included (its build already
+  /// wrote `index-a4eb4042.css`); found on Quartz 5.1, 2026-11-11. A build empties its folder, so
+  /// there is one; should a server's rebuilds leave more, the newest counts.
+  static func mainStylesheet(_ build: String) -> String? {
+    let plain = NodePath.join(build, "index.css")
+    if FileManager.default.fileExists(atPath: plain) { return plain }
+    var newest: (path: String, time: timespec)?
+    for entry in LayoutFrames.directoryEntriesWithKind(build) where entry.kind == .file && JSText.test(entry.name, #"\Aindex-[0-9a-f]+\.css\z"#) {
+      let path = NodePath.join(build, entry.name)
+      var info = stat()
+      guard stat(path, &info) == 0 else { continue }
+      let time = info.st_mtimespec
+      if let current = newest, (current.time.tv_sec, current.time.tv_nsec) >= (time.tv_sec, time.tv_nsec) { continue }
+      newest = (path, time)
+    }
+    return newest?.path
   }
 
   public struct Face: Equatable, Sendable {
@@ -117,7 +137,7 @@ public enum SiteFonts {
       guard let data = FileManager.default.contents(atPath: file) else { continue }
       faces.append(PreviewFace(family: located.face.family, weight: located.face.weight, style: located.face.style, unicodeRange: located.face.unicodeRange, data: data))
     }
-    let built = FileManager.default.fileExists(atPath: NodePath.join(BuildOutputGuard.buildDirectory(project: project, outputDir: nil), "index.css"))
+    let built = mainStylesheet(BuildOutputGuard.buildDirectory(project: project, outputDir: nil)) != nil
     return (faces, built)
   }
 

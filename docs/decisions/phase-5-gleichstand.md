@@ -2667,10 +2667,16 @@ an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwer
   hält `coreBusy` über das Verlassen der Seite hinweg). QuartzControl ließ beides zu und wies es im
   Hauptprozess ab; die Abweisungen bleiben hier als Sicherung.
 - **Kein Fall auf macOS:** die fehlende verschlüsselte Ablage beim Relay (`storageAvailable: true`).
-- **Nebenbefund:** `SiteFonts` sucht die Schriftregeln des Builds in `public/index.css`. Quartz
-  5.1 schreibt `index-<hash>.css` (an der Kopie `index-935eccdc.css`), die Datei wird also nie
-  gefunden, und `SiteFonts.swift:120` hält jedes 5.1-Projekt für ungebaut. Der Variablen-Graph
-  liest alle CSS-Dateien und ist nicht betroffen.
+- **Nebenbefund, behoben:** `SiteFonts` suchte die Schriftregeln des Builds in `public/index.css`.
+  Quartz schreibt `index-<hash>.css`, sobald es seine Dateien hasht (`componentResources.ts`,
+  `cssSlug`; an der 5.1-Kopie `index-935eccdc.css`, in gui-tests 5.0-Build schon
+  `index-a4eb4042.css`), sonst `index.css`. QuartzControls `styleService.ts` hatte denselben
+  Fehler, die Golden-Files halten ihn fest (`readPreviewFonts` sagte für gui-test „nicht
+  gebaut“). Jetzt zählt `index.css`, wo sie da ist, sonst die neueste `index-<hex>.css`;
+  `SiteFontsTests` hält die Abweichung vom Golden ausdrücklich fest, `theHashedMainStylesheetIsTheBuilds`
+  prüft den Namen (Gegenprobe: mit dem alten Code scheitern beide). Sichtbar wird das nur, wenn das
+  Fonts-Plugin beim Build selbst ausliefert („noch nicht gebaut“ statt „Der letzte Build enthält …“);
+  an der App nicht gesehen, der Klon ließ sich nicht in diesen Zustand bringen.
 - **Ohne Netz (`-QHOffline`).** Das WLAN auszuschalten ging nicht: Die messende Sitzung läuft
   über dasselbe Netz. Der Schalter lässt im Debug-Bau jede URLSession mit
   `notConnectedToInternet` scheitern (Loopback bleibt), npm bekommt `npm_config_offline`.
