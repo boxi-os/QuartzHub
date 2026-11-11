@@ -2053,9 +2053,13 @@ QuartzControl das Öffnen („project:open … Invalid UUID“); mein erster Ver
   gespeichert hat. Für dieses Projekt läuft ein Dev-Server von QuartzControl auf Port 8080.
   QuartzHub beendet ihn nicht.“ Mit einem neuen Start von QuartzControl kam die Ansage („QuartzControl
   läuft gerade. …“), nach dessen Beenden verschwand das Band.
-- **Befund, offen:** Das Band sitzt als `safeAreaInset` über der Seite mit halbdurchsichtigem
-  Hintergrund und erscheint erst nach dem Laden; die erste Zeile der Übersicht („Alles ok: …“) liegt
-  darunter und scheint durch die zweite Zeile des Bands.
+- **Behoben:** Das Band saß als `safeAreaInset` über der Seite mit halbdurchsichtigem Hintergrund
+  und erschien erst nach dem Laden; die erste Zeile der Übersicht („Alles ok: …“) lag darunter und
+  schien durch die zweite Zeile des Bands. Jetzt steht es in einem `VStack` über der Seite und
+  schiebt sie samt Inspektor nach unten. Dabei zeigte sich eine zweite Falle: Das Band war eine
+  `Group`, und eine leere `Group` hat im `VStack` keine Ansicht, an der `.task` laufen könnte; das
+  Band erschien gar nicht mehr, bis es selbst ein `VStack` wurde. Angesehen in Dunkel und Hell, mit
+  QuartzControl samt Server und nach dessen Beenden (Band weg, keine Lücke); Rauchtest 11 grün.
 - **QuartzControls Verhalten, nicht unseres:** Startet QuartzControl, während ein Server einer
   früheren Sitzung läuft, fragt es („Von einer vorherigen Sitzung laufen noch Dev-Server …“) und
   leert dabei `running-servers.json`; bis dahin zeigt QuartzHubs Band nur „QuartzControl läuft“, ohne

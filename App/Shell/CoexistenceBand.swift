@@ -12,7 +12,9 @@ struct CoexistenceBand: View {
   @State private var concerns = Coexistence.Concerns(quartzControlRunning: false, serverPort: nil)
 
   var body: some View {
-    Group {
+    // A stack, not a Group: an empty Group has no view for `.task` to run on, so the first check
+    // never happened once the band sat in a VStack above the page.
+    VStack(spacing: 0) {
       if !concerns.isEmpty {
         VStack(alignment: .leading, spacing: 4) {
           if concerns.quartzControlRunning {

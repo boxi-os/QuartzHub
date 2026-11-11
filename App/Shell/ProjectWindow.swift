@@ -120,9 +120,13 @@ struct ProjectWindow: View {
       .accessibilityLabel(L10n.t("projectLayout.navLabel"))
       .accessibilityIdentifier("sidebar")
     } detail: {
-      page(current, ProjectContext(id: row.id, name: row.name, path: row.path))
-        .id(pageID)
-        .safeAreaInset(edge: .top, spacing: 0) { CoexistenceBand(projectPath: row.path) }
+      // Above the page, not a safe-area inset over it: the band appears after the page has laid
+      // out, and an inset then left the page's first row under it, showing through.
+      VStack(spacing: 0) {
+        CoexistenceBand(projectPath: row.path)
+        page(current, ProjectContext(id: row.id, name: row.name, path: row.path))
+          .id(pageID)
+      }
     }
     .navigationTitle(row.name)
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
