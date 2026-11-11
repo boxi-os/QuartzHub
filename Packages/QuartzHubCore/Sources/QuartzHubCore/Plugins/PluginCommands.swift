@@ -62,6 +62,24 @@ public final class PluginCommands: Sendable {
     await quartz(["plugin", "prune"], project, environment, deadlines.local)
   }
 
+  // MARK: Quartz 5.1: doctor and info
+
+  /// `quartz plugin doctor`: Quartz's own check of quartz.config.yaml, quartz.lock.json and the
+  /// installed plugins. It ends with 1 when it found errors, so `success` is "nothing wrong", not
+  /// "it ran"; the output says which. With `fix` it moves the entries of the plugins that are part
+  /// of Quartz since 5.1 to `configuration.*` and drops their lockfile pins
+  /// (`BuiltinProcessing.pendingMigrations`), comments kept; a snapshot first when one is handed over.
+  public func doctor(project: String, fix: Bool, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
+                     snapshot: SnapshotStore.Take? = nil) async -> Result {
+    if fix, let failure = await Self.snapshotFirst(snapshot, project, "plugin doctor --fix") { return failure }
+    return await quartz(["plugin", "doctor"] + (fix ? ["--fix"] : []), project, environment, deadlines.local)
+  }
+
+  /// `quartz info`: Quartz, Node, the plugins and the config in one text, for a bug report.
+  public func info(project: String, environment: ToolEnvironment, deadlines: Deadlines = Deadlines()) async -> Result {
+    await quartz(["info"], project, environment, deadlines.local)
+  }
+
   private func quartz(_ arguments: [String], _ project: String, _ environment: ToolEnvironment, _ timeout: Duration) async -> Result {
     let command = environment.command("npx", ["quartz"] + arguments, in: project, timeout: timeout)
     let result = await ProcessRunner.run(command)

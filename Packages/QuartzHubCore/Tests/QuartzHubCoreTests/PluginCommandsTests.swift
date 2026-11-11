@@ -27,7 +27,7 @@ import Testing
     }
     try scratch.script("bin/npm", "echo \"npm $* $(pwd)\" >> '\(log)'\n\(npmBody ?? respond(answers["npm"]))")
     var npx = "echo \"npx $* $(pwd)\" >> '\(log)'\ncase \"$3\" in\n"
-    for sub in ["install", "add", "remove", "prune"] { npx += "\(sub))\n\(respond(answers[sub]))\n;;\n" }
+    for sub in ["install", "add", "remove", "prune", "doctor"] { npx += "\(sub))\n\(respond(answers[sub]))\n;;\n" }
     try scratch.script("bin/npx", npx + "esac")
     let hostPath = HostPath(entries: ["\(scratch.path)/bin", "/usr/bin", "/bin"], source: .inherited, added: [])
     return ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin"], hostPath: hostPath, nodeMode: .system,
@@ -132,6 +132,25 @@ import Testing
     _ = await frames.remove("frame-one", project)
     #expect(calls.all.last == ["pluginChange", "frame-one"] && calls.all.count == 4)
     #expect(seen.withLock { $0 } == [0, 1, 3, 5])
+  }
+
+  /// Quartz 5.1's doctor: a snapshot before `--fix` only, the check alone writes nothing; "found
+  /// errors" (exit 1) is no success, and the output goes back either way.
+  @Test func doctorFixTakesASnapshotFirstAndTheCheckDoesNot() async throws {
+    let project = "\(w)/P"
+    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: project) { $0 }
+    let environment = try environment(answers: .object(JSONObject([("doctor", .object(JSONObject([
+      ("success", .bool(false)), ("output", .string("✗ x: npm package is not installed")),
+    ])))])))
+    let calls = SnapshotCalls()
+    let commands = PluginCommands()
+    let check = await commands.doctor(project: project, fix: false, environment: environment, snapshot: calls.take { _ in })
+    #expect(!check.success && check.output.contains("npm package is not installed"))
+    #expect(calls.all.isEmpty)
+    _ = await commands.doctor(project: project, fix: true, environment: environment, snapshot: calls.take { _ in })
+    #expect(calls.all == [["pluginChange", "plugin doctor --fix"]])
+    _ = await commands.info(project: project, environment: environment)
+    #expect(self.calls == ["npx quartz plugin doctor @W@/P", "npx quartz plugin doctor --fix @W@/P", "npx quartz info @W@/P"])
   }
 
   @Test func aSnapshotThatFailsStopsTheCommand() async throws {
