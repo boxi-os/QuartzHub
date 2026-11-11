@@ -137,9 +137,10 @@ struct MarketplaceTab: View {
                : L10n.t("pluginsMarketplace.add"), action: addFromSource)
           .disabled(busy || trimmedSource.isEmpty)
       }
+      // No `fixedSize(vertical:)`: the header is outside the list's scroll view, and the sentence
+      // with it pushed every column of the window out of sight (offline, 2026-11-11).
       if model.result?.unavailable == true {
-        Text(L10n.t("pluginsMarketplace.unavailable"))
-          .foregroundStyle(.orange).fixedSize(horizontal: false, vertical: true)
+        Text(L10n.t("pluginsMarketplace.unavailable")).foregroundStyle(.orange)
       }
       if let message = model.message {
         Text(message).foregroundStyle(model.failed ? .red : .secondary).textSelection(.enabled).lineLimit(8)

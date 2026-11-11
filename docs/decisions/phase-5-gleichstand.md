@@ -2671,3 +2671,19 @@ an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwer
   5.1 schreibt `index-<hash>.css` (an der Kopie `index-935eccdc.css`), die Datei wird also nie
   gefunden, und `SiteFonts.swift:120` hält jedes 5.1-Projekt für ungebaut. Der Variablen-Graph
   liest alle CSS-Dateien und ist nicht betroffen.
+- **Ohne Netz (`-QHOffline`).** Das WLAN auszuschalten ging nicht: Die messende Sitzung läuft
+  über dasselbe Netz. Der Schalter lässt im Debug-Bau jede URLSession mit
+  `notConnectedToInternet` scheitern (Loopback bleibt), npm bekommt `npm_config_offline`.
+  - **Befund, behoben:** Der Marktplatz ohne Katalog ließ das ganze Projektfenster leer, nur die
+    Titelzeile blieb; die Bedienungshilfe fand `sidebar.overview` bei y = −707. Ursache: der
+    Hinweis „nicht erreichbar“ mit `fixedSize(horizontal: false, vertical: true)` im Kopf der
+    Seite, außerhalb der Scrollansicht der Liste (die Regel in `conventions.md`, „Ein
+    `@SceneStorage`-Schlüssel hat einen Typ“). Ohne `fixedSize` bricht der Satz um, und das
+    Fenster steht; geprüft hell, die Theme-Seite dunkel.
+  - Marktplatz: Hinweis mit explorer als Platzhalter, die README „nicht geliefert“, „Katalog neu
+    laden“ zeigt den Hinweis wieder. Themes: der Hinweis und die sieben Platzhalter erst mit leerem
+    npm-Cache; mit gefülltem antwortet `npm search` auch offline mit der ganzen Liste.
+- **Mit Netz (Freigabe 2026-11-11, nur lesen und holen):** „Archiviert“ an `quartz-community/v5`;
+  „Repository öffnen“ im Marktplatz; „5 ungenutzte Schriftdateien sind aus dem Projekt entfernt.“,
+  erst mit einer statischen Schrift (Old Standard TT): bei einer variablen wie Noto Sans ist es eine
+  Datei für alle Schnitte, da fällt beim Wechsel der Überschrift nichts weg.
