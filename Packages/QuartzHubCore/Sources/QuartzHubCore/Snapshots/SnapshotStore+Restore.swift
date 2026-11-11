@@ -227,11 +227,11 @@ extension SnapshotStore {
     for file in files {
       let id = String(file.dropLast(".yaml".count))
       let hash = await ProcessRunner.run(environment.command(
-        "git", ["--git-dir", op.store, "hash-object", "-w", "\(claimed)/\(file)"], in: op.project))
+        "git", ["--git-dir", op.store, "hash-object", "-w", "\(claimed)/\(file)"], in: op.project, timeout: gitDeadline))
       let blob = JS.trim(hash.stdout)
       if blob.isEmpty { continue }
       let made = await ProcessRunner.run(environment.command(
-        "git", ["--git-dir", op.store, "mktree"], in: op.project, input: Data("100644 blob \(blob)\tquartz.config.yaml\n".utf8)))
+        "git", ["--git-dir", op.store, "mktree"], in: op.project, input: Data("100644 blob \(blob)\tquartz.config.yaml\n".utf8), timeout: gitDeadline))
       let tree = JS.trim(made.stdout)
       if tree.isEmpty { continue }
       // The backup's own time, so the list keeps the history it imports.

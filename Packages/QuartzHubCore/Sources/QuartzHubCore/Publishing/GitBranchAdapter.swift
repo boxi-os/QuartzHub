@@ -14,22 +14,36 @@ import Foundation
 /// Machine answers (FETCH_HEAD, the tree, the commit) are read from stdout, the output shown is
 /// git's own as it came (the rule of points 7a and 7b; QuartzControl read both from one stream).
 public struct GitBranchAdapter: DeployAdapter {
+  /// QuartzControl had none: a push that hung left the page "running" for good (review
+  /// 2026-11-11, nebenbei 5). The network ones as Git-Sync's (`Sync.Deadlines`).
+  public struct Deadlines: Sendable, Equatable {
+    public var fetch: Duration = .seconds(10 * 60)
+    /// The whole build goes up on every deploy.
+    public var push: Duration = .seconds(30 * 60)
+    /// worktree, write-tree, commit-tree: local, but `add -A` over a large build takes a while.
+    public var local: Duration = .seconds(10 * 60)
+    public init() {}
+  }
+
   let environment: ToolEnvironment
   let token: GitAuth.Token
   let now: @Sendable () -> Date
+  let deadlines: Deadlines
 
-  public init(environment: ToolEnvironment, token: @escaping GitAuth.Token, now: @escaping @Sendable () -> Date = { Date() }) {
+  public init(environment: ToolEnvironment, token: @escaping GitAuth.Token, now: @escaping @Sendable () -> Date = { Date() },
+              deadlines: Deadlines = Deadlines()) {
     self.environment = environment
     self.token = token
     self.now = now
+    self.deadlines = deadlines
   }
 
   struct GitError: Error, CustomStringConvertible {
     let description: String
   }
 
-  func git(_ arguments: [String], in directory: String, _ extra: [String: String] = [:]) async -> (CommandResult, String) {
-    let command = environment.command("git", arguments, in: directory).adding(extra)
+  func git(_ arguments: [String], in directory: String, _ extra: [String: String] = [:], timeout: Duration? = nil) async -> (CommandResult, String) {
+    let command = environment.command("git", arguments, in: directory, timeout: timeout ?? deadlines.local).adding(extra)
     let result = await ProcessRunner.run(command)
     return (result, result.report(for: command))
   }
@@ -60,7 +74,10 @@ public struct GitBranchAdapter: DeployAdapter {
     // With the credential: a private repo would otherwise say "no such branch", and the deploy
     // would push a first root commit over an existing branch without the lease.
     // A full refspec behind "--": the name is never an option, and never a tag of that name.
-    let (fetch, _) = await git(["fetch", "origin", "--", "refs/heads/\(branch)"], in: context.project, auth.variables)
+    let (fetch, fetchText) = await git(["fetch", "origin", "--", "refs/heads/\(branch)"], in: context.project, auth.variables,
+                                       timeout: deadlines.fetch)
+    // A fetch that never answered says nothing about the branch; the push would only hang as well.
+    if fetch.termination == .timedOut || fetch.termination == .cancelled { throw GitError(description: fetchText) }
     var remoteTip = ""
     if fetch.success {
       remoteTip = JS.trim((await git(["rev-parse", "FETCH_HEAD"], in: context.project)).0.stdout)
@@ -197,7 +214,7 @@ public struct GitBranchAdapter: DeployAdapter {
         let push = staged.remoteTip.isEmpty
           ? ["push", "origin", "\(sha):refs/heads/\(branch)"]
           : ["push", "--force-with-lease=refs/heads/\(branch):\(staged.remoteTip)", "origin", "\(sha):refs/heads/\(branch)"]
-        let (pushed, pushText) = await git(push, in: worktree, auth.variables)
+        let (pushed, pushText) = await git(push, in: worktree, auth.variables, timeout: deadlines.push)
         output += pushText
         context.progress(1, 1, branch)
         result = DeployResult(success: pushed.success, output: output)

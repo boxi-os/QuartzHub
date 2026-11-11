@@ -113,14 +113,19 @@ public struct SnapshotStore: Sendable {
   let clock: Clock
   /// What `gc --prune=` keeps (see above).
   let pruneExpiry: String
+  /// Every git call of the store, local as they are: a hung one would hold the project's lock and
+  /// every writer behind it (review 2026-11-11, nebenbei 5; QuartzControl had none). Far above a
+  /// `git add -A` over a large project.
+  let gitDeadline: Duration
 
   public init(environment: ToolEnvironment, npm: @escaping Npm, repoint: @escaping Repoint, clock: Clock = .system,
-              pruneExpiry: String = "10.minutes.ago") {
+              pruneExpiry: String = "10.minutes.ago", gitDeadline: Duration = .seconds(10 * 60)) {
     self.environment = environment
     self.npm = npm
     self.repoint = repoint
     self.clock = clock
     self.pruneExpiry = pruneExpiry
+    self.gitDeadline = gitDeadline
   }
 
   /// What a writer asks for before it writes: a snapshot of `kind`, its id, nil when it was skipped
@@ -135,7 +140,8 @@ public struct SnapshotStore: Sendable {
     SnapshotStore(
       environment: environment,
       npm: { project in
-        let command = environment.command("npm", ["install"], in: project)
+        // The install after a restore that changed package.json, with the plugins' network deadline.
+        let command = environment.command("npm", ["install"], in: project, timeout: PluginCommands.Deadlines().network)
         let result = await ProcessRunner.run(command)
         return PluginCommands.Result(success: result.success, output: result.report(for: command))
       },
@@ -164,14 +170,14 @@ public struct SnapshotStore: Sendable {
   @discardableResult
   func git(_ op: Operation, _ arguments: [String], env: [String: String] = [:], input: Data? = nil) async -> CommandResult {
     var command = environment.command("git", ["--git-dir", op.store, "--work-tree", op.project] + arguments,
-                                      in: op.project, input: input)
+                                      in: op.project, input: input, timeout: gitDeadline)
     command = command.adding(env.merging(["GIT_INDEX_FILE": op.index]) { _, new in new })
     return await ProcessRunner.run(command)
   }
 
   /// git in the project's own repository (its HEAD, a reset), never with the store's index.
   func projectGit(_ project: String, _ arguments: [String]) async -> (CommandResult, Command) {
-    let command = environment.command("git", arguments, in: project)
+    let command = environment.command("git", arguments, in: project, timeout: gitDeadline)
     return (await ProcessRunner.run(command), command)
   }
 
@@ -230,10 +236,10 @@ public struct SnapshotStore: Sendable {
   func ensureStore(_ op: Operation) async throws -> Settings {
     if !FileManager.default.fileExists(atPath: "\(op.store)/HEAD") {
       try QuartzGuiDirectory(project: op.project).create()
-      _ = await ProcessRunner.run(environment.command("git", ["init", "--bare", "--quiet", op.store]))
+      _ = await ProcessRunner.run(environment.command("git", ["init", "--bare", "--quiet", op.store], timeout: gitDeadline))
       // A bare repository refuses a work tree; everything else about "bare" is what is wanted.
       for (key, value) in [("core.bare", "false"), ("user.name", "QuartzHub"), ("user.email", "snapshots@quartzhub.local")] {
-        _ = await ProcessRunner.run(environment.command("git", ["--git-dir", op.store, "config", key, value]))
+        _ = await ProcessRunner.run(environment.command("git", ["--git-dir", op.store, "config", key, value], timeout: gitDeadline))
       }
     }
     let settings = settings(project: op.project)

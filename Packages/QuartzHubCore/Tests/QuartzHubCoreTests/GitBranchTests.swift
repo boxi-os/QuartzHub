@@ -117,6 +117,60 @@ import Testing
     #expect(!FileManager.default.fileExists(atPath: pwned))
   }
 
+  /// A remote that never answers ends at the deadline with git's timeout sentence instead of a
+  /// page that runs for good (review 2026-11-11, nebenbei 5): first the fetch hangs, and nothing
+  /// is pushed after it; then the fetch fails at once and the push hangs. The "server" is an ssh
+  /// command that sleeps; no network.
+  @Test func aRemoteThatNeverAnswersEndsAtTheDeadline() async throws {
+    let root = TemplatePackageTests.realpath(TestFolder.make("qh-git-branch-hang"))
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let environment = ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_CONFIG_NOSYSTEM": "1",
+                                             "GIT_CONFIG_GLOBAL": "/dev/null"],
+                                      hostPath: HostPath(entries: ["/usr/bin", "/bin"], source: .inherited, added: []),
+                                      nodeMode: .system, runtime: .repository, git: nil, bundledGitFailure: nil)
+    let project = "\(root)/p", hang = "\(root)/hang.sh", reached = "\(root)/reached", fetchFails = "\(root)/fetch-fails"
+    try Posix.mkdirs(project)
+    try Posix.mkdirs("\(root)/build")
+    try Posix.write("\(root)/build/index.html", Data("x".utf8))
+    try Posix.write(hang, Data("""
+      #!/bin/sh
+      echo "$@" >> '\(reached)'
+      case "$*" in *upload-pack*) [ -f '\(fetchFails)' ] && exit 128 ;; esac
+      exec sleep 30
+
+      """.utf8))
+    #expect(chmod(hang, 0o755) == 0)
+    for args in [["-C", project, "init", "-q"], ["-C", project, "remote", "add", "origin", "ssh://qh-hang.invalid/site.git"],
+                 ["-C", project, "config", "core.sshCommand", hang],
+                 // Without it git first asks the command "-G" to learn which ssh it is.
+                 ["-C", project, "config", "ssh.variant", "ssh"],
+                 // The worktree needs a HEAD, or the run ends before the push.
+                 ["-C", project, "-c", "user.name=T", "-c", "user.email=t@example.org", "commit", "-q", "--allow-empty", "-m", "x"]] {
+      #expect(await ProcessRunner.run(environment.command("git", args, in: root)).success)
+    }
+    let target = PublishTarget(object: JSONObject([("id", .string("t")), ("name", .string("T")),
+                                                   ("destination", .object(JSONObject([("type", .string("git-branch")), ("provider", .string("github")), ("branch", .string("gh-pages"))])))]))
+    var deadlines = GitBranchAdapter.Deadlines()
+    deadlines.fetch = .seconds(1)
+    deadlines.push = .seconds(1)
+    let adapter = GitBranchAdapter(environment: environment, token: { nil }, deadlines: deadlines)
+    let context = DeployContext(project: project, target: target, buildDir: "\(root)/build")
+    let calls = { (try? String(decoding: Posix.read(reached), as: UTF8.self)) ?? "" }
+
+    var started = ContinuousClock.now
+    var run = try await adapter.run(context, excluding: [])
+    #expect(ContinuousClock.now - started < .seconds(15))
+    #expect(!run.success && run.output.contains("git fetch"), "\(run.output)")
+    #expect(calls().contains("git-upload-pack") && !calls().contains("git-receive-pack"), "\(calls())")
+
+    try Posix.write(fetchFails, Data())
+    started = ContinuousClock.now
+    run = try await adapter.run(context, excluding: [])
+    #expect(ContinuousClock.now - started < .seconds(15))
+    #expect(!run.success && run.output.contains("git push"), "\(run.output)")
+    #expect(calls().contains("git-receive-pack"), "\(calls())")
+  }
+
   @Test func readsNameStatusAsQuartzControl() {
     let raw = "M\0ä.html\0A\0neu ö.html\0D\0alt\0T\0link\0R100\0a\0b\0\0\0X\0y\0"
     #expect(GitBranchAdapter.parseNameStatus(raw) == [

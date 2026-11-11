@@ -527,6 +527,28 @@ import Testing
     #expect(await h.store.list(project: p).count == before)
   }
 
+  /// A git call of the store that hangs ends at the deadline, so it does not hold the project's
+  /// lock for good, and the next snapshot works again (review 2026-11-11, nebenbei 5). The hang
+  /// is a clean filter that sleeps.
+  @Test func aHungGitCallEndsAtTheDeadline() async throws {
+    let h = try Harness()
+    let p = try await Self.project(h)
+    h.store = SnapshotStore(environment: h.environment, npm: { _ in PluginCommands.Result(success: true, output: "") }, repoint: { _ in },
+                            gitDeadline: .seconds(1))
+    _ = try await h.store.create(project: p, kind: "manual", label: "vorher")
+    try Posix.write(h.path("gitconfig"), Data("[filter \"hang\"]\n\tclean = sleep 30\n".utf8))
+    try Harness.write(h.path("p/.gitattributes"), "*.md filter=hang\n")
+    try Harness.write(h.path("p/content/Über.md"), "neu\n")
+    let started = ContinuousClock.now
+    await #expect(throws: SnapshotStore.Failure.self) { _ = try await h.store.create(project: p, kind: "manual", label: "hängt") }
+    #expect(ContinuousClock.now - started < .seconds(15))
+
+    try Posix.write(h.path("gitconfig"), Data())
+    let after = try await h.store.create(project: p, kind: "manual", label: "danach")
+    let newest = await h.store.list(project: p).first
+    #expect(after != nil && newest?.label == "danach")
+  }
+
   // MARK: - Content switched off since the snapshot (review 2026-11-11, H1)
 
   /// The review's case: a snapshot with the notes, the switch off, a note changed, "restore

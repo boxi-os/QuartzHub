@@ -2124,3 +2124,26 @@ genügt. Nicht gemessen: Den Systemdialog am echten Eintrag klickt nur der Nutze
 erlauben“ die Zugriffsliste ändert, ist macOS' bekanntes Verhalten, nicht hier beobachtet.
 Angesehen mit einem Schein-Profil (ein Projekt, ein Zugang mit Geheimnis), Dunkel/Deutsch und
 Hell/Englisch, ohne „Übernehmen“ zu drücken.
+
+### 5. Fristen für das Branch-Ziel und den Snapshot-Store
+
+`git fetch` und `git push` des Branch-Ziels liefen ohne Frist, ebenso jeder git-Aufruf des
+Snapshot-Stores (wie in QuartzControl); ein hängender Push ließ die Seite dauerhaft „läuft“, ein
+hängendes `git add` hielte die Sperre des Projekts und jeden Schreiber dahinter. Jetzt
+`GitBranchAdapter.Deadlines` (Fetch 10 min und Push 30 min wie Git-Sync, lokale Schritte 10 min)
+und `SnapshotStore.gitDeadline` (10 min); das `npm install` nach einem Restore bekommt die
+Netzfrist der Plugins (20 min). Ein Fetch, der an der Frist endet, bricht den Lauf ab, statt
+danach zu pushen.
+
+Gemessen ohne Netz: Als „Server“ dient ein `core.sshCommand`, das 30 s schläft
+(`aRemoteThatNeverAnswersEndsAtTheDeadline`, mit 1 s Frist). Hängt der Fetch, endet der Lauf nach
+gut 1 s mit „Zeitüberschreitung nach 1000 ms: git fetch“, und `git-receive-pack` wird nie
+aufgerufen; hängt nur der Push, endet er mit „… git push“. Der alte Code brauchte 90 s (30 s Fetch,
+dann Push trotzdem, dann 30 s im zweiten Fall), fünf rote Erwartungen. Der erste Testentwurf ohne
+Commit im Projekt erreichte den Push nie (`worktree add` scheitert ohne HEAD); die Gegenprobe zeigte
+das. Im Store: ein Clean-Filter, der schläft (`aHungGitCallEndsAtTheDeadline`). Mit Frist scheitert
+der Snapshot nach 1 s, und der nächste gelingt wieder; ohne Frist hing er 30 s und speicherte die
+Notiz leer.
+
+Nicht umgesetzt: ein Abbrechen-Knopf für einen laufenden Deploy. Die Veröffentlichen-Seite hat
+keinen für die Adapter, nur für den Export; das ist eine eigene Änderung an der Seite.
