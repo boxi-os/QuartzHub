@@ -41972,6 +41972,23 @@
         }
       }
     },
+    "relay.checkHttpRedirect" : {
+      "comment" : "Forms relay check: an https address answered with a redirect to http://",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Relay leitet auf eine Adresse mit http:// um. QuartzHub folgt nur HTTPS, und ein Formular auf einer Website mit HTTPS käme dort ebenfalls nicht an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The relay redirects to an http:// address. QuartzHub follows HTTPS only, and a form on a site served over HTTPS would not get there either."
+          }
+        }
+      }
+    },
     "relay.checkHttpRefused" : {
       "comment" : "Plugins > Forms > Relay: after the check prefix, when the relay URL starts with http:// and macOS refuses the request",
       "localizations" : {

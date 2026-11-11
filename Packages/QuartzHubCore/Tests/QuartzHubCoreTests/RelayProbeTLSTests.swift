@@ -96,6 +96,9 @@ struct RelayProbeTLSTests {
     #expect(RelayProbe.unreachableReason(ats) == L10n.t("main.relayCheckNoTls", ["code": "net::ERR_SSL_PROTOCOL_ERROR"]))
     let http = NSError(domain: NSURLErrorDomain, code: NSURLErrorAppTransportSecurityRequiresSecureConnection)
     #expect(RelayProbe.unreachableReason(http) == L10n.t("relay.checkHttpRefused"))
+    // An https address that redirects to http:// (nebenbei 13).
+    #expect(RelayProbe.unreachableReason(http, requested: "https") == L10n.t("relay.checkHttpRedirect"))
+    #expect(RelayProbe.unreachableReason(http, requested: "http") == L10n.t("relay.checkHttpRefused"))
     #expect(RelayProbe.certificateCode(errSecHostNameMismatch) == "net::ERR_CERT_COMMON_NAME_INVALID")
     #expect(RelayProbe.certificateCode(errSecCertificateExpired) == "net::ERR_CERT_DATE_INVALID")
     #expect(RelayProbe.certificateCode(errSecNotTrusted) == "net::ERR_CERT_AUTHORITY_INVALID")

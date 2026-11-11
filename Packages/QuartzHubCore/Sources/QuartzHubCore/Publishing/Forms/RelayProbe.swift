@@ -352,13 +352,18 @@ public struct RelayProbe: Sendable {
   /// Security turns every certificate failure into -1200 with stream code -9802, so the error
   /// alone no longer tells a wrong name from an expired or unknown certificate (measured
   /// 2026-11-11: -1202/-9843 from a script, -1200/-9802 from an app bundle, same session).
-  static func unreachableReason(_ error: Error, certificate: String? = nil) -> String {
+  /// `requested`: the scheme of the address asked. ATS refuses an https address too when it
+  /// redirects to http://, and "fragt nur über HTTPS an" read wrong for an https address
+  /// (Review 2026-11-11 (2), nebenbei 13).
+  static func unreachableReason(_ error: Error, certificate: String? = nil, requested: String? = nil) -> String {
     let ns = error as NSError
     let tls = [NSURLErrorSecureConnectionFailed, NSURLErrorServerCertificateUntrusted, NSURLErrorServerCertificateHasUnknownRoot,
                NSURLErrorServerCertificateHasBadDate, NSURLErrorServerCertificateNotYetValid]
     if let certificate, tls.contains(ns.code) { return L10n.t("main.relayCheckCertificate", ["code": certificate]) }
     // http:// outside this machine: ATS refuses before any request (QuartzControl asked over http).
-    if ns.code == NSURLErrorAppTransportSecurityRequiresSecureConnection { return L10n.t("relay.checkHttpRefused") }
+    if ns.code == NSURLErrorAppTransportSecurityRequiresSecureConnection {
+      return requested?.lowercased() == "https" ? L10n.t("relay.checkHttpRedirect") : L10n.t("relay.checkHttpRefused")
+    }
     let stream = (ns.userInfo["_kCFStreamErrorCodeKey"] as? Int) ?? 0
     let posix = ((ns.userInfo[NSUnderlyingErrorKey] as? NSError)?.domain == NSPOSIXErrorDomain ? (ns.userInfo[NSUnderlyingErrorKey] as? NSError)?.code : nil) ?? stream
     let code: String? = switch ns.code {
@@ -556,7 +561,7 @@ public struct RelayProbe: Sendable {
       let s = state.withLock { $0 }
       if let error {
         if (error as NSError).code == NSURLErrorCancelled { return }
-        finish(.failed(RelayProbe.unreachableReason(error, certificate: s.certificate)))
+        finish(.failed(RelayProbe.unreachableReason(error, certificate: s.certificate, requested: task.originalRequest?.url?.scheme)))
         return
       }
       finish(.done(answer(s)))
