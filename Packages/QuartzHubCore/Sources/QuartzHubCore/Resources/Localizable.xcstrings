@@ -54651,6 +54651,23 @@
         }
       }
     },
+    "updates.core.installedVersion" : {
+      "comment" : "Updates page, Quartz core: the installed version is known, the newest is not (no network); {{latest}} is a commit or —",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installiert: Quartz {{current}} · Neueste Version: {{latest}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installed: Quartz {{current}} · Latest: {{latest}}"
+          }
+        }
+      }
+    },
     "updates.core.missing" : {
       "localizations" : {
         "de" : {

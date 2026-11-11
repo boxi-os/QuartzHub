@@ -180,6 +180,10 @@ struct UpdatesPage: View {
     if let installed = model.versions?.installed, let latest = model.versions?.latest {
       line = L10n.t("updates.core.versions", ["current": installed, "currentCommit": Self.short(core.currentCommit),
                                               "latest": latest, "latestCommit": Self.short(core.latestCommit)])
+    } else if let installed = model.versions?.installed {
+      // The project's own package.json answers without the network; only the newest is unknown
+      // then (measured offline on a 5.1 copy, 2026-11-11: the line said "Installiert: —").
+      line = L10n.t("updates.core.installedVersion", ["current": installed, "latest": Self.short(core.latestCommit)])
     } else {
       line = L10n.t("updates.core.commits", ["current": Self.short(core.currentCommit), "latest": Self.short(core.latestCommit)])
     }
