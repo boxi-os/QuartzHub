@@ -43634,6 +43634,23 @@
         }
       }
     },
+    "snapshots.saveFailed" : {
+      "comment" : "Snapshots: git commit-tree or update-ref failed; git's output follows on the next line",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Snapshot konnte nicht gespeichert werden:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The snapshot could not be saved:"
+          }
+        }
+      }
+    },
     "snippets.close" : {
       "localizations" : {
         "de" : {

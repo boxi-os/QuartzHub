@@ -338,9 +338,14 @@ public struct SnapshotStore: Sendable {
     let subject = "\(kind) \(head.isEmpty ? "-" : head)\(label.isEmpty ? "" : " \(label)")"
     let now = clock.now()
     let dates = clock.pinsGit ? ["GIT_AUTHOR_DATE": JS.isoString(now), "GIT_COMMITTER_DATE": JS.isoString(now)] : [:]
-    let commit = JS.trim(await git(op, ["commit-tree", tree, "-m", subject], env: dates).stdout)
+    // Checked, unlike QuartzControl: without them the writer got an id that names nothing and wrote
+    // on without a way back.
+    let committed = await git(op, ["commit-tree", tree, "-m", subject], env: dates)
+    let commit = JS.trim(committed.stdout)
+    guard committed.success, !commit.isEmpty else { throw Failure(message: "\(L10n.t("snapshots.saveFailed"))\n\(committed.output)") }
     let id = newId()
-    await git(op, ["update-ref", "\(Self.refPrefix)\(id)", commit])
+    let referenced = await git(op, ["update-ref", "\(Self.refPrefix)\(id)", commit])
+    guard referenced.success else { throw Failure(message: "\(L10n.t("snapshots.saveFailed"))\n\(referenced.output)") }
     // Loose objects cost a disk block each; `--auto` works only past git's own threshold.
     await git(op, ["gc", "--auto", "--quiet"])
     if !Self.keptKinds.contains(kind) { _ = await pruneUnlocked(op) }

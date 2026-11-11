@@ -2092,3 +2092,14 @@ hochladen“ gelesen wird und vergisst, was noch zu löschen war. Jetzt über
 Gemessen mit einem zweiten harten Link auf das Manifest (`aManifestIsReplacedNotRewritten`): der
 alte Schreiber ändert den Link mit (Test rot), der neue ersetzt die Datei, und keine `.tmp-`-Datei
 bleibt liegen. Das Absturzfenster selbst ist nicht nachgestellt.
+
+### 2. Ein Snapshot, den git nicht speichern konnte, ist ein Fehler
+
+`createUnlocked` prüfte das Ergebnis von `commit-tree` und `update-ref` nicht (wie QuartzControl):
+scheiterte eines, bekam der Schreiber eine Snapshot-Kennung, die keinen Eintrag hat, und schrieb
+weiter. Jetzt scheitert der Snapshot mit „Der Snapshot konnte nicht gespeichert werden:“ und gits
+Ausgabe, und der Schreiber hält vor dem Schreiben an (so wie schon bei `write-tree` und `git add`).
+Gemessen mit `aSnapshotGitCouldNotStoreIsAFailure`: Ref-Ordner schreibgeschützt (scheitert
+`update-ref`), dann Objekt-Ordner schreibgeschützt bei gleichem Baum (scheitert `commit-tree`).
+Der alte Code warf in beiden Fällen nichts (zwei rote Erwartungen), der neue wirft beide Male, und
+die Liste bleibt bei einem Snapshot.

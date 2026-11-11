@@ -503,6 +503,30 @@ import Testing
     #expect(try await h.store.take(p, "pluginChange", "noch einmal") == nil, "nothing changed")
   }
 
+  /// A commit or ref git could not write stops the writer instead of handing it an id that names
+  /// nothing (review 2026-11-11, nebenbei 2): first the ref folder read-only, then the object store.
+  @Test func aSnapshotGitCouldNotStoreIsAFailure() async throws {
+    let h = try Harness()
+    h.box.now.withLock { $0 = Date() }
+    let p = try await Self.project(h)
+    _ = try await h.store.create(project: p, kind: "manual", label: "eins")
+    let store = "\(p)/.quartz-gui/\(SnapshotStore.storeDirectory)"
+    let before = await h.store.list(project: p).count
+
+    let refs = "\(store)/\(SnapshotStore.refPrefix)"
+    #expect(chmod(refs, 0o555) == 0)
+    await #expect(throws: SnapshotStore.Failure.self) { _ = try await h.store.create(project: p, kind: "manual", label: "ohne Ref") }
+    #expect(chmod(refs, 0o755) == 0)
+
+    // The same tree, so only commit-tree has something to write.
+    let objectsDir = "\(store)/objects"
+    let objects = [objectsDir] + (Posix.entries(objectsDir) ?? []).filter { $0.kind == .directory }.map { "\(objectsDir)/\($0.name)" }
+    for dir in objects { chmod(dir, 0o555) }
+    defer { for dir in objects { chmod(dir, 0o755) } }
+    await #expect(throws: SnapshotStore.Failure.self) { _ = try await h.store.create(project: p, kind: "manual", label: "ohne Objekt") }
+    #expect(await h.store.list(project: p).count == before)
+  }
+
   // MARK: - Content switched off since the snapshot (review 2026-11-11, H1)
 
   /// The review's case: a snapshot with the notes, the switch off, a note changed, "restore
