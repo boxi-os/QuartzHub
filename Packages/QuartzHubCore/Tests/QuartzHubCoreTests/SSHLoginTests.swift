@@ -266,4 +266,31 @@ import Testing
     #expect(input(.ftp, "ftp.example.org", "web user") == nil)
     #expect(try RsyncAdapter.remoteSpec(make("debian-vm", "boxi"), "www").hasPrefix("boxi@debian-vm:www"))
   }
+
+  /// Review 2026-11-11, N6: the folder with a stored key went only through `cleanup()`; a quit in
+  /// the middle of a run, or a crash, left the key in $TMPDIR. The quit now takes the open ones,
+  /// the next start what is older than an hour.
+  @Test func aStoredKeyGoesAtQuitAndAfterACrash() async throws {
+    let sshd = try await LocalSSHD()
+    let text = String(decoding: try Posix.read(sshd.clientKey), as: UTF8.self)
+    let login = try SSHLogin.prepare(sshd.connection(), secret: JS.trim(text), hostKey: sshd.hostKey, environment: [:], configFile: Self.none)
+    #expect(Posix.exists("\(login.directory)/key"))
+    #expect(SSHLogin.openDirectories.withLock { $0.contains(login.directory) })
+    SSHLogin.removeOpenTempDirs(only: [login.directory])
+    #expect(!Posix.exists(login.directory))
+    #expect(!SSHLogin.openDirectories.withLock { $0.contains(login.directory) })
+
+    let root = TestFolder.make("qh-ssh-sweep")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    for name in ["qh-ssh-alt", "qh-ssh-probe-alt", "qh-ssh-jung", "anderes"] { try Posix.mkdirs("\(root)/\(name)") }
+    let old = Date().addingTimeInterval(-2 * 3600)
+    for name in ["qh-ssh-alt", "qh-ssh-probe-alt", "anderes"] {
+      var times = [timespec(tv_sec: Int(old.timeIntervalSince1970), tv_nsec: 0), timespec(tv_sec: Int(old.timeIntervalSince1970), tv_nsec: 0)]
+      _ = utimensat(AT_FDCWD, "\(root)/\(name)", &times, 0)
+    }
+    let removed = SSHLogin.sweepTempDirs(root: root).map(NodePath.basename).sorted()
+    #expect(removed == ["qh-ssh-alt", "qh-ssh-probe-alt"])
+    // The counter-check: a young one may be another instance's run; other names are not ours.
+    #expect(Posix.exists("\(root)/qh-ssh-jung") && Posix.exists("\(root)/anderes"))
+  }
 }

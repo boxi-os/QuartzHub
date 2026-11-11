@@ -2058,3 +2058,21 @@ N Datei(en) konnte(n) auf dem Ziel nicht gelöscht werden.“, orange mit Warnze
 (`publish.deployPartial`). Ein Erfolg bleibt es: das Manifest behält die Dateien, der nächste Lauf
 versucht es wieder. Gemessen mit `DeployKeptTests` (Ordner-Ziel, Unterordner 555: `kept` nennt die
 Datei; wieder 755: gelöscht, `kept` leer) und an der App auf einer Kopie, Hell und Dunkel.
+
+### N6: Der Ordner mit einem gespeicherten SSH-Schlüssel bleibt nicht liegen
+
+Ein als Text gespeicherter Schlüssel muss für ssh (`-i`) und rsync eine Datei sein; sie liegt in
+`$TMPDIR/qh-ssh-XXXXXX/key` (0600 in 0700) und ging nur über `cleanup()` am Ende des Laufs. Ein
+Beenden mitten im Lauf oder ein Absturz ließ sie liegen; für `qh-ssh-*` gab es keinen Kehraus wie
+für die Relay-Ordner. Neu gegenüber QuartzControl (ssh2 hielt den Schlüssel im Speicher).
+
+Jetzt merkt sich `SSHLogin` die offenen Ordner, `applicationWillTerminate` räumt sie weg, und der
+Start räumt `qh-ssh-*` älter als eine Stunde weg (dieselbe Regel wie `FormsRelay.sweepTempDirs`, jetzt
+eine Funktion `FormsRelay.sweep(prefix:)`). Der Weg über einen eigenen kurzlebigen ssh-agent (gar
+keine Datei) wäre gründlicher, ändert aber jeden Login-Weg samt den Messungen gegen debian-vm; er ist
+nicht umgesetzt. Gemessen mit `SSHLoginTests.aStoredKeyGoesAtQuitAndAfterACrash` (Schlüsseldatei da,
+nach dem Beenden weg; alte `qh-ssh-*` und `qh-ssh-probe-*` weg, ein junger und ein fremder Ordner
+bleiben). Im echten `$TMPDIR` lagen drei solche Ordner aus Testläufen (nur `known_hosts`); einen
+davon hatte die Gegenprobe zu N1 hinterlassen. Ein erster Testlauf mit dem globalen Aufräumen im
+Test brach einen parallel laufenden rsync-Test ab; der Test räumt deshalb nur seinen eigenen Ordner
+(`removeOpenTempDirs(only:)`).

@@ -1,5 +1,6 @@
 import CryptoKit
 import Foundation
+import Synchronization
 
 /// How QuartzHub reaches an SSH server: through the system's OpenSSH (`/usr/bin/ssh`), for SFTP
 /// (`ssh -s sftp`, the protocol spoken by `SFTPChannel`) and for rsync alike (decision of
@@ -34,7 +35,35 @@ public struct SSHLogin: Sendable {
 
   /// Removes the folder with the known_hosts file, the helper and a stored key.
   public func cleanup() {
+    Self.release(directory)
+  }
+
+  // MARK: Temporary folders (review 2026-11-11, N6)
+
+  /// A key stored as text has to be a file for ssh (`-i`), and rsync takes nothing else. The folder
+  /// it is in goes when the run ends; these are the ones open now, for the quit.
+  static let openDirectories = Mutex<Set<String>>([])
+
+  static func release(_ directory: String) {
     try? FileManager.default.removeItem(atPath: directory)
+    openDirectories.withLock { _ = $0.remove(directory) }
+  }
+
+  /// At quit: the folders a run still holds, a stored key among them. `only` narrows it, for a
+  /// test that runs beside other tests' logins.
+  public static func removeOpenTempDirs(only: Set<String>? = nil) {
+    let open = openDirectories.withLock { dirs -> Set<String> in
+      let taken = only.map { dirs.intersection($0) } ?? dirs
+      dirs.subtract(taken)
+      return taken
+    }
+    for dir in open { try? FileManager.default.removeItem(atPath: dir) }
+  }
+
+  /// At start: what a crash left behind, after an hour (a second instance may be in a run).
+  @discardableResult
+  public static func sweepTempDirs(now: Date = Date(), root: String = FormsRelay.tempRoot) -> [String] {
+    FormsRelay.sweep(prefix: "qh-ssh-", now: now, root: root)
   }
 
   /// "host key-type base64", with the bracketed form ssh uses whenever the port is not 22.
@@ -46,7 +75,9 @@ public struct SSHLogin: Sendable {
   static func temporaryFolder(_ prefix: String) throws(PublishFailure) -> String {
     var template = Array("\(NSTemporaryDirectory())\(prefix)-XXXXXX".utf8CString)
     guard let made = mkdtemp(&template) else { throw PublishFailure(String(describing: Posix.error("mkdtemp", NSTemporaryDirectory()))) }
-    return String(cString: made)
+    let directory = String(cString: made)
+    openDirectories.withLock { _ = $0.insert(directory) }
+    return directory
   }
 
   /// The options every connection gets.
@@ -106,7 +137,7 @@ public struct SSHLogin: Sendable {
       }
       return SSHLogin(connection: connection, directory: directory, options: options + ["-l", connection.username], variables: variables)
     } catch {
-      try? FileManager.default.removeItem(atPath: directory)
+      release(directory)
       throw error as? PublishFailure ?? PublishFailure(String(describing: error))
     }
   }
@@ -149,7 +180,7 @@ public struct SSHLogin: Sendable {
   public static func probe(_ connection: Connection, environment: ToolEnvironment, configFile: String? = nil) async -> Probe {
     do { try refuseUnsafe(connection) } catch { return .failed(error.message) }
     guard let directory = try? temporaryFolder("qh-ssh-probe") else { return .failed("mkdtemp") }
-    defer { try? FileManager.default.removeItem(atPath: directory) }
+    defer { release(directory) }
     let knownHosts = "\(directory)/known_hosts"
     var options = common(port: connection.port, knownHosts: knownHosts, configFile: configFile)
     options = options.map { $0 == "StrictHostKeyChecking=yes" ? "StrictHostKeyChecking=accept-new" : $0 }

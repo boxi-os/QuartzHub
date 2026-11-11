@@ -105,6 +105,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     Task.detached(priority: .utility) {
       SiteCopy.sweep()
       FormsRelay.sweepTempDirs()
+      SSHLogin.sweepTempDirs()
     }
   }
 
@@ -112,6 +113,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   /// next start; they carry the secret. A running export is told to stop, so it closes its window.
   func applicationWillTerminate(_ notification: Notification) {
     FormsRelay.removeOpenTempDirs()
+    // A key stored as text is a file while a run uses it (review 2026-11-11, N6).
+    SSHLogin.removeOpenTempDirs()
     ExportBook.cancelAll()
   }
 

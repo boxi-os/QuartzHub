@@ -257,8 +257,13 @@ public struct FormsRelay: Sendable {
   /// temporary folder and only after an hour (a second instance may be in the middle of one).
   @discardableResult
   public static func sweepTempDirs(now: Date = Date(), root: String = tempRoot) -> [String] {
+    sweep(prefix: tempPrefix, now: now, root: root)
+  }
+
+  /// Folders named `<prefix>*` directly in `root`, older than an hour; also SSH's (`SSHLogin`).
+  static func sweep(prefix: String, now: Date, root: String) -> [String] {
     var removed: [String] = []
-    for entry in Posix.entries(root) ?? [] where JSText.startsWith(entry.name, tempPrefix) && entry.kind == .directory {
+    for entry in Posix.entries(root) ?? [] where JSText.startsWith(entry.name, prefix) && entry.kind == .directory {
       let dir = "\(root)/\(entry.name)"
       var info = stat()
       guard lstat(dir, &info) == 0 else { continue }
