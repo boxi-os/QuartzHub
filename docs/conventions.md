@@ -44,6 +44,19 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
 - **Werkzeuge projektlokal.** XcodeGen und Downloads unter `.tools/`, nie Homebrew oder global.
 - **Kindprozesse (QC):** Argumentliste statt Shell (nur npm/npx brauchen eine), Projektdaten
   hinter `--`, git nie mit Shell, nie ohne Frist. Gilt ab dem Prozessstarter in Phase 3.
+- **Was aus einer Datei kommt, wird beim Lesen geprüft wie beim Speichern.** `publish-targets.json`
+  reist mit dem Projekt, Zugänge kommen aus QuartzControls Profil: Ziele und Zugänge laufen vor jedem
+  Adapter durch dieselbe Regel wie das Formular; ein Name, der einem Programm übergeben wird (Host,
+  Benutzer, Branch), beginnt nie mit „-“ und steht, wo das Programm es kennt, hinter `--`
+  (decisions/phase-5-gleichstand.md, Review 2026-11-11, M2, N1, N2).
+- **Was ein Abbruch verlieren würde, wird vorher notiert.** Ein geparkter Vault-Link steht in
+  `.quartz-gui/content-link.json`, bis er zurück ist; laufende Updates, Restores und Deploys kennt
+  `RunningWork`, und Beenden fragt (Review 2026-11-11, M1).
+- **Ein Restore schreibt nur zurück, was der Snapshot davor hält.** Ist `content/` heute aus dem
+  Store ausgenommen, wird es weder verglichen noch wiederhergestellt; damit weicht QuartzHub
+  bewusst von QuartzControl 1.3 ab (Review 2026-11-11, H1).
+- **Startschalter kommen nur aus den Startargumenten** (`LaunchArgument`), nie aus dem
+  Defaults-Bereich der App; der Release-Bau kennt nur sein Bundle (Review 2026-11-11, N4).
 - **Jede Dekompression bekommt eine Obergrenze, und die Datei selbst liefert sie nicht. (QC)**
 - **Ja/Nein-Fragen sind native Dialoge, die sichere Antwort zuerst, der bestätigende Button nach
   der Aktion benannt. (QC)** In SwiftUI `confirmationDialog`/`alert` mit `role: .cancel`.
