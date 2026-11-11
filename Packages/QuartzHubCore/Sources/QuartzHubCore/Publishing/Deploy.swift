@@ -80,10 +80,7 @@ public struct Deploy: Sendable {
     }
     let d = target.destination
     guard let adapter = adapters[Self.adapterKey(d)] else { throw PublishFailure(L10n.t("main.deployNoAdapter", ["type": JS.string(d["type"])])) }
-    // A path saved before the rule knew "~" is refused here, before preview and upload.
-    if let path = d["remotePath"]?.stringValue, RemotePath.problem(path, deleteRemoved: JS.truthy(d["deleteRemoved"])) == .wholeRoot {
-      throw PublishFailure(L10n.t("main.deployWholeRoot", ["path": path]))
-    }
+    if let problem = Self.locationProblem(d) { throw PublishFailure(problem) }
     // Here rather than in the adapters, so the preview already offers every file again.
     let type = d["type"]?.stringValue
     if (type == "ftp" || (type == "sftp" && d["transfer"] != .string("rsync"))), let path = d["remotePath"]?.stringValue, JSText.startsWith(path, "~") {
@@ -100,6 +97,28 @@ public struct Deploy: Sendable {
     let id = target.id
     context.progress = { processed, total, file in report(id, processed, total, file) }
     return (context, adapter)
+  }
+
+  /// Where a target read from the file points, checked before preview and upload: the file
+  /// travels with the project, so a target written by hand or by another tool never passed the
+  /// form, and an empty rsync path is the server's root, with --delete (review 2026-11-11, M2;
+  /// QuartzControl 1.3 checked only the whole root). A path saved before the rule knew "~" lands
+  /// here too.
+  static func locationProblem(_ d: JSONObject) -> String? {
+    switch d["type"]?.stringValue {
+    case "sftp", "ftp":
+      let path = d["remotePath"]?.stringValue ?? ""
+      switch RemotePath.problem(path, deleteRemoved: JS.truthy(d["deleteRemoved"])) {
+      case .empty?: return L10n.t("main.deployEmptyPath")
+      case .traversal?: return L10n.t("main.deployTraversalPath", ["path": path])
+      case .wholeRoot?: return L10n.t("main.deployWholeRoot", ["path": path])
+      case nil: return nil
+      }
+    case "folder", "document":
+      return SavePublishTargetInput.isAbsolutePath(d["path"]) ? nil : L10n.t("main.deployFolderPath", ["path": JS.string(d["path"] ?? .string(""))])
+    default:
+      return nil
+    }
   }
 
   /// A git-branch target replaces the branch with one root commit, so leaving a file out would

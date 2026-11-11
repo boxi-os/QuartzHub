@@ -24913,6 +24913,40 @@
         }
       }
     },
+    "main.deployEmptyPath" : {
+      "comment" : "Deploy refused: a target read from publish-targets.json has an empty remote path",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Ziel hat keinen Pfad auf dem Server. Trage ihn unter „Veröffentlichen“ ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This target has no path on the server. Enter one under “Publish”."
+          }
+        }
+      }
+    },
+    "main.deployFolderPath" : {
+      "comment" : "Deploy refused: a folder or document target read from publish-targets.json has no absolute path",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Ordner „{{path}}“ dieses Ziels ist kein vollständiger Pfad. Wähle ihn unter „Veröffentlichen“ neu aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The folder “{{path}}” of this target is not a full path. Choose it again under “Publish”."
+          }
+        }
+      }
+    },
     "main.deployNoAdapter" : {
       "localizations" : {
         "de" : {
@@ -25006,6 +25040,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The path “{{path}}” starts with another account’s login directory, which SFTP and FTP do not know. Under “Publish”, enter the path from your own login directory, with “~/” or without."
+          }
+        }
+      }
+    },
+    "main.deployTraversalPath" : {
+      "comment" : "Deploy refused: a target read from publish-targets.json has a remote path with ..",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Pfad „{{path}}“ dieses Ziels enthält „..“. Trage unter „Veröffentlichen“ einen Pfad ohne „..“ ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The path “{{path}}” of this target contains “..”. Under “Publish”, enter a path without “..”."
           }
         }
       }

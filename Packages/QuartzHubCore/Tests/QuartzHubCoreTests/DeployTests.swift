@@ -208,3 +208,67 @@ enum GoldenText {
 extension Error {
   var message: String { PublishFailure.message(of: self) }
 }
+
+/// Targets the form never saw (review 2026-11-11, M2): `publish-targets.json` travels with the
+/// project, so an entry written by hand or by another tool reaches the dispatcher as it is. An
+/// empty rsync path became `user@host:/` with --delete.
+@Suite struct DeployLocationTests {
+  final class Recorder: DeployAdapter, @unchecked Sendable {
+    let calls = Mutex<[String]>([])
+    func preview(_ context: DeployContext) async throws -> [DeployDiffEntry] {
+      calls.withLock { $0.append("preview \(context.target.id)") }
+      return []
+    }
+    func run(_ context: DeployContext, excluding excludePaths: [String]) async throws -> DeployResult {
+      calls.withLock { $0.append("run \(context.target.id)") }
+      return DeployResult(success: true, output: "")
+    }
+  }
+
+  @Test func aTargetFromTheFileIsCheckedBeforeAnAdapterSeesIt() async throws {
+    let root = TestFolder.make("qh-deploy-location")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let project = "\(root)/Gärten-Ü"
+    try Posix.mkdirs("\(project)/.quartz-gui")
+    try Posix.mkdirs("\(project)/public")
+    try Posix.write("\(project)/public/index.html", Data("<p>Start</p>\n".utf8))
+    let targets = #"""
+    [
+      {"id":"leer","name":"Leer","destination":{"type":"sftp","transfer":"rsync","remotePath":"","deleteRemoved":true}},
+      {"id":"blank","name":"Blank","destination":{"type":"ftp","remotePath":"  ","deleteRemoved":false}},
+      {"id":"ohne","name":"Ohne","destination":{"type":"sftp","transfer":"sftp","deleteRemoved":true}},
+      {"id":"hoch","name":"Hoch","destination":{"type":"sftp","transfer":"rsync","remotePath":"www/../..","deleteRemoved":false}},
+      {"id":"wurzel","name":"Wurzel","destination":{"type":"sftp","transfer":"rsync","remotePath":"~/","deleteRemoved":true}},
+      {"id":"relativ","name":"Relativ","destination":{"type":"folder","path":"site","deleteRemoved":true}},
+      {"id":"gut","name":"Gut","destination":{"type":"sftp","transfer":"rsync","remotePath":"httpdocs","deleteRemoved":true}},
+      {"id":"ordner","name":"Ordner","destination":{"type":"folder","path":"/tmp/qh-nie","deleteRemoved":false}}
+    ]
+    """#
+    try Posix.write("\(project)/.quartz-gui/publish-targets.json", Data(targets.utf8))
+    let recorder = Recorder()
+    let profile = TestFolder.make("qh-deploy-location-profile")
+    defer { try? FileManager.default.removeItem(atPath: profile) }
+    let deploy = Deploy(project: project, connections: Connections(profile: ProfileDirectory(profile), secrets: MemorySecrets()),
+                        adapters: ["rsync": recorder, "sftp": recorder, "ftp": recorder, "folder": recorder])
+
+    let refused = [
+      "leer": L10n.t("main.deployEmptyPath"),
+      "blank": L10n.t("main.deployEmptyPath"),
+      "ohne": L10n.t("main.deployEmptyPath"),
+      "hoch": L10n.t("main.deployTraversalPath", ["path": "www/../.."]),
+      "wurzel": L10n.t("main.deployWholeRoot", ["path": "~/"]),
+      "relativ": L10n.t("main.deployFolderPath", ["path": "site"]),
+    ]
+    for (id, message) in refused {
+      await #expect(throws: PublishFailure(message), "\(id)") { try await deploy.preview(id) }
+      let run = await deploy.run(id)
+      #expect(!run.success && run.output == message, "\(id): \(run.output)")
+    }
+    #expect(recorder.calls.withLock { $0 } == [], "no adapter saw a refused target")
+
+    // The counter-check: valid targets still reach their adapter.
+    _ = try await deploy.preview("gut")
+    _ = await deploy.run("ordner")
+    #expect(recorder.calls.withLock { $0 } == ["preview gut", "run ordner"])
+  }
+}

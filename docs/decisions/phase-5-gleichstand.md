@@ -1930,3 +1930,16 @@ QuartzControls. Die Gegenrichtung (alter Snapshot ohne Inhalt, Schalter heute an
 weiter wie in QuartzControl, mit der Warnung in der Frage, und der Snapshot davor hält sie.
 Angesehen an der App (Kopie, Schalter aus, Hell und Dunkel): der Satz steht unter der Zahl der
 Unterschiede, keine Zeile aus `content/`.
+
+### M2: Ein Ziel aus der Datei wird vor jedem Adapter geprüft
+
+`publish-targets.json` reist mit dem Projekt; ein Ziel, das von Hand oder von einem anderen Werkzeug
+geschrieben wurde, hat das Formular nie gesehen. `Deploy.context` prüfte nur „ganzes
+Anmeldeverzeichnis mit Löschen“, und ein leerer rsync-Pfad wurde `user@host:/` mit `--delete`.
+QuartzControl 1.3 ebenso (`deploy/index.ts`). Jetzt lehnt `Deploy.locationProblem` vor Vorschau und
+Lauf ab: einen leeren oder fehlenden Pfad (`main.deployEmptyPath`), einen mit „..“
+(`main.deployTraversalPath`), das ganze Anmeldeverzeichnis mit Löschen (wie bisher) und bei Ordner und
+Dokument einen Pfad, der nicht mit „/“ beginnt (`main.deployFolderPath`). Gemessen mit
+`DeployLocationTests` und einem Adapter, der Aufrufe mitschreibt: Mit dem alten Code erreichten fünf
+von sechs kaputten Zielen den Adapter, jetzt keines; zwei gültige erreichen ihn weiter. Der Branch
+eines Branch-Ziels folgt mit N2.
