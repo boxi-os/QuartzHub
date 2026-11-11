@@ -247,7 +247,7 @@ struct BuildServerPage: View {
           // app bundle as readily as show a folder.
           if info.exists && Self.isInside(project.path, info.dir) {
             Button(L10n.t("buildServer.openFolder"), systemImage: "folder") {
-              ExternalOpen.open(URL(fileURLWithPath: info.dir)) // path boundary
+              ExternalOpen.openFolder(info.dir)
             }
             .buttonStyle(.link)
             .font(.caption)

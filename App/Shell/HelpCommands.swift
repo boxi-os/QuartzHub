@@ -23,7 +23,7 @@ struct HelpCommands: Commands {
       Button(L10n.t("main.menuPluginCatalog")) { Self.open(Self.pluginCatalog) }
       Divider()
       Button(L10n.t("main.menuDataFolder")) {
-        ExternalOpen.open(URL(fileURLWithPath: AppProfile.own.path, isDirectory: true)) // path boundary
+        ExternalOpen.openFolder(AppProfile.own.path)
       }
       Button(L10n.t("main.menuLicenses")) { Self.openLicenses() }
     }
@@ -72,6 +72,6 @@ struct HelpCommands: Commands {
       alert.runModal()
       return
     }
-    ExternalOpen.open(URL(fileURLWithPath: folder, isDirectory: true)) // path boundary
+    ExternalOpen.openFolder(folder)
   }
 }

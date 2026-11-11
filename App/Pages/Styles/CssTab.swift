@@ -129,7 +129,7 @@ struct CssTab: View {
       Button(checking ? L10n.t("styleEditor.check.running") : L10n.t("styleEditor.check.checkActive")) { Task { await checkActive() } }
         .disabled(checking)
         .accessibilityIdentifier("css.checkActive")
-      Button(L10n.t("styleEditor.openExternally")) { ExternalOpen.open(URL(fileURLWithPath: activePath)) } // path boundary
+      Button(L10n.t("styleEditor.openExternally")) { ExternalOpen.openFile(activePath) }
         .disabled(activePath.isEmpty)
       Button(L10n.t("styleEditor.importFile")) { Task { await importFile() } }
     }

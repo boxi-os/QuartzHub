@@ -438,7 +438,7 @@ struct OverviewPage: View {
   }
 
   private func openFolder() {
-    ExternalOpen.open(URL(fileURLWithPath: project.path)) // path boundary
+    ExternalOpen.openFolder(project.path)
   }
 }
 

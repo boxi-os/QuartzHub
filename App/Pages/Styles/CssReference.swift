@@ -170,7 +170,7 @@ struct PluginReferences: View {
             HStack {
               Text(reference.label).font(.callout.weight(.medium)).lineLimit(1)
               Spacer()
-              Button(L10n.t("styleEditor.openExternally")) { ExternalOpen.open(URL(fileURLWithPath: reference.path)) } // path boundary
+              Button(L10n.t("styleEditor.openExternally")) { ExternalOpen.openFile(reference.path) }
                 .buttonStyle(.link).font(.caption)
             }
             ScrollView {
