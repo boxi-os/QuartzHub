@@ -9,12 +9,13 @@ import Synchronization
 ///
 /// - `frame.json` — QuartzHub's (and QuartzControl's) own copy of the definition, written back
 ///   whole, unknown keys included.
-/// - `package.json` — the plugin manifest naming the `Frame` export.
+/// - `package.json` — the plugin manifest naming the `Frame` export, as a component plugin.
 /// - `dist/frames.js` — the module Quartz imports (`FrameModule`), with the CSS and the group
 ///   orderings baked in. Those are copies of what the project's breakpoint widths and
 ///   `quartz.config.yaml` say, so every frame is rewritten before every build and every dev
 ///   server start (`writeAllFrames`, a step of `BuildService.preparation`): the one place the copy
 ///   is read is the build, so that is where it is made true again.
+/// - `dist/index.js` — an empty entry module (`entryModule`), which QuartzControl does not write.
 ///
 /// One writer per project at a time (`ProjectLock.frames`): saving a frame, changing the widths and
 /// the refresh before a build write the same files, and "Jetzt bauen" right after "Starten" is two
@@ -196,7 +197,8 @@ public struct LayoutFrames: Sendable {
     let dir = try Self.frameDirectory(project, def["id"])
     let package = JSJSON.stringify(.object(GridFrameCss.present([
       ("name", def["id"]), ("version", .string("1.0.0")), ("private", .bool(true)), ("type", .string("module")),
-      ("quartz", .object(JSONObject([("frames", .object(JSONObject([("Frame", .object(JSONObject([("exportName", .string("Frame"))])))])))])))
+      ("quartz", .object(JSONObject([("category", .string("component")),
+                                     ("frames", .object(JSONObject([("Frame", .object(JSONObject([("exportName", .string("Frame"))])))])))])))
     ])))
     let layouts = try groupLayouts(def["frameName"])
     let module = FrameModule.source(frameName: def["frameName"], areas: def["areas"], groupLayouts: layouts,
@@ -206,7 +208,18 @@ public struct LayoutFrames: Sendable {
     try JSONStore.write(def, to: "\(dir)/frame.json")
     try JSONStore.writeAtomic(Data(package.utf8), to: "\(dir)/package.json")
     try JSONStore.writeAtomic(Data(module.utf8), to: "\(dir)/dist/frames.js")
+    try JSONStore.writeAtomic(Data(Self.entryModule.utf8), to: "\(dir)/dist/index.js")
   }
+
+  /// The entry module of a frame's package, which has nothing to export. Quartz imports a plugin's
+  /// entry module before its frames; QuartzControl's frames have none, which Quartz 5.0 passed over
+  /// in silence and 5.1 reports on every build as "failed to load its entry module (only its
+  /// components/frames were loaded)", one error per frame, and `plugin doctor` as "has no built
+  /// entry point" (measured 2026-11-11 on a copy of gui-test). With it and `quartz.category:
+  /// "component"` both versions take the component-only path: import the module, then the frames
+  /// from the manifest. Deviation from QuartzControl, which still writes the two files without
+  /// (decisions/phase-5-gleichstand.md, Quartz 5.1).
+  static let entryModule = "// The frame is in frames.js; Quartz imports this entry module first.\nexport {}\n"
 
   /// Rewrites every frame against the config and the widths as they stand now. Never throws and
   /// returns at once for a project without frames, because it sits in front of every build; what

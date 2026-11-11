@@ -62,6 +62,20 @@ import Testing
     #expect(css.contains("\"n\""))
   }
 
+  /// Quartz 5.1 imports a plugin's entry module before its frames and reports one that is missing
+  /// on every build; QuartzHub's frames bring an empty one and say they are component plugins.
+  @Test func framesHaveAnEntryModule() async throws {
+    let golden = try Self.fixture("write/made-default-widths.json")
+    let path = "\(scratch.path)/entry"
+    try Self.layOut(golden, at: URL(fileURLWithPath: path))
+    #expect(await LayoutFrames(readConfig: Self.config(golden["config"]!)).writeAllFrames(project: path).isEmpty)
+    let dir = "\(path)/.quartz-gui/authored-frames/frame-made"
+    #expect(String(decoding: try Posix.read("\(dir)/dist/index.js"), as: UTF8.self) == LayoutFrames.entryModule)
+    let package = try JSJSON.parse(Posix.read("\(dir)/package.json"))
+    #expect(package["quartz"]?["category"] == .string("component"))
+    #expect(package["quartz"]?["frames"]?["Frame"]?["exportName"] == .string("Frame"))
+  }
+
   /// The build door: the second preparation step rewrites the frames with the real config reader,
   /// and says in the console that it could not read the groups (here: no quartz.config.yaml).
   @Test func theBuildDoorRewritesTheFrames() async throws {
@@ -221,10 +235,27 @@ import Testing
       let full = root.appendingPathComponent(relative)
       guard FileManager.default.fileExists(atPath: full.path, isDirectory: &isDirectory), !isDirectory.boolValue else { continue }
       if !keepTemporary && relative.contains(".tmp-") { continue }
-      let text = (try? String(contentsOf: full, encoding: .utf8)) ?? "<binary>"
+      guard let data = Self.quartzControlsForm(relative, (try? Data(contentsOf: full)) ?? Data()) else { continue }
+      let text = String(data: data, encoding: .utf8) ?? "<binary>"
       result[normalizeName(relative)] = QC.mask(QC.mask(text, base.replacingOccurrences(of: "/.quartz-gui", with: "", options: .literal)), mask)
     }
     return result
+  }
+
+  /// A frame's file as QuartzControl writes it: without QuartzHub's two additions for Quartz 5.1,
+  /// checked on their own (`framesHaveAnEntryModule`). Nil for the entry module, which it has not.
+  static func quartzControlsForm(_ path: String, _ data: Data) -> Data? {
+    let parts = path.split(separator: "/", omittingEmptySubsequences: false)
+    guard let at = parts.lastIndex(of: "authored-frames") else { return data }
+    let rest = parts[(at + 1)...]
+    if rest.count == 3, rest.dropFirst().joined(separator: "/") == "dist/index.js", data == Data(LayoutFrames.entryModule.utf8) { return nil }
+    if rest.count == 2, rest.last == "package.json", case .object(var package)? = try? JSJSON.parse(data),
+       case .object(var quartz)? = package["quartz"], quartz["category"] == .string("component") {
+      quartz["category"] = nil
+      package["quartz"] = .object(quartz)
+      return Data(JSJSON.stringify(.object(package)).utf8)
+    }
+    return data
   }
 
   static func normalize(_ files: JSONObject) -> [String: String] {

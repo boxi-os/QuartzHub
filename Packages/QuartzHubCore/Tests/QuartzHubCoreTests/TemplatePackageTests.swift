@@ -48,7 +48,8 @@ struct TemplatePackageTests {
         case .directory:
           out[rel] = .object(JSONObject([("dir", .bool(true))]))
           walk(full, rel + "/")
-        default: out[rel] = brief(FileManager.default.contents(atPath: full) ?? Data(), mask: mask)
+        default:
+          if let data = LayoutFramesTests.quartzControlsForm(rel, FileManager.default.contents(atPath: full) ?? Data()) { out[rel] = brief(data, mask: mask) }
         }
       }
     }
