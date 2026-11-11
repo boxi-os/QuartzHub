@@ -13,7 +13,8 @@ extension SnapshotStore {
   func diffUnlocked(_ op: Operation, _ id: String) async throws -> [FileChange] {
     let commit = try await commitFor(op, id)
     let snapshot = await find(op, id)
-    try await stage(op, try await ensureStore(op))
+    let settings = try await ensureStore(op)
+    try await stage(op, settings)
     let limitTo = snapshot.map { Self.isPartial($0.kind) } == true ? ["--"] + (await snapshotPaths(op, commit)) : []
     let result = await git(op, ["diff-index", "--cached", "--name-status", "-z", commit] + limitTo)
     guard result.success else { return [] }
@@ -27,11 +28,17 @@ extension SnapshotStore {
       case "D": .removedSince
       default: .modified
       }
-      changes.append(FileChange(path: parts[i + 1], status: status))
+      // A content folder the store leaves out today is not restored either (see restoreUnlocked),
+      // and its notes are not "removed since".
+      if settings.includeContent || !Self.isContent(parts[i + 1]) {
+        changes.append(FileChange(path: parts[i + 1], status: status))
+      }
       i += 2
     }
     return changes.sorted { Self.localeOrder($0.path, $1.path) }
   }
+
+  static func isContent(_ path: String) -> Bool { path == "content" || path.hasPrefix("content/") }
 
   /// `a.localeCompare(b)`: ICU collation.
   static func localeOrder(_ a: String, _ b: String) -> Bool {
@@ -64,8 +71,23 @@ extension SnapshotStore {
     let project = op.project
     let commit = try await commitFor(op, id)
     let snapshot = await find(op, id)
-    let effectivePaths: [String]? = if let paths, !paths.isEmpty {
-      paths
+    let settings = settings(project: project)
+    // A restore writes back only what the snapshot taken before it holds, and that follows today's
+    // switch. With content/ left out (switched off, or a link into a vault) a snapshot's notes
+    // would overwrite newer ones that no snapshot has: content/ is not restored at all.
+    // QuartzControl 1.3 restored it (decisions/phase-5-gleichstand.md, review 2026-11-11, H1).
+    let leaveContent = !settings.includeContent
+    var contentLeftAlone = false
+    var requested = paths ?? []
+    if leaveContent, requested.contains(where: Self.isContent) {
+      requested.removeAll(where: Self.isContent)
+      contentLeftAlone = true
+      if requested.isEmpty {
+        return PluginCommands.Result(success: true, output: Self.contentLeftAloneNote(settings))
+      }
+    }
+    let effectivePaths: [String]? = if !requested.isEmpty {
+      requested
     } else if let snapshot, Self.isPartial(snapshot.kind) {
       await snapshotPaths(op, commit)
     } else {
@@ -77,14 +99,26 @@ extension SnapshotStore {
     } else {
       touched = try await diffUnlocked(op, id).map(\.path)
     }
-    let settings = settings(project: project)
+    // The whole snapshot without its content/: the index holds no content/ either (stage drops
+    // it), so read-tree leaves the folder on disk as it is.
+    var target = commit
+    if effectivePaths == nil, leaveContent {
+      let entries = await git(op, ["ls-tree", "-z", commit]).stdout.components(separatedBy: "\0").filter { !$0.isEmpty }
+      let kept = entries.filter { !$0.hasSuffix("\tcontent") }
+      if kept.count != entries.count {
+        let made = await git(op, ["mktree", "-z"], input: Data(kept.map { $0 + "\0" }.joined().utf8))
+        target = JS.trim(made.stdout)
+        guard made.success, !target.isEmpty else { return PluginCommands.Result(success: false, output: made.output) }
+        contentLeftAlone = true
+      }
+    }
     _ = try await createUnlocked(op, kind: "restore", label: "")
     try await stage(op, settings)
 
     var output: [String] = []
     // git writes through a symlinked content folder: the link is parked for the write phase and
     // what git put under content/ is thrown away; a vault is not overwritten from a snapshot.
-    let touchesContent = touched.contains { $0 == "content" || $0.hasPrefix("content/") }
+    let touchesContent = touched.contains(where: Self.isContent)
     let write = { () async throws -> PluginCommands.Result? in
       if resetProjectHead, let head = snapshot?.projectHead {
         let (reset, command) = await projectGit(project, ["reset", "--hard", head])
@@ -92,7 +126,7 @@ extension SnapshotStore {
         output.append(reset.output)
       }
       guard let effectivePaths else {
-        let read = await git(op, ["read-tree", "-u", "--reset", commit])
+        let read = await git(op, ["read-tree", "-u", "--reset", target])
         guard read.success else { return PluginCommands.Result(success: false, output: read.output) }
         output.append(read.output)
         return nil
@@ -115,7 +149,7 @@ extension SnapshotStore {
       : try await write()
     if let failure { return failure }
 
-    if settings.contentIsSymlink && touchesContent { output.append(L10n.t("main.snapshotVaultUntouched")) }
+    if contentLeftAlone { output.append(Self.contentLeftAloneNote(settings)) }
     // A snapshot holds the project's absolute paths of its moment; the repair needs no record of
     // where the project used to be.
     if touched.contains(where: { $0 == "quartz.config.yaml" || $0 == "quartz.lock.json" }) {
@@ -128,6 +162,10 @@ extension SnapshotStore {
       if !install.success { return PluginCommands.Result(success: false, output: output.joined(separator: "\n")) }
     }
     return PluginCommands.Result(success: true, output: JS.trim(output.joined(separator: "\n")))
+  }
+
+  static func contentLeftAloneNote(_ settings: Settings) -> String {
+    settings.contentIsSymlink ? L10n.t("main.snapshotVaultUntouched") : L10n.t("main.snapshotContentUntouched")
   }
 
   static func batches(_ paths: [String]) -> [[String]] {

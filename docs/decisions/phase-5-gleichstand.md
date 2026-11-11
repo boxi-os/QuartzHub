@@ -1896,3 +1896,37 @@ Abschnitt GitHub Pages fragt neu, und das Fenster „Zugänge“ liest neu, wenn
 etwas ändert. Gegenprobe: vor dem Fix blieb der Satz stehen; danach stand ohne Klick ins
 Projektfenster „POST → https://127.0.0.1:8443“, und nach dem Löschen des Zugangs wieder „keine URL
 hinterlegt“.
+
+## Review 2026-11-11: die Befunde
+
+Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
+`review-befund`.
+
+### H1: Wiederherstellen lässt einen ausgeschalteten Content-Ordner in Ruhe
+
+Ein Restore nimmt vorher einen Snapshot „Vor Wiederherstellung“, und der folgt dem heutigen Schalter
+„Content-Ordner mitsichern“. War der Schalter beim alten Snapshot an und ist heute aus, schrieb
+„Alles wiederherstellen“ (`read-tree -u --reset`) die alten Notizen über die neuen, und kein
+Snapshot hielt die neuen. Gemessen mit `SnapshotStoreTests.aContentFolderSwitchedOffIsNotRestored`
+gegen den alten Code: Notiz „v2“ wurde „v1“, der Vergleich nannte die vorhandene Notiz „seitdem
+entfernt“, der Sicherheits-Snapshot hielt nur `quartz.config.yaml`. QuartzControl 1.3 hat denselben
+Code (`snapshotService.ts`, `restoreSnapshot`).
+
+Entschieden: **Ein Restore schreibt nur zurück, was der Snapshot davor auch hält.** Ist `content/`
+heute ausgenommen (Schalter aus oder Link in einen Vault), wird es weder verglichen noch
+wiederhergestellt. Beim ganzen Snapshot liest `read-tree` einen Tree ohne den Eintrag `content`
+(`ls-tree` und `mktree` des Snapshot-Commits); weil auch der Index nach `stage` kein `content/` hat,
+bleibt der Ordner auf der Platte, wie er ist, und nichts wird verschoben. Eine gewählte Notiz unter
+`content/` wird übersprungen. Die Ausgabe sagt es (`main.snapshotContentUntouched`, beim Vault wie
+bisher `main.snapshotVaultUntouched`), der Vergleich im Inspektor ebenso
+(`backups.contentNotCompared`). Mit dem Schalter an holt derselbe Restore die alte Notiz zurück, und
+der Snapshot davor hält die neue (Gegenprobe im selben Test).
+
+Für den geteilten Store heißt das: QuartzHub und QuartzControl 1.3 stellen einen solchen Snapshot
+verschieden wieder her. Die Golden-Schritte aus QuartzControl markieren den Unterschied
+(`qhDiffers: contentLeftOut` für den Vergleich, `storeIndex` für die Schritte, nach denen der Index
+des Stores bis zum nächsten Staging kein `content/` hält); alles andere bleibt Byte für Byte
+QuartzControls. Die Gegenrichtung (alter Snapshot ohne Inhalt, Schalter heute an) löscht die Notizen
+weiter wie in QuartzControl, mit der Warnung in der Frage, und der Snapshot davor hält sie.
+Angesehen an der App (Kopie, Schalter aus, Hell und Dunkel): der Satz steht unter der Zahl der
+Unterschiede, keine Zeile aus `content/`.

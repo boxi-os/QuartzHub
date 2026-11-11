@@ -274,6 +274,23 @@
         }
       }
     },
+    "backups.contentNotCompared" : {
+      "comment" : "Snapshots, comparison in the inspector: content/ is switched off for snapshots",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Content-Ordner wird nicht mitgesichert. Er wird deshalb weder verglichen noch wiederhergestellt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The content folder is not included. It is therefore neither compared nor restored."
+          }
+        }
+      }
+    },
     "backups.contentSymlinkHint" : {
       "localizations" : {
         "de" : {
@@ -29504,6 +29521,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set {{count}} of {{total}} files uploaded earlier to 0644, then the connection broke. The next upload checks the other {{left}}; until then they may stay writable by every account on the server.\n"
+          }
+        }
+      }
+    },
+    "main.snapshotContentUntouched" : {
+      "comment" : "Restore output when the snapshot store leaves content/ out today",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinweis: „Content-Ordner mitsichern“ ist ausgeschaltet, deshalb wurden die Dateien in content/ nicht angetastet. Alles außerhalb von content/ wurde wiederhergestellt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note: “Include the content folder” is off, so the files in content/ were left untouched. Everything outside content/ was restored."
           }
         }
       }

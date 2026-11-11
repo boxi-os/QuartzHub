@@ -260,7 +260,7 @@ try {
   await step('one file\'s diff, a name with an umlaut', { op: 'fileDiff', args: [first, 'content/Über uns.md'] })
   await step('content off', { op: 'saveSettings', args: [false] })
   await step('with content off the snapshot leaves it out, though the index had it', { setup: [at('2026-11-06T10:21:00.000Z')], op: 'create', args: ['contentChange', ''] })
-  await step('and the comparison then reports it removed', { op: 'diff', args: [first] })
+  await step('and the comparison then reports it removed', { op: 'diff', args: [first], qhDiffers: 'contentLeftOut' })
   await step('content on again', { op: 'saveSettings', args: [true] })
   await step('a file the store tracks', { setup: [at('2026-11-06T10:22:00.000Z'), W('p/notes.tmp', 'eins\n')], op: 'create', args: ['manual', 'tmp'] })
   await step('stays tracked when the project ignores it later (the index decides)', {
@@ -295,9 +295,9 @@ try {
     op: 'settings'
   })
   await step('a snapshot with a linked content folder', { setup: [at('2026-11-06T10:30:00.000Z')], op: 'create', args: ['manual', 'vault'] })
-  await step('restoring everything leaves the vault alone and says so', { setup: [at('2026-11-06T10:31:00.000Z')], op: 'restore', args: [first] })
-  await step('restoring one note through the link writes nothing into the vault', { setup: [at('2026-11-06T10:32:00.000Z')], op: 'restore', args: [first, { paths: ['content/index.md'] }] })
-  await step('turning content on is refused for a link', { op: 'saveSettings', args: [true] })
+  await step('restoring everything leaves the vault alone and says so', { setup: [at('2026-11-06T10:31:00.000Z')], op: 'restore', args: [first], qhDiffers: 'storeIndex' })
+  await step('restoring one note through the link writes nothing into the vault', { setup: [at('2026-11-06T10:32:00.000Z')], op: 'restore', args: [first, { paths: ['content/index.md'] }], qhDiffers: 'storeIndex' })
+  await step('turning content on is refused for a link', { op: 'saveSettings', args: [true], qhDiffers: 'storeIndex' })
 
   // the old config backups
   await step('the old config backups become snapshots with their own dates', {
@@ -307,10 +307,10 @@ try {
       W('p/.quartz-gui/backups/2026-11-06T09-50-00-000Z.yaml', 'configuration:\n  pageTitle: Alt drei\n'),
       W('p/.quartz-gui/backups/.DS_Store', 'x'), W('p/.quartz-gui/backups/notizen.txt', 'n'),
       W('p/.quartz-gui/backups/2026-08-24T09-00-00-000Z.yml', 'falsche Endung\n')],
-    op: 'migrate'
+    op: 'migrate', qhDiffers: 'storeIndex'
   })
-  await step('and a second migration finds nothing', { op: 'migrate' })
-  await step('the thinning took the older of the two from August', { op: 'list' })
+  await step('and a second migration finds nothing', { op: 'migrate', qhDiffers: 'storeIndex' })
+  await step('the thinning took the older of the two from August', { op: 'list', qhDiffers: 'storeIndex' })
   await step('the comparison of an imported one is that file only', { op: 'diff', args: ['2026-11-06T09-50-00-000Z-0000'] })
   await step('restoring an imported one restores that file only', { setup: [at('2026-11-06T10:41:00.000Z')], op: 'restore', args: ['2026-11-06T09-50-00-000Z-0000'] })
 

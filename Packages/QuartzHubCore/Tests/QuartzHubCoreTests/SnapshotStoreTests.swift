@@ -274,6 +274,12 @@ import Testing
         #expect(error == nil, "\(name): \(error ?? "")")
         #expect(result["projectHead"] == nil && result["label"] == args[1], "\(name): \(result)")
         #expect(step["result"]!["projectHead"]!.stringValue!.hasPrefix("fatal:"), "\(name): the golden's head")
+      case "contentLeftOut":
+        // QuartzControl listed the notes of a content folder switched off as removed since; they
+        // are neither compared nor restored here (review 2026-11-11, H1).
+        #expect(error == nil, "\(name): \(error ?? "")")
+        let kept = step["result"]!.arrayValue!.filter { !SnapshotStore.isContent($0["path"]!.stringValue!) }
+        #expect(Self.canon(result) == Self.canon(.array(kept)), "\(name): \(result)")
       case "settings":
         #expect(Self.canon(result) == Self.canon(h.settingsJSON(.init(includeContent: true, contentExists: true, contentIsSymlink: false))), "\(name): \(result)")
       default:
@@ -301,6 +307,13 @@ import Testing
           #expect(got["index"] == want["index"] && got["exclude"] == want["exclude"], "\(name): index")
           let objects = got["refs"]!.arrayValue!.map { $0["object"]!.stringValue! }
           #expect(objects.contains { $0.hasSuffix("\n\nmanual - \(args[1].stringValue!)\n") }, "\(name): \(objects)")
+        } else if differs == "storeIndex", case .object(let got) = store, case .object(let want)? = expected["store"] {
+          // A restore that leaves content/ alone leaves it out of the store's index too, until the
+          // next staging drops it there as well; everything else is QuartzControl's.
+          let withoutContent = { (index: JSONValue?) in index?.arrayValue?.filter { !SnapshotStore.isContent(String($0.stringValue!.split(separator: "\t", maxSplits: 1).last ?? "")) } }
+          #expect(got["refs"] == want["refs"] && got["exclude"] == want["exclude"], "\(name): refs")
+          #expect(withoutContent(got["index"]) == withoutContent(want["index"]), "\(name): index\n\(JSJSON.compact(got["index"]!))")
+          #expect(got["index"] != want["index"], "\(name): the golden's index had content/")
         } else {
           #expect(store == expected["store"], "\(name): store of \(folder)\n\(JSJSON.compact(store))\n\(JSJSON.compact(expected["store"]!))")
         }
@@ -489,5 +502,45 @@ import Testing
     #expect(id != nil && newest?.id == id && newest?.kind == "pluginChange" && newest?.label == "github:a/b")
     #expect(try await h.store.take(p, "pluginChange", "noch einmal") == nil, "nothing changed")
   }
-}
 
+  // MARK: - Content switched off since the snapshot (review 2026-11-11, H1)
+
+  /// The review's case: a snapshot with the notes, the switch off, a note changed, "restore
+  /// everything". The notes stay as they are now, the comparison does not call them removed, and
+  /// the output says why; outside content/ the restore still happens.
+  @Test func aContentFolderSwitchedOffIsNotRestored() async throws {
+    let h = try Harness()
+    h.box.now.withLock { $0 = Date() }
+    let p = try await Self.project(h)
+    let note = h.path("p/content/Über.md")
+    let s1 = try await h.store.create(project: p, kind: "manual", label: "mit Inhalt")!
+    _ = try await h.store.saveSettings(project: p, includeContent: false)
+    try Harness.write(note, "v2, neuer Text\n")
+    try Harness.write(h.path("p/quartz.config.yaml"), "configuration:\n  pageTitle: Zwei\n")
+
+    let changes = try await h.store.diff(project: p, id: s1.id)
+    #expect(changes.map(\.path) == ["quartz.config.yaml"], "\(changes)")
+
+    let all = try await h.store.restore(project: p, id: s1.id)
+    #expect(all.success, "\(all.output)")
+    #expect(all.output.contains(L10n.t("main.snapshotContentUntouched")), "\(all.output)")
+    #expect(try String(contentsOfFile: note, encoding: .utf8) == "v2, neuer Text\n")
+    #expect(try String(contentsOfFile: h.path("p/quartz.config.yaml"), encoding: .utf8) == "configuration:\n  pageTitle: Eins\n")
+
+    // A note named on its own is not restored either, and nothing else happens.
+    let one = try await h.store.restore(project: p, id: s1.id, paths: ["content/Über.md"])
+    #expect(one.success && one.output == L10n.t("main.snapshotContentUntouched"), "\(one.output)")
+    #expect(try String(contentsOfFile: note, encoding: .utf8) == "v2, neuer Text\n")
+
+    // The counter-check: with the switch on again, the same restore does bring the old note back,
+    // and the snapshot before it holds the new one.
+    _ = try await h.store.saveSettings(project: p, includeContent: true)
+    #expect(try await h.store.diff(project: p, id: s1.id).map(\.path) == ["content/Über.md"])
+    let back = try await h.store.restore(project: p, id: s1.id)
+    #expect(back.success && !back.output.contains(L10n.t("main.snapshotContentUntouched")), "\(back.output)")
+    #expect(try String(contentsOfFile: note, encoding: .utf8) == "Über\n")
+    let safety = await h.store.list(project: p).first { $0.kind == "restore" }!
+    let held = await ProcessRunner.run(h.environment.command("git", ["--git-dir", h.path("p/.quartz-gui/snapshots.git"), "show", "\(safety.commit):content/Über.md"]))
+    #expect(held.stdout == "v2, neuer Text\n", "\(held.output)")
+  }
+}

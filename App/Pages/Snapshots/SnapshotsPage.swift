@@ -280,7 +280,12 @@ private struct SnapshotInspector: View {
           .accessibilityIdentifier("backups.compared")
         // Where the misunderstanding arose: a changed note in a vault never shows here, and without
         // this line that reads as "nothing changed".
-        if model.settings?.contentIsSymlink == true { Note(L10n.t("backups.vaultNotCompared")) }
+        if model.settings?.contentIsSymlink == true {
+          Note(L10n.t("backups.vaultNotCompared"))
+        } else if let settings = model.settings, settings.contentExists, !settings.includeContent {
+          // Nor restored: the snapshot taken before a restore would not hold the notes.
+          Note(L10n.t("backups.contentNotCompared"))
+        }
         ForEach(changes, id: \.path) { change in fileRow(change) }
         if !changes.isEmpty { restore }
       } else {
