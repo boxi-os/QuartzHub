@@ -105,23 +105,25 @@ struct FieldRow: View {
 /// A word in a capsule: "wirkt nicht", "Frame".
 struct WordBadge: View {
   let text: String
-  /// The word's colour ("Installiert" green, "Update verfügbar" orange). On a selected row the
-  /// row's own text colour instead: green on the selection's blue was barely readable, in light
-  /// mode hardly at all (measured 2026-11-09, "Layout" in the forms list).
+  /// The badge's colour ("Installiert" green, "Update verfügbar" orange). It goes to the capsule;
+  /// the word stays in the text colour: orange text on the grey capsule came to 1.58:1 in light
+  /// mode in a row that is off (dimmed to 0.6), red to 3.0:1 (measured 2026-11-11, plugin doctor's
+  /// badges on Plugins). On a selected row the plain capsule: green on the selection's blue was
+  /// barely readable, in light mode hardly at all (measured 2026-11-09, "Layout" in the forms list).
   var tint: Color?
   @Environment(\.backgroundProminence) private var prominence
 
   var body: some View {
-    Group {
-      if let tint, prominence != .increased {
-        Text(text).foregroundStyle(tint)
-      } else {
-        Text(text)
+    Text(text)
+      .font(.caption2.weight(.semibold))
+      .padding(.horizontal, 5).padding(.vertical, 1)
+      .background {
+        if let tint, prominence != .increased {
+          Capsule().fill(tint.opacity(0.22)).overlay(Capsule().strokeBorder(tint.opacity(0.7), lineWidth: 1))
+        } else {
+          Capsule().fill(.quaternary)
+        }
       }
-    }
-    .font(.caption2.weight(.semibold))
-    .padding(.horizontal, 5).padding(.vertical, 1)
-    .background(Capsule().fill(.quaternary))
   }
 }
 
