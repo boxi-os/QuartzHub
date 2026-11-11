@@ -34,11 +34,10 @@ RES="$APP/Contents/Resources"
 cp -R Runtime/node "$RES/node"
 cp -R Runtime/git "$RES/git"
 rm -f "$RES/node/.version" "$RES/git/.version" "$RES/node/CHANGELOG.md" "$RES/node/README.md"
-mkdir -p "$RES/helpers" "$RES/licenses" "$RES/templates"
+mkdir -p "$RES/helpers" "$RES/licenses"
 cp Helpers/dist/*.cjs Helpers/dist/page-scripts.js "$RES/helpers/"
-# The basic template a new project can start from, when the online copy cannot be fetched
-# (BuiltinTemplate.swift).
-cp Resources/templates/qc-basic.qtpl "$RES/templates/"
+# No copy of the basic template: QuartzHub loads it from the template repository
+# (BuiltinTemplate.swift, decided 2026-11-11).
 cp Resources/licenses/* "$RES/licenses/"
 mv "$RES/node/LICENSE" "$RES/licenses/node-LICENSE.txt"
 cp LICENSE "$RES/licenses/QuartzHub-LICENSE.txt"

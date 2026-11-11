@@ -504,7 +504,9 @@ export interface WindowState {
 - **Leser:** `getBuiltinTemplate` (`:187-199`): lädt neu, wenn die Datei älter als 24 h ist
   (**mtime** der Datei, `:62-68`, `:189`); eine unlesbare Kopie wird gelöscht und sofort neu geladen
   (`:178-184`). Zwischen Cache und mitgelieferter Kopie (`Resources/templates/qc-basic.qtpl`) gewinnt
-  das jüngere `createdAt` aus `manifest.json`; Gleichstand → mitgelieferte Kopie.
+  das jüngere `createdAt` aus `manifest.json`; Gleichstand → mitgelieferte Kopie. **QuartzHub liefert
+  keine Kopie mit** (Entscheidung 2026-11-11, `decisions/phase-5-gleichstand.md`): Es zählt nur der
+  Cache; die Regel gilt nur noch in den Tests und im Debug-Bau ohne Netz.
 - Format der `.qtpl` selbst: ZIP mit `manifest.json` und `parts/<id>.json`
   (`templatePackage/shared.ts:12-17`) — gehört in einen eigenen Abschnitt (Vorlagenpaket), nicht hierher.
 - **Legacy:** 1.0.0-beta.1 und beta.2 cachten `templates/minimal-lesbar.qtpl`

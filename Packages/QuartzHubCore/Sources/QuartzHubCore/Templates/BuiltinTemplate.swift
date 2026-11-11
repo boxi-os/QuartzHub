@@ -3,12 +3,15 @@ import Foundation
 /// QuartzControl's `builtinTemplateService.ts`: where the basic template comes from when a project
 /// is created with it.
 ///
-/// Two sources: a file in a public repository, over plain HTTPS (no token, no API, no rate limit),
-/// cached in the profile and asked again after a day; and the copy inside the app, which makes the
-/// feature work on a train and on a first run. Of the cached and the shipped copy the newer
-/// `createdAt` wins, a tie goes to the copy (it cannot go away). Every path ends at a package
-/// that can be read, which is not the same as a file that exists: a torn cache is deleted and
-/// fetched again on the spot.
+/// The source is a file in a public repository, over plain HTTPS (no token, no API, no rate limit),
+/// cached in the profile and asked again after a day. QuartzHub ships no copy of it, unlike
+/// QuartzControl (decided 2026-11-11): creating a project clones Quartz from GitHub anyway, so a
+/// copy for "a train and a first run" never helped there, and a change to the template needs no
+/// release. A `bundled` copy is still taken where one is given, the newer `createdAt` winning and
+/// a tie going to the copy, as QuartzControl does: the tests, and a development build looking at
+/// the app without the network (`developmentCopy`). Every path ends at a package that can be
+/// read, which is not the same as a file that exists: a torn cache is deleted and fetched again
+/// on the spot.
 ///
 /// The address is QuartzControl's, deliberately: every version of both apps asks the same file, so a
 /// push there reaches them all.
@@ -33,27 +36,25 @@ public struct BuiltinTemplate: Sendable {
   /// A design and, here, its manual; anything larger is not that.
   static let maxBytes = 25 * 1024 * 1024
 
-  /// The copy inside the app (`Contents/Resources/templates`), in a development build the
-  /// repository's `Resources/templates`.
-  public static let bundledCopy: String = {
-    let packaged = "\(Bundle.main.resourceURL.map { Posix.path($0) } ?? "")/templates/\(fileName)"
+  /// The repository's `Resources/templates/qc-basic.qtpl`, for the tests and for a development
+  /// build without the network; nil in a release build, which ships none (review 2026-11-11, N4:
+  /// a release build reads nothing from the source tree).
+  public static let developmentCopy: String? = {
     #if DEBUG
-    if !FileManager.default.fileExists(atPath: packaged) {
-      var root = #filePath
-      for _ in 0..<6 { root = NodePath.dirname(root) }
-      return "\(root)/Resources/templates/\(fileName)"
-    }
+    var root = #filePath
+    for _ in 0..<6 { root = NodePath.dirname(root) }
+    return "\(root)/Resources/templates/\(fileName)"
+    #else
+    return nil
     #endif
-    // A release build has only its own copy (review 2026-11-11, N4).
-    return packaged
   }()
 
   let profile: ProfileDirectory
-  let bundled: String
+  let bundled: String?
   let fetch: FontService.Fetch
   let now: @Sendable () -> Date
 
-  public init(profile: ProfileDirectory = .quartzHub, bundled: String = BuiltinTemplate.bundledCopy, fetch: @escaping FontService.Fetch = FontService.liveFetch,
+  public init(profile: ProfileDirectory = .quartzHub, bundled: String? = nil, fetch: @escaping FontService.Fetch = FontService.liveFetch,
               now: @escaping @Sendable () -> Date = { Date() }) {
     self.profile = profile
     self.bundled = bundled
@@ -125,11 +126,11 @@ public struct BuiltinTemplate: Sendable {
   public func find() async -> Found? {
     if age(cached) > Self.maxAge { _ = await refresh() }
     let downloaded = await usableCache()
-    let shipped = Self.inspect(bundled)
-    if let downloaded, shipped == nil || downloaded.createdAt > shipped!.createdAt {
+    let shipped = bundled.flatMap { path in Self.inspect(path).map { (path, $0) } }
+    if let downloaded, shipped == nil || downloaded.createdAt > shipped!.1.createdAt {
       return Found(path: cached, source: .downloaded, pages: downloaded.pages)
     }
-    if let shipped { return Found(path: bundled, source: .bundled, pages: shipped.pages, downloadNotNewer: downloaded != nil) }
+    if let (path, info) = shipped { return Found(path: path, source: .bundled, pages: info.pages, downloadNotNewer: downloaded != nil) }
     return nil
   }
 }

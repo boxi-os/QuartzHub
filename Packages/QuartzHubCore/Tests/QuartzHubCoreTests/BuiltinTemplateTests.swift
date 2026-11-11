@@ -10,17 +10,33 @@ import Testing
 /// and recorded the answer, the requests and the cache afterwards.
 @Suite(.serialized) struct BuiltinTemplateTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/builtin-template")
+  /// `Resources/templates/qc-basic.qtpl`, the published package's state; the app ships no copy.
+  static let repositoryCopy = BuiltinTemplate.developmentCopy!
 
-  /// The copy inside the app makes a project for Quartz 5.1: no entry Quartz built in or calls
+  /// Without a copy given (as in the app) and without the network, there is no package, not a
+  /// stale one: the wizard says so (decided 2026-11-11). A cache still counts.
+  @Test func withoutACopyOnlyTheDownloadCounts() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = TemplatePackageTests.realpath(scratch.path)
+    let silent: FontService.Fetch = { _, _, _ throws(FontService.FetchFailure) in throw .unreachable }
+    #expect(await BuiltinTemplate(profile: ProfileDirectory("\(work)/a"), fetch: silent).find() == nil)
+    let cached = "\(work)/b/templates/qc-basic.qtpl"
+    try Posix.mkdirs(NodePath.dirname(cached))
+    try Posix.write(cached, try Posix.read(Self.repositoryCopy))
+    let found = await BuiltinTemplate(profile: ProfileDirectory("\(work)/b"), fetch: silent).find()
+    #expect(found?.source == .downloaded && found?.path == cached)
+  }
+
+  /// The repository's copy (the published package) makes a project for Quartz 5.1: no entry Quartz built in or calls
   /// deprecated, GitHub-flavoured before Obsidian-flavoured Markdown (2026-11-11). The old package
   /// (`Fixtures/templates/qc-basic-1.3.0.qtpl`) is the counter-check.
-  @Test func theShippedCopyIsForQuartz51() throws {
+  @Test func theCopyIsForQuartz51() throws {
     func entries(_ package: String) throws -> [PluginEntry] {
       let files = try ZipArchive.read(contentsOf: package)
       let part = try JSJSON.parse(try #require(files[TemplatePackage.partFile("plugins")]))
       return (part["entries"]?.arrayValue ?? []).compactMap { $0.objectValue.map(PluginEntry.init(object:)) }
     }
-    let shipped = try entries(BuiltinTemplate.bundledCopy)
+    let shipped = try entries(Self.repositoryCopy)
     let names = Set(shipped.map { BuiltinProcessing.officialPluginName($0.source) })
     #expect(names.isDisjoint(with: ["crawl-links", "remove-draft", "content-index", "hard-line-breaks"]))
     #expect(BuiltinProcessing.pendingMigrations(shipped).isEmpty)
@@ -35,7 +51,7 @@ import Testing
   @Test func aTieIsNotAnUnreachableGitHub() async throws {
     let scratch = try HostPathTests.Scratch(umlaut: true)
     let work = TemplatePackageTests.realpath(scratch.path)
-    let shipped = try Posix.read(BuiltinTemplate.bundledCopy)
+    let shipped = try Posix.read(Self.repositoryCopy)
     let bundled = "\(work)/resources/qc-basic.qtpl"
     try Posix.mkdirs(NodePath.dirname(bundled))
     try Posix.write(bundled, shipped)
@@ -54,7 +70,7 @@ import Testing
   @Test func findsAsQuartzControl() async throws {
     let scratch = try HostPathTests.Scratch(umlaut: true)
     let work = TemplatePackageTests.realpath(scratch.path)
-    var packages: [String: Data] = ["bundled": try Posix.read(BuiltinTemplate.bundledCopy)]
+    var packages: [String: Data] = ["bundled": try Posix.read(Self.repositoryCopy)]
     let stored = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("packages.json"))).objectValue!
     for name in stored.keys { packages[name] = Data(base64Encoded: stored[name]!.stringValue!)! }
     // Exactly the ceiling and one byte more, as the golden builds them.
@@ -121,7 +137,7 @@ import Testing
   }
 
   @Test func theCopyInTheRepositoryReads() throws {
-    let files = try ZipArchive.read(contentsOf: BuiltinTemplate.bundledCopy)
+    let files = try ZipArchive.read(contentsOf: Self.repositoryCopy)
     #expect(files[TemplatePackage.manifestFile] != nil)
     #expect(BuiltinTemplate.countPages(files[TemplatePackage.partFile("content")]) == 22)
   }

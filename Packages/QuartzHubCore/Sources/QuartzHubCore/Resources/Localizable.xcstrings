@@ -19558,6 +19558,57 @@
         }
       }
     },
+    "home.wizard.templateRetry" : {
+      "comment" : "Create-project sheet: button that asks GitHub for the basic template again",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
+    },
+    "home.wizard.templateUnavailable" : {
+      "comment" : "Create-project sheet: label when the basic template could not be downloaded (QuartzHub ships no copy)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basis-Template konnte nicht geladen werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The basic template could not be loaded"
+          }
+        }
+      }
+    },
+    "home.wizard.templateUnavailableHint" : {
+      "comment" : "Create-project sheet: hint under the missing basic template",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub lädt es von GitHub. Ohne Vorlage entsteht ein Projekt mit Quartz' eigener Grundeinstellung."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub loads it from GitHub. Without it, the project starts with Quartz's own defaults."
+          }
+        }
+      }
+    },
     "home.wizard.templateUnreadable" : {
       "localizations" : {
         "de" : {
@@ -49417,13 +49468,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Basis-Template konnte weder geladen noch in QuartzHub gefunden werden."
+            "value" : "Das Basis-Template konnte nicht geladen werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The basic template could neither be downloaded nor found inside QuartzHub."
+            "value" : "The basic template could not be loaded."
           }
         }
       }

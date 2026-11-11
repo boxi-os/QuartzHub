@@ -165,8 +165,7 @@ final class TemplatesModel {
     await load(Posix.path(url), source: nil)
   }
 
-  /// The package every new project is offered: the published copy, else the one inside QuartzHub.
-  /// Without the network for looking at the page (DEBUG, `-QHNoUpdateCheck YES`), the copy inside.
+  /// The package every new project is offered: the published one (downloaded or cached).
   func pickBuiltin() async {
     reset(nil, source: nil)
     planning = true
@@ -281,11 +280,13 @@ final class TemplatesModel {
 }
 
 extension BuiltinTemplate {
-  /// The finder for QuartzHub's profile, for the Templates page and the create wizard. Without the
-  /// network when looking at the app (DEBUG, `-QHNoUpdateCheck YES`): the copy inside, since a
-  /// profile without a fresh download would otherwise fetch the package from GitHub.
+  /// The finder for QuartzHub's profile, for the Templates page and the create wizard: the
+  /// published package only. Without the network when looking at the app (DEBUG,
+  /// `-QHNoUpdateCheck YES`): the repository's copy, since a profile without a fresh download
+  /// would otherwise fetch the package from GitHub.
   static func app() -> BuiltinTemplate {
     guard AppDeploy.offline else { return BuiltinTemplate(profile: AppProfile.own) }
-    return BuiltinTemplate(profile: AppProfile.own, fetch: { _, _, _ throws(FontService.FetchFailure) in throw .unreachable })
+    return BuiltinTemplate(profile: AppProfile.own, bundled: BuiltinTemplate.developmentCopy,
+                           fetch: { _, _, _ throws(FontService.FetchFailure) in throw .unreachable })
   }
 }

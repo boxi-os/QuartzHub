@@ -2610,3 +2610,15 @@ nach `npx quartz upgrade` nur).
   entfernt keine, ein crawl-links des Projekts bleibt also. Der Golden-Test der Importschritte
   liest jetzt eine feste Kopie der 1.3.0-Datei (`Fixtures/templates/qc-basic-1.3.0.qtpl`), denn
   seine Aufnahme gehört zu ihr.
+- **Entschieden (Nutzer, 2026-11-11): Die Grundvorlage kommt nur noch online.** QuartzControl
+  lieferte eine Kopie mit, „für den Zug und den ersten Start“. Beim Anlegen trägt das nicht, denn
+  `ProjectCreator` klont Quartz von GitHub und ruft `npm install`; ohne Netz scheitert das Anlegen
+  vor der Vorlage. Übrig blieben Randfälle (Import auf der Vorlagen-Seite ohne Netz, nur
+  `raw.githubusercontent.com` gestört), und dafür hätte jede Änderung der Vorlage ein Release
+  gebraucht. Jetzt: `package.sh` packt keine Kopie, `BuiltinTemplate` nimmt eine nur, wo eine
+  übergeben wird (Tests; Debug-Bau mit `-QHNoUpdateCheck` die des Repos, `developmentCopy`).
+  Kommt nichts, sagt der Anlege-Dialog „Basis-Template konnte nicht geladen werden“ mit
+  „Erneut versuchen“; gemessen in der App mit versteckter Repo-Kopie, danach zurückgelegt und neu
+  versucht: die beiden Schalter wie zuvor. Der Cache von einem Tag bleibt. Damit weicht QuartzHub
+  bewusst von QuartzControls `builtinTemplateService.ts` ab; dessen 25 aufgezeichnete Fälle laufen
+  weiter, mit der Kopie als übergebenem Pfad.

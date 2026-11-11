@@ -20,6 +20,9 @@ struct CreateProjectSheet: View {
   @State private var baseUrl = "localhost"
   /// The example template, asked for once: the answer may involve a download.
   @State private var builtin: BuiltinTemplate.Found?
+  /// Asked and nothing came: QuartzHub ships no copy, so the wizard says so and can ask again.
+  @State private var builtinMissing = false
+  @State private var builtinLoading = false
   @State private var useTemplate = true
   @State private var withContent = true
   @State private var busy = false
@@ -48,7 +51,7 @@ struct CreateProjectSheet: View {
     }
     .frame(width: 560)
     .interactiveDismissDisabled(busy)
-    .task { builtin = await BuiltinTemplate.app().find() }
+    .task { await loadBuiltin() }
   }
 
   private var form: some View {
@@ -117,6 +120,16 @@ struct CreateProjectSheet: View {
               }
             }
           }
+        } else if builtinMissing {
+          Section {
+            FormField(hint: L10n.t("home.wizard.templateUnavailableHint")) {
+              LabeledContent(L10n.t("home.wizard.templateUnavailable")) {
+                Button(L10n.t("home.wizard.templateRetry")) { Task { await loadBuiltin() } }
+                  .disabled(builtinLoading)
+                  .accessibilityIdentifier("create.templateRetry")
+              }
+            }
+          }
         }
         if let error {
           Section {
@@ -129,6 +142,13 @@ struct CreateProjectSheet: View {
       buttons
     }
     .frame(minHeight: 520, idealHeight: 680)
+  }
+
+  private func loadBuiltin() async {
+    builtinLoading = true
+    defer { builtinLoading = false }
+    builtin = await BuiltinTemplate.app().find()
+    builtinMissing = builtin == nil
   }
 
   private func contentHint(_ builtin: BuiltinTemplate.Found) -> String {
