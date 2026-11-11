@@ -461,10 +461,12 @@ public struct Connections: Sendable {
 
   /// The names from the file, checked against the Keychain: the section said "Adresse gesetzt"
   /// for addresses the Keychain no longer had (2026-11-11). A Keychain that cannot be read is not
-  /// "gone": the names stay, and the upload says what failed.
+  /// "gone": the names stay, and the upload says what failed. Asked without reading the secret:
+  /// the Forms tab calls this on every load, and reading meets the item's access list, so after
+  /// each new ad hoc build macOS asked as soon as the tab was looked at (Review 2026-11-11 (2), N5).
   public func relaySecretInfo(_ projectId: String) -> RelaySecretInfo {
     let entry = readRelayStore()[projectId]
-    if let entry, entry.secretInKeychain, (try? secrets.read(account: Self.relayAccount(projectId)).map { _ in true } ?? false) == false {
+    if let entry, entry.secretInKeychain, (try? secrets.contains(account: Self.relayAccount(projectId))) == false {
       var info = RelaySecretInfo(stored: true, recipients: [], captchaSecret: false, captchaSecrets: [], fingerprint: entry.fingerprint)
       info.missing = true
       return info

@@ -41,6 +41,21 @@ public enum Keychain {
     return text
   }
 
+  /// Whether an item exists, without reading its secret (and so without a prompt); a Keychain that
+  /// cannot be asked is a failure, not "no item".
+  public static func contains(service: String, account: String) throws(Failure) -> Bool {
+    let query: [String: Any] = [
+      kSecClass as String: kSecClassGenericPassword,
+      kSecAttrService as String: service,
+      kSecAttrAccount as String: account,
+      kSecReturnAttributes as String: true
+    ]
+    let status = SecItemCopyMatching(query as CFDictionary, nil)
+    if status == errSecSuccess { return true }
+    if status == errSecItemNotFound { return false }
+    throw Failure(status)
+  }
+
   /// Whether an item exists, without reading its secret (and so without a prompt).
   public static func exists(service: String, account: String) -> Bool {
     let query: [String: Any] = [

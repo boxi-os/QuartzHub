@@ -203,6 +203,11 @@ import Testing
     try store.saveRelaySecrets("p1", RelaySecretsChange(recipients: JSONObject([("Kontakt", .string("n@b.org"))])))
     info = store.relaySecretInfo("p1")
     #expect(info.recipients == ["Kontakt"] && !info.captchaSecret && !info.missing)
+    // Review 2026-11-11 (2), N5: looking at the Forms tab reads no secret (a read meets the item's
+    // access list and, after a new build, the system's dialog).
+    let before = secrets.reads
+    for _ in 0..<5 { _ = store.relaySecretInfo("p1") }
+    #expect(secrets.reads == before)
   }
 
   /// A password or token is one line: a pasted line break at the end goes, any other control
