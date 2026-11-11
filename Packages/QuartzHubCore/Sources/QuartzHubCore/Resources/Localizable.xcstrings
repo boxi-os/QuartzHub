@@ -25330,6 +25330,23 @@
         }
       }
     },
+    "main.branchCnameCase" : {
+      "comment" : "Branch deploy output: the build has a CNAME file in another case",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Build bringt „{{name}}“ mit, GitHub liest nur „CNAME“ in Großbuchstaben. Die eigene Domain aus GitHubs Einstellungen wird darum nicht übernommen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The build brings “{{name}}”; GitHub reads only “CNAME” in capitals, so the custom domain from GitHub’s settings is not carried over."
+          }
+        }
+      }
+    },
     "main.branchKeptDomain" : {
       "comment" : "Branch deploy output: the CNAME GitHub keeps for the custom domain was carried into the deploy",
       "localizations" : {

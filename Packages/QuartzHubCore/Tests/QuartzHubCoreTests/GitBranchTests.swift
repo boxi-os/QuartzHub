@@ -300,6 +300,15 @@ import Testing
         }
       }
     }
+
+    // Review 2026-11-11 (2), nebenbei 11: a build's "cname" in small letters is no CNAME for
+    // GitHub; the run says so instead of keeping quiet (APFS found it under "CNAME").
+    answer.withLock { $0 = .some("gh-test.example.org") }
+    try Posix.write("\(build)/cname", Data("small.example.org".utf8))
+    let small = try await asking.run(context, excluding: [])
+    #expect(small.success)
+    #expect(small.output.contains(L10n.t("main.branchCnameCase", ["name": "cname"])), "\(small.output)")
+    #expect(await published("cname") == "small.example.org")
   }
 
   @Test func readsNameStatusAsQuartzControl() {

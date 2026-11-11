@@ -110,7 +110,11 @@ public struct GitBranchAdapter: DeployAdapter {
     for entry in Posix.entries(context.buildDir) ?? [] {
       try TreeCopy.copy(from: "\(context.buildDir)/\(entry.name)", to: "\(worktree)/\(entry.name)", verbatimSymlinks: false)
     }
-    if let domain = try await keepPagesDomain(context, remoteTip: remoteTip, worktree: worktree) {
+    if let variant = Self.cnameVariant(worktree) {
+      // APFS finds "cname" under "CNAME"; GitHub reads only the exact name (Review 2026-11-11 (2),
+      // nebenbei 11). The build's file stays as it is, and the run says why the domain is not kept.
+      output += "\(L10n.t("main.branchCnameCase", ["name": variant]))\n"
+    } else if let domain = try await keepPagesDomain(context, remoteTip: remoteTip, worktree: worktree) {
       output += "\(L10n.t("main.branchKeptDomain", ["domain": domain]))\n"
     }
 
@@ -137,6 +141,13 @@ public struct GitBranchAdapter: DeployAdapter {
   /// github.io address to a domain given up long ago (Review 2026-11-11 (2), N3). When GitHub
   /// cannot be asked, the file is carried as before; dropping it would drop a live domain.
   /// Returns the domain carried, for the run's output.
+  /// A file the build brings as "cname" in another case, by the bytes of the directory listing.
+  static func cnameVariant(_ worktree: String) -> String? {
+    let names = (Posix.entries(worktree) ?? []).map(\.name)
+    if names.contains(where: { Array($0.utf8) == Array("CNAME".utf8) }) { return nil }
+    return names.first { $0.uppercased() == "CNAME" }
+  }
+
   func keepPagesDomain(_ context: DeployContext, remoteTip: String, worktree: String) async throws -> String? {
     guard !remoteTip.isEmpty, context.destination["provider"] == .string("github"),
           Posix.kind("\(worktree)/CNAME") == nil else { return nil }
