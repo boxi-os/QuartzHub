@@ -158,6 +158,8 @@ struct UpdatesPage: View {
       Text(L10n.t("updates.core.doctorHeading")).fontWeight(.medium)
       Note(L10n.t("updates.core.doctorHint"))
       RunOutput(text: doctor, label: L10n.t("updates.core.doctorHeading"), identifier: "updates.doctorAfter")
+      let intended = PluginDoctorReport.parse(doctor).intendedPlugins
+      if !intended.isEmpty { Note(L10n.t("updates.core.doctorIntended", ["names": intended.joined(separator: ", ")])) }
       BuiltinMigration(project: project, pending: model.pendingMigrations) { await model.checkAfterUpdate() }
       if model.markdownOrderProblem {
         Label(L10n.t("pluginsInstalled.markdownOrder"), systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)

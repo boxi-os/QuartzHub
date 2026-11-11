@@ -54635,6 +54635,23 @@
         }
       }
     },
+    "updates.core.doctorIntended" : {
+      "comment" : "Updates, below plugin doctor's output after a core update, when it names quartz-layout-box or quartz-navigations as configured twice",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„configured twice“ bei {{names}} ist gewollt: QuartzHub legt einen Eintrag je Box oder Navigation an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“configured twice” for {{names}} is intended: QuartzHub adds one entry per box or navigation."
+          }
+        }
+      }
+    },
     "updates.core.done" : {
       "comment" : "Updates page, Quartz core: above the output of a run that succeeded; also announced",
       "localizations" : {
