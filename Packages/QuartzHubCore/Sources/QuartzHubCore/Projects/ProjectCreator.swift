@@ -19,7 +19,9 @@ import Foundation
 public enum ProjectCreator {
   public static let templateRepository = "https://github.com/jackyzha0/quartz.git"
 
-  public enum Template: String, Sendable, CaseIterable { case `default`, obsidian, ttrpg, blog }
+  /// `quartz create -t`; `docs` since Quartz 5.1 (sidebars that scroll away with the page), and a
+  /// project is created from the default branch, which is 5.1.
+  public enum Template: String, Sendable, CaseIterable { case `default`, obsidian, ttrpg, blog, docs }
   /// `-X`: what `quartz create` does with `-s`.
   public enum Strategy: String, Sendable { case new, copy, symlink }
   public enum LinkResolution: String, Sendable { case absolute, shortest, relative }
