@@ -2389,6 +2389,788 @@
         }
       }
     },
+    "builtins.contentIndex.enabled" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): contentIndex enabled",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhaltsindex erzeugen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create the content index"
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.enabledHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne ihn fehlen Suche, Graph, Sitemap und RSS, und QuartzHub kann keine Dokumente exportieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Without it search, graph, sitemap and RSS are missing, and QuartzHub cannot export documents."
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.heading" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): configuration.contentIndex",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhaltsindex, Sitemap und RSS"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content index, sitemap and RSS"
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.includeEmptyFiles" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): includeEmptyFiles",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seiten ohne Text aufnehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include pages without text"
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.rss" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): enableRSS",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RSS-Feed"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RSS feed"
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.rssFullHtml" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): rssFullHtml",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganze Seite im RSS-Feed"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whole page in the RSS feed"
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.rssFullHtmlHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonst steht nur die Beschreibung im Feed."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otherwise only the description is in the feed."
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.rssLimit" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): rssLimit",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einträge im RSS-Feed"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Items in the RSS feed"
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.rssSlug" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): rssSlug",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name des Feeds"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feed name"
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.rssSlugHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„index“ ergibt index.xml."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“index” gives index.xml."
+          }
+        }
+      }
+    },
+    "builtins.contentIndex.siteMap" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): enableSiteMap",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sitemap (sitemap.xml)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sitemap (sitemap.xml)"
+          }
+        }
+      }
+    },
+    "builtins.description" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): what the section is",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links, Entwürfe, Inhaltsindex und Frontmatter erledigt Quartz seit 5.1 selbst. Die Einstellungen stehen in der Konfiguration, nicht mehr bei Plugins."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Since 5.1 Quartz handles links, drafts, the content index and frontmatter itself. Their settings are in the configuration, no longer with plugins."
+          }
+        }
+      }
+    },
+    "builtins.drafts.heading" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): configuration.drafts",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwürfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drafts"
+          }
+        }
+      }
+    },
+    "builtins.drafts.publish" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): drafts.publish",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwürfe veröffentlichen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publish drafts"
+          }
+        }
+      }
+    },
+    "builtins.drafts.publishHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seiten mit „draft: true“ im Frontmatter kommen sonst nicht auf die Website."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages with “draft: true” in their frontmatter are left off the site otherwise."
+          }
+        }
+      }
+    },
+    "builtins.frontmatter.delimiters" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): delimiters",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begrenzer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delimiters"
+          }
+        }
+      }
+    },
+    "builtins.frontmatter.delimitersHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Zeichen über und unter dem Frontmatter, meist „---“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The characters above and below the frontmatter, usually “---”."
+          }
+        }
+      }
+    },
+    "builtins.frontmatter.heading" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): configuration.frontmatter",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frontmatter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frontmatter"
+          }
+        }
+      }
+    },
+    "builtins.frontmatter.language" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): language",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        }
+      }
+    },
+    "builtins.heading" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): heading",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verarbeitung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processing"
+          }
+        }
+      }
+    },
+    "builtins.links.broken" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): disableBrokenWikilinks",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links auf fehlende Notizen markieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark links to missing notes"
+          }
+        }
+      }
+    },
+    "builtins.links.brokenHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solche Links bekommen die Klasse „broken“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Such links get the class “broken”."
+          }
+        }
+      }
+    },
+    "builtins.links.externalLinkIcon" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): externalLinkIcon",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Symbol hinter externen Links"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icon after external links"
+          }
+        }
+      }
+    },
+    "builtins.links.heading" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): configuration.links",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
+          }
+        }
+      }
+    },
+    "builtins.links.lazyLoad" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): lazyLoad",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder und Videos erst beim Scrollen laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load images and videos only when scrolled to"
+          }
+        }
+      }
+    },
+    "builtins.links.openLinksInNewTab" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): openLinksInNewTab",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Links in neuem Tab öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open external links in a new tab"
+          }
+        }
+      }
+    },
+    "builtins.links.prettyLinks" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): prettyLinks",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordner aus dem Linktext entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove folders from link text"
+          }
+        }
+      }
+    },
+    "builtins.links.prettyLinksHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus „ordner/notiz“ wird „notiz“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“folder/note” becomes “note”."
+          }
+        }
+      }
+    },
+    "builtins.links.resolution" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): markdownLinkResolution",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown-Links auflösen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resolve Markdown links"
+          }
+        }
+      }
+    },
+    "builtins.links.resolutionAbsolute" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): absolute",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ab dem Content-Ordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From the content folder"
+          }
+        }
+      }
+    },
+    "builtins.links.resolutionHint" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): hint",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie ein Link der Form [Text](pfad) seine Notiz findet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How a link of the form [text](path) finds its note."
+          }
+        }
+      }
+    },
+    "builtins.links.resolutionRelative" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): relative",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relativ zur Notiz"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relative to the note"
+          }
+        }
+      }
+    },
+    "builtins.links.resolutionShortest" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): shortest",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kürzester Pfad (wie Obsidian)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortest path (as in Obsidian)"
+          }
+        }
+      }
+    },
+    "builtins.migrate" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1) and Plugins: runs quartz plugin doctor --fix",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konfiguration umstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move settings"
+          }
+        }
+      }
+    },
+    "builtins.migrateConfirm" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): confirm question",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konfiguration umstellen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move settings?"
+          }
+        }
+      }
+    },
+    "builtins.migrateConfirmAction" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): confirm button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move"
+          }
+        }
+      }
+    },
+    "builtins.migrateConfirmDetail" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): confirm detail",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz verschiebt die Einstellungen von {{names}} in die Konfiguration; die Einträge der eingebauten Plugins fallen weg. Vorher legt QuartzHub einen Snapshot an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz moves the settings of {{names}} into the configuration; the entries of the built-in plugins go. QuartzHub takes a snapshot first."
+          }
+        }
+      }
+    },
+    "builtins.migrateDone" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): after doctor --fix",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konfiguration umgestellt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings moved."
+          }
+        }
+      }
+    },
+    "builtins.migrateFailed" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): doctor --fix left entries",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Konfiguration konnte nicht umgestellt werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The settings could not be moved."
+          }
+        }
+      }
+    },
+    "builtins.migrateRunning" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): while doctor --fix runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird umgestellt …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moving …"
+          }
+        }
+      }
+    },
+    "builtins.offByEntry" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): built-in off by an old entry",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus, weil das Plugin „{{plugin}}“ ausgeschaltet ist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off because the plugin “{{plugin}}” is turned off."
+          }
+        }
+      }
+    },
+    "builtins.offInConfiguration" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): built-in off by enabled: false",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In der Konfiguration ausgeschaltet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turned off in the configuration."
+          }
+        }
+      }
+    },
+    "builtins.output" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): label of the doctor output",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabe von Quartz"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz output"
+          }
+        }
+      }
+    },
+    "builtins.pending" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): old entries still there",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Teil steht noch als Plugin-Eintrag ({{names}}). Quartz liest ihn weiter; „Konfiguration umstellen“ schreibt ihn hierher."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Part of it is still a plugin entry ({{names}}). Quartz keeps reading it; “Move settings” writes it here."
+          }
+        }
+      }
+    },
+    "builtins.replacedBy" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): a plugin provides the same",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ersetzt durch das Plugin „{{plugin}}“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replaced by the plugin “{{plugin}}”."
+          }
+        }
+      }
+    },
+    "builtins.saveFirst" : {
+      "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): next to the disabled button while the page has edits",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erst speichern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save first."
+          }
+        }
+      }
+    },
     "common.back" : {
       "localizations" : {
         "de" : {
@@ -43205,6 +43987,23 @@
         }
       }
     },
+    "siteSettings.analyticsFields.apiHost" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: posthog apiHost",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse, an die PostHog Daten sendet, zum Beispiel https://eu.i.posthog.com."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address PostHog sends data to, for example https://eu.i.posthog.com."
+          }
+        }
+      }
+    },
     "siteSettings.analyticsFields.apiKey" : {
       "localizations" : {
         "de" : {
@@ -43253,6 +44052,40 @@
         }
       }
     },
+    "siteSettings.analyticsFields.personProfiles" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: posthog personProfiles",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "always, never oder identified_only."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "always, never or identified_only."
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsFields.posthogHost" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: posthog host",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veraltet: Seit Quartz 5.1 heißt das Feld apiHost."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deprecated: since Quartz 5.1 the field is apiHost."
+          }
+        }
+      }
+    },
     "siteSettings.analyticsFields.projectId" : {
       "localizations" : {
         "de" : {
@@ -43265,6 +44098,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Project id"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsFields.script" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: umami script",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name des Skripts, wenn es nicht script.js heißt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name of the script when it is not script.js."
           }
         }
       }
@@ -43313,6 +44163,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Measurement ID, e.g. G-XXXXXXX"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsFields.uiHost" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: posthog uiHost",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse der PostHog-Oberfläche, wenn sie von apiHost abweicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address of the PostHog interface when it differs from apiHost."
           }
         }
       }
@@ -43649,6 +44516,159 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hovering an internal link shows a small window with the beginning of the target page."
+          }
+        }
+      }
+    },
+    "siteSettings.prefetch" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: configuration.prefetch",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seiten vorab laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prefetch pages"
+          }
+        }
+      }
+    },
+    "siteSettings.prefetchHint" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: hint under prefetch",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt Zielseiten, bevor ein Link angeklickt wird, damit sie sofort erscheinen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loads target pages before a link is clicked, so they appear at once."
+          }
+        }
+      }
+    },
+    "siteSettings.prefetchHover" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: prefetch hover",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Zeigen auf einen Link"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When pointing at a link"
+          }
+        }
+      }
+    },
+    "siteSettings.prefetchOff" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: prefetch off",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        }
+      }
+    },
+    "siteSettings.prefetchViewport" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: prefetch viewport",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichtbare Links"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links on screen"
+          }
+        }
+      }
+    },
+    "siteSettings.publishAssets" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: configuration.publishAssets",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien veröffentlichen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publish files"
+          }
+        }
+      }
+    },
+    "siteSettings.publishAssetsAll" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: publishAssets all",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Dateien im Content-Ordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All files in the content folder"
+          }
+        }
+      }
+    },
+    "siteSettings.publishAssetsHint" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: hint under publishAssets",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Nur verwendete“ veröffentlicht Bilder und andere Dateien nur, wenn eine veröffentlichte Seite sie verwendet. So bleiben die Dateien unveröffentlichter Notizen privat."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Only those in use” publishes images and other files only when a published page uses them. Files of unpublished notes stay private that way."
+          }
+        }
+      }
+    },
+    "siteSettings.publishAssetsReferenced" : {
+      "comment" : "Konfiguration ▸ Website, Quartz 5.1: publishAssets referenced",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur verwendete"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only those in use"
           }
         }
       }

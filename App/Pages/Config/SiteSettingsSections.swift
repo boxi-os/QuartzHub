@@ -28,6 +28,17 @@ struct SiteSettingsSections: View {
       FormField(hint: L10n.t("siteSettings.popoversHint")) {
         Toggle(L10n.t("siteSettings.popovers"), isOn: flag("enablePopovers"))
       }
+      if model.features.prefetch {
+        FormField(hint: L10n.t("siteSettings.prefetchHint")) {
+          Picker(L10n.t("siteSettings.prefetch"), selection: choice("prefetch", default: "viewport")) {
+            Text(L10n.t("siteSettings.prefetchViewport")).tag("viewport")
+            Text(L10n.t("siteSettings.prefetchHover")).tag("hover")
+            Text(L10n.t("siteSettings.prefetchOff")).tag("off")
+            unknown("prefetch", known: ["viewport", "hover", "off"])
+          }
+          .accessibilityIdentifier("config.prefetch")
+        }
+      }
     } header: {
       Label(L10n.t("siteSettings.heading"), systemImage: "gearshape")
     }
@@ -45,6 +56,16 @@ struct SiteSettingsSections: View {
             .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
             .accessibilityLabel(L10n.t("siteSettings.ignorePatterns"))
             .accessibilityIdentifier("config.ignorePatterns")
+        }
+      }
+      if model.features.publishAssets {
+        FormField(hint: L10n.t("siteSettings.publishAssetsHint")) {
+          Picker(L10n.t("siteSettings.publishAssets"), selection: choice("publishAssets", default: "all")) {
+            Text(L10n.t("siteSettings.publishAssetsAll")).tag("all")
+            Text(L10n.t("siteSettings.publishAssetsReferenced")).tag("referenced")
+            unknown("publishAssets", known: ["all", "referenced"])
+          }
+          .accessibilityIdentifier("config.publishAssets")
         }
       }
     } header: {
@@ -74,6 +95,19 @@ struct SiteSettingsSections: View {
 
   private func flag(_ key: String) -> Binding<Bool> {
     Binding(get: { model.bool(key) }, set: { model.setBool(key, $0) })
+  }
+
+  /// One of Quartz's words for a key; a missing key shows Quartz's default and stays missing
+  /// until a choice is made.
+  private func choice(_ key: String, default fallback: String) -> Binding<String> {
+    Binding(get: { model.config?.configuration[key]?.stringValue ?? fallback }, set: { model.setString(key, $0) })
+  }
+
+  /// A value the file has that QuartzHub has no word for stays selectable as it is.
+  @ViewBuilder private func unknown(_ key: String, known: [String]) -> some View {
+    if let value = model.config?.configuration[key]?.stringValue, !known.contains(value) {
+      Text(verbatim: value).tag(value)
+    }
   }
 
   /// The valid values are the locale files in the project: Quartz's `i18n()` is a plain lookup, and
@@ -112,14 +146,17 @@ private struct AnalyticsSection: View {
   struct Field {
     let key: String
     var required = false
+    /// Read by Quartz 5.1 and later (umami's `script`, PostHog's hosts and profiles).
+    var since51 = false
   }
 
   static let providers: [(name: String, fields: [Field])] = [
     ("plausible", [Field(key: "host")]),
     ("google", [Field(key: "tagId", required: true)]),
-    ("umami", [Field(key: "websiteId", required: true), Field(key: "host")]),
+    ("umami", [Field(key: "websiteId", required: true), Field(key: "host"), Field(key: "script", since51: true)]),
     ("goatcounter", [Field(key: "websiteId", required: true), Field(key: "host"), Field(key: "scriptSrc")]),
-    ("posthog", [Field(key: "apiKey", required: true), Field(key: "host")]),
+    ("posthog", [Field(key: "apiKey", required: true), Field(key: "apiHost", since51: true), Field(key: "uiHost", since51: true),
+                 Field(key: "personProfiles", since51: true), Field(key: "host")]),
     ("tinylytics", [Field(key: "siteId", required: true)]),
     ("cabin", [Field(key: "host")]),
     ("clarity", [Field(key: "projectId")]),
@@ -130,7 +167,9 @@ private struct AnalyticsSection: View {
 
   private var value: JSONObject? { model.config?.configuration["analytics"]?.objectValue }
   private var provider: String { value?["provider"]?.stringValue ?? "" }
-  private var fields: [Field] { Self.providers.first { $0.name == provider }?.fields ?? [] }
+  private var fields: [Field] {
+    (Self.providers.first { $0.name == provider }?.fields ?? []).filter { !$0.since51 || model.features.analytics51 }
+  }
 
   var body: some View {
     Section {
@@ -145,7 +184,7 @@ private struct AnalyticsSection: View {
       }
       .accessibilityIdentifier("config.analytics")
       ForEach(fields, id: \.key) { field in
-        FormField(hint: Self.hint(field, provider: provider)) {
+        FormField(hint: Self.hint(field, provider: provider, analytics51: model.features.analytics51)) {
           TextField(field.key + (field.required ? " *" : ""), text: text(field.key))
         }
       }
@@ -176,9 +215,15 @@ private struct AnalyticsSection: View {
 
   /// `host` is the one key whose meaning flips: optional everywhere, the address of your own
   /// installation for matomo, where "leave it empty" would contradict the asterisk.
-  static func hint(_ field: Field, provider: String) -> String? {
+  static func hint(_ field: Field, provider: String, analytics51: Bool) -> String? {
     switch field.key {
+    case "host" where provider == "posthog" && analytics51:
+      L10n.t("siteSettings.analyticsFields.posthogHost")
     case "host": field.required ? L10n.t("siteSettings.analyticsFields.hostRequired") : L10n.t("siteSettings.analyticsFields.host")
+    case "script": L10n.t("siteSettings.analyticsFields.script")
+    case "apiHost": L10n.t("siteSettings.analyticsFields.apiHost")
+    case "uiHost": L10n.t("siteSettings.analyticsFields.uiHost")
+    case "personProfiles": L10n.t("siteSettings.analyticsFields.personProfiles")
     case "tagId": L10n.t("siteSettings.analyticsFields.tagId")
     case "websiteId": L10n.t("siteSettings.analyticsFields.websiteId")
     case "apiKey": L10n.t("siteSettings.analyticsFields.apiKey")

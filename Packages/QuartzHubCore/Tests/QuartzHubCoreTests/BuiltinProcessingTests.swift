@@ -141,6 +141,7 @@ import Testing
         prefetch?: "viewport" | "hover" | "off"
         publishAssets?: "all" | "referenced"
       }
+      export type Analytics = { provider: "posthog"; apiHost?: string }
       export interface FullPageLayout {
         sidebars?: SidebarModes
       }

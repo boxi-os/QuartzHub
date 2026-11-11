@@ -14,17 +14,22 @@ public struct QuartzFeatures: Equatable, Sendable {
   public var publishAssets: Bool
   /// `layout.sidebars` (`fit`/`scroll`/`static`), declared in `quartz/cfg.ts`.
   public var sidebars: Bool
+  /// PostHog's `apiHost`, `uiHost` and `personProfiles` and umami's `script`, declared in `quartz/cfg.ts`.
+  public var analytics51: Bool
 
-  public init(version: String? = nil, builtins: Bool = false, prefetch: Bool = false, publishAssets: Bool = false, sidebars: Bool = false) {
+  public init(version: String? = nil, builtins: Bool = false, prefetch: Bool = false, publishAssets: Bool = false, sidebars: Bool = false,
+              analytics51: Bool = false) {
     self.version = version
     self.builtins = builtins
     self.prefetch = prefetch
     self.publishAssets = publishAssets
     self.sidebars = sidebars
+    self.analytics51 = analytics51
   }
 
   /// Everything a 5.1 project has, for tests and previews.
-  public static let quartz51 = QuartzFeatures(version: "5.1.0", builtins: true, prefetch: true, publishAssets: true, sidebars: true)
+  public static let quartz51 = QuartzFeatures(version: "5.1.0", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
+                                              analytics51: true)
 
   public static func read(project: String) -> QuartzFeatures {
     var features = QuartzFeatures()
@@ -38,6 +43,7 @@ public struct QuartzFeatures: Equatable, Sendable {
       features.prefetch = text.contains("prefetch?:")
       features.publishAssets = text.contains("publishAssets?:")
       features.sidebars = text.contains("sidebars?:")
+      features.analytics51 = text.contains("apiHost?:")
     }
     return features
   }

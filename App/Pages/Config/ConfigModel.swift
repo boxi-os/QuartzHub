@@ -17,6 +17,11 @@ final class ConfigModel {
   private(set) var saveError: String?
   /// The locale files the project ships; nil while reading, empty when there are none.
   private(set) var locales: [String]?
+  /// What the project's Quartz can do (5.1: built-ins, prefetch, publishAssets).
+  private(set) var features = QuartzFeatures()
+  /// `quartz.capabilities.provides` per plugin entry name, read once per load: a plugin that
+  /// provides what a built-in does replaces it.
+  private var provides: [String: [String: [String]]] = [:]
 
   init(project: ProjectContext) {
     self.project = project
@@ -36,6 +41,14 @@ final class ConfigModel {
       loadError = Self.message(error)
     }
     let path = project.path
+    let entries = config?.plugins ?? []
+    (features, provides) = await Task.detached {
+      var provides: [String: [String: [String]]] = [:]
+      for entry in entries where entry.enabled {
+        if let declared = BuiltinProcessing.providedCapabilities(project: path, entry: entry) { provides[entry.name] = declared }
+      }
+      return (QuartzFeatures.read(project: path), provides)
+    }.value
     locales = await Task.detached { (try? LocaleFiles(environment: environment).list(project: path)) ?? [] }.value
   }
 
@@ -108,6 +121,36 @@ final class ConfigModel {
   }
 
   var plugins: [PluginEntry] { config?.plugins ?? [] }
+
+  // MARK: Quartz 5.1's built-ins
+
+  /// What the build will do with the draft as it stands, old plugin entries included.
+  var builtins: BuiltinProcessing.Plan? {
+    guard let config, features.builtins else { return nil }
+    return BuiltinProcessing.plan(configuration: config.configuration, plugins: config.plugins) { self.provides[$0.name] }
+  }
+
+  /// The entries `plugin doctor --fix` would move, by name.
+  var pendingMigrations: [String] {
+    let plugins = plugins
+    return BuiltinProcessing.pendingMigrations(plugins).map { plugins[$0].name }
+  }
+
+  func builtinValue(_ builtin: BuiltinProcessing.Builtin, _ key: String) -> JSONValue? {
+    builtins?[builtin].options[key]
+  }
+
+  /// Writes `configuration.<key>.<option>`; `<key>: false` becomes `{ enabled: false, … }`.
+  func setBuiltin(_ builtin: BuiltinProcessing.Builtin, _ key: String, _ value: JSONValue?) {
+    var object = JSONObject()
+    switch config?.configuration[builtin.configKey] {
+    case .object(let existing)?: object = existing
+    case .bool(let flag)?: object["enabled"] = .bool(flag)
+    default: break
+    }
+    object[key] = value
+    config?.configuration[builtin.configKey] = .object(object)
+  }
 
   func setPlugins(_ plugins: [PluginEntry]) {
     config?.plugins = plugins

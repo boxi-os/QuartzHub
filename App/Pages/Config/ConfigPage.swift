@@ -117,6 +117,7 @@ struct ConfigPage: View {
       } else {
         ProjectImageSection(model: model)
         SiteSettingsSections(model: model)
+        ProcessingSections(model: model, project: project)
         Section {
           HStack(alignment: .firstTextBaseline) {
             Note(L10n.t("configEditor.stylesHint"))
