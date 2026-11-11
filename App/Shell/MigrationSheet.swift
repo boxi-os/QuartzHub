@@ -7,11 +7,11 @@ import SwiftUI
 /// smoke test does that).
 enum AppProfile {
   static var own: ProfileDirectory {
-    UserDefaults.standard.string(forKey: "QHProfileDir").map { ProfileDirectory(Posix.onDisk($0)) } ?? .quartzHub
+    LaunchArgument.string("QHProfileDir").map { ProfileDirectory(Posix.onDisk($0)) } ?? .quartzHub
   }
 
   static var quartzControl: ProfileDirectory? {
-    guard let value = UserDefaults.standard.string(forKey: "QHMigrationSource") else { return .quartzControl }
+    guard let value = LaunchArgument.string("QHMigrationSource") else { return .quartzControl }
     return value.isEmpty ? nil : ProfileDirectory(Posix.onDisk(value))
   }
 }

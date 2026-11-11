@@ -2028,3 +2028,23 @@ Geheimnis doppelt, beide Zugänge unverändert) und `secretsLeftBehindCanBeFetch
 Schlüssel übernommen, später zwei von drei geholt, der mit fremdem Schlüssel bleibt offen). In der
 App mit Wegwerf-Profilen angesehen, Hell und Dunkel; den Button nicht gedrückt, weil er den echten
 Schlüsselbund-Eintrag von QuartzControl liest.
+
+### N4: Startschalter nur aus den Startargumenten, kein Rückfall auf den Bau-Rechner
+
+`QHProfileDir`, `QHMigrationSource`, `QHLanguage` und `QHWindowSize` kamen aus `UserDefaults`, das
+auch den dauerhaften Bereich der App liest: ein `defaults write io.github.boxios.quartzhub
+QHProfileDir …` lenkte jede spätere Sitzung in ein anderes Profil. Und `RuntimeLocation.current`
+sowie `BuiltinTemplate.bundledCopy` fielen ohne Laufzeit im Bundle still auf `#filePath` zurück, das
+Repo des Bau-Rechners; beide Pfade standen im Release-Binary.
+
+Entschieden: Die vier Schalter liest `LaunchArgument` nur aus den Argumenten dieses Starts, in
+beiden Bauarten. Sie bleiben im Release, damit das Paket gegen Wegwerf-Profile gemessen werden kann;
+die Testschalter (`QHMemorySecrets`, `QHNoUpdateCheck`, `QHOpenProject`, `QHStartServerFor`) bleiben
+`#if DEBUG`. Der Rückfall auf das Repo gibt es nur noch im Debug-Bau; ein Release ohne Node, git
+oder Helfer sagt beim Start „QuartzHub ist unvollständig.“ (`RuntimeLocation.isComplete`).
+
+Gemessen: `LaunchArgumentTests` (Werte, leerer Wert, fehlender Wert; der dauerhafte Bereich wird
+nicht gelesen; Laufzeit vollständig oder nicht). Ein Release-Bau ohne `package.sh`: `strings` findet
+keinen Pfad unter `/Users/boxi` oder dem Scratch-Ordner mehr (der Bau des Reviews bei `ddcb802` hatte
+zwei, `ToolEnvironment.swift` und `BuiltinTemplate.swift`); gestartet mit Wegwerf-Profil zeigte er
+die Meldung, schrieb ins Wegwerf-Profil, und das echte Profil blieb unberührt.

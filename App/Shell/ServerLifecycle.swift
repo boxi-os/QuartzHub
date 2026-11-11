@@ -75,6 +75,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     AppAppearance.shared.applyTheme(SettingsStore.read(AppProfile.own).theme)
+    // A release build no longer falls back to the build machine's repository (review 2026-11-11,
+    // N4): a package without its runtime says so once, instead of failing at every build.
+    if !RuntimeLocation.current.isComplete {
+      DispatchQueue.main.async {
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.messageText = L10n.t("main.runtimeIncomplete")
+        alert.informativeText = L10n.t("main.runtimeIncompleteDetail")
+        alert.addButton(withTitle: L10n.t("shell.alert.ok"))
+        alert.runModal()
+      }
+    }
     #if DEBUG
     // For the UI test of these questions: a dev server of the project at that path, started as
     // the server page will start it.

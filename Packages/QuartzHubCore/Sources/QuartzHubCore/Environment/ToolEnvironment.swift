@@ -18,19 +18,38 @@ public struct RuntimeLocation: Sendable, Equatable {
   }
 
   public static let current: RuntimeLocation = {
-    if let resources = Bundle.main.resourceURL.map({ Posix.path($0) }),
-       FileManager.default.isExecutableFile(atPath: "\(resources)/node/bin/node") {
-      return RuntimeLocation(node: "\(resources)/node", git: "\(resources)/git", helpers: "\(resources)/helpers")
-    }
-    return repository
+    #if DEBUG
+    if !bundled.isComplete { return repository }
+    #endif
+    // A release build knows only its bundle: an incomplete package says so at the start
+    // (`isComplete`) instead of finding Node in the repository of the Mac it was built on
+    // (review 2026-11-11, N4).
+    return bundled
   }()
 
-  /// The repository's copies, for development builds and tests.
+  /// Inside the app: `Contents/Resources/{node,git,helpers}`.
+  public static let bundled: RuntimeLocation = {
+    let resources = Bundle.main.resourceURL.map { Posix.path($0) } ?? ""
+    return RuntimeLocation(node: "\(resources)/node", git: "\(resources)/git", helpers: "\(resources)/helpers")
+  }()
+
+  /// The repository's copies, for development builds and tests. In a release build the bundle's,
+  /// so no path of the build machine is in the binary.
   public static let repository: RuntimeLocation = {
+    #if DEBUG
     var root = #filePath
     for _ in 0..<6 { root = NodePath.dirname(root) }
     return RuntimeLocation(node: "\(root)/Runtime/node", git: "\(root)/Runtime/git", helpers: "\(root)/Helpers/dist")
+    #else
+    return bundled
+    #endif
   }()
+
+  /// Node, git and the helpers are all there.
+  public var isComplete: Bool {
+    FileManager.default.isExecutableFile(atPath: "\(node)/bin/node") && FileManager.default.isExecutableFile(atPath: "\(git)/bin/git")
+      && FileManager.default.fileExists(atPath: helpers)
+  }
 
   public var nodeBin: String { "\(node)/bin" }
 

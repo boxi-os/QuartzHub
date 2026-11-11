@@ -29456,6 +29456,40 @@
         }
       }
     },
+    "main.runtimeIncomplete" : {
+      "comment" : "Alert at start: Node, git or the helpers are missing from the app bundle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub ist unvollständig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub is incomplete."
+          }
+        }
+      }
+    },
+    "main.runtimeIncompleteDetail" : {
+      "comment" : "Alert at start: below main.runtimeIncomplete",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Node, git oder die Helfer fehlen im Programm, deshalb können Builds, Updates und Git nicht laufen. Lade QuartzHub neu herunter und ersetze die App."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Node, git or the helpers are missing from the app, so builds, updates and git cannot run. Download QuartzHub again and replace the app."
+          }
+        }
+      }
+    },
     "main.secretMissingInKeychain" : {
       "localizations" : {
         "de" : {

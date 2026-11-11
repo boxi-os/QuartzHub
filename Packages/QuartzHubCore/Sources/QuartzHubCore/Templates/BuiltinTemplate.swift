@@ -36,13 +36,16 @@ public struct BuiltinTemplate: Sendable {
   /// The copy inside the app (`Contents/Resources/templates`), in a development build the
   /// repository's `Resources/templates`.
   public static let bundledCopy: String = {
-    if let resources = Bundle.main.resourceURL.map({ Posix.path($0) }) {
-      let packaged = "\(resources)/templates/\(fileName)"
-      if FileManager.default.fileExists(atPath: packaged) { return packaged }
+    let packaged = "\(Bundle.main.resourceURL.map { Posix.path($0) } ?? "")/templates/\(fileName)"
+    #if DEBUG
+    if !FileManager.default.fileExists(atPath: packaged) {
+      var root = #filePath
+      for _ in 0..<6 { root = NodePath.dirname(root) }
+      return "\(root)/Resources/templates/\(fileName)"
     }
-    var root = #filePath
-    for _ in 0..<6 { root = NodePath.dirname(root) }
-    return "\(root)/Resources/templates/\(fileName)"
+    #endif
+    // A release build has only its own copy (review 2026-11-11, N4).
+    return packaged
   }()
 
   let profile: ProfileDirectory

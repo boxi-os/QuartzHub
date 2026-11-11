@@ -21,7 +21,7 @@ final class AppAppearance {
 
   func applyLanguage(_ language: SettingsFile.Language) {
     // A UI test pins the language; the setting does not move it.
-    if UserDefaults.standard.string(forKey: "QHLanguage") != nil { return }
+    if LaunchArgument.string("QHLanguage") != nil { return }
     L10n.apply(LanguagePreference(rawValue: language.rawValue) ?? .system)
     revision += 1
     // macOS's own menu items (Ablage, Bearbeiten, Fenster) take the language at launch. The
