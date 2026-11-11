@@ -2147,3 +2147,11 @@ Notiz leer.
 
 Nicht umgesetzt: ein Abbrechen-Knopf für einen laufenden Deploy. Die Veröffentlichen-Seite hat
 keinen für die Adapter, nur für den Export; das ist eine eigene Änderung an der Seite.
+
+### 6. Ein gescheiterter Helferbau sagt beim Paketbau, warum
+
+`package.sh` rief `build-helpers.sh 2>/dev/null`, weil der Helferbau seine Dateiliste auf stderr
+schreibt; damit verschwand auch der Grund, wenn er scheiterte. Gemessen mit einem Syntaxfehler in
+`Helpers/src/sass-check.ts`: vorher Exit 1 ohne ein Wort, jetzt Exit 1 mit esbuilds Meldung
+(`Unexpected "="`, Datei und Zeile) und „Helferbau gescheitert: scripts/build-helpers.sh“. Ein
+intakter Bau bleibt still wie bisher.

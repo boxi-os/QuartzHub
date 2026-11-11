@@ -13,7 +13,8 @@ cd "$ROOT"
 
 [ -x Runtime/node/bin/node ] || { echo "Runtime/node fehlt: scripts/fetch-runtime.sh" >&2; exit 1; }
 [ -x Runtime/git/bin/git ] || { echo "Runtime/git fehlt: scripts/fetch-runtime.sh" >&2; exit 1; }
-scripts/build-helpers.sh 2>/dev/null
+# Its file list goes to stderr; shown only when the build fails, with the reason (esbuild, npm).
+HELPERS_OUT="$(scripts/build-helpers.sh 2>&1)" || { printf '%s\n' "$HELPERS_OUT" >&2; echo "Helferbau gescheitert: scripts/build-helpers.sh" >&2; exit 1; }
 for h in yaml-edit dts-schema sass-check locale-edit ftp-session content-files; do
   [ -f "Helpers/dist/$h.cjs" ] || { echo "Helpers/dist/$h.cjs fehlt nach dem Bau" >&2; exit 1; }
 done
