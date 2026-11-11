@@ -144,7 +144,9 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   (`docs/gleichstand.md`: 720 Zeilen, 683 gemessen, 1 gebaut, 4 fehlen); danach Lücken schließen und messen.
   Rauchtest und Ansehen ohne Netz mit `-QHNoUpdateCheck YES` (nur Debug). Erste Review-Runde
   (`docs/REVIEW-2026-11-11.md`) abgearbeitet: alle neun Befunde und die elf Nebenbei-Punkte,
-  Chronik in `docs/reviews.md`. Quartz 5.1 unterstützt (2026-11-11): eingebaute Verarbeitung,
+  Chronik in `docs/reviews.md`. Zweite Runde (`docs/REVIEW-2026-11-11-2.md`, die 60 Commits danach)
+  abgearbeitet: 2 Mittel, 6 Niedrig, 18 nebenbei, M1 als Entscheidung (eigene Frames nicht mehr
+  mit QuartzControl bauen). Quartz 5.1 unterstützt (2026-11-11): eingebaute Verarbeitung,
   `plugin doctor`, Frames mit Einstiegsmodul, Seitenleisten, Versionen und Release-Notes,
   `quartz info`, Vorlage `docs` (decisions/phase-5-gleichstand.md, Quartz 5.1).
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation

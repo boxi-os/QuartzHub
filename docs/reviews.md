@@ -45,3 +45,50 @@ Die Nebenbei-Punkte (Messungen unter „Review 2026-11-11: die Nebenbei-Punkte�
 
 Nicht umgesetzt: ein Abbrechen-Knopf für einen laufenden Deploy (Punkt 5; die Seite hat nur einen
 für den Export).
+
+## Zweite Runde: was seit der ersten dazukam (2026-11-11)
+
+Auftrag `REVIEW-2026-11-11-2-auftrag.md`, Bericht `REVIEW-2026-11-11-2.md` (Code `c19628d..eed348b`,
+Stand `301d5c1`): 0 Hoch, 2 Mittel, 6 Niedrig, 18 nebenbei. Der Nutzer wählte alle Befunde und alle
+Nebenbei-Punkte; M1 entschied er statt eines Umbaus.
+
+| Befund | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| M1 | Entschieden: Ein Projekt mit eigenen Frames baut QuartzControl nach QuartzHub nicht mehr; das Koexistenz-Band sagt es, solange QuartzControl läuft | `68b13c4` |
+| M2 | Aus einer Vorschau gehen nur http(s)-Adressen an das System; eigene Ordner öffnen im Finder, ohne ein `*.app` zu starten | `d06c0e2` |
+| N1 | Eine Vorlage nimmt `layout.sidebars` nicht weg; „docs“ mit dem Basis-Template bleibt „docs“ | `562546f` |
+| N2 | Eine Prüfung, die nicht lief, und Befunde ohne Plugin stehen auf der Seite Plugins; nach einem Kern-Update kein „warnt nur“ über Fehlern | `de65b2b` |
+| N3 | Eine alte `CNAME` bleibt beim Branch-Deploy nur, wenn GitHubs Pages-Einstellungen dieselbe Domain nennen | `afca86c` |
+| N4 | Nur Zeilenumbruch und NUL im Passwort werden abgelehnt; Tab und Emoji-Folgen gehen | `626cf46` |
+| N5 | Der Reiter Formulare fragt den Schlüsselbund nur, ob das Relay-Geheimnis da ist | `4239f5e` |
+| N6 | „gewollt“ gilt nur, solange alle Einträge eines Plugins dieselbe Quelle haben | `50e4fcf` |
+
+Die Nebenbei-Punkte:
+
+| Punkt | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| 1 | Speichern lässt Kommentare, Flow-Stil und Anker in unveränderten Blöcken stehen (`links`, `drafts`, Seitentypen) | `e3dcb40` |
+| 2 | Nur festgehalten: QuartzControl 1.3 kann die `sidebars` eines Seitentyps löschen (eingestellt, kein Fix) | — |
+| 3 | Was `-QHOffline` nicht vom Netz nimmt, steht in `Offline.swift` und `decisions/` | `f353ad9` |
+| 4 | Doctors Befunde zu eigenen Frames stehen auf der Seite Plugins, mit QuartzHubs Hinweis | `a76ab18` |
+| 5 | Alle `QH…`-Schalter kommen aus den Startargumenten; `LaunchSwitchHygieneTests` hält es | `54f7027` |
+| 6 | `order: null` eines alten Eintrags gilt wie in Quartz | `33c9582` |
+| 7 | Ein kurzes FTP-Passwort schwärzt nur nach „PASS “, nicht jedes gleiche Wort | `d4fe7fc` |
+| 8 | Übernommene Passwörter verlieren den Zeilenumbruch am Ende wie gespeicherte | `99bd6b8` |
+| 9 | Umbenennen bei fehlenden Relay-Geheimnissen schreibt nichts | `93bfa75` |
+| 10 | Der veraltete Kommentar in `GitBranchAdapter.swift` ist mit N3 neu geschrieben | `afca86c` |
+| 11 | Eine `cname` in Kleinbuchstaben wird im Lauf genannt | `277165c` |
+| 12 | Ein Token mit Zeilenumbruch heißt Token | `4f50884` |
+| 13 | Eine https-Adresse, die auf http:// umleitet, bekommt ihren eigenen Satz | `4c557f4` |
+| 14 | „Erstellen“ wartet auf das Basis-Template und sagt, dass es lädt | `fcd059d` |
+| 15 | Der Download der Vorlage bricht beim Laden an 25 MiB ab | `9282a15` |
+| 16 | Elf weitere Tests beenden nur noch, was ihnen gehört | `1b6b4f7` |
+| 17 | Nur festgehalten: Nehmen beide Apps gleichzeitig Snapshots, kann QuartzControls Commit QuartzHubs älteren Index enthalten (nicht neu durch `c114f6c`, mit der alten Sperre genauso) | — |
+| 18 | Nur festgehalten: `lsof -Fn` maskiert Zeilenumbruch, Tab und Backslash im Pfad; ein Server in so einem Ordner gehört keinem Projekt, nie einem falschen | — |
+
+Nicht an der App gesehen, weil es einen echten Lauf gebraucht hätte: das Band zu M1 (QuartzControl
+läuft), N3 (schreibt bei GitHub), N5 (Systemabfrage des echten Schlüsselbunds), der Satz auf der
+Seite Updates zu N2 (echtes Kern-Update), der Ladezustand zu 14 (zu kurz ohne langsames Netz).
+Unterwegs aufgefallen, nicht geändert: Eine Vorlage aus einem 5.1-Projekt bringt `sidebars` auch in
+ein 5.0-Projekt; unter `Packages/QuartzHubCore/file:/…` liegen 128 versionierte Dateien, ein
+Testrückstand vom 2026-11-06 (eine URL als Pfad).

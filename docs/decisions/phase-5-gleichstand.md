@@ -2721,3 +2721,34 @@ an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwer
   erste Versuch mit dem alten Benutzer: „FTPError: 530 Login incorrect.“, roh wie QuartzControl.
   Den Benutzernamen im Zugang zu ändern und mit „unverändert lassen“ zu speichern behielt das
   eingetragene Passwort.
+
+## Zweites Review (2026-11-11): was dabei entschieden wurde
+
+Chronik und Commits in `docs/reviews.md`, „Zweite Runde“; hier nur, was von QuartzControl abweicht
+oder eine Entscheidung ist.
+
+- **M1, entschieden statt umgebaut.** QuartzControl 1.3 schreibt vor jedem Build die
+  `package.json` eines Frames ohne `quartz.category` neu und lässt QuartzHubs `dist/index.js`
+  liegen; Quartz überspringt dann jeden eigenen Frame (5.1: „was skipped“, 5.0: ohne Meldung).
+  Verworfen: das Einstiegsmodul unter einem anderen Namen mit `exports` (fände QuartzControls Form
+  kein Modul mehr). Der Nutzer entschied, solche Projekte nach QuartzHub nicht mehr mit
+  QuartzControl zu bauen; das Band sagt es. Die Aussage weiter oben („bricht in QuartzControl also
+  nicht“) ist korrigiert.
+- **Adressen nach außen nur als http(s)** (M2), wie QuartzControls `setWindowOpenHandler`. Gemessen
+  vorher: `smb://` und `x-apple.systempreferences:` aus der Vorschau erreichten `NSWorkspace`;
+  `file://` sperrte WebKit schon selbst.
+- **Eine Vorlage führt das Layout zusammen** (N1), statt es zu ersetzen: Was das Paket nennt,
+  ersetzt, was es nicht nennt (`sidebars`), bleibt. Abweichung von QuartzControls `applyLayout`,
+  das nur `groups` und `byPageType` kannte; die aufgezeichneten Schritte bleiben gleich.
+- **Speichern behält unveränderte Knoten** (nebenbei 1): `syncMapping` geht Schlüssel für
+  Schlüssel und lässt Gleiches stehen; unterhalb von `configuration` gilt die Reihenfolge des neuen
+  Werts wie beim Ersetzen. Drei Config-Goldens weichen damit bewusst ab (ein Kommentar in `theme`,
+  Flow-Listen und Anker bleiben), die gelesenen Werte sind QuartzControls
+  (`ConfigFileTests.keepsWhatQuartzControlRewrote`).
+- **Steuerzeichen in Passwörtern** (N4): nur CR, LF und NUL, was basic-ftp und askpass nicht
+  tragen. Die Übernahme legt Geheimnisse so ab wie das Speichern (nebenbei 8).
+- **Branch-Deploy und `CNAME`** (N3, nebenbei 11): übernommen nur, wenn GitHubs Pages-Einstellungen
+  dieselbe Domain nennen; ohne Antwort wie bisher, weil Weglassen eine laufende Domain abschaltet.
+- **Bekannt und gelassen:** QuartzControl 1.3 kann die `sidebars` eines Seitentyps löschen
+  (nebenbei 2); zwei Apps, die gleichzeitig Snapshots nehmen, können sich die Index-Kopie
+  verschränken (17); `lsof` maskiert Steuerzeichen im Pfad (18).

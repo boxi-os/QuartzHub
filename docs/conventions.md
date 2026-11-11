@@ -60,6 +60,10 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   bewusst von QuartzControl 1.3 ab (Review 2026-11-11, H1).
 - **Startschalter kommen nur aus den Startargumenten** (`LaunchArgument`), nie aus dem
   Defaults-Bereich der App; der Release-Bau kennt nur sein Bundle (Review 2026-11-11, N4).
+  `LaunchSwitchHygieneTests` hält jeden `QH…`-Schlüssel aus `UserDefaults` (zweites Review, nebenbei 5).
+- **Nach außen geht eine Adresse nur als http(s)** (`ExternalOpen.open`, auch für SwiftUIs
+  `openURL`); eigene Ordner und Dateien über `openFolder`/`openFile` mit einem Pfad, nie mit einer
+  Adresse aus einer Webansicht. **(QC)** `setWindowOpenHandler` (zweites Review, M2).
 - **Was der Quartz eines Projekts kann, liest QuartzHub aus dem Projekt** (`QuartzFeatures`: die
   Datei, die Deklaration), nicht aus der Versionsnummer; was Quartz selbst prüft (`plugin doctor`,
   `quartz info`), fragt QuartzHub Quartz (decisions/phase-5-gleichstand.md, Quartz 5.1).
