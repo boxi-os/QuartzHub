@@ -336,6 +336,12 @@ nach Abhängigkeit:
   `HANDBOOK_URL`).
 - `docs/release.md` für QuartzHub, DMG, GitHub-Release; das Repo öffentlich machen, wenn der
   Nutzer es will. In QuartzControls README auf den Nachfolger hinweisen.
+- **Zum Release die Grundvorlage veröffentlichen** (Entscheidung 2026-11-11): Ihre Beispielseiten
+  nennen QuartzHub, deshalb wartet das öffentliche Vorlagen-Repo `boxi-os/quartzcontrol-templates`
+  bis dahin (online liegt der Stand für 5.1 ohne den Namen, `a3fa5b6`). Dann
+  `Resources/templates/qc-basic.qtpl` dorthin kopieren, die README des Repos und den
+  Fußzeilen-Link der Vorlage (`QuartzControl` → ?) nachziehen. QuartzHub liefert keine Kopie aus;
+  bis dahin bekommt ein Release-Bau die Online-Fassung.
 
 ## Verifikation (je Phase)
 
