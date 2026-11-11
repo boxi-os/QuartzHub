@@ -1976,6 +1976,43 @@ Nutzer trug das Token selbst ein.
 Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), der Token-Zustand „unbekannt“
 (GitHub nicht erreichbar).
 
+## Echte Updates an einer Kopie von gui-test gemessen
+
+Am 2026-11-11, mit der Erlaubnis des Nutzers, „Update durchführen“ und „Aktualisieren“ zu drücken.
+Die Kopie (`cp -c` von `gui-test`) war vorher entschärft: alle sieben Ziele entfernt, `origin`
+entfernt, die Frame-Links auf die Kopie, und `quartz-forms` (Link und `source` im Lockfile zeigten
+auf das echte Repo `~/Development/quartz-forms`, ein Plugin-Update hätte dort installiert) auf eine
+Kopie ohne `origin`. Die App lief ohne `-QHNoUpdateCheck`, denn der Schalter macht auch die Seite
+Updates „Nicht prüfbar“.
+
+- **Ein Plugin:** `obsidian-plugin-excalidraw` `997fc5f` → `56de4bb`, ohne Rückfrage wie in
+  QuartzControl; „Wird aktualisiert…“, die übrigen Knöpfe gesperrt, vorher Snapshot `pluginChange …
+  obsidian-plugin-excalidraw`, danach Lockfile und Zeile „Aktuell“, die Ausgabe unter der Liste.
+- **Alle:** `quartz-multilanguage` `b7f89a8` → `4d74d9f`, Ansage „Das Plugin-Update ist beendet.“
+  (mitgehört über die Bedienungshilfen), danach alles „Aktuell“. Der Snapshot dazu trägt keinen
+  Plugin-Namen.
+- **Kern:** Frage „Quartz-Kern aktualisieren?“, Snapshot `coreUpdate`, dann `97a2d05` → `7cfb079`,
+  157 Commits, in rund 20 s. `package.json` und `package-lock.json` gerieten in Konflikt und wurden
+  wie vorgesehen durch Quartz' Fassung ersetzt, npm schrieb die eigenen Pakete zurück, der Merge
+  wurde dafür einmal ergänzt (Reflog: `commit (merge)`, dann `commit (amend)`; die Ausgabe nennt
+  den ersten Hash). Der Aufwärm-Build baute 479 Dateien; „Das Kern-Update ist abgeschlossen.“ als
+  Text und Ansage, danach „Aktuell“. Die 89 nicht committeten Änderungen der Kopie blieben, wie sie
+  waren.
+- **Nicht zu Ende gelaufen:** Kopie auf den Stand vor dem Update zurückgesetzt und ein eigenes
+  Paket eingetragen, das npm nicht kennt (`@quartzhub-probe/gibt-es-nicht`, Registry 404), wie ein
+  zurückgezogenes Paket. Das Update scheitert an npms E404: „Das Kern-Update konnte nicht
+  abgeschlossen werden.“, Zustand „Nicht abgeschlossen“ mit „Ein früheres Update ist nicht zu Ende
+  gelaufen“ und allen eigenen Paketen (ein fehlendes lässt den ganzen `npm install` scheitern), in
+  der Übersicht „Ein Quartz-Kern-Update ist nicht zu Ende gelaufen“ mit Link zu Updates.
+  **Geerbt, Nebenbefund:** Ein zweiter Lauf meldet „Already up to date.“ und scheitert gleich; der
+  Satz der Übersicht „Einmal „Update durchführen“ löst es auf.“ (wortgleich QuartzControls
+  `coreUpdatePendingDetail`) stimmt für ein Paket, das es nicht mehr gibt, nicht. Die Seite Updates
+  nennt den Snapshot als zweiten Weg, die Übersicht nicht.
+
+Dabei ein Fehler meinerseits: Eine Suche nach Projekten, die hinter Quartz liegen, lief auch über
+`hinterland-history` (zwei git-Abfragen nach der Historie, keine Inhalte gelesen, nichts
+geschrieben). Solche Suchen laufen nur noch über die Scratch-Kopien.
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
