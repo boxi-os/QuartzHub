@@ -77,10 +77,14 @@ struct PluginInspector: View {
                 Label(finding.message, systemImage: finding.severity == .error ? "xmark.octagon.fill" : "exclamationmark.triangle.fill")
                   .foregroundStyle(finding.severity == .error ? .red : .orange)
                   .textSelection(.enabled)
-                if let hint = finding.hint { Text(verbatim: hint).font(.caption).foregroundStyle(.secondary).textSelection(.enabled) }
+                // Quartz's hint for a frame is `plugin install`; QuartzHub writes its frames itself.
+                if let hint = finding.hint, item.frame == nil {
+                  Text(verbatim: hint).font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
+                }
               }
             }
           }
+          if item.frame != nil { Note(L10n.t("pluginsInstalled.doctorFrameHint")) }
           if findings.contains(where: \.intended) { Note(L10n.t("pluginsInstalled.doctorIntendedHint")) }
         } header: {
           Text(L10n.t("pluginsInstalled.doctorHeading"))

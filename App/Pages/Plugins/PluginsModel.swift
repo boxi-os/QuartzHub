@@ -132,8 +132,10 @@ final class PluginsModel {
     doctor?.unassigned(names: items.map(\.entry.name)) ?? []
   }
 
+  /// A frame's too: doctor names it by its folder (`frame-<id>`), and "has no built entry point" is
+  /// the one sign on this page that a frame will not load (Review 2026-11-11 (2), nebenbei 4).
   func findings(_ item: IndexedPlugin) -> [PluginDoctorReport.Finding] {
-    item.frame != nil ? [] : doctor?.findings(for: item.entry.name) ?? []
+    doctor?.findings(for: item.entry.name) ?? []
   }
 
   /// The built-in that has taken over this entry's job, on a project whose Quartz has them.

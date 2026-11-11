@@ -36615,6 +36615,23 @@
         }
       }
     },
+    "pluginsInstalled.doctorFrameHint" : {
+      "comment" : "Plugins ▸ Installiert, inspector of a custom frame with a plugin doctor finding",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub schreibt seine Frames vor jedem Build und Dev-Server-Start neu. Bleibt der Befund danach, speichere den Frame im Layout-Editor noch einmal."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub rewrites its frames before every build and dev server start. If the finding stays after that, save the frame in the layout editor once more."
+          }
+        }
+      }
+    },
     "pluginsInstalled.doctorHeading" : {
       "comment" : "Plugins ▸ Installiert, Quartz 5.1: inspector section with plugin doctor's lines",
       "localizations" : {
