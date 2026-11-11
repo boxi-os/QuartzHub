@@ -203,6 +203,15 @@ import Testing
     try store.saveRelaySecrets("p1", RelaySecretsChange(recipients: JSONObject([("Kontakt", .string("n@b.org"))])))
     info = store.relaySecretInfo("p1")
     #expect(info.recipients == ["Kontakt"] && !info.captchaSecret && !info.missing)
+    // Review 2026-11-11 (2), nebenbei 9: with the secrets gone, renaming a form that had a captcha
+    // secret writes nothing; the section keeps saying they are missing.
+    try store.saveRelaySecrets("p1", RelaySecretsChange(captchaSecrets: JSONObject([("kontakt", .string("k"))])))
+    try secrets.delete(account: Connections.relayAccount("p1"))
+    let file = try Posix.read(ProfileDirectory(root).relaySecrets)
+    try store.saveRelaySecrets("p1", RelaySecretsChange(moveCaptchaSecret: ("kontakt", "anfrage")))
+    #expect(try Posix.read(ProfileDirectory(root).relaySecrets) == file)
+    #expect(store.relaySecretInfo("p1").missing)
+    try store.saveRelaySecrets("p1", RelaySecretsChange(recipients: JSONObject([("Kontakt", .string("n@b.org"))])))
     // Review 2026-11-11 (2), N5: looking at the Forms tab reads no secret (a read meets the item's
     // access list and, after a new build, the system's dialog).
     let before = secrets.reads

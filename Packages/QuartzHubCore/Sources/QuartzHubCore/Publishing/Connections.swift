@@ -518,8 +518,9 @@ public struct Connections: Sendable {
       var all = readRelayStore()
       // A rename asks after every form; the stored names answer without the Keychain when there is
       // nothing to carry.
-      if let move = change.moveCaptchaSecret, change.recipients == nil, change.captchaSecret == nil, change.captchaSecrets == nil,
-         !change.renewSecret, !(all[projectId]?.captchaSecrets.contains(move.from) ?? false) {
+      let onlyMove = change.moveCaptchaSecret != nil && change.recipients == nil && change.captchaSecret == nil
+        && change.captchaSecrets == nil && !change.renewSecret
+      if let move = change.moveCaptchaSecret, onlyMove, !(all[projectId]?.captchaSecrets.contains(move.from) ?? false) {
         return
       }
       // Missing from the Keychain although the file names them (another Mac, an item deleted):
@@ -529,6 +530,9 @@ public struct Connections: Sendable {
       do throws(PublishFailure) {
         current = try relaySecrets(projectId)
       } catch where error == PublishFailure(L10n.t("relay.secretsMissing")) {
+        // A rename alone has nothing to carry then, and starting a new set would make the section
+        // stop saying the secrets are missing (Review 2026-11-11 (2), nebenbei 9).
+        if onlyMove { return }
         current = nil
       }
       // QuartzControl made the default's secret first and a renewed one after it: two draws.
