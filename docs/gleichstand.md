@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Offen als `gebaut` bleibt die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, gemessen beim echten ersten Start des Nutzers.
+gezählt, zuletzt am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Die letzte `gebaut`-Zeile, die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, ist beim echten ersten Start des Nutzers gemessen (2026-11-11); keine Zeile steht mehr auf `gebaut`.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 194 | 1 | 17 | 0 | 4 | 216 |
+| Einrichtung | 195 | 0 | 17 | 0 | 4 | 216 |
 | Plugins und Wartung | 255 | 0 | 6 | 0 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 234 | 0 | 9 | 0 | 0 | 243 |
-| **Summe** | **683** | **1** | **32** | **0** | **4** | **720** |
+| **Summe** | **684** | **0** | **32** | **0** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
