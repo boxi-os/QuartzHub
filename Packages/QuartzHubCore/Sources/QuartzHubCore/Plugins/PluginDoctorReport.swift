@@ -17,6 +17,8 @@ public struct PluginDoctorReport: Equatable, Sendable {
     public var subject: String?
     public var message: String
     public var hint: String?
+    /// QuartzHub's own doing: a second entry of a plugin it enters once per box or navigation.
+    public var intended = false
   }
 
   public var findings: [Finding]
@@ -48,10 +50,25 @@ public struct PluginDoctorReport: Equatable, Sendable {
   }
 
   /// The plugins QuartzHub enters more than once on purpose, one entry per navigation or box.
-  /// Quartz renders such a plugin once per entry ("its component is rendered once per entry", a
-  /// warning of the 5.1 build), while doctor calls the second entry an error ("configured twice —
-  /// both copies would be loaded"); that finding is left out for them.
+  /// Quartz 5.1 places one component per entry (an entry has one `layout.position`), and its build
+  /// renders such a plugin once per entry ("its component is rendered once per entry", a warning),
+  /// while doctor calls the second entry an error ("configured twice — both copies would be
+  /// loaded"). That finding stays, marked as intended (decided 2026-11-11).
   static let instancePlugins: Set<String> = ["quartz-navigations", "quartz-layout-box"]
+
+  private static func intended(_ finding: Finding, of name: String) -> Bool {
+    instancePlugins.contains(name) && finding.message.hasPrefix("configured twice")
+  }
+
+  /// The plugins whose "configured twice" is intended, by name, sorted: for the raw output after an update.
+  public var intendedPlugins: [String] {
+    Self.instancePlugins.filter { name in
+      findings.contains { finding in
+        guard let subject = finding.subject else { return false }
+        return (subject == name || subject.hasSuffix("/\(name)")) && Self.intended(finding, of: name)
+      }
+    }.sorted()
+  }
 
   /// The findings about one plugin, by the name QuartzHub derives from its source. Quartz labels
   /// an npm package by its whole name (`@quartz-community/hard-line-breaks`), a git plugin by
@@ -60,12 +77,15 @@ public struct PluginDoctorReport: Equatable, Sendable {
     guard !name.isEmpty else { return [] }
     let names = { (label: Substring) in label == name || label.hasSuffix("/\(name)") }
     return findings.filter { finding in
-      if Self.instancePlugins.contains(name), finding.message.hasPrefix("configured twice") { return false }
       if let subject = finding.subject { return names(Substring(subject)) }
       // "<label>[@<version>] requires …": the version goes, a scope's leading "@" stays.
       guard var label = finding.message.split(separator: " ", maxSplits: 1).first else { return false }
       if let at = label.lastIndex(of: "@"), at != label.startIndex { label = label[..<at] }
       return names(label)
+    }.map { finding in
+      var marked = finding
+      marked.intended = Self.intended(finding, of: name)
+      return marked
     }
   }
 }

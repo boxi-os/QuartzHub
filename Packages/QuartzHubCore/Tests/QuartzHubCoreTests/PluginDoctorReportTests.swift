@@ -23,12 +23,19 @@ import Testing
     #expect(report.findings(for: "frame-focus").first?.message == "has no built entry point (dist/ missing)")
   }
 
-  /// QuartzHub's boxes and navigations are one entry each on purpose; a real duplicate still shows.
-  @Test func intendedInstancesAreNoFinding() throws {
+  /// QuartzHub's boxes and navigations are one entry each on purpose: Quartz's finding stays,
+  /// marked as intended; a real duplicate is not.
+  @Test func intendedInstancesAreMarked() throws {
     let report = PluginDoctorReport.parse(String(decoding: try Posix.read(Self.fixture), as: UTF8.self))
-    #expect(report.findings(for: "quartz-layout-box").isEmpty)
-    #expect(report.findings(for: "quartz-navigations").isEmpty)
-    #expect(report.findings(for: "obsidian-plugin-excalidraw").count == 1)
+    let boxes = report.findings(for: "quartz-layout-box")
+    #expect(boxes.count == 6 && boxes.allSatisfy(\.intended))
+    let navigations = report.findings(for: "quartz-navigations")
+    #expect(navigations.count == 1 && navigations.allSatisfy(\.intended))
+    let excalidraw = report.findings(for: "obsidian-plugin-excalidraw")
+    #expect(excalidraw.count == 1 && excalidraw.first?.intended == false)
+    #expect(report.findings(for: "crawl-links").allSatisfy { !$0.intended })
+    #expect(report.intendedPlugins == ["quartz-layout-box", "quartz-navigations"])
+    #expect(PluginDoctorReport.parse("✗ obsidian-plugin-excalidraw: configured twice (also as x) — both copies would be loaded").intendedPlugins.isEmpty)
   }
 
   @Test func versionsAndColoursDoNotHideThePlugin() {

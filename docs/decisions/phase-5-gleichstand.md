@@ -2562,8 +2562,14 @@ nach `npx quartz upgrade` nur).
 - **Quartz' eigene Prüfung auf der Plugin-Seite** (`plugin doctor` ohne --fix, 0,7 s,
   `PluginDoctorReport`): veraltete Plugins (hard-line-breaks), `quartzVersion`, fehlende Pakete,
   abgelehnte Optionen. QuartzHub baut die semver-Bereiche nicht nach, es fragt das Programm des
-  Projekts. „configured twice“ fällt für quartz-layout-box und quartz-navigations weg: ein
-  Eintrag je Box ist QuartzHubs Bauart, und der 5.1-Build rendert einmal je Eintrag.
+  Projekts. „configured twice“ bei quartz-layout-box und quartz-navigations bleibt sichtbar,
+  gekennzeichnet als „gewollt“ (grau statt rot, mit Hinweis; nach einem Core-Update eine Notiz unter
+  der Ausgabe). Ein Eintrag hat in 5.1 genau eine `layout.position`, eine Box im Header und eine im
+  Footer brauchen also zwei Einträge; der Build rendert einmal je Eintrag und warnt nur, Quartz'
+  eigener Test (`duplicate entries warn`) legt das fest. Forms kommt mit einem Eintrag aus, weil nur
+  `layoutForm` ins Layout geht. Verworfen (Nutzer, 2026-11-11): Boxen je Stelle bündeln (Example
+  von 7 auf 4 layout-box-Einträge, nicht auf 1) und umbenannte Kopien über `--as`/`name:` (lädt
+  den Code wirklich mehrfach). Stattdessen bei jedem Quartz-Update prüfen (plan.md, Phase 5).
 - **Eigene Frames brauchen ein Einstiegsmodul.** 5.0 schluckte den gescheiterten Import still, 5.1
   meldete je Frame und Build „failed to load its entry module“ (5 Fehler an gui-test). Jetzt
   `quartz.category: "component"` und ein leeres `dist/index.js`: 0 Fehler, die Startseite rendert

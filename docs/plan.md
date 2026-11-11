@@ -342,6 +342,12 @@ nach Abhängigkeit:
   `Resources/templates/qc-basic.qtpl` dorthin kopieren, die README des Repos und den
   Fußzeilen-Link der Vorlage (`QuartzControl` → ?) nachziehen. QuartzHub liefert keine Kopie aus;
   bis dahin bekommt ein Release-Bau die Online-Fassung.
+- **Bei jedem Quartz-Update: mehrfache Plugins prüfen** (Entscheidung 2026-11-11). layout-box und
+  navigations stehen je Box bzw. Navigation einmal in der Config; `plugin doctor` nennt das einen
+  Fehler, QuartzHub kennzeichnet ihn als „gewollt“. Nachsehen, ob `quartz/plugins/loader/config-loader.ts`
+  noch „rendered once per entry“ nur warnt, ob `layout-diagnostics.test.ts` „duplicate entries warn“
+  noch beide Einträge platziert und ob der Build einer Kopie von gui-test beide Boxen zeigt. Fällt
+  eines davon, kommt der Umbau „Boxen je Stelle bündeln“ (decisions/phase-5-gleichstand.md, Quartz 5.1).
 
 ## Verifikation (je Phase)
 
