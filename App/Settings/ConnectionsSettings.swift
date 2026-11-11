@@ -19,6 +19,7 @@ struct ConnectionsSettings: View {
 
   var body: some View {
     Form {
+      if model.pendingSecrets.count > 0 || model.fetchResult != nil { pendingSecretsSection }
       githubSection
       connectionsSection
     }
@@ -30,6 +31,28 @@ struct ConnectionsSettings: View {
                       draft: editing.draft,
                       onSaved: { _ in Task { await model.reload() } },
                       onForgetHostKey: editing.existing.map { connection in { forgetHostKey(connection) } })
+    }
+  }
+
+  // MARK: Secrets the takeover left behind
+
+  /// Review 2026-11-11, N3: a denied Keychain question at the first start left every secret behind
+  /// for good. QuartzControl still has them; this fetches those, and only those.
+  private var pendingSecretsSection: some View {
+    Section {
+      if model.pendingSecrets.count > 0 {
+        Text(L10n.t("settings.connections.pendingSecrets", ["count": String(model.pendingSecrets.count)], count: model.pendingSecrets.count))
+        HStack {
+          Button(model.fetchingSecrets ? L10n.t("migration.running") : L10n.t("settings.connections.fetchSecrets")) {
+            Task { await model.fetchSecrets() }
+          }
+          .disabled(model.fetchingSecrets)
+          .accessibilityIdentifier("settings.connections.fetchSecrets")
+          Spacer()
+        }
+        Note(L10n.t("settings.connections.pendingSecretsHint"))
+      }
+      if let result = model.fetchResult { Text(result).textSelection(.enabled) }
     }
   }
 
@@ -196,11 +219,44 @@ final class ConnectionsSettingsModel {
 
   private var store: Connections { AppDeploy.connections() }
 
+  private(set) var pendingSecrets = ProfileMigration.PendingSecrets()
+  private(set) var fetchingSecrets = false
+  private(set) var fetchResult: String?
+
+  /// Asks for QuartzControl's key (macOS asks the user) and stores what it opens, as the first
+  /// start would have.
+  func fetchSecrets() async {
+    guard AppProfile.quartzControl != nil, pendingSecrets.count > 0 else { return }
+    fetchingSecrets = true
+    defer { fetchingSecrets = false }
+    let pending = pendingSecrets, target = AppProfile.own, secrets = AppDeploy.secrets
+    let outcome: Result<ProfileMigration.Report, ProfileMigration.Failure> = await Task.detached {
+      let key = try? ProfileMigration.quartzControlKey()
+      do throws(ProfileMigration.Failure) {
+        return .success(try ProfileMigration.takeOverSecrets(pending, target: target, secretKey: key) { account, label, secret in
+          try secrets.write(secret, account: account, label: label)
+        })
+      } catch {
+        return .failure(error)
+      }
+    }.value
+    switch outcome {
+    case .success(let report) where report.secretsMoved > 0:
+      fetchResult = L10n.t("settings.connections.fetchedSecrets", ["count": String(report.secretsMoved)], count: report.secretsMoved)
+    case .success:
+      fetchResult = L10n.t("settings.connections.fetchFailed")
+    case .failure(let failure):
+      if case .write(let file) = failure { fetchResult = L10n.t("migration.failed", ["file": file]) } else { fetchResult = L10n.t("settings.connections.fetchFailed") }
+    }
+    AppDeploy.ConnectionsVersion.shared.bump()
+  }
+
   var github: Connection? { connections.first { $0.kind == .github } }
   var listed: [Connection] { connections.filter { $0.kind != .github } }
 
   func reload() async {
     connections = store.list()
+    pendingSecrets = AppProfile.quartzControl.map { ProfileMigration.pendingSecrets(source: $0, target: AppProfile.own) } ?? .init()
     let projects = ProjectStore(profile: AppProfile.own).list().map(\.path)
     let ids = connections.map(\.id)
     usage = await Task.detached {

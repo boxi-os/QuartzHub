@@ -123,6 +123,10 @@ struct MigrationSheet: View {
         Text(L10n.t("migration.secretsLost", count: report.secretsLost.count))
           .fixedSize(horizontal: false, vertical: true)
       }
+      if report.offeredAgain {
+        Text(L10n.t("migration.offeredAgain"))
+          .fixedSize(horizontal: false, vertical: true)
+      }
     }
     .accessibilityElement(children: .combine)
     .accessibilityIdentifier("migration.report")

@@ -43,6 +43,9 @@ public enum ProfileMigration {
     /// key, damaged): those have to be entered again in QuartzHub.
     public var secretsLost: [String] = []
     public var settings = false
+    /// A file of QuartzControl's could not be read: nothing marks the takeover done, so the next
+    /// start offers it again.
+    public var offeredAgain = false
   }
 
   public enum Failure: Error, Equatable {
@@ -132,8 +135,13 @@ public enum ProfileMigration {
 
     // Connections: the same objects without `encryptedSecret`; `secretInKeychain` says where the
     // secret went (QuartzHub's own field, docs/formats.md).
-    if !plan.connections.isEmpty {
-      let moved: [StoredConnection] = plan.connections.map { connection in
+    // A second run (the first could not read everything) keeps what QuartzHub has by now, and
+    // its secrets.
+    let kept = existingItems(target.connections)
+    let keptIds = Set(kept.compactMap { $0.objectValue?["id"]?.stringValue })
+    let newConnections = plan.connections.filter { !keptIds.contains($0.id) }
+    if !newConnections.isEmpty {
+      let moved: [StoredConnection] = newConnections.map { connection in
         var copy = connection
         let stored = secret(connection.encryptedSecret, account: "connection:\(connection.id)",
                             label: "QuartzHub – \(connection.name)", id: connection.id)
@@ -141,13 +149,14 @@ public enum ProfileMigration {
         if stored { copy.object["secretInKeychain"] = .bool(true) }
         return copy
       }
-      try write(JSONList(items: moved).json, to: target.connections)
+      try write(.array(kept + JSONList(items: moved).json.arrayValue!), to: target.connections)
       report.connections = moved.count
     }
 
     if !plan.relaySecrets.isEmpty {
       var object = JSONObject()
-      for (projectId, entry) in plan.relaySecrets {
+      if case .ok(let value) = JSONStore.peek(target.relaySecrets), let existing = value.objectValue { object = existing }
+      for (projectId, entry) in plan.relaySecrets where object[projectId] == nil {
         var copy = entry
         let stored = secret(entry.encrypted, account: "relay:\(projectId)", label: "QuartzHub – Relay", id: projectId)
         copy.object["encrypted"] = nil
@@ -157,17 +166,113 @@ public enum ProfileMigration {
       try write(.object(object), to: target.relaySecrets)
     }
 
-    if var settings = plan.settings {
+    if var settings = plan.settings, JSONStore.peek(target.settings) == .missing {
       settings.object["githubToken"] = nil
       settings.object["githubTokenEncrypted"] = nil
       try write(settings.json, to: target.settings)
       report.settings = true
     }
 
-    // Last: the marker that the takeover is done.
+    // Last: the marker that the takeover is done. Not while one of QuartzControl's files could not
+    // be read: that would mark it done for good, and what the file holds would never come over
+    // once it is repaired (review 2026-11-11, N3). The next start offers it again; what was taken
+    // now is written again then, the same way.
+    if !plan.unreadable.isEmpty {
+      report.offeredAgain = true
+      return report
+    }
     try write(JSONList(items: plan.projects).json, to: target.projects)
     report.projects = plan.projects.count
     return report
+  }
+
+  // MARK: - Secrets later
+
+  /// Secrets QuartzControl still holds for connections and relays that came over without one: the
+  /// Keychain question was denied, or the key did not fit then (review 2026-11-11, N3). Matched by
+  /// id; what QuartzHub already has a secret for is never touched.
+  public struct PendingSecrets: Equatable, Sendable {
+    public var connections: [String: String] = [:]
+    public var relays: [String: String] = [:]
+    public var count: Int { connections.count + relays.count }
+    public init() {}
+  }
+
+  public static func pendingSecrets(source: ProfileDirectory, target: ProfileDirectory) -> PendingSecrets {
+    var pending = PendingSecrets()
+    func items(_ path: String) -> [JSONValue] {
+      if case .ok(let value) = JSONStore.peek(path) { return value.arrayValue ?? [] }
+      return []
+    }
+    func object(_ path: String) -> JSONObject {
+      if case .ok(let value) = JSONStore.peek(path) { return value.objectValue ?? JSONObject() }
+      return JSONObject()
+    }
+    var theirs: [String: String] = [:]
+    for item in items(source.connections) {
+      let connection = StoredConnection(object: item.objectValue ?? JSONObject())
+      if let encrypted = connection.encryptedSecret, !encrypted.isEmpty { theirs[connection.id] = encrypted }
+    }
+    for item in items(target.connections) {
+      let connection = StoredConnection(object: item.objectValue ?? JSONObject())
+      if !connection.secretInKeychain, let encrypted = theirs[connection.id] { pending.connections[connection.id] = encrypted }
+    }
+    let theirRelays = object(source.relaySecrets), ourRelays = object(target.relaySecrets)
+    for projectId in ourRelays.keys {
+      guard let ours = ourRelays[projectId]?.objectValue, ours["secretInKeychain"] != .bool(true),
+            let encrypted = theirRelays[projectId]?.objectValue.map({ StoredRelaySecrets(object: $0) })?.encrypted, !encrypted.isEmpty
+      else { continue }
+      pending.relays[projectId] = encrypted
+    }
+    return pending
+  }
+
+  /// Takes `pending` over as the first run would have, and marks each one stored in QuartzHub's
+  /// files. What still fails is counted in `secretsLost` again.
+  public static func takeOverSecrets(
+    _ pending: PendingSecrets,
+    target: ProfileDirectory,
+    secretKey: Data?,
+    storeSecret: (_ account: String, _ label: String, _ secret: String) throws -> Void
+  ) throws(Failure) -> Report {
+    var report = Report()
+    func store(_ encrypted: String, account: String, label: String, id: String) -> Bool {
+      guard let secretKey, let plain = try? ChromiumSafeStorage.decrypt(base64: encrypted, key: secretKey),
+            (try? storeSecret(account, label, plain)) != nil
+      else {
+        report.secretsLost.append(id)
+        return false
+      }
+      report.secretsMoved += 1
+      return true
+    }
+    if !pending.connections.isEmpty, case .ok(let value) = JSONStore.peek(target.connections), var items = value.arrayValue {
+      for index in items.indices {
+        guard var object = items[index].objectValue, let id = object["id"]?.stringValue, let encrypted = pending.connections[id] else { continue }
+        let name = StoredConnection(object: object).name
+        if store(encrypted, account: "connection:\(id)", label: "QuartzHub – \(name)", id: id) {
+          object["secretInKeychain"] = .bool(true)
+          items[index] = .object(object)
+        }
+      }
+      try write(.array(items), to: target.connections)
+    }
+    if !pending.relays.isEmpty, case .ok(let value) = JSONStore.peek(target.relaySecrets), var object = value.objectValue {
+      for projectId in pending.relays.keys.sorted() {
+        guard var entry = object[projectId]?.objectValue, let encrypted = pending.relays[projectId] else { continue }
+        if store(encrypted, account: "relay:\(projectId)", label: "QuartzHub – Relay", id: projectId) {
+          entry["secretInKeychain"] = .bool(true)
+          object[projectId] = .object(entry)
+        }
+      }
+      try write(.object(object), to: target.relaySecrets)
+    }
+    return report
+  }
+
+  static func existingItems(_ path: String) -> [JSONValue] {
+    if case .ok(let value) = JSONStore.peek(path) { return value.arrayValue ?? [] }
+    return []
   }
 
   private static func write(_ value: JSONValue, to path: String) throws(Failure) {

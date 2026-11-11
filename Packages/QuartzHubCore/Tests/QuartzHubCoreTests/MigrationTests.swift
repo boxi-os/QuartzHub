@@ -144,6 +144,58 @@ import Testing
     #expect(Posix.exists(source.connections))
   }
 
+  // MARK: Review 2026-11-11, N3
+
+  /// A broken project list marked the takeover done with "[]"; repaired, it never came over.
+  @Test func anUnreadableFileLeavesTheTakeoverOpen() throws {
+    let good = { () throws in try makeSource() }
+    try good()
+    let list = try Posix.read(source.projects)
+    try Posix.write(source.projects, Data("[{".utf8))
+    let first = try ProfileMigration.run(ProfileMigration.plan(source: source), target: target, secretKey: key) { _, _, _ in }
+    #expect(first.offeredAgain && first.projects == 0 && first.connections == 3)
+    #expect(!Posix.exists(target.projects))
+
+    // Meanwhile a connection of QuartzHub's own, and c1 edited: both stay as they are.
+    var connections = ProfileMigration.existingItems(target.connections)
+    connections[0] = .object(JSONObject([("id", .string("c1")), ("kind", .string("ssh")), ("name", .string("Neu benannt"))]))
+    connections.append(.object(JSONObject([("id", .string("eigen")), ("kind", .string("webhook")), ("name", .string("Eigen"))])))
+    try JSONStore.write(.array(connections), to: target.connections)
+
+    // Repaired: offered again, and the second run brings the projects without touching the rest.
+    try Posix.write(source.projects, list)
+    #expect(ProfileMigration.shouldOffer(source: source, target: target))
+    var stored: [String: String] = [:]
+    let second = try ProfileMigration.run(ProfileMigration.plan(source: source), target: target, secretKey: key) { account, _, secret in
+      stored[account] = secret
+    }
+    #expect(!second.offeredAgain && second.projects == 2 && second.connections == 0)
+    #expect(stored.isEmpty, "nothing taken twice: \(stored)")
+    let names = ProfileMigration.existingItems(target.connections).map { $0["name"]?.stringValue ?? "" }
+    #expect(names == ["Neu benannt", "Agent", "GitHub", "Eigen"])
+    #expect(!ProfileMigration.shouldOffer(source: source, target: target))
+  }
+
+  /// "Nicht erlauben" in the Keychain question took everything but the secrets, for good. They can
+  /// be fetched later, and only those.
+  @Test func secretsLeftBehindCanBeFetchedLater() throws {
+    try makeSource()
+    _ = try ProfileMigration.run(ProfileMigration.plan(source: source), target: target, secretKey: nil) { _, _, _ in }
+    let pending = ProfileMigration.pendingSecrets(source: source, target: target)
+    #expect(pending.connections.keys.sorted() == ["c1", "c3"] && pending.relays.keys.sorted() == ["p1"])
+
+    var stored: [String: String] = [:]
+    let report = try ProfileMigration.takeOverSecrets(pending, target: target, secretKey: key) { account, _, secret in stored[account] = secret }
+    #expect(report.secretsMoved == 2 && report.secretsLost == ["c3"])
+    #expect(stored == ["connection:c1": "sftp-pass", "relay:p1": #"{"secret":"s","recipients":{"Ich":"a@example.org"}}"#])
+    let marks = ProfileMigration.existingItems(target.connections).map { $0["secretInKeychain"] }
+    #expect(marks == [.bool(true), nil, nil])
+    #expect(try JSJSON.parse(Posix.read(target.relaySecrets))["p1"]?["secretInKeychain"] == .bool(true))
+    // What is there now is not offered again; c3's key never fits.
+    #expect(ProfileMigration.pendingSecrets(source: source, target: target).connections.keys.sorted() == ["c3"])
+    #expect(ProfileMigration.pendingSecrets(source: source, target: target).relays.isEmpty)
+  }
+
   @Test func foreignServersNeedALivePidAndAServeCommand() throws {
     try makeSource { profile in
       try JSONStore.write(try JSJSON.parse("""

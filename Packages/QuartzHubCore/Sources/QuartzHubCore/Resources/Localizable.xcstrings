@@ -31247,6 +31247,23 @@
         }
       }
     },
+    "migration.offeredAgain" : {
+      "comment" : "Takeover dialog, result: a file of QuartzControl's was unreadable, so the takeover is not marked done",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weil nicht alles lesbar war, bietet QuartzHub die Übernahme beim nächsten Start noch einmal an. Was schon übernommen ist, bleibt dabei, wie es ist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As not everything could be read, QuartzHub offers the takeover again on the next start. What has been taken over stays as it is."
+          }
+        }
+      }
+    },
     "migration.projects" : {
       "comment" : "Übernahme-Dialog beim ersten Start (App/Shell/MigrationSheet.swift): Zeile Projekte",
       "localizations" : {
@@ -31413,13 +31430,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} Passwort oder Token konnte nicht übernommen werden und muss in QuartzHub neu eingegeben werden."
+                  "value" : "{{count}} Passwort oder Token konnte nicht übernommen werden. Unter Einstellungen ▸ Zugänge lässt es sich nachholen."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} Passwörter und Tokens konnten nicht übernommen werden und müssen in QuartzHub neu eingegeben werden."
+                  "value" : "{{count}} Passwörter und Tokens konnten nicht übernommen werden. Unter Einstellungen ▸ Zugänge lassen sie sich nachholen."
                 }
               }
             }
@@ -31431,13 +31448,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} password or token could not be taken over and has to be entered again in QuartzHub."
+                  "value" : "{{count}} password or token could not be taken over. It can be fetched later under Settings ▸ Connections."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} passwords and tokens could not be taken over and have to be entered again in QuartzHub."
+                  "value" : "{{count}} passwords and tokens could not be taken over. They can be fetched later under Settings ▸ Connections."
                 }
               }
             }
@@ -40867,6 +40884,81 @@
         }
       }
     },
+    "settings.connections.fetchFailed" : {
+      "comment" : "Settings, Connections: fetching secrets later brought none",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es konnte nichts übernommen werden. Ohne Erlaubnis für den Schlüsselbund-Eintrag von QuartzControl, oder mit einem anderen Schlüssel als damals, geht es nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing could be taken over. It needs permission for QuartzControl's keychain item and the key it used then."
+          }
+        }
+      }
+    },
+    "settings.connections.fetchSecrets" : {
+      "comment" : "Settings, Connections: button that fetches the secrets left behind",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus QuartzControl übernehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take Over from QuartzControl"
+          }
+        }
+      }
+    },
+    "settings.connections.fetchedSecrets" : {
+      "comment" : "Settings, Connections: result of fetching secrets later",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwort oder Token übernommen."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwörter und Tokens übernommen."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} password or token taken over."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} passwords and tokens taken over."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "settings.connections.newHeading" : {
       "localizations" : {
         "de" : {
@@ -40943,6 +41035,64 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connection"
+          }
+        }
+      }
+    },
+    "settings.connections.pendingSecrets" : {
+      "comment" : "Settings, Connections: secrets the first takeover left behind",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwort oder Token aus QuartzControl wurde noch nicht übernommen."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Passwörter und Tokens aus QuartzControl wurden noch nicht übernommen."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} password or token from QuartzControl has not been taken over yet."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} passwords and tokens from QuartzControl have not been taken over yet."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "settings.connections.pendingSecretsHint" : {
+      "comment" : "Settings, Connections: below the secrets left behind",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS fragt dabei, ob QuartzHub den Schlüsselbund-Eintrag von QuartzControl lesen darf."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS asks whether QuartzHub may read QuartzControl's keychain item."
           }
         }
       }

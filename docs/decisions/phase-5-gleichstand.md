@@ -2005,3 +2005,26 @@ contains invalid characters“, kein Befehl). rsyncs `user@host:` hat keinen sol
 auch der Benutzer. Gemessen mit `SSHLoginTests.aHostThatIsAnOptionNeverReachesSsh`: mit dem alten
 Code legte die Probe die Datei an, `prepare` und `remoteSpec` nahmen beides an, und das Formular
 speicherte es; jetzt nichts davon, gewöhnliche Namen gehen weiter.
+
+### N3: Eine unvollständige Übernahme lässt sich nachholen
+
+Die Übernahme schrieb `projects.json` (ihre Markierung „erledigt“) auch dann, wenn eine Datei von
+QuartzControl unlesbar war, als `[]`; nach dem Reparieren bot QuartzHub nichts mehr an. Ein
+„Nicht erlauben“ im Schlüsselbund-Dialog übernahm alles außer den Geheimnissen, ebenfalls für immer
+(gemessen vom Review: `shouldOffer` false). Jetzt:
+
+- **Unlesbare Datei:** keine Markierung, der nächste Start bietet die Übernahme wieder an, und der
+  Dialog sagt das (`migration.offeredAgain`). Der zweite Lauf führt zusammen statt zu überschreiben:
+  Zugänge und Relay-Einträge, die QuartzHub schon hat (gleiche ID), bleiben samt Geheimnis, die
+  Einstellungen auch; nur Fehlendes kommt dazu.
+- **Fehlende Geheimnisse:** Einstellungen ▸ Zugänge zeigt, wie viele QuartzControl noch für
+  übernommene Zugänge und Relays ohne Geheimnis hat, mit „Aus QuartzControl übernehmen“
+  (`ProfileMigration.pendingSecrets`, `takeOverSecrets`; derselbe Schlüssel und dieselben Konten im
+  Schlüsselbund wie beim ersten Start). Was QuartzHub schon hat, wird nie angefasst.
+
+Gemessen mit `ProfileMigrationTests.anUnreadableFileLeavesTheTakeoverOpen` (kaputte Liste, dann ein
+eigener und ein umbenannter Zugang, dann repariert: zweiter Lauf bringt die zwei Projekte, kein
+Geheimnis doppelt, beide Zugänge unverändert) und `secretsLeftBehindCanBeFetchedLater` (ohne
+Schlüssel übernommen, später zwei von drei geholt, der mit fremdem Schlüssel bleibt offen). In der
+App mit Wegwerf-Profilen angesehen, Hell und Dunkel; den Button nicht gedrückt, weil er den echten
+Schlüsselbund-Eintrag von QuartzControl liest.
