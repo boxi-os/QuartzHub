@@ -2183,3 +2183,14 @@ Query-Wert mit „+“ und „=“ (`aTokenEchoedInAnotherSpellingIsRedacted`): 
 dekodierten Pfad, die kleinen Escapes und den kodierten Query-Wert stehen, der neue keinen. Die 17
 Fälle gegen QuartzControls `webhook.ts` bleiben gleich; ein kurzes Wort des Pfads („build“) bleibt
 stehen.
+
+### 9. Ein Link im Build ist mit und ohne Dokumente derselbe
+
+Mit Dokumenten im Gepäck spiegelt `DeployStaging.mirror` den Build und ließ Links weg; ohne sie
+folgt `DeployManifests.walk` ihnen und lädt das Ziel hoch (wie QuartzControl). Zwei Läufe desselben
+Ziels sahen damit verschiedene Builds. Quartz schreibt keine Links, ein Nutzer kann sie aber in
+`public/` legen. Jetzt nimmt die Spiegelung einen Link wie der Walk: Ein Link auf eine Datei wird
+zur Datei mit deren Inhalt, ein Link auf einen Ordner oder ins Leere scheitert, wie das Hashen
+daran scheitert. Gemessen mit `aLinkInTheBuildIsTheSameWithAndWithoutDocuments`: Der alte Code
+fehlte `linked.html` in der Spiegelung (ENOENT beim Hashen), der neue liefert dieselbe Liste und
+dieselben Hashes, und ein Ordner-Link scheitert in beiden Wegen.

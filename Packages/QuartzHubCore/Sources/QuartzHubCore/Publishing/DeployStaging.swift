@@ -18,7 +18,10 @@ public struct DeployStaging: Sendable {
 
   public func remove() { try? FileManager.default.removeItem(atPath: dir) }
 
-  /// A link in the build is not followed: Quartz writes none.
+  /// A link in the build is taken as the manifest's walk takes it (Quartz writes none, a user
+  /// may): one to a file is that file, one to a folder or to nothing fails as hashing it does.
+  /// Before, the staging dropped links, so the same target saw two builds with and without
+  /// documents (review 2026-11-11, nebenbei 9; as QuartzControl).
   static func mirror(_ from: String, _ to: String) throws {
     try Posix.mkdirs(to)
     guard let entries = Posix.entries(from) else { throw Posix.error("scandir", from) }
@@ -28,7 +31,13 @@ public struct DeployStaging: Sendable {
       case .directory: try mirror(source, target)
       case .file:
         if link(source, target) != 0 { try Posix.copyFile(source, target) }
-      default: break
+      case .link:
+        var info = stat()
+        guard stat(source, &info) == 0 else { throw Posix.error("open", source) }
+        if info.st_mode & S_IFMT == S_IFDIR { throw NodeFileError(code: EISDIR, syscall: "read", path: source) }
+        // copyfile follows the link; link(2) might link the link itself.
+        try Posix.copyFile(source, target)
+      case .other: break
       }
     }
   }

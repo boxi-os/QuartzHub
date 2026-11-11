@@ -179,6 +179,32 @@ import Testing
   }
 }
 
+/// The staging for documents sees the build as the manifest's walk does (review 2026-11-11,
+/// nebenbei 9): a link to a file is that file, a link to a folder fails in both.
+@Suite struct DeployStagingTests {
+  @Test func aLinkInTheBuildIsTheSameWithAndWithoutDocuments() throws {
+    let root = TestFolder.make("qh-staging-links")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let build = "\(root)/public", staged = "\(root)/staged"
+    try Posix.mkdirs("\(build)/sub")
+    try Posix.mkdirs("\(root)/aside")
+    try Posix.write("\(build)/index.html", Data("i".utf8))
+    try Posix.write("\(build)/sub/b.html", Data("b".utf8))
+    try Posix.write("\(root)/aside/über.html", Data("ü".utf8))
+    #expect(symlink("../aside/über.html", "\(build)/linked.html") == 0)
+    try DeployStaging.mirror(build, staged)
+    let walked = try DeployManifests.walk(build)
+    #expect(try DeployManifests.walk(staged) == walked && walked.contains("linked.html"))
+    for path in walked { #expect(try DeployManifests.hash("\(staged)/\(path)") == DeployManifests.hash("\(build)/\(path)")) }
+    #expect(Posix.kind("\(staged)/linked.html") == .file)
+
+    #expect(symlink("../aside", "\(build)/folder") == 0)
+    #expect(throws: (any Error).self) { for path in try DeployManifests.walk(build) { _ = try DeployManifests.hash("\(build)/\(path)") } }
+    try? FileManager.default.removeItem(atPath: staged)
+    #expect(throws: (any Error).self) { try DeployStaging.mirror(build, staged) }
+  }
+}
+
 extension DeployManifests {
   func directoryForTests() throws { try directory.create() }
 }
