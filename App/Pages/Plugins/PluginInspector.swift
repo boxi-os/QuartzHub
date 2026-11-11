@@ -67,14 +67,21 @@ struct PluginInspector: View {
       let findings = model.findings(item)
       if !findings.isEmpty {
         Section {
-          ForEach(Array(findings.enumerated()), id: \.offset) { _, finding in
+          // The intended one once: it is the same sentence for every further entry.
+          let shown = findings.filter { !$0.intended } + findings.filter(\.intended).prefix(1)
+          ForEach(Array(shown.enumerated()), id: \.offset) { _, finding in
             VStack(alignment: .leading, spacing: 2) {
-              Label(finding.message, systemImage: finding.severity == .error ? "xmark.octagon.fill" : "exclamationmark.triangle.fill")
-                .foregroundStyle(finding.severity == .error ? .red : .orange)
-                .textSelection(.enabled)
-              if let hint = finding.hint { Text(verbatim: hint).font(.caption).foregroundStyle(.secondary).textSelection(.enabled) }
+              if finding.intended {
+                Label(finding.message, systemImage: "info.circle").foregroundStyle(.secondary).textSelection(.enabled)
+              } else {
+                Label(finding.message, systemImage: finding.severity == .error ? "xmark.octagon.fill" : "exclamationmark.triangle.fill")
+                  .foregroundStyle(finding.severity == .error ? .red : .orange)
+                  .textSelection(.enabled)
+                if let hint = finding.hint { Text(verbatim: hint).font(.caption).foregroundStyle(.secondary).textSelection(.enabled) }
+              }
             }
           }
+          if findings.contains(where: \.intended) { Note(L10n.t("pluginsInstalled.doctorIntendedHint")) }
         } header: {
           Text(L10n.t("pluginsInstalled.doctorHeading"))
         } footer: {

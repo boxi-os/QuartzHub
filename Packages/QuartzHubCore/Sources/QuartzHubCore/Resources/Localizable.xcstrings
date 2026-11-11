@@ -36598,6 +36598,40 @@
         }
       }
     },
+    "pluginsInstalled.doctorIntended" : {
+      "comment" : "Plugins, installed row and inspector: badge on a doctor finding QuartzHub causes on purpose (one entry per box or navigation)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gewollt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "intended"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.doctorIntendedHint" : {
+      "comment" : "Plugins inspector, below Quartz's 'configured twice' finding for quartz-layout-box or quartz-navigations",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub legt dieses Plugin absichtlich mehrfach an, einen Eintrag je Box oder Navigation. Quartz zeigt jeden Eintrag an, die Meldung kann bleiben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub adds this plugin more than once on purpose, one entry per box or navigation. Quartz shows every entry; the message can stay."
+          }
+        }
+      }
+    },
     "pluginsInstalled.doctorWarning" : {
       "comment" : "Plugins ▸ Installiert, Quartz 5.1: badge when plugin doctor reports a warning",
       "localizations" : {

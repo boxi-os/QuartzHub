@@ -328,6 +328,9 @@ private struct PluginRow: View {
   let busy: Bool
   let toggle: () -> Void
 
+  /// Doctor's findings but those QuartzHub causes on purpose (a second box or navigation).
+  private var open: [PluginDoctorReport.Finding] { findings.filter { !$0.intended } }
+
   var body: some View {
     HStack(alignment: .top, spacing: 10) {
       Toggle(L10n.t("pluginsInstalled.enabledSwitch", ["name": item.displayName]), isOn: Binding(get: { item.enabled }, set: { _ in toggle() }))
@@ -342,10 +345,12 @@ private struct PluginRow: View {
           if item.frame != nil { WordBadge(text: L10n.t("pluginsInstalled.frameBadge")) }
           if outdated { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable"), tint: .orange) }
           if builtin { WordBadge(text: L10n.t("pluginsInstalled.builtinBadge")) }
-          if findings.contains(where: { $0.severity == .error }) {
-            WordBadge(text: L10n.t("pluginsInstalled.doctorError"), tint: .red).help(findings.map(\.message).joined(separator: "\n"))
+          if open.contains(where: { $0.severity == .error }) {
+            WordBadge(text: L10n.t("pluginsInstalled.doctorError"), tint: .red).help(open.map(\.message).joined(separator: "\n"))
+          } else if !open.isEmpty {
+            WordBadge(text: L10n.t("pluginsInstalled.doctorWarning"), tint: .orange).help(open.map(\.message).joined(separator: "\n"))
           } else if !findings.isEmpty {
-            WordBadge(text: L10n.t("pluginsInstalled.doctorWarning"), tint: .orange).help(findings.map(\.message).joined(separator: "\n"))
+            WordBadge(text: L10n.t("pluginsInstalled.doctorIntended")).help(findings.map(\.message).joined(separator: "\n"))
           }
           if saved { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
         }
