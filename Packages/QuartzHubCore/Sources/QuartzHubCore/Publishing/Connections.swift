@@ -101,6 +101,15 @@ public struct Connection: Equatable, Sendable {
 
 /// What the connection form saves (`SaveConnectionInput`). `secret` nil means "leave the stored one
 /// alone"; on an edit an empty one means the same, unless the auth method changed.
+extension StoredConnection {
+  /// The secret as `Connections.save` keeps it (`SaveConnectionInput.normalized`): a password or
+  /// token without the line breaks a paste left at its end; a key and a webhook as they are.
+  public func keptSecret(_ plain: String) -> String {
+    guard let kind else { return plain }
+    return SaveConnectionInput(kind: kind, name: name, authMethod: authMethod, secret: plain).normalized.secret ?? plain
+  }
+}
+
 public struct SaveConnectionInput: Equatable, Sendable {
   public var id: String?
   public var kind: StoredConnection.Kind

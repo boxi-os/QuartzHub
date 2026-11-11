@@ -93,6 +93,37 @@ import Testing
     #expect(plan.unreadable.isEmpty)  // running-servers.json is not part of the takeover
   }
 
+  /// Review 2026-11-11 (2), nebenbei 8: a password QuartzControl stored with the line break a
+  /// paste left at its end is taken over as Connections.save keeps it; a key keeps its lines.
+  @Test func aTakenOverPasswordLosesThePastedLineBreak() throws {
+    try makeSource()
+    let key = "-----BEGIN OPENSSH PRIVATE KEY-----\nabc\n-----END OPENSSH PRIVATE KEY-----\n"
+    try JSONStore.write(try JSJSON.parse("""
+      [{"id":"f1","kind":"ftp","name":"FTP","encryptedSecret":"\(ChromiumSafeStorage.encrypt("qc-pw\r\n", key: self.key))","host":"h","port":21,"username":"u"},
+       {"id":"k1","kind":"ssh","name":"Key","encryptedSecret":"\(ChromiumSafeStorage.encrypt(key, key: self.key))","host":"h","port":22,"username":"u","authMethod":"privateKey"}]
+      """), to: source.connections)
+    var stored: [String: String] = [:]
+    _ = try ProfileMigration.run(ProfileMigration.plan(source: source), target: target, secretKey: self.key) { account, _, secret in
+      stored[account] = secret
+    }
+    #expect(stored["connection:f1"] == "qc-pw")
+    #expect(stored["connection:k1"] == key)
+  }
+
+  /// The same for secrets fetched later (Keychain question declined at the first start).
+  @Test func aPasswordFetchedLaterLosesThePastedLineBreak() throws {
+    try makeSource()
+    try JSONStore.write(try JSJSON.parse("""
+      [{"id":"f1","kind":"ftp","name":"FTP","encryptedSecret":"\(ChromiumSafeStorage.encrypt("qc-pw\n", key: self.key))","host":"h","port":21,"username":"u"}]
+      """), to: source.connections)
+    _ = try ProfileMigration.run(ProfileMigration.plan(source: source), target: target, secretKey: nil) { _, _, _ in }
+    let pending = ProfileMigration.pendingSecrets(source: source, target: target)
+    #expect(pending.connections.keys.sorted() == ["f1"])
+    var stored: [String: String] = [:]
+    _ = try ProfileMigration.takeOverSecrets(pending, target: target, secretKey: self.key) { account, _, secret in stored[account] = secret }
+    #expect(stored["connection:f1"] == "qc-pw")
+  }
+
   @Test func runMovesSecretsAndKeepsEverythingElse() throws {
     try makeSource()
     let before = try snapshot(source.path)

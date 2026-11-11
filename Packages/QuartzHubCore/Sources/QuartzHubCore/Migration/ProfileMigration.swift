@@ -122,10 +122,10 @@ public enum ProfileMigration {
       throw .write(target.path)
     }
 
-    func secret(_ encrypted: String?, account: String, label: String, id: String) -> Bool {
+    func secret(_ encrypted: String?, account: String, label: String, id: String, as kept: (String) -> String = { $0 }) -> Bool {
       guard let encrypted, !encrypted.isEmpty else { return false }
       guard let secretKey, let plain = try? ChromiumSafeStorage.decrypt(base64: encrypted, key: secretKey),
-            (try? storeSecret(account, label, plain)) != nil
+            (try? storeSecret(account, label, kept(plain))) != nil
       else {
         report.secretsLost.append(id)
         return false
@@ -144,8 +144,9 @@ public enum ProfileMigration {
     if !newConnections.isEmpty {
       let moved: [StoredConnection] = newConnections.map { connection in
         var copy = connection
+        // As Connections.save keeps it (Review 2026-11-11 (2), nebenbei 8).
         let stored = secret(connection.encryptedSecret, account: "connection:\(connection.id)",
-                            label: "QuartzHub – \(connection.name)", id: connection.id)
+                            label: "QuartzHub – \(connection.name)", id: connection.id, as: connection.keptSecret)
         copy.encryptedSecret = nil
         if stored { copy.object["secretInKeychain"] = .bool(true) }
         return copy
@@ -237,9 +238,9 @@ public enum ProfileMigration {
     storeSecret: (_ account: String, _ label: String, _ secret: String) throws -> Void
   ) throws(Failure) -> Report {
     var report = Report()
-    func store(_ encrypted: String, account: String, label: String, id: String) -> Bool {
+    func store(_ encrypted: String, account: String, label: String, id: String, as kept: (String) -> String = { $0 }) -> Bool {
       guard let secretKey, let plain = try? ChromiumSafeStorage.decrypt(base64: encrypted, key: secretKey),
-            (try? storeSecret(account, label, plain)) != nil
+            (try? storeSecret(account, label, kept(plain))) != nil
       else {
         report.secretsLost.append(id)
         return false
@@ -250,8 +251,10 @@ public enum ProfileMigration {
     if !pending.connections.isEmpty, case .ok(let value) = JSONStore.peek(target.connections), var items = value.arrayValue {
       for index in items.indices {
         guard var object = items[index].objectValue, let id = object["id"]?.stringValue, let encrypted = pending.connections[id] else { continue }
-        let name = StoredConnection(object: object).name
-        if store(encrypted, account: "connection:\(id)", label: "QuartzHub – \(name)", id: id) {
+        let connection = StoredConnection(object: object)
+        // As Connections.save keeps it: QuartzControl stored a pasted line break at the end, and
+        // every FTP login then failed (Review 2026-11-11 (2), nebenbei 8).
+        if store(encrypted, account: "connection:\(id)", label: "QuartzHub – \(connection.name)", id: id, as: connection.keptSecret) {
           object["secretInKeychain"] = .bool(true)
           items[index] = .object(object)
         }
