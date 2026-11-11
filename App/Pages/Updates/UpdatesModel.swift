@@ -48,6 +48,8 @@ final class UpdatesModel {
   var notesDone: [ReleaseNotes.Section] = []
   /// After a run on a Quartz with `plugin doctor` (5.1): its check, read only.
   var doctorAfter: String?
+  /// The config's entries beside it, for which duplicates are intended.
+  var doctorPlugins: [PluginEntry] = []
   var pendingMigrations: [String] = []
   var markdownOrderProblem = false
 
@@ -123,7 +125,9 @@ final class UpdatesModel {
     let environment = await environment()
     let doctor = await PluginCommands.shared.doctor(project: path, fix: false, environment: environment)
     doctorAfter = doctor.output
+    doctorPlugins = []
     if let config = try? await ConfigFile.read(project: path, runtime: environment.runtime) {
+      doctorPlugins = config.plugins
       pendingMigrations = BuiltinProcessing.pendingMigrations(config.plugins).map { config.plugins[$0].name }
       markdownOrderProblem = BuiltinProcessing.markdownOrderProblem(config.plugins) != nil
     }

@@ -156,7 +156,7 @@ struct UpdatesPage: View {
   @ViewBuilder private func afterUpdate(_ doctor: String) -> some View {
     VStack(alignment: .leading, spacing: 6) {
       Text(L10n.t("updates.core.doctorHeading")).fontWeight(.medium)
-      let report = PluginDoctorReport.parse(doctor)
+      let report = PluginDoctorReport.parse(doctor).with(plugins: model.doctorPlugins)
       // Review 2026-11-11 (2), N2: "only warns" stood above Quartz's errors as well.
       Note(!report.ran ? L10n.t("updates.core.doctorFailed")
            : report.hasErrors ? L10n.t("updates.core.doctorErrors") : L10n.t("updates.core.doctorHint"))

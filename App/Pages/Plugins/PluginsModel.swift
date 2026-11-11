@@ -120,7 +120,7 @@ final class PluginsModel {
     let environment = await AppServices.current()
     let result = await PluginCommands.shared.doctor(project: project.path, fix: false, environment: environment)
     guard run == doctorRun else { return }
-    doctor = PluginDoctorReport.parse(result.output)
+    doctor = PluginDoctorReport.parse(result.output).with(plugins: config?.plugins ?? [])
     doctorOutput = result.output
   }
 

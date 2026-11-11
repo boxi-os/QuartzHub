@@ -26,10 +26,36 @@ public struct PluginDoctorReport: Equatable, Sendable {
   /// findings mean "could not check", not "nothing to say" (Review 2026-11-11 (2), N2: a crashed
   /// or timed-out run read like a clean one).
   public var ran: Bool
+  /// The sources of the config's entries by plugin name, in doctor's spelling (`formatSource`),
+  /// from `with(plugins:)`. Without them a duplicate of a QuartzHub plugin counts as intended
+  /// whatever its source.
+  public var sources: [String: Set<String>] = [:]
 
   public init(findings: [Finding], ran: Bool = true) {
     self.findings = findings
     self.ran = ran
+  }
+
+  /// The report knowing the config's sources, so "configured twice" is intended only while every
+  /// entry of the plugin has the same one (Review 2026-11-11 (2), N6: a fork or a local copy beside
+  /// QuartzHub's entry loads a second code under the name).
+  public func with(plugins: [PluginEntry]) -> PluginDoctorReport {
+    var copy = self
+    copy.sources = Dictionary(grouping: plugins.filter { Self.instancePlugins.contains($0.name) }, by: \.name)
+      .mapValues { Set($0.map { Self.formatSource($0.source) }) }
+    return copy
+  }
+
+  /// Quartz's `formatSource` (cli/plugin-data.js).
+  static func formatSource(_ source: JSONValue?) -> String {
+    switch source {
+    case .string(let text)?: return text
+    case .object(let object)?:
+      var parts = [JS.string(object["repo"])]
+      if let subdir = object["subdir"], JS.truthy(subdir) { parts.append("(subdir: \(JS.string(subdir)))") }
+      return parts.joined(separator: " ")
+    default: return JS.string(source)
+    }
   }
 
   public static func parse(_ output: String) -> PluginDoctorReport {
@@ -58,7 +84,7 @@ public struct PluginDoctorReport: Equatable, Sendable {
   /// An error that is not one of QuartzHub's intended duplicates: the next build may fail on it.
   public var hasErrors: Bool {
     findings.contains { finding in
-      finding.severity == .error && !Self.instancePlugins.contains { Self.matches(finding, $0) && Self.intended(finding, of: $0) }
+      finding.severity == .error && !Self.instancePlugins.contains { Self.matches(finding, $0) && intended(finding, of: $0) }
     }
   }
 
@@ -75,8 +101,11 @@ public struct PluginDoctorReport: Equatable, Sendable {
   /// loaded"). That finding stays, marked as intended (decided 2026-11-11).
   static let instancePlugins: Set<String> = ["quartz-navigations", "quartz-layout-box"]
 
-  private static func intended(_ finding: Finding, of name: String) -> Bool {
-    instancePlugins.contains(name) && finding.message.hasPrefix("configured twice")
+  private func intended(_ finding: Finding, of name: String) -> Bool {
+    guard Self.instancePlugins.contains(name), finding.message.hasPrefix("configured twice") else { return false }
+    guard let known = sources[name] else { return true }
+    let other = finding.message.firstMatch(of: #/^configured twice \(also as (.*)\) — /#).map { String($0.1) }
+    return known.count == 1 && known.first == other
   }
 
   /// The plugins whose "configured twice" is intended, by name, sorted: for the raw output after an update.
@@ -84,7 +113,7 @@ public struct PluginDoctorReport: Equatable, Sendable {
     Self.instancePlugins.filter { name in
       findings.contains { finding in
         guard let subject = finding.subject else { return false }
-        return (subject == name || subject.hasSuffix("/\(name)")) && Self.intended(finding, of: name)
+        return (subject == name || subject.hasSuffix("/\(name)")) && intended(finding, of: name)
       }
     }.sorted()
   }
@@ -96,7 +125,7 @@ public struct PluginDoctorReport: Equatable, Sendable {
     guard !name.isEmpty else { return [] }
     return findings.filter { Self.matches($0, name) }.map { finding in
       var marked = finding
-      marked.intended = Self.intended(finding, of: name)
+      marked.intended = intended(finding, of: name)
       return marked
     }
   }

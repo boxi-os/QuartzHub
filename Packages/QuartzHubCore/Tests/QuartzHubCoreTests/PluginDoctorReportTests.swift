@@ -28,9 +28,9 @@ import Testing
   @Test func intendedInstancesAreMarked() throws {
     let report = PluginDoctorReport.parse(String(decoding: try Posix.read(Self.fixture), as: UTF8.self))
     let boxes = report.findings(for: "quartz-layout-box")
-    #expect(boxes.count == 6 && boxes.allSatisfy(\.intended))
+    #expect(boxes.count == 6 && boxes.allSatisfy { $0.intended })
     let navigations = report.findings(for: "quartz-navigations")
-    #expect(navigations.count == 1 && navigations.allSatisfy(\.intended))
+    #expect(navigations.count == 1 && navigations.allSatisfy { $0.intended })
     let excalidraw = report.findings(for: "obsidian-plugin-excalidraw")
     #expect(excalidraw.count == 1 && excalidraw.first?.intended == false)
     #expect(report.findings(for: "crawl-links").allSatisfy { !$0.intended })
@@ -78,5 +78,24 @@ import Testing
     #expect(!PluginDoctorReport.parse(twice + warning).hasErrors)
     #expect(PluginDoctorReport.parse(twice + "✗ obsidian-plugin-excalidraw: configured twice (also as x) — both copies would be loaded\n").hasErrors)
     #expect(PluginDoctorReport.parse(twice + "✗ quartz.lock.json: is not valid JSON\n").hasErrors)
+  }
+
+  /// Review 2026-11-11 (2), N6: "configured twice" is intended only while every entry of the
+  /// plugin has the source doctor names; a fork beside QuartzHub's entry is a finding again.
+  @Test func intendedOnlyForOneSource() throws {
+    let report = PluginDoctorReport.parse(String(decoding: try Posix.read(Self.fixture), as: UTF8.self))
+    func entry(_ name: String, _ source: JSONValue) -> PluginEntry {
+      PluginEntry(object: JSONObject([("name", .string(name)), ("source", source)]))
+    }
+    let same = report.with(plugins: (0..<7).map { _ in entry("quartz-layout-box", .string("github:boxi-os/quartz-layout-box")) })
+    #expect(same.findings(for: "quartz-layout-box").allSatisfy { $0.intended })
+    #expect(same.intendedPlugins.contains("quartz-layout-box"))
+    let forked = report.with(plugins: [entry("quartz-layout-box", .string("github:boxi-os/quartz-layout-box")),
+                                       entry("quartz-layout-box", .string("github:someone/quartz-layout-box"))])
+    #expect(!forked.findings(for: "quartz-layout-box").contains { $0.intended })
+    #expect(!forked.intendedPlugins.contains("quartz-layout-box"))
+    #expect(forked.hasErrors)
+    // Quartz's spelling of an object source.
+    #expect(PluginDoctorReport.formatSource(.object(JSONObject([("repo", .string("github:a/b")), ("subdir", .string("x"))]))) == "github:a/b (subdir: x)")
   }
 }
