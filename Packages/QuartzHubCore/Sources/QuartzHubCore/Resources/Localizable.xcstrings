@@ -19558,6 +19558,23 @@
         }
       }
     },
+    "home.wizard.templateLoading" : {
+      "comment" : "Create project sheet: the basic template is being fetched; Erstellen waits for it",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basis-Template wird geladen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading the basic template …"
+          }
+        }
+      }
+    },
     "home.wizard.templateRetry" : {
       "comment" : "Create-project sheet: button that asks GitHub for the basic template again",
       "localizations" : {

@@ -22,7 +22,9 @@ struct CreateProjectSheet: View {
   @State private var builtin: BuiltinTemplate.Found?
   /// Asked and nothing came: QuartzHub ships no copy, so the wizard says so and can ask again.
   @State private var builtinMissing = false
-  @State private var builtinLoading = false
+  /// From the start: `.task` runs after the first frame, and "Erstellen" in between made a project
+  /// without the template and said nothing (Review 2026-11-11 (2), nebenbei 14).
+  @State private var builtinLoading = true
   @State private var useTemplate = true
   @State private var withContent = true
   @State private var busy = false
@@ -38,7 +40,7 @@ struct CreateProjectSheet: View {
     while base.hasSuffix("/") { base.removeLast() }
     return "\(base)/\(trimmedName)"
   }
-  private var canCreate: Bool { !busy && !target.isEmpty && !nameInvalid && (strategy == .new || !source.isEmpty) }
+  private var canCreate: Bool { !busy && !builtinLoading && !target.isEmpty && !nameInvalid && (strategy == .new || !source.isEmpty) }
   private var contentAllowed: Bool { ProjectCreation.contentAllowed(strategy) }
 
   var body: some View {
@@ -119,6 +121,15 @@ struct CreateProjectSheet: View {
                   .disabled(!contentAllowed)
               }
             }
+          }
+        } else if builtinLoading {
+          Section {
+            HStack(spacing: 6) {
+              ProgressView().controlSize(.small)
+              Text(L10n.t("home.wizard.templateLoading")).foregroundStyle(.secondary)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier("create.templateLoading")
           }
         } else if builtinMissing {
           Section {
