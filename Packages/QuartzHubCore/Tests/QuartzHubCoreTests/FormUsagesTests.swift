@@ -161,4 +161,26 @@ import Testing
       #expect(got.unbuilt?.rawValue == want.unbuilt, "\(want.file)")
     }
   }
+
+  /// Quartz 5.1 leaves drafts out by itself: the same page counts as unbuilt there without a
+  /// remove-draft entry, and not once `configuration.drafts.publish` is true or the old entry is off.
+  @Test func draftsFollowQuartz51sBuiltin() async throws {
+    let scratch = try HostPathTests.Scratch()
+    let project = scratch.path
+    try Self.write(project, [["content/entwurf.md", "---\ndraft: true\n---\n\n```quartz-form\nkontakt\n```\n"]])
+    func scan(_ config: String) async throws -> FormUsages.Unbuilt? {
+      try Posix.write("\(project)/quartz.config.yaml", Data(config.utf8))
+      let result = try await FormUsages.scan(project: project, codeBlockLang: "quartz-form", frontmatterKey: "form")
+      try #require(result.pages.count == 1)
+      return result.pages[0].unbuilt
+    }
+    let bare = "configuration:\n  pageTitle: x\nplugins: []\n"
+    // 5.0: only the plugin leaves drafts out.
+    #expect(try await scan(bare) == nil)
+    try Self.write(project, [["quartz/plugins/builtins/index.ts", ""]])
+    #expect(try await scan(bare) == .draft)
+    #expect(try await scan("configuration:\n  drafts:\n    publish: true\nplugins: []\n") == nil)
+    #expect(try await scan("configuration: {}\nplugins:\n  - source: github:quartz-community/remove-draft\n    enabled: false\n") == nil)
+    #expect(try await scan("configuration: {}\nplugins:\n  - source: github:quartz-community/remove-draft\n    enabled: true\n") == .draft)
+  }
 }

@@ -22,8 +22,9 @@ public enum FormUsages {
     public var title: String?
     public var forms: [String]
     public var hidesLayout: Bool
-    /// A filter that is on keeps the page off the site (`draft: true` with remove-draft, no
-    /// `publish: true` with explicit-publish). It still names the form, so it counts for a rename;
+    /// A filter that is on keeps the page off the site (`draft: true` with remove-draft or, since
+    /// Quartz 5.1, unless `configuration.drafts` publishes drafts; no `publish: true` with
+    /// explicit-publish). It still names the form, so it counts for a rename;
     /// the preview does not go there.
     public var unbuilt: Unbuilt?
   }
@@ -208,7 +209,11 @@ public enum FormUsages {
     if let config = try? await ConfigFile.read(project: project, runtime: runtime) {
       if case .array(let items)? = config.configuration["ignorePatterns"] { patterns = items.compactMap(\.stringValue) }
       let on = { (name: String) in config.plugins.contains { $0.enabled && $0.name == name } }
-      removeDraft = on("remove-draft")
+      // Since Quartz 5.1 drafts are left out by Quartz itself unless `configuration.drafts` says
+      // otherwise; a remove-draft entry still counts, as Quartz reads it (`BuiltinProcessing`).
+      removeDraft = QuartzFeatures.read(project: project).builtins
+        ? BuiltinProcessing.plan(configuration: config.configuration, plugins: config.plugins).removesDrafts
+        : on("remove-draft")
       explicitPublish = on("explicit-publish")
     }
     let listed: (files: [String], source: ContentIndexPage.ListSource)
