@@ -38,7 +38,10 @@ struct CoexistenceBand: View {
 
   private func check() {
     let running = !NSRunningApplication.runningApplications(withBundleIdentifier: Coexistence.quartzControlBundleID).isEmpty
-    let next = Coexistence.concerns(project: projectPath, quartzControlRunning: running, servers: Coexistence.foreignServers())
+    // QuartzControl's profile as the launch names it, like the takeover: a test run with
+    // `-QHMigrationSource ""` reads no real servers, a measurement can point at a scratch profile.
+    let servers = AppProfile.quartzControl.map { Coexistence.foreignServers(profile: $0) } ?? []
+    let next = Coexistence.concerns(project: projectPath, quartzControlRunning: running, servers: servers)
     if next != concerns {
       concerns = next
       // Appears without the user doing anything: said, not only shown (docs/conventions.md).

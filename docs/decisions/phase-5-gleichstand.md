@@ -2035,6 +2035,32 @@ Projektfenster öffnet. Ein Build danach: „Erfolgreich in 3,6s“, 127 Dateien
   Satz zeigt alles nach dem ersten Doppelpunkt, also „…gibt-es-nicht:npm error code E404“ mit dem
   zweiten Doppelpunkt roh.
 
+## Band „QuartzControl läuft“ an der App gemessen
+
+Am 2026-11-11, mit der Erlaubnis des Nutzers, QuartzControl zu starten. QuartzControl 1.3 lief mit
+`--user-data-dir` auf einem Scratch-Profil (Electron nimmt den Schalter als `userData`; das echte
+Profil blieb unberührt, `projects.json` und `running-servers.json` mit Stand 2026-11-06), darin nur
+eine Kopie des Vorlagen-Projekts. Die Projekt-ID muss eine UUID sein, sonst verweigert
+QuartzControl das Öffnen („project:open … Invalid UUID“); mein erster Versuch hatte das falsch.
+
+- **Behoben:** Das Band las den Dev-Server immer aus dem echten Profil von QuartzControl
+  (`Coexistence.foreignServers()` mit `.quartzControl`), auch in einem Test-Start mit
+  `-QHMigrationSource ""`. Es nimmt jetzt `AppProfile.quartzControl` wie die Übernahme und die
+  Zugänge: leer heißt keine Server, ein Ordner heißt dieses Profil.
+- **Gemessen:** QuartzControl startet den Dev-Server (`running-servers.json`: PID, Port 8080),
+  QuartzHub öffnet dasselbe Projekt mit `-QHMigrationSource` auf das Scratch-Profil: „QuartzControl
+  läuft gerade. Ändern beide Apps dasselbe Projekt, kann die eine überschreiben, was die andere
+  gespeichert hat. Für dieses Projekt läuft ein Dev-Server von QuartzControl auf Port 8080.
+  QuartzHub beendet ihn nicht.“ Mit einem neuen Start von QuartzControl kam die Ansage („QuartzControl
+  läuft gerade. …“), nach dessen Beenden verschwand das Band.
+- **Befund, offen:** Das Band sitzt als `safeAreaInset` über der Seite mit halbdurchsichtigem
+  Hintergrund und erscheint erst nach dem Laden; die erste Zeile der Übersicht („Alles ok: …“) liegt
+  darunter und scheint durch die zweite Zeile des Bands.
+- **QuartzControls Verhalten, nicht unseres:** Startet QuartzControl, während ein Server einer
+  früheren Sitzung läuft, fragt es („Von einer vorherigen Sitzung laufen noch Dev-Server …“) und
+  leert dabei `running-servers.json`; bis dahin zeigt QuartzHubs Band nur „QuartzControl läuft“, ohne
+  den Server. Eine zweite Instanz war mein Versehen (`open -n` während QuartzControl noch fragte).
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
