@@ -20,6 +20,9 @@ struct CoexistenceBand: View {
           if concerns.quartzControlRunning {
             Text(L10n.t("shell.coexistence.running"))
           }
+          if concerns.framesAtRisk {
+            Text(L10n.t("shell.coexistence.frames"))
+          }
           if let port = concerns.serverPort {
             Text(port.map { L10n.t("shell.coexistence.server", ["port": String($0)]) } ?? L10n.t("shell.coexistence.serverNoPort"))
           }
@@ -43,7 +46,8 @@ struct CoexistenceBand: View {
     // QuartzControl's profile as the launch names it, like the takeover: a test run with
     // `-QHMigrationSource ""` reads no real servers, a measurement can point at a scratch profile.
     let servers = AppProfile.quartzControl.map { Coexistence.foreignServers(profile: $0) } ?? []
-    let next = Coexistence.concerns(project: projectPath, quartzControlRunning: running, servers: servers)
+    let next = Coexistence.concerns(project: projectPath, quartzControlRunning: running, servers: servers,
+                                    hasAuthoredFrames: running && !LayoutFrames.listFrames(project: projectPath).isEmpty)
     if next != concerns {
       concerns = next
       // Appears without the user doing anything: said, not only shown (docs/conventions.md).

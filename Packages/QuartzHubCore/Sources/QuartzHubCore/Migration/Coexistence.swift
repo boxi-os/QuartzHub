@@ -58,20 +58,31 @@ extension Coexistence {
   /// What a project window says about QuartzControl: that it runs, and its dev server for this
   /// project if it has one. A server of another project is not this window's concern; the path is
   /// compared as the store compares it (`==`, both Unicode forms alike).
+  ///
+  /// While QuartzControl runs, a project with authored frames gets one more sentence: QuartzControl
+  /// 1.3 rewrites a frame's `package.json` without `quartz.category` before each build and leaves
+  /// QuartzHub's `dist/index.js`, and Quartz then skips every authored frame, on 5.0 without a
+  /// message (Review 2026-11-11 (2), M1). Decided (user, 2026-11-11): such a project is no longer
+  /// built with QuartzControl, said here, not worked around.
   public struct Concerns: Equatable, Sendable {
     public var quartzControlRunning: Bool
     public var serverPort: Int??
+    /// QuartzControl runs and the project has authored frames.
+    public var framesAtRisk: Bool
 
     public var isEmpty: Bool { !quartzControlRunning && serverPort == nil }
 
-    public init(quartzControlRunning: Bool, serverPort: Int??) {
+    public init(quartzControlRunning: Bool, serverPort: Int??, framesAtRisk: Bool = false) {
       self.quartzControlRunning = quartzControlRunning
       self.serverPort = serverPort
+      self.framesAtRisk = framesAtRisk
     }
   }
 
-  public static func concerns(project path: String, quartzControlRunning: Bool, servers: [ForeignServer]) -> Concerns {
+  public static func concerns(project path: String, quartzControlRunning: Bool, servers: [ForeignServer],
+                              hasAuthoredFrames: Bool = false) -> Concerns {
     let server = servers.first { $0.projectPath == path }
-    return Concerns(quartzControlRunning: quartzControlRunning, serverPort: server.map { $0.port })
+    return Concerns(quartzControlRunning: quartzControlRunning, serverPort: server.map { $0.port },
+                    framesAtRisk: quartzControlRunning && hasAuthoredFrames)
   }
 }

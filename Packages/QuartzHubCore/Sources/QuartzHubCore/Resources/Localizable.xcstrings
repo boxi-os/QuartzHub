@@ -43552,6 +43552,23 @@
         }
       }
     },
+    "shell.coexistence.frames" : {
+      "comment" : "Band in a project window while QuartzControl runs and the project has authored frames",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Projekt hat eigene Frames. Baut QuartzControl es, fehlen sie auf der Website; baue und veröffentliche es mit QuartzHub."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This project has custom frames. If QuartzControl builds it, they are missing from the site; build and publish it with QuartzHub."
+          }
+        }
+      }
+    },
     "shell.coexistence.running" : {
       "comment" : "Band in a project window while QuartzControl runs",
       "localizations" : {

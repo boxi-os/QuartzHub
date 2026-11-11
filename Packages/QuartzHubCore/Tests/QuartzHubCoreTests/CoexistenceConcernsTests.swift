@@ -16,4 +16,14 @@ import Testing
     let unknownPort = Coexistence.concerns(project: "/p/Andere", quartzControlRunning: true, servers: servers)
     #expect(unknownPort.serverPort == .some(nil) && unknownPort.quartzControlRunning)
   }
+
+  /// Review 2026-11-11 (2), M1: the frames sentence only while QuartzControl runs.
+  @Test func framesOnlyWhileQuartzControlRuns() {
+    let running = Coexistence.concerns(project: "/p/Dritte", quartzControlRunning: true, servers: servers, hasAuthoredFrames: true)
+    #expect(running.framesAtRisk && !running.isEmpty)
+    let quit = Coexistence.concerns(project: "/p/Dritte", quartzControlRunning: false, servers: servers, hasAuthoredFrames: true)
+    #expect(!quit.framesAtRisk && quit.isEmpty)
+    let noFrames = Coexistence.concerns(project: "/p/Dritte", quartzControlRunning: true, servers: servers)
+    #expect(!noFrames.framesAtRisk)
+  }
 }

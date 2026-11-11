@@ -2602,6 +2602,11 @@ nach `npx quartz upgrade` nur).
   Gemessen dazu: QuartzControl überschreibt beim Speichern eines Frames `package.json`, lässt aber
   `dist/index.js` liegen, und damit allein ist `plugin doctor` zufrieden. Ein Projekt, das
   QuartzHub angefasst hat, bricht in QuartzControl also nicht. Die READMEs dort sagen es.
+  **Korrigiert (zweites Review, M1):** doctor ist zufrieden, der Build nicht. Mit `index.js` und
+  QuartzControls `package.json` überspringt Quartz jeden eigenen Frame („its category could not
+  be determined“ auf 5.1, ohne Meldung auf 5.0), und die Website kommt im Standard-Frame.
+  Entschieden (Nutzer, 2026-11-11): Ein Projekt mit eigenen Frames wird nach QuartzHub nicht mehr
+  mit QuartzControl gebaut; das Koexistenz-Band sagt es, solange QuartzControl läuft.
 - **Die Grundvorlage qc-basic für 5.1** (`scripts/template-quartz51.mjs`, einmal gelaufen): ohne
   crawl-links, remove-draft, content-index (ihre Optionen waren 5.1s Vorgaben) und das
   abgeschaltete hard-line-breaks; GFM 30 vor OFM 40; OFM ohne `parseArrows`, das 2.x nicht kennt;
