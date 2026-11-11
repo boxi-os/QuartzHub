@@ -9,7 +9,7 @@ enum AppDeploy {
   /// one store in memory for the process: a secret saved there is gone when the app quits.
   static let secrets: any SecretStore = {
     #if DEBUG
-    if UserDefaults.standard.bool(forKey: "QHMemorySecrets") { return MemorySecrets() }
+    if LaunchArgument.flag("QHMemorySecrets") { return MemorySecrets() }
     #endif
     return KeychainSecrets()
   }()
@@ -33,7 +33,7 @@ enum AppDeploy {
   /// exported without what its pages load from outside, as `qh-check export-document` does.
   static var offline: Bool {
     #if DEBUG
-    return UserDefaults.standard.bool(forKey: "QHNoUpdateCheck")
+    return LaunchArgument.flag("QHNoUpdateCheck")
     #else
     return false
     #endif

@@ -90,7 +90,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     #if DEBUG
     // For the UI test of these questions: a dev server of the project at that path, started as
     // the server page will start it.
-    if let path = UserDefaults.standard.string(forKey: "QHStartServerFor"),
+    if let path = LaunchArgument.string("QHStartServerFor"),
        let entry = try? ProjectStore(profile: AppProfile.own).add(path: path) {
       Task { _ = await AppServices.shared.builds.startServer(projectId: entry.id, project: path) }
     }

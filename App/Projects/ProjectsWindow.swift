@@ -201,7 +201,7 @@ struct ProjectsWindow: View {
   /// For the UI test: the project at this path, added to the (scratch) profile and opened.
   private func openFromLaunchArgument() {
     #if DEBUG
-    guard let path = UserDefaults.standard.string(forKey: "QHOpenProject") else { return }
+    guard let path = LaunchArgument.string("QHOpenProject") else { return }
     Task {
       guard let entry = try? await model.list.add(path: Posix.onDisk(path)) else { return }
       await model.reload()

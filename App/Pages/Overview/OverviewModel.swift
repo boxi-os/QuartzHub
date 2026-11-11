@@ -37,7 +37,7 @@ final class OverviewModel {
   /// check is skipped and the section says "Nicht prüfbar".
   private var updateCheckOff: Bool {
     #if DEBUG
-    UserDefaults.standard.bool(forKey: "QHNoUpdateCheck")
+    LaunchArgument.flag("QHNoUpdateCheck")
     #else
     false
     #endif

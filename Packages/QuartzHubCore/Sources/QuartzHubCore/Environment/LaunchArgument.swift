@@ -10,4 +10,10 @@ public enum LaunchArgument {
     guard let index = arguments.firstIndex(of: "-\(name)"), index + 1 < arguments.count else { return nil }
     return arguments[index + 1]
   }
+
+  /// A switch given as `-<name> YES` (as UserDefaults read it: YES, true or 1).
+  public static func flag(_ name: String, arguments: [String] = ProcessInfo.processInfo.arguments) -> Bool {
+    guard let value = string(name, arguments: arguments)?.lowercased() else { return false }
+    return value == "yes" || value == "true" || value == "1"
+  }
 }

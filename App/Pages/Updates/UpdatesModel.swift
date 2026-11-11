@@ -76,7 +76,7 @@ final class UpdatesModel {
   private func environment() async -> ToolEnvironment {
     var environment = await AppServices.shared.environment.value
     #if DEBUG
-    if UserDefaults.standard.bool(forKey: "QHNoUpdateCheck") { environment.base["GIT_ALLOW_PROTOCOL"] = "file" }
+    if LaunchArgument.flag("QHNoUpdateCheck") { environment.base["GIT_ALLOW_PROTOCOL"] = "file" }
     #endif
     return environment
   }

@@ -173,7 +173,7 @@ final class PluginsModel {
   /// `git ls-remote` per lockfile entry: slow or failing, it must not hold up the list.
   func checkOutdated() async {
     #if DEBUG
-    if UserDefaults.standard.bool(forKey: "QHNoUpdateCheck") { return }
+    if LaunchArgument.flag("QHNoUpdateCheck") { return }
     #endif
     let environment = await AppServices.current()
     let updater = CoreUpdate(environment: environment, snapshot: SnapshotStore.live(environment: environment).take)
