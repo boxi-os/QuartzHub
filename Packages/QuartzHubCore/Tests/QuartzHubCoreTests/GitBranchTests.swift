@@ -211,6 +211,69 @@ import Testing
     #expect(published.stdout == "x true")
   }
 
+  /// The domain GitHub committed as CNAME stays on the branch through the next deploy, so GitHub
+  /// keeps the domain; a CNAME the build brings wins, and another provider gets nothing added
+  /// (measured 2026-11-11: without it a deploy dropped the domain).
+  @Test func aPagesDomainOnTheBranchSurvivesTheDeploy() async throws {
+    let root = TemplatePackageTests.realpath(TestFolder.make("qh-git-branch-cname"))
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let environment = ToolEnvironment(base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_CONFIG_NOSYSTEM": "1",
+                                             "GIT_CONFIG_GLOBAL": "/dev/null", "GIT_AUTHOR_NAME": "T", "GIT_AUTHOR_EMAIL": "t@example.org",
+                                             "GIT_COMMITTER_NAME": "T", "GIT_COMMITTER_EMAIL": "t@example.org"],
+                                      hostPath: HostPath(entries: ["/usr/bin", "/bin"], source: .inherited, added: []),
+                                      nodeMode: .system, runtime: .repository, git: nil, bundledGitFailure: nil)
+    let project = "\(root)/p", origin = "\(root)/origin.git", github = "\(root)/github", build = "\(root)/build"
+    func git(_ args: [String], _ dir: String = "") async -> CommandResult {
+      await ProcessRunner.run(environment.command("git", args, in: dir.isEmpty ? root : dir))
+    }
+    try Posix.mkdirs(build)
+    try Posix.write("\(build)/index.html", Data("eins".utf8))
+    for args in [["init", "-q", "--bare", origin], ["init", "-q", project], ["-C", project, "remote", "add", "origin", origin],
+                 ["-C", project, "commit", "-q", "--allow-empty", "-m", "x"]] {
+      #expect(await git(args).success)
+    }
+    func target(_ provider: String) -> PublishTarget {
+      PublishTarget(object: JSONObject([("id", .string("t-\(provider)")), ("name", .string("T")),
+                                        ("destination", .object(JSONObject([("type", .string("git-branch")), ("provider", .string(provider)),
+                                                                            ("branch", .string("gh-pages"))])))]))
+    }
+    let adapter = GitBranchAdapter(environment: environment, token: { nil })
+    let context = DeployContext(project: project, target: target("github"), buildDir: build)
+    func published(_ path: String) async -> String? {
+      let shown = await git(["--git-dir", origin, "show", "gh-pages:\(path)"])
+      return shown.success ? shown.stdout : nil
+    }
+    #expect(try await adapter.run(context, excluding: []).success)
+
+    // What GitHub does when the domain is set: a commit adding CNAME on top of the deploy.
+    for args in [["clone", "-q", "--branch", "gh-pages", origin, github]] { #expect(await git(args).success) }
+    try Posix.write("\(github)/CNAME", Data("gh-test.example.org".utf8))
+    for args in [["add", "CNAME"], ["commit", "-q", "-m", "Create CNAME"], ["push", "-q", "origin", "gh-pages"]] {
+      #expect(await git(args, github).success)
+    }
+
+    // Unchanged build: nothing to publish, not "CNAME removed".
+    #expect(try await adapter.preview(context).isEmpty)
+    let unchanged = try await adapter.run(context, excluding: [])
+    #expect(unchanged.success && unchanged.output.contains(L10n.t("main.branchUnchanged")), "\(unchanged.output)")
+
+    try Posix.write("\(build)/index.html", Data("zwei".utf8))
+    #expect(try await adapter.preview(context).map(\.path) == ["index.html"])
+    #expect(try await adapter.run(context, excluding: []).success)
+    #expect(await published("CNAME") == "gh-test.example.org")
+    #expect(await published("index.html") == "zwei")
+
+    // The build's own CNAME wins.
+    try Posix.write("\(build)/CNAME", Data("own.example.org\n".utf8))
+    #expect(try await adapter.run(context, excluding: []).success)
+    #expect(await published("CNAME") == "own.example.org\n")
+
+    // Codeberg knows no CNAME file: nothing is carried for it.
+    try FileManager.default.removeItem(atPath: "\(build)/CNAME")
+    #expect(try await adapter.run(DeployContext(project: project, target: target("codeberg"), buildDir: build), excluding: []).success)
+    #expect(await published("CNAME") == nil)
+  }
+
   @Test func readsNameStatusAsQuartzControl() {
     let raw = "M\0ä.html\0A\0neu ö.html\0D\0alt\0T\0link\0R100\0a\0b\0\0\0X\0y\0"
     #expect(GitBranchAdapter.parseNameStatus(raw) == [

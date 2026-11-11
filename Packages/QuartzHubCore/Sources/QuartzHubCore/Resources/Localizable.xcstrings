@@ -39306,13 +39306,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Domain wird bei GitHub gespeichert, nicht im Branch, und überlebt damit jedes Deploy, das den Branch ersetzt. HTTPS kann erst erzwungen werden, wenn GitHub das Zertifikat ausgestellt hat, einige Minuten nach dem Setzen der Domain."
+            "value" : "GitHub legt die Domain als Datei „CNAME“ in den Branch, und QuartzHub behält sie bei jedem Deploy. HTTPS lässt sich erst erzwingen, wenn GitHub das Zertifikat ausgestellt hat, einige Minuten nach dem Setzen der Domain."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The domain is stored by GitHub, not in the branch, so it survives every deploy that replaces the branch. HTTPS can only be enforced once GitHub has issued the certificate, a few minutes after setting the domain."
+            "value" : "GitHub keeps the domain as a file “CNAME” on the branch, and QuartzHub keeps it on every deploy. HTTPS can only be enforced once GitHub has issued the certificate, a few minutes after setting the domain."
           }
         }
       }

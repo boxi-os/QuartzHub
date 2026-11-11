@@ -4,8 +4,8 @@ import SwiftUI
 
 /// QuartzControl's `GithubPages.tsx`, the other half of a branch deploy: which branch Pages reads,
 /// under which domain, and whether HTTPS is enforced live in the repository's settings, so without
-/// this the first deploy succeeds and the site stays 404. A domain set through the API is stored by
-/// GitHub and survives the branch being replaced; a CNAME file on the branch does not.
+/// this the first deploy succeeds and the site stays 404. GitHub keeps the domain as a CNAME file on
+/// the branch, which the branch deploy carries over (`GitBranchAdapter.keepPagesDomain`).
 struct GitHubPagesSection: View {
   let project: String
   let branch: String

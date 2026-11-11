@@ -104,6 +104,7 @@ public struct GitBranchAdapter: DeployAdapter {
     for entry in Posix.entries(context.buildDir) ?? [] {
       try TreeCopy.copy(from: "\(context.buildDir)/\(entry.name)", to: "\(worktree)/\(entry.name)", verbatimSymlinks: false)
     }
+    try await keepPagesDomain(context, remoteTip: remoteTip, worktree: worktree)
 
     // --force: whatever ignore rules there are (the worktree shares .git/info/exclude, and
     // core.excludesFile is global) must not drop a file from the live site.
@@ -114,6 +115,19 @@ public struct GitBranchAdapter: DeployAdapter {
     output += treeText
     if !tree.success { throw GitError(description: output) }
     return Staged(tree: JS.trim(tree.stdout), remoteTip: remoteTip, output: output)
+  }
+
+  /// GitHub keeps a custom domain of a branch site as a file: setting it (here or in GitHub's
+  /// settings) commits "Create CNAME" onto the branch, and a deploy that replaces the branch
+  /// without it drops the domain (measured 2026-11-11 against a test repository: the card showed
+  /// github.io again, pages under the domain answered 404). QuartzControl assumed a domain set
+  /// through the API survived; it does not. So the published CNAME is carried into each deploy
+  /// unless the build brings its own.
+  func keepPagesDomain(_ context: DeployContext, remoteTip: String, worktree: String) async throws {
+    guard !remoteTip.isEmpty, context.destination["provider"] == .string("github"),
+          Posix.kind("\(worktree)/CNAME") == nil else { return }
+    let (published, _) = await git(["cat-file", "blob", "\(remoteTip):CNAME"], in: context.project)
+    if published.success { try Posix.write("\(worktree)/CNAME", Data(published.stdout.utf8)) }
   }
 
   func assertOrigin(_ project: String) async throws {

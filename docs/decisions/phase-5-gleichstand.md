@@ -1959,7 +1959,19 @@ Nutzer trug das Token selbst ein.
   Kommentar in `GitHubPagesSection.swift` übernimmt den Satz. Folge für Nutzer beider Apps: Wer eine
   Domain setzt, verliert sie beim nächsten Deploy, und sein DNS-Eintrag zeigt dann auf GitHub, ohne
   dass eine Seite die Domain beansprucht (übernehmbar, solange die Domain nicht bei GitHub
-  verifiziert ist). Nicht behoben; der Nutzer entscheidet.
+  verifiziert ist).
+- **Behoben:** `GitBranchAdapter.keepPagesDomain` legt beim Anbieter GitHub die `CNAME` des
+  veröffentlichten Stands in den Baum, wenn der Build keine mitbringt; eine eigene des Builds
+  gewinnt, Codeberg bekommt nichts. Gemessen am Test-Repo, Domain diesmal ohne DNS-Eintrag (nichts
+  zu übernehmen): GitHub legt wieder „Create CNAME“ an; mit geändertem Build zeigt der Diff nur
+  `index.html`, der Deploy-Commit enthält `CNAME`, und nach GitHubs Bau zeigt „Status neu laden“
+  weiter `https://gh-test.borkel.net/` mit HTTPS. Domain in QuartzHub entfernt: GitHub legt selbst
+  „Delete CNAME“ an, der nächste Deploy meldet „Keine Änderungen gegenüber dem veröffentlichten
+  Stand, Push übersprungen.“; die alte Domain kommt nicht zurück. Im Kern
+  `aPagesDomainOnTheBranchSurvivesTheDeploy` (GitHubs Commit nachgestellt am lokalen Bare-Repo);
+  ohne die Übernahme drei rote Erwartungen (Vorschau meldet `CNAME` entfernt, ein unveränderter
+  Build wird gepusht, die Datei ist weg). Der Hinweis unter der Domain sagt es jetzt so. In
+  QuartzControl nicht behoben; ob der Fix auf `fix/1.3.x` kommt, entscheidet der Nutzer.
 
 Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), der Token-Zustand „unbekannt“
 (GitHub nicht erreichbar).
