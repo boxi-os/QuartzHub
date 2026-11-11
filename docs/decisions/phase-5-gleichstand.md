@@ -1973,8 +1973,13 @@ Nutzer trug das Token selbst ein.
   Build wird gepusht, die Datei ist weg). Der Hinweis unter der Domain sagt es jetzt so. In
   QuartzControl nicht behoben; ob der Fix auf `fix/1.3.x` kommt, entscheidet der Nutzer.
 
-Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), der Token-Zustand „unbekannt“
-(GitHub nicht erreichbar).
+- **Token ohne Netz** (danach, mit einem erfundenen Token und WLAN aus, der einzigen Verbindung;
+  ein Wächter drückte „Speichern & prüfen“, sobald `api.github.com` nicht mehr antwortete, und
+  „Erneut prüfen“, sobald es wieder antwortete): „Nicht prüfbar“ mit „GitHub war nicht erreichbar.
+  Ob der Token gilt, ist damit offen.“, das Token blieb gespeichert; danach „Abgelehnt“. Der erste
+  Versuch ohne Wächter kam zu früh: Als der Nutzer „WLAN ist aus“ schrieb, antwortete GitHub noch.
+
+Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor).
 
 ## Echte Updates an einer Kopie von gui-test gemessen
 

@@ -39,10 +39,10 @@ gezählt, zuletzt am 2026-11-11 nach Branch-Deploy und Webhook ohne Netz.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 186 | 8 | 17 | 1 | 4 | 216 |
+| Einrichtung | 187 | 8 | 17 | 0 | 4 | 216 |
 | Plugins und Wartung | 245 | 10 | 4 | 2 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 227 | 7 | 9 | 0 | 0 | 243 |
-| **Summe** | **658** | **25** | **30** | **3** | **4** | **720** |
+| **Summe** | **659** | **25** | **30** | **2** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
