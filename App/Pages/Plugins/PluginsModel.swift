@@ -71,6 +71,11 @@ final class PluginsModel {
   private(set) var savedIndex: Int?
   private(set) var maintenance: Maintenance?
   private(set) var maintenanceNotice: String?
+  /// What the project's Quartz can do; 5.1 brings the built-ins and `plugin doctor`.
+  private(set) var features = QuartzFeatures()
+  /// Quartz's own check (`plugin doctor`, 5.1), read after every reload; nil before and on 5.0.
+  private(set) var doctor: PluginDoctorReport?
+  private var doctorRun = 0
 
   private var writes: Task<Void, Never>?
   private var removing = false
@@ -96,6 +101,38 @@ final class PluginsModel {
     } catch {
       loadError = ConfigModel.message(error)
     }
+    let path = project.path
+    features = await Task.detached { QuartzFeatures.read(project: path) }.value
+    Task { await checkDoctor() }
+  }
+
+  /// `quartz plugin doctor` without --fix: it only reads (some 0.7 s on gui-test). Only the last
+  /// of several runs started in a row is kept.
+  func checkDoctor() async {
+    guard features.builtins else {
+      doctor = nil
+      return
+    }
+    doctorRun += 1
+    let run = doctorRun
+    let environment = await AppServices.current()
+    let result = await PluginCommands.shared.doctor(project: project.path, fix: false, environment: environment)
+    guard run == doctorRun else { return }
+    doctor = PluginDoctorReport.parse(result.output)
+  }
+
+  func findings(_ item: IndexedPlugin) -> [PluginDoctorReport.Finding] {
+    item.frame != nil ? [] : doctor?.findings(for: item.entry.name) ?? []
+  }
+
+  /// The built-in that has taken over this entry's job, on a project whose Quartz has them.
+  func builtin(_ item: IndexedPlugin) -> BuiltinProcessing.Builtin? {
+    features.builtins ? BuiltinProcessing.absorbing(item.entry) : nil
+  }
+
+  var pendingMigrations: [String] {
+    guard features.builtins, let plugins = config?.plugins else { return [] }
+    return BuiltinProcessing.pendingMigrations(plugins).map { plugins[$0].name }
   }
 
   func reloadFrames() {

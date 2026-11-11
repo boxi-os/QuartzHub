@@ -13,6 +13,8 @@ struct BuiltinMigration: View {
   let pending: [String]
   /// The page holds edits of the same file: they would be lost under Quartz's write.
   var blockedByEdits = false
+  /// On the Konfiguration page the settings move "here"; elsewhere they move to the configuration.
+  var onConfigPage = false
   /// After a run that wrote: the page reads the file again.
   let done: () async -> Void
 
@@ -25,7 +27,8 @@ struct BuiltinMigration: View {
     if !pending.isEmpty || output != nil {
       VStack(alignment: .leading, spacing: 6) {
         if !pending.isEmpty {
-          Text(L10n.t("builtins.pending", ["names": pending.joined(separator: ", ")]))
+          Text(onConfigPage ? L10n.t("builtins.pending", ["names": pending.joined(separator: ", ")])
+               : L10n.t("builtins.pendingElsewhere", ["names": pending.joined(separator: ", ")]))
             .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
           HStack {
             Button(running ? L10n.t("builtins.migrateRunning") : L10n.t("builtins.migrate")) {

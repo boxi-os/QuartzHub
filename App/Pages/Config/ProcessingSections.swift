@@ -15,7 +15,7 @@ struct ProcessingSections: View {
     if let plan = model.builtins {
       Section {
         Note(L10n.t("builtins.description"))
-        BuiltinMigration(project: project, pending: model.pendingMigrations, blockedByEdits: model.dirty) {
+        BuiltinMigration(project: project, pending: model.pendingMigrations, blockedByEdits: model.dirty, onConfigPage: true) {
           _ = try? await model.reread()
         }
       } header: {

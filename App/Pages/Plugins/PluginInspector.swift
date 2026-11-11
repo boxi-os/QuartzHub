@@ -11,6 +11,7 @@ struct PluginInspector: View {
   let item: IndexedPlugin
   @Bindable var model: PluginsModel
   @Environment(\.openLayout) private var openLayout
+  @Environment(\.openPage) private var openPage
   @Environment(\.openURL) private var openURL
 
   /// One choice for every plugin: whoever opens it wants to see placements.
@@ -51,6 +52,35 @@ struct PluginInspector: View {
         }))
         .disabled(busy)
         .accessibilityIdentifier("plugins.inspector.enabled")
+      }
+
+      if model.builtin(item) != nil {
+        Section {
+          Note(L10n.t("pluginsInstalled.builtinInspector"))
+          Button(L10n.t("pluginsInstalled.builtinOpenConfig")) { openPage(.config) }
+          BuiltinMigration(project: model.project, pending: model.pendingMigrations, blockedByEdits: busy) { await model.reload() }
+        } header: {
+          Text(L10n.t("pluginsInstalled.builtinBadge"))
+        }
+      }
+
+      let findings = model.findings(item)
+      if !findings.isEmpty {
+        Section {
+          ForEach(Array(findings.enumerated()), id: \.offset) { _, finding in
+            VStack(alignment: .leading, spacing: 2) {
+              Label(finding.message, systemImage: finding.severity == .error ? "xmark.octagon.fill" : "exclamationmark.triangle.fill")
+                .foregroundStyle(finding.severity == .error ? .red : .orange)
+                .textSelection(.enabled)
+              if let hint = finding.hint { Text(verbatim: hint).font(.caption).foregroundStyle(.secondary).textSelection(.enabled) }
+            }
+          }
+        } header: {
+          Text(L10n.t("pluginsInstalled.doctorHeading"))
+        } footer: {
+          Text(L10n.t("pluginsInstalled.doctorFooter")).font(.caption).foregroundStyle(.secondary)
+        }
+        .accessibilityIdentifier("plugins.inspector.doctor")
       }
 
       if item.frame != nil {

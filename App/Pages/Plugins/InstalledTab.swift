@@ -252,6 +252,7 @@ struct InstalledTab: View {
     let up = movable && position! > 0
     let down = movable && position! < (group?.items.count ?? 0) - 1
     return PluginRow(item: item, saved: model.savedIndex == item.index, outdated: model.outdated.contains(item.entry.name),
+                     builtin: model.builtin(item) != nil, findings: model.findings(item),
                      busy: model.busy || model.maintenance != nil) {
       Task { await model.toggleEnabled(item.index) }
     }
@@ -279,6 +280,7 @@ struct InstalledTab: View {
 
   private var maintenance: some View {
     Section {
+      BuiltinMigration(project: model.project, pending: model.pendingMigrations, blockedByEdits: model.busy) { await model.reload() }
       explanation(L10n.t("pluginsInstalled.maintenanceDescription"))
       HStack {
         Button(model.maintenance == .install ? L10n.t("pluginsInstalled.installFromLockRunning") : L10n.t("pluginsInstalled.installFromLock")) {
@@ -305,6 +307,10 @@ private struct PluginRow: View {
   let item: IndexedPlugin
   let saved: Bool
   let outdated: Bool
+  /// Quartz 5.1 does this itself (crawl-links, remove-draft, content-index).
+  let builtin: Bool
+  /// What `plugin doctor` says about it.
+  let findings: [PluginDoctorReport.Finding]
   let busy: Bool
   let toggle: () -> Void
 
@@ -321,12 +327,18 @@ private struct PluginRow: View {
           Text(item.displayName).fontWeight(.medium)
           if item.frame != nil { WordBadge(text: L10n.t("pluginsInstalled.frameBadge")) }
           if outdated { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable"), tint: .orange) }
+          if builtin { WordBadge(text: L10n.t("pluginsInstalled.builtinBadge")) }
+          if findings.contains(where: { $0.severity == .error }) {
+            WordBadge(text: L10n.t("pluginsInstalled.doctorError"), tint: .red).help(findings.map(\.message).joined(separator: "\n"))
+          } else if !findings.isEmpty {
+            WordBadge(text: L10n.t("pluginsInstalled.doctorWarning"), tint: .orange).help(findings.map(\.message).joined(separator: "\n"))
+          }
           if saved { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
         }
         Text(item.frame != nil ? L10n.t("pluginsInstalled.frameSource") : item.sourceLabel)
           .font(.caption).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle)
           .help(item.sourceLabel)
-        if let description = item.description {
+        if let description = builtin ? L10n.t("pluginsInstalled.builtinDescription") : item.description {
           Text(description).font(.caption).foregroundStyle(.secondary).lineLimit(1).help(description)
         }
         if let summary { Text(verbatim: summary).font(.system(.caption2, design: .monospaced)).foregroundStyle(.secondary) }

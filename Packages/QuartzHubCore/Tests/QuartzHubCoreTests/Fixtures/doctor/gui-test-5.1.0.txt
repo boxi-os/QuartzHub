@@ -1,0 +1,41 @@
+Checking plugins (Quartz 5.1.0 (93e08d6-dirty))...
+
+⚠ crawl-links: is built into Quartz now (configuration.links); this entry is applied automatically
+    → Run 'npx quartz plugin doctor --fix' to update quartz.config.yaml (comments are kept).
+⚠ remove-draft: is built into Quartz now (configuration.drafts); this entry is applied automatically
+    → Run 'npx quartz plugin doctor --fix' to update quartz.config.yaml (comments are kept).
+⚠ content-index: is built into Quartz now (configuration.contentIndex); this entry is applied automatically
+    → Run 'npx quartz plugin doctor --fix' to update quartz.config.yaml (comments are kept).
+⚠ note-properties: frontmatter options (delimiters, language) belong in configuration.frontmatter now
+    → Run 'npx quartz plugin doctor --fix' to update quartz.config.yaml (comments are kept).
+⚠ @quartz-community/hard-line-breaks is deprecated: Line breaks are handled by ObsidianFlavoredMarkdown 2.0+: a single line break renders as <br> by default (preset: legacy), as in Obsidian; set its strictLineBreaks option to true for spaces. Keep this plugin only if your site doesn't use ObsidianFlavoredMarkdown.
+    → Remove it when you have switched: npx quartz plugin remove @quartz-community/hard-line-breaks
+✗ frame-1787519243386: has no built entry point (dist/ missing)
+    → Run 'npx quartz plugin install frame-1787519243386' to build it.
+✗ frame-drawing: has no built entry point (dist/ missing)
+    → Run 'npx quartz plugin install frame-drawing' to build it.
+✗ frame-editorial: has no built entry point (dist/ missing)
+    → Run 'npx quartz plugin install frame-editorial' to build it.
+✗ frame-focus: has no built entry point (dist/ missing)
+    → Run 'npx quartz plugin install frame-focus' to build it.
+✗ frame-index: has no built entry point (dist/ missing)
+    → Run 'npx quartz plugin install frame-index' to build it.
+✗ obsidian-plugin-excalidraw: configured twice (also as github:quartz-community/obsidian-plugin-excalidraw) — both copies would be loaded
+    → Remove one of the entries.
+✗ quartz-layout-box: configured twice (also as github:boxi-os/quartz-layout-box) — both copies would be loaded
+    → Remove one of the entries.
+✗ quartz-layout-box: configured twice (also as github:boxi-os/quartz-layout-box) — both copies would be loaded
+    → Remove one of the entries.
+✗ quartz-layout-box: configured twice (also as github:boxi-os/quartz-layout-box) — both copies would be loaded
+    → Remove one of the entries.
+✗ quartz-layout-box: configured twice (also as github:boxi-os/quartz-layout-box) — both copies would be loaded
+    → Remove one of the entries.
+✗ quartz-layout-box: configured twice (also as github:boxi-os/quartz-layout-box) — both copies would be loaded
+    → Remove one of the entries.
+✗ quartz-layout-box: configured twice (also as github:boxi-os/quartz-layout-box) — both copies would be loaded
+    → Remove one of the entries.
+✗ quartz-navigations: configured twice (also as github:boxi-os/quartz-navigations) — both copies would be loaded
+    → Remove one of the entries.
+
+13 error(s), 5 warning(s) in 61 configured plugin(s)
+Run with --verbose for informational notes.

@@ -3137,6 +3137,23 @@
         }
       }
     },
+    "builtins.pendingElsewhere" : {
+      "comment" : "Plugins ▸ Installiert, Wartung and inspector, Quartz 5.1: old entries still there",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Teil der Verarbeitung steht noch als Plugin-Eintrag ({{names}}). Quartz liest ihn weiter; „Konfiguration umstellen“ schreibt ihn in die Konfiguration."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Part of the processing is still a plugin entry ({{names}}). Quartz keeps reading it; “Move settings” writes it into the configuration."
+          }
+        }
+      }
+    },
     "builtins.replacedBy" : {
       "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): a plugin provides the same",
       "localizations" : {
@@ -36195,6 +36212,74 @@
         }
       }
     },
+    "pluginsInstalled.builtinBadge" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: badge and inspector heading of crawl-links, remove-draft, content-index",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Quartz eingebaut"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Built into Quartz"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.builtinDescription" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: row text of an absorbed entry",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erledigt Quartz seit 5.1 selbst; eingestellt wird es unter Konfiguration ▸ Verarbeitung."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz does this itself since 5.1; it is set up under Configuration ▸ Processing."
+          }
+        }
+      }
+    },
+    "pluginsInstalled.builtinInspector" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: inspector of an absorbed entry",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz liest diesen Eintrag weiter und wendet ihn auf die eingebaute Verarbeitung an. „Konfiguration umstellen“ schreibt seine Einstellungen in die Konfiguration und entfernt ihn."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz keeps reading this entry and applies it to the built-in processing. “Move settings” writes its settings into the configuration and removes it."
+          }
+        }
+      }
+    },
+    "pluginsInstalled.builtinOpenConfig" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: inspector button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zur Konfiguration"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Configuration"
+          }
+        }
+      }
+    },
     "pluginsInstalled.busyRemoving" : {
       "localizations" : {
         "de" : {
@@ -36271,6 +36356,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "{{visible}} of {{total}} shown"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.doctorError" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: badge when plugin doctor reports an error",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler laut Quartz"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error according to Quartz"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.doctorFooter" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: inspector footer",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Quartz' eigener Prüfung (npx quartz plugin doctor), in Quartz' Worten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From Quartz's own check (npx quartz plugin doctor), in Quartz's words."
+          }
+        }
+      }
+    },
+    "pluginsInstalled.doctorHeading" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: inspector section with plugin doctor's lines",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz meldet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz reports"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.doctorWarning" : {
+      "comment" : "Plugins ▸ Installiert, Quartz 5.1: badge when plugin doctor reports a warning",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinweis von Quartz"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note from Quartz"
           }
         }
       }
