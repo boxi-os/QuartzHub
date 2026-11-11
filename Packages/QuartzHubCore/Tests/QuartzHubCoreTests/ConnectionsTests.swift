@@ -163,4 +163,25 @@ import Testing
     }
     #expect(store.list().count == 1)
   }
+
+  /// A password or token is one line: a pasted line break at the end goes, any other control
+  /// character is refused before it reaches the Keychain; a key pasted as text keeps its lines
+  /// (measured 2026-11-11: basic-ftp refused "PASS" with a trailing newline).
+  @Test func aOneLineSecretLosesThePastedLineBreak() throws {
+    let root = TestFolder.make("qh-connections-oneline")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let store = Connections(profile: ProfileDirectory(root), secrets: MemorySecrets())
+    let ftp = try store.save(SaveConnectionInput(kind: .ftp, name: "F", host: "h", port: 21, username: "u", secure: true, secret: "pa ss\r\n"))
+    #expect(try store.secret(ftp.id) == "pa ss")
+    let ssh = try store.save(SaveConnectionInput(kind: .ssh, name: "S", host: "h", port: 22, username: "u", authMethod: .password, secret: "pw\n"))
+    #expect(try store.secret(ssh.id) == "pw")
+    let github = try store.save(SaveConnectionInput(kind: .github, name: "G", secret: "ghp_x\n"))
+    #expect(try store.secret(github.id) == "ghp_x")
+    #expect(throws: PublishFailure(L10n.t("main.connectionSecretControl"))) {
+      try store.save(SaveConnectionInput(kind: .ftp, name: "F2", host: "h", port: 21, username: "u", secure: true, secret: "pa\nss"))
+    }
+    let key = "-----BEGIN OPENSSH PRIVATE KEY-----\nabc\n-----END OPENSSH PRIVATE KEY-----\n"
+    let keyed = try store.save(SaveConnectionInput(kind: .ssh, name: "K", host: "h", port: 22, username: "u", authMethod: .privateKey, secret: key))
+    #expect(try store.secret(keyed.id) == key)
+  }
 }

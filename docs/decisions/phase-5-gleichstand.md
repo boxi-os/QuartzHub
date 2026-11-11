@@ -2100,6 +2100,12 @@ FTP-Zugang nur für deren Ordner (Passwort vom Nutzer eingetragen). Am Relay-Klo
   `USER` 331 antwortet, ein Passwort mit Zeilenumbruch): mit dem alten Helfer und der alten
   `FTPSession` steht das Passwort in der Meldung, jetzt nicht. QuartzControls `ftp.ts` gibt
   `err.message` ebenso weiter (gelesen, nicht gemessen).
+- **Befund, behoben: ein Passwort durfte einen Zeilenumbruch enthalten.** Der Zeilenumbruch kam
+  beim Einfügen mit und machte jede Anmeldung unmöglich. `Connections.save` schneidet bei FTP-,
+  SSH-Passwort und GitHub-Token Zeilenumbrüche am Ende ab und lehnt andere Steuerzeichen mit „Das
+  Passwort enthält ein Steuerzeichen …“ ab; ein als Text eingefügter Schlüssel behält seine Zeilen.
+  `aOneLineSecretLosesThePastedLineBreak`: ohne die Regel vier rote Erwartungen. An der App nicht
+  nachgestellt (dafür hätte die Zwischenablage des Nutzers herhalten müssen).
 
 ## Review 2026-11-11: die Befunde
 

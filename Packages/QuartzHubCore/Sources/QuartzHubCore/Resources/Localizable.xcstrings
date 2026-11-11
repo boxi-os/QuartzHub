@@ -24719,6 +24719,23 @@
         }
       }
     },
+    "main.connectionSecretControl" : {
+      "comment" : "Connection form (Settings > Zugänge): a password or token with a control character other than a trailing line break",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zugang konnte nicht gespeichert werden: Das Passwort enthält ein Steuerzeichen, etwa einen Zeilenumbruch mitten im Text. Gib es noch einmal ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The connection could not be saved: the password contains a control character, such as a line break inside it. Enter it again."
+          }
+        }
+      }
+    },
     "main.contentSourceInsideTarget" : {
       "comment" : "Content folder",
       "localizations" : {

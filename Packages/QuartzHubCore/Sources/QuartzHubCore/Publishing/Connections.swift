@@ -140,6 +140,26 @@ public struct SaveConnectionInput: Equatable, Sendable {
     !JSText.startsWith(text, "-") && !text.unicodeScalars.contains { CharacterSet.whitespacesAndNewlines.contains($0) || CharacterSet.controlCharacters.contains($0) }
   }
 
+  /// A password or token is one line; a key pasted as text is not. FTP refuses a control
+  /// character in `PASS` (basic-ftp names the whole command in its error), and the askpass helper
+  /// ends the password with a newline of its own (measured 2026-11-11 with a pasted password).
+  var isOneLineSecret: Bool { kind == .ftp || kind == .github || (kind == .ssh && authMethod == .password) }
+
+  /// What a paste leaves at the end of a one-line secret (line breaks) goes; nothing else changes.
+  public var normalized: SaveConnectionInput {
+    guard isOneLineSecret, var text = secret else { return self }
+    while let last = text.unicodeScalars.last, last == "\n" || last == "\r" { text.unicodeScalars.removeLast() }
+    var copy = self
+    copy.secret = text
+    return copy
+  }
+
+  /// A one-line secret that still holds a control character after `normalized`.
+  public var secretHasControlCharacter: Bool {
+    guard isOneLineSecret, let secret = normalized.secret else { return false }
+    return secret.unicodeScalars.contains { CharacterSet.controlCharacters.contains($0) }
+  }
+
   public var problem: String? {
     let length = { (text: String) in JSText.length(text) }
     if length(name) < 1 || length(name) > 200 { return "name" }
@@ -274,8 +294,10 @@ public struct Connections: Sendable {
   /// `saveConnection`. The secret goes to the Keychain before the file says it is there; a secret
   /// that is no longer wanted is removed after.
   @discardableResult
-  public func save(_ input: SaveConnectionInput) throws(PublishFailure) -> Connection {
+  public func save(_ given: SaveConnectionInput) throws(PublishFailure) -> Connection {
+    let input = given.normalized
     if let problem = input.problem { throw PublishFailure(L10n.t("main.connectionInvalid", ["field": problem])) }
+    if input.secretHasControlCharacter { throw PublishFailure(L10n.t("main.connectionSecretControl")) }
     return try Self.lock.withLock { _ throws(PublishFailure) in
       var list = readAll()
       let existing = input.id.flatMap { id in list.items.first { $0.object["id"] == .string(id) } }
