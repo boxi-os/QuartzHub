@@ -182,7 +182,7 @@ struct ProjectsWindow: View {
   }
 
   private func reveal(_ row: ProjectOverview) {
-    NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: row.path)]) // path boundary
+    ExternalOpen.reveal([URL(fileURLWithPath: row.path)]) // path boundary
   }
 
   private func addExisting() {

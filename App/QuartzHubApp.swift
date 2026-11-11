@@ -38,6 +38,7 @@ struct QuartzHubApp: App {
       ProjectsWindow()
         .frame(minWidth: 640, minHeight: 420)
         .followsLanguage()
+        .environment(\.openURL, ExternalOpen.action)
     }
     .defaultSize(width: 980, height: 640)
     .keyboardShortcut("0", modifiers: [.command, .shift])
@@ -53,11 +54,13 @@ struct QuartzHubApp: App {
     WindowGroup(id: ProjectWindow.sceneID, for: String.self) { $projectId in
       ProjectWindow(projectId: projectId)
         .followsLanguage()
+        .environment(\.openURL, ExternalOpen.action)
     }
     .defaultSize(Self.initialSize)
 
     Settings {
       SettingsWindow()
+        .environment(\.openURL, ExternalOpen.action)
     }
   }
 }

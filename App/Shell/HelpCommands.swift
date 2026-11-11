@@ -23,14 +23,14 @@ struct HelpCommands: Commands {
       Button(L10n.t("main.menuPluginCatalog")) { Self.open(Self.pluginCatalog) }
       Divider()
       Button(L10n.t("main.menuDataFolder")) {
-        NSWorkspace.shared.open(URL(fileURLWithPath: AppProfile.own.path, isDirectory: true)) // path boundary
+        ExternalOpen.open(URL(fileURLWithPath: AppProfile.own.path, isDirectory: true)) // path boundary
       }
       Button(L10n.t("main.menuLicenses")) { Self.openLicenses() }
     }
   }
 
   private static func open(_ address: String) {
-    if let url = URL(string: address) { NSWorkspace.shared.open(url) } // not a file path
+    if let url = URL(string: address) { ExternalOpen.open(url) } // not a file path
   }
 
   /// A new issue with the version and the system filled in, as QuartzControl's `sendFeedback`.
@@ -72,6 +72,6 @@ struct HelpCommands: Commands {
       alert.runModal()
       return
     }
-    NSWorkspace.shared.open(URL(fileURLWithPath: folder, isDirectory: true)) // path boundary
+    ExternalOpen.open(URL(fileURLWithPath: folder, isDirectory: true)) // path boundary
   }
 }

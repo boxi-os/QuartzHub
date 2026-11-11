@@ -364,13 +364,13 @@ struct MarkedSite: NSViewRepresentable {
     func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction) async -> WKNavigationActionPolicy {
       guard let target = action.request.url else { return .cancel }
       if target.scheme == "about" || SitePreview.origin(target) == SitePreview.origin(parent.url) { return .allow }
-      if action.navigationType == .linkActivated { NSWorkspace.shared.open(target) }
+      if action.navigationType == .linkActivated { ExternalOpen.open(target) }
       return .cancel
     }
 
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
                  for action: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-      if let target = action.request.url { NSWorkspace.shared.open(target) }
+      if let target = action.request.url { ExternalOpen.open(target) }
       return nil
     }
   }

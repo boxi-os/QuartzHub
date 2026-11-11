@@ -289,7 +289,7 @@ private struct MaintenanceSettings: View {
         }
         Text(L10n.t("settings.maintenance.storageHint")).font(.caption).foregroundStyle(.secondary)
         Button(L10n.t("settings.maintenance.reveal")) {
-          NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: AppProfile.own.path)]) // path boundary
+          ExternalOpen.reveal([URL(fileURLWithPath: AppProfile.own.path)]) // path boundary
         }
       } footer: {
         Text("QuartzHub \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") · macOS \(ProcessInfo.processInfo.operatingSystemVersionString)")

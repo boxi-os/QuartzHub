@@ -438,7 +438,7 @@ struct OverviewPage: View {
   }
 
   private func openFolder() {
-    NSWorkspace.shared.open(URL(fileURLWithPath: project.path)) // path boundary
+    ExternalOpen.open(URL(fileURLWithPath: project.path)) // path boundary
   }
 }
 

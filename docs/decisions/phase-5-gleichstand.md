@@ -2628,3 +2628,17 @@ nach `npx quartz upgrade` nur).
   versucht: die beiden Schalter wie zuvor. Der Cache von einem Tag bleibt. Damit weicht QuartzHub
   bewusst von QuartzControls `builtinTemplateService.ts` ab; dessen 25 aufgezeichnete Fälle laufen
   weiter, mit der Kopie als übergebenem Pfad.
+
+## Die letzten gebaut-Zeilen (2026-11-11)
+
+Die 25 Zeilen von `docs/gleichstand.md`, die gebaut, aber an der App nicht gemessen waren. Gemessen
+an der 5.1-Kopie von gui-test (`q51/proj`, ohne Ziele und ohne `origin`), Wegwerf-Profil.
+
+- **Öffnen mit `-QHOpenLog <datei>`.** Sieben Zeilen blieben offen, weil ein Klick den Browser
+  oder ein anderes Programm geöffnet hätte. Alles, was QuartzHub nach außen gibt, läuft jetzt über
+  `ExternalOpen` (`NSWorkspace.open`, `activateFileViewerSelecting`, SwiftUIs `openURL` und `Link`
+  über die Umgebung jedes Fensters). Im Debug-Bau schreibt der Schalter je Aufruf eine Zeile
+  `open …` oder `reveal …` und öffnet nichts. Gemessen: die drei Web-Links im Hilfe-Menü (wie
+  QuartzControls `menu.ts`), Datenordner und Lizenzen, die Adresse des laufenden Dev-Servers,
+  „Repository auf GitHub öffnen“ im Inspektor und im Kontextmenü, „Extern öffnen“ in Eigenes CSS.
+  QuartzHub blieb jedes Mal vorn.

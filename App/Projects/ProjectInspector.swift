@@ -58,7 +58,7 @@ struct ProjectInspector: View {
           }
         } else {
           Button(L10n.t("shell.projects.showInFinder")) {
-            NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: row.path)]) // path boundary
+            ExternalOpen.reveal([URL(fileURLWithPath: row.path)]) // path boundary
           }
         }
         if !row.missing && row.isQuartzProject {
