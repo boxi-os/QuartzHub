@@ -2166,6 +2166,23 @@ Die Urteile der Prüfung nach dem Hochladen, je mit geänderter `transport.url` 
   „qhrelay/counters“ bleibt …“, Status „am 11.11.2026 vom Server entfernt“; von außen geben die
   drei Dateien 404.
 
+Danach drei Nebenbefunde dieses Laufs:
+
+- **Behoben (`4500b11`): Adressen, die im Schlüsselbund fehlten, galten als gesetzt.** Die Marken
+  kamen allein aus `relay-secrets.json`; jetzt fragt `relaySecretInfo` den Schlüsselbund. Fehlt der
+  Eintrag, gilt kein Name als gesetzt, und oben steht, dass die Geheimnisse fehlen; ist der
+  Schlüsselbund nicht lesbar, bleiben die Namen. An der App nach einem Neustart: „Adresse fehlt“,
+  „fehlt“ und der Hinweis.
+- **Behoben (`28a2c3b`): der Hinweis auf eine Adresse unter „@example.“ stand außer Sicht.** Er kam
+  oben in den Inspektor, weit über der Zeile, und wurde nicht angesagt (QuartzControl zeigt ihn
+  ebenso als Seitenmeldung). Jetzt steht er unter der Zeile, wird angesagt und geht mit der
+  nächsten Eingabe.
+- **Test (`76fe56e`): `aSyncThatHangsEnds` gibt der Attrappe 2 s statt 0,5 s.** Zweimal hatte sie
+  ihre Datei bei Fristende noch nicht geschrieben; in 58 weiteren Läufen nicht nachgestellt. Unter
+  Last flackern weiter `BuildServerTests.aServerOfThisProjectStartedElsewhereIsRefused`,
+  `ServerScanTests.aRealServerIsFoundAndStopped` und einmal
+  `ProcessRunnerTests.itHasItsOwnGroupAndStopReachesAllOfIt`; nicht untersucht.
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
