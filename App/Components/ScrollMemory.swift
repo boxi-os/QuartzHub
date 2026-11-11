@@ -122,9 +122,21 @@ struct ScrollMemory: NSViewRepresentable {
 
     /// The document grew while the page loaded in. Later growth (a log, a list filling) leaves the
     /// place alone: by then it is the user's.
+    ///
+    /// Not inside the notification: a list posts it from its own row update, and `restore` lays the
+    /// window out, so SwiftUI moved rows in a table that was still updating, and AppKit threw
+    /// (`moveRowsInRange:toIndex:`; Plugins, coming back while plugin doctor's findings changed row
+    /// heights, measured 2026-11-11). Once afterwards, however often the document grew meanwhile.
     private func settling() {
-      if scans < Self.settleScans { restore() }
+      guard scans < Self.settleScans, !restorePending else { return }
+      restorePending = true
+      DispatchQueue.main.async { [weak self] in
+        self?.restorePending = false
+        self?.restore()
+      }
     }
+
+    private var restorePending = false
 
     /// A wheel, a drag of the scroller or a key aimed at this scroller. The click in the sidebar that
     /// opened the page is an event too, and the page's first layout happens under it.
