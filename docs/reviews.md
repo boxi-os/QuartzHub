@@ -7,8 +7,8 @@ mit dem Skill `review-befund`, ein Befund pro Commit; die Messungen stehen im Co
 ## 2026-11-11: Daten, Geheimnisse, Server, Paket
 
 Auftrag `REVIEW-2026-11-11-auftrag.md`, Bericht `REVIEW-2026-11-11.md` (Stand `ddcb802`): 1 Hoch,
-2 Mittel, 6 Niedrig, 11 nebenbei. Der Nutzer wählte alle Befunde aus; die Nebenbei-Punkte sind
-nicht abgearbeitet.
+2 Mittel, 6 Niedrig, 11 nebenbei. Der Nutzer wählte alle Befunde aus, danach auch alle
+Nebenbei-Punkte.
 
 | Befund | Was jetzt stimmt | Commit |
 | --- | --- | --- |
@@ -26,3 +26,22 @@ Nicht umgesetzt aus den Vorschlägen: `npm install` aus dem Parken des Kern-Upda
 (M1; Umbau von `CoreUpdate.merge` mit 64 Golden-Schritten) und ein eigener ssh-agent statt einer
 Schlüsseldatei (N6; ändert jeden Login-Weg). H1, M1 und M2 stecken auch in QuartzControl 1.3; ob sie
 dort auf `fix/1.3.x` kommen, entscheidet der Nutzer.
+
+Die Nebenbei-Punkte (Messungen unter „Review 2026-11-11: die Nebenbei-Punkte“):
+
+| Punkt | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| 1 | Manifeste, Marker und `snapshot-settings.json` werden ersetzt, nicht an Ort und Stelle überschrieben | `b0ac09f` |
+| 2 | Scheitern `commit-tree` oder `update-ref`, scheitert der Snapshot, und der Schreiber hält an | `7f6bb0c` |
+| 3 | Eine `relay-secrets.json`, die kein Objekt ist, verdeckt die Altlasten nicht mehr | `c4a2584` |
+| 4 | Der Übernahme-Dialog verspricht nur noch unveränderte Dateien; „Erlauben“ genügt | `5259071` |
+| 5 | Branch-Ziel und Snapshot-Store haben für jeden git-Aufruf eine Frist; `npm install` nach einem Restore auch | `af8b801` |
+| 6 | Ein gescheiterter Helferbau sagt beim Paketbau, warum | `dccfab4` |
+| 7 | Der Branch-Deploy lässt keine Hooks des Projekts laufen | `b803db1` |
+| 8 | Die Webhook-Schwärzung findet den Token kodiert und dekodiert | `61a4f17` |
+| 9 | Ein Link im Build ist mit und ohne Dokumente derselbe | `1bf6889` |
+| 10 | Unverändert: das Umbiegen der Frame-Pfade ist eine Reparatur ohne Snapshot, wie in QuartzControl | — |
+| 11 | Test- und Messstarts lassen die Fensterrahmen des Nutzers für seinen nächsten Start da | `5c1c4ce` |
+
+Nicht umgesetzt: ein Abbrechen-Knopf für einen laufenden Deploy (Punkt 5; die Seite hat nur einen
+für den Export).

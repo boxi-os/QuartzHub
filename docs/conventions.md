@@ -49,6 +49,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   Adapter durch dieselbe Regel wie das Formular; ein Name, der einem Programm übergeben wird (Host,
   Benutzer, Branch), beginnt nie mit „-“ und steht, wo das Programm es kennt, hinter `--`
   (decisions/phase-5-gleichstand.md, Review 2026-11-11, M2, N1, N2).
+- **Ein Deploy lässt keine Hooks des Projekts laufen.** Ein Hook bekäme den Token in seiner
+  Umgebung und kann `GIT_ASKPASS` selbst fragen; der Branch trägt nur erzeugte Ausgabe. Git-Sync
+  behält sie (Review 2026-11-11, nebenbei 7).
 - **Was ein Abbruch verlieren würde, wird vorher notiert.** Ein geparkter Vault-Link steht in
   `.quartz-gui/content-link.json`, bis er zurück ist; laufende Updates, Restores und Deploys kennt
   `RunningWork`, und Beenden fragt (Review 2026-11-11, M1).

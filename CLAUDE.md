@@ -143,7 +143,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
 - **Phase 5 (Gleichstand und Release) läuft seit 2026-11-09.** Gleichstand-Liste als Rohfassung
   (`docs/gleichstand.md`: 720 Zeilen, 600 gemessen, 4 fehlen); danach Lücken schließen und messen.
   Rauchtest und Ansehen ohne Netz mit `-QHNoUpdateCheck YES` (nur Debug). Erste Review-Runde
-  (`docs/REVIEW-2026-11-11.md`) abgearbeitet: alle neun Befunde, Chronik in `docs/reviews.md`.
+  (`docs/REVIEW-2026-11-11.md`) abgearbeitet: alle neun Befunde und die elf Nebenbei-Punkte,
+  Chronik in `docs/reviews.md`.
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
   nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über
