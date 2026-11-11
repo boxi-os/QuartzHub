@@ -1941,9 +1941,28 @@ Nutzer trug das Token selbst ein.
   die API antwortet ohne Anmeldung mit `"visibility": "public"`, `origin` ist die https-Adresse
   ohne Token. Danach `origin` zurück auf das Test-Repo; das angelegte Repo löscht der Nutzer.
 
-Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), eine eigene Domain und „HTTPS
-erzwingen“ (bräuchten einen DNS-Eintrag des Nutzers), der Token-Zustand „unbekannt“ (GitHub nicht
-erreichbar).
+- **Eigene Domain und HTTPS:** `gh-test.borkel.net` (CNAME auf `boxi-os.github.io.`, vom Nutzer
+  angelegt). Mit Domain wird „HTTPS erzwingen“ frei; sofort gespeichert: „Domain gesetzt:
+  gh-test.borkel.net“ und der „zu früh“-Satz mit GitHubs „The certificate does not exist yet“,
+  Zustand „Wird gebaut“ mit `http://gh-test.borkel.net/`. Das Zertifikat (Let's Encrypt) war nach
+  rund einer Minute da; erneut gespeichert: „HTTPS erzwingen: an“, Karte mit
+  `https://gh-test.borkel.net/`.
+- **Befund, offen: ein Deploy verwirft die eigene Domain.** Beim Setzen der Domain über die API legt
+  GitHub für ein Branch-Deploy selbst einen Commit „Create CNAME“ auf `gh-pages` (Eltern der
+  letzte Deploy, Autor `boxi-os <boxi@borkel.net>`, die Hauptadresse des Kontos, auch wenn das Projekt
+  eine Noreply-Identität hat). Der nächste Deploy zeigt im Diff „Entfernt (1): CNAME“, ersetzt den
+  Branch per Lease (`+ cd77152...438890c (forced update)`), und GitHub verwirft daraufhin die Domain:
+  „Status neu laden“ zeigt wieder `https://boxi-os.github.io/test-repo/` ohne Domain, unter
+  `gh-test.borkel.net` liefert eine Unterseite 404 (die Startseite kam noch aus dem CDN-Cache,
+  `x-cache: HIT`). QuartzControls `decisions/publishing-and-credentials.md` sagt das Gegenteil („a
+  domain set here is stored by GitHub itself and does [survive]“), gemessen war es dort nicht; der
+  Kommentar in `GitHubPagesSection.swift` übernimmt den Satz. Folge für Nutzer beider Apps: Wer eine
+  Domain setzt, verliert sie beim nächsten Deploy, und sein DNS-Eintrag zeigt dann auf GitHub, ohne
+  dass eine Seite die Domain beansprucht (übernehmbar, solange die Domain nicht bei GitHub
+  verifiziert ist). Nicht behoben; der Nutzer entscheidet.
+
+Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), der Token-Zustand „unbekannt“
+(GitHub nicht erreichbar).
 
 ## Review 2026-11-11: die Befunde
 
