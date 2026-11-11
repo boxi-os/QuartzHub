@@ -259,7 +259,7 @@ Pfad-Kürzel: `Packages/…` = `Packages/QuartzHubCore/Sources/QuartzHubCore`; Q
 | Eigene Domain (CNAME bei GitHub) | Publish/GithubPages.tsx (`pages.cname`) | 6-veroeffentlichen/02-github-pages.md | App/Pages/Publish/GitHubPagesSection.swift | Netz | wie oben |
 | HTTPS erzwingen (gesperrt ohne Domain, „zu früh“-Satz) | Publish/GithubPages.tsx (`httpsEnforced`, `httpsOnlyWithDomain`) | 6-veroeffentlichen/02-github-pages.md | App/Pages/Publish/GitHubPagesSection.swift | Netz | wie oben |
 | `origin` nicht auf github.com: Hinweis auf Git-Sync | Publish/GithubPages.tsx (`noGithubOrigin`) | 6-veroeffentlichen/02-github-pages.md | App/Pages/Publish/GitHubPagesSection.swift | gemessen | 2026-11-10 (phase-5-gleichstand.md, „Veröffentlichen an der App gemessen“): `origin` auf eine Codeberg-Adresse gesetzt: „Das „origin“-Remote dieses Projekts zeigt nicht auf github.com. …“, ohne Anfrage an GitHub |
-| Repository auf GitHub anlegen (öffentlich/privat, als `origin`) | GitSync.tsx (liegt auf Git-Sync, nicht auf Veröffentlichen) | 6-veroeffentlichen/02-github-pages.md | App/Pages/GitSync/GitSyncPage.swift, GitSyncModel.swift (`createRepo`) | Netz | P4 „Git-Sync“: „Nicht gemessen: Push mit Token zu GitHub, „Repository anlegen“ (Netz)“ |
+| Repository auf GitHub anlegen (öffentlich/privat, als `origin`) | GitSync.tsx (liegt auf Git-Sync, nicht auf Veröffentlichen) | 6-veroeffentlichen/02-github-pages.md | App/Pages/GitSync/GitSyncPage.swift, GitSyncModel.swift (`createRepo`) | gemessen | P4 „Git-Sync“: „Nicht gemessen: Push mit Token zu GitHub, „Repository anlegen“ (Netz)“; 2026-11-11 (phase-5-gleichstand.md, „GitHub mit Test-Repo an der App gemessen“): siehe Git-Sync, „Repository anlegen“ |
 
 ### Dokumente
 

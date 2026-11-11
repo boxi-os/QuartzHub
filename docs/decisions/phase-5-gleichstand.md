@@ -1934,9 +1934,16 @@ Nutzer trug das Token selbst ein.
   „Bad credentials“ wörtlich in Rot, wie QuartzControls `getPagesInfo` (`result.message`); ein
   englischer Satz auf einer deutschen Seite (geerbt, Nebenbefund).
 
+- **Repository anlegen:** mit einem zweiten, kurzlebigen klassischen Token mit nur `public_repo`
+  (ein fein abgestuftes bräuchte Zugriff auf alle Repos und „Administration“, also auch Löschen).
+  In `gh-probe` war `origin` dafür herausgenommen. „Anlegen“ mit `quartzhub-create-probe`, „Privat“
+  aus: „Das Repository boxi-os/quartzhub-create-probe ist angelegt und als „origin“ eingetragen.“;
+  die API antwortet ohne Anmeldung mit `"visibility": "public"`, `origin` ist die https-Adresse
+  ohne Token. Danach `origin` zurück auf das Test-Repo; das angelegte Repo löscht der Nutzer.
+
 Nicht gemessen: das Anlegen von Pages mit POST (GitHub kam zuvor), eine eigene Domain und „HTTPS
-erzwingen“ (bräuchten einen DNS-Eintrag des Nutzers), „Repository anlegen“ (bräuchte ein Token für
-alle Repos), der Token-Zustand „unbekannt“ (GitHub nicht erreichbar).
+erzwingen“ (bräuchten einen DNS-Eintrag des Nutzers), der Token-Zustand „unbekannt“ (GitHub nicht
+erreichbar).
 
 ## Review 2026-11-11: die Befunde
 
