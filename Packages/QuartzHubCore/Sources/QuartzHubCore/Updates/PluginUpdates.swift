@@ -96,6 +96,13 @@ public enum PluginUpdates {
   /// which QuartzControl did not set.
   public static func update(project: String, name: String? = nil, environment: ToolEnvironment, snapshot: @escaping SnapshotStore.Take,
                             deadline: Duration = PluginCommands.Deadlines().network) async -> PluginCommands.Result {
+    await RunningWork.during(.pluginUpdate, project: project) {
+      await updateNow(project: project, name: name, environment: environment, snapshot: snapshot, deadline: deadline)
+    }
+  }
+
+  static func updateNow(project: String, name: String?, environment: ToolEnvironment, snapshot: @escaping SnapshotStore.Take,
+                        deadline: Duration) async -> PluginCommands.Result {
     if let failure = await PluginCommands.snapshotFirst(snapshot, project, name ?? "") { return failure }
     var arguments = ["quartz", "plugin", "install", "--latest"]
     if let name, !name.isEmpty { arguments.append(name) }

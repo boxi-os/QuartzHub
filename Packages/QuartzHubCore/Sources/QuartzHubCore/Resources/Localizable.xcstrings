@@ -28583,6 +28583,74 @@
         }
       }
     },
+    "main.quitWorkDetail" : {
+      "comment" : "Quit question while an update, restore or deploy runs, below the list",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beendest du jetzt, bleibt das Projekt womöglich halb geändert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you quit now, the project may be left half changed."
+          }
+        }
+      }
+    },
+    "main.quitWorkEntry" : {
+      "comment" : "Quit question while work runs: one line per run",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{work}} in „{{name}}“"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{work}} in “{{name}}”"
+          }
+        }
+      }
+    },
+    "main.quitWorkMessage" : {
+      "comment" : "Quit question while an update, restore or deploy runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub ist noch nicht fertig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub is not finished yet."
+          }
+        }
+      }
+    },
+    "main.quitWorkQuit" : {
+      "comment" : "Quit question while work runs: the confirming button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trotzdem beenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quit Anyway"
+          }
+        }
+      }
+    },
     "main.relayCheckCertificate" : {
       "localizations" : {
         "de" : {
@@ -29316,6 +29384,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "rsync does not exist on this operating system. Please use SFTP."
+          }
+        }
+      }
+    },
+    "main.runningWork.coreUpdate" : {
+      "comment" : "Quit question: kind of running work",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kern-Update"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Core update"
+          }
+        }
+      }
+    },
+    "main.runningWork.deploy" : {
+      "comment" : "Quit question: kind of running work",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veröffentlichen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publishing"
+          }
+        }
+      }
+    },
+    "main.runningWork.pluginUpdate" : {
+      "comment" : "Quit question: kind of running work",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin-Update"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin update"
+          }
+        }
+      }
+    },
+    "main.runningWork.restore" : {
+      "comment" : "Quit question: kind of running work",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen eines Snapshots"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restoring a snapshot"
           }
         }
       }
@@ -41963,6 +42099,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A QuartzControl dev server is running for this project. QuartzHub does not stop it."
+          }
+        }
+      }
+    },
+    "shell.contentLink.failed" : {
+      "comment" : "Alert text: putting back a parked vault link failed",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Verknüpfung von content/ konnte nicht wiederhergestellt werden: {{error}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The link from content/ could not be restored: {{error}}"
+          }
+        }
+      }
+    },
+    "shell.contentLink.relinked" : {
+      "comment" : "Alert text: vault link put back on opening the project",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Vorgang wurde unterbrochen, bevor er content/ wieder mit „{{target}}“ verknüpfen konnte. QuartzHub hat das jetzt nachgeholt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A run was interrupted before it could link content/ to “{{target}}” again. QuartzHub has done that now."
+          }
+        }
+      }
+    },
+    "shell.contentLink.relinkedMovedAside" : {
+      "comment" : "Alert text: vault link put back, the folder git had left there moved aside",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Vorgang wurde unterbrochen, bevor er content/ wieder mit „{{target}}“ verknüpfen konnte. QuartzHub hat das nachgeholt und den Ordner, der an seiner Stelle lag, unter Snapshots ▸ Beiseitegelegte Content-Ordner abgelegt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A run was interrupted before it could link content/ to “{{target}}” again. QuartzHub has done that and put the folder that was in its place under Snapshots ▸ Set-aside content folders."
+          }
+        }
+      }
+    },
+    "shell.contentLink.title" : {
+      "comment" : "Alert when a project opens and QuartzHub put back a vault link an interrupted run had parked",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content-Ordner wieder verknüpft"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content folder linked again"
           }
         }
       }

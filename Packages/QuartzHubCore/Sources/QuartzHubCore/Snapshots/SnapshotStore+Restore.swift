@@ -62,6 +62,10 @@ extension SnapshotStore {
   /// also removes what the snapshot does not have. `resetProjectHead` also moves the project's own
   /// branch back to the commit the snapshot recorded.
   public func restore(project: String, id: String, paths: [String]? = nil, resetProjectHead: Bool = false) async throws -> PluginCommands.Result {
+    try await RunningWork.during(.restore, project: project) { try await restoreLocked(project, id, paths, resetProjectHead) }
+  }
+
+  func restoreLocked(_ project: String, _ id: String, _ paths: [String]?, _ resetProjectHead: Bool) async throws -> PluginCommands.Result {
     try await Self.lock.run(project) {
       try await withIndex(project) { op in try await restoreUnlocked(op, id, paths: paths, resetProjectHead: resetProjectHead) }
     }

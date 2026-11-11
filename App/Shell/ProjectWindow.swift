@@ -26,6 +26,8 @@ struct ProjectWindow: View {
   @State private var layoutHandOver = LayoutHandOver()
   /// The way back after a link on a page (QuartzControl's `markReturn`).
   @State private var returnLink = ReturnLink()
+  /// What putting back a vault link an interrupted run had parked found to say (review 2026-11-11, M1).
+  @State private var contentLinkNote: String?
 
   private var current: ProjectPage { ProjectPage(rawValue: pageID) ?? .overview }
 
@@ -76,6 +78,27 @@ struct ProjectWindow: View {
     }
     .frame(minWidth: 900, minHeight: 560)
     .task { if !model.loaded { await model.reload() } }
+    .task(id: projectId.flatMap(model.row)?.path) {
+      if let path = projectId.flatMap(model.row)?.path { contentLinkNote = Self.recoverContentLink(path) }
+    }
+    .alert(L10n.t("shell.contentLink.title"), isPresented: Binding(get: { contentLinkNote != nil }, set: { if !$0 { contentLinkNote = nil } })) {
+      Button(L10n.t("shell.alert.ok"), role: .cancel) {}
+    } message: {
+      Text(contentLinkNote ?? "")
+    }
+  }
+
+  /// Before any page reads content/: a link a run had parked when QuartzHub quit or crashed.
+  static func recoverContentLink(_ project: String) -> String? {
+    do {
+      switch try ContentFolder.recoverParkedLink(project: project) {
+      case .relinked(let target)?: return L10n.t("shell.contentLink.relinked", ["target": target])
+      case .relinkedAfterMovingAside(let target, _)?: return L10n.t("shell.contentLink.relinkedMovedAside", ["target": target])
+      case nil: return nil
+      }
+    } catch {
+      return L10n.t("shell.contentLink.failed", ["error": PublishFailure.message(of: error)])
+    }
   }
 
   private func pages(_ row: ProjectOverview) -> some View {

@@ -213,7 +213,8 @@ public struct SnapshotStore: Sendable {
 
   /// Derived state about a remote, the dev server's log, a publish's staging: nothing to restore.
   static func isSnapshotWorthy(_ name: String) -> Bool {
-    if name == storeDirectory || name == settingsFile { return false }
+    // content-link.json: a run's note of the vault link it parked, gone when the run ends.
+    if name == storeDirectory || name == settingsFile || name == "content-link.json" { return false }
     if name == "backups" || name == "content-backups" || name == "logs" || name == "staging" { return false }
     return !name.hasPrefix("deploy-manifest-")
   }

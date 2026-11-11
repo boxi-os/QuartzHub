@@ -121,4 +121,75 @@ import Testing
     #expect(ran)
     #expect(Posix.exists("\(content)/note.md"))
   }
+
+  // MARK: - A link a run never put back (review 2026-11-11, M1)
+
+  var record: String { "\(project)/.quartz-gui/content-link.json" }
+
+  @Test func parkingWritesTheTargetDownAndRemovesItAfterwards() async throws {
+    try file("G\u{E4}rten/note.md")
+    try link("project/content", to: "../Ga\u{308}rten")
+    let written = try await ContentFolder.withSymlinkParked(project: project) {
+      try JSJSON.parse(try Posix.read(record))["target"]?.stringValue
+    }
+    // The bytes as the link had them, decomposed or not.
+    #expect(written.map { Array($0.utf8) } == Array("../Ga\u{308}rten".utf8))
+    #expect(!Posix.exists(record))
+    #expect(try target(content) == Array("../Ga\u{308}rten".utf8))
+  }
+
+  /// The crash: the record is there, the link is not.
+  @Test func aLostLinkIsPutBackOnOpening() throws {
+    try file("vault/note.md")
+    try file("project/.quartz-gui/content-link.json", #"{"target":"../vault"}"#)
+    #expect(try ContentFolder.recoverParkedLink(project: project) == .relinked(target: "../vault"))
+    #expect(try target(content) == Array("../vault".utf8))
+    #expect(!Posix.exists(record))
+    // Nothing left to do the second time.
+    #expect(try ContentFolder.recoverParkedLink(project: project) == nil)
+  }
+
+  /// What git checked out in its place is moved aside, never deleted.
+  @Test func whatGitLeftThereIsMovedAside() throws {
+    try file("vault/note.md")
+    try file("project/content/.gitkeep", "von git")
+    try file("project/.quartz-gui/content-link.json", #"{"target":"../vault"}"#)
+    guard case .relinkedAfterMovingAside(let target, let id)? = try ContentFolder.recoverParkedLink(project: project, now: Date(timeIntervalSince1970: 1_800_000_000)) else {
+      Issue.record("not moved aside")
+      return
+    }
+    #expect(target == "../vault")
+    #expect(try self.target(content) == Array("../vault".utf8))
+    #expect(String(decoding: try Posix.read("\(project)/.quartz-gui/content-backups/\(id)/content/.gitkeep"), as: UTF8.self) == "von git")
+    #expect(!Posix.exists(record))
+  }
+
+  /// A link that is back (the run finished putting it back, or the user set one) is left alone.
+  @Test func aLinkThatIsThereIsLeftAlone() throws {
+    try file("other/note.md")
+    try link("project/content", to: "../other")
+    try file("project/.quartz-gui/content-link.json", #"{"target":"../vault"}"#)
+    #expect(try ContentFolder.recoverParkedLink(project: project) == nil)
+    #expect(try target(content) == Array("../other".utf8))
+    #expect(!Posix.exists(record))
+  }
+
+  /// The counter-check: while this process holds the link parked, the record is no leftover.
+  @Test func aRunningRunIsNotRecoveredFrom() async throws {
+    try file("vault/note.md")
+    try link("project/content", to: "../vault")
+    let during = try await ContentFolder.withSymlinkParked(project: project) {
+      (try ContentFolder.recoverParkedLink(project: project), Posix.kind(content) == nil, Posix.exists(record))
+    }
+    #expect(during.0 == nil && during.1 && during.2)
+    #expect(try target(content) == Array("../vault".utf8))
+  }
+
+  @Test func runningWorkIsListedWhileItRuns() async {
+    let inside = await RunningWork.during(.restore, project: project) {
+      RunningWork.current.contains(RunningWork.Entry(kind: .restore, project: project))
+    }
+    #expect(inside)
+    #expect(!RunningWork.current.contains { $0.project == project })
+  }
 }

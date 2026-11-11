@@ -122,12 +122,40 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     quitAsking = true
     Task {
       // Unsaved edits first: "Abbrechen" there keeps everything as it is, servers included.
-      let quit = await UnsavedGuard.confirmAll() ? await settleRunningServers() : false
+      let quit = await UnsavedGuard.confirmAll() && confirmRunningWork() ? await settleRunningServers() : false
       quitAsking = false
       quitDecided = quit
       sender.reply(toApplicationShouldTerminate: quit)
     }
     return .terminateLater
+  }
+
+  /// An update, a restore or a deploy that is still running would be cut off halfway (review
+  /// 2026-11-11, M1). true: nothing runs, or quit anyway.
+  private func confirmRunningWork() -> Bool {
+    let running = RunningWork.current
+    guard !running.isEmpty else { return true }
+    let projects = ProjectStore(profile: AppProfile.own).list()
+    let lines = running.map { work in
+      let name = projects.first { Array($0.path.utf8) == Array(work.project.utf8) }?.name ?? NodePath.basename(work.project)
+      return L10n.t("main.quitWorkEntry", ["work": Self.workName(work.kind), "name": name])
+    }
+    let alert = NSAlert()
+    alert.alertStyle = .warning
+    alert.messageText = L10n.t("main.quitWorkMessage")
+    alert.informativeText = lines.sorted().joined(separator: "\n") + "\n\n" + L10n.t("main.quitWorkDetail")
+    alert.addButton(withTitle: L10n.t("main.confirmCancel"))
+    alert.addButton(withTitle: L10n.t("main.quitWorkQuit"))
+    return alert.runModal() == .alertSecondButtonReturn
+  }
+
+  static func workName(_ kind: RunningWork.Kind) -> String {
+    switch kind {
+    case .coreUpdate: L10n.t("main.runningWork.coreUpdate")
+    case .pluginUpdate: L10n.t("main.runningWork.pluginUpdate")
+    case .restore: L10n.t("main.runningWork.restore")
+    case .deploy: L10n.t("main.runningWork.deploy")
+    }
   }
 
   /// true: quit (with whatever had to happen to the servers done).

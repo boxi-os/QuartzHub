@@ -159,6 +159,10 @@ public struct Deploy: Sendable {
   /// `runDeploy`: every failure becomes the output of a failed run, so it arrives in the same panel
   /// as the transfer's own errors.
   public func run(_ targetId: String, outputDir: String? = nil, excluding excludePaths: [String] = []) async -> DeployResult {
+    await RunningWork.during(.deploy, project: project) { await runNow(targetId, outputDir: outputDir, excluding: excludePaths) }
+  }
+
+  func runNow(_ targetId: String, outputDir: String?, excluding excludePaths: [String]) async -> DeployResult {
     do throws(PublishFailure) {
       var (context, adapter) = try context(targetId, outputDir: outputDir)
       try Self.assertBuildExists(context)

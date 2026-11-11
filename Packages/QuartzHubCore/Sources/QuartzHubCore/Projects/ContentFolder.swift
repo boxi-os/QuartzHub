@@ -1,5 +1,6 @@
 import Darwin
 import Foundation
+import Synchronization
 
 /// The project's `content/`: what it is, how much is in it, and getting a link to a vault out of
 /// git's way. The reading half of `contentService.ts` and all of `contentSymlink.ts`. Changing the
@@ -85,11 +86,21 @@ public enum ContentFolder {
   ///
   /// The link is put back with `symlink(2)` and the bytes it had: `createSymbolicLink` decomposed
   /// the target, so a vault "Gärten" came back as "Ga\u{308}rten" after every core update.
+  ///
+  /// The target is written to `.quartz-gui/content-link.json` before the link goes: a core update
+  /// keeps it parked for minutes (npm runs inside), and a quit or a crash then lost the only record
+  /// of it (review 2026-11-11, M1). `recoverParkedLink` puts it back when the project is opened.
   public static func withSymlinkParked<T>(project: String, _ body: () async throws -> T) async throws -> T {
     let content = path(project: project)
     var info = stat()
     guard lstat(content, &info) == 0, (info.st_mode & S_IFMT) == S_IFLNK else { return try await body() }
     let target = try Posix.readlink(content)
+    let record = parkedRecord(project)
+    // Only the folder: `create()` also edits .gitignore, a tracked file in the middle of a merge.
+    try Posix.mkdirs(QuartzGuiDirectory(project: project).path)
+    try JSONStore.write(.object(JSONObject([("target", .string(target))])), to: record)
+    parked.withLock { _ = $0.insert(project) }
+    defer { parked.withLock { _ = $0.remove(project) } }
     try Posix.unlink(content)  // the link itself
 
     let outcome: Result<T, Error>
@@ -98,6 +109,7 @@ public enum ContentFolder {
     // Whatever is there now is git's (removeItem on a link would take only the link).
     if lstat(content, &info) == 0 { try FileManager.default.removeItem(atPath: content) }
     try Posix.symlink(target, content)
+    unlink(record)
     return try outcome.get()
   }
 

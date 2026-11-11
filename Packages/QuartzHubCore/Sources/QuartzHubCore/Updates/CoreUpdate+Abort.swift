@@ -4,8 +4,10 @@ import Foundation
 extension CoreUpdate {
   public func abort(project: String) async throws -> AbortResult {
     let busy = L10n.t("main.updateAlreadyRunning")
-    return try await whileHolding(project, busy: { AbortResult(success: false, output: busy, sentences: [busy]) }) {
-      try await ContentFolder.withSymlinkParked(project: project) { await self.abortParked(project) }
+    return try await RunningWork.during(.coreUpdate, project: project) {
+      try await whileHolding(project, busy: { AbortResult(success: false, output: busy, sentences: [busy]) }) {
+        try await ContentFolder.withSymlinkParked(project: project) { await self.abortParked(project) }
+      }
     }
   }
 

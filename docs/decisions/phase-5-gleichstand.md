@@ -1955,3 +1955,38 @@ Gemessen mit `GitBranchTests.aBranchThatIsAnOptionNeverReachesGit` (lokales `ori
 mit dem alten Adapter legte die Vorschau die Datei an, jetzt nicht. Die volle Refspec allein hätte
 schon gereicht (git: „invalid refspec“); `fetch -- refs/heads/gh-pages` liefert `FETCH_HEAD` wie
 zuvor, und die 15 Golden-Schritte aus QuartzControl laufen unverändert.
+
+### M1: Ein geparkter Vault-Link geht nicht mehr verloren, und Beenden fragt
+
+Kern-Update, Abbrechen des Merges und ein Restore mit dem Projekt-Commit nehmen den Link `content/`
+→ Vault für die Dauer von git weg (`ContentFolder.withSymlinkParked`); beim Kern-Update läuft darin
+auch npm, also Minuten. Das Ziel stand nur im Speicher, und beim Beenden fragte QuartzHub nur nach
+Ungespeichertem und Servern. QuartzControl 1.3 ebenso (`contentSymlink.ts`, `before-quit`).
+
+- **Notiz:** Vor dem Parken schreibt QuartzHub das Ziel nach `.quartz-gui/content-link.json`
+  (atomar, nur der Ordner wird angelegt: `QuartzGuiDirectory.create()` ergänzt die `.gitignore`, eine
+  versionierte Datei mitten im Merge), nach dem Zurücklegen geht die Notiz. Der Snapshot-Store nimmt
+  sie nie auf.
+- **Zurücklegen:** Beim Öffnen des Projektfensters legt `ContentFolder.recoverParkedLink` den Link
+  zurück, wenn eine Notiz da ist und dieser Prozess den Link nicht gerade selbst geparkt hält. Fehlt
+  `content/`, wird nur verknüpft; liegt dort ein Ordner (was git ausgecheckt hat), wird er wie bei
+  einem Wechsel der Content-Quelle unter `content-backups/` beiseitegelegt, nie gelöscht. Ein Link,
+  der wieder da ist, bleibt. Ein Hinweis sagt es (`shell.contentLink.*`).
+- **Beenden:** `RunningWork` zählt laufende Kern- und Plugin-Updates, Restores und Deploys dieses
+  Prozesses; `applicationShouldTerminate` fragt nach dem Ungespeicherten und vor den Servern
+  („QuartzHub ist noch nicht fertig.“, je Vorgang eine Zeile, Abbrechen als Standard,
+  „Trotzdem beenden“).
+
+Gemessen: `ContentFolderTests` (Notiz während des Parkens mit den Bytes des Ziels, auch zerlegt;
+Absturz ohne `content/`; git-Ordner an seiner Stelle; Link schon wieder da; kein Zurücklegen während
+eines eigenen Laufs; `RunningWork` während und nach einem Lauf). An der App (Kopien im Scratch):
+Notiz geschrieben, Link entfernt, `content/.gitkeep` angelegt, Projekt geöffnet: Link zurück, Ordner
+unter `content-backups/` mit „von git“, Hinweis in Hell und Dunkel; ohne Ordner nur verknüpft. Ein
+Ordner-Deploy mit 40.062 Dateien, währenddessen Beenden: die Frage mit „Veröffentlichen in
+„neu-probe““, Abbrechen ließ den Lauf fertig werden (40.000 Dateien angekommen); danach beendete
+QuartzHub ohne Frage. Die Frage ist ein natives `NSAlert`, nur in Dunkel angesehen.
+
+Nicht umgesetzt, aus dem Vorschlag des Reviews: `npm install` aus dem Parken herauszuziehen. Das ist
+ein Umbau von `CoreUpdate.merge` mit seinen 64 Golden-Schritten aus QuartzControl; mit Notiz und
+Frage kostet ein Abbruch nicht mehr den Link, nur ein laufender Dev-Server sieht während npm weiter
+keinen Inhalt (wie in QuartzControl).

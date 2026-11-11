@@ -176,6 +176,10 @@ public final class CoreUpdate: Sendable {
   // MARK: The run
 
   public func run(project: String) async throws -> Result {
+    try await RunningWork.during(.coreUpdate, project: project) { try await runHolding(project) }
+  }
+
+  func runHolding(_ project: String) async throws -> Result {
     try await whileHolding(project, busy: { Result(success: false, output: L10n.t("main.updateAlreadyRunning")) }) {
       let before = await stashEntry(project) != nil ? await stashRef(project) : nil
       let result = try await runFrom(project)
