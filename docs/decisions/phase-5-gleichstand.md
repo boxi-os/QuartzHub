@@ -2103,3 +2103,12 @@ Gemessen mit `aSnapshotGitCouldNotStoreIsAFailure`: Ref-Ordner schreibgeschützt
 `update-ref`), dann Objekt-Ordner schreibgeschützt bei gleichem Baum (scheitert `commit-tree`).
 Der alte Code warf in beiden Fällen nichts (zwei rote Erwartungen), der neue wirft beide Male, und
 die Liste bleibt bei einem Snapshot.
+
+### 3. Eine kaputte `relay-secrets.json` verdeckt die Altlasten nicht mehr
+
+`ProfileMigration.plan` kehrte bei einer `relay-secrets.json`, die kein Objekt ist, sofort zurück;
+`deploy-secrets.json` und `legacy-publish-targets.json` fehlten dann in der Liste der Altlasten.
+Jetzt zählt sie wie jede unlesbare Datei, und der Plan liest weiter
+(`relaySecretsThatAreNoObjectStillListTheLeftovers`: alter Code rot, ohne
+`legacy-publish-targets.json`; neuer Code grün). Seit N3 lässt eine unlesbare Datei die Übernahme
+ohnehin offen.

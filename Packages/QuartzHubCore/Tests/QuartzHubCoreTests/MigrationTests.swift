@@ -144,6 +144,18 @@ import Testing
     #expect(Posix.exists(source.connections))
   }
 
+  /// Relay secrets that are no object are named like any unreadable file, and the leftovers after
+  /// them are still listed (review 2026-11-11, nebenbei 3).
+  @Test func relaySecretsThatAreNoObjectStillListTheLeftovers() throws {
+    try makeSource { profile in
+      try Posix.write(profile.relaySecrets, Data("[]".utf8))
+      try Posix.write(profile.file("legacy-publish-targets.json"), Data("[]".utf8))
+    }
+    let plan = ProfileMigration.plan(source: source)
+    #expect(plan.unreadable == ["relay-secrets.json"] && plan.relaySecrets.isEmpty)
+    #expect(plan.legacy.sorted() == ["legacy-publish-targets.json", "settings.json: githubToken"])
+  }
+
   // MARK: Review 2026-11-11, N3
 
   /// A broken project list marked the takeover done with "[]"; repaired, it never came over.

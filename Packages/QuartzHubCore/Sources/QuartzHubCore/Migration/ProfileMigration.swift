@@ -88,13 +88,14 @@ public enum ProfileMigration {
       if value.arrayValue == nil { plan.unreadable.append(NodePath.basename(source.connections)) }
       plan.connections = JSONList<StoredConnection>(value).items
     }
+    // Not an object is unreadable like the others, and the leftovers below are still listed.
     if let value = load(source.relaySecrets) {
-      guard let object = value.objectValue else {
+      if let object = value.objectValue {
+        plan.relaySecrets = object.keys.compactMap { key in
+          object[key]?.objectValue.map { (key, StoredRelaySecrets(object: $0)) }
+        }
+      } else {
         plan.unreadable.append(NodePath.basename(source.relaySecrets))
-        return plan
-      }
-      plan.relaySecrets = object.keys.compactMap { key in
-        object[key]?.objectValue.map { (key, StoredRelaySecrets(object: $0)) }
       }
     }
     for name in ["deploy-secrets.json", "legacy-publish-targets.json"]
