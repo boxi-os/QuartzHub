@@ -26021,13 +26021,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Den Ordner „{{path}}“ gibt es auf dem Server nicht. QuartzControl legt den Ordner der Website an, aber keine Ordner darüber: Prüfe den Pfad des Ziels, oder lege den Ordner auf dem Server an."
+            "value" : "Den Ordner „{{path}}“ gibt es auf dem Server nicht. QuartzHub legt den Ordner der Website an, aber keine Ordner darüber: Prüfe den Pfad des Ziels, oder lege den Ordner auf dem Server an."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The folder “{{path}}” does not exist on the server. QuartzControl makes the site’s folder but no folders above it: check the target’s path, or make the folder on the server."
+            "value" : "The folder “{{path}}” does not exist on the server. QuartzHub makes the site’s folder but no folders above it: check the target’s path, or make the folder on the server."
           }
         }
       }
@@ -28077,13 +28077,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Server sagt nicht lesbar, in welchem Ordner die Anmeldung beginnt ({{reply}}). Für „{{path}}“ braucht QuartzControl diesen Ordner: Trage einen absoluten Pfad ein, der mit „/“ beginnt."
+            "value" : "Der Server sagt nicht lesbar, in welchem Ordner die Anmeldung beginnt ({{reply}}). Für „{{path}}“ braucht QuartzHub diesen Ordner: Trage einen absoluten Pfad ein, der mit „/“ beginnt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The server does not say readably which folder the login starts in ({{reply}}). QuartzControl needs that folder for “{{path}}”: enter an absolute path starting with “/”."
+            "value" : "The server does not say readably which folder the login starts in ({{reply}}). QuartzHub needs that folder for “{{path}}”: enter an absolute path starting with “/”."
           }
         }
       }
@@ -31030,13 +31030,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Server hat die Anmeldung als {{user}}@{{host}} mit Passwort abgelehnt. Prüfe das Passwort; stimmt es, nimmt der Server Passwörter nicht in der Form an, in der QuartzControl sie schickt, und es bleibt die Anmeldung mit Schlüssel."
+            "value" : "Der Server hat die Anmeldung als {{user}}@{{host}} mit Passwort abgelehnt. Prüfe das Passwort; stimmt es, nimmt der Server Passwörter nicht in der Form an, in der QuartzHub sie schickt, und es bleibt die Anmeldung mit Schlüssel."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The server refused the login as {{user}}@{{host}} with a password. Check the password; if it is right, the server does not take passwords the way QuartzControl sends them, and logging in with a key remains."
+            "value" : "The server refused the login as {{user}}@{{host}} with a password. Check the password; if it is right, the server does not take passwords the way QuartzHub sends them, and logging in with a key remains."
           }
         }
       }
@@ -31078,13 +31078,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Server hat die Anmeldung als {{user}}@{{host}} mit dem in QuartzControl hinterlegten Schlüssel abgelehnt. Prüfe, ob genau dieser Schlüssel beim Anbieter hinterlegt ist."
+            "value" : "Der Server hat die Anmeldung als {{user}}@{{host}} mit dem in QuartzHub hinterlegten Schlüssel abgelehnt. Prüfe, ob genau dieser Schlüssel beim Anbieter hinterlegt ist."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The server refused the login as {{user}}@{{host}} with the key stored in QuartzControl. Check that this exact key is registered with the provider."
+            "value" : "The server refused the login as {{user}}@{{host}} with the key stored in QuartzHub. Check that this exact key is registered with the provider."
           }
         }
       }
