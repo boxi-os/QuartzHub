@@ -323,7 +323,11 @@ import Testing
     #expect(getpgid(process.pid) == process.pid)
     #expect(getpgid(grandchild) == process.pid)
     #expect(getpgid(process.pid) != getpgrp())
-    #expect(await process.stop(grace: .milliseconds(500)) == .signaled(SIGTERM))
+    // Awaited apart: an `await` inside #expect left its failure without a value (once in a full
+    // run, 2026-11-11, after 6 s; not reproduced in 120 runs under load nor in 4000 group
+    // SIGTERMs to the same script, all of which ended the shell with SIGTERM).
+    let ended = await process.stop(grace: .milliseconds(500))
+    #expect(ended == .signaled(SIGTERM))
     #expect(!ProcessRunnerTests.alive(grandchild))
     #expect(!process.groupIsAlive)
     #expect(!process.signal(SIGTERM), "no group any more")
