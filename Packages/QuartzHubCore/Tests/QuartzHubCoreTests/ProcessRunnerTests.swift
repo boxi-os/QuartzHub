@@ -22,6 +22,33 @@ import Testing
     if group > 0, getpgid(pid) == group { kill(pid, SIGKILL) }
   }
 
+  /// The group of a process the test launched, ended at the test's end only while its leader has
+  /// not been reaped: until then the number is the test's, after it anyone's (Review 2026-11-11
+  /// (2), nebenbei 16, the pattern 24cb3cd took out of three tests).
+  static func endGroup(_ process: LaunchedProcess) {
+    if process.termination == nil { _ = process.signal(SIGKILL) }
+  }
+
+  /// A process the test did not launch itself (a daemon, a service's server), known by its pid
+  /// and its start time: ended only while that pid is still the same process.
+  struct Foreign {
+    let pid: pid_t
+    let started: [UInt64]?
+    init(_ pid: pid_t) { (self.pid, started) = (pid, Self.start(pid)) }
+    init(pid: pid_t, started: [UInt64]?) { (self.pid, self.started) = (pid, started) }
+
+    static func start(_ pid: pid_t) -> [UInt64]? {
+      var info = proc_bsdinfo()
+      let size = Int32(MemoryLayout<proc_bsdinfo>.size)
+      guard proc_pidinfo(pid, PROC_PIDTBSDINFO, 0, &info, size) == size else { return nil }
+      return [info.pbi_start_tvsec, info.pbi_start_tvusec]
+    }
+
+    var isStillIt: Bool { started != nil && Self.start(pid) == started }
+    func kill(_ number: Int32 = SIGTERM) { if isStillIt { _ = Darwin.kill(pid, number) } }
+    func killGroup(_ number: Int32 = SIGKILL) { if isStillIt { _ = killpg(pid, number) } }
+  }
+
   @Test func separatesStdoutAndKeepsOrderInOutput() async {
     let result = await ProcessRunner.run(Self.sh("echo one; echo two >&2; sleep 0.05; echo three; exit 3"))
     #expect(result.termination == .exited(3))
@@ -360,7 +387,7 @@ import Testing
 
   @Test func aLeftoverIsEndedOnlyInItsGroup() async throws {
     let process = try ProcessRunner.launch(Command("/bin/sleep", ["30"])).get()
-    defer { process.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(process) }
     ProcessRunnerTests.killLeftover(process.pid, group: process.pid + 1)
     try await Task.sleep(for: .milliseconds(300))
     #expect(process.termination == nil, "another group's number is left alone")
@@ -375,5 +402,22 @@ import Testing
     #expect(throws: CommandResult.StartFailure.directoryMissing) {
       try ProcessRunner.launch(Command("/bin/pwd", in: URL(fileURLWithPath: "/nowhere-\(UUID().uuidString)").path)).get()
     }
+  }
+
+  /// A process known by pid and start time: one that ended is not "still it", so nothing is sent
+  /// to whatever has the number by then.
+  @Test func aForeignProcessIsEndedOnlyWhileItIsStillIt() async throws {
+    let process = try ProcessRunner.launch(Command("/bin/sleep", ["30"])).get()
+    defer { ProcessRunnerTests.endGroup(process) }
+    let known = ProcessRunnerTests.Foreign(process.pid)
+    #expect(known.isStillIt)
+    let other = ProcessRunnerTests.Foreign(pid: process.pid, started: [0, 0])
+    other.kill(SIGKILL)
+    try await Task.sleep(for: .milliseconds(200))
+    #expect(process.termination == nil, "another start time is another process")
+    known.kill(SIGKILL)
+    #expect(await process.exit() == .signaled(SIGKILL))
+    #expect(!known.isStillIt)
+    ProcessRunnerTests.endGroup(process)
   }
 }

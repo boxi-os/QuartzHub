@@ -45,7 +45,8 @@ import Testing
     let (port, wsPort) = BuildServerTests.freePorts()
     _ = await servers.startServer(projectId: "p", project: base.project.path, options: .init(port: port, wsPort: wsPort))
     let pid = try #require(await servers.serverStatus("p").pid)
-    defer { killpg(pid, SIGKILL) }
+    let server = ProcessRunnerTests.Foreign(pid)
+    defer { server.killGroup() }
     try await BuildServerTests.until { base.calls.count == 1 }
     let clock = ContinuousClock()
     let start = clock.now
@@ -62,9 +63,9 @@ import Testing
                                                "--wsPort", String(wsPort)], in: base.project.path)
     command.environment["QH_FAKE_DIR"] = base.scratch.url.path
     let left = try ProcessRunner.launch(command).get()
-    defer { left.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(left) }
     let other = try ProcessRunner.launch(Command("/bin/sleep", ["30"])).get()
-    defer { other.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(other) }
     try await BuildServerTests.until { await ServerPorts.state(port) == .taken }
     try store.record(projectId: "left", server: TrackedServer(pid: left.pid, port: port, startedAt: "t"))
     try store.record(projectId: "reused", server: TrackedServer(pid: other.pid, port: 1, startedAt: "t"))

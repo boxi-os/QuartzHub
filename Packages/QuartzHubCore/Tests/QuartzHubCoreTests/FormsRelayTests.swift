@@ -92,7 +92,7 @@ struct FormsRelayTests {
 
   @Test func replaysQuartzControlsSteps() async throws {
     let (server, port, closed) = try await RelayProbeTests.startServer()
-    defer { _ = server.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(server) }
     let work = TestFolder.make("qh-relay")
     defer { _ = try? FileManager.default.removeItem(atPath: work) }
     let project = "\(work)/Gärten-Ü"

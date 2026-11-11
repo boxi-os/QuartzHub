@@ -71,7 +71,8 @@ import Testing
     defer { unlink(socket) }
     let started = await ProcessRunner.run(Command("/usr/bin/ssh-agent", ["-a", socket], environment: ["PATH": "/usr/bin"]))
     let pid = JSText.firstMatch(started.stdout, "SSH_AGENT_PID=(\\d+)")?.groups[1].flatMap { Int32($0) }
-    defer { if let pid { kill(pid, SIGTERM) } }
+    let agent = pid.map(ProcessRunnerTests.Foreign.init)
+    defer { agent?.kill() }
     let added = await ProcessRunner.run(Command("/usr/bin/ssh-add", [sshd.clientKey], environment: ["PATH": "/usr/bin", "SSH_AUTH_SOCK": socket]))
     #expect(added.success, "\(added.output)")
     let login = try SSHLogin.prepare(sshd.connection(.agent), secret: nil, hostKey: sshd.hostKey, environment: ["SSH_AUTH_SOCK": socket],

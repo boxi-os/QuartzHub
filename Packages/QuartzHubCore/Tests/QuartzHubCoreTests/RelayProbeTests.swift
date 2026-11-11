@@ -81,7 +81,7 @@ struct RelayProbeTests {
 
   @Test func replaysQuartzControlsProbes() async throws {
     let (server, port, closed) = try await Self.startServer()
-    defer { _ = server.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(server) }
     let probe = Self.probe(port: port)
     let unmask = { (s: String) in s.replacingOccurrences(of: "@PORT@", with: String(port)).replacingOccurrences(of: "@CLOSED@", with: String(closed)) }
     let mask = { (s: String) in s.replacingOccurrences(of: ":\(port)", with: ":@PORT@").replacingOccurrences(of: ":\(closed)", with: ":@CLOSED@") }

@@ -66,7 +66,7 @@ struct RelayProbeTLSTests {
     defer { try? FileManager.default.removeItem(atPath: dir) }
     let der = try await Self.certificate(dir, "other", san: "DNS:qh-probe.invalid")
     let (server, port) = try Self.start(dir, "other")
-    defer { _ = server.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(server) }
     let url = "https://127.0.0.1:\(port)/send.php"
     let (noted, reason) = await Self.noted(url, anchors: [der])
     #expect(noted == "net::ERR_CERT_COMMON_NAME_INVALID")
@@ -82,7 +82,7 @@ struct RelayProbeTLSTests {
     defer { try? FileManager.default.removeItem(atPath: dir) }
     _ = try await Self.certificate(dir, "own", san: "IP:127.0.0.1")
     let (server, port) = try Self.start(dir, "own")
-    defer { _ = server.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(server) }
     let (noted, reason) = await Self.noted("https://127.0.0.1:\(port)/send.php", anchors: [])
     #expect(noted == "net::ERR_CERT_AUTHORITY_INVALID")
     #expect(reason == L10n.t("main.relayCheckCertificate", ["code": "net::ERR_CERT_AUTHORITY_INVALID"]))

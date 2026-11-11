@@ -169,7 +169,7 @@ import Testing
                           in: project.path)
     outside.environment["QH_FAKE_DIR"] = scratch.url.path
     let stranger = try ProcessRunner.launch(outside).get()
-    defer { stranger.signal(SIGKILL) }
+    defer { ProcessRunnerTests.endGroup(stranger) }
     try await Self.until { await ServerPorts.state(port) == .taken }
     let (mine, myWs) = Self.freePorts()
     let status = await service(try environment()).startServer(projectId: "p", project: project.path, options: .init(port: mine, wsPort: myWs))
