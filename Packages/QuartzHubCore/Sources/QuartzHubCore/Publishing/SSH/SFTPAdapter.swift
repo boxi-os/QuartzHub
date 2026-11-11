@@ -271,7 +271,7 @@ public struct SFTPAdapter: DeployAdapter {
 
       try manifests.commit(context.target.id, buildDir: context.buildDir, excluding: partition.manifestExcludes + kept)
       if context.onlyPaths != nil && !kept.isEmpty { return DeployResult(success: false, output: output + L10n.t("main.relayRemoveRefusedRest")) }
-      return DeployResult(success: true, output: output)
+      return DeployResult(success: true, output: output, kept: kept)
     } catch let failure as PublishFailure {
       return DeployResult(success: false, output: "\(output)\n\(failure.message)")
     } catch let failure as SFTPChannel.Failure {

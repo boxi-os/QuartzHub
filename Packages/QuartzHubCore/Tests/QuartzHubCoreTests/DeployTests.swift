@@ -274,3 +274,43 @@ extension Error {
     #expect(recorder.calls.withLock { $0 } == ["preview gut", "run ordner"])
   }
 }
+
+/// Review 2026-11-11, N5: a run whose deletions the target refused said "Veröffentlichung
+/// erfolgreich." while the files stayed live. The result now carries them.
+@Suite struct DeployKeptTests {
+  @Test func refusedDeletionsAreCarriedInTheResult() async throws {
+    let root = TestFolder.make("qh-deploy-kept")
+    let site = "\(root)/Ziel"
+    defer {
+      _ = chmod("\(site)/sub", 0o755)
+      try? FileManager.default.removeItem(atPath: root)
+    }
+    let project = "\(root)/Gärten-Ü"
+    try Posix.mkdirs("\(project)/.quartz-gui")
+    try Posix.mkdirs("\(project)/public/sub")
+    try Posix.write("\(project)/public/index.html", Data("a\n".utf8))
+    try Posix.write("\(project)/public/sub/alt.html", Data("b\n".utf8))
+    try Posix.write("\(project)/.quartz-gui/publish-targets.json", Data("""
+      [{"id":"t","name":"T","destination":{"type":"folder","path":"\(site)","deleteRemoved":true}}]
+      """.utf8))
+    let profile = TestFolder.make("qh-deploy-kept-profile")
+    defer { try? FileManager.default.removeItem(atPath: profile) }
+    let deploy = Deploy(project: project, connections: Connections(profile: ProfileDirectory(profile), secrets: MemorySecrets()),
+                        adapters: ["folder": FolderAdapter()])
+    let first = await deploy.run("t")
+    #expect(first.success && first.kept.isEmpty, "\(first.output)")
+
+    // The page is gone from the build, and the target's folder will not let it go.
+    try FileManager.default.removeItem(atPath: "\(project)/public/sub/alt.html")
+    _ = chmod("\(site)/sub", 0o555)
+    let second = await deploy.run("t")
+    #expect(second.success && second.kept == ["sub/alt.html"], "\(second.output) \(second.kept)")
+    #expect(FileManager.default.fileExists(atPath: "\(site)/sub/alt.html"))
+
+    // The counter-check: allowed again, the deletion happens and nothing is kept.
+    _ = chmod("\(site)/sub", 0o755)
+    let third = await deploy.run("t")
+    #expect(third.success && third.kept.isEmpty, "\(third.output)")
+    #expect(!FileManager.default.fileExists(atPath: "\(site)/sub/alt.html"))
+  }
+}

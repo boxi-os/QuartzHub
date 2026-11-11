@@ -4,10 +4,14 @@ import Foundation
 public struct DeployResult: Equatable, Sendable {
   public var success: Bool
   public var output: String
+  /// Files the target refused to delete and still has (the output names each). A run with these
+  /// is a success, not a clean one: the title says so (review 2026-11-11, N5).
+  public var kept: [String]
 
-  public init(success: Bool, output: String) {
+  public init(success: Bool, output: String, kept: [String] = []) {
     self.success = success
     self.output = output
+    self.kept = kept
   }
 }
 
@@ -180,7 +184,7 @@ public struct Deploy: Sendable {
         return DeployResult(success: false, output: PublishFailure.message(of: error))
       }
       guard let notes = staging?.notes, !notes.isEmpty else { return result }
-      return DeployResult(success: result.success, output: (notes + ["", result.output]).joined(separator: "\n"))
+      return DeployResult(success: result.success, output: (notes + ["", result.output]).joined(separator: "\n"), kept: result.kept)
     } catch {
       return DeployResult(success: false, output: error.message)
     }

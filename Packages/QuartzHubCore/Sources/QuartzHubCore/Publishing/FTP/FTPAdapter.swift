@@ -259,7 +259,7 @@ public struct FTPAdapter: DeployAdapter {
 
       try manifests.commit(context.target.id, buildDir: context.buildDir, excluding: partition.manifestExcludes + kept)
       if context.onlyPaths != nil && !kept.isEmpty { return DeployResult(success: false, output: output + L10n.t("main.relayRemoveRefusedRest")) }
-      return DeployResult(success: true, output: output)
+      return DeployResult(success: true, output: output, kept: kept)
     } catch {
       let text: String
       switch error {

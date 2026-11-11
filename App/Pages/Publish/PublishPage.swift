@@ -246,7 +246,7 @@ struct PublishPage: View {
       // Its own view: only it reads the progress, so an event redraws one row and not the page.
       if running { DeployProgress(model: model) }
       if let result = model.result, result.targetId == target.id {
-        OutcomeTitle(title: model.resultTitle(result.value, document: document), success: result.value.success)
+        OutcomeTitle(title: model.resultTitle(result.value, document: document), success: result.value.success, partial: !result.value.kept.isEmpty)
           .accessibilityIdentifier("publish.result")
         RunOutput(text: result.value.output, label: L10n.t("publish.deployHeading"), identifier: "publish.output")
       }

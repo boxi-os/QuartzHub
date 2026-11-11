@@ -296,7 +296,10 @@ final class PublishModel {
   }
 
   func resultTitle(_ result: DeployResult, document: Bool) -> String {
-    result.success ? (document ? L10n.t("publish.exportSuccess") : L10n.t("publish.deploySuccess")) : L10n.t("publish.deployFailed")
+    if !result.success { return L10n.t("publish.deployFailed") }
+    // Files the target would not delete are still live: not the plain "erfolgreich".
+    if !result.kept.isEmpty { return L10n.t("publish.deployPartial", ["count": String(result.kept.count)], count: result.kept.count) }
+    return document ? L10n.t("publish.exportSuccess") : L10n.t("publish.deploySuccess")
   }
 
   // MARK: Targets and connections

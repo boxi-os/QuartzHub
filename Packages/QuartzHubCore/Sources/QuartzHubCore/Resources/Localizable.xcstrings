@@ -38908,6 +38908,47 @@
         }
       }
     },
+    "publish.deployPartial" : {
+      "comment" : "Publish result title: uploaded, deletions refused (the output lists them)",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Veröffentlicht, aber {{count}} Datei konnte auf dem Ziel nicht gelöscht werden."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Veröffentlicht, aber {{count}} Dateien konnten auf dem Ziel nicht gelöscht werden."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Published, but {{count}} file could not be deleted on the target."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Published, but {{count}} files could not be deleted on the target."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "publish.deploySuccess" : {
       "localizations" : {
         "de" : {

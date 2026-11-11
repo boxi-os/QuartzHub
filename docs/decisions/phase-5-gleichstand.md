@@ -2048,3 +2048,13 @@ nicht gelesen; Laufzeit vollständig oder nicht). Ein Release-Bau ohne `package.
 keinen Pfad unter `/Users/boxi` oder dem Scratch-Ordner mehr (der Bau des Reviews bei `ddcb802` hatte
 zwei, `ToolEnvironment.swift` und `BuiltinTemplate.swift`); gestartet mit Wegwerf-Profil zeigte er
 die Meldung, schrieb ins Wegwerf-Profil, und das echte Profil blieb unberührt.
+
+### N5: Verweigerte Löschungen stehen im Titel
+
+SFTP, FTP und Ordner gaben `success: true`, auch wenn das Ziel Löschungen verweigerte; die Ausgabe
+nannte jede Datei, Titel und Ansage sagten „Veröffentlichung erfolgreich.“ (QuartzControl 1.3
+ebenso). Jetzt trägt `DeployResult.kept` diese Dateien, und der Titel heißt „Veröffentlicht, aber
+N Datei(en) konnte(n) auf dem Ziel nicht gelöscht werden.“, orange mit Warnzeichen
+(`publish.deployPartial`). Ein Erfolg bleibt es: das Manifest behält die Dateien, der nächste Lauf
+versucht es wieder. Gemessen mit `DeployKeptTests` (Ordner-Ziel, Unterordner 555: `kept` nennt die
+Datei; wieder 755: gelöscht, `kept` leer) und an der App auf einer Kopie, Hell und Dunkel.
