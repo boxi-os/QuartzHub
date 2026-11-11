@@ -26446,13 +26446,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Im Build fehlt static/contentIndex.json. QuartzHub liest daraus, welche Seiten es gibt; ohne das Plugin „ContentIndex“ kann kein Dokument entstehen."
+            "value" : "Im Build fehlt static/contentIndex.json. QuartzHub liest daraus, welche Seiten es gibt; ist der Inhaltsindex aus (seit Quartz 5.1 unter Konfiguration ▸ Verarbeitung, davor das Plugin „ContentIndex“), kann kein Dokument entstehen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The build has no static/contentIndex.json. QuartzHub reads from it which pages exist; without the “ContentIndex” plugin no document can be made."
+            "value" : "The build has no static/contentIndex.json. QuartzHub reads from it which pages exist; with the content index off (since Quartz 5.1 under Configuration ▸ Processing, before that the “ContentIndex” plugin) no document can be made."
           }
         }
       }
