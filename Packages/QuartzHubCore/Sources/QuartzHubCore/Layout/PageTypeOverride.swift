@@ -4,7 +4,8 @@ import Foundation
 /// of QuartzControl's `routes/LayoutEditor/pageTypeOverride.ts`, measured with
 /// `scripts/layout-board-golden.mjs`.
 ///
-/// Quartz reads three keys there (`config-loader.ts`): `exclude` drops components by
+/// Quartz reads three keys there (`config-loader.ts`), and since 5.1 a fourth, `sidebars`
+/// (`sidebar`, `withSidebar`): `exclude` drops components by
 /// `extractPluginName(source)`, an *empty* list under `positions.<pos>` clears that position (any
 /// other value is ignored), and `template` names the frame. The frame is `template` ?? the page
 /// type plugin's own ?? "default", and a name no frame is registered under renders the default one.
@@ -30,6 +31,8 @@ public enum PageTypeOverride {
     if let template = override["template"], JS.truthy(template) { return true }
     if let exclude = override["exclude"], JS.truthy(exclude), length(exclude) > 0 { return true }
     if let positions = override["positions"], JS.truthy(positions), !LayoutBoxes.spread(positions).isEmpty { return true }
+    // Quartz 5.1's fourth key; QuartzControl's check predates it and would drop such an entry.
+    if case .object(let sidebars)? = override["sidebars"], !sidebars.isEmpty { return true }
     return false
   }
 
@@ -113,6 +116,39 @@ public enum PageTypeOverride {
     var positions = LayoutBoxes.spread(of(config, pageType)["positions"])
     positions[position] = cleared ? .array([]) : nil
     return with(config, pageType, [("positions", .object(positions))])
+  }
+
+  // MARK: Quartz 5.1: sidebars
+
+  public static let sidebarModes = ["fit", "scroll", "static"]
+
+  /// How a sidebar ("left", "right") handles content taller than the screen, as Quartz 5.1's
+  /// `parseSidebars` reads it: the page type's `sidebars` over `layout.sidebars`, "fit" without
+  /// either, an unknown value read as "fit" (Quartz warns and uses fit). `own` is whether this
+  /// level (the page type, or the whole site for nil) says so itself.
+  public static func sidebar(_ config: QuartzConfig, _ pageType: String?, _ side: String) -> (mode: String, own: Bool) {
+    let site = config.layout?["sidebars"]?[side]?.stringValue.flatMap { sidebarModes.contains($0) ? $0 : nil }
+    guard let pageType else { return (site ?? "fit", site != nil) }
+    let typed = of(config, pageType)["sidebars"]?[side]?.stringValue.flatMap { sidebarModes.contains($0) ? $0 : nil }
+    return (typed ?? site ?? "fit", typed != nil)
+  }
+
+  /// Sets or (nil) removes one side, for the site (`layout.sidebars`) or a page type; an emptied
+  /// `sidebars` goes, and a page type that then customizes nothing leaves `byPageType`.
+  public static func withSidebar(_ config: QuartzConfig, _ pageType: String?, _ side: String, _ mode: String?) -> QuartzConfig {
+    func apply(_ value: JSONValue?) -> JSONValue? {
+      var sides = value?.objectValue ?? JSONObject()
+      sides[side] = mode.map(JSONValue.string)
+      return sides.isEmpty ? nil : .object(sides)
+    }
+    guard let pageType else {
+      var next = config
+      var layout = config.layout ?? JSONObject()
+      layout["sidebars"] = apply(layout["sidebars"])
+      next.layout = layout
+      return next
+    }
+    return with(config, pageType, [("sidebars", apply(of(config, pageType)["sidebars"]))])
   }
 
   /// nil takes the template away, which is not "default": the page type's plugin may bring a frame.

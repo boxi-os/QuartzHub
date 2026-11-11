@@ -24429,6 +24429,142 @@
         }
       }
     },
+    "layoutEditor.sidebars.fit" : {
+      "comment" : "Layout ▸ Komponenten, Kopfzeile der Bühne, Quartz 5.1: fit, the sidebar is one screen tall and its components scroll",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirmhoch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screen height"
+          }
+        }
+      }
+    },
+    "layoutEditor.sidebars.help" : {
+      "comment" : "Layout ▸ Komponenten, Kopfzeile der Bühne, Quartz 5.1: tooltip",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was die Seitenleiste tut, wenn ihr Inhalt höher als der Bildschirm ist. „Bildschirmhoch“ lässt die einzelnen Komponenten scrollen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What the sidebar does when its content is taller than the screen. “Screen height” lets the single components scroll."
+          }
+        }
+      }
+    },
+    "layoutEditor.sidebars.idleHint" : {
+      "comment" : "Layout ▸ Komponenten, Bühne, Quartz 5.1: shown when the drawn frame is not Quartz's default",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Einstellung der Seitenleisten wirkt nur im Standard-Frame von Quartz. Dieser Frame bestimmt selbst, wie seine Bereiche scrollen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The sidebar setting only works in Quartz's default frame. This frame decides itself how its areas scroll."
+          }
+        }
+      }
+    },
+    "layoutEditor.sidebars.inherit" : {
+      "comment" : "Layout ▸ Komponenten, Kopfzeile der Bühne, Quartz 5.1: page type takes layout.sidebars",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie alle Seiten ({{mode}})"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As all pages ({{mode}})"
+          }
+        }
+      }
+    },
+    "layoutEditor.sidebars.left" : {
+      "comment" : "Layout ▸ Komponenten, Kopfzeile der Bühne, Quartz 5.1: picker for layout.sidebars.left",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linke Seitenleiste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Left sidebar"
+          }
+        }
+      }
+    },
+    "layoutEditor.sidebars.right" : {
+      "comment" : "Layout ▸ Komponenten, Kopfzeile der Bühne, Quartz 5.1: picker for layout.sidebars.right",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechte Seitenleiste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right sidebar"
+          }
+        }
+      }
+    },
+    "layoutEditor.sidebars.scroll" : {
+      "comment" : "Layout ▸ Komponenten, Kopfzeile der Bühne, Quartz 5.1: scroll, the sidebar stays and scrolls on its own",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrollt selbst"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrolls itself"
+          }
+        }
+      }
+    },
+    "layoutEditor.sidebars.static" : {
+      "comment" : "Layout ▸ Komponenten, Kopfzeile der Bühne, Quartz 5.1: static, the sidebar scrolls away with the page",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrollt mit der Seite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrolls with the page"
+          }
+        }
+      }
+    },
     "layoutEditor.stage.approximate" : {
       "localizations" : {
         "de" : {

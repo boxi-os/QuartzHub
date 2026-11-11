@@ -159,6 +159,10 @@ struct StageTab: View {
           Text(L10n.t("layoutEditor.pageType.allPagesFrame", ["name": LayoutWords.frame(facts.frameChoice.name)]))
             .font(.callout).foregroundStyle(.secondary).fixedSize()
         }
+        if model.features.sidebars {
+          sidebarPicker(facts, "left")
+          sidebarPicker(facts, "right")
+        }
         if let own {
           Button { editFrame(own) } label: { Label(L10n.t("layoutEditor.stage.editFrame"), systemImage: "rectangle.split.3x3") }
         }
@@ -220,12 +224,52 @@ struct StageTab: View {
     .accessibilityIdentifier("layout.frame")
   }
 
+  /// Quartz 5.1's `sidebars`: for all pages `layout.sidebars`, for a page type its own. On a page
+  /// type the first option is "as for all pages" and names what that is; choosing it removes the
+  /// page type's value.
+  private func sidebarPicker(_ facts: StageFacts, _ side: String) -> some View {
+    let current = PageTypeOverride.sidebar(facts.config, facts.pageType, side)
+    let inherited = PageTypeOverride.sidebar(facts.config, nil, side).mode
+    let inherit = "inherit"
+    return Picker(side == "left" ? L10n.t("layoutEditor.sidebars.left") : L10n.t("layoutEditor.sidebars.right"),
+                  selection: Binding(get: { current.own || facts.pageType == nil ? current.mode : inherit }, set: { value in
+      let mode: String? = value == inherit || (facts.pageType == nil && value == "fit") ? nil : value
+      model.config = PageTypeOverride.withSidebar(facts.config, facts.pageType, side, mode)
+    })) {
+      if facts.pageType != nil {
+        Text(L10n.t("layoutEditor.sidebars.inherit", ["mode": Self.sidebarWord(inherited)])).tag(inherit)
+      }
+      ForEach(PageTypeOverride.sidebarModes, id: \.self) { Text(Self.sidebarWord($0)).tag($0) }
+    }
+    .fixedSize()
+    .help(L10n.t("layoutEditor.sidebars.help"))
+    .accessibilityIdentifier("layout.sidebars.\(side)")
+  }
+
+  static func sidebarWord(_ mode: String) -> String {
+    switch mode {
+    case "scroll": L10n.t("layoutEditor.sidebars.scroll")
+    case "static": L10n.t("layoutEditor.sidebars.static")
+    default: L10n.t("layoutEditor.sidebars.fit")
+    }
+  }
+
   @ViewBuilder private func hints(_ facts: StageFacts) -> some View {
     let dead = facts.override.map { PageTypeOverride.deadExcludes(facts.config, $0) } ?? []
     let unknownFrame: String? = if case .unknown(let name) = facts.frame, model.framesLoaded, model.pluginFrames != nil { name } else { nil }
-    if facts.pageType != nil || !dead.isEmpty || unknownFrame != nil {
+    // Quartz renders the sidebar modes in its default frame only (DefaultFrame's
+    // data-sidebar-mode); an own frame is a grid whose areas scroll with the page, and
+    // full-width/minimal have no sidebars (measured on the 5.1 copy of gui-test: no page carried it).
+    let sidebarsIdle: Bool = model.features.sidebars && {
+      switch facts.frame {
+      case .standard, .unknown: false
+      default: true
+      }
+    }()
+    if facts.pageType != nil || !dead.isEmpty || unknownFrame != nil || sidebarsIdle {
       VStack(alignment: .leading, spacing: 4) {
         if facts.pageType != nil { Note(L10n.t("layoutEditor.pageType.scopeHint", ["type": facts.typeLabel])) }
+        if sidebarsIdle { Note(L10n.t("layoutEditor.sidebars.idleHint")) }
         if !dead.isEmpty {
           Note(L10n.t("layoutEditor.excludeDeadHint", ["names": dead.joined(separator: ", ")], count: dead.count)).foregroundStyle(.orange)
         }
