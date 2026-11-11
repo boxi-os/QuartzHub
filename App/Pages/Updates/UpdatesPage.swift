@@ -46,6 +46,17 @@ struct UpdatesPage: View {
           Button(L10n.t("updates.snapshots.openBackups")) { openPage(.backups) }
             .buttonStyle(.link)
         }
+        if model.hasInfo {
+          Section(L10n.t("updates.info.heading")) {
+            Text(L10n.t("updates.info.hint")).foregroundStyle(.secondary)
+            Button(model.infoRunning ? L10n.t("updates.info.running") : L10n.t("updates.info.run")) { Task { await model.readInfo() } }
+              .disabled(model.infoRunning)
+              .accessibilityIdentifier("updates.info")
+            if let info = model.info {
+              RunOutput(text: info, label: L10n.t("updates.info.heading"), identifier: "updates.infoOutput")
+            }
+          }
+        }
       }
     }
   }

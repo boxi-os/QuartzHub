@@ -51,6 +51,12 @@ final class UpdatesModel {
   var pendingMigrations: [String] = []
   var markdownOrderProblem = false
 
+  /// `quartz info` (Quartz 5.1): the text for a bug report, read on request.
+  var info: String?
+  var infoRunning = false
+  /// Read with the checks: `quartz info` came with 5.1.
+  var hasInfo = false
+
   var coreBusy = false
   var coreResult: Outcome?
   var pluginRun: PluginRun?
@@ -101,8 +107,9 @@ final class UpdatesModel {
     if answers.0.state == .behind, let installed = versions.installed, let newest = versions.latest, installed != newest {
       ahead = await updater.releaseNotes(project: path, revision: latest, from: installed, to: newest)
     }
+    let features = await Task.detached { QuartzFeatures.read(project: path) }.value
     guard mine == round else { return }
-    (self.versions, notesAhead) = (versions, ahead)
+    (self.versions, notesAhead, hasInfo) = (versions, ahead, features.builtins)
   }
 
   /// Quartz's check after the update, and what QuartzHub offers from it: the move of the built-in
@@ -120,6 +127,13 @@ final class UpdatesModel {
       pendingMigrations = BuiltinProcessing.pendingMigrations(config.plugins).map { config.plugins[$0].name }
       markdownOrderProblem = BuiltinProcessing.markdownOrderProblem(config.plugins) != nil
     }
+  }
+
+  func readInfo() async {
+    infoRunning = true
+    defer { infoRunning = false }
+    let result = await PluginCommands.shared.info(project: path, environment: await environment())
+    info = result.output
   }
 
   // MARK: The core

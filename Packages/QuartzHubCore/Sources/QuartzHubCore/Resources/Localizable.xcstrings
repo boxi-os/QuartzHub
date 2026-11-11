@@ -54805,6 +54805,74 @@
         }
       }
     },
+    "updates.info.heading" : {
+      "comment" : "Updates, Inspektor, Quartz 5.1: section with quartz info",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für einen Fehlerbericht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For a bug report"
+          }
+        }
+      }
+    },
+    "updates.info.hint" : {
+      "comment" : "Updates, Inspektor, Quartz 5.1: what quartz info is",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz fasst Version, Umgebung und Plugins als Text zusammen, für ein Issue bei Quartz oder einem Plugin."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz sums up its version, the environment and the plugins as text, for an issue with Quartz or a plugin."
+          }
+        }
+      }
+    },
+    "updates.info.run" : {
+      "comment" : "Updates, Inspektor, Quartz 5.1: button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz-Info anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Quartz info"
+          }
+        }
+      }
+    },
+    "updates.info.running" : {
+      "comment" : "Updates, Inspektor, Quartz 5.1: button while quartz info runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird gelesen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading …"
+          }
+        }
+      }
+    },
     "updates.plugins.finished" : {
       "comment" : "Updates page, Plugins: announced when a plugin update ends; the output says how it went",
       "localizations" : {
