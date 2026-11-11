@@ -153,8 +153,10 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   `Posix.path(url)`. `PathHygieneTests` verbietet die zerlegenden Formen in `Sources` und `App`.
   Tests laufen in Ordnern mit „Gärten-Ü“, maskieren mit `.literal` und vergleichen Namen nach
   UTF-8-Bytes, nicht mit `==`.
-- QuartzControl bekommt nur noch kritische Fixes auf `fix/1.3.x`; die passieren im
-  QuartzControl-Repo, nicht hier.
+- **QuartzControl ist seit 2026-11-11 eingestellt** (1.3.0 die letzte Fassung, keine Fixes mehr;
+  Anlass Quartz 5.1, decisions/phase-5-gleichstand.md). Sein Repo bleibt die Spezifikation und die
+  Quelle der Übernahme; QuartzHubs Dateien bleiben in 1.3s Format, solange es keine Entscheidung
+  dagegen gibt.
 
 ## Arbeitsweise
 

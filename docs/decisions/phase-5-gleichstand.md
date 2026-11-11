@@ -2590,7 +2590,23 @@ nach `npx quartz upgrade` nur).
   Kapiteln, HTML); das Options-Schema der 5.1-Plugins liest QuartzHub ganz (339 Optionen, 0
   unsichtbar; 5.0: 340); `defaultDateType` ist aus `configuration` verschwunden, QuartzHub nutzte es
   nie; GitHub Pages lädt die fertige Ausgabe hoch, die strengere CI-Regel trifft es nicht.
-- **Offen, Entscheidung des Nutzers:** die Grundvorlage qc-basic (GFM/OFM-Reihenfolge, alte
-  Einträge) liegt im öffentlichen Repo `boxi-os/quartzcontrol-templates`, das beide Apps lesen;
-  QuartzControl 1.3 hat dieselben Lücken (Frames ohne Einstiegsmodul, Entwürfe in FormUsages,
-  `layout.sidebars`).
+- **Entschieden (Nutzer, 2026-11-11): QuartzControl wird eingestellt**, statt die Lücken in 1.3
+  nachzuziehen (Frames ohne Einstiegsmodul, Entwürfe in FormUsages, `layout.sidebars`). Es hat
+  keine Nutzer; der einzige echte Fehler trifft eigene Frames, und lokal baut Quartz trotzdem.
+  Gemessen dazu: QuartzControl überschreibt beim Speichern eines Frames `package.json`, lässt aber
+  `dist/index.js` liegen, und damit allein ist `plugin doctor` zufrieden. Ein Projekt, das
+  QuartzHub angefasst hat, bricht in QuartzControl also nicht. Die READMEs dort sagen es.
+- **Die Grundvorlage qc-basic für 5.1** (`scripts/template-quartz51.mjs`, einmal gelaufen): ohne
+  crawl-links, remove-draft, content-index (ihre Optionen waren 5.1s Vorgaben) und das
+  abgeschaltete hard-line-breaks; GFM 30 vor OFM 40; OFM ohne `parseArrows`, das 2.x nicht kennt;
+  note-properties ohne `delimiters`/`language` (Vorgaben). 45 Einträge, 31 aktiv. Dazu die 22
+  Beispielseiten: Sie waren bei etwa 100 Zeichen hart umbrochen, und 5.1 macht wie Obsidian aus
+  jedem einfachen Umbruch ein `<br>`. Die Startseite allein hatte so fünf Brüche mitten im Satz
+  (Gegenprobe mit der alten Datei); 20 Seiten sind jetzt je Absatz eine Zeile, das Skript prüft,
+  dass sich kein Wort ändert. Gemessen an einem in der App angelegten Projekt (offline, also mit
+  dieser Kopie): `plugin doctor` meldet nur die gewollte zweite layout-box, der Build hat eine
+  Warnung (dieselbe), kein `<br>` in den 34 Seiten. QuartzControls eigener ZIP-Leser liest die
+  Datei. Für 5.0-Projekte bleibt sie brauchbar: Ein Import ergänzt und ersetzt Einträge, er
+  entfernt keine, ein crawl-links des Projekts bleibt also. Der Golden-Test der Importschritte
+  liest jetzt eine feste Kopie der 1.3.0-Datei (`Fixtures/templates/qc-basic-1.3.0.qtpl`), denn
+  seine Aufnahme gehört zu ihr.
