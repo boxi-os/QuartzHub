@@ -2070,6 +2070,19 @@ QuartzControl das Öffnen („project:open … Invalid UUID“); mein erster Ver
   leert dabei `running-servers.json`; bis dahin zeigt QuartzHubs Band nur „QuartzControl läuft“, ohne
   den Server. Eine zweite Instanz war mein Versehen (`open -n` während QuartzControl noch fragte).
 
+## Plugin von GitHub an der App gemessen
+
+Am 2026-11-11. Den Aufruf, der fremden Code von GitHub in ein Projekt holt, lehnte der
+Sicherheitsfilter dieser Sitzung früher ab, auch mit Freigabe; deshalb gab der Nutzer selbst ein und
+drückte „Hinzufügen“, an der Scratch-Kopie `e/proj` (Plugins ▸ Marktplatz). Eingegeben:
+`quartz-community/obsidian-plugin-excalidraw` (öffentlich, noch nicht im Projekt). Danach:
+„quartz-community/obsidian-plugin-excalidraw installiert.“ unter dem Feld, der Katalog zählt 44 statt
+43 von 46 installiert, vorher Snapshot `pluginChange … quartz-community/obsidian-plugin-excalidraw`,
+in `quartz.config.yaml` der Eintrag mit `source` wie eingegeben und den Standard-Optionen, im
+Lockfile `resolved` und Commit `56de4bb`. Ein Build danach: „Erfolgreich in 1,7s“, 67 Dateien. In
+der Ausgabe meldet Quartz zum Frame `frame-index` der Vorlage „failed to load its entry module (only
+its components/frames were loaded)“, wie schon beim Build nach dem Anlegen; nicht untersucht.
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
