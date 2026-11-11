@@ -55,11 +55,14 @@ import Testing
     try Posix.mkdirs(project)
     _ = await ProcessRunner.run(golden.environment.command("git", ["init", "-q"], in: project))
     _ = await ProcessRunner.run(golden.environment.command("git", ["remote", "add", "origin", "https://github.com/o/r"], in: project))
+    // 2 s, not 0.5: twice in full runs the stand-in had not written its file when 0.5 s were up
+    // (ENOENT, the test over at 0.55 and 0.61 s), so the launch itself took that long; not
+    // reproduced in 58 further runs, alone, under load or in the suite (2026-11-11).
     var deadlines = Sync.Deadlines()
-    deadlines.sync = .milliseconds(500)
+    deadlines.sync = .seconds(2)
     let result = await Sync.run(project: project, direction: .push, environment: golden.environment, token: { "t" }, deadlines: deadlines)
     #expect(!result.success)
-    #expect(result.output.hasSuffix(L10n.t("main.commandTimeout", ["ms": "500", "command": "npx quartz"])))
+    #expect(result.output.hasSuffix(L10n.t("main.commandTimeout", ["ms": "2000", "command": "npx quartz"])))
     let script = String(decoding: try Posix.read(golden.path("askpass-path")), as: UTF8.self)
     #expect(!script.isEmpty && !Posix.exists(script))
   }
