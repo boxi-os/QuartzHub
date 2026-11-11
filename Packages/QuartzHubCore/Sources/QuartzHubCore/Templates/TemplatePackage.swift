@@ -1077,12 +1077,25 @@ public struct TemplatePackage: Sendable {
   func planLayout(_ payload: JSONValue, _ run: Run) async throws -> PartPlan {
     let config = try await readConfig(run.project)
     var plan = PartPlan(id: "layout")
-    if Self.stringified(config.layout.map(JSONValue.object) ?? .null) != Self.stringified(payload["layout"]) { plan.conflicts.append(.string("layout")) }
+    let incoming = payload["layout"]?.objectValue.map { JSONValue.object(Self.mergedLayout(config.layout, $0)) } ?? payload["layout"]
+    if Self.stringified(config.layout.map(JSONValue.object) ?? .null) != Self.stringified(incoming) { plan.conflicts.append(.string("layout")) }
     let current = LayoutFrames.widths(project: run.project)
     if payload["breakpoints"]?["tablet"] != .number(current.tablet) || payload["breakpoints"]?["mobile"] != .number(current.mobile) {
       plan.conflicts.append(.string("breakpoints"))
     }
     return plan
+  }
+
+  /// The package's layout over the project's: what the package names replaces, a key it does not
+  /// name stays. QuartzControl replaced the whole `layout`, which knew only `groups` and
+  /// `byPageType`; a package without Quartz 5.1's `sidebars` took the project's (and `quartz
+  /// create -t docs` with the basic template made a "default" site; Review 2026-11-11 (2), N1).
+  /// The package's keys come first, in its order, so a package that names everything the project
+  /// has gives QuartzControl's result.
+  static func mergedLayout(_ current: JSONObject?, _ package: JSONObject) -> JSONObject {
+    var merged = package
+    for key in current?.keys ?? [] where merged[key] == nil { merged[key] = current?[key] }
+    return merged
   }
 
   func applyLayout(_ payload: JSONValue, _ run: Run) async throws {
@@ -1092,7 +1105,7 @@ public struct TemplatePackage: Sendable {
     }
     if let layout = payload["layout"], JS.truthy(layout) {
       var config = try await readConfig(run.project)
-      config.layout = layout.objectValue
+      config.layout = layout.objectValue.map { Self.mergedLayout(config.layout, $0) }
       try await writeConfig(config, run.project)
     }
     // Every frame's media queries carry the widths, so every frame is rewritten.

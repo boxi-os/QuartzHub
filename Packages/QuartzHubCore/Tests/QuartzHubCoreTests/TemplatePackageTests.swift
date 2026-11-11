@@ -255,4 +255,49 @@ struct TemplatePackageTests {
     }
     #expect(try FileManager.default.contentsOfDirectory(atPath: scratch.path) == [".quartz-gui"])
   }
+
+  /// Review 2026-11-11 (2), N1: what the package names replaces, Quartz 5.1's `sidebars` it does not
+  /// name stays; a package that names it wins.
+  @Test func aPackageLayoutKeepsWhatItDoesNotName() throws {
+    let project = try JSJSON.parse(Data(#"{"sidebars":{"left":"static"},"groups":{"a":1},"byPageType":{}}"#.utf8)).objectValue!
+    let package = try JSJSON.parse(Data(#"{"groups":{"b":2},"byPageType":{"tag":{}}}"#.utf8)).objectValue!
+    #expect(JSJSON.compact(.object(TemplatePackage.mergedLayout(project, package))) == #"{"groups":{"b":2},"byPageType":{"tag":{}},"sidebars":{"left":"static"}}"#)
+    var naming = package
+    naming["sidebars"] = .object(JSONObject([("right", .string("fixed"))]))
+    #expect(TemplatePackage.mergedLayout(project, naming)["sidebars"] == naming["sidebars"])
+    #expect(TemplatePackage.mergedLayout(nil, package) == package)
+  }
+
+  /// `quartz create -t docs` (Quartz 5.1.0's `quartz/cli/templates/docs.yaml`), then the wizard's
+  /// default, the basic template: the site keeps its static sidebars. Before, the template's layout
+  /// replaced the whole `layout` and the result was the default template (measured by the reviewer).
+  @Test func docsWithTheBasicTemplateKeepsItsSidebars() async throws {
+    let package = try #require(BuiltinTemplate.developmentCopy)
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let profile = ProfileDirectory("\(scratch.path)/Profil")
+    let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
+    let list = ProjectList(store: ProjectStore(profile: profile), builds: BuildService(logs: LogBuffer(), environment: { environment }),
+                           connections: Connections(profile: profile, secrets: MemorySecrets()), runtime: .repository)
+    let read: LayoutFrames.ReadConfig = { try await ConfigFile.read(project: $0, runtime: .repository) }
+    let stub = PluginCommands.Result(success: true, output: "")
+    let templates = TemplatePackage(
+      runtime: .repository, locales: LocaleFiles(environment: environment), frames: LayoutFrames(readConfig: read),
+      fonts: FontService(readConfig: read), npm: { _, _ in stub }, addPlugin: { _, _ in stub }, head: { _ in nil },
+      snapshot: { _, _, _ in }, app: ("QuartzHub", "0.0.0-test"))
+    let docs = try Posix.read(NodePath.normalize("\(NodePath.dirname(#filePath))/Fixtures/templates/quartz-5.1.0-docs.yaml"))
+    var options = ProjectCreator.Options(targetDirectory: "\(scratch.path)/Docs-\u{DC}")
+    options.template = .docs
+    let outcome = await ProjectCreation.run(
+      options, template: .init(path: package, withContent: false), appLanguage: "de",
+      environment: environment, list: list, templates: templates,
+      create: { options, _ in
+        try? Posix.mkdirs("\(options.targetDirectory)/content")
+        try? Posix.write(ConfigFile.path(project: options.targetDirectory), docs)
+        return ProjectCreator.Result(success: true, output: "")
+      })
+    #expect(outcome.projectId != nil, "\(outcome.failure ?? "")")
+    let config = try await ConfigFile.read(project: options.targetDirectory, runtime: .repository)
+    #expect(config.layout?["sidebars"].map { JSJSON.compact($0) } == #"{"left":"static","right":"static"}"#)
+    #expect(config.layout?["groups"] != nil)
+  }
 }
