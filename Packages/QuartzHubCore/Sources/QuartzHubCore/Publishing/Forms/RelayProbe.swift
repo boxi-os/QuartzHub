@@ -1,4 +1,5 @@
 import Foundation
+import Security
 import Synchronization
 
 /// What send.php answered right after an upload (`RelayCheck`): `GET ?challenge=<form>` with the
@@ -333,9 +334,29 @@ public struct RelayProbe: Sendable {
     return ms.truncatingRemainder(dividingBy: 1000) == 0 ? String(Int(ms / 1000)) : String(ms / 1000)
   }
 
+  /// Chromium's code for a certificate the trust evaluation refused (`Fetch`'s own evaluation).
+  static func certificateCode(_ status: OSStatus) -> String {
+    switch status {
+    case errSecHostNameMismatch: "net::ERR_CERT_COMMON_NAME_INVALID"
+    case errSecCertificateExpired, errSecCertificateNotValidYet: "net::ERR_CERT_DATE_INVALID"
+    case errSecCertificateRevoked: "net::ERR_CERT_REVOKED"
+    case errSecNotTrusted: "net::ERR_CERT_AUTHORITY_INVALID"
+    default: "net::ERR_CERT_INVALID"
+    }
+  }
+
   /// Chromium's code for the failures formsService.ts names, as `unreachableReason` words them.
-  static func unreachableReason(_ error: Error) -> String {
+  /// `certificate`: what the delegate's own trust evaluation refused. In the app, App Transport
+  /// Security turns every certificate failure into -1200 with stream code -9802, so the error
+  /// alone no longer tells a wrong name from an expired or unknown certificate (measured
+  /// 2026-11-11: -1202/-9843 from a script, -1200/-9802 from an app bundle, same session).
+  static func unreachableReason(_ error: Error, certificate: String? = nil) -> String {
     let ns = error as NSError
+    let tls = [NSURLErrorSecureConnectionFailed, NSURLErrorServerCertificateUntrusted, NSURLErrorServerCertificateHasUnknownRoot,
+               NSURLErrorServerCertificateHasBadDate, NSURLErrorServerCertificateNotYetValid]
+    if let certificate, tls.contains(ns.code) { return L10n.t("main.relayCheckCertificate", ["code": certificate]) }
+    // http:// outside this machine: ATS refuses before any request (QuartzControl asked over http).
+    if ns.code == NSURLErrorAppTransportSecurityRequiresSecureConnection { return L10n.t("relay.checkHttpRefused") }
     let stream = (ns.userInfo["_kCFStreamErrorCodeKey"] as? Int) ?? 0
     let posix = ((ns.userInfo[NSUnderlyingErrorKey] as? NSError)?.domain == NSPOSIXErrorDomain ? (ns.userInfo[NSUnderlyingErrorKey] as? NSError)?.code : nil) ?? stream
     let code: String? = switch ns.code {
@@ -381,6 +402,8 @@ public struct RelayProbe: Sendable {
       var current: String
       var tainted = false
       var hops = 0
+      /// What the trust evaluation refused, as Chromium's code.
+      var certificate: String?
     }
 
     let start: String
@@ -492,20 +515,25 @@ public struct RelayProbe: Sendable {
 
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
                     completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-      guard !anchors.isEmpty, challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+      guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
             let trust = challenge.protectionSpace.serverTrust else {
         completionHandler(.performDefaultHandling, nil)
         return
       }
-      let certificates = anchors.compactMap { SecCertificateCreateWithData(nil, $0 as CFData) }
-      SecTrustSetAnchorCertificates(trust, certificates as CFArray)
-      SecTrustSetAnchorCertificatesOnly(trust, false)
-      // Not trusted with them either: the system's answer, which names the certificate.
-      if SecTrustEvaluateWithError(trust, nil) {
-        completionHandler(.useCredential, URLCredential(trust: trust))
-      } else {
-        completionHandler(.performDefaultHandling, nil)
+      if !anchors.isEmpty {
+        let certificates = anchors.compactMap { SecCertificateCreateWithData(nil, $0 as CFData) }
+        SecTrustSetAnchorCertificates(trust, certificates as CFArray)
+        SecTrustSetAnchorCertificatesOnly(trust, false)
       }
+      var refused: CFError?
+      if SecTrustEvaluateWithError(trust, &refused) {
+        completionHandler(anchors.isEmpty ? .performDefaultHandling : .useCredential, anchors.isEmpty ? nil : URLCredential(trust: trust))
+        return
+      }
+      // Noted for the failure that follows; the system still decides, and fails the request.
+      let code = refused.map { RelayProbe.certificateCode(OSStatus(CFErrorGetCode($0))) } ?? "net::ERR_CERT_INVALID"
+      state.withLock { $0.certificate = code }
+      completionHandler(.performDefaultHandling, nil)
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
@@ -526,7 +554,7 @@ public struct RelayProbe: Sendable {
       let s = state.withLock { $0 }
       if let error {
         if (error as NSError).code == NSURLErrorCancelled { return }
-        finish(.failed(RelayProbe.unreachableReason(error)))
+        finish(.failed(RelayProbe.unreachableReason(error, certificate: s.certificate)))
         return
       }
       finish(.done(answer(s)))

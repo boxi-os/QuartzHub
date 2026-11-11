@@ -40663,6 +40663,23 @@
         }
       }
     },
+    "relay.checkHttpRefused" : {
+      "comment" : "Plugins > Forms > Relay: after the check prefix, when the relay URL starts with http:// and macOS refuses the request",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub fragt ein Relay nur über HTTPS an. Ein Formular auf einer Website mit HTTPS erreicht ein Relay unter http:// ohnehin nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub only asks a relay over HTTPS. A form on a site served over HTTPS cannot reach a relay at http:// anyway."
+          }
+        }
+      }
+    },
     "relay.secretsMissing" : {
       "comment" : "Plugins > Formulare > Relay: relay-secrets.json says the secrets are in the Keychain, the Keychain has none",
       "localizations" : {

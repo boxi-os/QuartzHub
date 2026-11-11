@@ -2132,7 +2132,7 @@ Die Urteile der Prüfung nach dem Hochladen, je mit geänderter `transport.url` 
 - **403:** `…/qhrelay/counters/qf-probe.count` (vom `.htaccess` des Relays gesperrt): „Der Server
   verweigert den Zugriff auf … (HTTP 403). Meist liegt das an den Rechten des Ordners oder an einer
   Firewall des Hosters.“
-- **Befund, offen: jeder Zertifikatsfehler heißt in der App „keine verschlüsselte Verbindung“.**
+- **Befund, behoben: jeder Zertifikatsfehler hieß in der App „keine verschlüsselte Verbindung“.**
   `qh-nix.borkel.net` (die DNS-Wildcard greift, das Zertifikat nennt den Namen nicht): „Das Relay
   konnte nicht geprüft werden: Mit dem Server kam keine verschlüsselte Verbindung zustande
   (net::ERR_SSL_PROTOCOL_ERROR). Spricht er HTTPS?“, erwartet war ERR_CERT_COMMON_NAME_INVALID.
@@ -2141,12 +2141,22 @@ Die Urteile der Prüfung nach dem Hochladen, je mit geänderter `transport.url` 
   Info.plist -1200 mit -9802, auch gegen badssl.com (abgelaufen, selbst signiert). Die
   Unterscheidung in `unreachableReason` (Name, Datum, Aussteller) erreicht die App damit nie. Gegen
   die VM (2026-11-10) kam ERR_CERT_AUTHORITY_INVALID, weil `anchors` dort die eigene Prüfung im
-  Delegate auslöste.
-- **Befund, offen: eine Relay-Adresse mit http:// zeigt eine englische Systemmeldung.** „Das Relay
+  Delegate auslöste. Jetzt prüft der Delegate von `RelayProbe` das Zertifikat bei jeder Anfrage
+  selbst (`SecTrustEvaluateWithError`), merkt sich den Grund (-67602 Name, -67818/-67819 Datum,
+  -67843 Aussteller, im App-Bundle gemessen) und überlässt die Entscheidung weiter dem System; die
+  Meldung nennt den gemerkten Grund vor dem allgemeinen Fehler. `RelayProbeTLSTests` gegen einen
+  lokalen TLS-Server (Node `https`, Zertifikate von `openssl`): falscher Name mit eigenem Anker,
+  unbekannter Aussteller ohne; ohne das Merken drei rote Erwartungen. An der App (Relay in ein
+  Ordner-Ziel, danach die Prüfung): `qh-nix.borkel.net` „Das Zertifikat des Servers wird nicht
+  anerkannt (net::ERR_CERT_COMMON_NAME_INVALID). Browser lehnen dort auch das Formular ab.“; die
+  gültige Adresse kommt weiter durch („… antwortet kein Relay (HTTP 404) …“, das Relay war entfernt).
+- **Befund, behoben: eine Relay-Adresse mit http:// zeigte eine englische Systemmeldung.** „Das Relay
   konnte nicht geprüft werden: The resource could not be loaded because the App Transport Security
   policy requires the use of a secure connection.“ (-1022). QuartzControl fragt über Chromium auch
   http an; all-inkl antwortet dort 404 aus einem anderen Docroot. Webhooks betrifft es nicht, die
-  nehmen nur https.
+  nehmen nur https. ATS bleibt an; jetzt: „Das Relay konnte nicht geprüft werden: QuartzHub fragt ein
+  Relay nur über HTTPS an. Ein Formular auf einer Website mit HTTPS erreicht ein Relay unter http://
+  ohnehin nicht.“ (an der App gemessen; Test `atsShapedFailuresAsTheAppSeesThem`).
 - **Nicht an der App:** 500 ohne Inhalt, kein PHP (samt „config.php lesbar machen und neu
   hochladen“), fremdes Relay, PHP-Meldung, „File not found.“ und die Weiterleitung, die den POST
   verliert, bräuchten eigene PHP- oder `.htaccess`-Dateien auf dem echten Host. Sie stehen als
