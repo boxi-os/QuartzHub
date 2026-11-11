@@ -105,6 +105,16 @@ import Testing
 
   // MARK: beyond QuartzControl's answers
 
+  /// Started from the Finder, QuartzHub has no LANG, and lsof then wrote "G\xc3\xa4rten" for
+  /// "Gärten": the folder of a server matched no project. Asked with an environment like that one.
+  @Test func aFolderWithAnUmlautIsReadWithoutALocale() async throws {
+    let scratch = try HostPathTests.Scratch()
+    let process = try ProcessRunner.launch(Command("/bin/sleep", ["30"], in: scratch.path, environment: ["PATH": "/usr/bin:/bin"])).get()
+    defer { process.signal(SIGKILL) }
+    let cwd = await ServerScan.workingDirectory(process.pid, .live, environment: ["PATH": "/usr/bin:/bin"])
+    #expect(cwd.map { Array($0.utf8) } == Array(BuildOutputGuard.realPath(scratch.path).utf8), "\(cwd ?? "nil")")
+  }
+
   @Test func aProjectRegisteredThroughALinkIsRecognised() async throws {
     let scratch = try HostPathTests.Scratch()
     let real = scratch.url.appendingPathComponent("Echt")

@@ -350,9 +350,17 @@ public enum ServerScan {
     }
   }
 
-  /// `lsof -Fn` prints one field per line, so a path with spaces needs no splitting.
-  static func workingDirectory(_ pid: Int32, _ system: System) async -> String? {
-    let result = await system.run(Command("/usr/sbin/lsof", ["-a", "-p", String(pid), "-d", "cwd", "-Fn"], timeout: .seconds(2)))
+  /// `lsof -Fn` prints one field per line, so a path with spaces needs no splitting. Without a
+  /// UTF-8 locale it writes every byte outside ASCII as text (`G\xc3\xa4rten`), and an app started
+  /// from the Finder or the Dock has none (neither has LANG; `open` in a terminal passes the
+  /// shell's on, measured 2026-11-11): a server in a folder with an umlaut belonged to no project,
+  /// and one of the same project started elsewhere was not refused. The locale is set for lsof,
+  /// whatever QuartzHub was started with.
+  static func workingDirectory(_ pid: Int32, _ system: System,
+                               environment: [String: String] = ProcessInfo.processInfo.environment) async -> String? {
+    var utf8 = environment
+    utf8["LC_ALL"] = "en_US.UTF-8"
+    let result = await system.run(Command("/usr/sbin/lsof", ["-a", "-p", String(pid), "-d", "cwd", "-Fn"], environment: utf8, timeout: .seconds(2)))
     guard result.success else { return nil }
     return result.stdout.split(separator: "\n").first { $0.hasPrefix("n") }.map { String($0.dropFirst()) }
   }

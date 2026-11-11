@@ -2178,10 +2178,26 @@ Danach drei Nebenbefunde dieses Laufs:
   ebenso als Seitenmeldung). Jetzt steht er unter der Zeile, wird angesagt und geht mit der
   nächsten Eingabe.
 - **Test (`76fe56e`): `aSyncThatHangsEnds` gibt der Attrappe 2 s statt 0,5 s.** Zweimal hatte sie
-  ihre Datei bei Fristende noch nicht geschrieben; in 58 weiteren Läufen nicht nachgestellt. Unter
-  Last flackern weiter `BuildServerTests.aServerOfThisProjectStartedElsewhereIsRefused`,
-  `ServerScanTests.aRealServerIsFoundAndStopped` und einmal
-  `ProcessRunnerTests.itHasItsOwnGroupAndStopReachesAllOfIt`; nicht untersucht.
+  ihre Datei bei Fristende noch nicht geschrieben; in 58 weiteren Läufen nicht nachgestellt.
+- **Behoben: Ein Server in einem Ordner mit Umlaut gehörte zu keinem Projekt.** Die zwei Tests,
+  die „unter Last flackerten“ (`BuildServerTests.aServerOfThisProjectStartedElsewhereIsRefused`,
+  `ServerScanTests.aRealServerIsFoundAndStopped`), flackerten nicht: Sie scheiterten bei jedem Lauf
+  ohne `LANG`. Ohne UTF-8-Locale schreibt `lsof -Fn` jedes Byte außerhalb von ASCII als Text
+  (`qh-scratch-G\xc3\xa4rten-…`), und der Testordner trägt seit dem NFD-Durchgang „Gärten-Ü“. Mit
+  `LANG` liefen sie grün, also je nachdem, wie der Lauf gestartet war. Die App betrifft das
+  wirklich: Finder und Dock haben kein `LANG`, eine von dort gestartete App also auch nicht; nur
+  `open` aus dem Terminal reicht das der Shell durch (beides mit `ps eww` gemessen). Ein Dev-Server
+  in „~/Gärten“ wurde keinem Projekt zugeordnet, und einer desselben Projekts, der woanders lief,
+  wurde nicht abgewiesen. `ServerScan.workingDirectory` setzt jetzt `LC_ALL=en_US.UTF-8` für
+  `lsof`. `ps` schreibt Umlaute ohne Locale ebenso um (`GM-CM-$rten`), dort sucht QuartzHub aber
+  nur „quartz“, `--serve` und die Ports. Gemessen mit `aFolderWithAnUmlautIsReadWithoutALocale`
+  (Gegenprobe ohne die Locale rot) und zwei vollen Läufen der Kerntests, mit und ohne `LANG`,
+  beide grün. QuartzControl fragt `lsof` genauso und hat denselben Fehler (nicht gemessen).
+- **Nicht gefunden: `ProcessRunnerTests.itHasItsOwnGroupAndStopReachesAllOfIt`.** Er scheiterte
+  einmal in einem vollen Lauf, nach 6 s und ohne Wert in der Meldung (`await` im `#expect` wird
+  als `<not evaluated>` gemeldet). Nicht nachgestellt: 120 Wiederholungen unter 40 Lastprozessen
+  grün, und 4000 SIGTERMs an die Gruppe desselben Skripts beendeten die Shell immer mit SIGTERM.
+  Der Test wartet jetzt getrennt, damit das nächste Scheitern seinen Wert nennt.
 
 ## Review 2026-11-11: die Befunde
 
