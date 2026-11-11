@@ -471,7 +471,13 @@ public struct Connections: Sendable {
   /// The secrets, nil when none are stored.
   public func relaySecrets(_ projectId: String) throws(PublishFailure) -> RelaySecrets? {
     guard let entry = readRelayStore()[projectId], entry.secretInKeychain else { return nil }
-    let plain = try read(account: Self.relayAccount(projectId))
+    let plain: String
+    do throws(PublishFailure) {
+      plain = try read(account: Self.relayAccount(projectId))
+    } catch where error == PublishFailure(L10n.t("main.secretMissingInKeychain")) {
+      // Said where they are entered, the relay section, not under the connections.
+      throw PublishFailure(L10n.t("relay.secretsMissing"))
+    }
     guard let object = (try? JSJSON.parse(Data(plain.utf8)))?.objectValue else { return nil }
     return RelaySecrets(object: object)
   }
@@ -487,7 +493,15 @@ public struct Connections: Sendable {
          !change.renewSecret, !(all[projectId]?.captchaSecrets.contains(move.from) ?? false) {
         return
       }
-      let current = try relaySecrets(projectId)
+      // Missing from the Keychain although the file names them (another Mac, an item deleted):
+      // what is lost is lost, and the change starts a new set instead of failing every save, which
+      // left no way to enter an address again (measured 2026-11-11).
+      let current: RelaySecrets?
+      do throws(PublishFailure) {
+        current = try relaySecrets(projectId)
+      } catch where error == PublishFailure(L10n.t("relay.secretsMissing")) {
+        current = nil
+      }
       // QuartzControl made the default's secret first and a renewed one after it: two draws.
       let fresh = current == nil ? Self.base64url(randomBytes(32)) : nil
       var recipients = current?.recipients ?? JSONObject()

@@ -40663,6 +40663,23 @@
         }
       }
     },
+    "relay.secretsMissing" : {
+      "comment" : "Plugins > Formulare > Relay: relay-secrets.json says the secrets are in the Keychain, the Keychain has none",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Adressen und Secrets des Relays fehlen im Schlüsselbund, etwa nach einem Umzug auf einen anderen Mac. Trag sie hier neu ein und lade das Relay danach neu hoch."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The relay's addresses and secrets are missing from the Keychain, for example after moving to another Mac. Enter them here again and upload the relay afterwards."
+          }
+        }
+      }
+    },
     "settings.appearance.appliedImmediately" : {
       "localizations" : {
         "de" : {

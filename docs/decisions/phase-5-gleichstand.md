@@ -2106,6 +2106,16 @@ FTP-Zugang nur für deren Ordner (Passwort vom Nutzer eingetragen). Am Relay-Klo
   Passwort enthält ein Steuerzeichen …“ ab; ein als Text eingefügter Schlüssel behält seine Zeilen.
   `aOneLineSecretLosesThePastedLineBreak`: ohne die Regel vier rote Erwartungen. An der App nicht
   nachgestellt (dafür hätte die Zwischenablage des Nutzers herhalten müssen).
+- **Befund, behoben: fehlende Relay-Geheimnisse ließen sich nicht neu eintragen.** Nennt
+  `relay-secrets.json` die Geheimnisse als im Schlüsselbund und fehlt der Eintrag dort (anderer Mac,
+  Eintrag gelöscht; hier `-QHMemorySecrets` über einen Neustart), scheiterte jede Änderung, weil
+  `saveRelaySecrets` zuerst die alten las, und der Hinweis schickte zu „Einstellungen → Zugänge“, wo
+  es keine Relay-Geheimnisse gibt. QuartzControl kann das nicht treffen: Es hält die Geheimnisse
+  verschlüsselt in der Datei selbst. Jetzt sagt das Lesen „Die Adressen und Secrets des Relays fehlen
+  im Schlüsselbund, … Trag sie hier neu ein und lade das Relay danach neu hoch.“, und eine Änderung
+  fängt mit einem neuen Satz an (neues Signier-Secret). `relaySecretsGoneFromTheKeychainCanBeEnteredAgain`:
+  alter Code mit dem alten Satz und gescheitertem Speichern rot. An der App nach dem Neustart:
+  „Adresse für „TestKontakt“ gespeichert.“, neuer Fingerabdruck, das alte Captcha-Secret ist mit weg.
 
 ## Review 2026-11-11: die Befunde
 

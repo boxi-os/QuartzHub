@@ -164,6 +164,24 @@ import Testing
     #expect(store.list().count == 1)
   }
 
+  /// The relay's secrets named in the file but gone from the Keychain (another Mac, an item
+  /// deleted): reading says so where they are entered, and a new address is stored as a fresh set
+  /// instead of every save failing (measured 2026-11-11: no address could be entered again).
+  @Test func relaySecretsGoneFromTheKeychainCanBeEnteredAgain() throws {
+    let root = TestFolder.make("qh-connections-relay-gone")
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    let secrets = MemorySecrets()
+    let store = Connections(profile: ProfileDirectory(root), secrets: secrets)
+    try store.saveRelaySecrets("p1", RelaySecretsChange(recipients: JSONObject([("Kontakt", .string("alt@example.org"))])))
+    let before = try #require(try store.relaySecrets("p1"))
+    try secrets.delete(account: Connections.relayAccount("p1"))
+    #expect(throws: PublishFailure(L10n.t("relay.secretsMissing"))) { try store.relaySecrets("p1") }
+    try store.saveRelaySecrets("p1", RelaySecretsChange(recipients: JSONObject([("Kontakt", .string("neu@example.org"))])))
+    let after = try #require(try store.relaySecrets("p1"))
+    #expect(after.recipients["Kontakt"] == .string("neu@example.org"))
+    #expect(after.secret != before.secret && !after.secret.isEmpty)
+  }
+
   /// A password or token is one line: a pasted line break at the end goes, any other control
   /// character is refused before it reaches the Keychain; a key pasted as text keeps its lines
   /// (measured 2026-11-11: basic-ftp refused "PASS" with a trailing newline).
