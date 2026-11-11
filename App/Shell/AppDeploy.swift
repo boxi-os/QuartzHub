@@ -48,7 +48,12 @@ enum AppDeploy {
       "sftp": SFTPAdapter(connections: connections, environment: environment, confirm: confirm),
       "rsync": RsyncAdapter(connections: connections, environment: environment),
       "ftp": FTPAdapter(connections: connections, runtime: environment.runtime),
-      "git-branch": GitBranchAdapter(environment: environment, token: connections.gitToken),
+      "git-branch": GitBranchAdapter(environment: environment, token: connections.gitToken, pagesDomain: { project in
+        // Unknown unless GitHub answered: no origin there, no Pages call, an error.
+        guard let info = try? await GitHubAPI(environment: environment, token: connections.gitToken).pagesInfo(project),
+              info.error == nil else { return nil }
+        return .some(info.configured ? info.cname?.stringValue : nil)
+      }),
       "webhook": WebhookAdapter(),
       "document": DocumentAdapter(runtime: environment.runtime, outside: !offline),
     ], progress: progress)

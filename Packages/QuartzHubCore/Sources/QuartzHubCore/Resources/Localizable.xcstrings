@@ -25313,6 +25313,23 @@
         }
       }
     },
+    "main.branchKeptDomain" : {
+      "comment" : "Branch deploy output: the CNAME GitHub keeps for the custom domain was carried into the deploy",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die eigene Domain {{domain}} aus GitHubs Pages-Einstellungen bleibt auf dem Branch (CNAME)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The custom domain {{domain}} from GitHub’s Pages settings stays on the branch (CNAME)."
+          }
+        }
+      }
+    },
     "main.branchNoOrigin" : {
       "comment" : "Publishing - git branch",
       "localizations" : {

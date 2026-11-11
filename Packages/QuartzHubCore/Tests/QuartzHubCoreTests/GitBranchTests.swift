@@ -272,6 +272,34 @@ import Testing
     try FileManager.default.removeItem(atPath: "\(build)/CNAME")
     #expect(try await adapter.run(DeployContext(project: project, target: target("codeberg"), buildDir: build), excluding: []).success)
     #expect(await published("CNAME") == nil)
+
+    // Review 2026-11-11 (2), N3: with GitHub's answer, only the domain its settings name is
+    // carried. The branch holds "gh-test.example.org" again (GitHub's commit), then the build drops
+    // nothing and GitHub says another domain, none, the same one (other case), or nothing (unknown).
+    try Posix.write("\(github)/CNAME", Data("gh-test.example.org".utf8))
+    for args in [["fetch", "-q", "origin"], ["reset", "-q", "--hard", "origin/gh-pages"]] { #expect(await git(args, github).success) }
+    try Posix.write("\(github)/CNAME", Data("gh-test.example.org".utf8))
+    for args in [["add", "CNAME"], ["commit", "-q", "-m", "Create CNAME"], ["push", "-q", "origin", "gh-pages"]] {
+      #expect(await git(args, github).success)
+    }
+    let answer = Mutex<String??>(nil)
+    let asking = GitBranchAdapter(environment: environment, token: { nil }, pagesDomain: { _ in answer.withLock { $0 } })
+    for (said, kept) in [(String??.some("GH-Test.example.org"), true), (.some(nil), false), (.some("other.example.org"), false), (nil, true)] {
+      answer.withLock { $0 = said }
+      try Posix.write("\(build)/index.html", Data(UUID().uuidString.utf8))
+      let result = try await asking.run(context, excluding: [])
+      #expect(result.success)
+      #expect((await published("CNAME") != nil) == kept, "GitHub said \(String(describing: said))")
+      #expect(result.output.contains(L10n.t("main.branchKeptDomain", ["domain": "gh-test.example.org"])) == kept)
+      if !kept {
+        // Put GitHub's file back for the next case.
+        for args in [["fetch", "-q", "origin"], ["reset", "-q", "--hard", "origin/gh-pages"]] { #expect(await git(args, github).success) }
+        try Posix.write("\(github)/CNAME", Data("gh-test.example.org".utf8))
+        for args in [["add", "CNAME"], ["commit", "-q", "-m", "Create CNAME"], ["push", "-q", "origin", "gh-pages"]] {
+          #expect(await git(args, github).success)
+        }
+      }
+    }
   }
 
   @Test func readsNameStatusAsQuartzControl() {

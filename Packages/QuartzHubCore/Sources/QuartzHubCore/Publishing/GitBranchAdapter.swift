@@ -6,8 +6,8 @@ import Foundation
 ///
 /// Every deploy publishes one root commit and replaces what the branch held: the branch carries
 /// only generated output, so a history of it costs size for nothing recoverable. Consequence by
-/// design: nothing may live on that branch that the build does not make (a CNAME has to come
-/// from the build or from GitHub's Pages settings). Built with plumbing (`write-tree`,
+/// design: nothing may live on that branch that the build does not make, except the CNAME GitHub
+/// keeps for the domain its Pages settings name (`keepPagesDomain`). Built with plumbing (`write-tree`,
 /// `commit-tree` without a parent) in a detached worktree per target, pushed as a sha, so no local
 /// branch is left behind.
 ///
@@ -25,17 +25,23 @@ public struct GitBranchAdapter: DeployAdapter {
     public init() {}
   }
 
+  /// The custom domain GitHub's Pages settings name for the project's origin: `.some(nil)` none
+  /// (or no Pages site), nil unknown (no token, no network, another host).
+  public typealias PagesDomain = @Sendable (_ project: String) async -> String??
+
   let environment: ToolEnvironment
   let token: GitAuth.Token
   let now: @Sendable () -> Date
   let deadlines: Deadlines
+  let pagesDomain: PagesDomain
 
   public init(environment: ToolEnvironment, token: @escaping GitAuth.Token, now: @escaping @Sendable () -> Date = { Date() },
-              deadlines: Deadlines = Deadlines()) {
+              deadlines: Deadlines = Deadlines(), pagesDomain: @escaping PagesDomain = { _ in nil }) {
     self.environment = environment
     self.token = token
     self.now = now
     self.deadlines = deadlines
+    self.pagesDomain = pagesDomain
   }
 
   struct GitError: Error, CustomStringConvertible {
@@ -104,7 +110,9 @@ public struct GitBranchAdapter: DeployAdapter {
     for entry in Posix.entries(context.buildDir) ?? [] {
       try TreeCopy.copy(from: "\(context.buildDir)/\(entry.name)", to: "\(worktree)/\(entry.name)", verbatimSymlinks: false)
     }
-    try await keepPagesDomain(context, remoteTip: remoteTip, worktree: worktree)
+    if let domain = try await keepPagesDomain(context, remoteTip: remoteTip, worktree: worktree) {
+      output += "\(L10n.t("main.branchKeptDomain", ["domain": domain]))\n"
+    }
 
     // --force: whatever ignore rules there are (the worktree shares .git/info/exclude, and
     // core.excludesFile is global) must not drop a file from the live site.
@@ -123,11 +131,22 @@ public struct GitBranchAdapter: DeployAdapter {
   /// github.io again, pages under the domain answered 404). QuartzControl assumed a domain set
   /// through the API survived; it does not. So the published CNAME is carried into each deploy
   /// unless the build brings its own.
-  func keepPagesDomain(_ context: DeployContext, remoteTip: String, worktree: String) async throws {
+  ///
+  /// Only while GitHub's settings name the same domain: a CNAME that a build used to bring, or one
+  /// another tool left on the branch, would otherwise stay for good, and GitHub would send the
+  /// github.io address to a domain given up long ago (Review 2026-11-11 (2), N3). When GitHub
+  /// cannot be asked, the file is carried as before; dropping it would drop a live domain.
+  /// Returns the domain carried, for the run's output.
+  func keepPagesDomain(_ context: DeployContext, remoteTip: String, worktree: String) async throws -> String? {
     guard !remoteTip.isEmpty, context.destination["provider"] == .string("github"),
-          Posix.kind("\(worktree)/CNAME") == nil else { return }
+          Posix.kind("\(worktree)/CNAME") == nil else { return nil }
     let (published, _) = await git(["cat-file", "blob", "\(remoteTip):CNAME"], in: context.project)
-    if published.success { try Posix.write("\(worktree)/CNAME", Data(published.stdout.utf8)) }
+    guard published.success else { return nil }
+    let domain = JS.trim(published.stdout)
+    if case .some(let configured) = await pagesDomain(context.project),
+       JS.trim(configured ?? "").lowercased() != domain.lowercased() || domain.isEmpty { return nil }
+    try Posix.write("\(worktree)/CNAME", Data(published.stdout.utf8))
+    return domain
   }
 
   func assertOrigin(_ project: String) async throws {
