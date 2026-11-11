@@ -2013,6 +2013,28 @@ Dabei ein Fehler meinerseits: Eine Suche nach Projekten, die hinter Quartz liege
 `hinterland-history` (zwei git-Abfragen nach der Historie, keine Inhalte gelesen, nichts
 geschrieben). Solche Suchen laufen nur noch über die Scratch-Kopien.
 
+## Warnungen nach dem Anlegen an der App gemessen
+
+Am 2026-11-11. Der Assistent nimmt die eingebaute Vorlage, eine Fassung im Profil gewinnt, wenn
+ihr `createdAt` neuer ist (`BuiltinTemplate.find`). Ins Scratch-Profil kam deshalb `qc-basic.qtpl`
+mit einem zusätzlichen Plugin `@quartzhub-probe/gibt-es-nicht` (npm antwortet 404; ein GitHub-Repo,
+das es nicht gibt, hätte git nach Zugangsdaten fragen lassen und den Schlüsselbund berührt), dazu
+`defaultProjectDirectory` auf einen Scratch-Ordner. Angelegt wurde `warn-probe` mit Vorlage und
+Beispielseiten; `quartz create` holte Quartz von GitHub.
+
+Nach rund 10 s die Abschlussseite: „Projekt angelegt“, „Das Projekt ist da. Beim Anwenden der
+Vorlage gab es aber etwas zu melden:“, die Warnung in Orange und „Zum Projekt“, das das
+Projektfenster öffnet. Ein Build danach: „Erfolgreich in 3,6s“, 127 Dateien, in der Ausgabe
+übersprungene Plugins.
+
+- **Geerbt, Nebenbefund:** Die Vorlage holt alle fehlenden npm-Pakete in einem `npm install`
+  (wie QuartzControls `templatePackageService.ts`). Ein Paket, das es nicht gibt, lässt damit auch
+  `@quartz-community/crawl-links`, `remove-draft` und `content-index` ungeladen; die Warnung nennt
+  alle vier, der Build überspringt sie und den Frame `frame-index`.
+- **Geerbt, Nebenbefund:** Die Warnung ist `pluginInstallFailed:<Pakete>:<npm-Ausgabe>`, der
+  Satz zeigt alles nach dem ersten Doppelpunkt, also „…gibt-es-nicht:npm error code E404“ mit dem
+  zweiten Doppelpunkt roh.
+
 ## Review 2026-11-11: die Befunde
 
 Die erste Review-Runde (`docs/REVIEW-2026-11-11.md`), ein Befund pro Commit mit dem Skill
