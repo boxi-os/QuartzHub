@@ -15,6 +15,13 @@ import Testing
 
   static func alive(_ pid: pid_t) -> Bool { kill(pid, 0) == 0 }
 
+  /// Ends what a test started and left running, but only while `pid` is still in `group`, the
+  /// test's own: once that process is gone the number can belong to anyone's (the pid space
+  /// wraps), and an unchecked SIGKILL at the end of a test could hit any process of the user.
+  static func killLeftover(_ pid: pid_t, group: pid_t) {
+    if group > 0, getpgid(pid) == group { kill(pid, SIGKILL) }
+  }
+
   @Test func separatesStdoutAndKeepsOrderInOutput() async {
     let result = await ProcessRunner.run(Self.sh("echo one; echo two >&2; sleep 0.05; echo three; exit 3"))
     #expect(result.termination == .exited(3))
@@ -79,7 +86,9 @@ import Testing
     let result = await ProcessRunner.run(Self.sh("sleep 30 >/dev/null 2>&1 & echo $!; wait", timeout: .milliseconds(200)))
     #expect(result.termination == .timedOut)
     let grandchild = try #require(pid_t(result.stdout.trimmingCharacters(in: .whitespacesAndNewlines)))
-    defer { kill(grandchild, SIGKILL) }
+    // Its group is the shell's, read while it still runs (-1 once it is gone: nothing to end).
+    let group = getpgid(grandchild)
+    defer { Self.killLeftover(grandchild, group: group) }
     var gone = false
     for _ in 0..<40 where !gone {
       try await Task.sleep(for: .milliseconds(50))
@@ -319,7 +328,7 @@ import Testing
     let process = try Self.launch("sleep 30 & echo $!; wait", files)
     try await Self.waitFor { !files.read("out").isEmpty }
     let grandchild = try #require(pid_t(files.read("out").trimmingCharacters(in: .whitespacesAndNewlines)))
-    defer { kill(grandchild, SIGKILL) }
+    defer { ProcessRunnerTests.killLeftover(grandchild, group: process.pid) }
     #expect(getpgid(process.pid) == process.pid)
     #expect(getpgid(grandchild) == process.pid)
     #expect(getpgid(process.pid) != getpgrp())
@@ -341,12 +350,22 @@ import Testing
     let process = try Self.launch("(trap '' TERM; while :; do sleep 0.05; done) & echo $!; wait", files)
     try await Self.waitFor { !files.read("out").isEmpty }
     let stubborn = try #require(pid_t(files.read("out").trimmingCharacters(in: .whitespacesAndNewlines)))
-    defer { kill(stubborn, SIGKILL) }
+    defer { ProcessRunnerTests.killLeftover(stubborn, group: process.pid) }
     let start = ContinuousClock.now
     #expect(await process.stop(grace: .milliseconds(400)) == .signaled(SIGTERM))
     #expect(ContinuousClock.now - start >= .milliseconds(400))
     try await Self.waitFor { !ProcessRunnerTests.alive(stubborn) }
     #expect(!ProcessRunnerTests.alive(stubborn), "\(stubborn) survived the stop")
+  }
+
+  @Test func aLeftoverIsEndedOnlyInItsGroup() async throws {
+    let process = try ProcessRunner.launch(Command("/bin/sleep", ["30"])).get()
+    defer { process.signal(SIGKILL) }
+    ProcessRunnerTests.killLeftover(process.pid, group: process.pid + 1)
+    try await Task.sleep(for: .milliseconds(300))
+    #expect(process.termination == nil, "another group's number is left alone")
+    ProcessRunnerTests.killLeftover(process.pid, group: process.pid)
+    #expect(await process.exit() == .signaled(SIGKILL))
   }
 
   @Test func startFailuresAreTheirOwnAnswers() {
