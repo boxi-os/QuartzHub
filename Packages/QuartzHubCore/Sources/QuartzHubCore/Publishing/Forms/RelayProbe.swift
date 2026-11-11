@@ -298,7 +298,9 @@ public struct RelayProbe: Sendable {
     let deadline = deadline ?? .now + timeout
     guard let request = URL(string: url) else { return .failed("net::ERR_INVALID_URL") }
     let fetch = Fetch(start: url, origin: origin, seconds: Self.seconds(timeout), reportsStatus: !handedOn, anchors: anchors)
-    let session = URLSession(configuration: configuration(), delegate: fetch, delegateQueue: nil)
+    let sessionConfiguration = configuration()
+    Offline.apply(sessionConfiguration)
+    let session = URLSession(configuration: sessionConfiguration, delegate: fetch, delegateQueue: nil)
     defer { session.invalidateAndCancel() }
     let outcome: Fetch.Result = await withTaskCancellationHandler {
       await withCheckedContinuation { continuation in

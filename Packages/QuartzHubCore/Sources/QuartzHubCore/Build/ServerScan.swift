@@ -409,6 +409,7 @@ enum LiveProbes {
     configuration.timeoutIntervalForRequest = 1.5
     configuration.timeoutIntervalForResource = 1.5
     configuration.urlCache = nil
+    Offline.apply(configuration)
     let session = URLSession(configuration: configuration)
     defer { session.invalidateAndCancel() }
     let bytes: URLSession.AsyncBytes

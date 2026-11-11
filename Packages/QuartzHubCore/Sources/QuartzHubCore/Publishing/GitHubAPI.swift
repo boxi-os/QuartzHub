@@ -77,6 +77,7 @@ public struct GitHubAPI: Sendable {
     configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
     configuration.timeoutIntervalForRequest = Double(timeout.components.seconds)
     configuration.timeoutIntervalForResource = Double(timeout.components.seconds)
+    Offline.apply(configuration)
     session = URLSession(configuration: configuration)
     self.base = base
     self.token = token

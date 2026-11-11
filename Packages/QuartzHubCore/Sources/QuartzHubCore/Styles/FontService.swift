@@ -33,6 +33,7 @@ public struct FontService: Sendable {
   /// URLSession with the system's proxy settings and certificate store, the counterpart of
   /// Electron's `net.fetch` (which QuartzControl used for the same two reasons).
   public static let liveFetch: Fetch = { url, userAgent, timeout throws(FetchFailure) in
+    Offline.registerForShared()
     guard let target = URL(string: url) else { throw .unreachable }
     var mutable = URLRequest(url: target)
     if let userAgent { mutable.setValue(userAgent, forHTTPHeaderField: "User-Agent") }

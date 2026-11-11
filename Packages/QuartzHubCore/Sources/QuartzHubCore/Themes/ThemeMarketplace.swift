@@ -73,6 +73,7 @@ public actor ThemeMarketplace {
     configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
     configuration.timeoutIntervalForRequest = Double(timeout.components.seconds)
     configuration.timeoutIntervalForResource = Double(timeout.components.seconds)
+    Offline.apply(configuration)
     session = URLSession(configuration: configuration)
     self.search = search
     self.install = install

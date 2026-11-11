@@ -124,6 +124,8 @@ public struct ToolEnvironment: Sendable, Equatable {
     var variables = base
     variables["PATH"] = path.joined(separator: ":")
     if let git { variables.merge(git.variables) { _, new in new } }
+    // `-QHOffline`: npm answers from its cache or fails with ENOTCACHED, as without a network.
+    if Offline.isOn { variables["npm_config_offline"] = "true" }
     return variables
   }
 

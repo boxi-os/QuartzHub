@@ -86,6 +86,7 @@ public actor Marketplace {
     let seconds = Double(deadline.components.seconds) + Double(deadline.components.attoseconds) / 1e18
     configuration.timeoutIntervalForRequest = seconds
     configuration.timeoutIntervalForResource = seconds
+    Offline.apply(configuration)
     session = URLSession(configuration: configuration)
     self.base = base
     self.now = now
