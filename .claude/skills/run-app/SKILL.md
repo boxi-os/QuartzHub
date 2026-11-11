@@ -15,7 +15,8 @@ open -n build/DerivedData/Build/Products/Debug/QuartzHub.app --args -QHLanguage 
 ```
 
 Startargumente: `-QHLanguage de|en` (Sprache unabhängig vom Mac), `-QHWindowSize 1400x860`
-(Startgröße; entfernt gespeicherte Fensterrahmen), `-ApplePersistenceIgnoreState YES` (kein
+(Startgröße; entfernt gespeicherte Fensterrahmen, die eigenen des Nutzers legt sein nächster Start
+ohne `-QHProfileDir` und `-QHWindowSize` zurück, `WindowFrames`), `-ApplePersistenceIgnoreState YES` (kein
 wiederhergestelltes Fenster), `-QHProfileDir <ordner>` (QuartzHubs Profil woanders, sonst
 `~/Library/Application Support/QuartzHub`), `-QHMigrationSource <ordner>` (Profil von QuartzControl
 für die Übernahme; leer = aus), `-QHOpenProject <ordner>` (nimmt den Ordner in die Liste auf und

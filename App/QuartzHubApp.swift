@@ -18,13 +18,9 @@ struct QuartzHubApp: App {
       nil
     }
     L10n.apply(pinned ?? settings ?? .system)
-    // A saved window frame ("NSWindow Frame …" in this app's defaults) wins over defaultSize; a
-    // test that asks for a size gets it only without one.
-    if LaunchArgument.string("QHWindowSize") != nil {
-      for key in UserDefaults.standard.dictionaryRepresentation().keys where key.hasPrefix("NSWindow Frame ") {
-        UserDefaults.standard.removeObject(forKey: key)
-      }
-    }
+    // A saved window frame wins over defaultSize, so a test that asks for a size clears them; the
+    // user's own frames are kept aside for their next start (WindowFrames).
+    WindowFrames.prepare(WindowFrames.launch())
   }
 
   /// The first window's size. A UI test sets it with -QHWindowSize 1500x950: dragging a window's

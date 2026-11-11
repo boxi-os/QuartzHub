@@ -2194,3 +2194,27 @@ zur Datei mit deren Inhalt, ein Link auf einen Ordner oder ins Leere scheitert, 
 daran scheitert. Gemessen mit `aLinkInTheBuildIsTheSameWithAndWithoutDocuments`: Der alte Code
 fehlte `linked.html` in der Spiegelung (ENOENT beim Hashen), der neue liefert dieselbe Liste und
 dieselben Hashes, und ein Ordner-Link scheitert in beiden Wegen.
+
+### 10. Das Umbiegen der Frame-Pfade bleibt ohne Snapshot
+
+Das bloße Öffnen einer kopierten `gui-test` schreibt `quartz.config.yaml` und `quartz.lock.json`
+(fünf Frame-Pfade auf den neuen Ort) ohne `configChange`-Snapshot. Nicht geändert: Das ist
+`repointAuthoredFrames`, eine Reparatur wie in QuartzControl („No snapshot: this is a repair“ im
+Code). Ein frisch dupliziertes Projekt hat noch keinen Store, in den ein Snapshot ginge, und ein
+Snapshot des alten Stands hielte nur Pfade auf einen Ordner, der nicht mehr gemeint ist. Wer eine
+Kopie mit dem Original vergleicht, sieht diese fünf Zeilen.
+
+### 11. Test- und Messstarts lassen die Fensterrahmen des Nutzers da
+
+`-QHWindowSize` löschte alle `NSWindow Frame …` im Defaults-Bereich `io.github.boxios.quartzhub`,
+den auch der Debug-Bau teilt, mit dem der Nutzer arbeitet; jeder Start mit Scratch-Profil schrieb
+danach seine eigenen Rahmen darüber. Jetzt (`WindowFrames`) legt der erste Start mit
+`-QHProfileDir` oder `-QHWindowSize` die Rahmen des Nutzers unter `QHUserWindowFrames` beiseite,
+`-QHWindowSize` löscht wie bisher, und der nächste Start ohne beide Schalter legt die Rahmen
+zurück, gleich was die Starts dazwischen gespeichert haben. Ein Schlüssel statt eines Schritts
+beim Beenden, weil XCUITest die App ohne Beenden schließt; alle UI-Tests geben ein Scratch-Profil
+mit. Gemessen mit `aTestLaunchLeavesTheUsersFramesForTheNextStart` (eigene Defaults-Suite: zwei
+Testläufe mit Größe, einer ohne, dann der eigene Start; der alte Weg verlor die Rahmen, Test rot)
+und an der App: Nach einem Scratch-Start mit `-QHWindowSize 1300x800` standen die drei Rahmen des
+Nutzers unverändert unter `QHUserWindowFrames`. Den eigenen Start mit dem echten Profil habe ich
+nicht gemacht (Regel: nur Scratch-Profile); den deckt der Test.
