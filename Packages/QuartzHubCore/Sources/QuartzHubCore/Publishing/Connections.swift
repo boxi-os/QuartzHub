@@ -313,7 +313,10 @@ public struct Connections: Sendable {
   public func save(_ given: SaveConnectionInput) throws(PublishFailure) -> Connection {
     let input = given.normalized
     if let problem = input.problem { throw PublishFailure(L10n.t("main.connectionInvalid", ["field": problem])) }
-    if input.secretHasControlCharacter { throw PublishFailure(L10n.t("main.connectionSecretControl")) }
+    if input.secretHasControlCharacter {
+      // A token is no password (Review 2026-11-11 (2), nebenbei 12).
+      throw PublishFailure(input.kind == .github ? L10n.t("main.connectionTokenControl") : L10n.t("main.connectionSecretControl"))
+    }
     return try Self.lock.withLock { _ throws(PublishFailure) in
       var list = readAll()
       let existing = input.id.flatMap { id in list.items.first { $0.object["id"] == .string(id) } }

@@ -229,6 +229,9 @@ import Testing
     #expect(throws: PublishFailure(L10n.t("main.connectionSecretControl"))) {
       try store.save(SaveConnectionInput(kind: .ssh, name: "S2", host: "h", port: 22, username: "u", authMethod: .password, secret: "pa\0ss"))
     }
+    #expect(throws: PublishFailure(L10n.t("main.connectionTokenControl"))) {
+      try store.save(SaveConnectionInput(kind: .github, name: "G2", secret: "ghp_\nx"))
+    }
     // Review 2026-11-11 (2), N4: a tab, the joiner of an emoji sequence, a soft hyphen go through.
     let family = "\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467}"
     for (index, secret) in ["pa\tss", "x\(family)y", "Trenn\u{AD}zeichen"].enumerated() {

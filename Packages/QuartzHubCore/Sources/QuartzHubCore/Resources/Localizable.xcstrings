@@ -25739,6 +25739,23 @@
         }
       }
     },
+    "main.connectionTokenControl" : {
+      "comment" : "Connection form (Settings > Zugänge): a GitHub token with a line break inside it",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zugang konnte nicht gespeichert werden: Der Token enthält einen Zeilenumbruch mitten im Text. Gib ihn noch einmal ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The connection could not be saved: the token contains a line break inside it. Enter it again."
+          }
+        }
+      }
+    },
     "main.contentSourceInsideTarget" : {
       "comment" : "Content folder",
       "localizations" : {
