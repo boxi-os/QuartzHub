@@ -154,7 +154,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
 - **UI-Überarbeitung seit 2026-11-12** auf dem Branch `ui-ueberarbeitung` (decisions/ui-ueberarbeitung.md):
   macOS 26, Titel = Ort, Verlauf statt Rückweg-Leiste, Menüs „Gehe zu“ und „Projekt“, Bausteine in
   `App/Components/Design.swift`, alle Seiten und ihre Reiter nach den vier Seitentypen, Hinweise und Fehler als `Callout` oder
-  `FieldProblem`; offen ist das Ansehen im hellen Modus.
+  `FieldProblem`, in Hell und Dunkel angesehen.
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
   nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über

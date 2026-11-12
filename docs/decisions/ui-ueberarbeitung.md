@@ -213,5 +213,20 @@ Geblieben sind gefärbte Wörter, die Zustand in einer Zeile zeigen, kein Satz �
 neben einem Eintrag, „Adresse fehlt“ in einer Empfängerzeile, „nicht installiert“ neben einer Schrift,
 die Zeile des Build-Ergebnisses in Grün oder Rot.
 
-Offen: Die Übersicht von Layout (Kacheln und Tabelle) ist noch nicht in `Card` umgestellt.
+## Hell
+
+Alle Seiten und Reiter einmal in Hell aufgenommen (1200 × 780, 2026-11-12). Was auffiel: Karten,
+Kennzahl-Kacheln und der Kopf der Arbeitsflächen (`.fill.quinary`) waren auf Weiß kaum zu sehen.
+Gemessen gegen den Fensterhintergrund:
+
+| | Hell | Dunkel |
+|---|---|---|
+| Fenster | 255 | 40 |
+| Abschnitt eines gruppierten `Form` | 248 | 49 |
+| `.fill.quinary` (vorher) | 253 | 42 |
+| `.fill.quaternary` (jetzt, `Surface.card`) | 248 | 46 |
+
+Damit sehen eine Seite aus Karten und eine aus Formularen gleich aus. In Dunkel ist das nach der
+Rechnung über `NSColor.quaternarySystemFill` gemessen, nicht an einer neuen Aufnahme. Sonst war in
+Hell nichts anders als in Dunkel.
 
