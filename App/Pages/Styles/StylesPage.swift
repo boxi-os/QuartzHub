@@ -268,7 +268,8 @@ struct StylesPage: View {
   /// A project in 1.0's form keeps working, so this asks rather than does: a moved project is one an
   /// older QuartzControl reads without variables and stylesheets.
   private var moveNote: some View {
-    Callout(.info) {
+    // A failed move turns the note itself into the error, not a second box inside it.
+    Callout(migrateError == nil ? .info : .error) {
       Text(L10n.t("styles.migrate.note"))
       HStack {
         Button(migrating ? L10n.t("styles.migrate.running") : L10n.t("styles.migrate.action")) {
@@ -283,7 +284,7 @@ struct StylesPage: View {
         .accessibilityIdentifier("styles.migrate")
         if model.dirty { Text(L10n.t("styles.migrate.saveFirst")).foregroundStyle(.secondary) }
       }
-      if let migrateError { Text(migrateError).foregroundStyle(.red).textSelection(.enabled) }
+      if let migrateError { Text(migrateError) }
     }
   }
 }

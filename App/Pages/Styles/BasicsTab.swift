@@ -201,7 +201,7 @@ struct BasicsTab: View {
   }
 
   private func warning(_ text: String) -> some View {
-    Text(text).font(.caption).foregroundStyle(.orange).fixedSize(horizontal: false, vertical: true)
+    Callout(.warning, text)
   }
 
   // MARK: Where the fonts come from
@@ -258,7 +258,7 @@ struct BasicsTab: View {
       }
       // The plugin's self-hosting rewrites the font URLs to the base URL and stops the build without one.
       if loaders.contains(where: { $0.via == "plugin" && $0.mode == "selfHosted" }) && baseUrl.isEmpty {
-        Text(L10n.t("themeEditor.delivery.baseUrlMissing")).font(.callout).foregroundStyle(.red)
+        Callout(.error, L10n.t("themeEditor.delivery.baseUrlMissing"))
       }
     }
   }
@@ -303,7 +303,7 @@ struct BasicsTab: View {
             }
           }
         }
-        if let fixError { Text(fixError).font(.callout).foregroundStyle(.red).textSelection(.enabled) }
+        if let fixError { Callout(.error, fixError) }
       }
     }
   }
@@ -433,7 +433,7 @@ struct BasicsTab: View {
             .disabled(removing != nil)
           }
         }
-        if let unusedError { Text(unusedError).font(.callout).foregroundStyle(.red).textSelection(.enabled) }
+        if let unusedError { Callout(.error, unusedError) }
       }
     }
   }

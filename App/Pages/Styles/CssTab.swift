@@ -426,7 +426,7 @@ struct CssFilesInspector: View {
         }
         LabeledContent("custom.scss", value: L10n.t("styleEditor.files.alwaysLast")).font(.system(.callout, design: .monospaced))
         createRow
-        if let error { Text(error).font(.callout).foregroundStyle(.red).textSelection(.enabled) }
+        if let error { Callout(.error, error) }
       } header: {
         Text(L10n.t("styleEditor.files.heading"))
       }

@@ -359,13 +359,13 @@ struct ActiveStylesSection: View {
         }
       }
       if families.contains(where: { !$0.isEmpty && !PreviewFontRegistry.isAvailable($0) }) {
-        Text(L10n.t("styleEditor.current.notInstalledExplainer")).font(.caption).foregroundStyle(.orange)
+        Callout(.warning, L10n.t("styleEditor.current.notInstalledExplainer"))
       }
       switch FontDelivery.buildState(config, faces: faces, built: built) {
-      case .notBuilt?: Text(L10n.t("styleEditor.current.fontsNotBuilt")).font(.caption).foregroundStyle(.orange)
-      case .missing(let list)?: Text(L10n.t("styleEditor.current.fontsMissingFromBuild", ["families": list.joined(separator: ", ")])).font(.caption).foregroundStyle(.orange)
-      case .notFetched(let list)?: Text(L10n.t("styleEditor.current.fontsNotFetched", ["families": list.joined(separator: ", ")])).font(.caption).foregroundStyle(.orange)
-      case .noRule(let list)?: Text(L10n.t("styleEditor.current.fontsNoRule", ["families": list.joined(separator: ", ")])).font(.caption).foregroundStyle(.orange)
+      case .notBuilt?: Callout(.warning, L10n.t("styleEditor.current.fontsNotBuilt"))
+      case .missing(let list)?: Callout(.warning, L10n.t("styleEditor.current.fontsMissingFromBuild", ["families": list.joined(separator: ", ")]))
+      case .notFetched(let list)?: Callout(.warning, L10n.t("styleEditor.current.fontsNotFetched", ["families": list.joined(separator: ", ")]))
+      case .noRule(let list)?: Callout(.warning, L10n.t("styleEditor.current.fontsNoRule", ["families": list.joined(separator: ", ")]))
       case nil: EmptyView()
       }
       let specs = requests.map { r in

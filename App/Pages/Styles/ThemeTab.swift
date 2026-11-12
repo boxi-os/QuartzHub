@@ -300,7 +300,7 @@ struct ThemeTab: View {
         .disabled(catalogLoading)
       }
       if catalog?.unavailable == true {
-        Label(L10n.t("themes.catalog.unavailable"), systemImage: "exclamationmark.triangle").foregroundStyle(.orange)
+        Callout(.warning, L10n.t("themes.catalog.unavailable"))
       }
       if filtered.isEmpty {
         Note(catalogLoading || catalog == nil ? L10n.t("themes.loading") : L10n.t("themes.catalog.noResults"))
