@@ -306,6 +306,14 @@ Rückmeldung des Nutzers nach dem zweiten Start aus Xcode (2026-11-12), vier Pun
     Raster und schoben es aus dem Fenster, während der Inspektor ohne Auswahl leer war. Sie stehen
     jetzt dort (`FrameSettingsInspector`): Ist kein Bereich gewählt, ist der Frame selbst gewählt, wie
     auf einer Zeichenfläche. Das Raster beginnt bei 1680 × 1000 jetzt rund 400 statt 790 pt unter der Fensterkante.
+- **Aufklappen.** Auf Stile ▸ Variablen klappte eine Gruppe nur am Pfeil auf, und ohne Bewegung:
+  ein `DisclosureGroup` antwortet nur seinem Pfeil (gemessen schon 2026-11-09, die Options-Form
+  hatte dafür einen eigenen Klick), und eine Änderung seiner Bindung ohne Transaktion springt in
+  einem Formular. `Fold` (Design.swift) nimmt die ganze Kopfzeile und klappt mit `Motion.layout`,
+  mit „Bewegung reduzieren“ ohne Bewegung; alle 17 Klappgruppen der App sind jetzt `Fold`. Gemessen
+  mit sechs Aufnahmen im Abstand von 130 ms nach einem Klick rechts in die Zeile „Flächen“: im
+  vierten Bild der Pfeil halb gedreht und drei der sieben Zeilen herein; dazu ein Klick in die
+  Zeile im Inspektor (Server-Einstellungen) und unten (Ausgabe).
 - **Akzentfarbe.** QuartzHub hat eine eigene, Petrol (`App/Assets.xcassets/AccentColor`, hell
   `#1A7F8E`, dunkel `#208998`, über `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` als
   `NSAccentColorName` im Info.plist). Sie gilt, wenn in den Systemeinstellungen „Bunt“ gewählt ist, wie

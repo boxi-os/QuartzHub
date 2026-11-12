@@ -135,7 +135,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   animiert erst, wenn die Ansicht eine halbe Sekunde steht, weil eine neue Seite mehrere vorläufige
   Breiten bekommt (decisions/ui-ueberarbeitung.md, Nach dem ersten Ausprobieren). Hinweise, Warnungen und Fehler sind `Callout`;
   was an einer eben getippten Eingabe falsch ist, steht als `FieldProblem` direkt unter dem Feld, und
-  was ein Feld tut, erklärt `Note` ohne Kasten (decisions/ui-ueberarbeitung.md, Hinweise).
+  was ein Feld tut, erklärt `Note` ohne Kasten (decisions/ui-ueberarbeitung.md, Hinweise). Was auf-
+  und zuklappt, ist `Fold`, kein bloßer `DisclosureGroup`: die ganze Kopfzeile klappt, animiert
+  (decisions/ui-ueberarbeitung.md, Zweite Runde).
 - **Die Website zeigt `ScaledSite`**, in Vorschau & Build wie neben den Plugin-Editoren: Desktop
   rendert mit `max(Tablet-Grenze + 1, 1280)` px und wird eingepasst, „100 %“ ist dieselbe Webansicht
   in einer Scrollansicht (eine zweite lud die Website neu).
