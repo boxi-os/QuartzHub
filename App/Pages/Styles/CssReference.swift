@@ -47,7 +47,7 @@ struct CssVariableReference: View {
       if list.isEmpty { Note(L10n.t("styleEditor.cssVars.noResults")) }
       ForEach(list, id: \.group) { entry in
         let open = !search.isEmpty || VariablesPlace.lines(openGroups).contains(entry.group)
-        DisclosureGroup(isExpanded: Binding(get: { open }, set: { _ in openGroups = VariablesPlace.toggled(openGroups, entry.group) })) {
+        Fold(isExpanded: Binding(get: { open }, set: { _ in openGroups = VariablesPlace.toggled(openGroups, entry.group) })) {
           ForEach(entry.keys, id: \.self) { key in row(key) }
         } label: {
           HStack {
@@ -63,7 +63,7 @@ struct CssVariableReference: View {
     }
     Section {
       Note(L10n.t("styleEditor.cssVars.calloutsDescription"))
-      DisclosureGroup(isExpanded: $calloutsOpen) {
+      Fold(isExpanded: $calloutsOpen) {
         ForEach(CssVariables.callouts, id: \.type) { callout in calloutRow(callout) }
       } label: {
         HStack {
@@ -264,7 +264,7 @@ struct ActiveStylesSection: View {
 
   var body: some View {
     Section {
-      DisclosureGroup(isExpanded: $open) {
+      Fold(isExpanded: $open) {
         colorTable
         fontList
       } label: {

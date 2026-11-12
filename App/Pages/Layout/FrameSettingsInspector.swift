@@ -58,7 +58,7 @@ struct FrameSettingsInspector: View {
           }
         }
         Section {
-          DisclosureGroup(L10n.t("layoutEditor.frameBuilder.lineNamesLabel")) {
+          Fold(L10n.t("layoutEditor.frameBuilder.lineNamesLabel")) {
             Note(L10n.t("layoutEditor.frameBuilder.lineNamesHint"))
             Text(L10n.t("layoutEditor.frameBuilder.columnLinesLabel")).font(.callout.weight(.medium))
             tracks(key: "columnLineNames", count: layout.cols + 1, first: 0, placeholder: "", name: .line,

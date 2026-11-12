@@ -104,7 +104,7 @@ struct FormInspector: View {
                                    @ViewBuilder content: @escaping () -> Content) -> some View {
     let count = problems.filter { FormsOptions.part($0) == part }.count
     return Section {
-      DisclosureGroup(isExpanded: Binding(get: { isOpen(part) }, set: { setOpen(part, $0) })) {
+      Fold(isExpanded: Binding(get: { isOpen(part) }, set: { setOpen(part, $0) })) {
         VStack(alignment: .leading, spacing: 14) { content() }
           .padding(.top, 6)
       } label: {

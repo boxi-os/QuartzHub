@@ -243,7 +243,7 @@ struct BuildServerPage: View {
   private func outputPanel(height: CGFloat?) -> some View {
     VStack(spacing: 0) {
       Divider()
-      DisclosureGroup(isExpanded: $outputOpen.animation(reduceMotion ? nil : Motion.layout)) {
+      Fold(isExpanded: $outputOpen) {
         HStack(alignment: .top, spacing: Spacing.m) {
           console(L10n.t("buildServer.serverLogLabel"), empty: logs.server.lines.isEmpty, clear: { monitor.clearLog(project.id, .server) }) {
             LogConsole(lines: logs.server, label: L10n.t("buildServer.serverLogLabel"), identifier: "server.log.server", fills: true) {
@@ -288,7 +288,7 @@ struct BuildServerPage: View {
     Section {
       addressRow
       Note(serverFacts(now: now))
-      DisclosureGroup(isExpanded: $model.optionsOpen) {
+      Fold(isExpanded: $model.optionsOpen) {
         optionsFields
       } label: {
         Label(L10n.t("buildServer.serverOptions"), systemImage: "slider.horizontal.3")

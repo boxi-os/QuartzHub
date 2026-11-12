@@ -126,7 +126,7 @@ struct PlaceholderList: View {
 
   var body: some View {
     let rows = rows
-    DisclosureGroup {
+    Fold {
       VStack(alignment: .leading, spacing: 6) {
         Text(L10n.t("snippets.placeholders.introInsert")).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
         if off { Callout(.warning, L10n.t("snippets.placeholders.off")) }

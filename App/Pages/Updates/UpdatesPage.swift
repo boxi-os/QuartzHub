@@ -316,7 +316,7 @@ private struct ReleaseNotesView: View {
   }
 
   var body: some View {
-    DisclosureGroup(isExpanded: $open) {
+    Fold(isExpanded: $open) {
       ScrollView {
         VStack(alignment: .leading, spacing: 10) {
           ForEach(sections, id: \.version) { section in

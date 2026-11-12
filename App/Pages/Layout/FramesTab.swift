@@ -593,7 +593,7 @@ struct BreakpointWidthsSection: View {
     let t = Int(tablet), m = Int(mobile)
     let valid = t != nil && m != nil && m! >= 240 && t! <= 3840 && m! < t!
     let changed = Double(t ?? 0) != model.widths.tablet || Double(m ?? 0) != model.widths.mobile
-    DisclosureGroup(L10n.t("layoutEditor.breakpoints.title")) {
+    Fold(L10n.t("layoutEditor.breakpoints.title")) {
       VStack(alignment: .leading, spacing: 8) {
         Note(L10n.t("layoutEditor.breakpoints.hint"))
         HStack(spacing: 14) {

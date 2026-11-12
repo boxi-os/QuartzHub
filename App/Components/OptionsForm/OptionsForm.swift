@@ -65,7 +65,7 @@ struct OptionsForm: View {
         if merged.fields.isEmpty { Note(L10n.t("pluginOptions.none")) }
         // What the reader could not read, counted rather than passed over, in the reader's words.
         if let notes = schema?.notes, !notes.isEmpty {
-          DisclosureGroup(L10n.t("pluginOptions.notes", ["count": String(notes.count)], count: notes.count)) {
+          Fold(L10n.t("pluginOptions.notes", ["count": String(notes.count)], count: notes.count)) {
             ForEach(Array(notes.enumerated()), id: \.offset) { _, note in
               Text(verbatim: (note.path.isEmpty ? "" : note.path.joined(separator: ".") + ": ") + note.reason)
                 .font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary).textSelection(.enabled)
@@ -284,15 +284,13 @@ private struct FoldGroup<Content: View>: View {
 
   var body: some View {
     let binding = Binding(get: { locked || (open ?? initiallyOpen) }, set: { if !locked { open = $0 } })
-    let disclosure = DisclosureGroup(isExpanded: binding) {
+    let disclosure = Fold(isExpanded: binding) {
       VStack(alignment: .leading, spacing: 12) { content() }
         .padding(.top, 6)
     } label: {
-      // The whole band folds, as QuartzControl's `FoldBox` is one button; on its own, the
-      // disclosure group answered only its chevron (measured 2026-11-09).
+      // The whole band folds (`Fold`), as QuartzControl's `FoldBox` is one button; on its own,
+      // the disclosure group answered only its chevron (measured 2026-11-09).
       GroupTitle(title: title, aside: aside, mark: mark).fontWeight(.medium)
-        .contentShape(Rectangle())
-        .onTapGesture { binding.wrappedValue.toggle() }
     }
     if topLevel {
       Section { disclosure }

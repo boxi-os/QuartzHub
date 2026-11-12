@@ -440,7 +440,7 @@ struct StyleSettingsGroupView: View {
   var body: some View {
     if let heading = group.heading {
       if group.hasAnyField {
-        DisclosureGroup(isExpanded: Binding(get: { forceOpen || (open ?? !heading.collapsed) }, set: { open = $0 })) {
+        Fold(isExpanded: Binding(get: { forceOpen || (open ?? !heading.collapsed) }, set: { open = $0 })) {
           if let description = heading.description { Note(description) }
           content
         } label: {

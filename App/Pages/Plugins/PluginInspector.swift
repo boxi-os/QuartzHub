@@ -119,7 +119,7 @@ struct PluginInspector: View {
   /// says where the component stands.
   private func placement(_ layout: JSONObject) -> some View {
     Section {
-      DisclosureGroup(isExpanded: $placementOpen) {
+      Fold(isExpanded: $placementOpen) {
         VStack(alignment: .leading, spacing: 12) {
           LayoutField(key: "position", kind: .choice(Self.positions), value: layout["position"],
                       hint: L10n.t("pluginsInstalled.layoutFields.position")) { set(["layout", "position"], $0) }
