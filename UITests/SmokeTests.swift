@@ -49,9 +49,10 @@ final class SmokeTests: XCTestCase {
     return (profile, project)
   }
 
-  /// Its title is the project's name followed by the page ("smoke-projekt – Übersicht").
+  /// The window with the project's sidebar. Not by title: that names the page, not the project
+  /// (decisions/ui-ueberarbeitung.md, Titel).
   private func projectWindow(_ app: XCUIApplication) -> XCUIElement {
-    app.windows.matching(NSPredicate(format: "title BEGINSWITH %@", Self.projectName)).firstMatch
+    app.windows.containing(NSPredicate(format: "identifier == %@", "sidebar")).firstMatch
   }
 
   /// Small: the minimum (content 900×560; the window adds the toolbar). Large: 1400×860, which
@@ -94,6 +95,14 @@ final class SmokeTests: XCTestCase {
     let link = any["overview.link.plugins"].firstMatch
     link.click()
     XCTAssertTrue(any["page.plugins"].firstMatch.waitForExistence(timeout: 5), "the link did not open Plugins")
+    // Title and subtitle, as the window gives them to accessibility: "Plugins – Installiert".
+    XCTAssertTrue(window.title.hasPrefix("Plugins"), "the title does not name the page: \(window.title)")
+    XCTAssertFalse(window.title.contains(Self.projectName), "the title still names the project: \(window.title)")
+    // The way back is the history's: the toolbar's back button, then forward again.
+    window.buttons["history.back"].firstMatch.click()
+    XCTAssertTrue(any["page.overview"].firstMatch.waitForExistence(timeout: 5), "Zurück did not lead to the overview")
+    window.buttons["history.forward"].firstMatch.click()
+    XCTAssertTrue(any["page.plugins"].firstMatch.waitForExistence(timeout: 5), "Vorwärts did not lead to Plugins")
   }
 
   /// Vorschau & Build of the scratch project: both consoles there and empty, the scan of this Mac

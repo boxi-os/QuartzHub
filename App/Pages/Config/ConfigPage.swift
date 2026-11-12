@@ -63,7 +63,7 @@ struct ConfigPage: View {
           LocalizationTab(model: localization, configured: model.config == nil ? nil : model.string("locale"))
         }
       }
-      .returnTab(page: .config, tab: $tabID)
+      .historyTab(page: .config, tab: $tabID)
       .task { await model.load() }
       .unsavedChanges(model.dirty, save: model.saving || model.config == nil ? nil : { await model.save() },
                       command: tab == .site)

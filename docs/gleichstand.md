@@ -39,10 +39,10 @@ gezählt, zuletzt am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 195 | 0 | 17 | 0 | 4 | 216 |
-| Plugins und Wartung | 255 | 0 | 6 | 0 | 0 | 261 |
+| Einrichtung | 194 | 0 | 18 | 0 | 4 | 216 |
+| Plugins und Wartung | 254 | 0 | 7 | 0 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 234 | 0 | 9 | 0 | 0 | 243 |
-| **Summe** | **684** | **0** | **32** | **0** | **4** | **720** |
+| **Summe** | **682** | **0** | **34** | **0** | **4** | **720** |
 
 Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den

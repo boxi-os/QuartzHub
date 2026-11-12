@@ -54,7 +54,6 @@ struct PluginsPage: View {
   /// quartz-multilanguage's schema: its groups are the rows of the tab and the panels of the inspector.
   @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
-  @Environment(\.returnLink) private var returnLink
 
   init(project: ProjectContext) {
     self.project = project
@@ -125,7 +124,7 @@ struct PluginsPage: View {
             .task { if marketplace.result == nil { await marketplace.load() } }
         }
       }
-      .returnTab(page: .plugins, tab: $tabID)
+      .historyTab(page: .plugins, tab: $tabID)
       .task {
         await model.load()
         let path = project.path
@@ -204,7 +203,6 @@ struct PluginsPage: View {
   private func showAllOptions(_ plugin: PluginEntry, index: Int) {
     let same = (model.config?.plugins ?? []).prefix(index + 1).filter { $0.name == plugin.name }.count
     selected = same == 1 ? plugin.name : "\(plugin.name)#\(same)"
-    returnLink?.markTab(.plugins, to: Tab.installed.rawValue)
     tabID = Tab.installed.rawValue
   }
 

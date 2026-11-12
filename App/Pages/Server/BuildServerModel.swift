@@ -108,21 +108,27 @@ final class BuildServerModel {
     clicked = true
     buildResult = nil
     defer { clicked = false }
+    buildResult = await Self.build(project, outputDir: outputDir)
+    await refreshOutput()
+  }
+
+  /// The build of this page and of Projekt ▸ Build ausführen (⌘B), which can run from any page.
+  static func build(_ project: ProjectContext, outputDir: String) async -> BuildService.Result? {
     switch await BuildAction.run(projectId: project.id, project: project.path, outputDir: outputDir.isEmpty ? nil : outputDir) {
     case .finished(let result):
-      buildResult = result
       Announce.post(resultLine(result))
+      return result
     case .refused(let message):
       // Into the build console, where the reader is already looking (QuartzControl's choice here).
       BuildMonitor.shared.logs(project.id).append(.build, LogLine(projectId: project.id, stream: .stderr, text: message))
       Announce.post(message)
+      return nil
     case .cancelled:
-      break
+      return nil
     }
-    await refreshOutput()
   }
 
-  func resultLine(_ result: BuildService.Result) -> String {
+  static func resultLine(_ result: BuildService.Result) -> String {
     let seconds = Double(result.duration.components.seconds) + Double(result.duration.components.attoseconds) / 1e18
     return L10n.t("buildServer.resultLine", [
       "status": result.success ? L10n.t("buildServer.success") : L10n.t("buildServer.failed"),

@@ -24,8 +24,8 @@ struct ProjectWindow: View {
   /// `@SceneStorage` keys: two properties of one key in one scene undo each other's writes
   /// (measured: the Layout page's tab picker stopped switching).
   @State private var layoutHandOver = LayoutHandOver()
-  /// The way back after a link on a page (QuartzControl's `markReturn`).
-  @State private var returnLink = ReturnLink()
+  /// Back and forward through the window's pages and tabs (⌘[ ⌘]).
+  @State private var history = NavigationHistory()
   /// What putting back a vault link an interrupted run had parked found to say (review 2026-11-11, M1).
   @State private var contentLinkNote: String?
 
@@ -50,12 +50,20 @@ struct ProjectWindow: View {
     }
   }
 
-  /// A link on a page: to `page`, on `tab` when it names one, with the way back.
+  /// A link on a page: to `page`, on `tab` when it names one. The way back is the history's.
   private func follow(to page: ProjectPage, tab: String?) {
-    let origin = current
     go(to: page) {
-      if let tab { returnLink.send(page, tab: tab) }
-      returnLink.markPage(from: origin, to: ReturnLink.Place(page: page, tab: tab))
+      if let tab { history.send(page, tab: tab) }
+    }
+  }
+
+  /// A step back or forward: to another page through the leave question, or a tab of this one.
+  private func travel(_ step: NavigationHistory.Step) {
+    guard let target = history.target(step) else { return }
+    if target.page == current {
+      history.commit(step)
+    } else {
+      go(to: target.page) { history.commit(step) }
     }
   }
 
@@ -128,32 +136,44 @@ struct ProjectWindow: View {
           .id(pageID)
       }
     }
-    .navigationTitle(row.name)
+    // The place, not the project: its name is at the top of the sidebar (Apple: "Don't title
+    // windows with your app name"). The tab is the page's subtitle (PageScaffold); the Window menu
+    // still names the project (WindowMenuTitle).
+    .navigationTitle(current.title)
+    .toolbar { HistoryButtons(history: history, step: travel) }
+    .focusedSceneValue(\.windowNavigation, WindowNavigation(
+      backTitle: history.back.last.map(NavigationHistory.label),
+      forwardTitle: history.forward.last.map(NavigationHistory.label),
+      step: travel,
+      open: { go(to: $0) },
+      current: current))
+    .focusedSceneValue(\.projectActions, ProjectActions(
+      project: ProjectContext(id: row.id, name: row.name, path: row.path),
+      state: BuildMonitor.shared.status(row.id).state))
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
     .environment(\.openPage, OpenPageAction { follow(to: $0, tab: $1) })
     .environment(\.layoutHandOver, layoutHandOver)
     .environment(\.openLayout, OpenLayoutAction { target in
       layoutHandOver.target = target
-      let origin = current
       go(to: .layout) {
         let tab: LayoutModel.Tab = switch target {
         case .component: .global
         case .frame: .frames
         }
-        returnLink.markPage(from: origin, to: ReturnLink.Place(page: .layout, tab: tab.rawValue))
+        history.send(.layout, tab: tab.rawValue)
       }
     })
-    .environment(\.returnLink, returnLink)
-    .environment(\.goToPage, GoToPageAction { go(to: $0, done: $1) })
+    .environment(\.history, history)
     .environment(\.unsavedGuard, unsaved)
     .onChange(of: highlighted) { _, page in
       if let page { go(to: page) }
     }
     .onChange(of: pageID, initial: true) {
       highlighted = current
-      returnLink.notePage(current)
+      history.notePage(current)
     }
     .background(UnsavedWindowHook(unsaved: unsaved))
+    .background(WindowMenuTitle(title: "\(row.name) – \(history.current.map(NavigationHistory.label) ?? current.title)"))
   }
 
   /// Every page of the project, each a `PageScaffold` of its own.
@@ -183,6 +203,41 @@ struct ProjectWindow: View {
   }
 }
 
+/// The project window's entry in the Window menu: the title bar names only the place, and two
+/// project windows on the same page would read the same there.
+struct WindowMenuTitle: NSViewRepresentable {
+  let title: String
+
+  func makeNSView(context: Context) -> NSView { TitleView() }
+
+  func updateNSView(_ view: NSView, context: Context) {
+    (view as? TitleView)?.title = title
+  }
+
+  final class TitleView: NSView {
+    var title = "" { didSet { apply() } }
+    private var observations: [NSKeyValueObservation] = []
+
+    override func viewDidMoveToWindow() {
+      super.viewDidMoveToWindow()
+      observations = []
+      guard let window else { return }
+      // AppKit writes the menu entry again whenever SwiftUI sets the title or the subtitle, so it
+      // is put back after each of them.
+      observations = [
+        window.observe(\.title) { [weak self] _, _ in self?.apply() },
+        window.observe(\.subtitle) { [weak self] _, _ in self?.apply() },
+      ]
+      apply()
+    }
+
+    private func apply() {
+      guard let window, !title.isEmpty else { return }
+      DispatchQueue.main.async { [title] in NSApp.changeWindowsItem(window, title: title, filename: false) }
+    }
+  }
+}
+
 /// Moves the window to another page, for a link on a page (the overview's "Plugins ›"), on the
 /// tab the link names if it names one.
 struct OpenPageAction {
@@ -190,14 +245,7 @@ struct OpenPageAction {
   func callAsFunction(_ page: ProjectPage, tab: String? = nil) { open(page, tab) }
 }
 
-/// The window's own way to a page, for the way back: `done` once the page has changed.
-struct GoToPageAction {
-  let go: (ProjectPage, @escaping () -> Void) -> Void
-  func callAsFunction(_ page: ProjectPage, done: @escaping () -> Void) { go(page, done) }
-}
-
 extension EnvironmentValues {
-  @Entry var goToPage = GoToPageAction { _, _ in }
   @Entry var openPage = OpenPageAction { _, _ in }
   @Entry var openLayout = OpenLayoutAction { _ in }
   @Entry var layoutHandOver: LayoutHandOver?

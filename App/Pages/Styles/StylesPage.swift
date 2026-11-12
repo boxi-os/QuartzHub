@@ -63,7 +63,7 @@ struct StylesPage: View {
         .padding(.horizontal, 16)
         content
       }
-      .returnTab(page: .styles, tab: $tabID)
+      .historyTab(page: .styles, tab: $tabID)
       .task {
         await model.load()
       }

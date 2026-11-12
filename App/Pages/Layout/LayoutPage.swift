@@ -18,7 +18,6 @@ struct LayoutPage: View {
   @SceneStorage("layout.selected") private var selected = ""
   @State private var breakpoint = "desktop"
   @Environment(\.layoutHandOver) private var handOver
-  @Environment(\.returnLink) private var returnLink
   /// The frame the Frames tab opens on, by id; set by "Frame bearbeiten" and from the Plugins page.
   @SceneStorage("layout.frame") private var openFrameId = ""
   @SceneStorage("frames.selectedArea") private var selectedArea = ""
@@ -64,7 +63,7 @@ struct LayoutPage: View {
         }
         content
       }
-      .returnTab(page: .layout, tab: $tabID)
+      .historyTab(page: .layout, tab: $tabID)
       .accessibilityElement(children: .contain)
       .accessibilityIdentifier("page.layout")
       .onAppear(perform: takeHandOver)
@@ -121,11 +120,9 @@ struct LayoutPage: View {
         OverviewTab(model: model, openPageType: { type, index in
           pageType = type
           selected = index.flatMap { LayoutEntries.componentRef(model.config?.plugins ?? [], $0) }.map { "\($0.name)\n\($0.occurrence)" } ?? ""
-          returnLink?.markTab(.layout, to: LayoutModel.Tab.global.rawValue)
           tabID = LayoutModel.Tab.global.rawValue
         }, openFrame: { name in
           openFrameId = name == "default" ? "default" : model.frames.first { $0.frameName == name }?.id ?? ""
-          returnLink?.markTab(.layout, to: LayoutModel.Tab.frames.rawValue)
           tabID = LayoutModel.Tab.frames.rawValue
         })
       case .global:
@@ -187,7 +184,6 @@ struct LayoutPage: View {
       }
       frameBreakpoint = breakpoint
     }
-    returnLink?.markTab(.layout, to: LayoutModel.Tab.frames.rawValue)
     tabID = LayoutModel.Tab.frames.rawValue
   }
 

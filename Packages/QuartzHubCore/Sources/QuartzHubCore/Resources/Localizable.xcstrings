@@ -43807,6 +43807,57 @@
         }
       }
     },
+    "shell.history.back" : {
+      "comment" : "Toolbar and Go menu: one step back in the window's history",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        }
+      }
+    },
+    "shell.history.forward" : {
+      "comment" : "Toolbar and Go menu: one step forward in the window's history",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorwärts"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forward"
+          }
+        }
+      }
+    },
+    "shell.history.forwardTo" : {
+      "comment" : "Help tag of the toolbar's forward button; place is a page, with its tab",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorwärts zu „{{place}}“"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forward to “{{place}}”"
+          }
+        }
+      }
+    },
     "shell.inspector.group" : {
       "comment" : "Sidebar-Gruppe der Seite im Inspektor, z. B. „Bereich: Gestaltung“.",
       "localizations" : {
@@ -43926,6 +43977,23 @@
         }
       }
     },
+    "shell.menu.go" : {
+      "comment" : "Menu: back, forward and every page of the project window",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gehe zu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go"
+          }
+        }
+      }
+    },
     "shell.menu.moveDown" : {
       "comment" : "Arrange menu and row context menu: moves the selected row one place down",
       "localizations" : {
@@ -43990,6 +44058,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Existing Project…"
+          }
+        }
+      }
+    },
+    "shell.menu.project" : {
+      "comment" : "Menu: what can be done with the frontmost window's project",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project"
+          }
+        }
+      }
+    },
+    "shell.menu.revealProject" : {
+      "comment" : "Project menu",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projektordner im Finder zeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Project Folder in Finder"
+          }
+        }
+      }
+    },
+    "shell.menu.startServer" : {
+      "comment" : "Project menu, while Vorschau & Build is shown",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server starten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Server"
+          }
+        }
+      }
+    },
+    "shell.menu.stopServer" : {
+      "comment" : "Project menu, while the dev server runs",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server stoppen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop Server"
           }
         }
       }

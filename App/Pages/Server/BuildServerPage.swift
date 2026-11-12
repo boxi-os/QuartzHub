@@ -218,7 +218,7 @@ struct BuildServerPage: View {
       outputRows(now: now)
       outputDirField
       if let result = model.buildResult {
-        Text(model.resultLine(result)).font(.callout).foregroundStyle(result.success ? .green : .red)
+        Text(BuildServerModel.resultLine(result)).font(.callout).foregroundStyle(result.success ? .green : .red)
       }
       LogConsole(lines: logs.build, label: L10n.t("buildServer.buildLogLabel"), identifier: "server.log.build") {
         monitor.clearLog(project.id, .build)

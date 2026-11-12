@@ -47,6 +47,8 @@ struct QuartzHubApp: App {
       InspectorCommand()
       ProjectCommands()
       SaveCommand()
+      GoCommands()
+      ProjectMenu()
       ArrangeCommands()
       HelpCommands()
     }

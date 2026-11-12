@@ -12,18 +12,19 @@ extension View {
         .accessibilityLabel(L10n.t("shell.inspector.name"))
         .accessibilityIdentifier("inspector")
         .inspectorColumnWidth(min: 240, ideal: 300, max: 440)
+        .toolbar {
+          ToolbarSpacer(.flexible)
+          ToolbarItem(placement: .primaryAction) {
+            Button {
+              isPresented.wrappedValue.toggle()
+            } label: {
+              Label(L10n.t("shell.inspector.toggle"), systemImage: "sidebar.trailing")
+            }
+            .help(L10n.t("shell.inspector.toggle"))
+            .accessibilityIdentifier("inspector.toggle")
+          }
+        }
     }
     .focusedSceneValue(\.inspectorPresented, isPresented)
-    .toolbar {
-      ToolbarItem(placement: .primaryAction) {
-        Button {
-          isPresented.wrappedValue.toggle()
-        } label: {
-          Label(L10n.t("shell.inspector.toggle"), systemImage: "sidebar.trailing")
-        }
-        .help(L10n.t("shell.inspector.toggle"))
-        .accessibilityIdentifier("inspector.toggle")
-      }
-    }
   }
 }
