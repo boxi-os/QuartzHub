@@ -104,6 +104,30 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   nicht nur mit Grau. (QC)**
 - **Farben nach Rolle (QC):** Systemstile (`.secondary`, `.tint`, Materialien) statt fester
   Farben; Hell und Dunkel folgen dem System bzw. der Einstellung.
+- **Der Fenstertitel nennt den Ort, nicht das Projekt.** Titel ist die Seite, Untertitel der Reiter;
+  der Projektname steht in der Seitenleiste und im Menü „Fenster“ (`WindowMenuTitle`, setzt den
+  Eintrag nach jedem Titelwechsel neu). Messung: decisions/ui-ueberarbeitung.md.
+- **Zurück und Vorwärts sind der Verlauf des Fensters** (`NavigationHistory`): Seite und Reiter je
+  Schritt, ⌘[ ⌘] (deutsche Tastatur ⌘Ö ⌘Ä), jeder Schritt auf eine andere Seite durch
+  `UnsavedGuard`. Eine Seite mit Reitern meldet ihren mit `.historyTab(page:tab:)`; ein Verweis auf
+  eine andere Seite ist ein Schritt wie jeder andere, es gibt keinen eigenen Rückweg.
+- **Die Symbolleiste hat eine feste Reihenfolge:** Seitenaktionen als Symbole, dann Speichern, ganz
+  rechts der Inspektor (sein Schalter hängt am Inhalt des Inspektors, sonst stünde er vor
+  Speichern). Höchstens eine Aktion je Seite ist hervorgehoben (`.glassProminent`). Speichern ist nur
+  mit Ungespeichertem aktiv, ohne „Gespeichert“ oder Abzeichen daneben; den Zustand sagt der Punkt im
+  Schließen-Knopf. Was für das ganze Projekt gilt, steht auch im Menü (Projekt, Gehe zu).
+- **Vier Seitentypen mit festen Breitenregeln.** Formular: `SettingsForm` mit `SettingsSection`, eine
+  Spalte bis 880 pt, ab 900 pt Breite Überschrift und Erklärung links daneben (Variante C). Liste:
+  `Table` oder `List` über die volle Breite, kein Kopf über der Liste, Anlegen ist ➕ in der
+  Symbolleiste. Übersicht: `CardGrid` mit `Card`, eine bis drei Spalten. Arbeitsfläche: füllt Breite
+  und Höhe. Reiter stehen in `.pageTabs(…)` und werden zum Menü, wo sie nicht passen.
+- **Maße und Bewegung aus `App/Components/Design.swift`:** `Spacing` (Seitenrand 20), `Motion` für
+  Wechsel der Anordnung und Ein-/Ausblenden, mit „Bewegung reduzieren“ ohne Bewegung. Eine Anordnung,
+  die mit der Breite wechselt, wechselt über `AnyLayout` und `onGeometryChange` mit
+  `withAnimation`, nicht über `if`. Hinweise, Warnungen und Fehler sind `Callout`.
+- **Die Website zeigt `ScaledSite`**, in Vorschau & Build wie neben den Plugin-Editoren: Desktop
+  rendert mit `max(Tablet-Grenze + 1, 1280)` px und wird eingepasst, „100 %“ ist dieselbe Webansicht
+  in einer Scrollansicht (eine zweite lud die Website neu).
 - **Code bearbeitet man in NSTextView mit TextKit 2, ohne Editor-Paket.** Zeilennummern
   (`NSRulerView`), Färben und Einrückungslinien sind eigene Teile. Der Färber steht im Kern und
   wird je Tastendruck gemessen: Färben, nicht der Editor, ist das Teure (Messung in

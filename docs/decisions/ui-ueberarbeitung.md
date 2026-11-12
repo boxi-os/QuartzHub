@@ -138,3 +138,25 @@ Die Musterseite für den Typ Arbeitsfläche, gemessen am 2026-11-12 an der gui-t
 - **Inspektor:** Adresse mit Kopieren, Angaben zum Lauf, Server-Einstellungen, die laufenden Server
   auf dem Mac, der einmalige Build mit Ausgabeordner. Zwei Zeilen brachen dort hässlich um
   („lo-cal-host :808 0“, „Ausga-beordner (optional)“) und stehen jetzt untereinander.
+
+## Die übrigen Seiten
+
+Nach dem OK des Nutzers zum Prototyp (2026-11-12), eine Seite je Commit, jede mit Bau,
+`qh-check i18n`, Rauchtest über alle Seiten in zwei Größen und Ansehen in der App:
+
+- **Formulare:** Updates, Git-Sync, Vorlagen sind `SettingsForm`. Dazu bekam `SettingsSection` einen
+  Zustand neben der Überschrift („Nicht prüfbar“, die Zahl der Änderungen) und eine Test-Kennung an
+  der Überschrift, weil die Kennung eines `Form` nicht im Baum ankommt. Abschnitte ohne Überschrift
+  gehen im Abschnitt davor auf (Vorlagen: die Knöpfe bei ihren Bestandteilen).
+- **Listen:** Veröffentlichen und Dokumente ohne Kopf über der Liste. ➕ legt an, „Zugänge
+  verwalten“ ist ein Symbol, „Jetzt veröffentlichen“ bzw. „Exportieren“ die hervorgehobene Aktion;
+  die Erklärungen stehen im Fuß der Liste. Die Ziele der gui-test-Kopie sind echt: angesehen, nicht
+  ausgelöst.
+- **Übersicht:** `CardGrid` mit `Card`, bei 1200 pt zwei, bei 1680 pt drei Spalten, das Band
+  „Alles ok“ bzw. „Handlungsbedarf“ über die volle Breite.
+- **Stile, Layout, Plugins:** die Reiter als `PageTabs` (Plugins mit sechs Reitern ist bei 1200 pt
+  ein Menü, Layout und Stile Segmente, bei 900 pt alle drei Menüs) und Speichern nach der Regel.
+  **Noch nicht umgestellt** ist der Inhalt der Reiter: Stile ▸ Basis ist ein `Form`, in das die Seite
+  ihre Hinweise als `Section` einschiebt; die Editoren von Plugins und Layout sind eigene
+  Arbeitsflächen. Das ist ein eigener Schritt je Reiter.
+
