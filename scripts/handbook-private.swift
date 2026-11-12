@@ -24,8 +24,8 @@ if let extra = try? String(contentsOfFile: "\(vault)/private/privat.txt", encodi
   words += extra.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty && !$0.hasPrefix("#") }
 }
 // The project's public GitHub name may stand (the account's short name is often a part of it),
-// and the placeholder of the folder fields ("/Users/du/Dokumente").
-let allowed = ["boxi-os", "/Users/du/"]
+// and the placeholder of the folder fields ("/Users/du/Dokumente", "/Users/you/Documents").
+let allowed = ["boxi-os", "/Users/du/", "/Users/you/"]
 let patterns = [#"/Users/(?!Share)[^/\s]+"#, #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"#]
 
 func findings(in text: String) -> [String] {
