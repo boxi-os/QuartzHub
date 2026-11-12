@@ -98,3 +98,19 @@ Verarbeitung) stehen jetzt als Erklärung beim Abschnitt statt als erste Zeile. 
 mit Ungespeichertem aktiv; „Nicht gespeichert“ und „Gespeichert.“ daneben entfallen, das sagt der
 Punkt im Schließen-Knopf. Der Rauchtest prüft das jetzt am Knopf (aus, an, nach ⌘S wieder aus);
 Gegenprobe: mit immer aktivem Speichern scheitert er („Speichern is on with nothing to save“).
+
+## Snapshots
+
+Die Musterseite für den Typ Liste, gemessen am 2026-11-12 an der gui-test-Kopie (18 Snapshots).
+
+- **Tabelle über die volle Breite** (`Table`) mit Zeitpunkt, Name, Anlass; ab 720 pt Breite der Seite
+  dazu der Commit. Spalten, die mit der Breite kommen, nimmt `Table` nicht nachträglich auf: Ohne
+  `.id(wide)` fehlte der Commit auch bei 1680 pt, mit erscheint er. Löschen über das Kontextmenü und
+  die Entf-Taste (`onDeleteCommand`), leer und beim Laden ein `ContentUnavailableView` bzw. `ProgressView`.
+- **Kein Kopf mehr über der Liste.** „Snapshot anlegen“ ist ➕ in der Symbolleiste und öffnet ein
+  Popover mit Name und Erklärung (Return legt an). Gemessen: „UI-Test Popover“ angelegt, die
+  Meldung „Snapshot angelegt.“ steht als `Callout` über der Tabelle, die Zeile oben mit „Von dir“.
+  Die Einstellung „Content-Ordner mitsichern“ und der Satz zu Git-Sync stehen im Inspektor, wenn
+  nichts gewählt ist.
+- **Auswahl:** Ein Klick auf „quartz-betterbases“ öffnet den Snapshot im Inspektor mit „4 Dateien
+  unterscheiden sich“ wie vorher.

@@ -41,6 +41,57 @@
         }
       }
     },
+    "backups.column.commit" : {
+      "comment" : "Snapshots: column of the snapshot table, only in a wide window",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commit"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commit"
+          }
+        }
+      }
+    },
+    "backups.column.label" : {
+      "comment" : "Snapshots: column of the snapshot table",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "backups.column.when" : {
+      "comment" : "Snapshots: column of the snapshot table",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitpunkt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time"
+          }
+        }
+      }
+    },
     "backups.compareHeading" : {
       "comment" : "Snapshots, inspector: heading over the files that differ",
       "localizations" : {

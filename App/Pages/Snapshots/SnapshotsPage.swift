@@ -1,10 +1,12 @@
 import QuartzHubCore
 import SwiftUI
 
-/// Snapshots: QuartzControl's `Backups.tsx`. In the middle a new snapshot and the list, below it
-/// the set-aside content folders; the open snapshot is compared and restored in the inspector,
-/// which without one sums up the store. A file's text diff opens in a sheet: the inspector is too
-/// narrow for git's lines.
+/// Snapshots: QuartzControl's `Backups.tsx`. A list page (decisions/ui-ueberarbeitung.md,
+/// Seitentypen): in the middle the snapshots as a table across the whole width, its columns coming
+/// with the width, below it the set-aside content folders. A new snapshot is made from the toolbar.
+/// The open snapshot is compared and restored in the inspector, which without one sums up the
+/// store and holds its setting. A file's text diff opens in a sheet: the inspector is too narrow
+/// for git's lines.
 struct SnapshotsPage: View {
   let project: ProjectContext
 
@@ -14,6 +16,9 @@ struct SnapshotsPage: View {
   /// same key and with the same type: two types for one key blank the whole window.
   @SceneStorage("backups.open") private var openId: String?
   @SceneStorage("backups.newLabel") private var newLabel = ""
+  @State private var creatingOpen = false
+  /// Room for the commit column (decisions/ui-ueberarbeitung.md, Snapshots).
+  @State private var wide = false
 
   init(project: ProjectContext) {
     self.project = project
@@ -28,8 +33,23 @@ struct SnapshotsPage: View {
   var body: some View {
     PageScaffold(page: .backups) {
       VStack(alignment: .leading, spacing: 0) {
-        header
-        list
+        messages
+        table
+        if !model.folders.isEmpty {
+          Divider()
+          folders
+        }
+      }
+      .onGeometryChange(for: Bool.self) { $0.size.width >= 720 } action: { wide = $0 }
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          Button { creatingOpen = true } label: {
+            Label(L10n.t("backups.create"), systemImage: "plus")
+          }
+          .help(L10n.t("backups.create"))
+          .accessibilityIdentifier("backups.new")
+          .popover(isPresented: $creatingOpen, arrowEdge: .bottom) { createForm }
+        }
       }
       .accessibilityElement(children: .contain)
       .accessibilityIdentifier("page.backups")
@@ -49,40 +69,55 @@ struct SnapshotsPage: View {
 
   // MARK: The middle
 
-  /// Outside the list's scrolling, so no `fixedSize(vertical:)` here: a wrapped text fixed to its
-  /// height left the whole window blank, sidebar included (measured; the window's minimum height
-  /// is asked of the text at its narrowest).
-  private var header: some View {
-    VStack(alignment: .leading, spacing: 10) {
-      // Both this page and Git-Sync keep old versions of the project; they are not alternatives.
-      Note(L10n.t("backups.vsGitSync"))
-      HStack(spacing: 8) {
-        TextField(L10n.t("backups.newHeading"), text: $newLabel, prompt: Text(L10n.t("backups.labelPlaceholder")))
-          .textFieldStyle(.roundedBorder)
-          .frame(maxWidth: 360)
-          .onSubmit(create)
-          .accessibilityIdentifier("backups.label")
+  /// What the last action said, above the table. Outside the list's scrolling, so no
+  /// `fixedSize(vertical:)` here: a wrapped text fixed to its height left the whole window blank,
+  /// sidebar included (measured; the window's minimum height is asked of the text at its narrowest).
+  @ViewBuilder private var messages: some View {
+    if model.message != nil || model.error != nil {
+      VStack(alignment: .leading, spacing: Spacing.xs) {
+        if let message = model.message {
+          Callout(.info) { Text(message).textSelection(.enabled) }
+        }
+        if let error = model.error {
+          Callout(.error) { Text(error).textSelection(.enabled).lineLimit(12) }
+        }
+      }
+      .padding(.horizontal, Spacing.page)
+      .padding(.vertical, Spacing.s)
+      .transition(.opacity)
+    }
+  }
+
+  /// "Snapshot anlegen" from the toolbar: the name, what is kept, the button.
+  private var createForm: some View {
+    VStack(alignment: .leading, spacing: Spacing.s) {
+      Text(L10n.t("backups.newHeading")).font(.headline)
+      TextField(L10n.t("backups.newHeading"), text: $newLabel, prompt: Text(L10n.t("backups.labelPlaceholder")))
+        .textFieldStyle(.roundedBorder)
+        .labelsHidden()
+        .onSubmit(create)
+        .accessibilityIdentifier("backups.label")
+      Text(L10n.t("backups.newHint")).font(.callout).foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+      HStack {
+        Spacer()
         Button(model.creating ? L10n.t("common.saving") : L10n.t("backups.create"), action: create)
+          .keyboardShortcut(.defaultAction)
           .disabled(model.creating)
           .accessibilityIdentifier("backups.create")
       }
-      Note(L10n.t("backups.newHint"))
-      if let settings = model.settings { contentSetting(settings) }
-      if let message = model.message {
-        Text(message).foregroundStyle(.secondary).textSelection(.enabled)
-      }
-      if let error = model.error {
-        Text(error).foregroundStyle(.red).textSelection(.enabled).lineLimit(12)
-      }
     }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 12)
+    .padding(Spacing.m)
+    .frame(width: 360)
   }
 
   private func create() {
     guard !model.creating else { return }
     Task {
-      if await model.create(label: newLabel) { newLabel = "" }
+      if await model.create(label: newLabel) {
+        newLabel = ""
+        creatingOpen = false
+      }
     }
   }
 
@@ -100,31 +135,57 @@ struct SnapshotsPage: View {
     }
   }
 
-  private var list: some View {
-    List(selection: $openId) {
-      Section {
-        if let snapshots = model.snapshots {
-          if snapshots.isEmpty { Text(L10n.t("backups.none")).foregroundStyle(.secondary) }
-          ForEach(snapshots, id: \.id) { snapshot in
-            SnapshotRow(snapshot: snapshot)
-              .tag(snapshot.id)
-              .contextMenu {
-                Button(L10n.t("backups.export")) { Task { await model.export(snapshot, window: unsaved?.window) } }
-                Divider()
-                Button(L10n.t("common.deleteNamed", ["name": Self.title(snapshot)]), role: .destructive) { delete(snapshot) }
-              }
-              .accessibilityActions {
-                Button(L10n.t("common.deleteNamed", ["name": Self.title(snapshot)])) { delete(snapshot) }
-              }
-          }
-        } else {
-          Text(L10n.t("common.loading")).foregroundStyle(.secondary)
-        }
-      } header: {
-        Text(L10n.t("backups.listTitle", ["count": String(model.snapshots?.count ?? 0)]))
+  /// Full width, edge to edge. The commit comes in as a column once there is room for it.
+  private var table: some View {
+    Table(model.snapshots ?? [], selection: $openId) {
+      TableColumn(L10n.t("backups.column.when")) { snapshot in
+        Text(Self.when(snapshot.createdAt)).monospacedDigit()
       }
-      if !model.folders.isEmpty { folders }
+      .width(min: 140, ideal: 170, max: 220)
+      TableColumn(L10n.t("backups.column.label")) { snapshot in
+        if snapshot.label.isEmpty {
+          Text(verbatim: "–").foregroundStyle(.tertiary)
+        } else {
+          Text(snapshot.label).lineLimit(1)
+        }
+      }
+      TableColumn(L10n.t("backups.kind")) { snapshot in
+        Self.kindBadge(snapshot.kind).foregroundStyle(.secondary)
+      }
+      .width(min: 120, ideal: 190)
+      if wide {
+        TableColumn(L10n.t("backups.column.commit")) { snapshot in
+          Text(verbatim: String(snapshot.commit.prefix(7))).font(.system(.body, design: .monospaced)).foregroundStyle(.secondary)
+        }
+        .width(min: 70, ideal: 80, max: 100)
+      }
     }
+    .contextMenu(forSelectionType: String.self) { ids in
+      if let id = ids.first, let snapshot = model.snapshots?.first(where: { $0.id == id }) {
+        Button(L10n.t("backups.export")) { Task { await model.export(snapshot, window: unsaved?.window) } }
+        Divider()
+        Button(L10n.t("common.deleteNamed", ["name": Self.title(snapshot)]), role: .destructive) { delete(snapshot) }
+      }
+    }
+    .onDeleteCommand {
+      if let snapshot = openSnapshot { delete(snapshot) }
+    }
+    .overlay {
+      if model.snapshots == nil {
+        ProgressView(L10n.t("common.loading"))
+      } else if model.snapshots?.isEmpty == true {
+        ContentUnavailableView {
+          Label(L10n.t("backups.listTitle", ["count": "0"]), systemImage: "archivebox")
+        } description: {
+          Text(L10n.t("backups.none"))
+        } actions: {
+          Button(L10n.t("backups.create")) { creatingOpen = true }
+        }
+      }
+    }
+    // A Table keeps the columns it was first built with; a column that comes with the width
+    // needs a new one (measured: without this the commit never appeared at 1680 pt).
+    .id(wide)
     .accessibilityIdentifier("backups.list")
   }
 
@@ -137,6 +198,7 @@ struct SnapshotsPage: View {
   /// Not snapshots: the content folders a switch of the content source moved aside. The only way
   /// back to a replaced folder, and the only copy of it.
   private var folders: some View {
+    List {
     Section {
       Note(L10n.t("backups.movedFoldersHint")).fixedSize(horizontal: false, vertical: true)
       ForEach(model.folders, id: \.id) { entry in
@@ -165,6 +227,8 @@ struct SnapshotsPage: View {
       Label(L10n.t("backups.movedFoldersHeading"), systemImage: "clock.arrow.circlepath")
     }
     .selectionDisabled()
+    }
+    .frame(maxHeight: 220)
   }
 
   // MARK: The inspector without a snapshot
@@ -172,6 +236,11 @@ struct SnapshotsPage: View {
   @ViewBuilder private var summary: some View {
     Section {
       Text(L10n.t("projectLayout.descriptions.backups")).foregroundStyle(.secondary)
+      // Both this page and Git-Sync keep old versions of the project; they are not alternatives.
+      Text(L10n.t("backups.vsGitSync")).foregroundStyle(.secondary)
+    }
+    if let settings = model.settings {
+      Section { contentSetting(settings) }
     }
     Section(L10n.t("backups.panelEmptyTitle")) {
       Text(L10n.t("backups.panelEmptyText")).foregroundStyle(.secondary)
@@ -223,26 +292,8 @@ struct SnapshotsPage: View {
   }
 }
 
-/// One snapshot: its name or its time, the time under a name, what made it.
-private struct SnapshotRow: View {
-  let snapshot: SnapshotStore.Snapshot
-
-  var body: some View {
-    HStack(spacing: 10) {
-      VStack(alignment: .leading, spacing: 2) {
-        Text(SnapshotsPage.title(snapshot)).fontWeight(.medium).lineLimit(1)
-        if !snapshot.label.isEmpty {
-          Text(SnapshotsPage.when(snapshot.createdAt)).font(.caption).foregroundStyle(.secondary)
-        }
-      }
-      Spacer(minLength: 8)
-      SnapshotsPage.kindBadge(snapshot.kind).font(.callout).foregroundStyle(.secondary)
-    }
-    .padding(.vertical, 2)
-    .accessibilityElement(children: .combine)
-    .accessibilityIdentifier("backups.row.\(snapshot.id)")
-  }
-}
+/// A table's rows need an identity: the snapshot's own id in the store.
+extension SnapshotStore.Snapshot: @retroactive Identifiable {}
 
 /// The open snapshot against the project as it is now: what differs, and the way back.
 private struct SnapshotInspector: View {
