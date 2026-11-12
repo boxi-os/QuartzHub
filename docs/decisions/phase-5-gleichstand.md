@@ -2752,3 +2752,17 @@ oder eine Entscheidung ist.
 - **Bekannt und gelassen:** QuartzControl 1.3 kann die `sidebars` eines Seitentyps löschen
   (nebenbei 2); zwei Apps, die gleichzeitig Snapshots nehmen, können sich die Index-Kopie
   verschränken (17); `lsof` maskiert Steuerzeichen im Pfad (18).
+
+## PDF-Export: Bilder außerhalb des Fensters (2026-11-13)
+
+Beim ersten Buch des Handbuchs fehlten im PDF alle Aufnahmen; an ihrer Stelle stand eine Lücke von
+rund 70 px, im ePub waren sie da. `imagesSettled` meldete alle geladen, `findDocumentProblems` kein
+kaputtes Bild. Ursache: Quartz' `base.scss` gibt jedem `img` `content-visibility: auto`, und der
+Druck von WebKit zeichnet ein solches Element nicht, wenn es außerhalb des Fensters liegt. Chrome
+(QuartzControl) druckt es. Gegenprobe in einem eigenen WebKit-Druck: hinter 5000 px Abstand fehlt
+das Bild mit `auto`, das mit `visible` erscheint.
+
+Das Druck-Stylesheet setzt deshalb `body.pdf * { content-visibility: visible !important; }`
+(`DocumentHTML.webKitPrintRules`), die einzige Regel über QuartzControls hinaus;
+`DocumentHTMLTests` fügt sie in dessen Goldens ein. Danach: 20 statt 17 Seiten, alle sechs
+Aufnahmen im PDF.

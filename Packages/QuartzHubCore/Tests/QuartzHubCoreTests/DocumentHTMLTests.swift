@@ -65,9 +65,17 @@ import Testing
   /// QuartzControl's output with QuartzHub's one deviation: the cover's height follows the paper
   /// (`DocumentHTML.coverHeightMM`). A4 portrait is left as QuartzControl wrote it.
   static func ownCover(_ qc: String, _ size: String, _ landscape: Bool) -> String {
-    if size == "A4" && !landscape { return qc }
+    let img = "body.pdf img { max-width: 100% !important; height: auto !important; break-inside: avoid; }\n"
+    let webKit = qc.replacingOccurrences(of: img, with: img + DocumentHTML.webKitPrintRules + "\n")
+    if size == "A4" && !landscape { return webKit }
     let own = JSJSON.numberToString(DocumentHTML.coverHeightMM(size, landscape: landscape))
-    return qc.replacingOccurrences(of: ".cover { height: 230mm;", with: ".cover { height: \(own)mm;")
+    return webKit.replacingOccurrences(of: ".cover { height: 230mm;", with: ".cover { height: \(own)mm;")
+  }
+
+  /// The one rule WebKit needs beyond QuartzControl's (`webKitPrintRules`), once in every document.
+  @Test func printsSkippedContent() {
+    let css = DocumentHTML.printCss(pageSize: "A4", landscape: false, title: "T")
+    #expect(css.components(separatedBy: DocumentHTML.webKitPrintRules).count == 2)
   }
 
   /// The text area less QuartzControl's 27 mm: A4 portrait is its 230 mm, the others fit their page

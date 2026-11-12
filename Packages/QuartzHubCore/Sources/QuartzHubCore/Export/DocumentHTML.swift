@@ -121,6 +121,12 @@ public enum DocumentHTML {
     return JS.round((height - marginMM.top - marginMM.bottom - 27) * 10) / 10
   }
 
+  /// Not in QuartzControl, whose Chrome prints what it skipped on screen: Quartz's base.scss gives
+  /// every `img` `content-visibility: auto`, and WebKit's print leaves such an element blank when
+  /// it lies outside the window (measured 2026-11-13: the handbook's screenshots were empty gaps in
+  /// the PDF and present in the ePub; a 5000 px spacer reproduces it, `visible` brings them back).
+  static let webKitPrintRules = "body.pdf * { content-visibility: visible !important; }"
+
   public static func printCss(pageSize: String, landscape: Bool, title: String) -> String {
     let p = paper(pageSize)
     let (w, h) = landscape ? (p.h, p.w) : (p.w, p.h)
@@ -145,6 +151,7 @@ body.pdf h4 { font-size: 11.5pt; margin-top: 1.1em; }
 body.pdf h1, body.pdf h2, body.pdf h3, body.pdf h4, body.pdf .index-heading { break-after: avoid; }
 body.pdf .index-heading { font-size: 13pt; font-weight: 600; margin: 1.3em 0 0.5em; }
 body.pdf img { max-width: 100% !important; height: auto !important; break-inside: avoid; }
+\(webKitPrintRules)
 body.pdf p:has(> img), body.pdf blockquote.callout, body.pdf pre, body.pdf tr, body.pdf figure { break-inside: avoid; }
 body.pdf a { text-decoration: none; }
 /* In der Website rollt der Tabellen-Container; auf Papier wird umbrochen. Der Außenabstand kommt
