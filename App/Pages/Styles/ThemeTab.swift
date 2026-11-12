@@ -17,7 +17,6 @@ enum ThemeServices {
 /// shows its details in the inspector.
 struct ThemeTab: View {
   let model: StylesModel
-  let notes: AnyView
   let goTo: (StylesModel.Tab) -> Void
   @Binding var selection: String?
   @Binding var query: String
@@ -50,14 +49,12 @@ struct ThemeTab: View {
   private var activeThemeId: String? { plugin.flatMap { FontDelivery.enabled($0) ? themeId : nil } }
 
   var body: some View {
-    Form {
-      notes
+    SettingsForm {
       activeSection
       if let plugin, FontDelivery.enabled(plugin), info?.styleSettingsId.isEmpty == false { styleSettingsSection(plugin) }
       presetsSection
       catalogSection
     }
-    .formStyle(.grouped)
     .task { await reloadPresets() }
     .task(id: "\(themeId ?? "")|\(plugin.map(FontDelivery.enabled) ?? false)") { await loadThemeInfo() }
     .task { if catalog == nil { await loadCatalog() } }
@@ -92,7 +89,7 @@ struct ThemeTab: View {
   // MARK: The active theme
 
   @ViewBuilder private var activeSection: some View {
-    Section {
+    SettingsSection(L10n.t("themes.active.title")) {
       if let plugin {
         if FontDelivery.enabled(plugin) {
           LabeledContent(L10n.t("themes.active.heading", ["themeId": themeId ?? "—"])) {
@@ -117,8 +114,6 @@ struct ThemeTab: View {
       } else {
         Note(L10n.t("themes.active.none"))
       }
-    } header: {
-      Text(L10n.t("themes.active.title"))
     }
   }
 
@@ -199,7 +194,7 @@ struct ThemeTab: View {
   private func styleSettingsSection(_ plugin: PluginEntry) -> some View {
     let values = options(plugin)["styleSettings"]?.objectValue ?? JSONObject()
     let ids = info?.styleSettingsId ?? []
-    return Section {
+    return SettingsSection(L10n.t("themes.active.styleSettingsHeading", ["ids": ids.joined(separator: ", ")])) {
       if schemaLoading || schema == nil {
         Note(L10n.t("styles.styleSettings.loading"))
       } else if let schema, schema != .null, let info {
@@ -216,14 +211,10 @@ struct ThemeTab: View {
         Note(L10n.t("themes.active.ownValuesHint"))
         Button(L10n.t("themes.active.goToVariables")) { goTo(.variables) }.buttonStyle(.link).font(.callout)
       }
-    } header: {
-      HStack {
-        Text(L10n.t("themes.active.styleSettingsHeading", ["ids": ids.joined(separator: ", ")]))
-        Spacer()
-        Button(refreshingSchema ? L10n.t("common.loading") : L10n.t("styles.styleSettings.refresh")) { Task { await refreshSchema() } }
-          .disabled(refreshingSchema || schemaLoading)
-          .font(.callout)
-      }
+    } accessory: {
+      Button(refreshingSchema ? L10n.t("common.loading") : L10n.t("styles.styleSettings.refresh")) { Task { await refreshSchema() } }
+        .buttonStyle(.link)
+        .disabled(refreshingSchema || schemaLoading)
     }
   }
 
@@ -239,8 +230,7 @@ struct ThemeTab: View {
   // MARK: Presets
 
   private var presetsSection: some View {
-    Section {
-      Note(L10n.t("themes.presets.description"))
+    SettingsSection(L10n.t("themes.presets.title"), note: L10n.t("themes.presets.description")) {
       if presets.isEmpty { Note(L10n.t("themes.presets.none")) }
       ForEach(Array(presets.enumerated()), id: \.offset) { _, preset in
         let name = preset["name"]?.stringValue ?? ""
@@ -262,8 +252,6 @@ struct ThemeTab: View {
           .buttonStyle(.borderless)
         }
       }
-    } header: {
-      Text(L10n.t("themes.presets.title"))
     }
   }
 
@@ -297,8 +285,7 @@ struct ThemeTab: View {
     let q = StylesModel.trim(query).lowercased()
     let themes = catalog?.themes ?? []
     let filtered = q.isEmpty ? themes : themes.filter { $0.id.lowercased().contains(q) }
-    return Section {
-      Note(L10n.t("themes.catalog.description"))
+    return SettingsSection(L10n.t("themes.catalog.title"), note: L10n.t("themes.catalog.description")) {
       HStack {
         TextField(L10n.t("themes.catalog.searchPlaceholder"), text: $query, prompt: Text(L10n.t("themes.catalog.searchPlaceholder")))
           .labelsHidden()
@@ -322,8 +309,6 @@ struct ThemeTab: View {
       if filtered.count > Self.visibleLimit {
         Note(L10n.t("themes.catalog.moreResults", count: filtered.count - Self.visibleLimit))
       }
-    } header: {
-      Text(L10n.t("themes.catalog.title"))
     }
   }
 

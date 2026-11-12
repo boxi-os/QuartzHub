@@ -76,13 +76,36 @@ struct Callout<Content: View>: View {
     .padding(.horizontal, Spacing.s)
     .padding(.vertical, Spacing.xs + 2)
     .background(kind.tint.opacity(0.12), in: .rect(cornerRadius: 10))
-    .accessibilityElement(children: .combine)
+    // Contain, not combine: a callout may carry a button, and combined it would be lost.
+    .accessibilityElement(children: .contain)
   }
 }
 
 extension Callout where Content == Text {
   init(_ kind: Kind, _ text: String) {
     self.init(kind) { Text(text) }
+  }
+}
+
+// MARK: - Save
+
+/// Speichern in the toolbar: enabled only with something to save, no "Gespeichert" beside it (the
+/// dot in the close button says that).
+struct SaveButton: View {
+  let saving: Bool
+  let disabled: Bool
+  let identifier: String
+  let action: () async -> Void
+
+  var body: some View {
+    Button {
+      Task { await action() }
+    } label: {
+      Label(saving ? L10n.t("common.saving") : L10n.t("common.save"), systemImage: "square.and.arrow.down")
+    }
+    .labelStyle(.titleOnly)
+    .disabled(disabled)
+    .accessibilityIdentifier(identifier)
   }
 }
 
@@ -207,6 +230,8 @@ struct SettingsSection<Content: View, Accessory: View>: View {
         .frame(width: wide ? FormWidth.heading : nil, alignment: .leading)
         .padding(.leading, Spacing.page)
         .padding(.top, wide ? Spacing.l : Spacing.xs)
+        // A long note beside a short group keeps its distance to the line under the section.
+        .padding(.bottom, wide ? Spacing.l : 0)
         .zIndex(1)
       Form {
         Section { content() }

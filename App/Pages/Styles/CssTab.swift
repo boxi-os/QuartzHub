@@ -9,7 +9,8 @@ struct CssTab: View {
   static let mainTab = ":main"
 
   let model: StylesModel
-  let notes: AnyView
+  /// The page's Speichern, after this tab's actions in the toolbar.
+  let saveButton: SaveButton
   @Binding var openTabs: String
   @Binding var activeTab: String
   /// Bumped by the page after a save: the check runs again.
@@ -90,24 +91,28 @@ struct CssTab: View {
   // MARK: The view
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
-      toolbar
+    VStack(alignment: .leading, spacing: Spacing.xs) {
       ScrollView {
-        VStack(alignment: .leading, spacing: 8) {
-          notes
+        VStack(alignment: .leading, spacing: Spacing.xs) {
           consolidateNote
           staleBanners
           checkBanner
-          if let actionError { Label(actionError, systemImage: "exclamationmark.octagon.fill").foregroundStyle(.red).textSelection(.enabled) }
+          if let actionError { Callout(.error) { Text(actionError).textSelection(.enabled) } }
           componentRow
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .animation(Motion.quick, value: bannerKey)
       }
       .frame(maxHeight: 220)
       .fixedSize(horizontal: false, vertical: true)
-      tabBar
+      HStack(alignment: .bottom, spacing: Spacing.s) {
+        tabBar
+        Text(activePath).font(.caption).foregroundStyle(.secondary).lineLimit(1).truncationMode(.head)
+          .textSelection(.enabled)
+          .padding(.bottom, Spacing.xxs)
+      }
       if activeTab == StylesModel.managedStylesheet {
-        Label(L10n.t("styleEditor.managedFile.warning"), systemImage: "exclamationmark.triangle").font(.callout).foregroundStyle(.orange)
+        Callout(.warning, L10n.t("styleEditor.managedFile.warning"))
       }
       CodeEditor(text: Binding(get: { contentOf(activeTab) }, set: setContent),
                  language: activeTab.lowercased().hasSuffix(".css") ? .css : .scss, wraps: false,
@@ -117,22 +122,38 @@ struct CssTab: View {
         .frame(maxHeight: .infinity)
         .accessibilityIdentifier("css.editor")
     }
-    .padding(16)
+    .padding(Spacing.page)
+    .toolbar { toolbar }
     .task(id: openTabs) { await loadOpenFiles() }
     .task(id: model.fileSet?.files.map(\.relativePath).joined(separator: "\n") ?? "") { pruneTabs() }
   }
 
-  private var toolbar: some View {
-    HStack {
-      Text(activePath).font(.caption).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle)
-      Spacer()
-      Button(checking ? L10n.t("styleEditor.check.running") : L10n.t("styleEditor.check.checkActive")) { Task { await checkActive() } }
-        .disabled(checking)
-        .accessibilityIdentifier("css.checkActive")
-      Button(L10n.t("styleEditor.openExternally")) { ExternalOpen.openFile(activePath) }
-        .disabled(activePath.isEmpty)
-      Button(L10n.t("styleEditor.importFile")) { Task { await importFile() } }
+  /// The tab's actions as symbols, before the page's Speichern (docs/conventions.md, Symbolleiste).
+  @ToolbarContentBuilder private var toolbar: some ToolbarContent {
+    ToolbarItemGroup(placement: .primaryAction) {
+      Button { Task { await importFile() } } label: {
+        Label(L10n.t("styleEditor.importFile"), systemImage: "square.and.arrow.down.on.square")
+      }
+      .help(L10n.t("styleEditor.importFile"))
+      Button { ExternalOpen.openFile(activePath) } label: {
+        Label(L10n.t("styleEditor.openExternally"), systemImage: "arrow.up.forward.app")
+      }
+      .help(L10n.t("styleEditor.openExternally"))
+      .disabled(activePath.isEmpty)
+      Button { Task { await checkActive() } } label: {
+        Label(checking ? L10n.t("styleEditor.check.running") : L10n.t("styleEditor.check.checkActive"), systemImage: "checkmark.seal")
+      }
+      .help(L10n.t("styleEditor.check.checkActive"))
+      .disabled(checking)
+      .accessibilityIdentifier("css.checkActive")
     }
+    ToolbarSpacer(.fixed, placement: .primaryAction)
+    ToolbarItem(placement: .primaryAction) { saveButton }
+  }
+
+  /// What the banners above the editor say, for their animation.
+  private var bannerKey: String {
+    "\(String(describing: check))|\(scss?.staleBy != nil)|\(model.managedStale != nil)|\(actionError ?? "")|\(consolidated ?? "")"
   }
 
   // MARK: Reading
@@ -170,16 +191,13 @@ struct CssTab: View {
   @ViewBuilder private var consolidateNote: some View {
     let legacy = StylesheetConsolidation.legacyCount(imported.map(\.relativePath), consolidated: model.fileSet?.consolidated ?? false)
     if legacy > 0 {
-      GroupBox {
-        VStack(alignment: .leading, spacing: 8) {
-          Text(L10n.t("styles.consolidate.note", ["count": String(legacy)]))
-          HStack {
-            Button(consolidating ? L10n.t("styles.consolidate.running") : L10n.t("styles.consolidate.action")) { Task { await consolidate(legacy) } }
-              .disabled(consolidating || model.dirty)
-            if model.dirty { Text(L10n.t("styles.migrate.saveFirst")).foregroundStyle(.secondary) }
-          }
+      Callout(.info) {
+        Text(L10n.t("styles.consolidate.note", ["count": String(legacy)]))
+        HStack {
+          Button(consolidating ? L10n.t("styles.consolidate.running") : L10n.t("styles.consolidate.action")) { Task { await consolidate(legacy) } }
+            .disabled(consolidating || model.dirty)
+          if model.dirty { Text(L10n.t("styles.migrate.saveFirst")).foregroundStyle(.secondary) }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
     if let consolidated { Text(consolidated).font(.callout).foregroundStyle(.secondary) }
@@ -219,15 +237,15 @@ struct CssTab: View {
 
   @ViewBuilder private var staleBanners: some View {
     if let writer = scss?.staleBy {
-      HStack {
-        Label(Self.staleSentence(writer, file: "custom.scss"), systemImage: "exclamationmark.triangle").foregroundStyle(.orange)
+      Callout(.warning) {
+        Text(Self.staleSentence(writer, file: "custom.scss"))
         Button(L10n.t("styles.scssStaleReload")) { Task { await model.reloadScss(after: nil) } }.buttonStyle(.link)
       }
       .accessibilityIdentifier("css.stale")
     }
     if let writer = model.managedStale, model.fileDrafts[StylesModel.managedStylesheet] != nil {
-      HStack {
-        Label(Self.staleSentence(writer, file: StylesModel.managedStylesheet), systemImage: "exclamationmark.triangle").foregroundStyle(.orange)
+      Callout(.warning) {
+        Text(Self.staleSentence(writer, file: StylesModel.managedStylesheet))
         Button(L10n.t("styles.scssStaleReload")) { model.discardManagedDraft() }.buttonStyle(.link)
       }
     }
@@ -238,9 +256,9 @@ struct CssTab: View {
   @ViewBuilder private var checkBanner: some View {
     switch check {
     case .error(let diagnostic)?:
-      VStack(alignment: .leading, spacing: 4) {
+      Callout(.error) {
         HStack(alignment: .firstTextBaseline) {
-          Label(L10n.t("styleEditor.check.failed"), systemImage: "exclamationmark.octagon.fill").fontWeight(.medium)
+          Text(L10n.t("styleEditor.check.failed")).fontWeight(.medium)
           Spacer()
           Button(checking ? L10n.t("styleEditor.check.running") : L10n.t("styleEditor.check.recheck")) { Task { await runCheck() } }
             .buttonStyle(.link).disabled(checking)
@@ -268,12 +286,9 @@ struct CssTab: View {
         }
       }
       .font(.callout)
-      .foregroundStyle(.red)
-      .padding(8)
-      .background(.red.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
       .accessibilityIdentifier("css.checkFailed")
     case .unavailable(let reason)?:
-      Note(L10n.t("styleEditor.check.unavailable", ["reason": reason]))
+      Callout(.info, L10n.t("styleEditor.check.unavailable", ["reason": reason]))
     case .ok?:
       HStack(spacing: 6) {
         Label(L10n.t("styleEditor.check.ok"), systemImage: "checkmark").foregroundStyle(.green)

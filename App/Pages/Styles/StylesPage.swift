@@ -34,6 +34,7 @@ struct StylesPage: View {
   @State private var cssComponent = ""
   @State private var cssReferences: [StyleFiles.Reference] = []
   @Environment(\.unsavedGuard) private var unsaved
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   init(project: ProjectContext) {
     self.project = project
@@ -58,16 +59,10 @@ struct StylesPage: View {
       }
       .unsavedChanges(model.dirty, save: model.saving || model.config == nil ? nil : { [model, tab] in await model.save(from: tab) })
       .toolbar {
-        // Speichern only with something to save, no badge beside it (as on Konfiguration).
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            Task { await save() }
-          } label: {
-            Label(model.saving ? L10n.t("common.saving") : L10n.t("common.save"), systemImage: "square.and.arrow.down")
-          }
-          .labelStyle(.titleOnly)
-          .disabled(!model.dirty || model.saving || model.config == nil)
-          .accessibilityIdentifier("styles.save")
+        // Speichern only with something to save, no badge beside it (as on Konfiguration). Eigenes
+        // CSS puts it after its own actions: a toolbar of an inner view comes after this one.
+        if tab != .customCss {
+          ToolbarItem(placement: .primaryAction) { saveButton }
         }
       }
     } inspector: {
@@ -191,6 +186,12 @@ struct StylesPage: View {
     }
   }
 
+  private var saveButton: SaveButton {
+    SaveButton(saving: model.saving, disabled: !model.dirty || model.saving || model.config == nil, identifier: "styles.save") {
+      _ = await save()
+    }
+  }
+
   private func save() async -> Bool {
     let saved = await model.save(from: tab)
     savedRound += 1
@@ -208,13 +209,12 @@ struct StylesPage: View {
 
   @ViewBuilder private var content: some View {
     if let error = model.loadError {
-      Form {
-        Section {
-          Text(L10n.t("styles.loadFailed")).fontWeight(.medium).foregroundStyle(.red)
-          Text(error).font(.system(.callout, design: .monospaced)).foregroundStyle(.red).textSelection(.enabled)
-        }
+      Callout(.error) {
+        Text(L10n.t("styles.loadFailed")).fontWeight(.medium)
+        Text(error).font(.system(.callout, design: .monospaced)).textSelection(.enabled)
       }
-      .formStyle(.grouped)
+      .padding(Spacing.page)
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
       .accessibilityElement(children: .contain)
       .accessibilityIdentifier("page.styles")
     } else if model.config == nil {
@@ -222,16 +222,17 @@ struct StylesPage: View {
         .accessibilityIdentifier("page.styles")
     } else {
       VStack(spacing: 0) {
+        notes
         switch tab {
         case .basics:
-          BasicsTab(model: model, goTo: { tabID = $0.rawValue }, savedRound: savedRound, notes: AnyView(notes)) { _ = await save() }
+          BasicsTab(model: model, goTo: { tabID = $0.rawValue }, savedRound: savedRound) { _ = await save() }
         case .theme:
-          ThemeTab(model: model, notes: AnyView(notes), goTo: { tabID = $0.rawValue }, selection: $themeSelected, query: $themeQuery,
+          ThemeTab(model: model, goTo: { tabID = $0.rawValue }, selection: $themeSelected, query: $themeQuery,
                    catalog: $themeCatalog)
         case .variables:
-          VariablesTab(model: model, notes: AnyView(notes), place: variablesPlace, scrollTarget: $varScroll)
+          VariablesTab(model: model, place: variablesPlace, scrollTarget: $varScroll)
         case .customCss:
-          CssTab(model: model, notes: AnyView(notes), openTabs: $cssOpenTabs, activeTab: $cssActiveTab, check: $cssCheck, checking: $cssChecking,
+          CssTab(model: model, saveButton: saveButton, openTabs: $cssOpenTabs, activeTab: $cssActiveTab, check: $cssCheck, checking: $cssChecking,
                  runCheck: runCssCheck, insertion: $cssInsertion, component: $cssComponent)
             .task(id: cssComponent) { await loadCssReferences() }
             // Checked on arrival too: an error made outside the app is worth seeing before the next edit.
@@ -243,46 +244,46 @@ struct StylesPage: View {
     }
   }
 
-  /// The save's sentences and the move to `_quartzcontrol.scss`, the first sections of every tab's
-  /// form: they are about the page, not about the tab in front.
+  /// The save's sentences and the move to `_quartzcontrol.scss`, above every tab: they are about
+  /// the page, not about the tab in front.
   @ViewBuilder private var notes: some View {
     let failed = model.status == .failed ? model.message : nil
-    if failed != nil || model.fontNote != nil {
-      Section {
-        if let failed {
-          Label(failed, systemImage: "exclamationmark.octagon.fill").foregroundStyle(.red).textSelection(.enabled)
-            .accessibilityIdentifier("styles.saveError")
-        }
-        if let note = model.fontNote {
-          Text(note).foregroundStyle(.secondary).textSelection(.enabled).accessibilityIdentifier("styles.note")
-        }
+    let move = model.scss?.info.moved == false
+    VStack(alignment: .leading, spacing: Spacing.xs) {
+      if let failed {
+        Callout(.error) { Text(failed).textSelection(.enabled).accessibilityIdentifier("styles.saveError") }
       }
+      if let note = model.fontNote {
+        Callout(.info) { Text(note).textSelection(.enabled).accessibilityIdentifier("styles.note") }
+      }
+      if move { moveNote }
     }
-    if model.scss?.info.moved == false { moveNote }
+    .frame(maxWidth: FormWidth.wide, alignment: .leading)
+    .padding(.horizontal, Spacing.page)
+    .padding(.top, failed != nil || model.fontNote != nil || move ? Spacing.s : 0)
+    .frame(maxWidth: .infinity)
+    .animation(Motion.layout(reduce: reduceMotion), value: "\(failed ?? "")|\(model.fontNote ?? "")|\(move)")
   }
 
   /// A project in 1.0's form keeps working, so this asks rather than does: a moved project is one an
   /// older QuartzControl reads without variables and stylesheets.
   private var moveNote: some View {
-    Section {
-      VStack(alignment: .leading, spacing: 8) {
-        Text(L10n.t("styles.migrate.note"))
-        HStack {
-          Button(migrating ? L10n.t("styles.migrate.running") : L10n.t("styles.migrate.action")) {
-            Task {
-              migrating = true
-              migrateError = nil
-              do { try await model.migrate() } catch { migrateError = StylesModel.message(error) }
-              migrating = false
-            }
+    Callout(.info) {
+      Text(L10n.t("styles.migrate.note"))
+      HStack {
+        Button(migrating ? L10n.t("styles.migrate.running") : L10n.t("styles.migrate.action")) {
+          Task {
+            migrating = true
+            migrateError = nil
+            do { try await model.migrate() } catch { migrateError = StylesModel.message(error) }
+            migrating = false
           }
-          .disabled(migrating || model.dirty)
-          .accessibilityIdentifier("styles.migrate")
-          if model.dirty { Text(L10n.t("styles.migrate.saveFirst")).foregroundStyle(.secondary) }
         }
-        if let migrateError { Text(migrateError).foregroundStyle(.red).textSelection(.enabled) }
+        .disabled(migrating || model.dirty)
+        .accessibilityIdentifier("styles.migrate")
+        if model.dirty { Text(L10n.t("styles.migrate.saveFirst")).foregroundStyle(.secondary) }
       }
-      .frame(maxWidth: .infinity, alignment: .leading)
+      if let migrateError { Text(migrateError).foregroundStyle(.red).textSelection(.enabled) }
     }
   }
 }

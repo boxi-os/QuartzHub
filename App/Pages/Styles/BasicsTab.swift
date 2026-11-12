@@ -9,8 +9,6 @@ struct BasicsTab: View {
   let goTo: (StylesModel.Tab) -> Void
   /// Bumped by the page after a save: saving may have fetched the Google fonts into the project.
   let savedRound: Int
-  /// The page's sentences, above the tab's own sections.
-  let notes: AnyView
   /// The page's save, as the toolbar runs it.
   let save: () async -> Void
 
@@ -38,8 +36,7 @@ struct BasicsTab: View {
   private var themeId: String? { FontDelivery.activeThemeId(config) }
 
   var body: some View {
-    Form {
-      notes
+    SettingsForm {
       themeBanner
       fontsSection
       deliverySection
@@ -48,7 +45,6 @@ struct BasicsTab: View {
       unusedSection
       colorSections
     }
-    .formStyle(.grouped)
     .task(id: "\(themeId ?? "")|\(savedRound)") { await reloadFaces() }
     .task(id: "\(draftFamilies.joined(separator: "|"))|\(faces.count)|\(savedRound)") { await reloadUnused() }
   }
@@ -74,8 +70,8 @@ struct BasicsTab: View {
 
   @ViewBuilder private var themeBanner: some View {
     if let plugin = config.plugins.first(where: { FontDelivery.enabled($0) && FontDelivery.isThemePlugin($0) }) {
-      Section {
-        VStack(alignment: .leading, spacing: 6) {
+      Callout(.warning) {
+        Group {
           if model.graphLoading {
             Text(L10n.t("themeEditor.overrideChecking"))
           } else {
@@ -85,28 +81,26 @@ struct BasicsTab: View {
               "fonts": String(Self.slots.filter { overriddenByTheme(Self.fontVariable[$0]!) }.count), "totalFonts": String(Self.slots.count)
             ]))
           }
-          Text(L10n.t("themeEditor.overrideStillEditable")).foregroundStyle(.secondary)
-          Button(L10n.t("themeEditor.goToThemeTab")) { goTo(.theme) }.buttonStyle(.link)
         }
-        .font(.callout)
-      } header: {
-        Label(L10n.t("styles.tabs.theme"), systemImage: "paintpalette").foregroundStyle(.orange)
+        Text(L10n.t("themeEditor.overrideStillEditable")).foregroundStyle(.secondary)
+        Button(L10n.t("themeEditor.goToThemeTab")) { goTo(.theme) }.buttonStyle(.link)
       }
+      .padding(.horizontal, Spacing.page)
+      .padding(.top, Spacing.s)
     }
   }
 
   // MARK: Fonts
 
   private var fontsSection: some View {
-    Section(L10n.t("themeEditor.fonts")) {
+    SettingsSection(L10n.t("themeEditor.fonts"), note: fontOrigin == "local" ? L10n.t("themeEditor.localHint")
+                    : L10n.t("themeEditor.googleFontsHint", ["count": String(GoogleFontList.families.count)])) {
       Picker(L10n.t("themeEditor.fontSource"), selection: Binding(get: { fontOrigin }, set: { setTheme("fontOrigin", .string($0)) })) {
         Text(L10n.t("themeEditor.googleFonts")).tag("googleFonts")
         Text(L10n.t("themeEditor.local")).tag("local")
         if fontOrigin != "googleFonts" && fontOrigin != "local" { Text(verbatim: fontOrigin).tag(fontOrigin) }
       }
       .accessibilityIdentifier("styles.fontSource")
-      Note(fontOrigin == "local" ? L10n.t("themeEditor.localHint")
-           : L10n.t("themeEditor.googleFontsHint", ["count": String(GoogleFontList.families.count)]))
       ForEach(Self.slots, id: \.self) { slot in fontField(slot) }
     }
   }
@@ -189,7 +183,6 @@ struct BasicsTab: View {
               .textInputCompletion(item.name)
             }
           }
-          .frame(maxWidth: 320)
           .accessibilityIdentifier("styles.font.\(slot)")
       }
       if let spelledDifferently {
@@ -220,7 +213,7 @@ struct BasicsTab: View {
     let google = FontDelivery.callsGoogle(config)
     let state = FontDelivery.buildState(config, faces: faces, built: built)
     let baseUrl = config.configuration["baseUrl"]?.stringValue ?? ""
-    return Section(L10n.t("themeEditor.delivery.heading")) {
+    return SettingsSection(L10n.t("themeEditor.delivery.heading"), note: L10n.t("themeEditor.delivery.description")) {
       VStack(alignment: .leading, spacing: 2) {
         if loaders.isEmpty { Note(L10n.t("styleEditor.current.noLoader")) }
         ForEach(loaders, id: \.self) { loader in
@@ -232,7 +225,6 @@ struct BasicsTab: View {
         get: { loaders.contains { $0.mode == "selfHosted" } && !google },
         set: { model.setConfig(FontDelivery.withSelfHostedFonts(config, $0)) }))
         .accessibilityIdentifier("styles.selfHost")
-      Note(L10n.t("themeEditor.delivery.description"))
       if case .notBuilt? = state { warning(L10n.t("styleEditor.current.fontsNotBuilt")) }
       if case .missing(let families)? = state {
         warning(L10n.t("styleEditor.current.fontsMissingFromBuild", ["families": families.joined(separator: ", ")]))
@@ -293,8 +285,7 @@ struct BasicsTab: View {
   @ViewBuilder private var fixesSection: some View {
     let applicable = FontDelivery.cssFixes.filter { $0.appliesTo(config) }
     if !applicable.isEmpty {
-      Section {
-        Note(L10n.t("styles.fixes.description"))
+      SettingsSection(L10n.t("styles.fixes.heading"), note: L10n.t("styles.fixes.description")) {
         ForEach(applicable, id: \.id) { fix in
           let existing = model.fileSet?.files.first { $0.name == fix.fileName }
           HStack(alignment: .firstTextBaseline) {
@@ -313,8 +304,6 @@ struct BasicsTab: View {
           }
         }
         if let fixError { Text(fixError).font(.callout).foregroundStyle(.red).textSelection(.enabled) }
-      } header: {
-        Text(L10n.t("styles.fixes.heading"))
       }
     }
   }
@@ -355,8 +344,7 @@ struct BasicsTab: View {
   // MARK: A font file of one's own
 
   private var importSection: some View {
-    Section(L10n.t("themeEditor.localFontHeading")) {
-      Note(L10n.t("themeEditor.localFontDescription"))
+    SettingsSection(L10n.t("themeEditor.localFontHeading"), note: L10n.t("themeEditor.localFontDescription")) {
       if pendingFont == nil {
         Button(L10n.t("themeEditor.localFontPick")) { pick() }
           .accessibilityIdentifier("styles.fontImport")
@@ -424,8 +412,7 @@ struct BasicsTab: View {
   /// does not see.
   @ViewBuilder private var unusedSection: some View {
     if !unused.isEmpty {
-      Section(L10n.t("themeEditor.unusedFonts.heading")) {
-        Note(L10n.t("themeEditor.unusedFonts.description"))
+      SettingsSection(L10n.t("themeEditor.unusedFonts.heading"), note: L10n.t("themeEditor.unusedFonts.description")) {
         ForEach(unused, id: \.family) { font in
           HStack {
             VStack(alignment: .leading, spacing: 2) {
@@ -479,17 +466,15 @@ struct BasicsTab: View {
     let colors = theme["colors"]?.objectValue ?? JSONObject()
     let leaves = colors.keys.filter { colors[$0]?.stringValue != nil }
     if !leaves.isEmpty || colors.isEmpty {
-      Section(L10n.t("themeEditor.colors")) {
+      SettingsSection(L10n.t("themeEditor.colors")) {
         ForEach(leaves, id: \.self) { key in colorRow(path: [key], name: key) }
       }
     }
     ForEach(colors.keys.filter { colors[$0]?.objectValue != nil }, id: \.self) { mode in
-      Section {
+      SettingsSection(leaves.isEmpty ? "\(L10n.t("themeEditor.colors")) · \(mode)" : mode) {
         ForEach((colors[mode]?.objectValue?.keys ?? []).filter { colors[mode]?[$0]?.stringValue != nil }, id: \.self) { key in
           colorRow(path: [mode, key], name: key)
         }
-      } header: {
-        Text(leaves.isEmpty ? "\(L10n.t("themeEditor.colors")) · \(mode)" : mode)
       }
     }
   }
@@ -519,7 +504,6 @@ struct BasicsTab: View {
     return LabeledContent {
       CssColorField(name: name, value: Binding(get: { colorValue(path) }, set: { setColor(path, $0) }),
                     identifier: "styles.color.\(path.joined(separator: "."))")
-        .frame(maxWidth: 320)
     } label: {
       HStack(spacing: 6) {
         Text(name).foregroundStyle(overridden ? .secondary : .primary)

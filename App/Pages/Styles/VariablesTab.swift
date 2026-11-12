@@ -32,7 +32,6 @@ struct VariablesPlace {
 /// selected variable is in the inspector.
 struct VariablesTab: View {
   let model: StylesModel
-  let notes: AnyView
   let place: VariablesPlace
   /// Set by a jump from the inspector; the row is scrolled to and the request cleared.
   @Binding var scrollTarget: String?
@@ -60,22 +59,28 @@ struct VariablesTab: View {
   }
 
   var body: some View {
+    // A list over the full width, one Form: the jump from the inspector scrolls to a row of it,
+    // which a SettingsForm's sections (one Form each, not scrolling) would not let it do.
     ScrollViewReader { proxy in
-      Form {
-        notes
-        if let themeId = model.config.flatMap(FontDelivery.activeThemeId) {
-          Section { Label(L10n.t("styles.variables.themeNote", ["themeId": themeId]), systemImage: "info.circle").foregroundStyle(.secondary) }
-        }
-        if !collisions.isEmpty {
-          Section {
-            Label(L10n.t("styles.variables.collisionNote", ["names": collisions.map { "--\($0)" }.joined(separator: ", ")], count: collisions.count),
-                  systemImage: "exclamationmark.triangle").foregroundStyle(.orange)
+      VStack(spacing: 0) {
+        let themeId = model.config.flatMap(FontDelivery.activeThemeId)
+        if themeId != nil || !collisions.isEmpty {
+          VStack(alignment: .leading, spacing: Spacing.xs) {
+            if let themeId { Callout(.info, L10n.t("styles.variables.themeNote", ["themeId": themeId])) }
+            if !collisions.isEmpty {
+              Callout(.warning, L10n.t("styles.variables.collisionNote", ["names": collisions.map { "--\($0)" }.joined(separator: ", ")],
+                                       count: collisions.count))
+            }
           }
+          .padding(.horizontal, Spacing.page)
+          .padding(.top, Spacing.s)
         }
-        mainSection
-        allSection
+        Form {
+          mainSection
+          allSection
+        }
+        .formStyle(.grouped)
       }
-      .formStyle(.grouped)
       .onChange(of: scrollTarget) { _, target in
         guard let target else { return }
         Task { @MainActor in
