@@ -336,5 +336,5 @@ Apple-Forum auch keine für die Info.plist-Schlüssel.
 - **Info.plist-Katalog.** `CFBundleDisplayName`, `CFBundleName` und `NSHumanReadableCopyright`
   stehen jetzt selbst darin, in der Form, die Xcode schreibt, und auf Englisch mit demselben Wert
   (Name und Lizenz werden nicht übersetzt). Das Bundle hat sie damit auch in `en.lproj`.
-- Ob die Xcode-Oberfläche die Kataloge damit in Ruhe lässt, zeigt erst ein Bau in Xcode; von der
-  Kommandozeile aus ist das nicht zu messen.
+- Gegenprobe in Xcode (der Nutzer, 2026-11-12, Bau mit dem Stand 3d2a3b2): danach `git status`
+  leer, beide Kataloge unverändert. Von der Kommandozeile aus ist das nicht zu messen.
