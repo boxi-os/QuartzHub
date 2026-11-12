@@ -74,8 +74,12 @@ struct PublishPage: View {
     if let selectedId, ids.contains(selectedId) {
       model.select(selectedId)
     } else {
-      selectedId = ids.first
-      model.select(ids.first)
+      // A turn later, once the rows are in: chosen in the update that inserted them, AppKit warned
+      // of a reentrant operation in the table's delegate, "will become an assert" (2026-11-12).
+      DispatchQueue.main.async {
+        selectedId = ids.first
+        model.select(ids.first)
+      }
     }
   }
 

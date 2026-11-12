@@ -36,12 +36,12 @@ struct DocumentsPage: View {
         // when none is remembered or the remembered one is gone (as on Veröffentlichen).
         model.load(select: .some(storedId))
         if model.selectedId == nil { model.open(model.books.first?.id) }
-        highlighted = model.selectedId.map(Self.bookTag)
+        highlightLater(model.selectedId)
       }
       .onChange(of: highlighted) { old, new in choose(from: old, to: new) }
       .onChange(of: model.selectedId) { _, id in
         storedId = id
-        highlighted = id.map(Self.bookTag)
+        highlightLater(id)
       }
       .task(id: "\(model.draft?.id ?? "")|\(model.draft?.root ?? "")") {
         await model.settle(book: model.draft?.id, root: model.draft?.root ?? "")
@@ -104,6 +104,13 @@ struct DocumentsPage: View {
   /// A click on another book, or on the empty list after a book, leaves the open one: with edits
   /// that asks the sidebar's question with its three answers (QuartzControl, measured
   /// 2026-11-05). A row of the order is no change of book.
+  /// The list's selection a turn later, once its rows are in: set in the update that inserted
+  /// them, AppKit warned of a reentrant operation in the table's delegate, "will become an assert"
+  /// (2026-11-12, as on Veröffentlichen).
+  private func highlightLater(_ id: String?) {
+    DispatchQueue.main.async { highlighted = id.map(Self.bookTag) }
+  }
+
   private func choose(from old: String?, to new: String?) {
     let target: String?
     if let new, new.hasPrefix("book:") {
@@ -194,7 +201,15 @@ struct DocumentsPage: View {
     } header: {
       Text(L10n.t("documents.booksHeading"))
     } footer: {
-      howItWorks
+      VStack(alignment: .leading, spacing: Spacing.xs) {
+        howItWorks
+        if model.siteLoading {
+          HStack(spacing: Spacing.xs) {
+            ProgressView().controlSize(.small)
+            Text(L10n.t("documents.pagesLoading")).foregroundStyle(.secondary)
+          }
+        }
+      }
     }
   }
 
@@ -202,14 +217,12 @@ struct DocumentsPage: View {
 
   @ViewBuilder private var pagesSections: some View {
     if model.site == nil || model.siteLoading {
-      Section(L10n.t("documents.pagesHeading")) {
-        if model.siteLoading {
-          HStack(spacing: 6) {
-            ProgressView().controlSize(.small)
-            Text(L10n.t("documents.pagesLoading")).foregroundStyle(.secondary)
-          }
-        }
-        if let error = model.siteError, !model.siteLoading {
+      // While the pages load, no section of theirs: one that ~140 pages then replaced, with a row
+      // or only a heading, made AppKit re-enter its own row-height update inside SwiftUI's diff
+      // ("reentrant operation in its NSTableView delegate", the stack all AppKit and SwiftUI,
+      // 2026-11-12). The loading line stands under the books instead (`booksSection`).
+      if let error = model.siteError, !model.siteLoading {
+        Section(L10n.t("documents.pagesHeading")) {
           Callout(.error) {
             Text(error).textSelection(.enabled).accessibilityIdentifier("documents.siteError")
             Button(L10n.t("documents.toBuild")) { openPage(.server) }.buttonStyle(.link).font(.callout)
