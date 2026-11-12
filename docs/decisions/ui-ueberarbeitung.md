@@ -269,3 +269,45 @@ Meldungen.
   ist das System (WebKit-Sandbox, AppIntents, Spotlight, Netz). Von der App kam nur die Tabellen-
   Warnung oben und auf Stufe Info „ignoring retroactive Equatable conformance“ von AttributeGraph,
   ohne Typnamen im Log; nicht weiter verfolgt.
+
+## Zweite Runde
+
+Rückmeldung des Nutzers nach dem zweiten Start aus Xcode (2026-11-12), vier Punkte.
+
+- **Layout ▸ Übersicht.** Die Tabelle stand in ihrer Karte links, so breit wie ihr Inhalt (1680 × 1000:
+  rund die Hälfte der Karte leer). Jetzt teilen sich die Seitentypen, was die Komponentennamen übrig
+  lassen (`ViewThatFits`: die Kartenbreite, wenn sie passt, sonst wie bisher seitlich scrollend; bei
+  1000 pt scrollt sie). Eine Überschrift wie „Excalidraw-Seiten“ bleibt einzeilig.
+- **Geteilte Bereiche.** Die vier Plugin-Editoren waren ein `VSplitView`: dessen Trennlinie ist eine
+  Haarlinie zwischen zwei Flächen desselben Graus, und man sah nicht, dass sich etwas ziehen lässt.
+  `SplitPanes` stellt jeden Bereich auf eine Karte (`paneCard`), dazwischen ein sichtbarer Griff mit
+  dem Zeiger für Zeilenhöhe, Doppelklick stellt zurück, die Aufteilung bleibt je Fenster
+  (`@SceneStorage`, Anteil der Höhe), mit Bedienungshilfe-Aktion ±40 pt. Gezogen und gemessen bei
+  1680 × 1000: der Griff folgt, an der Mindesthöhe ist Schluss. Durchgesehen auf weitere Stellen:
+  Übersicht, Layout und Frames haben schon Karten; die Ausgabe unter Vorschau & Build ist eine feste,
+  einklappbare Konsole und ließe sich mit demselben Griff ziehbar machen, ist aber nicht gemacht.
+- **Frames-Editor.** Gemessen mit Aufnahmen samt Zeiger (`screencapture -C`), Ziehen per CGEvent:
+  - Anfasser zeigen den Zeiger ihrer Kante oder Ecke (`.pointerStyle(.frameResize(position:))`), ein
+    Bereich die Hand (`.grabIdle`).
+  - Ein Bereich auf einem belegten Platz ließ früher nichts geschehen, ohne Zeichen: der Bereich
+    darüber nahm den Drop nicht an, die Zelle darunter bekam ihn nie. Jetzt ist das ganze Raster ein
+    Ziel (`DropDelegate`): es kennt den gezogenen Bereich ab Beginn des Ziehens (`onDrag`, der Inhalt
+    eines Drops ist erst beim Loslassen lesbar), zeigt während des Ziehens, wo er landet, in der
+    Akzentfarbe, und rot gestrichelt mit dem Zeiger „nicht erlaubt“ (`.forbidden`), wo er einen
+    anderen überdecken würde.
+  - Eine Kante, die ein anderer Bereich aufhält, färbt den Bereich beim Ziehen rot.
+  - Ein Klick ins Leere (Seite, Kasten des Rasters, freie Zelle) wählt ab.
+  - Die Einstellungen des Frames (Name, Raster, Breite, Spuren, Linien, Breakpoints) standen über dem
+    Raster und schoben es aus dem Fenster, während der Inspektor ohne Auswahl leer war. Sie stehen
+    jetzt dort (`FrameSettingsInspector`): Ist kein Bereich gewählt, ist der Frame selbst gewählt, wie
+    auf einer Zeichenfläche. Das Raster beginnt bei 1680 × 1000 jetzt rund 400 statt 790 pt unter der Fensterkante.
+- **Akzentfarbe.** QuartzHub hat eine eigene, Petrol (`App/Assets.xcassets/AccentColor`, hell
+  `#1A7F8E`, dunkel `#2A9AAA`, über `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` als
+  `NSAccentColorName` im Info.plist). Sie gilt, wenn in den Systemeinstellungen „Bunt“ gewählt ist, wie
+  bei Podcasts; eine feste Farbe dort geht vor. Die Töne sind so gewählt, dass weißer Text auf der
+  Auswahl so lesbar bleibt wie auf dem System-Blau (Kontrast hell 4,7, dunkel 3,3; Blau rund 4 und
+  3,6). Umschaltbar in den Einstellungen ist sie nicht: gemessen mit `.tint(.orange)` am Projektfenster
+  wurden Reiter, Schalter, Menüs und alle Knopftexte orange, die Seitenleiste, die Listenauswahl und
+  alles, was `Color.accentColor` nimmt, blieben bei der Farbe aus dem Katalog. Eine Wahl zur Laufzeit
+  machte die App zweifarbig; eine Schnittstelle, die die Akzentfarbe einer App zur Laufzeit setzt,
+  ist nicht bekannt.

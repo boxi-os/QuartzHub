@@ -103,7 +103,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
 - **Ein deaktiviertes Control muss noch lesbar sein; was nicht wirkt, sagt das mit einem Wort,
   nicht nur mit Grau. (QC)**
 - **Farben nach Rolle (QC):** Systemstile (`.secondary`, `.tint`, Materialien) statt fester
-  Farben; Hell und Dunkel folgen dem System bzw. der Einstellung.
+  Farben; Hell und Dunkel folgen dem System bzw. der Einstellung. Die Akzentfarbe ist eine, aus dem
+  Asset-Katalog (`AccentColor`, gilt bei „Bunt“); kein `.tint(…)` mit eigener Farbe, das erreicht
+  Seitenleiste und Listenauswahl nicht (decisions/ui-ueberarbeitung.md, Zweite Runde).
 - **Der Fenstertitel nennt den Ort, nicht das Projekt.** Titel ist die Seite, Untertitel der Reiter;
   der Projektname steht in der Seitenleiste und im Menü „Fenster“ (`WindowMenuTitle`, setzt den
   Eintrag nach jedem Titelwechsel neu). Messung: decisions/ui-ueberarbeitung.md.
@@ -120,9 +122,11 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   Spalte bis 880 pt, ab 900 pt Breite Überschrift und Erklärung links daneben (Variante C). Liste:
   `Table` oder `List` über die volle Breite, kein Kopf über der Liste, Anlegen ist ➕ in der
   Symbolleiste. Übersicht: `CardGrid` mit `Card`, eine bis drei Spalten. Arbeitsfläche: füllt Breite
-  und Höhe, ihr Kopf ist `WorkspaceHeader`. Reiter stehen in `.pageTabs(…)`, einer eigenen Zeile über
-  dem Inhalt (keine `safeAreaBar`: deren Einschub erreicht keinen `VSplitView`), und werden zum Menü,
-  wo sie nicht passen.
+  und Höhe, ihr Kopf ist `WorkspaceHeader`; Bereiche, deren Höhe man ziehen kann, sind `SplitPanes`
+  mit je einer Karte (`paneCard`) und sichtbarem Griff, kein `VSplitView` (dessen Haarlinie sah
+  niemand). Reiter stehen in `.pageTabs(…)`, einer eigenen Zeile über dem Inhalt (keine
+  `safeAreaBar`: deren Einschub erreicht keine AppKit-Ansicht), und werden zum Menü, wo sie nicht
+  passen.
 - **Die Symbolleiste eines Reiters kommt nach der der Seite.** Ein Reiter mit eigenen Aktionen stellt
   deshalb auch „Speichern“ (`SaveButton`) selbst hinter sie, und die Seite lässt ihres dort weg.
 - **Maße und Bewegung aus `App/Components/Design.swift`:** `Spacing` (Seitenrand 20), `Motion` für
