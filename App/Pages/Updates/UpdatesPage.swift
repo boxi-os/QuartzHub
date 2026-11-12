@@ -1,9 +1,9 @@
 import QuartzHubCore
 import SwiftUI
 
-/// Updates: QuartzControl's `Updates.tsx` as one grouped form, the core and then the plugins. The
-/// card that pointed to Snapshots is the inspector's page context now; "Erneut prüfen" is in the
-/// toolbar.
+/// Updates: QuartzControl's `Updates.tsx` as a settings form (decisions/ui-ueberarbeitung.md,
+/// variant C), the core and then the plugins. The card that pointed to Snapshots is the inspector's
+/// page context now; "Erneut prüfen" is in the toolbar.
 struct UpdatesPage: View {
   let project: ProjectContext
 
@@ -22,13 +22,12 @@ struct UpdatesPage: View {
 
   var body: some View {
     PageScaffold(page: .updates) {
-      Form {
+      SettingsForm {
         coreSection
         pluginsSection
       }
-      .formStyle(.grouped)
       .toolbar {
-        ToolbarItem {
+        ToolbarItem(placement: .primaryAction) {
           Button(L10n.t("updates.recheck"), systemImage: "arrow.clockwise") { Task { await model.reload() } }
             .disabled(model.checking || model.coreBusy)
             .help(L10n.t("updates.recheck"))
@@ -64,7 +63,7 @@ struct UpdatesPage: View {
   // MARK: The core
 
   private var coreSection: some View {
-    Section {
+    SettingsSection(L10n.t("updates.core.heading"), symbol: "shippingbox") {
       // On a row that is always there: a Form's identifier does not reach the accessibility tree.
       VStack(alignment: .leading, spacing: 4) {
         if let core = model.core {
@@ -145,10 +144,8 @@ struct UpdatesPage: View {
         if !model.notesDone.isEmpty { ReleaseNotesView(sections: model.notesDone, identifier: "updates.notesDone") }
         if let doctor = model.doctorAfter { afterUpdate(doctor) }
       }
-    } header: {
-      SectionHeader(title: L10n.t("updates.core.heading"), symbol: "shippingbox") {
-        if let core = model.core { stateBadge(core.state) }
-      }
+    } accessory: {
+      if let core = model.core { stateBadge(core.state) }
     }
   }
 
@@ -217,8 +214,7 @@ struct UpdatesPage: View {
   // MARK: Plugins
 
   private var pluginsSection: some View {
-    Section {
-      Note(L10n.t("updates.plugins.hint"))
+    SettingsSection(L10n.t("updates.plugins.heading"), symbol: ProjectPage.plugins.symbol, note: L10n.t("updates.plugins.hint")) {
       if let plugins = model.plugins {
         if plugins.isEmpty {
           Note(L10n.t("updates.plugins.none"))
@@ -241,11 +237,9 @@ struct UpdatesPage: View {
         OutcomeTitle(title: result.title, success: result.success)
         RunOutput(text: result.output, label: L10n.t("updates.plugins.output"), identifier: "updates.pluginOutput")
       }
-    } header: {
-      SectionHeader(title: L10n.t("updates.plugins.heading"), symbol: ProjectPage.plugins.symbol) {
-        let behind = (model.plugins ?? []).filter { $0.state == .behind }.count
-        if behind > 0 { StateBadge(text: String(behind), color: .orange) }
-      }
+    } accessory: {
+      let behind = (model.plugins ?? []).filter { $0.state == .behind }.count
+      if behind > 0 { StateBadge(text: String(behind), color: .orange) }
     }
   }
 

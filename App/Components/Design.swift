@@ -172,20 +172,24 @@ struct SettingsForm<Content: View>: View {
   }
 }
 
-/// One section of a `SettingsForm`: its heading with the page's symbol, an optional note, its rows.
-struct SettingsSection<Content: View>: View {
+/// One section of a `SettingsForm`: its heading with the page's symbol, an optional state beside
+/// it (a `StateBadge`: "Läuft", "Update verfügbar"), an optional note, its rows.
+struct SettingsSection<Content: View, Accessory: View>: View {
   let title: String
   var symbol: String?
   var note: String?
   @ViewBuilder var content: () -> Content
+  @ViewBuilder var accessory: () -> Accessory
 
   @Environment(\.settingsWide) private var wide
 
-  init(_ title: String, symbol: String? = nil, note: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+  init(_ title: String, symbol: String? = nil, note: String? = nil, @ViewBuilder content: @escaping () -> Content,
+       @ViewBuilder accessory: @escaping () -> Accessory) {
     self.title = title
     self.symbol = symbol
     self.note = note
     self.content = content
+    self.accessory = accessory
   }
 
   var body: some View {
@@ -216,11 +220,17 @@ struct SettingsSection<Content: View>: View {
 
   private var heading: some View {
     VStack(alignment: .leading, spacing: Spacing.xxs) {
-      Group {
-        if let symbol { Label(title, systemImage: symbol) } else { Text(title) }
+      // The state beside the heading in one column, under it in the narrow heading column.
+      let row = wide ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xxs))
+        : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Spacing.s))
+      row {
+        Group {
+          if let symbol { Label(title, systemImage: symbol) } else { Text(title) }
+        }
+        .font(.headline)
+        .accessibilityAddTraits(.isHeader)
+        accessory().font(.callout).foregroundStyle(.secondary)
       }
-      .font(.headline)
-      .accessibilityAddTraits(.isHeader)
       if let note {
         Text(note)
           .font(.callout)
@@ -228,5 +238,11 @@ struct SettingsSection<Content: View>: View {
           .fixedSize(horizontal: false, vertical: true)
       }
     }
+  }
+}
+
+extension SettingsSection where Accessory == EmptyView {
+  init(_ title: String, symbol: String? = nil, note: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+    self.init(title, symbol: symbol, note: note, content: content) { EmptyView() }
   }
 }
