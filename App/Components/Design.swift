@@ -34,6 +34,45 @@ enum Motion {
   static func layout(reduce: Bool) -> Animation? { reduce ? nil : layout }
 }
 
+extension View {
+  /// Follows a value worked out from the view's width: a layout that changes with the width.
+  /// Changes in the view's first half second are taken as they are, later ones are animated.
+  ///
+  /// A page that appears is measured several times before its width settles: Konfiguration at
+  /// 1680 pt got 180, 960, then 1170 pt, the Übersicht one, two, then three columns (logged
+  /// 2026-11-12). Animated from the start, every page and tab change in a wide window drew the
+  /// narrow layout first and then moved into the wide one; with only the first value unanimated,
+  /// it still moved from 180 to 960.
+  func onWidthChange<Value: Equatable & Sendable>(_ value: @escaping @Sendable (CGFloat) -> Value, reduceMotion: Bool,
+                                       perform action: @escaping (Value) -> Void) -> some View {
+    modifier(WidthChange(value: value, reduceMotion: reduceMotion, action: action))
+  }
+}
+
+private struct WidthChange<Value: Equatable & Sendable>: ViewModifier {
+  /// How long a view that appeared counts as settling.
+  static var settling: TimeInterval { 0.5 }
+
+  let value: @Sendable (CGFloat) -> Value
+  let reduceMotion: Bool
+  let action: (Value) -> Void
+  @State private var appeared = Date.distantFuture
+
+  func body(content: Content) -> some View {
+    content
+      .onAppear { appeared = .now }
+      .onGeometryChange(for: Value.self) { [value] in value($0.size.width) } action: { next in
+        if Date.now.timeIntervalSince(appeared) > Self.settling {
+          withAnimation(Motion.layout(reduce: reduceMotion)) { action(next) }
+        } else {
+          var settling = Transaction()
+          settling.disablesAnimations = true
+          withTransaction(settling) { action(next) }
+        }
+      }
+  }
+}
+
 // MARK: - Callout
 
 /// A note, a warning or an error in one form: symbol, text, the colour of its kind as a tint of the
@@ -224,9 +263,7 @@ struct SettingsForm<Content: View>: View {
         .padding(.vertical, Spacing.xs)
         .frame(maxWidth: .infinity)
     }
-    .onGeometryChange(for: Bool.self) { $0.size.width >= FormWidth.sideBySide } action: { next in
-      withAnimation(Motion.layout(reduce: reduceMotion)) { wide = next }
-    }
+    .onWidthChange({ $0 >= FormWidth.sideBySide }, reduceMotion: reduceMotion) { wide = $0 }
   }
 }
 
@@ -424,8 +461,6 @@ struct CardGrid<Content: View>: View {
               alignment: .leading, spacing: Spacing.m) {
       content()
     }
-    .onGeometryChange(for: Int.self) { max(1, min(3, Int(($0.size.width + Spacing.m) / (300 + Spacing.m)))) } action: { next in
-      withAnimation(Motion.layout(reduce: reduceMotion)) { columns = next }
-    }
+    .onWidthChange({ max(1, min(3, Int(($0 + Spacing.m) / (300 + Spacing.m)))) }, reduceMotion: reduceMotion) { columns = $0 }
   }
 }
