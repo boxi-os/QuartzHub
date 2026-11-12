@@ -279,6 +279,50 @@ extension SettingsSection where Accessory == EmptyView {
   }
 }
 
+// MARK: - Workspace header
+
+/// The head of a workspace (Layout ▸ Komponenten, Layout ▸ Frames): what is open, a few facts about
+/// it, and under a line the controls that choose it. One look for both, not two copies.
+struct WorkspaceHeader<Facts: View, Controls: View>: View {
+  let symbol: String
+  /// The kind of thing open, above its name ("Seitentyp", "Eigener Frame").
+  let kicker: String
+  let title: String
+  @ViewBuilder var facts: () -> Facts
+  @ViewBuilder var controls: () -> Controls
+
+  init(symbol: String, kicker: String, title: String, @ViewBuilder facts: @escaping () -> Facts,
+       @ViewBuilder controls: @escaping () -> Controls) {
+    self.symbol = symbol
+    self.kicker = kicker
+    self.title = title
+    self.facts = facts
+    self.controls = controls
+  }
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: Spacing.s) {
+      HStack(spacing: Spacing.s) {
+        Image(systemName: symbol).font(.title3).foregroundStyle(.tint)
+          .frame(width: 32, height: 32)
+          .background(.tint.opacity(0.15), in: .rect(cornerRadius: 8))
+          .accessibilityHidden(true)
+        VStack(alignment: .leading, spacing: 0) {
+          Text(kicker).font(.caption).foregroundStyle(.secondary).textCase(.uppercase)
+          Text(title).font(.title3.weight(.semibold))
+        }
+        Spacer(minLength: Spacing.xs)
+        facts()
+      }
+      .accessibilityElement(children: .combine)
+      Divider()
+      controls()
+    }
+    .padding(Spacing.m)
+    .background(.fill.quinary, in: .rect(cornerRadius: 12))
+  }
+}
+
 // MARK: - Card
 
 /// One tile of an overview (Übersicht, Layout ▸ Übersicht): its heading with the page's symbol and

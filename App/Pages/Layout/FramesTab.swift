@@ -10,6 +10,8 @@ struct FramesTab: View {
   @Bindable var model: LayoutModel
   @Binding var breakpoint: String
   @Binding var selectedArea: String
+  /// The page's Speichern, after this tab's actions in the toolbar.
+  let saveButton: SaveButton
   @Environment(\.unsavedGuard) private var unsaved
 
   /// The board's cells in its own coordinates, for dragging an edge onto the nearest grid line.
@@ -21,10 +23,9 @@ struct FramesTab: View {
 
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 16) {
+      VStack(alignment: .leading, spacing: Spacing.m) {
         if let message = model.frameMessage {
-          Label(message, systemImage: "exclamationmark.octagon.fill").foregroundStyle(.red).textSelection(.enabled)
-            .accessibilityIdentifier("layout.frames.message")
+          Callout(.error) { Text(message).textSelection(.enabled).accessibilityIdentifier("layout.frames.message") }
         }
         head
         // A brand-new frame needs no restart: the server has never loaded it.
@@ -36,9 +37,10 @@ struct FramesTab: View {
           standard
         }
       }
-      .padding(16)
+      .padding(Spacing.page)
       .frame(maxWidth: .infinity, alignment: .leading)
     }
+    .toolbar { toolbar }
     .onExitCommand { selectedArea = "" }
     .accessibilityIdentifier("layout.frames")
   }
@@ -72,23 +74,13 @@ struct FramesTab: View {
   private var head: some View {
     let view = model.draft.map(FrameView.init)
     let label = view.map { $0.frameName.isEmpty ? L10n.t("layoutEditor.frameBuilder.unnamed") : $0.frameName }
-    return VStack(alignment: .leading, spacing: 10) {
-      HStack(spacing: 10) {
-        Image(systemName: "rectangle.split.3x3").font(.title3).foregroundStyle(.tint)
-          .frame(width: 32, height: 32).background(RoundedRectangle(cornerRadius: 7).fill(Color.accentColor.opacity(0.15)))
-          .accessibilityHidden(true)
-        VStack(alignment: .leading, spacing: 0) {
-          Text(view == nil ? L10n.t("layoutEditor.context.builtinFrame") : L10n.t("layoutEditor.context.ownFrame"))
-            .font(.caption).foregroundStyle(.secondary).textCase(.uppercase)
-          Text(label ?? L10n.t("layoutEditor.frameBuilder.standardTitle")).font(.title3.weight(.semibold))
-        }
-        Spacer(minLength: 8)
+    return WorkspaceHeader(symbol: "rectangle.split.3x3",
+                           kicker: view == nil ? L10n.t("layoutEditor.context.builtinFrame") : L10n.t("layoutEditor.context.ownFrame"),
+                           title: label ?? L10n.t("layoutEditor.frameBuilder.standardTitle")) {
         if view == nil { Text(L10n.t("layoutEditor.context.viewOnly")).font(.caption).foregroundStyle(.secondary) }
         if view != nil, model.draftIsNew { Text(L10n.t("layoutEditor.context.newDraft")).font(.caption).foregroundStyle(.tint) }
-      }
-      .accessibilityElement(children: .combine)
-      Divider()
-      FlowLayout(spacing: 10, minItem: 0, stretch: false) {
+    } controls: {
+      FlowLayout(spacing: Spacing.s, minItem: 0, stretch: false) {
         Picker(L10n.t("layoutEditor.frameBuilder.frameLabel"), selection: Binding(get: { view?.id ?? "" }, set: { id in
           guard id != (view?.id ?? "") else { return }
           if id.isEmpty {
@@ -109,22 +101,6 @@ struct FramesTab: View {
         }
         .fixedSize()
         .accessibilityIdentifier("layout.frames.picker")
-        Button { switchTo { model.newFrame() } } label: { Label(L10n.t("layoutEditor.frameBuilder.newFrame"), systemImage: "plus") }
-        if view != nil {
-          Button { model.duplicateDraft() } label: { Label(L10n.t("layoutEditor.frameBuilder.duplicate"), systemImage: "plus.square.on.square") }
-        }
-        if let view, !model.draftIsNew {
-          Button(role: .destructive) {
-            Task {
-              guard await Confirm.ask(L10n.t("layoutEditor.frameBuilder.deleteConfirm", ["name": view.frameName]),
-                                      confirm: L10n.t("layoutEditor.frameBuilder.deleteConfirmAction"), destructive: true,
-                                      window: unsaved?.window) else { return }
-              await model.deleteFrame(view.id)
-            }
-          } label: { Label(L10n.t("common.deleteNamed", ["name": view.frameName]), systemImage: "trash") }
-            .labelStyle(.iconOnly)
-            .help(L10n.t("common.deleteNamed", ["name": view.frameName]))
-        }
       }
       ViewThatFits(in: .horizontal) {
         breakpointPicker(ranges: true).pickerStyle(.segmented).fixedSize()
@@ -132,9 +108,33 @@ struct FramesTab: View {
         breakpointPicker(ranges: true).pickerStyle(.menu).fixedSize()
       }
     }
-    .padding(12)
-    .background(RoundedRectangle(cornerRadius: 10).fill(Color.accentColor.opacity(0.06)))
-    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.accentColor.opacity(0.3)))
+  }
+
+  /// New, duplicate and delete as symbols, before the page's Speichern: a toolbar of an inner view
+  /// comes after the page's, so the tab places Speichern itself (docs/conventions.md, Symbolleiste).
+  @ToolbarContentBuilder private var toolbar: some ToolbarContent {
+    let view = model.draft.map(FrameView.init)
+    ToolbarItemGroup(placement: .primaryAction) {
+      Button { switchTo { model.newFrame() } } label: { Label(L10n.t("layoutEditor.frameBuilder.newFrame"), systemImage: "plus") }
+        .help(L10n.t("layoutEditor.frameBuilder.newFrame"))
+        .accessibilityIdentifier("layout.frames.new")
+      Button { model.duplicateDraft() } label: { Label(L10n.t("layoutEditor.frameBuilder.duplicate"), systemImage: "plus.square.on.square") }
+        .help(L10n.t("layoutEditor.frameBuilder.duplicate"))
+        .disabled(view == nil)
+      Button(role: .destructive) {
+        guard let view else { return }
+        Task {
+          guard await Confirm.ask(L10n.t("layoutEditor.frameBuilder.deleteConfirm", ["name": view.frameName]),
+                                  confirm: L10n.t("layoutEditor.frameBuilder.deleteConfirmAction"), destructive: true,
+                                  window: unsaved?.window) else { return }
+          await model.deleteFrame(view.id)
+        }
+      } label: { Label(view.map { L10n.t("common.deleteNamed", ["name": $0.frameName]) } ?? L10n.t("layoutEditor.frameBuilder.deleteConfirmAction"), systemImage: "trash") }
+        .help(view.map { L10n.t("common.deleteNamed", ["name": $0.frameName]) } ?? L10n.t("layoutEditor.frameBuilder.deleteConfirmAction"))
+        .disabled(view == nil || model.draftIsNew)
+    }
+    ToolbarSpacer(.fixed, placement: .primaryAction)
+    ToolbarItem(placement: .primaryAction) { saveButton }
   }
 
   private func breakpointPicker(ranges: Bool) -> some View {

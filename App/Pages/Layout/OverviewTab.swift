@@ -21,7 +21,7 @@ struct OverviewTab: View {
     if let config = model.config {
       let facts = Facts(model: model, config: config)
       ScrollView {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: Spacing.m) {
           Note(L10n.t("layoutEditor.overview.intro"))
           tiles(facts)
           if let tile = Tile(rawValue: openTile) {
@@ -37,7 +37,7 @@ struct OverviewTab: View {
             Label(L10n.t("layoutEditor.overview.title"), systemImage: "tablecells").font(.headline)
           }
         }
-        .padding(16)
+        .padding(Spacing.page)
         .frame(maxWidth: .infinity, alignment: .leading)
       }
       .accessibilityIdentifier("layout.overview")

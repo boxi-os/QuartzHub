@@ -64,15 +64,9 @@ struct LayoutPage: View {
       .focusedSceneValue(\.pageSave, frontDirty && !model.saving && !model.frameSaving ? PageSaveAction { await saveFront() } : nil)
       .toolbar {
         // Speichern for the tab in front, only with something to save there; no badge beside it.
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            Task { await saveFront() }
-          } label: {
-            Label(model.saving || model.frameSaving ? L10n.t("common.saving") : L10n.t("common.save"), systemImage: "square.and.arrow.down")
-          }
-          .labelStyle(.titleOnly)
-          .disabled(!frontDirty || model.saving || model.frameSaving || model.config == nil || (tab == .frames && model.draft == nil))
-          .accessibilityIdentifier("layout.save")
+        // Frames places it after its own actions: a toolbar of an inner view comes after this one.
+        if tab != .frames {
+          ToolbarItem(placement: .primaryAction) { saveButton }
         }
       }
     } inspector: {
@@ -82,11 +76,12 @@ struct LayoutPage: View {
 
   @ViewBuilder private var content: some View {
     if let error = model.loadError {
-      VStack(alignment: .leading, spacing: 6) {
-        Text(L10n.t("configEditor.loadError")).fontWeight(.medium).foregroundStyle(.red)
-        Text(error).font(.system(.callout, design: .monospaced)).foregroundStyle(.red).textSelection(.enabled)
+      Callout(.error) {
+        Text(L10n.t("configEditor.loadError")).fontWeight(.medium)
+        Text(error).font(.system(.callout, design: .monospaced)).textSelection(.enabled)
       }
-      .padding(16)
+      .padding(Spacing.page)
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
       .accessibilityIdentifier("layout.loadError")
     } else if model.config == nil {
       ProgressView(L10n.t("layoutEditor.loading")).frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -104,7 +99,7 @@ struct LayoutPage: View {
       case .global:
         StageTab(model: model, selected: $selected, storedPageType: $pageType, breakpoint: $breakpoint, editFrame: editFrame)
       case .frames:
-        FramesTab(model: model, breakpoint: $frameBreakpoint, selectedArea: $selectedArea)
+        FramesTab(model: model, breakpoint: $frameBreakpoint, selectedArea: $selectedArea, saveButton: saveButton)
       }
     }
   }
@@ -131,6 +126,12 @@ struct LayoutPage: View {
   }
 
   // MARK: saving and frames
+
+  private var saveButton: SaveButton {
+    SaveButton(saving: model.saving || model.frameSaving,
+               disabled: !frontDirty || model.saving || model.frameSaving || model.config == nil || (tab == .frames && model.draft == nil),
+               identifier: "layout.save") { await saveFront() }
+  }
 
   /// What ⌘S and the toolbar's Save write: the frame on the Frames tab, the config elsewhere.
   private var frontDirty: Bool { tab == .frames ? model.draftDirty : model.dirty }

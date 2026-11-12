@@ -84,13 +84,13 @@ struct StageTab: View {
     if let config = model.config {
       let facts = StageFacts(model: model, config: config, storedPageType: storedPageType)
       ScrollView {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: Spacing.m) {
           header(facts)
           tray(facts)
           stage(facts)
           groupsPanel(config)
         }
-        .padding(16)
+        .padding(Spacing.page)
         .frame(maxWidth: .infinity, alignment: .leading)
       }
       .onExitCommand { selected = "" }
@@ -116,24 +116,14 @@ struct StageTab: View {
 
   private func header(_ facts: StageFacts) -> some View {
     let own: FrameView? = if case .own(let frame) = facts.frame { frame } else { nil }
-    return VStack(alignment: .leading, spacing: 10) {
-      HStack(spacing: 10) {
-        Image(systemName: facts.pageType == nil ? "doc.on.doc" : "doc.text").font(.title3).foregroundStyle(.tint)
-          .frame(width: 32, height: 32).background(RoundedRectangle(cornerRadius: 7).fill(Color.accentColor.opacity(0.15)))
-          .accessibilityHidden(true)
-        VStack(alignment: .leading, spacing: 0) {
-          Text(L10n.t("layoutEditor.pageType.label")).font(.caption).foregroundStyle(.secondary).textCase(.uppercase)
-          Text(facts.pageType == nil ? L10n.t("layoutEditor.pageType.all") : facts.typeLabel).font(.title3.weight(.semibold))
-        }
-        Spacer(minLength: 8)
+    return WorkspaceHeader(symbol: facts.pageType == nil ? "doc.on.doc" : "doc.text", kicker: L10n.t("layoutEditor.pageType.label"),
+                           title: facts.pageType == nil ? L10n.t("layoutEditor.pageType.all") : facts.typeLabel) {
         fact("rectangle.split.3x1", L10n.t("layoutEditor.summary.frame"), LayoutWords.frame(facts.frameChoice.name))
         fact(LayoutWords.breakpointSymbol(breakpoint), nil, LayoutWords.breakpoint(breakpoint))
         if let type = facts.pageType, facts.customized(type) {
           fact("slider.horizontal.3", nil, L10n.t("layoutEditor.context.customized")).foregroundStyle(.tint)
         }
-      }
-      .accessibilityElement(children: .combine)
-      Divider()
+    } controls: {
       // Wraps: beside each other the two are wider than the middle of the smallest window.
       FlowLayout(spacing: 12, minItem: 0, stretch: false) {
         Picker(L10n.t("layoutEditor.pageType.label"), selection: $storedPageType) {
@@ -175,9 +165,6 @@ struct StageTab: View {
       }
       hints(facts)
     }
-    .padding(12)
-    .background(RoundedRectangle(cornerRadius: 10).fill(Color.accentColor.opacity(0.06)))
-    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.accentColor.opacity(0.3)))
   }
 
   private func viewPicker(ranges: Bool) -> some View {
@@ -267,13 +254,13 @@ struct StageTab: View {
       }
     }()
     if facts.pageType != nil || !dead.isEmpty || unknownFrame != nil || sidebarsIdle {
-      VStack(alignment: .leading, spacing: 4) {
+      VStack(alignment: .leading, spacing: Spacing.xs) {
         if facts.pageType != nil { Note(L10n.t("layoutEditor.pageType.scopeHint", ["type": facts.typeLabel])) }
         if sidebarsIdle { Note(L10n.t("layoutEditor.sidebars.idleHint")) }
         if !dead.isEmpty {
-          Note(L10n.t("layoutEditor.excludeDeadHint", ["names": dead.joined(separator: ", ")], count: dead.count)).foregroundStyle(.orange)
+          Callout(.warning, L10n.t("layoutEditor.excludeDeadHint", ["names": dead.joined(separator: ", ")], count: dead.count))
         }
-        if let unknownFrame { Note(L10n.t("layoutEditor.pageType.unknownFrame", ["frame": unknownFrame])).foregroundStyle(.orange) }
+        if let unknownFrame { Callout(.warning, L10n.t("layoutEditor.pageType.unknownFrame", ["frame": unknownFrame])) }
       }
     }
   }
