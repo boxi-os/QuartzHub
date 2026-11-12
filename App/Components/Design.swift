@@ -575,3 +575,58 @@ struct SplitPanes<Top: View, Bottom: View>: View {
       }
   }
 }
+
+// MARK: - Fold
+
+/// A DisclosureGroup whose whole head row opens and closes it, animated. A native one opens only
+/// at its chevron, and in a list-backed Form a change of its binding without a transaction jumps
+/// (user test, 2026-11-12, Stile ▸ Variablen). With "Bewegung reduzieren" it opens without motion.
+struct Fold<Label: View, Content: View>: View {
+  /// The caller's state, or the fold's own (`Fold(title)`).
+  private let external: Binding<Bool>?
+  @State private var own = false
+  private let content: () -> Content
+  private let label: () -> Label
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+  init(isExpanded: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, @ViewBuilder label: @escaping () -> Label) {
+    external = isExpanded
+    self.content = content
+    self.label = label
+  }
+
+  /// Closed at first, its state its own.
+  init(@ViewBuilder content: @escaping () -> Content, @ViewBuilder label: @escaping () -> Label) {
+    external = nil
+    self.content = content
+    self.label = label
+  }
+
+  private var isExpanded: Bool { external?.wrappedValue ?? own }
+
+  private func set(_ open: Bool) {
+    withAnimation(Motion.layout(reduce: reduceMotion)) {
+      if let external { external.wrappedValue = open } else { own = open }
+    }
+  }
+
+  var body: some View {
+    DisclosureGroup(isExpanded: Binding(get: { isExpanded }, set: { set($0) })) {
+      content()
+    } label: {
+      label()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+        .onTapGesture { set(!isExpanded) }
+    }
+  }
+}
+
+extension Fold where Label == Text {
+  /// Closed at first, its state its own.
+  init(_ title: String, @ViewBuilder content: @escaping () -> Content) {
+    external = nil
+    self.content = content
+    self.label = { Text(title) }
+  }
+}

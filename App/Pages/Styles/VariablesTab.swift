@@ -127,7 +127,7 @@ struct VariablesTab: View {
       Note(L10n.t("styles.variables.mainDescription"))
       ForEach(curatedGroups, id: \.group) { entry in
         let open = VariablesPlace.lines(place.openGroups.wrappedValue).contains(entry.group)
-        DisclosureGroup(isExpanded: Binding(get: { open }, set: { _ in place.openGroups.wrappedValue = VariablesPlace.toggled(place.openGroups.wrappedValue, entry.group) })) {
+        Fold(isExpanded: Binding(get: { open }, set: { _ in place.openGroups.wrappedValue = VariablesPlace.toggled(place.openGroups.wrappedValue, entry.group) })) {
           ForEach(entry.keys, id: \.self) { key in row(key) }
         } label: {
           groupHeader(Self.groupLabel(entry.group), count: entry.keys.count, changed: entry.keys.filter { model.overrides.map(\.key).contains($0) }.count)
@@ -171,7 +171,7 @@ struct VariablesTab: View {
     let overridden = Set(model.overrides.map(\.key))
     let sources = model.graph?.sources
     return Section {
-      DisclosureGroup(isExpanded: place.allOpen) {
+      Fold(isExpanded: place.allOpen) {
         let themeId = model.graph?.themeId
         Note(themeId.map { L10n.t("styles.variables.allDescriptionTheme", ["themeId": $0], count: keys.count) } ?? L10n.t("styles.variables.allDescription"))
         if model.graphLoading {
@@ -234,7 +234,7 @@ struct VariablesTab: View {
     if browsing {
       ForEach(grouped, id: \.group) { entry in
         let open = VariablesPlace.lines(place.openBrowseGroups.wrappedValue).contains(entry.group)
-        DisclosureGroup(isExpanded: Binding(get: { open }, set: { _ in place.openBrowseGroups.wrappedValue = VariablesPlace.toggled(place.openBrowseGroups.wrappedValue, entry.group) })) {
+        Fold(isExpanded: Binding(get: { open }, set: { _ in place.openBrowseGroups.wrappedValue = VariablesPlace.toggled(place.openBrowseGroups.wrappedValue, entry.group) })) {
           ForEach(entry.keys, id: \.self) { key in row(key) }
         } label: {
           groupHeader(Self.groupLabel(entry.group), count: entry.keys.count, changed: 0)
