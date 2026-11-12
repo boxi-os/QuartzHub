@@ -332,8 +332,27 @@ nach Abhängigkeit:
 - **Gleichstand-Liste** aus den Routen, Kanälen (`shared/ipc-contract.ts`, 171 Kanäle) und
   Handbuch-Kapiteln von QuartzControl 1.3. Abgehakt wird nur, was an der gebauten App gemessen ist.
 - **Review-Runden** mit dem übernommenen Skill `review-befund`.
-- **Handbuch:** Kopie des QuartzControl-Handbuchs anpassen und online stellen (Muster
-  `HANDBOOK_URL`).
+- **Handbuch** (Entscheidung 2026-11-12: Deutsch und Englisch, mit PDF und ePub; nicht streng an
+  QuartzControl, anders wo sinnvoll). Gemacht mit QuartzHub selbst (Projekt, Bau, Bücher,
+  Veröffentlichen); was dabei hakt, ist ein Befund für die App.
+  1. Gerüst: Vault `~/Obsidian/QuartzProjekte/QuartzHub-Handbuch` (eigenes git-Repo, `de` und `en/`),
+     Projekt `~/Documents/QuartzProjekte/QuartzHub-Web` als Duplikat von QuartzControl-Web mit
+     QuartzHubs „Duplizieren“, Titel QuartzHub, Adresse `boxi-os.github.io/QuartzHub`, Farben nach
+     dem Petrol der App.
+  2. Gliederung nach der Seitenleiste: 1 Einstieg (mit Umstieg von QuartzControl, das Fenster
+     lesen), 2 Projekte, 3 Übersicht, 4 Einrichtung (Konfiguration, Plugins mit allen Reitern),
+     5 Gestaltung (Layout, Stile, Vorlagen), 6 Veröffentlichung (Vorschau & Build, Git-Sync,
+     Dokumente, Veröffentlichen), 7 Wartung (Updates, Snapshots), 8 Nachschlagen.
+  3. Aufnahmen mit `scripts/handbook-shots.sh` (1440 × 900, hell und dunkel über die Einstellung
+     im Wegwerf-Profil, de und en) an einer Kopie des Handbuch-Projekts.
+  4. Englisch je Teil gleich nach dem Deutschen.
+  5. `qh-check handbook`: wörtliche Zitate gegen den Katalog, beide Sprachen.
+  6. PDF und ePub über die Seite „Dokumente“, je Sprache ein Buch; epubcheck und `check:export`.
+  7. Anbinden: Hilfe ▸ Handbuch, „Im Handbuch nachlesen“ im Inspektor, Link im Fenster „Projekte“,
+     dazu der Hinweis auf eine neuere Fassung (die vier offenen Zeilen der Gleichstand-Liste).
+  8. Online (Repo `boxi-os/QuartzHub-Handbuch`, GitHub Pages über „Veröffentlichen“) erst nach
+     Freigabe.
+  Teil für Teil, je Teil ein Commit im Vault; nach Teil 1 Durchsicht mit dem Nutzer.
 - `docs/release.md` für QuartzHub, DMG, GitHub-Release; das Repo öffentlich machen, wenn der
   Nutzer es will. In QuartzControls README auf den Nachfolger hinweisen.
 - **Zum Release die Grundvorlage veröffentlichen** (Entscheidung 2026-11-11): Ihre Beispielseiten
