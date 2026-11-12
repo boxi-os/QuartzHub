@@ -47,4 +47,10 @@ JSON
   printf '{\n  "theme": "%s"\n}\n' "$theme" > "$prof/settings.json"
   printf '[]\n' > "$prof/running-servers.json"
 done
+# A profile of QuartzControl for the question at the first start: one project and settings, no
+# connections and no secrets (so nothing asks for the keychain).
+qc="$DEMO/quartzcontrol-profile"
+mkdir -p "$qc"
+cp "$DEMO/profile-light/projects.json" "$qc/projects.json"
+printf '{\n  "theme": "system",\n  "language": "system"\n}\n' > "$qc/settings.json"
 echo "Demo: $P"

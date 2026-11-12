@@ -23,8 +23,9 @@ words += NSFullUserName().split(separator: " ").map(String.init).filter { $0.cou
 if let extra = try? String(contentsOfFile: "\(vault)/private/privat.txt", encoding: .utf8) {
   words += extra.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty && !$0.hasPrefix("#") }
 }
-// The project's public GitHub name may stand; the account's short name often is a part of it.
-let allowed = ["boxi-os"]
+// The project's public GitHub name may stand (the account's short name is often a part of it),
+// and the placeholder of the folder fields ("/Users/du/Dokumente").
+let allowed = ["boxi-os", "/Users/du/"]
 let patterns = [#"/Users/(?!Share)[^/\s]+"#, #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"#]
 
 func findings(in text: String) -> [String] {
