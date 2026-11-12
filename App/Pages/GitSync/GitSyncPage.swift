@@ -1,7 +1,7 @@
 import QuartzHubCore
 import SwiftUI
 
-/// Git-Sync: QuartzControl's `GitSync.tsx` as one grouped form. Its three cards are sections, in
+/// Git-Sync: QuartzControl's `GitSync.tsx` as a settings form (variant C). Its three cards are sections, in
 /// this order: the repository's state, the repository on GitHub (only without an origin), the sync,
 /// and last the changed files, which can run to 500 rows and would push the sync off the window
 /// above them. "Aktualisieren" is in the toolbar.
@@ -28,7 +28,7 @@ struct GitSyncPage: View {
 
   var body: some View {
     PageScaffold(page: .sync) {
-      Form {
+      SettingsForm {
         statusSection
         if let status = model.status, status.isRepo, status.readError == nil, status.remoteUrl == nil {
           createRepoSection
@@ -38,9 +38,8 @@ struct GitSyncPage: View {
           changesSection(status)
         }
       }
-      .formStyle(.grouped)
       .toolbar {
-        ToolbarItem {
+        ToolbarItem(placement: .primaryAction) {
           Button(L10n.t("gitSync.refresh"), systemImage: "arrow.clockwise") { Task { await model.refresh() } }
             .disabled(model.refreshing)
             .help(L10n.t("gitSync.refresh"))
@@ -60,7 +59,7 @@ struct GitSyncPage: View {
   // MARK: The repository's state
 
   private var statusSection: some View {
-    Section {
+    SettingsSection(L10n.t("gitSync.statusTitle"), symbol: ProjectPage.sync.symbol) {
       // On a row that is always there: a Form's identifier does not reach the accessibility tree.
       Group {
         if let status = model.status {
@@ -102,10 +101,8 @@ struct GitSyncPage: View {
           .textSelection(.enabled)
           .accessibilityIdentifier("gitSync.notice")
       }
-    } header: {
-      SectionHeader(title: L10n.t("gitSync.statusTitle"), symbol: ProjectPage.sync.symbol) {
-        if model.refreshing { ProgressView().controlSize(.small) }
-      }
+    } accessory: {
+      if model.refreshing { ProgressView().controlSize(.small) }
     }
   }
 
@@ -200,7 +197,7 @@ struct GitSyncPage: View {
   /// Offered only when the project is a repository with no origin at all: the state a new project
   /// is left in on purpose, so that a push can never reach jackyzha0/quartz.
   private var createRepoSection: some View {
-    Section {
+    SettingsSection(L10n.t("gitSync.createRepo.title"), symbol: "plus.rectangle.on.folder") {
       Note(model.viewer.map { L10n.t("gitSync.createRepo.asAccount", ["login": $0.login]) } ?? L10n.t("gitSync.createRepo.noToken"))
       TextField(L10n.t("gitSync.createRepo.name"), text: $repoName)
         .disabled(model.viewer == nil || model.creating)
@@ -221,8 +218,6 @@ struct GitSyncPage: View {
       if let result = model.createResult {
         RunOutput(text: result.output, label: L10n.t("gitSync.createRepo.output"), identifier: "gitSync.createRepoOutput")
       }
-    } header: {
-      SectionHeader(title: L10n.t("gitSync.createRepo.title"), symbol: "plus.rectangle.on.folder") { EmptyView() }
     }
     .task {
       // A sensible default the user can overwrite: the project folder's own name.
@@ -233,11 +228,11 @@ struct GitSyncPage: View {
 
   // MARK: The sync
 
+  /// The note says what `quartz sync` does, in its order: the commit (on by default, even for
+  /// "Pull"), the fixed pull branch and the force push.
   private var syncSection: some View {
-    Section {
-      // What `quartz sync` does, in its order: the commit (on by default, even for "Pull"), the
-      // fixed pull branch and the force push.
-      Note(L10n.t("gitSync.explainer", ["branch": Self.quartzSourceBranch]))
+    SettingsSection(L10n.t("gitSync.title"), symbol: "arrow.up.arrow.down",
+                    note: L10n.t("gitSync.explainer", ["branch": Self.quartzSourceBranch])) {
 
       // The commit is part of every direction, so it sits above the buttons.
       Toggle(L10n.t("gitSync.commitChanges"), isOn: $commit)
@@ -273,8 +268,6 @@ struct GitSyncPage: View {
         OutcomeTitle(title: result.success ? L10n.t("gitSync.success") : L10n.t("gitSync.failed"), success: result.success)
         RunOutput(text: result.output, label: L10n.t("gitSync.output"), identifier: "gitSync.output")
       }
-    } header: {
-      SectionHeader(title: L10n.t("gitSync.title"), symbol: "arrow.up.arrow.down") { EmptyView() }
     }
   }
 
@@ -295,7 +288,7 @@ struct GitSyncPage: View {
   // MARK: The changed files
 
   private func changesSection(_ status: GitStatus) -> some View {
-    Section {
+    SettingsSection(L10n.t("gitSync.changesTitle"), symbol: "doc.badge.ellipsis") {
       ForEach(status.changes, id: \.listId) { change in
         ChangeRow(change: change)
       }
@@ -303,10 +296,8 @@ struct GitSyncPage: View {
       if hidden > 0 {
         Note(L10n.t("gitSync.moreChanges", ["count": String(hidden)], count: hidden))
       }
-    } header: {
-      SectionHeader(title: L10n.t("gitSync.changesTitle"), symbol: "doc.badge.ellipsis") {
-        Text(verbatim: String(status.changeCount)).monospacedDigit()
-      }
+    } accessory: {
+      Text(verbatim: String(status.changeCount)).monospacedDigit()
     }
   }
 
