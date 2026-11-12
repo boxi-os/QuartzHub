@@ -58,15 +58,18 @@ struct ExtraContentTab: View {
       // The whole column: at its text's width, the tab picker above moved to the left.
       .frame(maxWidth: .infinity, maxHeight: .infinity)
     } else {
-      VSplitView {
-        list(boxes)
-          .frame(minHeight: 170)
-        ExtraContentFiles(projectPath: model.project.path, boxes: boxes, onSnippetRenamed: snippetRenamed)
-          .frame(minHeight: 120)
-        EditorPreview(project: model.project, prefix: "extraContent", hint: L10n.t("extraContent.previewHint"),
-                      highlight: highlight(boxes), onAssignClass: assignClass)
-          .frame(minHeight: 300)
+      SplitPanes("extraContent.list", initial: 0.3, topMin: 170, bottomMin: 120 + 300 + SplitPanes<EmptyView, EmptyView>.grip) {
+        list(boxes).paneCard()
+      } bottom: {
+        SplitPanes("extraContent.files", initial: 0.35, topMin: 120, bottomMin: 300) {
+          ExtraContentFiles(projectPath: model.project.path, boxes: boxes, onSnippetRenamed: snippetRenamed).paneCard()
+        } bottom: {
+          EditorPreview(project: model.project, prefix: "extraContent", hint: L10n.t("extraContent.previewHint"),
+                        highlight: highlight(boxes), onAssignClass: assignClass).paneCard()
+        }
       }
+      .padding([.horizontal, .bottom], Spacing.page)
+      .padding(.top, Spacing.xxs)
       .toolbar {
         // ➕ in the toolbar (docs/conventions.md, Liste).
         ToolbarItem(placement: .primaryAction) {

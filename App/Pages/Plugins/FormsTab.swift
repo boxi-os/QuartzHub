@@ -282,13 +282,14 @@ struct FormsTab: View {
       Text(L10n.t("common.loading")).foregroundStyle(.secondary).padding()
     } else if let entry = entries.first {
       let view = FormsView(entry: entry, state: state)
-      VSplitView {
-        list(view, count: entries.count)
-          .frame(minHeight: 260)
+      SplitPanes("forms", initial: 0.45, topMin: 260, bottomMin: 300) {
+        list(view, count: entries.count).paneCard()
+      } bottom: {
         EditorPreview(project: model.project, prefix: "forms", hint: L10n.t("formsEditor.previewHint"),
-                      highlight: highlight(view), goTo: state.goTo)
-          .frame(minHeight: 300)
+                      highlight: highlight(view), goTo: state.goTo).paneCard()
       }
+      .padding([.horizontal, .bottom], Spacing.page)
+      .padding(.top, Spacing.xxs)
       .toolbar {
         // ➕ in the toolbar (docs/conventions.md, Liste); name and start in a popover.
         ToolbarItem(placement: .primaryAction) {

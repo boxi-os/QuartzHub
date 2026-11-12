@@ -3661,6 +3661,40 @@
         }
       }
     },
+    "common.splitGrip" : {
+      "comment" : "Help and accessibility label of the grip between two resizable panes (Plugins editors).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziehen, um die Bereiche anders aufzuteilen; Doppelklick stellt die Aufteilung zurück."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag to divide the panes differently; double-click to reset."
+          }
+        }
+      }
+    },
+    "common.splitGripName" : {
+      "comment" : "Accessibility name of the grip between two resizable panes; its value is the top pane's share.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufteilung der Bereiche"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pane divider"
+          }
+        }
+      }
+    },
     "common.viewSwitcher" : {
       "comment" : "Name der Sub-Tab-Leiste für Screenreader. Nicht „Bereich“ - das heißt im Layout-Editor ein Frame-Bereich, und ein Wort hat einen Namen.",
       "localizations" : {

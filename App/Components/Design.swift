@@ -464,3 +464,94 @@ struct CardGrid<Content: View>: View {
     .onWidthChange({ max(1, min(3, Int(($0 + Spacing.m) / (300 + Spacing.m)))) }, reduceMotion: reduceMotion) { columns = $0 }
   }
 }
+
+// MARK: - Panes
+
+extension View {
+  /// One pane of a workspace split: on the card surface, its content clipped to the card's corners.
+  /// A list in it leaves its own background off, so the card shows through.
+  func paneCard() -> some View {
+    self
+      .scrollContentBackground(.hidden)
+      .background(Surface.card, in: .rect(cornerRadius: 12))
+      .clipShape(.rect(cornerRadius: 12))
+  }
+}
+
+/// Two panes of a workspace one above the other, with a grip between them that shows it can be
+/// dragged: a `VSplitView`'s divider is a hairline between two areas of the same grey, and nobody
+/// saw that the Plugins editors could be resized (user test, 2026-11-12). The position is the top
+/// pane's share of the height, kept per window; a double click on the grip returns to `initial`.
+/// Three panes are two splits, the second one the bottom pane of the first; the panes put
+/// themselves on cards (`paneCard`).
+struct SplitPanes<Top: View, Bottom: View>: View {
+  static var grip: CGFloat { Spacing.s }
+
+  @SceneStorage private var share: Double
+  private let initial: Double
+  private let topMin: CGFloat
+  private let bottomMin: CGFloat
+  private let top: Top
+  private let bottom: Bottom
+  @State private var dragFrom: CGFloat?
+  @State private var hovering = false
+
+  init(_ key: String, initial: Double, topMin: CGFloat, bottomMin: CGFloat,
+       @ViewBuilder top: () -> Top, @ViewBuilder bottom: () -> Bottom) {
+    _share = SceneStorage(wrappedValue: initial, "split.\(key)")
+    self.initial = initial
+    self.topMin = topMin
+    self.bottomMin = bottomMin
+    self.top = top()
+    self.bottom = bottom()
+  }
+
+  private func clamped(_ height: CGFloat, in available: CGFloat) -> CGFloat {
+    max(min(height, available - bottomMin), min(topMin, available))
+  }
+
+  var body: some View {
+    GeometryReader { geometry in
+      let available = max(0, geometry.size.height - Self.grip)
+      let height = clamped(available * share, in: available)
+      VStack(spacing: 0) {
+        top.frame(height: height)
+        grip(height: height, available: available)
+        bottom.frame(maxHeight: .infinity)
+      }
+      .coordinateSpace(.named("split"))
+    }
+  }
+
+  private func grip(height: CGFloat, available: CGFloat) -> some View {
+    let dragging = dragFrom != nil
+    return Capsule()
+      .fill(dragging || hovering ? AnyShapeStyle(.secondary) : AnyShapeStyle(.quaternary))
+      .frame(width: 40, height: 5)
+      .frame(maxWidth: .infinity)
+      .frame(height: Self.grip)
+      .contentShape(Rectangle())
+      .pointerStyle(.rowResize)
+      .onHover { hovering = $0 }
+      .gesture(
+        DragGesture(minimumDistance: 1, coordinateSpace: .named("split"))
+          .onChanged { value in
+            let from = dragFrom ?? height
+            dragFrom = from
+            guard available > 0 else { return }
+            share = clamped(from + value.translation.height, in: available) / available
+          }
+          .onEnded { _ in dragFrom = nil }
+      )
+      .onTapGesture(count: 2) { share = initial }
+      .help(L10n.t("common.splitGrip"))
+      .accessibilityElement()
+      .accessibilityLabel(L10n.t("common.splitGripName"))
+      .accessibilityValue("\(Int((share * 100).rounded())) %")
+      .accessibilityAdjustableAction { direction in
+        guard available > 0 else { return }
+        let step: CGFloat = direction == .increment ? 40 : -40
+        share = clamped(height + step, in: available) / available
+      }
+  }
+}

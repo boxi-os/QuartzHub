@@ -60,13 +60,14 @@ struct NavigationsTab: View {
       // The whole column: at its text's width, the tab picker above moved to the left.
       .frame(maxWidth: .infinity, maxHeight: .infinity)
     } else {
-      VSplitView {
-        list(instances)
-          .frame(minHeight: 180)
+      SplitPanes("navigations", initial: 0.4, topMin: 180, bottomMin: 320) {
+        list(instances).paneCard()
+      } bottom: {
         EditorPreview(project: model.project, prefix: "navigations", hint: L10n.t("navigationsEditor.previewHint"),
-                      highlight: highlight(instances), onAssignClass: assignClass)
-          .frame(minHeight: 320)
+                      highlight: highlight(instances), onAssignClass: assignClass).paneCard()
       }
+      .padding([.horizontal, .bottom], Spacing.page)
+      .padding(.top, Spacing.xxs)
       .toolbar {
         ToolbarItem(placement: .primaryAction) { addButton }
       }

@@ -128,13 +128,14 @@ struct MultilanguageTab: View {
       Text(L10n.t("common.loading")).foregroundStyle(.secondary).padding()
     } else if let entry = entries.first {
       let view = MultilanguageView(entry: entry, schema: schema?.schema)
-      VSplitView {
-        list(view, count: entries.count)
-          .frame(minHeight: 260)
+      SplitPanes("multilanguage", initial: 0.45, topMin: 260, bottomMin: 300) {
+        list(view, count: entries.count).paneCard()
+      } bottom: {
         EditorPreview(project: model.project, prefix: "multilanguage", hint: L10n.t("multilanguageEditor.previewHint"),
-                      highlight: highlight(view), onAssignClass: {})
-          .frame(minHeight: 300)
+                      highlight: highlight(view), onAssignClass: {}).paneCard()
       }
+      .padding([.horizontal, .bottom], Spacing.page)
+      .padding(.top, Spacing.xxs)
       .toolbar {
         // ➕ in the toolbar (docs/conventions.md, Liste); the language asked for in a popover.
         ToolbarItem(placement: .primaryAction) {
