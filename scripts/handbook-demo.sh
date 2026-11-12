@@ -30,6 +30,13 @@ sed -i '' "s#$SRC/#$P/#g" "$P/quartz.config.yaml" "$P/quartz.lock.json"
 git -C "$P" config user.name "QuartzHub Demo"
 git -C "$P" config user.email "demo@example.invalid"
 
+# Two more rows for the Projects window: a second site (only its config, enough for the list) and
+# one whose folder is gone, for the warning.
+R=$DEMO/QuartzProjekte/Rezepte
+mkdir -p "$R"
+printf 'configuration:\n  pageTitle: Rezepte\n  baseUrl: rezepte.example.org\n' > "$R/quartz.config.yaml"
+rm -rf "$DEMO/QuartzProjekte/Alte-Website"
+
 for theme in light dark; do
   prof="$DEMO/profile-$theme"
   mkdir -p "$prof"
@@ -41,16 +48,33 @@ for theme in light dark; do
     "path": "$P",
     "addedAt": "2026-11-12T12:00:00.000Z",
     "lastOpenedAt": "2026-11-12T12:00:00.000Z"
+  },
+  {
+    "id": "6f1d6c1e-0000-4000-8000-000000000002",
+    "name": "Rezepte",
+    "path": "$R",
+    "addedAt": "2026-10-02T09:00:00.000Z",
+    "lastOpenedAt": "2026-11-01T18:30:00.000Z"
+  },
+  {
+    "id": "6f1d6c1e-0000-4000-8000-000000000003",
+    "name": "Alte-Website",
+    "path": "$DEMO/QuartzProjekte/Alte-Website",
+    "addedAt": "2025-03-14T10:00:00.000Z",
+    "lastOpenedAt": "2025-06-20T16:00:00.000Z"
   }
 ]
 JSON
-  printf '{\n  "theme": "%s"\n}\n' "$theme" > "$prof/settings.json"
+  # The folder dialogs start in the demo, so a sheet shows its path and not an empty field.
+  printf '{\n  "theme": "%s",\n  "defaultProjectDirectory": "%s"\n}\n' "$theme" "$DEMO/QuartzProjekte" > "$prof/settings.json"
   printf '[]\n' > "$prof/running-servers.json"
 done
 # A profile of QuartzControl for the question at the first start: one project and settings, no
 # connections and no secrets (so nothing asks for the keychain).
 qc="$DEMO/quartzcontrol-profile"
 mkdir -p "$qc"
-cp "$DEMO/profile-light/projects.json" "$qc/projects.json"
+# Only the first project: the question counts what it found.
+python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); json.dump(d[:1], open(sys.argv[2], "w"), indent=2)' \
+  "$DEMO/profile-light/projects.json" "$qc/projects.json"
 printf '{\n  "theme": "system",\n  "language": "system"\n}\n' > "$qc/settings.json"
 echo "Demo: $P"

@@ -44,18 +44,21 @@ PAGES=(
   "vorschau-und-build|10|" "git-sync|11|" "dokumente|12|" "veroeffentlichen|13|"
   "updates|15|" "snapshots|16|"
 )
-SCENES=(projekte-leer uebernahme projekte neues-projekt vorschau-und-build-laeuft)
+SCENES=(projekte-leer uebernahme projekte projekte-fehlt neues-projekt duplizieren
+  einstellungen-allgemein einstellungen-zugaenge einstellungen-laufzeit einstellungen-daten vorschau-und-build-laeuft)
 
 wanted() { [ -z "$ONLY" ] || [[ $ONLY == *",$1,"* ]]; }
 
 winid() {
   # The largest of QuartzHub's windows: the project window when one is open, else Projects.
-  swift - <<'SWIFT'
+  # With "front": the frontmost one (the settings).
+  swift - "${1:-largest}" <<'SWIFT'
 import CoreGraphics
 let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as! [[String: Any]]
 let own = list.filter { ($0[kCGWindowOwnerName as String] as? String) == "QuartzHub" && ($0[kCGWindowLayer as String] as? Int) == 0 }
 let area = { (w: [String: Any]) -> Double in let b = w[kCGWindowBounds as String] as! [String: Double]; return b["Width"]! * b["Height"]! }
-if let w = own.max(by: { area($0) < area($1) }) { print(w[kCGWindowNumber as String]!) }
+let pick = CommandLine.arguments.last == "front" ? own.first : own.max(by: { area($0) < area($1) })
+if let w = pick { print(w[kCGWindowNumber as String]!) }
 SWIFT
 }
 
@@ -87,6 +90,52 @@ tab() {
  end repeat"
 }
 
+# A row of the Projects window's list (the window's only outline). The contents go into a variable
+# first: an element straight out of `entire contents` does not take a property change.
+project_row() {
+  ax "set els to entire contents of window 1
+ repeat with e in els
+  try
+   if role of e is \"AXOutline\" then
+    set selected of row $1 of e to true
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
+
+# A button by its accessibility identifier, wherever it sits in the front window.
+press() {
+  ax "set els to entire contents of window 1
+ repeat with e in els
+  try
+   if role of e is \"AXButton\" and value of attribute \"AXIdentifier\" of e is \"$1\" then
+    click e
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
+
+# Types into the n-th text field of the front window (sheets included).
+type_into() {
+  ax "set n to 0
+ set els to entire contents of window 1
+ repeat with e in els
+  try
+   if role of e is \"AXTextField\" then
+    set n to n + 1
+    if n is $1 then
+     set focused of e to true
+     exit repeat
+    end if
+   end if
+  end try
+ end repeat
+ delay 0.5
+ keystroke \"$2\""
+}
+
 # launch <lang> <profile> <windows to wait for> [more arguments]
 launch() {
   local lang=$1 profile=$2 windows=$3; shift 3
@@ -116,9 +165,12 @@ empty_profile() {
 new=()
 shoot() {
   local file="$OUT/$lang/$1-$suffix.png"
-  screencapture -o -x -l "$(winid)" "$file"
+  screencapture -o -x -l "$(winid ${2:-})" "$file"
   # sRGB: the display's own profile would carry its model name into the handbook.
-  sips --resampleWidth 1440 -m "/System/Library/ColorSync/Profiles/sRGB Profile.icc" "$file" >/dev/null
+  # At most 1440 px wide; a smaller window (the settings) is not enlarged.
+  local width=$(sips -g pixelWidth "$file" | awk '/pixelWidth/ { print $2 }')
+  [ "$width" -gt 1440 ] && sips --resampleWidth 1440 "$file" >/dev/null
+  sips -m "/System/Library/ColorSync/Profiles/sRGB Profile.icc" "$file" >/dev/null
   new+=("$file")
   echo "$file"
 }
@@ -148,11 +200,29 @@ for lang in $LANGS; do
       launch $lang "$(empty_profile $theme)" 1 -QHMigrationSource "$DEMO/quartzcontrol-profile"
       sleep 2; shoot uebernahme; escape
     fi
-    if wanted projekte || wanted neues-projekt; then
+    if wanted projekte || wanted projekte-fehlt || wanted neues-projekt || wanted duplizieren; then
       launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource ""
-      if wanted projekte; then shoot projekte; fi
-      if wanted neues-projekt; then key n; sleep 3; shoot neues-projekt; escape; fi
+      if wanted projekte; then project_row 1; sleep 1; shoot projekte; fi
+      if wanted projekte-fehlt; then project_row 3; sleep 1; shoot projekte-fehlt; fi
+      if wanted neues-projekt; then key n; sleep 3; shoot neues-projekt; escape; sleep 1; fi
+      if wanted duplizieren; then
+        project_row 1; sleep 1; press projects.duplicate; sleep 2
+        type_into 2 QuartzHub-Docs-$([ $lang = de ] && echo Kopie || echo copy); sleep 1
+        shoot duplizieren; escape; sleep 1
+      fi
     fi
+    # The settings, one shot per tab (toolbar buttons in order).
+    if wanted einstellungen-allgemein || wanted einstellungen-zugaenge || wanted einstellungen-laufzeit || wanted einstellungen-daten; then
+      launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource ""
+    fi
+    n=0
+    for t in allgemein zugaenge laufzeit daten; do
+      n=$((n + 1))
+      wanted einstellungen-$t || continue
+      ax 'keystroke "," using command down'; sleep 2
+      ax "click button $n of toolbar 1 of window 1"; sleep 2
+      shoot einstellungen-$t front
+    done
     if wanted vorschau-und-build-laeuft; then
       with_project $lang $theme
       page 10; sleep 2; key r
