@@ -62,7 +62,12 @@ struct OverviewTab: View {
             .transition(.opacity)
           }
           Card(L10n.t("layoutEditor.overview.title"), symbol: "tablecells") {
-            ScrollView(.horizontal) { matrix(facts).padding(.bottom, Spacing.xs) }
+            // The card's width when it fits, the page types sharing what the names leave; scrolled
+            // sideways only when it does not.
+            ViewThatFits(in: .horizontal) {
+              matrix(facts).frame(maxWidth: .infinity, alignment: .leading)
+              ScrollView(.horizontal) { matrix(facts).padding(.bottom, Spacing.xs) }
+            }
             legend
           } accessory: {
             EmptyView()
@@ -368,6 +373,8 @@ struct OverviewTab: View {
             }
           }
           .buttonStyle(.plain)
+          .fixedSize()
+          .frame(maxWidth: .infinity)
           .gridColumnAlignment(.center)
         }
       }
