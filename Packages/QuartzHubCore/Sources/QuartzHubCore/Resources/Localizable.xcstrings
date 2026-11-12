@@ -1331,6 +1331,23 @@
         }
       }
     },
+    "buildServer.actualSize" : {
+      "comment" : "Vorschau & Build: the preview at real pixels, scrolling sideways",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100 %"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100%"
+          }
+        }
+      }
+    },
     "buildServer.autoReload" : {
       "localizations" : {
         "de" : {
@@ -1920,6 +1937,23 @@
         }
       }
     },
+    "buildServer.fit" : {
+      "comment" : "Vorschau & Build: the preview scaled into the room it has",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einpassen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fit"
+          }
+        }
+      }
+    },
     "buildServer.lastBuilt" : {
       "localizations" : {
         "de" : {
@@ -2060,6 +2094,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stop the server to change these."
+          }
+        }
+      }
+    },
+    "buildServer.output" : {
+      "comment" : "Vorschau & Build: the collapsible panel with both consoles",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Output"
           }
         }
       }
@@ -2244,6 +2295,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "{{status}} in {{seconds}}s"
+          }
+        }
+      }
+    },
+    "buildServer.scale" : {
+      "comment" : "Vorschau & Build: the width the site is rendered at and the scale it is shown at",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{width}} px · {{percent}} %"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{width}} px · {{percent}}%"
           }
         }
       }

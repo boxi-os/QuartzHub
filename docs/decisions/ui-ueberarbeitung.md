@@ -114,3 +114,27 @@ Die Musterseite für den Typ Liste, gemessen am 2026-11-12 an der gui-test-Kopie
   nichts gewählt ist.
 - **Auswahl:** Ein Klick auf „quartz-betterbases“ öffnet den Snapshot im Inspektor mit „4 Dateien
   unterscheiden sich“ wie vorher.
+
+## Vorschau & Build
+
+Die Musterseite für den Typ Arbeitsfläche, gemessen am 2026-11-12 an der gui-test-Kopie.
+
+- **Die Website füllt die Mitte** (`ScaledSite`, aus `EditorPreview` gelöst: `MarkedSite` mit dem
+  `CutView`, der die Bounds skaliert). Desktop rendert mit `max(Tablet-Grenze + 1, 1280)` px und
+  wird eingepasst. Vorher bekam die Vorschau die Breite der Formularzeile (rund 570 pt) und zeigte
+  deshalb auch bei 1680 pt das Handy-Layout der Website. Jetzt: 900 × 560 Desktop-Layout eingepasst,
+  1200 × 780 „1280 px · 54 %“, 1680 × 1000 „1280 px · 91 %“. Mobil 390 px mittig mit 100 %.
+- **„100 %“** zeigt echte Pixel und scrollt seitlich. Zuerst war das eine zweite Webansicht; der
+  Wechsel lud die Website neu und sprang von „Kontakt“ zurück auf die Startseite. Jetzt ist es eine
+  Webansicht in einer Scrollansicht, die beim Einpassen gesperrt ist; „Kontakt“ bleibt beim Wechsel
+  auf Mobil und auf 100 %.
+- **Die Leiste über der Website** (Breite, Maßstab, Einpassen/100 %, Neu laden, Browser) war bei
+  900 pt mit Inspektor breiter als die Mitte und schob die Seitenleiste aus dem Fenster. Jetzt drei
+  Stufen über `ViewThatFits`: alles, dann Menüs statt Segmenten, dann ohne Maßstab.
+- **Symbolleiste:** Build als Symbol (Hammer), Neu starten, dann Starten bzw. Stoppen als die eine
+  hervorgehobene Aktion (`.glassProminent`). Der Knopf in der leeren Vorschau ist nicht hervorgehoben.
+- **Ausgabe** unten wie in Xcode: ein `DisclosureGroup` mit beiden Konsolen nebeneinander, 160 pt hoch.
+  Der Zustand wird gemerkt (`server.outputOpen`).
+- **Inspektor:** Adresse mit Kopieren, Angaben zum Lauf, Server-Einstellungen, die laufenden Server
+  auf dem Mac, der einmalige Build mit Ausgabeordner. Zwei Zeilen brachen dort hässlich um
+  („lo-cal-host :808 0“, „Ausga-beordner (optional)“) und stehen jetzt untereinander.

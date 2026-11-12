@@ -96,8 +96,10 @@ private struct ServerRow: View {
   let stopping: Bool
   let stop: () -> Void
 
+  /// One under the other: the section stands in the inspector, which is too narrow for the
+  /// address, the badge and the button side by side (they broke into "lo-cal-host", measured).
   var body: some View {
-    HStack(alignment: .firstTextBaseline, spacing: 10) {
+    VStack(alignment: .leading, spacing: Spacing.xs) {
       VStack(alignment: .leading, spacing: 3) {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
           if let url = URL(string: "http://localhost:\(server.port)") {
@@ -105,6 +107,8 @@ private struct ServerRow: View {
               // A String, not a literal: an interpolated literal is a LocalizedStringKey, and its
               // number came out as "8.080" (seen in the running app).
               Label("localhost:" + String(server.port), systemImage: "arrow.up.right.square").fontWeight(.semibold)
+                .lineLimit(1)
+                .fixedSize()
             }
             .help(L10n.t("common.openInBrowser"))
           }
@@ -116,7 +120,6 @@ private struct ServerRow: View {
           .textSelection(.enabled)
         Text(facts).font(.caption).foregroundStyle(.secondary)
       }
-      Spacer(minLength: 8)
       Button(L10n.t("buildServer.discovery.stopServer"), role: .destructive, action: stop)
         .disabled(stopping)
     }

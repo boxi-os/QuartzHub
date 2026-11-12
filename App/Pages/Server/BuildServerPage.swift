@@ -2,18 +2,24 @@ import AppKit
 import QuartzHubCore
 import SwiftUI
 
-/// Vorschau & Build: QuartzControl's `BuildServer.tsx` as one grouped form. The dev server leads
-/// with its address (live when it runs, muted saying what it will be when not), then its facts,
-/// settings, live preview and console; then every Quartz server on this Mac; then the one-off build
-/// with the folder it writes to and its console.
+/// Vorschau & Build: QuartzControl's `BuildServer.tsx` as a workspace (decisions/ui-ueberarbeitung.md,
+/// Seitentypen). The site fills the middle, scaled from the width of a device (`ScaledSite`), with
+/// both consoles in a panel under it that folds away. Server and build are the toolbar's; the
+/// server's address and settings, the output folder and the other Quartz servers on this Mac are
+/// the inspector's.
 struct BuildServerPage: View {
   let project: ProjectContext
 
   @State private var model: BuildServerModel
   @State private var monitor = BuildMonitor.shared
   @State private var copied = false
+  /// The room the preview has, for the scale it is shown at.
+  @State private var previewRoom = 0.0
+  @SceneStorage("server.previewFit") private var fit = true
+  @SceneStorage("server.outputOpen") private var outputOpen = true
   @FocusState private var outputDirFocused: Bool
   @Environment(\.openPage) private var openPage
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   init(project: ProjectContext) {
     self.project = project
@@ -34,74 +40,244 @@ struct BuildServerPage: View {
   private var embeddable: Bool { running && liveOptions.host.isEmpty }
   private var buildRunning: Bool { activity?.kind == .build }
   private var building: Bool { model.clicked || buildRunning }
+  /// The width the site is rendered at: Desktop wider than the tablet band, so it shows its desktop
+  /// layout at any window width (before, it got the form row's ~570 pt and showed the phone's).
+  private var renderWidth: Double {
+    PreviewWidth.points(model.previewMode, widths: model.breakpoints) ?? ScaledSite.desktopWidth(tablet: model.breakpoints.tablet)
+  }
+  private var shownScale: Double { ScaledSite.scale(width: renderWidth, room: previewRoom, fit: fit) }
 
   var body: some View {
     PageScaffold(page: .server) {
-      // The clock of the drawing, not of the last tick: drawn between two ticks, a folder written
-      // a moment ago was newer than the tick and read "in 13 Sekunden" (measured 2026-11-09).
-      TimelineView(.periodic(from: .now, by: 30)) { context in
-        let now = max(context.date, Date())
-        Form {
-          serverSection(now: now)
-          DiscoveredServersSection(ports: [liveOptions.port, liveOptions.wsPort]) {
-            Task { await BuildMonitor.shared.refresh(project.id, from: AppServices.shared.builds) }
-          }
-          buildSection(now: now)
+      VStack(spacing: 0) {
+        notices
+        if embeddable, let url = URL(string: address) {
+          previewBar
+          Divider()
+          ScaledSite(url: url, reloadKey: "\(address)#\(model.previewNonce)", width: renderWidth, fit: fit,
+                     label: L10n.t("buildServer.livePreview"))
+            .onGeometryChange(for: Double.self) { $0.size.width } action: { previewRoom = $0 }
+            .transition(.opacity)
+        } else {
+          emptyPreview
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .transition(.opacity)
         }
-        .formStyle(.grouped)
+        outputPanel
       }
+      .animation(reduceMotion ? nil : Motion.quick, value: embeddable)
+      .toolbar { toolbar }
       .task { await model.load() }
       // A build that ends while the page is open, started here or anywhere else, changed the folder.
       .onChange(of: buildRunning) { _, running in
         if !running { Task { await model.refreshOutput() } }
       }
     } inspector: {
-      InspectorPageContext(page: .server) {
-        Section {
-          Text(L10n.t("projectLayout.descriptions.server")).foregroundStyle(.secondary)
+      // The clock of the drawing, not of the last tick: drawn between two ticks, a folder written
+      // a moment ago was newer than the tick and read "in 13 Sekunden" (measured 2026-11-09).
+      TimelineView(.periodic(from: .now, by: 30)) { context in
+        let now = max(context.date, Date())
+        InspectorPageContext(page: .server) {
+          serverSection(now: now)
+          DiscoveredServersSection(ports: [liveOptions.port, liveOptions.wsPort]) {
+            Task { await BuildMonitor.shared.refresh(project.id, from: AppServices.shared.builds) }
+          }
+          buildSection(now: now)
         }
       }
     }
   }
 
-  // MARK: Dev server
+  // MARK: Toolbar
+
+  /// The build as a symbol, the server as the page's one prominent action.
+  @ToolbarContentBuilder private var toolbar: some ToolbarContent {
+    ToolbarItemGroup(placement: .primaryAction) {
+      Button { Task { await model.runBuild() } } label: {
+        Label(building ? L10n.t("buildServer.building") : L10n.t("buildServer.buildNow"), systemImage: "hammer")
+      }
+      .help(L10n.t("buildServer.oneOffBuildHint"))
+      .disabled(building)
+      .accessibilityIdentifier("server.build")
+      if running {
+        Button(action: model.restart) {
+          Label(L10n.t("buildServer.restart"), systemImage: "arrow.clockwise")
+        }
+        .help(L10n.t("buildServer.restart"))
+      }
+    }
+    ToolbarSpacer(.fixed, placement: .primaryAction)
+    ToolbarItem(placement: .primaryAction) {
+      // Only what applies now; "Stoppen" from `starting` on, because a start waits for a build
+      // into the same folder and that is when someone wants out.
+      if status.state == .stopped || status.state == .error {
+        Button(action: model.start) {
+          Label(L10n.t("buildServer.start"), systemImage: "play.fill").labelStyle(.titleAndIcon)
+        }
+        .buttonStyle(.glassProminent)
+        .accessibilityIdentifier("server.start")
+      } else {
+        Button(role: .destructive, action: model.stop) {
+          Label(L10n.t("buildServer.stop"), systemImage: "stop.fill").labelStyle(.titleAndIcon)
+        }
+        .buttonStyle(.glassProminent)
+        .disabled(status.state == .stopping)
+        .accessibilityIdentifier("server.stop")
+      }
+    }
+  }
+
+  // MARK: The middle
+
+  /// What needs saying before the site: the server's error, a missing start page.
+  @ViewBuilder private var notices: some View {
+    let error = ProjectAttention.serverErrorText(status)
+    if error != nil || model.missingIndex {
+      VStack(alignment: .leading, spacing: Spacing.xs) {
+        if let error {
+          Callout(.error) { Text(error).textSelection(.enabled) }
+        }
+        if model.missingIndex {
+          Callout(.warning) {
+            Text(L10n.t("buildServer.noIndex"))
+            Button(L10n.t("buildServer.noIndexLink")) { openPage(.config, tab: ConfigPage.Tab.site.rawValue) }
+              .buttonStyle(.link)
+          }
+        }
+      }
+      .padding(.horizontal, Spacing.page)
+      .padding(.vertical, Spacing.s)
+    }
+  }
+
+  /// Width, scale, fit or real pixels, reload, browser: the same controls as the editors' preview.
+  /// In a narrow middle the two pickers become menus, then the scale goes: at 900 pt with the
+  /// inspector, the full bar was wider than the column and pushed the sidebar out (measured).
+  private var previewBar: some View {
+    ViewThatFits(in: .horizontal) {
+      barRow(menus: false, scale: true)
+      barRow(menus: true, scale: true)
+      barRow(menus: true, scale: false)
+    }
+    .padding(.horizontal, Spacing.page)
+    .padding(.vertical, Spacing.xs)
+  }
+
+  private func barRow(menus: Bool, scale: Bool) -> some View {
+    HStack(spacing: Spacing.s) {
+      Picker(L10n.t("buildServer.viewport.label"), selection: $model.previewMode) {
+        ForEach(PreviewWidth.Mode.allCases) { Text($0.title).tag($0) }
+      }
+      .menuOrSegmented(menus)
+      .labelsHidden()
+      .fixedSize()
+      .accessibilityIdentifier("server.previewMode")
+      if scale {
+        Text(L10n.t("buildServer.scale", ["width": String(Int(renderWidth)), "percent": String(Int((shownScale * 100).rounded()))]))
+          .font(.callout.monospacedDigit())
+          .foregroundStyle(.secondary)
+          .lineLimit(1)
+          .fixedSize()
+          .contentTransition(.numericText())
+          .help(L10n.t("sitePreview.scaled", ["width": String(Int(renderWidth)), "percent": String(Int((shownScale * 100).rounded()))]))
+          .accessibilityIdentifier("server.previewScale")
+      }
+      if !menus, let activity, activity.kind != .build { ActivityLine(activity: activity).fixedSize() }
+      Spacer(minLength: Spacing.xs)
+      Picker(L10n.t("buildServer.fit"), selection: $fit) {
+        Text(L10n.t("buildServer.fit")).tag(true)
+        Text(L10n.t("buildServer.actualSize")).tag(false)
+      }
+      .menuOrSegmented(menus)
+      .labelsHidden()
+      .fixedSize()
+      Button { model.previewNonce += 1 } label: {
+        Label(L10n.t("buildServer.reloadPreview"), systemImage: "arrow.clockwise")
+      }
+      .labelStyle(.iconOnly)
+      .buttonStyle(.borderless)
+      .help(L10n.t("buildServer.reloadPreview"))
+      if let url = URL(string: address) {
+        Link(destination: url) {
+          Label(L10n.t("common.openInBrowser"), systemImage: "safari")
+        }
+        .labelStyle(.iconOnly)
+        .help(L10n.t("common.openInBrowser"))
+      }
+    }
+  }
+
+  @ViewBuilder private var emptyPreview: some View {
+    if running {
+      // Behind a tunnel: the address works in the browser, not in here.
+      ContentUnavailableView {
+        Label(L10n.t("buildServer.livePreview"), systemImage: "play.display")
+      } description: {
+        Text(L10n.t("sitePreview.remote"))
+      }
+    } else if status.state == .starting {
+      ProgressView(L10n.t("sitePreview.starting")).frame(maxWidth: .infinity, maxHeight: .infinity)
+    } else {
+      ContentUnavailableView {
+        Label(L10n.t("buildServer.livePreview"), systemImage: "play.display")
+      } description: {
+        Text(L10n.t("buildServer.devServerHint"))
+      } actions: {
+        if status.state == .stopped || status.state == .error {
+          // Not prominent: the toolbar's Starten is the page's one main action.
+          Button(L10n.t("buildServer.start"), systemImage: "play.fill", action: model.start)
+        }
+      }
+    }
+  }
+
+  /// Both consoles under the site, like Xcode's; folded away, one line. A DisclosureGroup, so its
+  /// state is said and its opening animated by the system.
+  private var outputPanel: some View {
+    VStack(spacing: 0) {
+      Divider()
+      DisclosureGroup(isExpanded: $outputOpen.animation(reduceMotion ? nil : Motion.layout)) {
+        HStack(alignment: .top, spacing: Spacing.m) {
+          console(L10n.t("buildServer.serverLogLabel")) {
+            LogConsole(lines: logs.server, label: L10n.t("buildServer.serverLogLabel"), identifier: "server.log.server", fills: true) {
+              monitor.clearLog(project.id, .server)
+            }
+          }
+          console(L10n.t("buildServer.buildLogLabel")) {
+            LogConsole(lines: logs.build, label: L10n.t("buildServer.buildLogLabel"), identifier: "server.log.build", fills: true) {
+              monitor.clearLog(project.id, .build)
+            }
+          }
+        }
+        .frame(height: 160, alignment: .top)
+        .padding(.top, Spacing.xs)
+      } label: {
+        Text(L10n.t("buildServer.output")).fontWeight(.medium)
+      }
+      .padding(.horizontal, Spacing.page)
+      .padding(.vertical, Spacing.xs)
+    }
+    .background(.bar)
+  }
+
+  private func console<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+    VStack(alignment: .leading, spacing: Spacing.xxs) {
+      Text(title).font(.caption).foregroundStyle(.secondary)
+      content()
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+  }
+
+  // MARK: Dev server (inspector)
 
   private func serverSection(now: Date) -> some View {
     Section {
       addressRow
       Note(serverFacts(now: now))
-      if let error = ProjectAttention.serverErrorText(status) {
-        Text(error).font(.callout).foregroundStyle(.red).textSelection(.enabled)
-      }
-      if model.missingIndex {
-        HStack(alignment: .firstTextBaseline) {
-          Text(L10n.t("buildServer.noIndex")).font(.callout).foregroundStyle(.orange)
-          Button(L10n.t("buildServer.noIndexLink")) { openPage(.config, tab: ConfigPage.Tab.site.rawValue) }.buttonStyle(.link).font(.callout)
-        }
-      }
-      if let activity, activity.kind != .build { ActivityLine(activity: activity) }
-      // Only what applies now; "Stoppen" from `starting` on, because a start waits for a build
-      // into the same folder and that is when someone wants out.
-      HStack {
-        if status.state == .stopped || status.state == .error {
-          Button(L10n.t("buildServer.start"), systemImage: "play.fill", action: model.start)
-            .accessibilityIdentifier("server.start")
-        } else {
-          Button(L10n.t("buildServer.restart"), systemImage: "arrow.clockwise", action: model.restart)
-            .disabled(!running)
-          Button(L10n.t("buildServer.stop"), systemImage: "stop.fill", role: .destructive, action: model.stop)
-            .disabled(status.state == .stopping)
-            .accessibilityIdentifier("server.stop")
-        }
-      }
       DisclosureGroup(isExpanded: $model.optionsOpen) {
         optionsFields
       } label: {
         Label(L10n.t("buildServer.serverOptions"), systemImage: "slider.horizontal.3")
-      }
-      if embeddable { preview }
-      LogConsole(lines: logs.server, label: L10n.t("buildServer.serverLogLabel"), identifier: "server.log.server") {
-        monitor.clearLog(project.id, .server)
       }
     } header: {
       SectionHeader(title: L10n.t("buildServer.devServer"), symbol: ProjectPage.server.symbol) {
@@ -115,19 +291,22 @@ struct BuildServerPage: View {
       Group {
         if running, let url = URL(string: address) {
           Link(destination: url) {
-            Label(address, systemImage: "arrow.up.right.square").font(.title3.weight(.semibold))
+            Label(address, systemImage: "arrow.up.right.square").fontWeight(.semibold)
           }
           .help(L10n.t("common.openInBrowser"))
         } else {
-          Text(address).font(.title3.weight(.semibold)).foregroundStyle(.secondary)
+          Text(address).fontWeight(.semibold).foregroundStyle(.secondary)
         }
       }
+      .lineLimit(1)
       .accessibilityIdentifier("page.server")
+      Spacer(minLength: 0)
       Button(action: copyAddress) {
         Label(L10n.t("common.copy"), systemImage: copied ? "checkmark" : "doc.on.doc")
       }
+      .labelStyle(.iconOnly)
       .buttonStyle(.borderless)
-      .font(.callout)
+      .help(L10n.t("common.copy"))
     }
   }
 
@@ -168,60 +347,16 @@ struct BuildServerPage: View {
     }
   }
 
-  /// At real CSS pixels: switching the width resizes the view and keeps where the reader had gone in
-  /// the site; only "Vorschau neu laden" (and a new address) loads it again.
-  @ViewBuilder private var preview: some View {
-    let width = PreviewWidth.points(model.previewMode, widths: model.breakpoints)
-    DisclosureGroup(isExpanded: $model.previewOpen) {
-      HStack {
-        Picker(L10n.t("buildServer.viewport.label"), selection: $model.previewMode) {
-          ForEach(PreviewWidth.Mode.allCases) { Text($0.title).tag($0) }
-        }
-        .pickerStyle(.segmented)
-        .fixedSize()
-        Text(PreviewWidth.text(width)).font(.callout).foregroundStyle(.secondary).monospacedDigit()
-        Spacer()
-        Button(L10n.t("buildServer.reloadPreview"), systemImage: "arrow.clockwise") { model.previewNonce += 1 }
-          .buttonStyle(.borderless)
-      }
-      if let url = URL(string: address) {
-        ScrollView(.horizontal) {
-          HStack(spacing: 0) {
-            SitePreview(url: url, label: L10n.t("buildServer.livePreview"))
-              .id("\(address)#\(model.previewNonce)")
-              .frame(width: width.map { CGFloat($0) })
-          }
-          .containerRelativeFrame(.horizontal) { length, _ in max(length, width.map { CGFloat($0) } ?? length) }
-        }
-        .frame(height: 560)
-        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
-      }
-    } label: {
-      Text(L10n.t("buildServer.livePreview"))
-    }
-  }
-
   // MARK: One-off build
 
   private func buildSection(now: Date) -> some View {
     Section {
-      HStack(alignment: .firstTextBaseline) {
-        Note(L10n.t("buildServer.oneOffBuildHint"))
-        Spacer(minLength: 12)
-        Button(building ? L10n.t("buildServer.building") : L10n.t("buildServer.buildNow"), systemImage: "hammer") {
-          Task { await model.runBuild() }
-        }
-        .disabled(building)
-        .accessibilityIdentifier("server.build")
-      }
+      Note(L10n.t("buildServer.oneOffBuildHint"))
       if let activity, activity.kind == .build { ActivityLine(activity: activity) }
       outputRows(now: now)
       outputDirField
       if let result = model.buildResult {
         Text(BuildServerModel.resultLine(result)).font(.callout).foregroundStyle(result.success ? .green : .red)
-      }
-      LogConsole(lines: logs.build, label: L10n.t("buildServer.buildLogLabel"), identifier: "server.log.build") {
-        monitor.clearLog(project.id, .build)
       }
     } header: {
       SectionHeader(title: L10n.t("buildServer.oneOffBuild"), symbol: "hammer") { EmptyView() }
@@ -263,8 +398,11 @@ struct BuildServerPage: View {
 
   @ViewBuilder private var outputDirField: some View {
     VStack(alignment: .leading, spacing: 4) {
+      // The label above the field: in the inspector's width, beside it, it broke into three lines.
+      Text(L10n.t("buildServer.exportDir"))
       HStack {
         TextField(L10n.t("buildServer.exportDir"), text: $model.outputDir, prompt: Text(L10n.t("buildServer.exportDirPlaceholder")))
+          .labelsHidden()
           .focused($outputDirFocused)
           .onSubmit { Task { await model.commitOutputDir(model.outputDir) } }
           .accessibilityIdentifier("server.outputDir")
@@ -297,5 +435,11 @@ struct BuildServerPage: View {
   static func isInside(_ parent: String, _ child: String) -> Bool {
     if child == parent { return true }
     return child.hasPrefix(parent.hasSuffix("/") ? parent : parent + "/")
+  }
+}
+
+private extension View {
+  @ViewBuilder func menuOrSegmented(_ menu: Bool) -> some View {
+    if menu { pickerStyle(.menu) } else { pickerStyle(.segmented) }
   }
 }

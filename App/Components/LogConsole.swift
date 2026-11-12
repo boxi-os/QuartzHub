@@ -12,6 +12,8 @@ struct LogConsole: View {
   let lines: ProjectLogs.Lines
   let label: String
   let identifier: String
+  /// In a panel of its own (Vorschau & Build's output): as high as the panel, not 288 pt.
+  var fills = false
   let clear: () -> Void
 
   var body: some View {
@@ -32,7 +34,8 @@ struct LogConsole: View {
           .buttonStyle(.link)
           .font(.callout)
         LogTextView(lines: lines, label: label, identifier: identifier)
-          .frame(height: 288)
+          .frame(height: fills ? nil : 288)
+          .frame(maxHeight: fills ? .infinity : nil)
           .clipShape(RoundedRectangle(cornerRadius: 6))
           .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
       }
