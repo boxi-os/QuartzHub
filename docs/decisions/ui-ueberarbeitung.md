@@ -230,3 +230,42 @@ Damit sehen eine Seite aus Karten und eine aus Formularen gleich aus. In Dunkel 
 Rechnung über `NSColor.quaternarySystemFill` gemessen, nicht an einer neuen Aufnahme. Sonst war in
 Hell nichts anders als in Dunkel.
 
+## Nach dem ersten Ausprobieren
+
+Rückmeldung des Nutzers nach dem Start aus Xcode (2026-11-12): Nach einem Reiter- oder Seitenwechsel
+sprang die Anordnung im breiten Fenster noch animiert um, und Xcode zeigte viele Warnungen und
+Meldungen.
+
+- **Umspringen.** Gemessen bei 1680 × 1000 mit acht Aufnahmen direkt nach dem Wechsel Übersicht →
+  Konfiguration: im zweiten Bild die schmale Spalte, im dritten und vierten der Übergang, erst im
+  fünften die Anordnung mit der Überschrift daneben. Mitgeschrieben: `SettingsForm` bekam nacheinander
+  180, 960 und 1170 pt, das Kartenraster der Übersicht eine, zwei, dann drei Spalten. Nur den ersten
+  Wert ohne Animation zu nehmen reichte nicht (es lief von 180 auf 960 weiter). `onWidthChange` nimmt
+  deshalb alles in der ersten halben Sekunde einer Ansicht ohne Animation; danach ist eine Änderung
+  echt (Fenster, Inspektor, Seitenleiste) und wird animiert. Gegenprobe: Konfiguration steht im
+  ersten Bild nach dem Wechsel breit da, die Übersicht mit drei Spalten. Was danach noch nachrückt,
+  ist Inhalt (der Streifen „Alles ok“, das Projektbild), nicht die Breite.
+- **„Reentrant operation in its NSTableView delegate“** auf Veröffentlichen und Dokumente.
+  Veröffentlichen wählte sein erstes Ziel im selben Durchgang, in dem die Liste ihre Zeilen bekam; ein
+  Durchlauf später ist die Warnung weg. Bei Dokumente lag es nicht an der Auswahl: Der Aufrufstapel
+  (Haltepunkt auf `NSLog`) ist ganz AppKit und SwiftUI, `OutlineListCoordinator.diffRows` →
+  `-[NSTableView endUpdates]` → die Zeilenhöhen, die sich selbst noch einmal anstoßen. Ausgelöst hat
+  es der Abschnitt „Seiten“ des Ladens, den rund 140 Seiten ersetzten, mit Zeile wie nur mit
+  Überschrift; ohne ihn kamen die Seiten ohne Warnung dazu (Versuche einzeln gezählt). Der Hinweis
+  „Seiten werden geladen“ steht jetzt unter den Büchern.
+- **String-Kataloge.** Die Oberfläche von Xcode gleicht beim Bauen die Kataloge ab und markierte alle
+  2.786 Schlüssel als `stale`, weil sie `L10n.t("…")` nicht als Textaufruf kennt; in den Info.plist-
+  Katalog trug sie drei Schlüssel nur auf Deutsch ein. Das sind Meldungen im Katalog-Editor, keine
+  Fehler, und gehört nicht ins Repository. `xcodebuild` auf der Kommandozeile ändert die Kataloge
+  nicht. Für das App-Ziel ist `SWIFT_EMIT_LOC_STRINGS` schon aus; den Abgleich für das Paket
+  abzuschalten, ist offen.
+- **Compiler-Warnungen.** Ein Neubau zeigte 24 verschiedene, fast alle älter als die Überarbeitung;
+  alle behoben. Darunter: `canSave ? { … } : nil` an `.unsavedChanges` (die Closure bekam ihren Typ
+  ohne den des Parameters), jetzt `.unsavedChanges(_:canSave:save:)`; `CTFontManagerRegisterGraphicsFont`
+  (veraltet seit macOS 15) durch einen Deskriptor aus den Daten, eine variable Schrift auf Stärke 400
+  gesetzt (ohne das zeichnete Noto Sans dünn, nebeneinander verglichen). Übrig ist nur die Notiz des
+  `appintentsmetadataprocessor`, dass die App keine App Intents nutzt.
+- **Laufzeit-Meldungen.** Über alle Seiten mitgeschrieben (`log show`, Default bis Fault): fast alles
+  ist das System (WebKit-Sandbox, AppIntents, Spotlight, Netz). Von der App kam nur die Tabellen-
+  Warnung oben und auf Stufe Info „ignoring retroactive Equatable conformance“ von AttributeGraph,
+  ohne Typnamen im Log; nicht weiter verfolgt.

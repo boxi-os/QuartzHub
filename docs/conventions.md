@@ -127,8 +127,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   deshalb auch „Speichern“ (`SaveButton`) selbst hinter sie, und die Seite lässt ihres dort weg.
 - **Maße und Bewegung aus `App/Components/Design.swift`:** `Spacing` (Seitenrand 20), `Motion` für
   Wechsel der Anordnung und Ein-/Ausblenden, mit „Bewegung reduzieren“ ohne Bewegung. Eine Anordnung,
-  die mit der Breite wechselt, wechselt über `AnyLayout` und `onGeometryChange` mit
-  `withAnimation`, nicht über `if`. Hinweise, Warnungen und Fehler sind `Callout`;
+  die mit der Breite wechselt, wechselt über `AnyLayout` und `onWidthChange`, nicht über `if`:
+  animiert erst, wenn die Ansicht eine halbe Sekunde steht, weil eine neue Seite mehrere vorläufige
+  Breiten bekommt (decisions/ui-ueberarbeitung.md, Nach dem ersten Ausprobieren). Hinweise, Warnungen und Fehler sind `Callout`;
   was an einer eben getippten Eingabe falsch ist, steht als `FieldProblem` direkt unter dem Feld, und
   was ein Feld tut, erklärt `Note` ohne Kasten (decisions/ui-ueberarbeitung.md, Hinweise).
 - **Die Website zeigt `ScaledSite`**, in Vorschau & Build wie neben den Plugin-Editoren: Desktop
@@ -138,6 +139,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   (`NSRulerView`), Färben und Einrückungslinien sind eigene Teile. Der Färber steht im Kern und
   wird je Tastendruck gemessen: Färben, nicht der Editor, ist das Teure (Messung in
   `decisions/phase-4-oberflaeche.md`, 4b).
+- **Eine Auswahl, die die Seite selbst setzt, kommt einen Durchlauf nach den Zeilen**
+  (`DispatchQueue.main.async`), und eine Liste ersetzt beim Laden keine Zeile durch viele: beides ließ
+  AppKit vor einem „reentrant operation in its NSTableView delegate“ warnen, das ein Assert werden soll.
 - **Umsortieren hat drei Wege zu einer Funktion.** Mit der Maus wird gezogen (`onMove`, im
   Raster `draggable`/`dropDestination`). In einer Liste gibt es dazu „Nach oben“ und „Nach unten“
   im Menü (⌥⌘↑/⌥⌘↓), im Kontextmenü und als Bedienungshilfe-Aktion. In Raster und Board übernimmt
