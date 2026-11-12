@@ -120,7 +120,11 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   Spalte bis 880 pt, ab 900 pt Breite Überschrift und Erklärung links daneben (Variante C). Liste:
   `Table` oder `List` über die volle Breite, kein Kopf über der Liste, Anlegen ist ➕ in der
   Symbolleiste. Übersicht: `CardGrid` mit `Card`, eine bis drei Spalten. Arbeitsfläche: füllt Breite
-  und Höhe. Reiter stehen in `.pageTabs(…)` und werden zum Menü, wo sie nicht passen.
+  und Höhe, ihr Kopf ist `WorkspaceHeader`. Reiter stehen in `.pageTabs(…)`, einer eigenen Zeile über
+  dem Inhalt (keine `safeAreaBar`: deren Einschub erreicht keinen `VSplitView`), und werden zum Menü,
+  wo sie nicht passen.
+- **Die Symbolleiste eines Reiters kommt nach der der Seite.** Ein Reiter mit eigenen Aktionen stellt
+  deshalb auch „Speichern“ (`SaveButton`) selbst hinter sie, und die Seite lässt ihres dort weg.
 - **Maße und Bewegung aus `App/Components/Design.swift`:** `Spacing` (Seitenrand 20), `Motion` für
   Wechsel der Anordnung und Ein-/Ausblenden, mit „Bewegung reduzieren“ ohne Bewegung. Eine Anordnung,
   die mit der Breite wechselt, wechselt über `AnyLayout` und `onGeometryChange` mit

@@ -63,8 +63,9 @@ Gemessen am 2026-11-12 an der App (Debug-Bau, Kopie von gui-test, Wegwerf-Profil
 
 `App/Components/Design.swift`: `Spacing` (4, 8, 12, 16, 20, 24; Seitenrand 20), `FormWidth`, `Motion`
 (`.smooth(duration: 0.3)` für Anordnungen, `.snappy(duration: 0.2)` für Ein- und Ausblenden, mit
-„Bewegung reduzieren“ keine Bewegung), `Callout`, `PageTabs` (in einer `safeAreaBar`), `SettingsForm`
-und `SettingsSection` (Variante C).
+„Bewegung reduzieren“ keine Bewegung), `Callout`, `PageTabs` (eine eigene Zeile über dem Inhalt,
+siehe „Reiter-Inhalte“), `SaveButton`, `SettingsForm` und `SettingsSection` (Variante C), `Card` und
+`CardGrid`, `WorkspaceHeader`.
 
 ### Formulare: Variante C mit nativen Zeilen
 
@@ -156,7 +157,42 @@ Nach dem OK des Nutzers zum Prototyp (2026-11-12), eine Seite je Commit, jede mi
   „Alles ok“ bzw. „Handlungsbedarf“ über die volle Breite.
 - **Stile, Layout, Plugins:** die Reiter als `PageTabs` (Plugins mit sechs Reitern ist bei 1200 pt
   ein Menü, Layout und Stile Segmente, bei 900 pt alle drei Menüs) und Speichern nach der Regel.
-  **Noch nicht umgestellt** ist der Inhalt der Reiter: Stile ▸ Basis ist ein `Form`, in das die Seite
-  ihre Hinweise als `Section` einschiebt; die Editoren von Plugins und Layout sind eigene
-  Arbeitsflächen. Das ist ein eigener Schritt je Reiter.
+  Den Inhalt der Reiter behandelt der nächste Abschnitt.
+
+## Reiter-Inhalte
+
+Je Seite ein Commit, gebaut und mit `qh-check i18n` und dem Rauchtest (11 von 11) geprüft, jeder
+Reiter bei 1200 × 780 angesehen, Basis und Community-Themes auch bei 1680 × 1000:
+
+- **Die Reiter-Leiste ist eine Zeile über dem Inhalt, keine `safeAreaBar`.** Gefunden bei 1200 × 780:
+  Navigationen, Zusätzliche Inhalte, Mehrsprachigkeit und Formulare zeichneten ihre Einleitung unter
+  das Reiter-Menü. Grund: Der Einschub der `safeAreaBar` kommt in einem `VSplitView` (AppKit) nicht
+  an. Seit der Leiste als eigener Zeile beginnt jeder Inhalt darunter, auch auf Konfiguration
+  (angesehen). Damit läuft der Scroll-Kanten-Effekt nicht mehr unter den Reitern durch, nur noch unter
+  der Symbolleiste.
+- **Die Symbolleiste eines inneren Views kommt nach der der Seite.** Gesehen auf Stile ▸ Eigenes CSS:
+  Die drei Aktionen des Reiters standen rechts von „Speichern“. Ein Reiter mit eigenen Aktionen
+  stellt deshalb auch „Speichern“ selbst hinter sie (`SaveButton`, von der Seite gereicht), und die
+  Seite lässt ihres auf diesem Reiter weg. So bei Eigenes CSS und Layout ▸ Frames.
+- **Stile:** Die Hinweise der Seite (Speicherfehler, Schriftenhinweis, Umzug nach
+  `_quartzcontrol.scss`) stehen als `Callout` über jedem Reiter, statt als `Section` in jedes Formular
+  geschoben zu werden. Basis und Community-Themes sind `SettingsForm`, ihre Erklärungen stehen neben
+  den Abschnitten, feste Feldbreiten (320 pt) sind weg. Variablen bleibt ein einziges `Form` über die
+  volle Breite: Der Sprung aus dem Inspektor scrollt zu einer Zeile, und in den Abschnitten eines
+  `SettingsForm` (je ein `Form`, das nicht scrollt) fände er sie nicht. Eigenes CSS: Importieren, Extern
+  öffnen und Prüfen sind Symbole in der Symbolleiste, die Bänder `Callout`, der Pfad steht neben den
+  Datei-Reitern.
+- **Layout:** Bühne und Frame-Editor hatten je eine Kopie desselben Kopfes mit getöntem Rand. Beide
+  sind jetzt `WorkspaceHeader` auf dem Hintergrund der Karten. Neuer Frame, Duplizieren und Löschen
+  sind Symbole in der Symbolleiste.
+- **Plugins:** Die vier Editoren haben keinen Kopf mehr über der Liste. Die Einleitung steht im
+  Inspektor, „Neu …“ ist ➕ in der Symbolleiste, das Popover geht darunter auf (angesehen bei
+  Navigationen). Die Zahl ist die Überschrift des Listenabschnitts. Marktplatz lädt den Katalog über
+  ein Symbol in der Symbolleiste neu. Die Zeile mit Plugin, Schalter und „Alle Optionen“ bleibt: Das
+  sind Bedienelemente, kein Kopf.
+- **`Callout` enthält seine Kinder** (`children: .contain` statt `.combine`): Einige tragen einen
+  Knopf, und zusammengefasst wäre er für die Bedienungshilfen nicht mehr erreichbar.
+
+Offen: `Warning`, `ErrorLine` und `Note` in den Options-Formularen und Inspektoren sind noch die alten
+Bausteine. Die Übersicht von Layout (Kacheln und Tabelle) ist noch nicht in `Card` umgestellt.
 
