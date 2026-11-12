@@ -46,42 +46,32 @@ struct ConfigPage: View {
 
   var body: some View {
     PageScaffold(page: .config) {
-      VStack(spacing: 0) {
-        // Above the content, not in the toolbar: there it pushed the inspector button to the
-        // middle of the window (seen in the running app).
-        Picker(L10n.t("common.viewSwitcher"), selection: $tabID) {
-          ForEach(Tab.allCases) { Text($0.title).tag($0.rawValue) }
-        }
-        .pickerStyle(.segmented)
-        .labelsHidden()
-        .fixedSize()
-        .padding(.top, 12)
-        .accessibilityIdentifier("config.tabs")
+      Group {
         switch tab {
         case .site: siteForm
         case .localization:
           LocalizationTab(model: localization, configured: model.config == nil ? nil : model.string("locale"))
         }
       }
+      // Above the content, not in the toolbar: there it pushed the inspector button to the
+      // middle of the window (seen in the running app).
+      .pageTabs(Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "config.tabs")
       .historyTab(page: .config, tab: $tabID)
       .task { await model.load() }
       .unsavedChanges(model.dirty, save: model.saving || model.config == nil ? nil : { await model.save() },
                       command: tab == .site)
       .toolbar {
         if tab == .site {
-          ToolbarItemGroup(placement: .primaryAction) {
-            if model.status == .saved {
-              Text(L10n.t("common.saved")).foregroundStyle(.green)
-            } else if model.dirty, !model.saving {
-              UnsavedBadge().accessibilityIdentifier("config.unsaved")
-            }
+          // No "Gespeichert" and no badge beside it: Speichern is enabled only with something to
+          // save, and the dot in the close button says the same (decisions/ui-ueberarbeitung.md).
+          ToolbarItem(placement: .primaryAction) {
             Button {
               Task { await model.save() }
             } label: {
               Label(model.saving ? L10n.t("common.saving") : L10n.t("common.save"), systemImage: "square.and.arrow.down")
             }
             .labelStyle(.titleOnly)
-            .disabled(model.saving || model.config == nil)
+            .disabled(!model.dirty || model.saving || model.config == nil)
             .accessibilityIdentifier("config.save")
           }
         }
@@ -96,36 +86,37 @@ struct ConfigPage: View {
   }
 
   private var siteForm: some View {
-    Form {
+    SettingsForm {
       if model.status == .failed, let error = model.saveError {
-        Section {
-          Label(error, systemImage: "exclamationmark.octagon.fill")
-            .foregroundStyle(.red)
-            .textSelection(.enabled)
-            .accessibilityIdentifier("config.saveError")
+        Callout(.error) {
+          Text(error).textSelection(.enabled).accessibilityIdentifier("config.saveError")
         }
+        .padding(.horizontal, Spacing.page)
+        .padding(.top, Spacing.s)
       }
-      ContentFolderSection(project: project)
       if let error = model.loadError {
-        Section {
-          Text(L10n.t("configEditor.loadError")).fontWeight(.medium).foregroundStyle(.red)
-          Text(error).font(.system(.callout, design: .monospaced)).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error) {
+          Text(L10n.t("configEditor.loadError")).fontWeight(.medium)
+          Text(error).font(.system(.callout, design: .monospaced)).textSelection(.enabled)
             .accessibilityIdentifier("config.loadError")
         }
-      } else if model.config == nil {
-        Section { Text(L10n.t("configEditor.loading")).foregroundStyle(.secondary) }
-      } else {
+        .padding(.horizontal, Spacing.page)
+        .padding(.top, Spacing.s)
+      }
+      ContentFolderSection(project: project)
+      if model.loadError == nil, model.config == nil {
+        ProgressView(L10n.t("configEditor.loading")).frame(maxWidth: .infinity).padding(Spacing.xl)
+      } else if model.config != nil {
         ProjectImageSection(model: model)
         SiteSettingsSections(model: model)
         ProcessingSections(model: model, project: project)
-        Section {
-          HStack(alignment: .firstTextBaseline) {
-            Note(L10n.t("configEditor.stylesHint"))
-            Button(L10n.t("configEditor.stylesHintLink")) { openPage(.styles) }.buttonStyle(.link).font(.callout)
-          }
+        HStack(alignment: .firstTextBaseline) {
+          Note(L10n.t("configEditor.stylesHint"))
+          Button(L10n.t("configEditor.stylesHintLink")) { openPage(.styles) }.buttonStyle(.link).font(.callout)
         }
+        .padding(.horizontal, Spacing.page)
+        .padding(.vertical, Spacing.m)
       }
     }
-    .formStyle(.grouped)
   }
 }

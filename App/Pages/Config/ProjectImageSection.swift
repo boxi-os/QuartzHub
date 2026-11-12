@@ -30,7 +30,7 @@ struct ProjectImageSection: View {
   private var markShows: Bool { ProjectImageBox.findOther(plugins) != nil }
 
   var body: some View {
-    Section {
+    SettingsSection(L10n.t("projectImage.label"), symbol: "photo") {
       HStack(alignment: .top, spacing: 14) {
         avatar
         VStack(alignment: .leading, spacing: 8) {
@@ -55,8 +55,6 @@ struct ProjectImageSection: View {
       if let error {
         Text(error).font(.callout).foregroundStyle(.red).textSelection(.enabled)
       }
-    } header: {
-      Label(L10n.t("projectImage.label"), systemImage: "photo")
     }
     .task { await reloadIcon() }
     .alert(installParts.title, isPresented: $confirmInstall) {

@@ -58,3 +58,43 @@ Gemessen am 2026-11-12 an der App (Debug-Bau, Kopie von gui-test, Wegwerf-Profil
 - **Rauchtest.** Neu: Übersicht ▸ Link auf Plugins, Titel nennt die Seite und nicht das Projekt,
   Zurück, Vorwärts. Gegenprobe: mit stillgelegtem Zurück scheitert er („Zurück did not lead to the
   overview“).
+
+## Bausteine
+
+`App/Components/Design.swift`: `Spacing` (4, 8, 12, 16, 20, 24; Seitenrand 20), `FormWidth`, `Motion`
+(`.smooth(duration: 0.3)` für Anordnungen, `.snappy(duration: 0.2)` für Ein- und Ausblenden, mit
+„Bewegung reduzieren“ keine Bewegung), `Callout`, `PageTabs` (in einer `safeAreaBar`), `SettingsForm`
+und `SettingsSection` (Variante C).
+
+### Formulare: Variante C mit nativen Zeilen
+
+Ein `Form` kann die Überschrift eines Abschnitts nicht neben seine Zeilen setzen. Gemessen am
+2026-11-12 mit einem Testprogramm (Scratchpad, SwiftUI auf macOS 27.2) und dann in der App:
+
+- **Ein gruppiertes `Form` je Abschnitt** mit `.scrollDisabled(true)` und
+  `.fixedSize(horizontal: false, vertical: true)` in der Scrollansicht der Seite wird so hoch wie
+  seine Zeilen und behält die Optik der Plattform (Beschriftung links, Feld, Schalter und Auswahl
+  rechts). Daneben oder darüber steht die Überschrift, umgeschaltet mit `AnyLayout`
+  (`HStackLayout`/`VStackLayout`).
+- **Scrollen:** Das Mausrad über einem Kasten scrollt die Seite (CGEvent-Scrollen über
+  „Projektbild“ bei 1200 pt, die Seite lief weiter); die gesperrten Formulare halten nichts fest.
+- **Ränder:** Ein gruppiertes `Form` lässt etwa 20 pt über und unter seinem Kasten.
+  `contentMargins(.vertical, …)` ändert daran nichts, weder für `.scrollContent` noch für alle
+  Stellen. Ausgeglichen mit −12 pt über dem Kasten, wenn die Überschrift darüber steht. Dann
+  verdeckte der Hintergrund des Formulars die Überschrift; `.scrollContentBackground(.hidden)` und
+  `zIndex` lösen das.
+- **Grenze:** ab 900 pt Breite der Seite stehen Überschrift und Erklärung daneben (Spalte 220 pt),
+  bis 1120 pt; darunter eine Spalte bis 880 pt. Bei 1200 × 780 mit Inspektor untereinander, bei
+  1680 × 1000 daneben. Zwischen den Abschnitten steht dann eine Linie (`Group(subviews:)`).
+- **Bewegung:** Bei 1300 pt Fensterbreite und ⌃⌘I wechselt die Konfiguration von untereinander auf
+  daneben. Eine Aufnahme direkt nach dem Tastendruck zeigt den Inspektor halb draußen und die Kästen
+  auf dem Weg nach rechts, eine Sekunde später den Endstand.
+
+## Konfiguration
+
+Die erste Seite auf den neuen Bausteinen: `SettingsForm` mit den zehn Abschnitten von Website, die
+Reiter als `PageTabs`, Fehler als `Callout`. Zwei Beschreibungen (Content-Ordner, Eingebaute
+Verarbeitung) stehen jetzt als Erklärung beim Abschnitt statt als erste Zeile. Speichern ist nur
+mit Ungespeichertem aktiv; „Nicht gespeichert“ und „Gespeichert.“ daneben entfallen, das sagt der
+Punkt im Schließen-Knopf. Der Rauchtest prüft das jetzt am Knopf (aus, an, nach ⌘S wieder aus);
+Gegenprobe: mit immer aktivem Speichern scheitert er („Speichern is on with nothing to save“).

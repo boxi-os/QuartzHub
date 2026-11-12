@@ -10,7 +10,7 @@ struct SiteSettingsSections: View {
   @State private var ignoreText = ""
 
   var body: some View {
-    Section {
+    SettingsSection(L10n.t("siteSettings.heading"), symbol: "gearshape") {
       FormField(hint: L10n.t("siteSettings.pageTitleHint")) {
         TextField(L10n.t("siteSettings.pageTitle"), text: binding("pageTitle"))
           .accessibilityIdentifier("config.pageTitle")
@@ -39,11 +39,9 @@ struct SiteSettingsSections: View {
           .accessibilityIdentifier("config.prefetch")
         }
       }
-    } header: {
-      Label(L10n.t("siteSettings.heading"), systemImage: "gearshape")
     }
 
-    Section {
+    SettingsSection(L10n.t("siteSettings.ignoreHeading"), symbol: "eye.slash") {
       FormField(hint: L10n.t("siteSettings.ignorePatternsHint")) {
         VStack(alignment: .leading, spacing: 4) {
           Text(L10n.t("siteSettings.ignorePatterns"))
@@ -68,8 +66,6 @@ struct SiteSettingsSections: View {
           .accessibilityIdentifier("config.publishAssets")
         }
       }
-    } header: {
-      Label(L10n.t("siteSettings.ignoreHeading"), systemImage: "eye.slash")
     }
     .onChange(of: model.ignorePatterns, initial: true) { _, patterns in
       // Only when the draft changed under the text (read, saved, read again), not on our own edit.
@@ -172,7 +168,7 @@ private struct AnalyticsSection: View {
   }
 
   var body: some View {
-    Section {
+    SettingsSection(L10n.t("siteSettings.analyticsHeading"), symbol: "chart.bar") {
       Note(L10n.t("siteSettings.analyticsDescription"))
       Picker(L10n.t("siteSettings.analyticsProvider"), selection: Binding(get: { provider }, set: select)) {
         Text(L10n.t("siteSettings.analyticsNone")).tag("")
@@ -194,8 +190,6 @@ private struct AnalyticsSection: View {
           .font(.callout)
           .foregroundStyle(.orange)
       }
-    } header: {
-      Label(L10n.t("siteSettings.analyticsHeading"), systemImage: "chart.bar")
     }
   }
 

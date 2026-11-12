@@ -324,10 +324,15 @@ final class SmokeTests: XCTestCase {
 
     let field = any["config.pageTitle"].firstMatch
     XCTAssertTrue(field.waitForExistence(timeout: 10), "no title field")
+    // Speichern says whether there is something to save: off before the edit, on after it.
+    let save = window.buttons["config.save"].firstMatch
+    XCTAssertTrue(save.waitForExistence(timeout: 5), "no Speichern")
+    XCTAssertFalse(save.isEnabled, "Speichern is on with nothing to save")
     field.click()
     field.typeKey("a", modifierFlags: .command)
     field.typeText("Neu")
-    XCTAssertTrue(any["config.unsaved"].firstMatch.waitForExistence(timeout: 5), "the edit is not marked unsaved")
+    let unsaved = expectation(for: NSPredicate(format: "isEnabled == true"), evaluatedWith: save)
+    wait(for: [unsaved], timeout: 5)
 
     any["sidebar.plugins"].firstMatch.click()
     let cancel = window.sheets.buttons["Abbrechen"].firstMatch
@@ -343,7 +348,7 @@ final class SmokeTests: XCTestCase {
       (try? String(contentsOf: config, encoding: .utf8))?.contains("pageTitle: Neu") == true
     }, evaluatedWith: nil)
     wait(for: [written], timeout: 10)
-    let saved = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: any["config.unsaved"].firstMatch)
+    let saved = expectation(for: NSPredicate(format: "isEnabled == false"), evaluatedWith: save)
     wait(for: [saved], timeout: 5)
 
     any["sidebar.plugins"].firstMatch.click()

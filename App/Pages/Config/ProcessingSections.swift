@@ -13,13 +13,10 @@ struct ProcessingSections: View {
 
   var body: some View {
     if let plan = model.builtins {
-      Section {
-        Note(L10n.t("builtins.description"))
+      SettingsSection(L10n.t("builtins.heading"), symbol: "gearshape.2", note: L10n.t("builtins.description")) {
         BuiltinMigration(project: project, pending: model.pendingMigrations, blockedByEdits: model.dirty, onConfigPage: true) {
           _ = try? await model.reread()
         }
-      } header: {
-        Label(L10n.t("builtins.heading"), systemImage: "gearshape.2")
       }
       links(plan)
       drafts(plan)
@@ -31,7 +28,7 @@ struct ProcessingSections: View {
   // MARK: sections
 
   private func links(_ plan: BuiltinProcessing.Plan) -> some View {
-    Section {
+    SettingsSection(L10n.t("builtins.links.heading"), symbol: "link") {
       state(plan[.links])
       FormField(hint: L10n.t("builtins.links.resolutionHint")) {
         Picker(L10n.t("builtins.links.resolution"), selection: text(.links, "markdownLinkResolution")) {
@@ -51,14 +48,12 @@ struct ProcessingSections: View {
       FormField(hint: L10n.t("builtins.links.brokenHint")) {
         Toggle(L10n.t("builtins.links.broken"), isOn: flag(.links, "disableBrokenWikilinks"))
       }
-    } header: {
-      Label(L10n.t("builtins.links.heading"), systemImage: "link")
     }
     .disabled(!plan[.links].enabled)
   }
 
   private func drafts(_ plan: BuiltinProcessing.Plan) -> some View {
-    Section {
+    SettingsSection(L10n.t("builtins.drafts.heading"), symbol: "pencil.and.outline") {
       state(plan[.drafts])
       FormField(hint: L10n.t("builtins.drafts.publishHint")) {
         Toggle(L10n.t("builtins.drafts.publish"), isOn: Binding(
@@ -71,14 +66,12 @@ struct ProcessingSections: View {
           }))
         .accessibilityIdentifier("config.drafts.publish")
       }
-    } header: {
-      Label(L10n.t("builtins.drafts.heading"), systemImage: "pencil.and.outline")
     }
   }
 
   private func contentIndex(_ plan: BuiltinProcessing.Plan) -> some View {
     let planned = plan[.contentIndex]
-    return Section {
+    return SettingsSection(L10n.t("builtins.contentIndex.heading"), symbol: "list.bullet.rectangle") {
       if case .replacedBy? = planned.note { state(planned) }
       FormField(hint: L10n.t("builtins.contentIndex.enabledHint")) {
         Toggle(L10n.t("builtins.contentIndex.enabled"), isOn: Binding(
@@ -102,13 +95,11 @@ struct ProcessingSections: View {
         Toggle(L10n.t("builtins.contentIndex.includeEmptyFiles"), isOn: flag(.contentIndex, "includeEmptyFiles"))
       }
       .disabled(!planned.enabled)
-    } header: {
-      Label(L10n.t("builtins.contentIndex.heading"), systemImage: "list.bullet.rectangle")
     }
   }
 
   private func frontmatter(_ plan: BuiltinProcessing.Plan) -> some View {
-    Section {
+    SettingsSection(L10n.t("builtins.frontmatter.heading"), symbol: "doc.text") {
       state(plan[.frontmatter])
       FormField(hint: L10n.t("builtins.frontmatter.delimitersHint")) {
         TextField(L10n.t("builtins.frontmatter.delimiters"), text: text(.frontmatter, "delimiters"))
@@ -118,8 +109,6 @@ struct ProcessingSections: View {
         Text(verbatim: "TOML").tag("toml")
         unknown(.frontmatter, "language", known: ["yaml", "toml"])
       }
-    } header: {
-      Label(L10n.t("builtins.frontmatter.heading"), systemImage: "doc.text")
     }
     .disabled(!plan[.frontmatter].enabled)
   }

@@ -17,7 +17,7 @@ struct ContentFolderSection: View {
   @State private var indexFallback = false
 
   var body: some View {
-    Section {
+    SettingsSection(L10n.t("content.label"), symbol: "folder", note: L10n.t("content.cardHint")) {
       if let status {
         if !status.exists {
           Text(L10n.t("content.noFolder")).foregroundStyle(.orange)
@@ -56,13 +56,10 @@ struct ContentFolderSection: View {
       } else {
         Text(L10n.t("content.loading")).foregroundStyle(.secondary)
       }
-      HStack(alignment: .firstTextBaseline) {
-        Note(L10n.t("content.cardHint"))
+      HStack {
         Spacer()
         Button(L10n.t("content.changeSource")) { changing = true }
       }
-    } header: {
-      Label(L10n.t("content.label"), systemImage: "folder")
     }
     .task { await reload() }
     .sheet(isPresented: $changing) {
