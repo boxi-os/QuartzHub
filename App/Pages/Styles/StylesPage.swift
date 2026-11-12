@@ -42,27 +42,12 @@ struct StylesPage: View {
 
   private var tab: StylesModel.Tab { StylesModel.Tab(rawValue: tabID) ?? .basics }
 
-  private var tabPicker: some View {
-    Picker(L10n.t("common.viewSwitcher"), selection: $tabID) {
-      ForEach(StylesModel.Tab.allCases) { Text($0.title).tag($0.rawValue) }
-    }
-    .labelsHidden()
-    .accessibilityIdentifier("styles.tabs")
-  }
-
   var body: some View {
     PageScaffold(page: .styles) {
-      VStack(spacing: 0) {
-        // Four tabs are wider than the middle column of the smallest window with the inspector:
-        // there they become a menu, or the window grows past its frame (seen at 1000 × 700).
-        ViewThatFits(in: .horizontal) {
-          tabPicker.pickerStyle(.segmented).fixedSize()
-          tabPicker.pickerStyle(.menu).fixedSize()
-        }
-        .padding(.top, 12)
-        .padding(.horizontal, 16)
-        content
-      }
+      content
+      // Four tabs are wider than the middle column of the smallest window with the inspector:
+      // PageTabs makes them a menu there, or the window grows past its frame (seen at 1000 × 700).
+      .pageTabs(StylesModel.Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "styles.tabs")
       .historyTab(page: .styles, tab: $tabID)
       .task {
         await model.load()
@@ -73,19 +58,15 @@ struct StylesPage: View {
       }
       .unsavedChanges(model.dirty, save: model.saving || model.config == nil ? nil : { [model, tab] in await model.save(from: tab) })
       .toolbar {
-        ToolbarItemGroup(placement: .primaryAction) {
-          if model.status == .saved {
-            Text(L10n.t("common.saved")).foregroundStyle(.green)
-          } else if model.dirty, !model.saving {
-            UnsavedBadge().accessibilityIdentifier("styles.unsaved")
-          }
+        // Speichern only with something to save, no badge beside it (as on Konfiguration).
+        ToolbarItem(placement: .primaryAction) {
           Button {
             Task { await save() }
           } label: {
             Label(model.saving ? L10n.t("common.saving") : L10n.t("common.save"), systemImage: "square.and.arrow.down")
           }
           .labelStyle(.titleOnly)
-          .disabled(model.saving || model.config == nil)
+          .disabled(!model.dirty || model.saving || model.config == nil)
           .accessibilityIdentifier("styles.save")
         }
       }
