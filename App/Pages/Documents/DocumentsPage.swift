@@ -6,8 +6,8 @@ import SwiftUI
 /// a file in the project (quartz-books/<id>.json), exported by a target of the type „Dokument“ on
 /// Veröffentlichen.
 ///
-/// In the middle the books, then the selected book's pages; the inspector holds its title, author
-/// and PDF settings. Both halves are one draft: "Speichern" in the toolbar and ⌘S write it, and
+/// A list page (decisions/ui-ueberarbeitung.md): in the middle the books, then the selected book's
+/// pages; the inspector holds its title, author and PDF settings. "Neues Buch" is the toolbar's +. Both halves are one draft: "Speichern" in the toolbar and ⌘S write it, and
 /// every way off it asks (another book, "Neues Buch", another page, closing the window).
 struct DocumentsPage: View {
   let project: ProjectContext
@@ -28,10 +28,7 @@ struct DocumentsPage: View {
 
   var body: some View {
     PageScaffold(page: .documents) {
-      VStack(alignment: .leading, spacing: 0) {
-        header
-        list
-      }
+      list
       .accessibilityElement(children: .contain)
       .accessibilityIdentifier("page.documents")
       .task {
@@ -55,11 +52,17 @@ struct DocumentsPage: View {
       }
       .unsavedChanges(model.dirty, save: model.saving || model.draft == nil ? nil : { await model.save() })
       .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          Button(action: create) { Label(L10n.t("documents.newBook"), systemImage: "plus") }
+            .help(L10n.t("documents.newBook"))
+            .disabled(model.creating)
+            .accessibilityIdentifier("documents.newBook")
+        }
+        // No badge beside Speichern: it is enabled only with something to save, and the dot in the
+        // close button says the same (as on Konfiguration).
         if model.draft != nil {
+          ToolbarSpacer(.fixed, placement: .primaryAction)
           ToolbarItemGroup(placement: .primaryAction) {
-            if model.dirty, !model.saving {
-              UnsavedBadge().accessibilityIdentifier("documents.unsaved")
-            }
             Button(L10n.t("documents.discard")) { model.discard() }
               .disabled(!model.dirty || model.saving)
               .accessibilityIdentifier("documents.discard")
@@ -137,7 +140,8 @@ struct DocumentsPage: View {
 
   // MARK: Above the list
 
-  private var header: some View {
+  /// Under the books: what a book is for, and the way to the page that exports it.
+  private var howItWorks: some View {
     HStack(alignment: .firstTextBaseline) {
       Note(L10n.t("documents.howItWorks"))
       Spacer()
@@ -146,8 +150,6 @@ struct DocumentsPage: View {
         .font(.callout)
         .accessibilityIdentifier("documents.toPublish")
     }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 12)
   }
 
   // MARK: The list
@@ -190,14 +192,9 @@ struct DocumentsPage: View {
         Warning(L10n.t("documents.unreadable", ["file": "\(BookFile.directory)/\(entry.id).json", "reason": entry.reason]))
       }
     } header: {
-      HStack {
-        Text(L10n.t("documents.booksHeading"))
-        Spacer()
-        Button(action: create) { Label(L10n.t("documents.newBook"), systemImage: "plus") }
-          .controlSize(.small)
-          .disabled(model.creating)
-          .accessibilityIdentifier("documents.newBook")
-      }
+      Text(L10n.t("documents.booksHeading"))
+    } footer: {
+      howItWorks
     }
   }
 
