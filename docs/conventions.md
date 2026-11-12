@@ -128,7 +128,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
 - **Maße und Bewegung aus `App/Components/Design.swift`:** `Spacing` (Seitenrand 20), `Motion` für
   Wechsel der Anordnung und Ein-/Ausblenden, mit „Bewegung reduzieren“ ohne Bewegung. Eine Anordnung,
   die mit der Breite wechselt, wechselt über `AnyLayout` und `onGeometryChange` mit
-  `withAnimation`, nicht über `if`. Hinweise, Warnungen und Fehler sind `Callout`.
+  `withAnimation`, nicht über `if`. Hinweise, Warnungen und Fehler sind `Callout`;
+  was an einer eben getippten Eingabe falsch ist, steht als `FieldProblem` direkt unter dem Feld, und
+  was ein Feld tut, erklärt `Note` ohne Kasten (decisions/ui-ueberarbeitung.md, Hinweise).
 - **Die Website zeigt `ScaledSite`**, in Vorschau & Build wie neben den Plugin-Editoren: Desktop
   rendert mit `max(Tablet-Grenze + 1, 1280)` px und wird eingepasst, „100 %“ ist dieselbe Webansicht
   in einer Scrollansicht (eine zweite lud die Website neu).

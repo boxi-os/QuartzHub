@@ -193,6 +193,25 @@ Reiter bei 1200 × 780 angesehen, Basis und Community-Themes auch bei 1680 × 10
 - **`Callout` enthält seine Kinder** (`children: .contain` statt `.combine`): Einige tragen einen
   Knopf, und zusammengefasst wäre er für die Bedienungshilfen nicht mehr erreichbar.
 
-Offen: `Warning`, `ErrorLine` und `Note` in den Options-Formularen und Inspektoren sind noch die alten
-Bausteine. Die Übersicht von Layout (Kacheln und Tabelle) ist noch nicht in `Card` umgestellt.
+## Hinweise, Fehler und Erklärungen
+
+`Warning`, `ErrorLine` und rund 90 frei gefärbte Zeilen (rot oder orange gesetzter `Text`, `Label` mit
+Warnsymbol) sind ersetzt. Es gibt drei Arten Text neben einem Bedienelement:
+
+- **`Callout`** sagt etwas über den Zustand einer Sache: eine Datei fehlt, ein Laden scheiterte, eine
+  Einstellung wirkt nicht. Sein Text ist auswählbar wie vorher der von `ErrorLine`, damit ein Pfad
+  oder ein Grund kopiert werden kann. Hat ein Hinweis einen Knopf und scheitert dessen Aktion, wird
+  der Kasten selbst zum Fehler (Umzug in Stile, Dev-Server neu starten), statt einen zweiten Kasten
+  in sich zu tragen.
+- **`FieldProblem`** sagt, was an der eben getippten Eingabe falsch ist, als Zeile direkt unter dem
+  Feld (Symbol, rot, klein). Ein Kasten unter jedem Feld eines Popovers oder des Inspektors wog mehr
+  als das Feld selbst (angesehen am Popover „Neues Formular“ mit einer vergebenen Kennung).
+- **`Note`** erklärt, was ein Feld tut, in sekundärem Text. Erklärungen sind keine Hinweise und
+  bleiben ohne Kasten.
+
+Geblieben sind gefärbte Wörter, die Zustand in einer Zeile zeigen, kein Satz über ihn: „ungespeichert“
+neben einem Eintrag, „Adresse fehlt“ in einer Empfängerzeile, „nicht installiert“ neben einer Schrift,
+die Zeile des Build-Ergebnisses in Grün oder Rot.
+
+Offen: Die Übersicht von Layout (Kacheln und Tabelle) ist noch nicht in `Card` umgestellt.
 
