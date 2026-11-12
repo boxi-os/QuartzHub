@@ -134,42 +134,33 @@ struct InstalledTab: View {
       }
       if filtering { Note(L10n.t("pluginsInstalled.reorderDisabledByFilter")) }
       if model.markdownOrderProblem {
-        HStack(alignment: .firstTextBaseline) {
-          // No fixedSize(vertical:) here: outside a scroll view it shifted the whole window
-          // (docs/conventions.md).
-          Label(L10n.t("pluginsInstalled.markdownOrder"), systemImage: "exclamationmark.triangle.fill")
-            .foregroundStyle(.orange)
-          Spacer()
+        Callout(.warning) {
+          Text(L10n.t("pluginsInstalled.markdownOrder"))
           Button(L10n.t("pluginsInstalled.markdownOrderFix")) { Task { await model.fixMarkdownOrder() } }
             .disabled(!canReorder)
             .accessibilityIdentifier("plugins.markdownOrderFix")
         }
-        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("plugins.markdownOrder")
       }
       if model.doctorFailed {
         // Review 2026-11-11 (2), N2: without this the tab looked like a clean check.
-        VStack(alignment: .leading, spacing: 2) {
-          Label(L10n.t("pluginsInstalled.doctorFailed"), systemImage: "exclamationmark.triangle.fill")
-            .foregroundStyle(.orange)
+        Callout(.warning) {
+          Text(L10n.t("pluginsInstalled.doctorFailed"))
           Text(model.doctorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
-            .font(.caption.monospaced()).foregroundStyle(.secondary).textSelection(.enabled).lineLimit(4)
+            .font(.caption.monospaced()).foregroundStyle(.secondary).lineLimit(4)
         }
-        .accessibilityElement(children: .combine)
         .accessibilityIdentifier("plugins.doctorFailed")
       }
       ForEach(Array(model.doctorGeneral.enumerated()), id: \.offset) { _, finding in
-        Label([finding.subject, finding.message].compactMap { $0 }.joined(separator: ": "),
-              systemImage: finding.severity == .error ? "xmark.octagon.fill" : "exclamationmark.triangle.fill")
-          .foregroundStyle(finding.severity == .error ? .red : .orange)
-          .textSelection(.enabled)
+        Callout(finding.severity == .error ? .error : .warning,
+                [finding.subject, finding.message].compactMap { $0 }.joined(separator: ": "))
           .help(finding.hint ?? "")
           .accessibilityIdentifier("plugins.doctorGeneral")
       }
       if let message = model.message {
-        Text(message).foregroundStyle(.red).textSelection(.enabled).lineLimit(8)
+        Callout(.error) { Text(message).lineLimit(8) }
       } else if model.refused {
-        Text(L10n.t("pluginsInstalled.busyRemoving")).foregroundStyle(.red)
+        Callout(.error, L10n.t("pluginsInstalled.busyRemoving"))
       }
     }
     .padding(.horizontal, 16)
@@ -180,8 +171,10 @@ struct InstalledTab: View {
                     sequences: [Group], visible: Int) -> some View {
     List(selection: $selection) {
       if let error = model.loadError {
-        Text(L10n.t("configEditor.loadError")).fontWeight(.medium).foregroundStyle(.red)
-        Text(error).font(.system(.callout, design: .monospaced)).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error) {
+          Text(L10n.t("configEditor.loadError")).fontWeight(.medium)
+          Text(error).font(.system(.callout, design: .monospaced))
+        }
       } else if model.config == nil {
         Text(L10n.t("common.loading")).foregroundStyle(.secondary)
       } else if items.isEmpty {

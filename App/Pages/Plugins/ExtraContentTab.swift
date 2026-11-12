@@ -46,7 +46,7 @@ struct ExtraContentTab: View {
   var body: some View {
     let boxes = boxes
     if let error = model.loadError {
-      Text(error).foregroundStyle(.red).textSelection(.enabled).padding()
+      Callout(.error, error).padding(Spacing.page)
     } else if model.config == nil {
       Text(L10n.t("common.loading")).foregroundStyle(.secondary).padding()
     } else if boxes.isEmpty {
@@ -276,8 +276,7 @@ struct BoxInspector: View {
           }
           Note(L10n.t("plugins.savesImmediately"))
           if let installed, installed != LayoutBoxes.readAgainst, !LayoutBoxes.sameCode.contains(installed) {
-            Text(L10n.t("plugins.readAgainst", ["plugin": LayoutBoxes.plugin, "read": LayoutBoxes.readAgainst, "installed": installed]))
-              .font(.caption).foregroundStyle(.orange)
+            Callout(.warning, L10n.t("plugins.readAgainst", ["plugin": LayoutBoxes.plugin, "read": LayoutBoxes.readAgainst, "installed": installed]))
           }
         }
         Toggle(L10n.t("extraContent.enabled"), isOn: Binding(get: { box.plugin.enabled }, set: { _ in
@@ -318,7 +317,7 @@ struct BoxInspector: View {
                     root: LayoutBoxes.root(options: options, installed: installed), projectPath: model.project.path)
       } else {
         Section(L10n.t("extraContent.optionsHeading")) {
-          Text(L10n.t("layoutEditor.inspector.optionsError", ["reason": ""])).foregroundStyle(.red)
+          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": ""]))
         }
       }
     }

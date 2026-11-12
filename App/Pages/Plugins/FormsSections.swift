@@ -102,7 +102,7 @@ struct FormsKeysSection: View {
           }
           if let user = report.userIds.first { Text(user).font(.caption).foregroundStyle(.secondary) }
           if let problem = report.problem {
-            Text(problem).font(.caption).foregroundStyle(.red).fixedSize(horizontal: false, vertical: true)
+            Callout(.error, problem)
           } else {
             if let expires = report.expires { Text(L10n.t("formsEditor.keys.expires", ["date": expires])).font(.caption).foregroundStyle(.secondary) }
             if let notice = report.notice { Callout(.warning, notice) }

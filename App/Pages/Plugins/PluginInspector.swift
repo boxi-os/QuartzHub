@@ -183,12 +183,12 @@ struct PluginInspector: View {
   @ViewBuilder private var options: some View {
     if let schemaError {
       Section(L10n.t("pluginsInstalled.optionsHeading")) {
-        Text(L10n.t("layoutEditor.inspector.optionsError", ["reason": schemaError])).foregroundStyle(.red)
+        Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": schemaError]))
       }
     } else if let schema {
       if let unreadable = schema.unreadable {
         Section(L10n.t("pluginsInstalled.optionsHeading")) {
-          Text(L10n.t("pluginOptions.unreadable", ["reason": unreadable])).font(.callout).foregroundStyle(.orange)
+          Callout(.warning, L10n.t("pluginOptions.unreadable", ["reason": unreadable]))
         }
       } else {
         Section {} header: { Text(L10n.t("pluginsInstalled.optionsHeading")) }

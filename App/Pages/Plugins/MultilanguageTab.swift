@@ -123,7 +123,7 @@ struct MultilanguageTab: View {
   var body: some View {
     let entries = MultilanguageOptions.entries(model.config?.plugins ?? [])
     if let error = model.loadError {
-      Text(error).foregroundStyle(.red).textSelection(.enabled).padding()
+      Callout(.error, error).padding(Spacing.page)
     } else if model.config == nil {
       Text(L10n.t("common.loading")).foregroundStyle(.secondary).padding()
     } else if let entry = entries.first {

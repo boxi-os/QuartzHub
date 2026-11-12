@@ -277,7 +277,7 @@ struct FormsTab: View {
   var body: some View {
     let entries = FormsOptions.entries(model.config?.plugins ?? [])
     if let error = model.loadError {
-      Text(error).foregroundStyle(.red).textSelection(.enabled).padding()
+      Callout(.error, error).padding(Spacing.page)
     } else if model.config == nil {
       Text(L10n.t("common.loading")).foregroundStyle(.secondary).padding()
     } else if let entry = entries.first {
@@ -591,11 +591,12 @@ struct FormMessages: View {
     if !problems.isEmpty || !hints.isEmpty {
       VStack(alignment: .leading, spacing: 4) {
         if !problems.isEmpty {
-          Text(L10n.t("formsEditor.check.problems", ["count": String(problems.count)], count: problems.count))
-            .font(.caption.weight(.semibold)).foregroundStyle(.red)
-          ForEach(Array(problems.enumerated()), id: \.offset) { _, m in
-            Text(verbatim: m.rest.isEmpty ? m.text : m.rest).font(.system(.caption, design: .monospaced)).foregroundStyle(.red)
-              .fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
+          Callout(.error) {
+            Text(L10n.t("formsEditor.check.problems", ["count": String(problems.count)], count: problems.count))
+              .font(.caption.weight(.semibold))
+            ForEach(Array(problems.enumerated()), id: \.offset) { _, m in
+              Text(verbatim: m.rest.isEmpty ? m.text : m.rest).font(.system(.caption, design: .monospaced))
+            }
           }
         }
         if !hints.isEmpty {

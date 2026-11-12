@@ -141,9 +141,12 @@ struct FormFieldsEditor: View {
       if isOpen {
         Divider()
         VStack(alignment: .leading, spacing: 12) {
-          ForEach(Array(problems.enumerated()), id: \.offset) { _, m in
-            Text(verbatim: m.rest.isEmpty ? m.text : m.rest).font(.system(.caption, design: .monospaced)).foregroundStyle(.red)
-              .fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
+          if !problems.isEmpty {
+            Callout(.error) {
+              ForEach(Array(problems.enumerated()), id: \.offset) { _, m in
+                Text(verbatim: m.rest.isEmpty ? m.text : m.rest).font(.system(.caption, design: .monospaced))
+              }
+            }
           }
           let controllers = fields.prefix(i).filter(FormsOptions.isController)
           if divider {

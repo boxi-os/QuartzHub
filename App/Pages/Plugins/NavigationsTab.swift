@@ -48,7 +48,7 @@ struct NavigationsTab: View {
   var body: some View {
     let instances = instances
     if let error = model.loadError {
-      Text(error).foregroundStyle(.red).textSelection(.enabled).padding()
+      Callout(.error, error).padding(Spacing.page)
     } else if model.config == nil {
       Text(L10n.t("common.loading")).foregroundStyle(.secondary).padding()
     } else if instances.isEmpty {
@@ -284,8 +284,7 @@ struct NavigationInspector: View {
           Note(L10n.t("plugins.savesImmediately"))
           if let installed = schema?.packageVersion, installed != NavigationVariants.readAgainst,
              !NavigationVariants.sameCode.contains(installed) {
-            Text(L10n.t("plugins.readAgainst", ["plugin": NavigationVariants.plugin, "read": NavigationVariants.readAgainst, "installed": installed]))
-              .font(.caption).foregroundStyle(.orange)
+            Callout(.warning, L10n.t("plugins.readAgainst", ["plugin": NavigationVariants.plugin, "read": NavigationVariants.readAgainst, "installed": installed]))
           }
         }
         Toggle(L10n.t("navigationsEditor.enabled"), isOn: Binding(get: { item.entry.enabled }, set: { _ in
@@ -318,7 +317,7 @@ struct NavigationInspector: View {
                     root: NavigationVariants.root(options: options, fields: schema.schema?.fields ?? [], lang: language))
       } else {
         Section(L10n.t("navigationsEditor.optionsHeading")) {
-          Text(L10n.t("layoutEditor.inspector.optionsError", ["reason": ""])).foregroundStyle(.red)
+          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": ""]))
         }
       }
     }
