@@ -64,25 +64,9 @@ struct PluginsPage: View {
 
   private var tab: Tab { Tab(rawValue: tabID) ?? .installed }
 
-  private var tabPicker: some View {
-    Picker(L10n.t("common.viewSwitcher"), selection: $tabID) {
-      ForEach(Tab.allCases) { Text($0.title).tag($0.rawValue) }
-    }
-    .labelsHidden()
-    .accessibilityIdentifier("plugins.tabs")
-  }
-
   var body: some View {
     PageScaffold(page: .plugins) {
       VStack(spacing: 0) {
-        // Six tabs are wider than the middle column of the smallest window: there they become a
-        // menu, or the window was pushed wider than the screen (measured with the UI test at 900 pt).
-        ViewThatFits(in: .horizontal) {
-          tabPicker.pickerStyle(.segmented).fixedSize()
-          tabPicker.pickerStyle(.menu).fixedSize()
-        }
-        .padding(.top, 12)
-        .padding(.horizontal, 16)
         switch tab {
         case .installed:
           InstalledTab(model: model, selection: $selected)
@@ -124,6 +108,9 @@ struct PluginsPage: View {
             .task { if marketplace.result == nil { await marketplace.load() } }
         }
       }
+      // Six tabs are wider than the middle column of the smallest window: PageTabs makes them a
+      // menu there, or the window was pushed wider than the screen (measured at 900 pt).
+      .pageTabs(Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "plugins.tabs")
       .historyTab(page: .plugins, tab: $tabID)
       .task {
         await model.load()
