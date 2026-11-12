@@ -22,6 +22,17 @@ struct PluginsPage: View {
       }
     }
 
+    /// What an editor tab is and that it writes at once; in the inspector, not above its list.
+    var intro: String? {
+      switch self {
+      case .navigations: L10n.t("navigationsEditor.intro")
+      case .extras: L10n.t("extraContent.intro")
+      case .languages: L10n.t("multilanguageEditor.intro")
+      case .forms: L10n.t("formsEditor.intro")
+      case .installed, .marketplace: nil
+      }
+    }
+
     var description: String {
       switch self {
       case .installed: L10n.t("plugins.descriptions.installed")
@@ -146,7 +157,10 @@ struct PluginsPage: View {
           SettingsGroupInspector(group: group, view: view, model: model)
             .id(languageSelected)
         } else {
-          InspectorPageContext(page: .plugins) { MultilanguageOverview(view: view) }
+          InspectorPageContext(page: .plugins) {
+            introSection
+            MultilanguageOverview(view: view)
+          }
         }
       } else if tab == .forms, let entry = FormsOptions.entries(model.config?.plugins ?? []).first, let formSelected {
         let view = FormsView(entry: entry, state: forms)
@@ -157,7 +171,10 @@ struct PluginsPage: View {
           FormsSectionInspector(id: section.id, view: view, model: model, state: forms, selection: $formSelected)
             .id(formSelected)
         } else {
-          InspectorPageContext(page: .plugins) { FormsOverview() }
+          InspectorPageContext(page: .plugins) {
+            introSection
+            FormsOverview()
+          }
         }
       } else if tab == .marketplace, let marketplaceSelected,
                 let plugin = marketplace.result?.plugins.first(where: { $0.fullName == marketplaceSelected }) {
@@ -168,6 +185,7 @@ struct PluginsPage: View {
           Section {
             Text(tab.description).foregroundStyle(.secondary)
           }
+          introSection
           if tab == .installed, model.config != nil { summary }
           if tab == .marketplace { marketplaceSummary }
           if tab == .navigations {
@@ -183,6 +201,10 @@ struct PluginsPage: View {
         }
       }
     }
+  }
+
+  @ViewBuilder private var introSection: some View {
+    if let intro = tab.intro { Section { Note(intro) } }
   }
 
   /// „Alle Optionen in der Plugin-Liste“, from all four editors: the plugin list knows the entry by

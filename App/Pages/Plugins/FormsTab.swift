@@ -289,6 +289,21 @@ struct FormsTab: View {
                       highlight: highlight(view), goTo: state.goTo)
           .frame(minHeight: 300)
       }
+      .toolbar {
+        // ➕ in the toolbar (docs/conventions.md, Liste); name and start in a popover.
+        ToolbarItem(placement: .primaryAction) {
+          Button { adding = true } label: { Label(L10n.t("formsEditor.add"), systemImage: "plus") }
+            .help(L10n.t("formsEditor.add"))
+            .disabled(model.busy)
+            .popover(isPresented: $adding, arrowEdge: .bottom) {
+              AddFormForm(ids: view.ids) { id, start in
+                adding = false
+                Task { await add(id, start: start) }
+              } cancel: { adding = false }
+            }
+            .accessibilityIdentifier("forms.add")
+        }
+      }
       .task(id: entry.plugin.source.map(JSJSON.compact) ?? "") { await loadSchema(entry) }
       .task(id: JSJSON.compact(.object(entry.plugin.object))) { await check(entry, relay: view.usesRelay) }
       .task(id: state.relayRound) { if state.relayRound > 0, view.usesRelay { await loadRelay(entry) } }
@@ -310,20 +325,20 @@ struct FormsTab: View {
     let forms = view.forms
     let placed = view.placed
     let unknown = view.unknownUses
-    return VStack(alignment: .leading, spacing: 8) {
-      Note(L10n.t("formsEditor.intro"))
+    // The intro is in the inspector, adding is ➕ in the toolbar.
+    return VStack(alignment: .leading, spacing: Spacing.xs) {
       if let installed = state.schema?.packageVersion, installed != FormsOptions.readAgainst {
-        Warning(L10n.t("plugins.readAgainst", ["plugin": FormsOptions.plugin, "read": FormsOptions.readAgainst, "installed": installed]))
+        Callout(.warning, L10n.t("plugins.readAgainst", ["plugin": FormsOptions.plugin, "read": FormsOptions.readAgainst, "installed": installed]))
       }
-      if let message = model.message { ErrorLine(message) }
-      if count > 1 { Warning(L10n.t("formsEditor.severalEntries", ["count": String(count)], count: count)) }
+      if let message = model.message { Callout(.error) { Text(message).textSelection(.enabled) } }
+      if count > 1 { Callout(.warning, L10n.t("formsEditor.severalEntries", ["count": String(count)], count: count)) }
       if !unknown.isEmpty {
-        Warning(L10n.t("formsEditor.unknownUses", ["count": String(unknown.count),
+        Callout(.warning, L10n.t("formsEditor.unknownUses", ["count": String(unknown.count),
                                                     "list": unknown.prefix(5).map { "\($0.form) (\($0.file))" }.joined(separator: ", ")],
                        count: unknown.count))
       }
       CheckSummary(check: state.check, checking: state.checking, unplaced: placed.problems.filter { $0.form == nil && $0.section == nil })
-      if let error = state.scanError { Warning(L10n.t("formsEditor.scanFailed", ["reason": error])) }
+      if let error = state.scanError { Callout(.warning, L10n.t("formsEditor.scanFailed", ["reason": error])) }
       HStack(spacing: 12) {
         Label(view.entry.plugin.name, systemImage: "puzzlepiece.extension").font(.headline)
         Toggle(L10n.t("formsEditor.enabled"), isOn: Binding(get: { view.entry.plugin.enabled }, set: { on in
@@ -346,19 +361,7 @@ struct FormsTab: View {
             formRow(form.id, form.def, view: view, problems: placed.problems.filter { $0.form == form.id }.count)
           }
         } header: {
-          HStack {
-            Text(L10n.t("formsEditor.listTitle", ["count": String(forms.count)], count: forms.count))
-            Spacer()
-            Button { adding = true } label: { Label(L10n.t("formsEditor.add"), systemImage: "plus") }
-              .disabled(model.busy)
-              .popover(isPresented: $adding, arrowEdge: .bottom) {
-                AddFormForm(ids: view.ids) { id, start in
-                  adding = false
-                  Task { await add(id, start: start) }
-                } cancel: { adding = false }
-              }
-              .accessibilityIdentifier("forms.add")
-          }
+          Text(L10n.t("formsEditor.listTitle", ["count": String(forms.count)], count: forms.count))
         }
         Section(L10n.t("formsEditor.sectionsTitle")) {
           if !state.schemaLoaded {
@@ -373,8 +376,8 @@ struct FormsTab: View {
       }
       .accessibilityIdentifier("forms.list")
     }
-    .padding(.horizontal, 16)
-    .padding(.top, 10)
+    .padding(.horizontal, Spacing.page)
+    .padding(.top, Spacing.s)
   }
 
   private func formRow(_ id: String, _ def: JSONObject, view: FormsView, problems: Int) -> some View {

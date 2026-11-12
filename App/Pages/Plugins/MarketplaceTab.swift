@@ -104,26 +104,29 @@ struct MarketplaceTab: View {
       }
       .accessibilityIdentifier("marketplace.list")
     }
-  }
-
-  private var header: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      HStack(spacing: 10) {
-        TextField(L10n.t("pluginsMarketplace.searchPlaceholder"), text: $query,
-                  prompt: Text(L10n.t("pluginsMarketplace.searchPlaceholder")))
-          .textFieldStyle(.roundedBorder)
-          .frame(maxWidth: 260)
-          .accessibilityIdentifier("marketplace.search")
-        Spacer()
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
         Button {
           Task { await model.refresh() }
         } label: {
           Label(model.refreshing ? L10n.t("pluginsMarketplace.refreshing") : L10n.t("pluginsMarketplace.refresh"),
                 systemImage: "arrow.clockwise")
         }
+        .help(L10n.t("pluginsMarketplace.refresh"))
         .disabled(model.refreshing)
       }
-      HStack(spacing: 8) {
+    }
+  }
+
+  private var header: some View {
+    // Reloading the catalog is a symbol in the toolbar; here only what narrows or adds.
+    VStack(alignment: .leading, spacing: Spacing.xs) {
+      TextField(L10n.t("pluginsMarketplace.searchPlaceholder"), text: $query,
+                prompt: Text(L10n.t("pluginsMarketplace.searchPlaceholder")))
+        .textFieldStyle(.roundedBorder)
+        .frame(maxWidth: 260)
+        .accessibilityIdentifier("marketplace.search")
+      HStack(spacing: Spacing.xs) {
         Text(L10n.t("pluginsMarketplace.addFromGithub")).foregroundStyle(.secondary)
         TextField(L10n.t("pluginsMarketplace.addFromGithub"), text: $source,
                   prompt: Text(verbatim: L10n.t("pluginsMarketplace.addPlaceholder")))
@@ -140,14 +143,14 @@ struct MarketplaceTab: View {
       // No `fixedSize(vertical:)`: the header is outside the list's scroll view, and the sentence
       // with it pushed every column of the window out of sight (offline, 2026-11-11).
       if model.result?.unavailable == true {
-        Text(L10n.t("pluginsMarketplace.unavailable")).foregroundStyle(.orange)
+        Callout(.warning, L10n.t("pluginsMarketplace.unavailable"))
       }
       if let message = model.message {
-        Text(message).foregroundStyle(model.failed ? .red : .secondary).textSelection(.enabled).lineLimit(8)
+        Callout(model.failed ? .error : .info) { Text(message).textSelection(.enabled).lineLimit(8) }
       }
     }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 10)
+    .padding(.horizontal, Spacing.page)
+    .padding(.vertical, Spacing.s)
   }
 
   private var trimmedSource: String { source.trimmingCharacters(in: .whitespacesAndNewlines) }

@@ -67,38 +67,45 @@ struct NavigationsTab: View {
                       highlight: highlight(instances), onAssignClass: assignClass)
           .frame(minHeight: 320)
       }
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) { addButton }
+      }
     }
   }
 
-  private func list(_ instances: [NavigationInstance]) -> some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Note(L10n.t("navigationsEditor.intro"))
-      if let message = model.message { Text(message).foregroundStyle(.red).textSelection(.enabled).lineLimit(6) }
-      HStack {
-        Text(L10n.t("navigationsEditor.listTitle", ["count": String(instances.count)], count: instances.count)).font(.headline)
-        Spacer()
-        Button { adding = true } label: { Label(L10n.t("navigationsEditor.add"), systemImage: "plus") }
-          .disabled(model.busy)
-          .popover(isPresented: $adding, arrowEdge: .bottom) {
-            VStack(alignment: .leading, spacing: 8) {
-              Text(L10n.t("navigationsEditor.addQuestion")).foregroundStyle(.secondary)
-              VariantTiles(selected: nil) { variant in
-                adding = false
-                Task { await add(variant) }
-              }
-            }
-            .padding(12)
-            .frame(width: 460)
+  /// ➕ in the toolbar (docs/conventions.md, Liste); the variants in a popover under it.
+  private var addButton: some View {
+    Button { adding = true } label: { Label(L10n.t("navigationsEditor.add"), systemImage: "plus") }
+      .help(L10n.t("navigationsEditor.add"))
+      .disabled(model.busy)
+      .popover(isPresented: $adding, arrowEdge: .bottom) {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+          Text(L10n.t("navigationsEditor.addQuestion")).foregroundStyle(.secondary)
+          VariantTiles(selected: nil) { variant in
+            adding = false
+            Task { await add(variant) }
           }
-          .accessibilityIdentifier("navigations.add")
+        }
+        .padding(Spacing.s)
+        .frame(width: 460)
+      }
+      .accessibilityIdentifier("navigations.add")
+  }
+
+  private func list(_ instances: [NavigationInstance]) -> some View {
+    // No head above the list: the intro is in the inspector, adding is ➕ in the toolbar.
+    VStack(alignment: .leading, spacing: Spacing.xs) {
+      if let message = model.message {
+        Callout(.error) { Text(message).textSelection(.enabled).lineLimit(6) }
+          .padding(.horizontal, Spacing.page).padding(.top, Spacing.s)
       }
       List(selection: $selection) {
-        ForEach(instances) { item in row(item, count: instances.count).tag(item.occurrence) }
+        Section(L10n.t("navigationsEditor.listTitle", ["count": String(instances.count)], count: instances.count)) {
+          ForEach(instances) { item in row(item, count: instances.count).tag(item.occurrence) }
+        }
       }
       .accessibilityIdentifier("navigations.list")
     }
-    .padding(.horizontal, 16)
-    .padding(.top, 10)
   }
 
   private func row(_ item: NavigationInstance, count: Int) -> some View {

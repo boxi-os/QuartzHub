@@ -135,6 +135,21 @@ struct MultilanguageTab: View {
                       highlight: highlight(view), onAssignClass: {})
           .frame(minHeight: 300)
       }
+      .toolbar {
+        // ➕ in the toolbar (docs/conventions.md, Liste); the language asked for in a popover.
+        ToolbarItem(placement: .primaryAction) {
+          Button { adding = true } label: { Label(L10n.t("multilanguageEditor.add"), systemImage: "plus") }
+            .help(L10n.t("multilanguageEditor.add"))
+            .disabled(model.busy)
+            .popover(isPresented: $adding, arrowEdge: .bottom) {
+              AddLanguageForm(languages: view.languages) { code in
+                adding = false
+                Task { await add(code) }
+              } cancel: { adding = false }
+            }
+            .accessibilityIdentifier("multilanguage.add")
+        }
+      }
     } else {
       ContentUnavailableView {
         Label(L10n.t("multilanguageEditor.notInstalledTitle"), systemImage: "globe")
@@ -151,15 +166,15 @@ struct MultilanguageTab: View {
     let languages = view.languages
     let defaultCode = view.defaultCode
     let published = view.published
-    return VStack(alignment: .leading, spacing: 8) {
-      Note(L10n.t("multilanguageEditor.intro"))
+    // The intro is in the inspector, adding is ➕ in the toolbar.
+    return VStack(alignment: .leading, spacing: Spacing.xs) {
       if let installed = schema?.packageVersion, installed != MultilanguageOptions.readAgainst, !MultilanguageOptions.sameCode.contains(installed) {
-        Warning(L10n.t("plugins.readAgainst", ["plugin": MultilanguageOptions.plugin, "read": MultilanguageOptions.readAgainst, "installed": installed]))
+        Callout(.warning, L10n.t("plugins.readAgainst", ["plugin": MultilanguageOptions.plugin, "read": MultilanguageOptions.readAgainst, "installed": installed]))
       }
-      if let message = model.message { ErrorLine(message) }
-      if count > 1 { Warning(L10n.t("multilanguageEditor.severalEntries", ["count": String(count)], count: count)) }
+      if let message = model.message { Callout(.error) { Text(message).textSelection(.enabled) } }
+      if count > 1 { Callout(.warning, L10n.t("multilanguageEditor.severalEntries", ["count": String(count)], count: count)) }
       if let set = options["defaultLanguage"]?.stringValue, MultilanguageOptions.normalizeCode(set) != defaultCode {
-        Warning(L10n.t("multilanguageEditor.defaultUnknown", ["code": set, "name": MultilanguageView.name(languages[0])]))
+        Callout(.warning, L10n.t("multilanguageEditor.defaultUnknown", ["code": set, "name": MultilanguageView.name(languages[0])]))
       }
       HStack(spacing: 12) {
         Label(view.entry.plugin.name, systemImage: "puzzlepiece.extension").font(.headline)
@@ -191,19 +206,7 @@ struct MultilanguageTab: View {
             Task { await reorder(order, moved: moved, at: at, count: languages.count) }
           }
         } header: {
-          HStack {
-            Text(L10n.t("multilanguageEditor.listTitle", ["count": String(languages.count)], count: languages.count))
-            Spacer()
-            Button { adding = true } label: { Label(L10n.t("multilanguageEditor.add"), systemImage: "plus") }
-              .disabled(model.busy)
-              .popover(isPresented: $adding, arrowEdge: .bottom) {
-                AddLanguageForm(languages: languages) { code in
-                  adding = false
-                  Task { await add(code) }
-                } cancel: { adding = false }
-              }
-              .accessibilityIdentifier("multilanguage.add")
-          }
+          Text(L10n.t("multilanguageEditor.listTitle", ["count": String(languages.count)], count: languages.count))
         }
         Section(L10n.t("multilanguageEditor.sectionsTitle")) {
           if let reason = schema?.unreadable { Warning(L10n.t("pluginOptions.unreadable", ["reason": reason])) }
@@ -222,8 +225,8 @@ struct MultilanguageTab: View {
       .accessibilityIdentifier("multilanguage.list")
       .focusedSceneValue(\.moveSelection, moveAction(languages))
     }
-    .padding(.horizontal, 16)
-    .padding(.top, 10)
+    .padding(.horizontal, Spacing.page)
+    .padding(.top, Spacing.s)
   }
 
   private func languageRow(_ language: MultilanguageOptions.Language, at offset: Int, of languages: [MultilanguageOptions.Language],

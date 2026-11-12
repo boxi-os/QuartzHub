@@ -67,6 +67,15 @@ struct ExtraContentTab: View {
                       highlight: highlight(boxes), onAssignClass: assignClass)
           .frame(minHeight: 300)
       }
+      .toolbar {
+        // ➕ in the toolbar (docs/conventions.md, Liste).
+        ToolbarItem(placement: .primaryAction) {
+          Button { Task { await add(boxes) } } label: { Label(L10n.t("extraContent.add"), systemImage: "plus") }
+            .help(L10n.t("extraContent.add"))
+            .disabled(model.busy)
+            .accessibilityIdentifier("extras.add")
+        }
+      }
       .task(id: boxes.first?.plugin.source.map(JSJSON.compact) ?? "") {
         guard let source = PluginSource(boxes.first?.plugin.source) else { return }
         let environment = await AppServices.current()
@@ -76,23 +85,19 @@ struct ExtraContentTab: View {
   }
 
   private func list(_ boxes: [LayoutBoxes.Box]) -> some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Note(L10n.t("extraContent.intro"))
-      if let message = model.message { Text(message).foregroundStyle(.red).textSelection(.enabled).lineLimit(6) }
-      HStack {
-        Text(L10n.t("extraContent.listTitle", ["count": String(boxes.count)], count: boxes.count)).font(.headline)
-        Spacer()
-        Button { Task { await add(boxes) } } label: { Label(L10n.t("extraContent.add"), systemImage: "plus") }
-          .disabled(model.busy)
-          .accessibilityIdentifier("extras.add")
+    // No head above the list: the intro is in the inspector, adding is ➕ in the toolbar.
+    VStack(alignment: .leading, spacing: Spacing.xs) {
+      if let message = model.message {
+        Callout(.error) { Text(message).textSelection(.enabled).lineLimit(6) }
+          .padding(.horizontal, Spacing.page).padding(.top, Spacing.s)
       }
       List(selection: $selection) {
-        ForEach(boxes) { box in row(box, boxes: boxes).tag(box.occurrence) }
+        Section(L10n.t("extraContent.listTitle", ["count": String(boxes.count)], count: boxes.count)) {
+          ForEach(boxes) { box in row(box, boxes: boxes).tag(box.occurrence) }
+        }
       }
       .accessibilityIdentifier("extras.list")
     }
-    .padding(.horizontal, 16)
-    .padding(.top, 10)
   }
 
   private func row(_ box: LayoutBoxes.Box, boxes: [LayoutBoxes.Box]) -> some View {
