@@ -61,6 +61,7 @@ targets:
         ENABLE_APP_SANDBOX: NO
         ENABLE_HARDENED_RUNTIME: NO
         GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
 
   QuartzHubUITests:
     type: bundle.ui-testing
