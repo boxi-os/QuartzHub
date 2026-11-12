@@ -160,6 +160,10 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   Einzige Ausnahme: Texte der `Info.plist` (Grund einer Systemfrage) liest macOS aus dem Bundle;
   Deutsch steht in `project.yml`, Englisch in `App/InfoPlist.xcstrings`
   (decisions/phase-5-gleichstand.md, Freigabe „Lokales Netzwerk“).
+- **Jeder Eintrag im Katalog ist „manual“ und ohne Symbol** (`"extractionState" : "manual"`,
+  `"generatesSymbol" : false`), geschrieben von `scripts/strings.mjs`: Xcode kennt `L10n.t` nicht
+  und setzte sonst jeden Schlüssel auf „stale“; Symbole kollidierten (decisions/ui-ueberarbeitung.md,
+  Kataloge). Was die Xcode-Oberfläche trotzdem an den Katalogen ändert, wird nicht committet.
 - **Schlüssel aus QuartzControl behalten ihren Namen** (Renderer wie gehabt, `mainT` unter
   `main.`), damit Code und Doku beider Apps über denselben Namen auffindbar bleiben. Neue
   Schlüssel bekommen einen Bereich (`shell.`, …) und einen `comment`, der sagt, wo der Text steht.

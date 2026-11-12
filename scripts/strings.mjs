@@ -5,6 +5,12 @@
 //   node scripts/strings.mjs set <schlüssel> --de "…" --en "…"   (ändert einen vorhandenen Text,
 //     der Kommentar bleibt, wenn keiner angegeben ist; Muster beim Umstellen auf „QuartzHub“)
 //   node scripts/strings.mjs show <schlüssel>
+//   node scripts/strings.mjs normalize   (nur sortieren und jeden Eintrag „manual“ markieren)
+//
+// Jeder Eintrag trägt `"extractionState" : "manual"`: Die Texte kommen über `L10n.t`, das Xcodes
+// Abgleich nicht kennt; ohne die Markierung setzte die Xcode-Oberfläche beim Bauen jeden Schlüssel
+// auf „stale“. Und `"generatesSymbol" : false`: Für Einträge von Hand erzeugt `xcstringstool` sonst
+// Swift-Symbole, und zwei Schlüssel ergäben dasselbe (decisions/ui-ueberarbeitung.md, Kataloge).
 //
 // `add` überschreibt keinen Schlüssel, den es schon gibt (Abbruch), `set` ändert nur einen
 // vorhandenen; sonst wird in Xcode oder von Hand geändert. Regeln für den Wortlaut: docs/conventions.md, „Ein Wort, ein Name“.
@@ -23,9 +29,22 @@ const fail = (message) => {
   console.error(message)
   process.exit(2)
 }
-if (!command || !key) fail('Aufruf: node scripts/strings.mjs add|set|show <schlüssel> …')
+if (!command || (!key && command !== 'normalize')) fail('Aufruf: node scripts/strings.mjs add|set|show <schlüssel> … oder normalize')
 
 const catalog = JSON.parse(readFileSync(file, 'utf-8'))
+// Xcode's order of an entry's keys, alphabetical: comment, extractionState, generatesSymbol, localizations.
+const manual = ({ comment, extractionState, generatesSymbol, localizations, ...more }) =>
+  ({ ...(comment !== undefined ? { comment } : {}), extractionState: 'manual', generatesSymbol: false,
+     ...(localizations ? { localizations } : {}), ...more })
+const write = () => {
+  catalog.strings = Object.fromEntries(Object.keys(catalog.strings).sort().map((k) => [k, manual(catalog.strings[k])]))
+  writeFileSync(file, JSON.stringify(catalog, null, 2).replace(/^(\s*"(?:[^"\\]|\\.)*"):/gm, '$1 :') + '\n')
+}
+if (command === 'normalize') {
+  write()
+  console.log('normalisiert')
+  process.exit(0)
+}
 if (command === 'show') {
   console.log(JSON.stringify(catalog.strings[key] ?? null, null, 2))
   process.exit(0)
@@ -46,6 +65,5 @@ for (const lang of ['de', 'en']) {
 }
 const comment = opt('comment') ?? (command === 'set' ? catalog.strings[key].comment : undefined)
 catalog.strings[key] = { ...(comment ? { comment } : {}), localizations }
-catalog.strings = Object.fromEntries(Object.keys(catalog.strings).sort().map((k) => [k, catalog.strings[k]]))
-writeFileSync(file, JSON.stringify(catalog, null, 2).replace(/^(\s*"(?:[^"\\]|\\.)*"):/gm, '$1 :') + '\n')
+write()
 console.log(`${key} ${command === 'set' ? 'geändert' : 'eingetragen'}`)

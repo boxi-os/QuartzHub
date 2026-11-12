@@ -257,8 +257,8 @@ Meldungen.
   2.786 Schlüssel als `stale`, weil sie `L10n.t("…")` nicht als Textaufruf kennt; in den Info.plist-
   Katalog trug sie drei Schlüssel nur auf Deutsch ein. Das sind Meldungen im Katalog-Editor, keine
   Fehler, und gehört nicht ins Repository. `xcodebuild` auf der Kommandozeile ändert die Kataloge
-  nicht. Für das App-Ziel ist `SWIFT_EMIT_LOC_STRINGS` schon aus; den Abgleich für das Paket
-  abzuschalten, ist offen.
+  nicht. Für das App-Ziel ist `SWIFT_EMIT_LOC_STRINGS` schon aus; für das Paket siehe „Kataloge“
+  unten.
 - **Compiler-Warnungen.** Ein Neubau zeigte 24 verschiedene, fast alle älter als die Überarbeitung;
   alle behoben. Darunter: `canSave ? { … } : nil` an `.unsavedChanges` (die Closure bekam ihren Typ
   ohne den des Parameters), jetzt `.unsavedChanges(_:canSave:save:)`; `CTFontManagerRegisterGraphicsFont`
@@ -316,3 +316,25 @@ Rückmeldung des Nutzers nach dem zweiten Start aus Xcode (2026-11-12), vier Pun
   alles, was `Color.accentColor` nimmt, blieben bei der Farbe aus dem Katalog. Eine Wahl zur Laufzeit
   machte die App zweifarbig; eine Schnittstelle, die die Akzentfarbe einer App zur Laufzeit setzt,
   ist nicht bekannt.
+
+## Kataloge
+
+Die Xcode-Oberfläche setzte beim Bauen alle Schlüssel des Paket-Katalogs auf `stale` und trug in
+`App/InfoPlist.xcstrings` drei Schlüssel nur auf Deutsch ein (2026-11-12, bei jedem Bau des
+Nutzers). Für ein Swift-Paket gibt es keine Bau-Einstellung, die den Abgleich abschaltet, und laut
+Apple-Forum auch keine für die Info.plist-Schlüssel.
+
+- **Paket-Katalog.** Als `stale` markiert Xcode nur, was es selbst aus dem Code gezogen hat. Ein
+  Eintrag mit `"extractionState" : "manual"` gilt als von Hand gepflegt; so trägt Xcode Schlüssel
+  ein, die man im Katalog mit ➕ anlegt. Alle 3.250 Einträge sind jetzt so markiert, und
+  `scripts/strings.mjs` schreibt das bei jedem Eintrag mit (`normalize` für den ganzen Katalog).
+  Für solche Einträge erzeugt `xcstringstool` aber Swift-Symbole, und der Bau brach ab: zwei
+  Schlüssel (`snippets.placeholdersOff`, `snippets.placeholders.off`) ergäben dasselbe Symbol.
+  Dazu deshalb `"generatesSymbol" : false` (der Name steht im `XCStringsParser` von Xcode;
+  Gegenprobe mit `xcrun xcstringstool generate-symbols`: mit der Markierung leere Datei, ohne sie
+  der Fehler). `qh-check i18n`, die Kerntests und die App auf Englisch laufen damit unverändert.
+- **Info.plist-Katalog.** `CFBundleDisplayName`, `CFBundleName` und `NSHumanReadableCopyright`
+  stehen jetzt selbst darin, in der Form, die Xcode schreibt, und auf Englisch mit demselben Wert
+  (Name und Lizenz werden nicht übersetzt). Das Bundle hat sie damit auch in `en.lproj`.
+- Ob die Xcode-Oberfläche die Kataloge damit in Ruhe lässt, zeigt erst ein Bau in Xcode; von der
+  Kommandozeile aus ist das nicht zu messen.
