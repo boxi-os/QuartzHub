@@ -62,7 +62,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `scripts/handbook-shots.sh [--lang de|en] [--theme light|dark] [--only …] [--out …]` — Aufnahmen
   des Projektfensters nach `<vault>/assets/screenshots/`; bewegt Maus und Tastatur
 - `swift scripts/handbook-private.swift <vault> [dateien…]` — Handbuch-Texte und, per Texterkennung,
-  Aufnahmen auf Persönliches (Konto, `/Users/…`, Mails, `<vault>/private/privat.txt`); Exit 1 bei Fund
+  Aufnahmen auf Persönliches (Konto, `/Users/…`, Mails, `<vault>/private/privat.txt`, Farbprofil mit Bildschirmnamen); Exit 1 bei Fund
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)
 - `scripts/package.sh` — Release-Bau, `.app` mit Runtime und Helfern, ad hoc signiert, DMG nach `build/package/`

@@ -6,6 +6,7 @@
 // Gesucht wird nach dem Kurz- und dem vollen Namen des angemeldeten Kontos, dem Home-Ordner, jedem
 // /Users/…-Pfad außer /Users/Shared, Mail-Adressen und den Wörtern aus <vault>/private/privat.txt
 // (eine Zeile je Wort; der Ordner private wird nicht gebaut, die Liste bleibt also privat).
+// Bei Bildern auch das Farbprofil: alles außer sRGB trägt den Namen eines Bildschirms.
 // Ohne weitere Angaben: alle .md und alle Bilder unter assets/ des Vaults. Exit 0: nichts gefunden,
 // 1: Funde (je Fund Datei, Wort, Zeile), 2: Aufruf falsch.
 import AppKit
@@ -54,6 +55,16 @@ func recognized(_ path: String) -> String {
   return (request.results ?? []).compactMap { $0.topCandidates(1).first?.string }.joined(separator: "\n")
 }
 
+// A screenshot carries the colour profile of the display it was taken on, and its name is the
+// display's model ("LG HDR 4K"). handbook-shots.sh converts every shot to sRGB; anything else here
+// names a display.
+func metadata(_ path: String) -> [String] {
+  guard let source = CGImageSourceCreateWithURL(URL(fileURLWithPath: path) as CFURL, nil),
+        let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any] else { return [] }
+  let profile = props[kCGImagePropertyProfileName] as? String ?? ""
+  return profile.isEmpty || profile.hasPrefix("sRGB") ? [] : ["Farbprofil: \(profile)"]
+}
+
 let fm = FileManager.default
 var files: [String] = []
 let roots = args.count > 1 ? Array(args.dropFirst()) : [vault]
@@ -73,7 +84,7 @@ var found = 0
 for file in files.sorted() {
   let ext = (file as NSString).pathExtension.lowercased()
   let text = ["png", "jpg", "jpeg", "webp"].contains(ext) ? recognized(file) : ((try? String(contentsOfFile: file, encoding: .utf8)) ?? "")
-  for f in findings(in: text) {
+  for f in findings(in: text) + (["png", "jpg", "jpeg", "webp"].contains(ext) ? metadata(file) : []) {
     print("\(file): \(f)")
     found += 1
   }

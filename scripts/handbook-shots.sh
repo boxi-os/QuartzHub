@@ -117,7 +117,8 @@ new=()
 shoot() {
   local file="$OUT/$lang/$1-$suffix.png"
   screencapture -o -x -l "$(winid)" "$file"
-  sips --resampleWidth 1440 "$file" >/dev/null
+  # sRGB: the display's own profile would carry its model name into the handbook.
+  sips --resampleWidth 1440 -m "/System/Library/ColorSync/Profiles/sRGB Profile.icc" "$file" >/dev/null
   new+=("$file")
   echo "$file"
 }
