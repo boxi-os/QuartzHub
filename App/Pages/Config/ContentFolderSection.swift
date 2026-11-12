@@ -20,8 +20,9 @@ struct ContentFolderSection: View {
     SettingsSection(L10n.t("content.label"), symbol: "folder", note: L10n.t("content.cardHint")) {
       if let status {
         if !status.exists {
-          Text(L10n.t("content.noFolder")).foregroundStyle(.orange)
-            .accessibilityIdentifier("page.config")
+          Callout(.warning) {
+            Text(L10n.t("content.noFolder")).accessibilityIdentifier("page.config")
+          }
         } else {
           HStack(spacing: 10) {
             StateBadge(text: status.isSymlink ? L10n.t("content.symlinkBadge") : L10n.t("content.realFolderBadge"),
@@ -41,18 +42,19 @@ struct ContentFolderSection: View {
           }
         }
         if status.hasIndex == false {
-          HStack(alignment: .firstTextBaseline) {
-            Text(L10n.t("content.noIndex")).foregroundStyle(.orange)
-            Spacer()
+          Callout(.warning) {
+            Text(L10n.t("content.noIndex"))
             Button(L10n.t("content.createIndex")) { creatingIndex = true }
               .accessibilityIdentifier("config.createIndex")
           }
         }
         if indexFallback, status.hasIndex == true {
-          Text(L10n.t("content.indexCreatedFallback")).font(.callout).foregroundStyle(.orange)
+          Callout(.warning, L10n.t("content.indexCreatedFallback"))
         }
       } else if loaded {
-        Text(L10n.t("content.noFolder")).foregroundStyle(.orange).accessibilityIdentifier("page.config")
+        Callout(.warning) {
+          Text(L10n.t("content.noFolder")).accessibilityIdentifier("page.config")
+        }
       } else {
         Text(L10n.t("content.loading")).foregroundStyle(.secondary)
       }
@@ -98,7 +100,7 @@ private struct ChangeSourceSheet: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
       Text(L10n.t("content.dialogTitle")).font(.headline)
-      Text(L10n.t("content.dialogWarning")).foregroundStyle(.orange).fixedSize(horizontal: false, vertical: true)
+      Callout(.warning, L10n.t("content.dialogWarning"))
       Form {
         LabeledContent(L10n.t("content.newSourceFolder")) {
           HStack {
@@ -120,7 +122,7 @@ private struct ChangeSourceSheet: View {
           .font(.callout).foregroundStyle(.secondary)
       }
       if let error {
-        Text(error).font(.callout).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error, error)
       }
       HStack {
         Spacer()
@@ -200,11 +202,10 @@ private struct CreateIndexSheet: View {
       }
       Note(L10n.t("content.createIndexListHint"))
       if status.isSymlink, let target = status.symlinkTarget {
-        Text(L10n.t("content.createIndexLinked", ["path": target]))
-          .font(.callout).foregroundStyle(.orange).fixedSize(horizontal: false, vertical: true)
+        Callout(.warning, L10n.t("content.createIndexLinked", ["path": target]))
       }
       if let error {
-        Text(error).font(.callout).foregroundStyle(.red).textSelection(.enabled).fixedSize(horizontal: false, vertical: true)
+        Callout(.error, error)
       }
       HStack {
         Spacer()

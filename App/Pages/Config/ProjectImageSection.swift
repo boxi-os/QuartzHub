@@ -53,7 +53,7 @@ struct ProjectImageSection: View {
       darkRow
       headerRow
       if let error {
-        Text(error).font(.callout).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error, error)
       }
     }
     .task { await reloadIcon() }

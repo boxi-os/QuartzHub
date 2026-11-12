@@ -186,9 +186,7 @@ private struct AnalyticsSection: View {
       }
       let missing = fields.filter { $0.required && JSRead.string(value?[$0.key]).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.map(\.key)
       if !provider.isEmpty, !missing.isEmpty {
-        Label(L10n.t("siteSettings.analyticsMissing", ["fields": missing.joined(separator: ", ")]), systemImage: "exclamationmark.triangle")
-          .font(.callout)
-          .foregroundStyle(.orange)
+        Callout(.warning, L10n.t("siteSettings.analyticsMissing", ["fields": missing.joined(separator: ", ")]))
       }
     }
   }

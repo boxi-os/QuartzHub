@@ -17,8 +17,10 @@ struct LocalizationTab: View {
     Form {
       if let error = model.listError {
         Section {
-          Text(L10n.t("localization.loadFailed")).fontWeight(.medium).foregroundStyle(.red)
-          Text(error).font(.system(.callout, design: .monospaced)).foregroundStyle(.red).textSelection(.enabled)
+          Callout(.error) {
+            Text(L10n.t("localization.loadFailed")).fontWeight(.medium)
+            Text(error).font(.system(.callout, design: .monospaced))
+          }
         }
       } else if let locales = model.locales {
         if locales.isEmpty {
@@ -82,8 +84,10 @@ struct LocalizationTab: View {
   @ViewBuilder private var entries: some View {
     if let error = model.entriesError {
       Section {
-        Text(L10n.t("localization.localeLoadFailed", ["code": model.code])).fontWeight(.medium).foregroundStyle(.red)
-        Text(error).font(.system(.callout, design: .monospaced)).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error) {
+          Text(L10n.t("localization.localeLoadFailed", ["code": model.code])).fontWeight(.medium)
+          Text(error).font(.system(.callout, design: .monospaced))
+        }
       }
     } else if model.entries == nil {
       Section { Text(L10n.t("common.loading")).foregroundStyle(.secondary) }
@@ -128,7 +132,7 @@ private struct EntryRow: View {
           .lineLimit(2...8)
       }
       if let error = model.errors[key] {
-        Text(error).font(.caption).foregroundStyle(.red)
+        FieldProblem(error)
       }
     }
     .accessibilityElement(children: .contain)
