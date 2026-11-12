@@ -34,14 +34,6 @@ struct LayoutPage: View {
     LayoutModel.Tab(rawValue: tabID).flatMap { Self.tabs.contains($0) ? $0 : nil } ?? .global
   }
 
-  private var tabPicker: some View {
-    Picker(L10n.t("common.viewSwitcher"), selection: $tabID) {
-      ForEach(Self.tabs) { Text($0.title).tag($0.rawValue) }
-    }
-    .labelsHidden()
-    .accessibilityIdentifier("layout.tabs")
-  }
-
   var body: some View {
     // The selection is read here, in the page's own body: read only inside the inspector, a
     // selection handed over from the Plugins page on the first visit never reached it, and the
@@ -49,20 +41,14 @@ struct LayoutPage: View {
     let chosen = selected
     PageScaffold(page: .layout) {
       VStack(spacing: 0) {
-        // Three tabs and the inspector are wider than the smallest window: there they become a menu.
-        ViewThatFits(in: .horizontal) {
-          tabPicker.pickerStyle(.segmented).fixedSize()
-          tabPicker.pickerStyle(.menu).fixedSize()
-        }
-        .padding(.top, 12)
-        .padding(.horizontal, 16)
         if model.status == .failed, let error = model.saveError {
-          Label(error, systemImage: "exclamationmark.octagon.fill").foregroundStyle(.red).textSelection(.enabled)
-            .padding(.horizontal, 16).padding(.top, 8)
-            .accessibilityIdentifier("layout.saveError")
+          Callout(.error) { Text(error).textSelection(.enabled).accessibilityIdentifier("layout.saveError") }
+            .padding(.horizontal, Spacing.page).padding(.top, Spacing.xs)
         }
         content
       }
+      // Three tabs and the inspector are wider than the smallest window: PageTabs makes them a menu.
+      .pageTabs(Self.tabs.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "layout.tabs")
       .historyTab(page: .layout, tab: $tabID)
       .accessibilityElement(children: .contain)
       .accessibilityIdentifier("page.layout")
@@ -77,25 +63,15 @@ struct LayoutPage: View {
                       command: false)
       .focusedSceneValue(\.pageSave, frontDirty && !model.saving && !model.frameSaving ? PageSaveAction { await saveFront() } : nil)
       .toolbar {
-        ToolbarItemGroup(placement: .primaryAction) {
-          if tab == .frames {
-            if model.frameSavedAt != nil, model.frameSavedAt == model.draft {
-              Text(L10n.t("layoutEditor.frameBuilder.saved")).foregroundStyle(.green)
-            } else if model.draftDirty {
-              UnsavedBadge().accessibilityIdentifier("layout.unsaved")
-            }
-          } else if model.status == .saved {
-            Text(L10n.t("common.saved")).foregroundStyle(.green)
-          } else if model.dirty, !model.saving {
-            UnsavedBadge().accessibilityIdentifier("layout.unsaved")
-          }
+        // Speichern for the tab in front, only with something to save there; no badge beside it.
+        ToolbarItem(placement: .primaryAction) {
           Button {
             Task { await saveFront() }
           } label: {
             Label(model.saving || model.frameSaving ? L10n.t("common.saving") : L10n.t("common.save"), systemImage: "square.and.arrow.down")
           }
           .labelStyle(.titleOnly)
-          .disabled(model.saving || model.frameSaving || model.config == nil || (tab == .frames && model.draft == nil))
+          .disabled(!frontDirty || model.saving || model.frameSaving || model.config == nil || (tab == .frames && model.draft == nil))
           .accessibilityIdentifier("layout.save")
         }
       }
