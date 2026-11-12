@@ -108,6 +108,16 @@ struct FieldProblem: View {
   }
 }
 
+// MARK: - Surface
+
+/// The surface of a card, a figure and a workspace head: the same grey as a grouped Form's section,
+/// so a page of cards and a page of forms read alike. Measured against the window background
+/// (2026-11-12): a section is 248 on 255 in light and 49 on 40 in dark; `.fill.quaternary` is 248
+/// and 46, `.fill.quinary` was 253 and 42 and left the cards barely visible on white.
+enum Surface {
+  static let card = AnyShapeStyle(.fill.quaternary)
+}
+
 // MARK: - Save
 
 /// Speichern in the toolbar: enabled only with something to save, no "Gespeichert" beside it (the
@@ -344,7 +354,7 @@ struct WorkspaceHeader<Facts: View, Controls: View>: View {
       controls()
     }
     .padding(Spacing.m)
-    .background(.fill.quinary, in: .rect(cornerRadius: 12))
+    .background(Surface.card, in: .rect(cornerRadius: 12))
   }
 }
 
@@ -387,7 +397,7 @@ struct Card<Content: View, Accessory: View, Footer: View>: View {
     }
     .padding(Spacing.m)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    .background(.fill.quinary, in: .rect(cornerRadius: 12))
+    .background(Surface.card, in: .rect(cornerRadius: 12))
     .accessibilityElement(children: .contain)
   }
 }

@@ -173,7 +173,7 @@ struct OverviewTab: View {
       .frame(minWidth: 130, maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
       .padding(Spacing.s)
       // The cards' surface; the open figure is tinted like a selection.
-      .background(open ? AnyShapeStyle(Color.accentColor.opacity(0.15)) : AnyShapeStyle(.fill.quinary), in: .rect(cornerRadius: 12))
+      .background(open ? AnyShapeStyle(Color.accentColor.opacity(0.15)) : Surface.card, in: .rect(cornerRadius: 12))
       .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(open ? Color.accentColor : .clear))
       .contentShape(.rect(cornerRadius: 12))
     }
