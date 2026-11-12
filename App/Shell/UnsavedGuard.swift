@@ -196,6 +196,14 @@ extension View {
   func unsavedChanges(_ dirty: Bool, save: (@MainActor () async -> Bool)?, command: Bool = true) -> some View {
     modifier(UnsavedChanges(dirty: dirty, save: save, command: command))
   }
+
+  /// The same with the condition apart: a save that is only there while `canSave`. Written as
+  /// `canSave ? { … } : nil` at the page, the closure got its type without the parameter's and
+  /// Swift warned of a non-Sendable function converted to a main-actor one.
+  func unsavedChanges(_ dirty: Bool, canSave: Bool, command: Bool = true,
+                      save: @escaping @MainActor () async -> Bool) -> some View {
+    unsavedChanges(dirty, save: canSave ? save : nil, command: command)
+  }
 }
 
 private struct UnsavedChanges: ViewModifier {

@@ -195,7 +195,7 @@ public final class FTPSession: @unchecked Sendable {
   /// `client.close()`, and the helper ends.
   public func close() async {
     _ = try? await call("close")
-    writes.sync { Darwin.close(input) }
+    writes.sync { _ = Darwin.close(input) }
     _ = await process.exit()
   }
 }

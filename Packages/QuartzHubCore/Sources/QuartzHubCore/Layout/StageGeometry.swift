@@ -168,7 +168,7 @@ public enum StageGeometry {
         skip()
         let op = at(pos)
         // calc() wants whitespace around + and -; a sign glued to a number belongs to the number.
-        guard op == "+" || op == "-", at(pos - 1).map { StageGeometry.isSpace($0) } ?? true else { return left }
+        guard op == "+" || op == "-", at(pos - 1).map({ StageGeometry.isSpace($0) }) ?? true else { return left }
         pos += 1
         guard let right = product() else { return nil }
         left = Val(n: op == "+" ? left.n + right.n : left.n - right.n, length: left.length || right.length)

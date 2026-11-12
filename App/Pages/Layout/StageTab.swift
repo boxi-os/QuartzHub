@@ -449,7 +449,7 @@ struct StageTab: View {
     .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity, alignment: .topLeading)
     .background(RoundedRectangle(cornerRadius: 6).fill(Color.secondary.opacity(0.05)))
     .dropDestination(for: String.self) { items, _ in
-      drop(items.first, onto: .area(position: position, group: group, name: areaName), facts)
+      return drop(items.first, onto: .area(position: position, group: group, name: areaName), facts)
     }
   }
 
@@ -466,7 +466,7 @@ struct StageTab: View {
           .onDisappear { dragging = nil }
       }
       .dropDestination(for: String.self) { items, _ in
-        drop(items.first, onto: .chip(index), facts)
+        return drop(items.first, onto: .chip(index), facts)
       }
       .accessibilityIdentifier("layout.chip.\(label)")
   }

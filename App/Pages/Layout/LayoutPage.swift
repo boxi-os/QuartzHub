@@ -59,8 +59,9 @@ struct LayoutPage: View {
       .onChange(of: openFrameId) { openRequestedFrame() }
       // Two documents: the config and the frame being edited. Leaving asks for both, and saves
       // whichever is changed; ⌘S saves the one of the tab in front.
-      .unsavedChanges(model.dirty || model.draftDirty, save: model.saving || model.config == nil ? nil : { await saveAll() },
-                      command: false)
+      .unsavedChanges(model.dirty || model.draftDirty, canSave: !model.saving && model.config != nil, command: false) {
+        await saveAll()
+      }
       .focusedSceneValue(\.pageSave, frontDirty && !model.saving && !model.frameSaving ? PageSaveAction { await saveFront() } : nil)
       .toolbar {
         // Speichern for the tab in front, only with something to save there; no badge beside it.

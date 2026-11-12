@@ -188,22 +188,23 @@ struct PluginReferences: View {
 
 /// The fonts a project or its build has, in this process, so a sample shows the site's font and not
 /// this machine's (QuartzControl's `loadPreviewFonts`, which added them to `document.fonts`). Each
-/// file is registered once; a family is known by the PostScript name of its first face.
+/// file is read once; a family is drawn with its first face. Read into a descriptor, not registered
+/// with the font manager: `CTFontManagerRegisterGraphicsFont` is deprecated since macOS 15, and the
+/// sample needs the face, not the system to know it.
 @MainActor
 enum PreviewFontRegistry {
   private static var registered: Set<String> = []
-  private static var names: [String: String] = [:]
+  private static var descriptors: [String: CTFontDescriptor] = [:]
 
   static func register(_ faces: [SiteFonts.PreviewFace]) {
     for face in faces {
       let key = "\(face.family)|\(face.weight)|\(face.style)|\(face.unicodeRange ?? "")|\(face.data.count)"
       guard !registered.contains(key) else { continue }
       registered.insert(key)
-      guard let provider = CGDataProvider(data: face.data as CFData), let font = CGFont(provider) else { continue }
-      // Already registered by another project is fine; a file this cannot read is no file, and
-      // the sample falls back and says so.
-      CTFontManagerRegisterGraphicsFont(font, nil)
-      if names[face.family.lowercased()] == nil, let name = font.postScriptName as String? { names[face.family.lowercased()] = name }
+      // A file this cannot read is no file, and the sample falls back and says so.
+      guard let read = CTFontManagerCreateFontDescriptorsFromData(face.data as CFData) as? [CTFontDescriptor],
+            let first = read.first else { continue }
+      if descriptors[face.family.lowercased()] == nil { descriptors[face.family.lowercased()] = regular(first) }
     }
   }
 
@@ -219,18 +220,27 @@ enum PreviewFontRegistry {
   /// family's; nil for none.
   static func font(_ family: String, size: CGFloat) -> Font? {
     if let design = generic[family.lowercased()] { return .system(size: size, design: design) }
-    guard let name = postScriptName(family) else { return nil }
-    return .custom(name, size: size)
+    if let face = descriptors[family.lowercased()] { return Font(CTFontCreateWithFontDescriptor(face, size, nil)) }
+    return installed(family) ? .custom(family, size: size) : nil
   }
 
-  static func postScriptName(_ family: String) -> String? {
-    if let name = names[family.lowercased()] { return name }
-    if NSFontManager.shared.availableFontFamilies.contains(where: { $0.lowercased() == family.lowercased() }) { return family }
-    return nil
+  /// A variable face at the weight of a sample, 400. Read from its data it starts at its axis'
+  /// default, and Noto Sans (400–700) drew thin where the registered font had drawn it regular
+  /// (seen side by side, 2026-11-12). A face without a weight axis stays as it is.
+  private static func regular(_ face: CTFontDescriptor) -> CTFontDescriptor {
+    let weight = 0x7767_6874 // 'wght'
+    let probe = CTFontCreateWithFontDescriptor(face, 12, nil)
+    guard let axes = CTFontCopyVariationAxes(probe) as? [[CFString: Any]],
+          axes.contains(where: { ($0[kCTFontVariationAxisIdentifierKey] as? NSNumber)?.intValue == weight }) else { return face }
+    return CTFontDescriptorCreateCopyWithVariation(face, weight as CFNumber, 400)
+  }
+
+  private static func installed(_ family: String) -> Bool {
+    NSFontManager.shared.availableFontFamilies.contains { $0.lowercased() == family.lowercased() }
   }
 
   static func isAvailable(_ family: String) -> Bool {
-    !family.isEmpty && (generic[family.lowercased()] != nil || postScriptName(family) != nil)
+    !family.isEmpty && (generic[family.lowercased()] != nil || descriptors[family.lowercased()] != nil || installed(family))
   }
 }
 

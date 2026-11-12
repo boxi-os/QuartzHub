@@ -58,8 +58,9 @@ struct ConfigPage: View {
       .pageTabs(Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "config.tabs")
       .historyTab(page: .config, tab: $tabID)
       .task { await model.load() }
-      .unsavedChanges(model.dirty, save: model.saving || model.config == nil ? nil : { await model.save() },
-                      command: tab == .site)
+      .unsavedChanges(model.dirty, canSave: !model.saving && model.config != nil, command: tab == .site) {
+        await model.save()
+      }
       .toolbar {
         if tab == .site {
           // No "Gespeichert" and no badge beside it: Speichern is enabled only with something to

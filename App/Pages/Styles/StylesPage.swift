@@ -57,7 +57,9 @@ struct StylesPage: View {
         // Once read, and again for a different theme: that is a different variable table.
         if model.config != nil { await model.reloadGraph() }
       }
-      .unsavedChanges(model.dirty, save: model.saving || model.config == nil ? nil : { [model, tab] in await model.save(from: tab) })
+      .unsavedChanges(model.dirty, canSave: !model.saving && model.config != nil) { [tab] in
+        await model.save(from: tab)
+      }
       .toolbar {
         // Speichern only with something to save, no badge beside it (as on Konfiguration). Eigenes
         // CSS puts it after its own actions: a toolbar of an inner view comes after this one.

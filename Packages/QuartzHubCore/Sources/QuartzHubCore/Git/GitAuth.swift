@@ -41,7 +41,7 @@ public struct GitAuth: Sendable {
     guard let token = try await token(), !token.isEmpty else { return .none }
 
     var template = Array("\(NSTemporaryDirectory())qh-git-XXXXXX".utf8CString)
-    guard let made = mkdtemp(&template) else { throw Posix.error("mkdtemp", String(cString: template)) }
+    guard let made = mkdtemp(&template) else { throw Posix.error("mkdtemp", template.withUnsafeBufferPointer { String(cString: $0.baseAddress!) }) }
     let directory = String(cString: made)
     let script = "\(directory)/askpass.sh"
     // git calls the helper once per prompt with the prompt as $1; GitHub takes any user name with a

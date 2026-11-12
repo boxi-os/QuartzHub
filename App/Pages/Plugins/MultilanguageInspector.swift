@@ -131,7 +131,7 @@ struct LanguageInspector: View {
 
   private func set(_ key: String, _ value: JSONValue?) async {
     let code = language.code
-    await update { options in
+    _ = await update { options in
       MultilanguageOptions.withLanguages(options, MultilanguageOptions.languages(options).map { $0.code == code ? $0.with(key, value) : $0 })
     }
   }

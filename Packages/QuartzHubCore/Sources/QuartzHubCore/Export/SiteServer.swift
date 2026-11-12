@@ -117,7 +117,7 @@ public final class SiteServer: Sendable {
       response += "Content-Length: \(answer.body.count)\r\nConnection: keep-alive\r\n\r\n"
       var bytes = Data(response.utf8)
       if method != "HEAD" { bytes.append(answer.body) }
-      connection.send(content: bytes, completion: .contentProcessed { [weak self] error in
+      connection.send(content: bytes, completion: .contentProcessed { [weak self, chunked, rest] error in
         guard error == nil else { return connection.cancel() }
         // A chunked body has no length to read past; the connection ends with this answer.
         if chunked { return connection.cancel() }

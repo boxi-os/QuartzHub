@@ -128,7 +128,7 @@ public final class SFTPChannel: @unchecked Sendable {
 
   /// Ends the conversation and waits for ssh to exit.
   public func close() async {
-    writes.sync { Darwin.close(input) }
+    writes.sync { _ = Darwin.close(input) }
     _ = await process.exit()
   }
 
@@ -305,7 +305,7 @@ public final class SFTPChannel: @unchecked Sendable {
     var framed = Data()
     framed.appendUInt32(UInt32(packet.count))
     framed.append(packet)
-    writes.async { [input] in
+    writes.async { [input, framed] in
       framed.withUnsafeBytes { raw in
         var offset = 0
         while offset < raw.count {

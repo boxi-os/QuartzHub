@@ -50,7 +50,7 @@ struct DocumentsPage: View {
         guard let siteKey else { return }
         await model.loadSite(root: siteKey.root, language: siteKey.language)
       }
-      .unsavedChanges(model.dirty, save: model.saving || model.draft == nil ? nil : { await model.save() })
+      .unsavedChanges(model.dirty, canSave: !model.saving && model.draft != nil) { await model.save() }
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
           Button(action: create) { Label(L10n.t("documents.newBook"), systemImage: "plus") }

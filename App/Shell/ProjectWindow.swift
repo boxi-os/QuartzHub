@@ -225,8 +225,10 @@ struct WindowMenuTitle: NSViewRepresentable {
       // AppKit writes the menu entry again whenever SwiftUI sets the title or the subtitle, so it
       // is put back after each of them.
       observations = [
-        window.observe(\.title) { [weak self] _, _ in self?.apply() },
-        window.observe(\.subtitle) { [weak self] _, _ in self?.apply() },
+        // On the main thread: SwiftUI sets both there, and the entry has to be back before AppKit
+        // draws the menu.
+        window.observe(\.title) { [weak self] _, _ in MainActor.assumeIsolated { self?.apply() } },
+        window.observe(\.subtitle) { [weak self] _, _ in MainActor.assumeIsolated { self?.apply() } },
       ]
       apply()
     }

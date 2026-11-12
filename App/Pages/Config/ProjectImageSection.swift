@@ -36,12 +36,12 @@ struct ProjectImageSection: View {
         VStack(alignment: .leading, spacing: 8) {
           HStack {
             Button(custom || icon?.unrecorded == true ? L10n.t("projectImage.replace") : L10n.t("projectImage.choose")) {
-              pick({ try ProjectIcon.set(project: model.project.path, source: $0) }, after: lightApplied)
+              pick({ [path = model.project.path] in try ProjectIcon.set(project: path, source: $0) }, after: lightApplied)
             }
             .accessibilityIdentifier("config.imageChoose")
             if custom {
               Button(L10n.t("projectImage.remove")) {
-                run({ try ProjectIcon.clear(project: model.project.path) }, after: lightApplied)
+                run({ [path = model.project.path] in try ProjectIcon.clear(project: path) }, after: lightApplied)
               }
             }
           }
@@ -118,12 +118,12 @@ struct ProjectImageSection: View {
       // Replacing a dark picture that is there needs no light one (a template leaves that state);
       // choosing a first one waits for a light picture, which the header needs.
       Button(hasDark ? L10n.t("projectImage.dark.replace") : L10n.t("projectImage.dark.choose")) {
-        pick({ try ProjectIcon.setDark(project: model.project.path, source: $0) }, after: darkApplied)
+        pick({ [path = model.project.path] in try ProjectIcon.setDark(project: path, source: $0) }, after: darkApplied)
       }
       .disabled(busy || (!custom && !hasDark))
       if hasDark {
         Button(L10n.t("projectImage.dark.remove")) {
-          run({ try ProjectIcon.clearDark(project: model.project.path) }, after: darkApplied)
+          run({ [path = model.project.path] in try ProjectIcon.clearDark(project: path) }, after: darkApplied)
         }
         .disabled(busy)
       }

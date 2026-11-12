@@ -99,7 +99,7 @@ public enum BuildOutputGuard {
     while true {
       var buffer = [CChar](repeating: 0, count: Int(PATH_MAX))
       if realpath(head, &buffer) != nil {
-        let found = String(cString: buffer)
+        let found = buffer.withUnsafeBufferPointer { String(cString: $0.baseAddress!) }
         return rest.isEmpty ? found : resolve(found + "/" + rest.reversed().joined(separator: "/"))
       }
       guard head != "/", let slash = head.lastIndex(of: "/") else { return path }

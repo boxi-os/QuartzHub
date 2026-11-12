@@ -72,7 +72,7 @@ public enum ProjectPaths {
   /// JSONStore file either; it is Quartz's, and nothing here moves it aside.
   static func rewriteLockfile(project: String, _ rewrite: (String) -> String?) throws {
     let url = "\(project)/quartz.lock.json"
-    guard case .object(var lock)?? = try? PluginCommands.readLockfile(project: project) else { return }
+    guard case .object(var lock)? = try? PluginCommands.readLockfile(project: project) else { return }
     var changed = false
     func fix(_ entry: JSONValue) -> JSONValue {
       guard case .object(var object) = entry else { return entry }

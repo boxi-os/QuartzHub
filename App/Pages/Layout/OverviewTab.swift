@@ -399,7 +399,8 @@ struct OverviewTab: View {
 
   private func groupHead(_ position: String, _ group: String, _ facts: Facts) -> some View {
     let ownIn = facts.frames.filter { $0.areas.contains { $0.slot == position && $0.group == group } }
-    let names = Array(NSOrderedSet(array: ownIn.flatMap { $0.areas.filter { $0.slot == position && $0.group == group }.map(\.name) })).compactMap { $0 as? String }
+    let areaNames: [String] = ownIn.flatMap { $0.areas.filter { $0.slot == position && $0.group == group }.map(\.name) }
+    let names = Array(NSOrderedSet(array: areaNames)).compactMap { $0 as? String }
     let color = LayoutWords.groupColor(group, facts.groupNames) ?? .secondary
     return GridRow {
       HStack(spacing: 6) {
