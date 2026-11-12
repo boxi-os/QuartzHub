@@ -29,6 +29,9 @@ sed -i '' "s#$SRC/#$P/#g" "$P/quartz.config.yaml" "$P/quartz.lock.json"
 # Commits from Git-Sync or a snapshot would carry the global identity into a picture.
 git -C "$P" config user.name "QuartzHub Demo"
 git -C "$P" config user.email "demo@example.invalid"
+# The copy's state as one commit, so Git-Sync shows a project that is up to date.
+git -C "$P" add -A
+git -C "$P" diff --cached --quiet || git -C "$P" commit -qm "Handbuch-Demo"
 
 # Two more rows for the Projects window: a second site (only its config, enough for the list) and
 # one whose folder is gone, for the warning.

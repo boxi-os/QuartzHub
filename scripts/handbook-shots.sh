@@ -142,7 +142,7 @@ launch() {
   pkill -x QuartzHub 2>/dev/null || true
   sleep 2
   open -n "$APP" --args -QHLanguage "$lang" -ApplePersistenceIgnoreState YES -QHProfileDir "$profile" \
-    -QHNoUpdateCheck YES -QHMemorySecrets YES -QHWindowSize 1440x900 "$@"
+    -QHMemorySecrets YES -QHWindowSize 1440x900 "$@"
   # Adding the project runs node once (its frames' paths); its window comes after that.
   for i in {1..40}; do
     sleep 1
@@ -151,7 +151,10 @@ launch() {
   sleep 3
 }
 
+# The project window asks GitHub for updates (git ls-remote, read only), so Updates and the
+# overview show a real answer rather than "Nicht prüfbar"; the other windows stay offline.
 with_project() { launch $1 "$DEMO/profile-$2" 2 -QHMigrationSource "" -QHOpenProject "$PROJECT"; ax "perform action \"AXRaise\" of $project_window"; }
+offline=(-QHNoUpdateCheck YES)
 
 # An empty profile in the given theme, made again for every use: the question at the first start
 # would otherwise not come back.
@@ -183,6 +186,8 @@ for lang in $LANGS; do
     todo=0; for line in $PAGES; do wanted ${line%%|*} && todo=1; done
     if [ $todo = 1 ]; then
       with_project $lang $theme
+      # One build first, so the overview and Preview & build show its result.
+      key b; sleep 40
       for line in $PAGES; do
         name=${line%%|*}; rest=${line#*|}; row=${rest%%|*}; t=${rest#*|}
         wanted $name || continue
@@ -193,15 +198,15 @@ for lang in $LANGS; do
     fi
 
     if wanted projekte-leer; then
-      launch $lang "$(empty_profile $theme)" 1 -QHMigrationSource ""
+      launch $lang "$(empty_profile $theme)" 1 -QHMigrationSource "" $offline
       shoot projekte-leer
     fi
     if wanted uebernahme; then
-      launch $lang "$(empty_profile $theme)" 1 -QHMigrationSource "$DEMO/quartzcontrol-profile"
+      launch $lang "$(empty_profile $theme)" 1 -QHMigrationSource "$DEMO/quartzcontrol-profile" $offline
       sleep 2; shoot uebernahme; escape
     fi
     if wanted projekte || wanted projekte-fehlt || wanted neues-projekt || wanted duplizieren; then
-      launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource ""
+      launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource "" $offline
       if wanted projekte; then project_row 1; sleep 1; shoot projekte; fi
       if wanted projekte-fehlt; then project_row 3; sleep 1; shoot projekte-fehlt; fi
       if wanted neues-projekt; then key n; sleep 3; shoot neues-projekt; escape; sleep 1; fi
@@ -213,7 +218,7 @@ for lang in $LANGS; do
     fi
     # The settings, one shot per tab (toolbar buttons in order).
     if wanted einstellungen-allgemein || wanted einstellungen-zugaenge || wanted einstellungen-laufzeit || wanted einstellungen-daten; then
-      launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource ""
+      launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource "" $offline
     fi
     n=0
     for t in allgemein zugaenge laufzeit daten; do
