@@ -57,6 +57,12 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   der Export wie „Jetzt veröffentlichen“ (Wegwerf-Projekt, Buch über die ganze Website, Ziel „Dokument“, `Deploy.run`), ohne Netz;
   die Dateien heißen `check-export.*` und gehen an dasselbe `check:export -- --files`
 - `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text
+- `scripts/handbook-demo.sh` — Demo-Projekt für die Handbuch-Aufnahmen unter `/Users/Shared/QuartzHub-Demo`
+  (Kopie von QuartzHub-Web, Inhalt aus dem Vault kopiert, Profile für hell und dunkel, neutrale git-Identität)
+- `scripts/handbook-shots.sh [--lang de|en] [--theme light|dark] [--only …] [--out …]` — Aufnahmen
+  des Projektfensters nach `<vault>/assets/screenshots/`; bewegt Maus und Tastatur
+- `swift scripts/handbook-private.swift <vault> [dateien…]` — Handbuch-Texte und, per Texterkennung,
+  Aufnahmen auf Persönliches (Konto, `/Users/…`, Mails, `<vault>/private/privat.txt`); Exit 1 bei Fund
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)
 - `scripts/package.sh` — Release-Bau, `.app` mit Runtime und Helfern, ad hoc signiert, DMG nach `build/package/`
