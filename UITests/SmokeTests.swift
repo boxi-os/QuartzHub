@@ -322,7 +322,9 @@ final class SmokeTests: XCTestCase {
     any["sidebar.config"].firstMatch.click()
     XCTAssertTrue(any["page.config"].firstMatch.waitForExistence(timeout: 5), "Konfiguration did not open")
 
-    let field = any["config.pageTitle"].firstMatch
+    // By type, not `any`: each section is a Form of its own, a scroll view in the tree, and `any`
+    // once matched that scroll view, below the window, instead of the field (1 run in 4).
+    let field = window.textFields["config.pageTitle"].firstMatch
     XCTAssertTrue(field.waitForExistence(timeout: 10), "no title field")
     // Speichern says whether there is something to save: off before the edit, on after it.
     let save = window.buttons["config.save"].firstMatch
