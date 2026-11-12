@@ -14,8 +14,31 @@ struct OverviewTab: View {
   /// The frame editor on this frame, "default" for Quartz's.
   let openFrame: (String) -> Void
 
-  enum Tile: String { case placed, conditioned, disabled, pageTypes, frames }
+  enum Tile: String {
+    case placed, conditioned, disabled, pageTypes, frames
+
+    var symbol: String {
+      switch self {
+      case .placed: "square.grid.2x2"
+      case .conditioned: "line.3.horizontal.decrease.circle"
+      case .disabled: "pause.circle"
+      case .pageTypes: "doc.on.doc"
+      case .frames: "rectangle.split.3x1"
+      }
+    }
+
+    var title: String {
+      switch self {
+      case .placed: L10n.t("layoutEditor.overview.panelPlacedTitle")
+      case .conditioned: L10n.t("layoutEditor.overview.panelConditionedTitle")
+      case .disabled: L10n.t("layoutEditor.overview.disabledTitle")
+      case .pageTypes: L10n.t("layoutEditor.overview.panelPageTypesTitle")
+      case .frames: L10n.t("layoutEditor.overview.framesTitle")
+      }
+    }
+  }
   @SceneStorage("layoutOverview.openTile") private var openTile = ""
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
     if let config = model.config {
@@ -25,18 +48,29 @@ struct OverviewTab: View {
           Note(L10n.t("layoutEditor.overview.intro"))
           tiles(facts)
           if let tile = Tile(rawValue: openTile) {
-            GroupBox { panel(tile, facts).frame(maxWidth: .infinity, alignment: .leading).padding(4) }
-          }
-          GroupBox {
-            VStack(alignment: .leading, spacing: 10) {
-              ScrollView(.horizontal) { matrix(facts).padding(.bottom, 6) }
-              legend
+            Card(tile.title, symbol: tile.symbol) {
+              panel(tile, facts)
+            } accessory: {
+              Button { openTile = "" } label: {
+                Label(L10n.t("common.close"), systemImage: "xmark").labelStyle(.iconOnly)
+              }
+              .buttonStyle(.borderless)
+              .help(L10n.t("common.close"))
+            } footer: {
+              EmptyView()
             }
-            .padding(4)
-          } label: {
-            Label(L10n.t("layoutEditor.overview.title"), systemImage: "tablecells").font(.headline)
+            .transition(.opacity)
+          }
+          Card(L10n.t("layoutEditor.overview.title"), symbol: "tablecells") {
+            ScrollView(.horizontal) { matrix(facts).padding(.bottom, Spacing.xs) }
+            legend
+          } accessory: {
+            EmptyView()
+          } footer: {
+            EmptyView()
           }
         }
+        .animation(Motion.layout(reduce: reduceMotion), value: openTile)
         .padding(Spacing.page)
         .frame(maxWidth: .infinity, alignment: .leading)
       }
@@ -100,7 +134,7 @@ struct OverviewTab: View {
     let customized = facts.pageTypes.filter(facts.customized).count
     let used = Set(facts.chosen.values.map(\.name))
     let unused = facts.frames.filter { !used.contains($0.frameName) }.count
-    return FlowLayout(spacing: 8, minItem: 0, stretch: false) {
+    let figures = Group {
       tile(.placed, placed.count, L10n.t("layoutEditor.overview.statPlaced", count: placed.count),
            "\(L10n.t("layoutEditor.overview.statAlways", count: placed.count - desktop - mobile)) · \(desktop) \(L10n.t("layoutEditor.displayDesktopOnly")) · \(mobile) \(L10n.t("layoutEditor.displayMobileOnly"))")
       tile(.conditioned, conditioned, L10n.t("layoutEditor.overview.statConditioned", count: conditioned), nil)
@@ -110,6 +144,15 @@ struct OverviewTab: View {
       tile(.frames, facts.frames.count, L10n.t("layoutEditor.overview.statFrames", count: facts.frames.count),
            unused > 0 ? L10n.t("layoutEditor.overview.statUnused", count: unused) : nil)
     }
+    // One row of five equal figures while they fit, otherwise three and two: as many columns as
+    // fit left four and one at 1200 pt with the inspector open.
+    return ViewThatFits(in: .horizontal) {
+      HStack(alignment: .top, spacing: Spacing.s) { figures }
+      LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Spacing.s, alignment: .top), count: 3),
+                alignment: .leading, spacing: Spacing.s) {
+        figures
+      }
+    }
   }
 
   /// A figure is a switch: it opens what it counts right under the figures, one at a time.
@@ -118,20 +161,21 @@ struct OverviewTab: View {
     return Button {
       openTile = open ? "" : tile.rawValue
     } label: {
-      VStack(alignment: .leading, spacing: 2) {
+      VStack(alignment: .leading, spacing: Spacing.xxs) {
         HStack {
-          Text(verbatim: "\(value)").font(.title2.weight(.semibold))
+          Text(verbatim: "\(value)").font(.title2.weight(.semibold)).monospacedDigit()
           Spacer()
           Image(systemName: open ? "chevron.up" : "chevron.down").font(.caption).foregroundStyle(.secondary)
         }
         Text(label).font(.caption).foregroundStyle(.secondary)
         if let extra { Text(extra).font(.caption2).foregroundStyle(.tertiary) }
       }
-      .frame(minWidth: 140, alignment: .leading)
-      .padding(10)
-      .background(RoundedRectangle(cornerRadius: 8).fill(open ? Color.accentColor.opacity(0.12) : Color.clear))
-      .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(open ? Color.accentColor : Color.secondary.opacity(0.3)))
-      .contentShape(Rectangle())
+      .frame(minWidth: 130, maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+      .padding(Spacing.s)
+      // The cards' surface; the open figure is tinted like a selection.
+      .background(open ? AnyShapeStyle(Color.accentColor.opacity(0.15)) : AnyShapeStyle(.fill.quinary), in: .rect(cornerRadius: 12))
+      .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(open ? Color.accentColor : .clear))
+      .contentShape(.rect(cornerRadius: 12))
     }
     .buttonStyle(.plain)
     .accessibilityAddTraits(open ? .isSelected : [])
@@ -154,10 +198,9 @@ struct OverviewTab: View {
   }
 
   @ViewBuilder private func panel(_ tile: Tile, _ facts: Facts) -> some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(alignment: .leading, spacing: Spacing.s) {
       switch tile {
       case .placed:
-        Text(L10n.t("layoutEditor.overview.panelPlacedTitle")).font(.headline)
         if facts.placed.isEmpty { Note(L10n.t("layoutEditor.overview.panelPlacedNone")) }
         ForEach([("all", L10n.t("layoutEditor.overview.panelAlways")), ("desktop-only", L10n.t("layoutEditor.displayDesktopOnly")),
                  ("mobile-only", L10n.t("layoutEditor.displayMobileOnly"))], id: \.0) { display, title in
@@ -169,13 +212,11 @@ struct OverviewTab: View {
         }
       case .conditioned:
         let items = facts.placed.filter { facts.layout($0)["condition"] != nil }
-        Text(L10n.t("layoutEditor.overview.panelConditionedTitle")).font(.headline)
         if items.isEmpty { Note(L10n.t("layoutEditor.overview.panelConditionedNone")) }
         ForEach(items, id: \.self) { i in
           placedRow(i, facts, detail: LayoutWords.condition(facts.layout(i)["condition"]?.stringValue ?? ""))
         }
       case .disabled:
-        Text(L10n.t("layoutEditor.overview.disabledTitle")).font(.headline)
         if facts.parked.isEmpty {
           Note(L10n.t("layoutEditor.overview.disabledNone"))
         } else {
@@ -183,7 +224,6 @@ struct OverviewTab: View {
           FlowLayout(spacing: 6, minItem: 0, stretch: false) { ForEach(facts.parked.sorted(), id: \.self) { pill($0, facts, muted: true) } }
         }
       case .pageTypes:
-        Text(L10n.t("layoutEditor.overview.panelPageTypesTitle")).font(.headline)
         ForEach(facts.pageTypes, id: \.self) { type in
           let override = PageTypeOverride.of(facts.config, type)
           let hidden = facts.placed.filter { PageTypeOverride.isExcluded(override, facts.plugins[$0]) }
@@ -208,7 +248,6 @@ struct OverviewTab: View {
           Divider()
         }
       case .frames:
-        Text(L10n.t("layoutEditor.overview.framesTitle")).font(.headline)
         framesList(facts)
       }
     }
