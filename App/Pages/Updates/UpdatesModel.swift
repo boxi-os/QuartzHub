@@ -112,6 +112,7 @@ final class UpdatesModel {
     let features = await Task.detached { QuartzFeatures.read(project: path) }.value
     guard mine == round else { return }
     (self.versions, notesAhead, hasInfo) = (versions, ahead, features.builtins)
+    if doctorAfter != nil, !coreBusy { await readConfigFindings(environment) }
   }
 
   /// Quartz's check after the update, and what QuartzHub offers from it: the move of the built-in
@@ -126,11 +127,17 @@ final class UpdatesModel {
     let doctor = await PluginCommands.shared.doctor(project: path, fix: false, environment: environment)
     doctorAfter = doctor.output
     doctorPlugins = []
-    if let config = try? await ConfigFile.read(project: path, runtime: environment.runtime) {
-      doctorPlugins = config.plugins
-      pendingMigrations = BuiltinProcessing.pendingMigrations(config.plugins).map { config.plugins[$0].name }
-      markdownOrderProblem = BuiltinProcessing.markdownOrderProblem(config.plugins) != nil
-    }
+    await readConfigFindings(environment)
+  }
+
+  /// The box's offers from the config. Read again with every check while the box stands: the
+  /// fixes are made on the Plugins page, and the model outlives the page (2026-11-12: the order
+  /// hint stayed after the order was fixed there). Quartz's own output stays the one after the update.
+  private func readConfigFindings(_ environment: ToolEnvironment) async {
+    guard let config = try? await ConfigFile.read(project: path, runtime: environment.runtime) else { return }
+    doctorPlugins = config.plugins
+    pendingMigrations = BuiltinProcessing.pendingMigrations(config.plugins).map { config.plugins[$0].name }
+    markdownOrderProblem = BuiltinProcessing.markdownOrderProblem(config.plugins) != nil
   }
 
   func readInfo() async {
