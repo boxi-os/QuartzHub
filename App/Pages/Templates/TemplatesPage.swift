@@ -1,8 +1,8 @@
 import QuartzHubCore
 import SwiftUI
 
-/// Vorlagen: QuartzControl's `Templates.tsx` as one grouped form, writing a template first and
-/// applying one after. Both halves are in the middle, under each other, as there; the inspector
+/// Vorlagen: QuartzControl's `Templates.tsx` as a settings form (variant C), writing a template
+/// first and applying one after. Both halves are in the middle, under each other, as there; the inspector
 /// keeps the page's context, since nothing on the page is a selection.
 struct TemplatesPage: View {
   let project: ProjectContext
@@ -17,11 +17,10 @@ struct TemplatesPage: View {
 
   var body: some View {
     PageScaffold(page: .templates) {
-      Form {
+      SettingsForm {
         exportSections
         importSections
       }
-      .formStyle(.grouped)
       .task { await model.appear() }
     } inspector: {
       InspectorPageContext(page: .templates) {
@@ -35,18 +34,16 @@ struct TemplatesPage: View {
   // MARK: Writing a template
 
   @ViewBuilder private var exportSections: some View {
-    Section {
-      Note(L10n.t("templates.exportHint"))
-        // On a row that is always there: a Form's identifier does not reach the accessibility tree.
-        .accessibilityIdentifier("page.templates")
+    SettingsSection(L10n.t("templates.exportHeading"), symbol: "shippingbox", note: L10n.t("templates.exportHint"),
+                    identifier: "page.templates") {
       TextField(L10n.t("templates.nameLabel"), text: $model.name)
         .accessibilityIdentifier("templates.name")
       TextField(L10n.t("templates.descriptionLabel"), text: $model.description, prompt: Text(L10n.t("templates.descriptionPlaceholder")))
-    } header: {
-      Label(L10n.t("templates.exportHeading"), systemImage: "shippingbox")
     }
 
-    Section(L10n.t("templates.partsHeading")) {
+    // The parts and what writes them, in one group: a section without a heading has no place in
+    // the heading column.
+    SettingsSection(L10n.t("templates.partsHeading")) {
       if let available = model.available {
         if available.isEmpty {
           Note(L10n.t("templates.nothingToExport"))
@@ -61,9 +58,6 @@ struct TemplatesPage: View {
           Note(L10n.t("common.loading"))
         }
       }
-    }
-
-    Section {
       HStack(spacing: 12) {
         Button(model.exporting ? L10n.t("templates.exporting") : L10n.t("templates.exportButton")) {
           Task { await model.export(window: unsaved?.window) }
@@ -107,8 +101,7 @@ struct TemplatesPage: View {
   // MARK: Applying a template
 
   @ViewBuilder private var importSections: some View {
-    Section {
-      Note(L10n.t("templates.importHint"))
+    SettingsSection(L10n.t("templates.importHeading"), symbol: "square.and.arrow.down.on.square", note: L10n.t("templates.importHint")) {
       HStack(spacing: 8) {
         Button(L10n.t("templates.pickBuiltin")) { Task { await model.pickBuiltin() } }
           .accessibilityIdentifier("templates.pickBuiltin")
@@ -132,12 +125,10 @@ struct TemplatesPage: View {
       if let plan = model.plan {
         packageBox(plan)
       }
-    } header: {
-      Label(L10n.t("templates.importHeading"), systemImage: "square.and.arrow.down.on.square")
     }
 
     if let plan = model.plan {
-      Section(L10n.t("templates.strategyHeading")) {
+      SettingsSection(L10n.t("templates.strategyHeading")) {
         Picker(L10n.t("templates.strategyHeading"), selection: $model.strategy) {
           Text(L10n.t("templates.strategyPackage")).tag(TemplatePackage.Strategy.packageWins)
           Text(L10n.t("templates.strategyProject")).tag(TemplatePackage.Strategy.projectWins)
@@ -150,7 +141,7 @@ struct TemplatesPage: View {
         Note(model.strategy == .packageWins ? L10n.t("templates.strategyPackageHint") : L10n.t("templates.strategyProjectHint"))
       }
 
-      Section(L10n.t("templates.partsHeading")) {
+      SettingsSection(L10n.t("templates.partsHeading")) {
         ForEach(TemplatesModel.sortedForDisplay(plan.parts, id: \.id), id: \.id) { part in
           PartRow(id: part.id, checked: model.importSelected.contains(part.id), disabled: model.running,
                   summary: TemplateWords.planSummary(part, strategy: model.strategy),
@@ -161,9 +152,6 @@ struct TemplatesPage: View {
             EmptyView()
           }
         }
-      }
-
-      Section {
         if !model.missingPackages.isEmpty {
           Note(L10n.t("templates.willInstall", ["packages": model.missingPackages.joined(separator: ", ")]))
         }

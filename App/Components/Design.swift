@@ -178,16 +178,20 @@ struct SettingsSection<Content: View, Accessory: View>: View {
   let title: String
   var symbol: String?
   var note: String?
+  /// For tests, on the heading: it is always there, and a Form's own identifier does not reach the
+  /// accessibility tree.
+  var identifier: String?
   @ViewBuilder var content: () -> Content
   @ViewBuilder var accessory: () -> Accessory
 
   @Environment(\.settingsWide) private var wide
 
-  init(_ title: String, symbol: String? = nil, note: String? = nil, @ViewBuilder content: @escaping () -> Content,
-       @ViewBuilder accessory: @escaping () -> Accessory) {
+  init(_ title: String, symbol: String? = nil, note: String? = nil, identifier: String? = nil,
+       @ViewBuilder content: @escaping () -> Content, @ViewBuilder accessory: @escaping () -> Accessory) {
     self.title = title
     self.symbol = symbol
     self.note = note
+    self.identifier = identifier
     self.content = content
     self.accessory = accessory
   }
@@ -198,6 +202,8 @@ struct SettingsSection<Content: View, Accessory: View>: View {
       : AnyLayout(VStackLayout(alignment: .leading, spacing: 0))
     layout {
       heading
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(identifier ?? "")
         .frame(width: wide ? FormWidth.heading : nil, alignment: .leading)
         .padding(.leading, Spacing.page)
         .padding(.top, wide ? Spacing.l : Spacing.xs)
@@ -242,7 +248,8 @@ struct SettingsSection<Content: View, Accessory: View>: View {
 }
 
 extension SettingsSection where Accessory == EmptyView {
-  init(_ title: String, symbol: String? = nil, note: String? = nil, @ViewBuilder content: @escaping () -> Content) {
-    self.init(title, symbol: symbol, note: note, content: content) { EmptyView() }
+  init(_ title: String, symbol: String? = nil, note: String? = nil, identifier: String? = nil,
+       @ViewBuilder content: @escaping () -> Content) {
+    self.init(title, symbol: symbol, note: note, identifier: identifier, content: content) { EmptyView() }
   }
 }
