@@ -151,10 +151,11 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   mit QuartzControl bauen). Quartz 5.1 unterstützt (2026-11-11): eingebaute Verarbeitung,
   `plugin doctor`, Frames mit Einstiegsmodul, Seitenleisten, Versionen und Release-Notes,
   `quartz info`, Vorlage `docs` (decisions/phase-5-gleichstand.md, Quartz 5.1).
-- **UI-Überarbeitung seit 2026-11-12** auf dem Branch `ui-ueberarbeitung` (decisions/ui-ueberarbeitung.md):
+- **UI-Überarbeitung am 2026-11-12 abgeschlossen**, aus dem Branch `ui-ueberarbeitung` in `main` (decisions/ui-ueberarbeitung.md):
   macOS 26, Titel = Ort, Verlauf statt Rückweg-Leiste, Menüs „Gehe zu“ und „Projekt“, Bausteine in
   `App/Components/Design.swift`, alle Seiten und ihre Reiter nach den vier Seitentypen, Hinweise und Fehler als `Callout` oder
-  `FieldProblem`, in Hell und Dunkel angesehen.
+  `FieldProblem`, geteilte Bereiche als `SplitPanes`, Klappgruppen als `Fold`, eigene Akzentfarbe Petrol, in Hell und Dunkel
+  angesehen und vom Nutzer in Xcode ausprobiert.
 - **Pfade sind Zeichenketten mit den Bytes der Platte, nie `URL`s** (NFD-Durchgang): Foundation
   zerlegt „Über“ in `URL(fileURLWithPath:)`, jedem Anhängen und jedem FileManager-Schreiber, Node
   nicht. Rechnen mit `NodePath`, anlegen mit `Posix`, eine URL von außen einmal über
