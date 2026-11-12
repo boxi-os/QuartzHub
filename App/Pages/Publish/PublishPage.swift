@@ -7,8 +7,9 @@ import SwiftUI
 /// connection, its exclusions, and editing and deleting it. A target is edited in a sheet with its
 /// own "Speichern"; a connection begun there is a sheet over it.
 ///
-/// The publish button stays in the middle, not in the inspector: the inspector can be hidden for
-/// the whole window, and the page's one action must not go with it.
+/// A list page (decisions/ui-ueberarbeitung.md). Publishing is the toolbar's one prominent action,
+/// not the inspector's: the inspector can be hidden for the whole window, and the page's one action
+/// must not go with it. A new target and the connections are the toolbar's too.
 struct PublishPage: View {
   let project: ProjectContext
 
@@ -28,9 +29,10 @@ struct PublishPage: View {
   var body: some View {
     PageScaffold(page: .publish) {
       VStack(alignment: .leading, spacing: 0) {
-        header
+        notices
         list
       }
+      .toolbar { toolbar }
       .accessibilityElement(children: .contain)
       .accessibilityIdentifier("page.publish")
       .task {
@@ -77,29 +79,53 @@ struct PublishPage: View {
     }
   }
 
-  // MARK: Above the list
+  // MARK: Toolbar and notices
 
-  /// Outside the list's scrolling, so no `fixedSize(vertical:)` here (Snapshots).
-  private var header: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      HStack(alignment: .firstTextBaseline) {
-        Note(L10n.t("publish.connectionVsTarget"))
-        Spacer()
-        Button(L10n.t("publish.manageConnections")) { PublishModel.openConnectionSettings(openSettings) }
-          .accessibilityIdentifier("publish.manageConnections")
+  @ToolbarContentBuilder private var toolbar: some ToolbarContent {
+    ToolbarItemGroup(placement: .primaryAction) {
+      Button { editing = Identified(value: .empty()) } label: {
+        Label(L10n.t("publish.newTarget"), systemImage: "plus")
       }
-      if model.baseUrlWarning {
-        Label(L10n.t("publish.baseUrlWarning", ["baseUrl": model.baseUrl?.isEmpty == false ? model.baseUrl! : "—"]),
-              systemImage: "exclamationmark.triangle")
-          .font(.callout).foregroundStyle(.orange)
-          .accessibilityIdentifier("publish.baseUrlWarning")
+      .help(L10n.t("publish.newTarget"))
+      .accessibilityIdentifier("publish.newTarget")
+      Button { PublishModel.openConnectionSettings(openSettings) } label: {
+        Label(L10n.t("publish.manageConnections"), systemImage: "key")
       }
-      if let failure = model.failure {
-        Text(failure).foregroundStyle(.red).textSelection(.enabled)
+      .help(L10n.t("publish.manageConnections"))
+      .accessibilityIdentifier("publish.manageConnections")
+    }
+    if let target = model.selected {
+      let document = target.destination["type"] == .string("document")
+      let running = model.running && model.runningTarget == target.id
+      ToolbarSpacer(.fixed, placement: .primaryAction)
+      ToolbarItem(placement: .primaryAction) {
+        Button { Task { await model.publish(window: unsaved?.window) } } label: {
+          Label(running ? L10n.t("common.saving") : document ? L10n.t("publish.exportButton") : L10n.t("publish.deployButton"),
+                systemImage: ProjectPage.publish.symbol)
+            .labelStyle(.titleAndIcon)
+        }
+        .buttonStyle(.glassProminent)
+        .disabled(!model.canDeploy)
+        .accessibilityIdentifier("publish.deploy")
       }
     }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 12)
+  }
+
+  /// Outside the list's scrolling, so no `fixedSize(vertical:)` here (Snapshots).
+  @ViewBuilder private var notices: some View {
+    if model.baseUrlWarning || model.failure != nil {
+      VStack(alignment: .leading, spacing: Spacing.xs) {
+        if model.baseUrlWarning {
+          Callout(.warning, L10n.t("publish.baseUrlWarning", ["baseUrl": model.baseUrl?.isEmpty == false ? model.baseUrl! : "—"]))
+            .accessibilityIdentifier("publish.baseUrlWarning")
+        }
+        if let failure = model.failure {
+          Callout(.error) { Text(failure).textSelection(.enabled) }
+        }
+      }
+      .padding(.horizontal, Spacing.page)
+      .padding(.vertical, Spacing.s)
+    }
   }
 
   // MARK: The list
@@ -121,17 +147,9 @@ struct PublishPage: View {
             }
         }
       } header: {
-        HStack {
-          Text(L10n.t("publish.targetHeading"))
-          Spacer()
-          Button {
-            editing = Identified(value: .empty())
-          } label: {
-            Label(L10n.t("publish.newTarget"), systemImage: "plus")
-          }
-          .controlSize(.small)
-          .accessibilityIdentifier("publish.newTarget")
-        }
+        Text(L10n.t("publish.targetHeading"))
+      } footer: {
+        Note(L10n.t("publish.connectionVsTarget"))
       }
       if let target = model.selected { targetSections(target) }
     }
@@ -227,18 +245,14 @@ struct PublishPage: View {
   private func publishSection(_ target: PublishTarget) -> some View {
     let document = target.destination["type"] == .string("document")
     let running = model.running && model.runningTarget == target.id
+    // The button is the toolbar's; here what it does and how it went.
     return Section {
-      HStack {
-        Button(running ? L10n.t("common.saving") : document ? L10n.t("publish.exportButton") : L10n.t("publish.deployButton")) {
-          Task { await model.publish(window: unsaved?.window) }
-        }
-        .buttonStyle(.borderedProminent)
-        .disabled(!model.canDeploy)
-        .accessibilityIdentifier("publish.deploy")
-        if document && running {
-          Button(L10n.t("publish.cancelExport")) { model.cancelExport() }
-            .accessibilityIdentifier("publish.cancelExport")
-        }
+      if document && running {
+        Button(L10n.t("publish.cancelExport")) { model.cancelExport() }
+          .accessibilityIdentifier("publish.cancelExport")
+      }
+      if !running, model.result?.targetId != target.id {
+        Note(L10n.t("publish.deployHint"))
       }
       if target.destination["deleteRemoved"] == .bool(false) {
         Note(L10n.t("publish.deleteDisabledHint"))

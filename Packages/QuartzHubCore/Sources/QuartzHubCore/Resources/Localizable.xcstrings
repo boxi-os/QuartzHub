@@ -40353,6 +40353,23 @@
         }
       }
     },
+    "publish.deployHint" : {
+      "comment" : "Veröffentlichen: the publish section before the first run; the button is in the toolbar",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seit dem Öffnen noch kein Lauf zu diesem Ziel."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No run to this target since opening."
+          }
+        }
+      }
+    },
     "publish.deployPartial" : {
       "comment" : "Publish result title: uploaded, deletions refused (the output lists them)",
       "localizations" : {
