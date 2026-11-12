@@ -192,13 +192,14 @@ struct FormsRelaySection: View {
         if state.relayLoading { Text(L10n.t("formsEditor.relay.loading")).font(.caption).foregroundStyle(.secondary) }
       }
       if let problem = r.hashProblem {
-        ErrorLine(L10n.t("formsEditor.relay.problemsFirst"))
-        Text(verbatim: problem).font(.system(.caption, design: .monospaced)).foregroundStyle(.red).textSelection(.enabled)
-          .fixedSize(horizontal: false, vertical: true)
+        Callout(.error) {
+          Text(L10n.t("formsEditor.relay.problemsFirst"))
+          Text(verbatim: problem).font(.system(.caption, design: .monospaced)).textSelection(.enabled)
+        }
       }
-      if !r.secrets.storageAvailable { Warning(L10n.t("formsEditor.relay.noStorage")) }
-      if r.secrets.missing { Warning(L10n.t("relay.secretsMissing")) }
-      if let message { ErrorLine(message) }
+      if !r.secrets.storageAvailable { Callout(.warning, L10n.t("formsEditor.relay.noStorage")) }
+      if r.secrets.missing { Callout(.warning, L10n.t("relay.secretsMissing")) }
+      if let message { Callout(.error, message) }
     }
 
     Section {
@@ -221,14 +222,14 @@ struct FormsRelaySection: View {
             return next != nil
           }
         }
-        if subdirInvalid { ErrorLine(L10n.t("formsEditor.relay.subdirInvalid")) }
+        if subdirInvalid { FieldProblem(L10n.t("formsEditor.relay.subdirInvalid")) }
         if !subdirInvalid, let char = subdirRsync {
-          ErrorLine(char.unicodeScalars.allSatisfy { CharacterSet.whitespacesAndNewlines.contains($0) }
+          FieldProblem(char.unicodeScalars.allSatisfy { CharacterSet.whitespacesAndNewlines.contains($0) }
             ? L10n.t("formsEditor.relay.subdirRsyncSpace") : L10n.t("formsEditor.relay.subdirRsyncChar", ["char": char]))
         }
         if let conflict = r.conflict {
-          VStack(alignment: .leading, spacing: 4) {
-            Warning(L10n.t("formsEditor.relay.conflict", ["target": conflict.targetName, "path": conflict.exclude]))
+          Callout(.warning) {
+            Text(L10n.t("formsEditor.relay.conflict", ["target": conflict.targetName, "path": conflict.exclude]))
             Button(L10n.t("formsEditor.relay.excludeSubmit", ["path": conflict.exclude])) { Task { await exclude(conflict) } }
           }
         }
@@ -395,8 +396,8 @@ struct FormsRelaySection: View {
           Text(RelayWords.checkText(check, configReadable: result.configReadable == true))
             .font(.caption).foregroundStyle(!isOk ? Color.red : countersOff ? Color.orange : Color.green)
             .fixedSize(horizontal: false, vertical: true)
-          if case .noPhp(_, let open?) = check { ErrorLine(L10n.t("formsEditor.relay.configOpen", ["url": open])) }
-          if countersOff { Warning(L10n.t("formsEditor.relay.countersNotWritable")) }
+          if case .noPhp(_, let open?) = check { Callout(.error, L10n.t("formsEditor.relay.configOpen", ["url": open])) }
+          if countersOff { Callout(.warning, L10n.t("formsEditor.relay.countersNotWritable")) }
           if needsReadable(check), result.configReadable == false {
             Button(L10n.t("formsEditor.relay.makeReadable")) {
               Task { if await save(["configReadable": .bool(true)]) { await upload() } }
@@ -404,7 +405,7 @@ struct FormsRelaySection: View {
             .disabled(!canUpload || busy != nil)
           }
         }
-        if result.countersOpen != nil { Warning(L10n.t("formsEditor.relay.countersOpen")) }
+        if result.countersOpen != nil { Callout(.warning, L10n.t("formsEditor.relay.countersOpen")) }
       }
     }
   }
@@ -475,7 +476,7 @@ struct FormsRelaySection: View {
         }
         .disabled(!draft.contains("@") || !r.secrets.storageAvailable)
       }
-      if let problem = rowProblems[name] { ErrorLine(problem) }
+      if let problem = rowProblems[name] { FieldProblem(problem) }
       let note = savedNote("recipient:\(name)", r, L10n.t("formsEditor.relay.addressSetAnnounce", ["name": name]),
                            L10n.t("formsEditor.relay.addressSetPending", ["name": name]))
       if !note.isEmpty { Text(note).font(.caption).foregroundStyle(.green) }
@@ -742,7 +743,7 @@ struct RelayRecipientField: View {
                     prompt: Text(verbatim: "kontakt"))
             .textFieldStyle(.roundedBorder).labelsHidden()
           Text(L10n.t("formsEditor.recipientPick.nameHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-          if !newName.isEmpty, let nameProblem { ErrorLine(nameProblem) }
+          if !newName.isEmpty, let nameProblem { FieldProblem(nameProblem) }
           if storageAvailable {
             Text(L10n.t("formsEditor.recipientPick.address"))
             TextField(L10n.t("formsEditor.recipientPick.address"), text: $address, prompt: Text(verbatim: "name@example.org"))
@@ -766,7 +767,7 @@ struct RelayRecipientField: View {
         .padding(8)
         .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
       }
-      if let error { ErrorLine(error) }
+      if let error { Callout(.error, error) }
       Text(L10n.t("formsEditor.recipientHint.relay")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
     }
   }

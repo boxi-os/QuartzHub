@@ -294,7 +294,7 @@ struct BoxInspector: View {
         }
         if !ownText.isEmpty { Note(L10n.t("extraContent.langOverride", ["langs": ownText.joined(separator: ", ")])) }
         ForEach(Array(broken.enumerated()), id: \.offset) { _, b in
-          ErrorLine(b.lang == nil ? L10n.t("extraContent.broken", ["key": b.key])
+          Callout(.error, b.lang == nil ? L10n.t("extraContent.broken", ["key": b.key])
                     : L10n.t("extraContent.brokenLang", ["key": b.key, "lang": b.lang ?? ""]))
         }
         VStack(alignment: .leading, spacing: 6) {

@@ -367,7 +367,7 @@ struct FormsTab: View {
           if !state.schemaLoaded {
             Note(L10n.t("layoutEditor.inspector.optionsLoading"))
           } else {
-            if let reason = state.schema?.unreadable { Warning(L10n.t("pluginOptions.unreadable", ["reason": reason])) }
+            if let reason = state.schema?.unreadable { Callout(.warning, L10n.t("pluginOptions.unreadable", ["reason": reason])) }
             ForEach(view.sections, id: \.id) { section in
               sectionRow(section.id, view: view, problems: placed.problems.filter { $0.section == section.id }.count)
             }
@@ -566,7 +566,7 @@ struct CheckSummary: View {
     case nil:
       if checking { Note(L10n.t("formsEditor.check.checking")) }
     case .unavailable(let reason)?:
-      Warning(L10n.t("formsEditor.check.unavailable", ["reason": reason]))
+      Callout(.warning, L10n.t("formsEditor.check.unavailable", ["reason": reason]))
     case .checked(let problems, _, _)?:
       VStack(alignment: .leading, spacing: 4) {
         HStack(spacing: 8) {
@@ -660,7 +660,7 @@ private struct AddFormForm: View {
         .focused($focused)
         .onSubmit(submit)
       Text(L10n.t("formsEditor.idHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-      if tried, let problem { ErrorLine(FormsView.idProblem(problem)) }
+      if tried, let problem { FieldProblem(FormsView.idProblem(problem)) }
       HStack {
         Spacer()
         Button(L10n.t("common.cancel"), action: cancel).keyboardShortcut(.cancelAction)

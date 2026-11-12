@@ -29,7 +29,7 @@ struct FormsKeysSection: View {
     let isAdding = adding ?? keys.isEmpty
     let problem = FormsOptions.keyNameProblem(name, existing: keys.keys)
     Section {
-      if case .unavailable(let reason)? = state.check { Warning(L10n.t("formsEditor.keys.notChecked", ["reason": reason])) }
+      if case .unavailable(let reason)? = state.check { Callout(.warning, L10n.t("formsEditor.keys.notChecked", ["reason": reason])) }
       if keys.isEmpty, !isAdding { Note(L10n.t("formsEditor.keys.none")) }
       ForEach(keys.keys, id: \.self) { key in
         keyRow(key, report: reports[key])
@@ -47,7 +47,7 @@ struct FormsKeysSection: View {
                     prompt: Text(verbatim: "owner"))
             .textFieldStyle(.roundedBorder).labelsHidden()
           Text(L10n.t("formsEditor.keys.nameHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-          if !name.isEmpty, let problem { ErrorLine(Self.nameProblem(problem)) }
+          if !name.isEmpty, let problem { FieldProblem(Self.nameProblem(problem)) }
         }
         Picker(L10n.t("formsEditor.keys.way"), selection: $way) {
           Text(L10n.t("formsEditor.keys.wayFile")).tag("file")
@@ -81,7 +81,7 @@ struct FormsKeysSection: View {
               .disabled(problem != nil || pasted.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || busy)
           }
         }
-        if let error { ErrorLine(error) }
+        if let error { Callout(.error, error) }
         Button(L10n.t("common.cancel")) { adding = false }
       }
     }
@@ -105,7 +105,7 @@ struct FormsKeysSection: View {
             Text(problem).font(.caption).foregroundStyle(.red).fixedSize(horizontal: false, vertical: true)
           } else {
             if let expires = report.expires { Text(L10n.t("formsEditor.keys.expires", ["date": expires])).font(.caption).foregroundStyle(.secondary) }
-            if let notice = report.notice { Warning(notice) }
+            if let notice = report.notice { Callout(.warning, notice) }
           }
         } else if case .checked? = state.check, !state.checking {
           Text(L10n.t("formsEditor.keys.unread")).font(.caption).foregroundStyle(.secondary)
@@ -226,10 +226,10 @@ struct FormsTextsSection: View {
       if let plugin = wording {
         list(plugin)
       } else if older, let installed {
-        Section { Warning(L10n.t("formsEditor.textList.older", ["since": FormsOptions.textsSince, "installed": installed])) }
+        Section { Callout(.warning, L10n.t("formsEditor.textList.older", ["since": FormsOptions.textsSince, "installed": installed])) }
         fallback
       } else if case .unavailable(let reason)? = result {
-        Section { Warning(L10n.t("formsEditor.textList.unavailable", ["reason": reason])) }
+        Section { Callout(.warning, L10n.t("formsEditor.textList.unavailable", ["reason": reason])) }
         fallback
       } else {
         Section { Note(L10n.t("formsEditor.textList.reading")) }
@@ -279,7 +279,7 @@ struct FormsTextsSection: View {
       }
       Note(L10n.t("formsEditor.textList.hint") + (own.isEmpty ? "" : " " + L10n.t("formsEditor.ownTexts", ["count": String(own.count)], count: own.count)))
       if !plugin.own { Note(L10n.t("formsEditor.textList.fallbackLocale", ["code": code, "locale": plugin.locale])) }
-      if sameLanguage.count > 1 { Warning(L10n.t("formsEditor.textList.severalEntries", ["keys": sameLanguage.joined(separator: ", "), "key": key])) }
+      if sameLanguage.count > 1 { Callout(.warning, L10n.t("formsEditor.textList.severalEntries", ["keys": sameLanguage.joined(separator: ", "), "key": key])) }
       TextField(L10n.t("formsEditor.textList.search"), text: $search, prompt: Text(L10n.t("formsEditor.textList.search")))
         .textFieldStyle(.roundedBorder).labelsHidden()
     }

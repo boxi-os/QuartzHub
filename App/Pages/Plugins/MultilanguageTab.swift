@@ -209,7 +209,7 @@ struct MultilanguageTab: View {
           Text(L10n.t("multilanguageEditor.listTitle", ["count": String(languages.count)], count: languages.count))
         }
         Section(L10n.t("multilanguageEditor.sectionsTitle")) {
-          if let reason = schema?.unreadable { Warning(L10n.t("pluginOptions.unreadable", ["reason": reason])) }
+          if let reason = schema?.unreadable { Callout(.warning, L10n.t("pluginOptions.unreadable", ["reason": reason])) }
           if view.schema == nil { Note(L10n.t("multilanguageEditor.noSchema")) }
           ForEach(view.groups, id: \.id) { group in
             VStack(alignment: .leading, spacing: 2) {
@@ -382,7 +382,7 @@ private struct AddLanguageForm: View {
         .onSubmit(submit)
         .accessibilityLabel(Text(verbatim: "code"))
       Text(L10n.t("multilanguageEditor.addHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-      if tried, let problem { ErrorLine(MultilanguageTab.problemText(problem)) }
+      if tried, let problem { FieldProblem(MultilanguageTab.problemText(problem)) }
       HStack {
         Spacer()
         Button(L10n.t("common.cancel"), action: cancel).keyboardShortcut(.cancelAction)

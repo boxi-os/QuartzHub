@@ -41,7 +41,7 @@ struct ExtraContentFiles: View {
       VStack(alignment: .leading, spacing: 12) {
         Text(L10n.t("extraContent.files.title")).font(.headline)
         Note(L10n.t("extraContent.files.intro"))
-        ForEach([actionError, loadError].compactMap { $0 }, id: \.self) { ErrorLine($0) }
+        ForEach([actionError, loadError].compactMap { $0 }, id: \.self) { Callout(.error, $0) }
         ForEach(dirs, id: \.self) { dir in
           FileSection(kind: .snippet, dir: dir, heading: L10n.t("extraContent.files.snippetsIn", ["dir": dir]),
                       info: snippetDirs[dir], usersOf: { snippetUsers(dir, $0) }, projectPath: projectPath,
@@ -318,7 +318,7 @@ private struct FileSection: View {
       if let note { Note(note).font(.caption) }
       if info?.state == .missing { Note(L10n.t("extraContent.files.dirMissing")) }
       if info?.state == .link { Note(L10n.t("extraContent.files.dirLink")) }
-      if info?.state == .outside || info?.state == .reserved { Warning(L10n.t("extraContent.files.dirUnusable")) }
+      if info?.state == .outside || info?.state == .reserved { Callout(.warning, L10n.t("extraContent.files.dirUnusable")) }
       if newName != nil, let onNew {
         NewSnippetRow(name: Binding(get: { newName ?? "" }, set: { newName = $0 }), fileExtension: $newExtension) {
           let base = (newName ?? "").trimmingCharacters(in: .whitespaces)
@@ -397,7 +397,7 @@ private struct RenameRow: View {
         Button(L10n.t("extraContent.files.renameSubmit"), action: submit)
         Button(L10n.t("extraContent.files.cancel"), action: onDone)
       }
-      if let problem { ErrorLine(problem) }
+      if let problem { FieldProblem(problem) }
     }
     .onAppear { focused = true }
   }

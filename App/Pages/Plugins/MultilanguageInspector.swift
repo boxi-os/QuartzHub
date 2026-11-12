@@ -65,7 +65,7 @@ struct LanguageInspector: View {
           }
           .accessibilityIdentifier("multilanguage.inspector.code")
         }
-        if let problem { ErrorLine(MultilanguageTab.problemText(problem)) }
+        if let problem { FieldProblem(MultilanguageTab.problemText(problem)) }
         ForEach(Self.fields, id: \.self) { textField($0) }
       }
       Section {

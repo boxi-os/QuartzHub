@@ -70,7 +70,9 @@ struct Callout<Content: View>: View {
   var body: some View {
     HStack(alignment: .firstTextBaseline, spacing: Spacing.xs) {
       Image(systemName: kind.symbol).foregroundStyle(kind.tint).accessibilityHidden(true)
+      // Selectable, so a path or a reason in a message can be copied.
       VStack(alignment: .leading, spacing: Spacing.xxs) { content() }
+        .textSelection(.enabled)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     .padding(.horizontal, Spacing.s)
@@ -84,6 +86,25 @@ struct Callout<Content: View>: View {
 extension Callout where Content == Text {
   init(_ kind: Kind, _ text: String) {
     self.init(kind) { Text(text) }
+  }
+}
+
+/// What is wrong with the value just typed, directly below its field: a line, not a box. A box
+/// under every field of a sheet or the inspector weighed more than the field itself; a message
+/// about the state of a thing, not about an entry, is a `Callout`.
+struct FieldProblem: View {
+  let text: String
+  init(_ text: String) { self.text = text }
+
+  var body: some View {
+    Label {
+      Text(text).textSelection(.enabled)
+    } icon: {
+      Image(systemName: Callout<EmptyView>.Kind.error.symbol)
+    }
+    .font(.caption)
+    .foregroundStyle(.red)
+    .fixedSize(horizontal: false, vertical: true)
   }
 }
 

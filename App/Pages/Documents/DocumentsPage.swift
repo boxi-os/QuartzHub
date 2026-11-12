@@ -165,7 +165,7 @@ struct DocumentsPage: View {
 
   private var booksSection: some View {
     Section {
-      if let error = model.listError ?? model.createError { ErrorLine(error) }
+      if let error = model.listError ?? model.createError { Callout(.error, error) }
       if model.loaded && model.books.isEmpty { Text(L10n.t("documents.noBooks")).foregroundStyle(.secondary) }
       ForEach(model.books, id: \.id) { book in
         let name = book.title.isEmpty ? book.id : book.title
@@ -189,7 +189,7 @@ struct DocumentsPage: View {
         .accessibilityIdentifier("documents.book.\(book.id)")
       }
       ForEach(model.unreadable, id: \.id) { entry in
-        Warning(L10n.t("documents.unreadable", ["file": "\(BookFile.directory)/\(entry.id).json", "reason": entry.reason]))
+        Callout(.warning, L10n.t("documents.unreadable", ["file": "\(BookFile.directory)/\(entry.id).json", "reason": entry.reason]))
       }
     } header: {
       Text(L10n.t("documents.booksHeading"))
@@ -210,8 +210,10 @@ struct DocumentsPage: View {
           }
         }
         if let error = model.siteError, !model.siteLoading {
-          ErrorLine(error).accessibilityIdentifier("documents.siteError")
-          Button(L10n.t("documents.toBuild")) { openPage(.server) }.buttonStyle(.link).font(.callout)
+          Callout(.error) {
+            Text(error).textSelection(.enabled).accessibilityIdentifier("documents.siteError")
+            Button(L10n.t("documents.toBuild")) { openPage(.server) }.buttonStyle(.link).font(.callout)
+          }
         }
       }
     } else if let site = model.site, let draft = model.draft {

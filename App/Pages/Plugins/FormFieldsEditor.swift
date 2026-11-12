@@ -47,7 +47,7 @@ struct FormFieldsEditor: View {
         Note(L10n.t("formsEditor.templateFieldsNote", ["template": FormsView.templateName(template)]))
       }
       if let olderPlugin { NoEffectLine(L10n.t("formsEditor.olderPlugin", ["since": FormsOptions.layoutSince, "installed": olderPlugin])) }
-      if fields.isEmpty { Warning(L10n.t("formsEditor.noFields")) }
+      if fields.isEmpty { Callout(.warning, L10n.t("formsEditor.noFields")) }
       ForEach(Array(fields.enumerated()), id: \.offset) { i, field in
         row(field, at: i)
       }
@@ -456,7 +456,7 @@ private struct FieldEditor: View {
         return true
       }
       Text(L10n.t("formsEditor.fieldNameHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-      if let problem { ErrorLine(Self.nameProblem(problem)) }
+      if let problem { FieldProblem(Self.nameProblem(problem)) }
     }
     VStack(alignment: .leading, spacing: 4) {
       Text(L10n.t("formsEditor.fieldType"))

@@ -28,9 +28,9 @@ struct ImageButton: View {
         Label(L10n.t("snippets.insertImage"), systemImage: "photo.badge.plus")
       }
       .disabled(busy)
-      if placeholdersOff { Warning(L10n.t("snippets.placeholdersOff", ["token": "{{root}}"])) }
-      if let note { Warning(note) }
-      if let error { ErrorLine(error) }
+      if placeholdersOff { Callout(.warning, L10n.t("snippets.placeholdersOff", ["token": "{{root}}"])) }
+      if let note { Callout(.warning, note) }
+      if let error { Callout(.error, error) }
     }
   }
 
@@ -129,7 +129,7 @@ struct PlaceholderList: View {
     DisclosureGroup {
       VStack(alignment: .leading, spacing: 6) {
         Text(L10n.t("snippets.placeholders.introInsert")).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-        if off { Warning(L10n.t("snippets.placeholders.off")) }
+        if off { Callout(.warning, L10n.t("snippets.placeholders.off")) }
         Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: 10, verticalSpacing: 4) {
           ForEach(rows, id: \.token) { row in
             GridRow {
@@ -193,7 +193,7 @@ struct SnippetFileField: View {
             if raw != (current ?? "") { onValue(raw.isEmpty ? nil : .string(raw)) }
             return true
           }
-          Warning(listing.state == .outside ? L10n.t("snippets.dir.outside", ["dir": dir]) : L10n.t("snippets.dir.reserved", ["dir": dir]))
+          Callout(.warning, listing.state == .outside ? L10n.t("snippets.dir.outside", ["dir": dir]) : L10n.t("snippets.dir.reserved", ["dir": dir]))
         }
       } else {
         VStack(alignment: .leading, spacing: 6) {
@@ -218,14 +218,14 @@ struct SnippetFileField: View {
           if listing?.state == .link { Note(L10n.t("snippets.dir.link", ["dir": dir])) }
           if listing?.state == .missing { Note(L10n.t("snippets.dir.missing", ["dir": dir])) }
           if listing != nil, !silenced, let effective, !effectiveExists, listing?.state != .missing {
-            Warning(L10n.t("snippets.missingFile", ["name": effective, "dir": dir]))
+            Callout(.warning, L10n.t("snippets.missingFile", ["name": effective, "dir": dir]))
           }
           if newName != nil {
             NewSnippetRow(name: Binding(get: { newName ?? "" }, set: { newName = $0 }), fileExtension: $newExtension) {
               Task { await create() }
             }
           }
-          if let error { ErrorLine(error) }
+          if let error { Callout(.error, error) }
           if let editing, writable, files.contains(editing) {
             SnippetEditor(projectPath: projectPath, dir: dir, file: editing, placeholdersOff: placeholdersOff) { self.editing = nil }
               .id("\(dir)/\(editing)")
@@ -415,7 +415,7 @@ struct SnippetEditor: View {
         Button(L10n.t("snippets.save")) { Task { await save() } }
           .disabled(!dirty)
       }
-      if let error { ErrorLine(error) }
+      if let error { Callout(.error, error) }
     }
     .padding(8)
     .background(RoundedRectangle(cornerRadius: 7).fill(.quaternary.opacity(0.4)))
@@ -454,23 +454,5 @@ struct SnippetEditor: View {
     }
     draft = nil
     onClose()
-  }
-}
-
-/// A sentence in the warning colour: something will not work as one expects.
-struct Warning: View {
-  let text: String
-  init(_ text: String) { self.text = text }
-  var body: some View {
-    Text(text).font(.caption).foregroundStyle(.orange).fixedSize(horizontal: false, vertical: true)
-  }
-}
-
-/// A sentence in the error colour: something failed.
-struct ErrorLine: View {
-  let text: String
-  init(_ text: String) { self.text = text }
-  var body: some View {
-    Text(text).font(.caption).foregroundStyle(.red).fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
   }
 }

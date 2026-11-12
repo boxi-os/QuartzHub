@@ -67,7 +67,7 @@ struct FormInspector: View {
           .id(idReset)
           .accessibilityIdentifier("forms.inspector.id")
         }
-        if let problem { ErrorLine(FormsView.idProblem(problem)) }
+        if let problem { FieldProblem(FormsView.idProblem(problem)) }
         FormMessages(problems: messages.problems, hints: messages.hints)
       }
       part(.general, L10n.t("formsEditor.parts.general"), "slider.horizontal.3", messages.problems) { general }
@@ -244,7 +244,7 @@ struct FormInspector: View {
     if mode != "off" {
       if keyNames.isEmpty {
         HStack {
-          Warning(L10n.t("formsEditor.noKeysYet"))
+          Callout(.warning, L10n.t("formsEditor.noKeysYet"))
           Button { selection = "section:keys" } label: { Label(L10n.t("formsEditor.sections.keys"), systemImage: "key") }
         }
       } else {
