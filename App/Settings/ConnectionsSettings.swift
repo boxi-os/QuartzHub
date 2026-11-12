@@ -92,7 +92,7 @@ struct ConnectionsSettings: View {
         }
       }
       if let failure = model.githubFailure {
-        Text(failure).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error, failure)
       }
     } header: {
       Text(L10n.t("settings.github.title"))
@@ -145,7 +145,7 @@ struct ConnectionsSettings: View {
         Button(L10n.t("settings.connections.addWebhook")) { add(.webhook) }
       }
       if let failure = model.failure {
-        Text(failure).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error, failure)
       }
     } header: {
       Text(L10n.t("settings.connections.title"))

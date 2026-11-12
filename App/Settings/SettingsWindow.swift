@@ -119,7 +119,7 @@ private struct GeneralSettings: View {
           }
         }
         if let directoryFailure {
-          Text(directoryFailure).foregroundStyle(.red).font(.callout)
+          Callout(.error, directoryFailure)
         }
       } header: {
         Text(L10n.t("settings.projects.title"))
@@ -256,11 +256,12 @@ private struct MaintenanceSettings: View {
       let quarantined = JSONStore.quarantinedFiles()
       if !quarantined.isEmpty {
         Section {
-          Label(L10n.t("settings.maintenance.unreadableTitle"), systemImage: "exclamationmark.triangle.fill")
-            .foregroundStyle(.orange)
-          Text(L10n.t("settings.maintenance.unreadableHint")).foregroundStyle(.secondary)
-          ForEach(quarantined, id: \.path) { file in
-            Text(file.quarantinedAs ?? file.path).font(.caption.monospaced()).textSelection(.enabled)
+          Callout(.warning) {
+            Text(L10n.t("settings.maintenance.unreadableTitle"))
+            Text(L10n.t("settings.maintenance.unreadableHint")).foregroundStyle(.secondary)
+            ForEach(quarantined, id: \.path) { file in
+              Text(file.quarantinedAs ?? file.path).font(.caption.monospaced())
+            }
           }
         }
       }

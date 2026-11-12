@@ -74,7 +74,7 @@ struct CreateProjectSheet: View {
               .accessibilityIdentifier("create.name")
           }
           if nameInvalid {
-            Text(L10n.t("home.wizard.nameInvalid")).foregroundStyle(.red).font(.callout)
+            FieldProblem(L10n.t("home.wizard.nameInvalid"))
           } else if !target.isEmpty {
             LabeledContent(L10n.t("home.wizard.targetPreview")) {
               Text(target).font(.callout.monospaced()).textSelection(.enabled).lineLimit(2).truncationMode(.middle)
@@ -144,7 +144,7 @@ struct CreateProjectSheet: View {
         }
         if let error {
           Section {
-            Text(error).foregroundStyle(.red).font(.callout).textSelection(.enabled)
+            Callout(.error, error)
           }
         }
       }
@@ -195,14 +195,13 @@ struct CreateProjectSheet: View {
         .foregroundStyle(.secondary)
       ScrollView {
         VStack(alignment: .leading, spacing: 6) {
-          if let failure = outcome.failure {
-            Text(failure).foregroundStyle(.red).textSelection(.enabled)
-          }
-          if let style = outcome.styleFailure {
-            Text(style).foregroundStyle(.orange).textSelection(.enabled)
-          }
-          ForEach(Array(ImportWarnings.lines(outcome.warnings).enumerated()), id: \.offset) { _, line in
-            Text(line).foregroundStyle(.orange)
+          if let failure = outcome.failure { Callout(.error, failure) }
+          if let style = outcome.styleFailure { Callout(.warning, style) }
+          let lines = ImportWarnings.lines(outcome.warnings)
+          if !lines.isEmpty {
+            Callout(.warning) {
+              ForEach(Array(lines.enumerated()), id: \.offset) { _, line in Text(line) }
+            }
           }
         }
         .font(.callout)

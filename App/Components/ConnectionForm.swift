@@ -201,8 +201,7 @@ struct ConnectionFields: View {
         .accessibilityIdentifier("connection.secret")
     }
     if draft.kind == .ftp && !draft.secure {
-      Label(L10n.t("publish.ftpPlaintextWarning"), systemImage: "exclamationmark.triangle")
-        .font(.callout).foregroundStyle(.orange)
+      Callout(.warning, L10n.t("publish.ftpPlaintextWarning"))
     }
   }
 
@@ -265,7 +264,7 @@ struct ConnectionSheet: View {
           }
         }
         if let failure {
-          Text(failure).foregroundStyle(.red).textSelection(.enabled)
+          Callout(.error, failure)
         }
       }
       .formStyle(.grouped)

@@ -53,7 +53,7 @@ struct DuplicateProjectSheet: View {
               .accessibilityIdentifier("duplicate.name")
           }
           if nameInvalid {
-            Text(L10n.t("home.wizard.nameInvalid")).foregroundStyle(.red).font(.callout)
+            FieldProblem(L10n.t("home.wizard.nameInvalid"))
           } else if !target.isEmpty {
             LabeledContent(L10n.t("home.wizard.targetPreview")) {
               Text(target).font(.callout.monospaced()).textSelection(.enabled).lineLimit(2).truncationMode(.middle)
@@ -78,7 +78,7 @@ struct DuplicateProjectSheet: View {
         }
         if let error {
           Section {
-            Text(error).foregroundStyle(.red).font(.callout).textSelection(.enabled)
+            Callout(.error, error)
           }
         }
       }

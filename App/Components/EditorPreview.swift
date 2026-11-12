@@ -137,7 +137,7 @@ struct EditorPreview: View {
     if status.state != .running {
       VStack(alignment: .leading, spacing: 8) {
         Text(status.state == .starting ? L10n.t("sitePreview.starting") : L10n.t("sitePreview.notRunning")).foregroundStyle(.secondary)
-        if let error = ProjectAttention.serverErrorText(status) { Text(error).foregroundStyle(.red).font(.callout) }
+        if let error = ProjectAttention.serverErrorText(status) { Callout(.error, error) }
         if status.state == .stopped || status.state == .error {
           Button { start() } label: { Label(L10n.t("sitePreview.start"), systemImage: "play.fill") }
             .disabled(starting)

@@ -46,8 +46,7 @@ struct MigrationSheet: View {
       case .asking, .running: overview
       case .done(let report): result(report)
       case .failed(let file):
-        Text(L10n.t("migration.failed", ["file": file]))
-          .foregroundStyle(.red)
+        Callout(.error, L10n.t("migration.failed", ["file": file]))
       }
       buttons
     }

@@ -24,14 +24,13 @@ struct DevServerRestartHint: View {
       if show, restarted {
         Text(L10n.t("devServer.restarted")).font(.caption).foregroundStyle(.green)
       } else if show, running || restarting {
-        HStack(spacing: 8) {
-          Text(L10n.t("devServer.staleHint")).font(.caption).foregroundStyle(.orange)
-            .fixedSize(horizontal: false, vertical: true)
+        // A failed restart turns the hint itself into the error, not a second box inside it.
+        Callout(error == nil ? .warning : .error) {
+          Text(L10n.t("devServer.staleHint"))
           Button(restarting ? L10n.t("devServer.restarting") : L10n.t("devServer.restart"), action: restart)
             .disabled(restarting)
-          if let error { Text(error).font(.caption).foregroundStyle(.red).textSelection(.enabled) }
+          if let error { Text(error) }
         }
-        .accessibilityElement(children: .contain)
       }
     }
     // A new save is a new question: the previous answer ("neu gestartet") must not stand for it.

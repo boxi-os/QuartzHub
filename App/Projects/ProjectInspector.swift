@@ -25,8 +25,7 @@ struct ProjectInspector: View {
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("inspector.project")
         if let problem = row.problem {
-          Label(problem, systemImage: "exclamationmark.triangle")
-            .foregroundStyle(.orange)
+          Callout(.warning, problem)
         }
         if row.serverRunning {
           LabeledContent(L10n.t("common.serverState.running")) {
@@ -54,7 +53,7 @@ struct ProjectInspector: View {
           Button(L10n.t("home.locateFolder")) { relocate() }
             .disabled(relocating)
           if let relocateFailure {
-            Text(relocateFailure).foregroundStyle(.red).font(.callout)
+            Callout(.error, relocateFailure)
           }
         } else {
           Button(L10n.t("shell.projects.showInFinder")) {
