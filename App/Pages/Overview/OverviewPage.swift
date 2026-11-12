@@ -2,8 +2,8 @@ import AppKit
 import QuartzHubCore
 import SwiftUI
 
-/// Übersicht: QuartzControl's `ProjectDashboard.tsx` as one grouped form. Its tiles become sections
-/// in the same order (Dev-Server, Die Seite, Git-Sync, Plugins, Gestaltung, Build, Veröffentlichen,
+/// Übersicht: QuartzControl's `ProjectDashboard.tsx` as a grid of cards (decisions/ui-ueberarbeitung.md,
+/// Seitentypen), in the same order (Dev-Server, Die Seite, Git-Sync, Plugins, Gestaltung, Build, Veröffentlichen,
 /// Updates, Snapshots), each leading with the one number or name it is about and ending with a link
 /// to the page that owns it. The band "Handlungsbedarf" stands above them; the three things worth
 /// doing from here are in the toolbar.
@@ -63,19 +63,23 @@ struct OverviewPage: View {
   // MARK: The form
 
   private func form(now: Date) -> some View {
-    Form {
-      attentionSection
-      serverSection(now: now)
-      siteSection
-      gitSection(now: now)
-      pluginsSection
-      designSection
-      buildSection(now: now)
-      publishSection
-      updatesSection
-      snapshotsSection(now: now)
+    ScrollView {
+      VStack(alignment: .leading, spacing: Spacing.m) {
+        attentionSection
+        CardGrid {
+          serverSection(now: now)
+          siteSection
+          gitSection(now: now)
+          pluginsSection
+          designSection
+          buildSection(now: now)
+          publishSection
+          updatesSection
+          snapshotsSection(now: now)
+        }
+      }
+      .padding(Spacing.page)
     }
-    .formStyle(.grouped)
   }
 
   private func open(_ issue: ProjectAttention.Issue) {
@@ -100,8 +104,17 @@ struct OverviewPage: View {
 
   @ViewBuilder private var attentionSection: some View {
     let issues = ProjectAttention.issues(reads)
+    // The band above the cards, across the whole width.
     if !issues.isEmpty {
-      Section {
+      VStack(alignment: .leading, spacing: Spacing.s) {
+        Label {
+          Text("\(L10n.t("dashboard.attention.title"))\(Text(" (\(issues.count))").foregroundStyle(.secondary))")
+        } icon: {
+          Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+        }
+        .font(.headline)
+        .accessibilityAddTraits(.isHeader)
+        .accessibilityIdentifier("overview.attention")
         ForEach(issues) { issue in
           IssueRow(issue: issue, installing: model.busy.contains(.install)) {
             Task { await model.installDependencies() }
@@ -109,26 +122,24 @@ struct OverviewPage: View {
             open(issue)
           }
         }
-      } header: {
-        Label {
-          Text("\(L10n.t("dashboard.attention.title"))\(Text(" (\(issues.count))").foregroundStyle(.secondary))")
-        } icon: {
-          Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
-        }
-        .accessibilityIdentifier("overview.attention")
       }
+      .padding(Spacing.m)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .background(Color.orange.opacity(0.10), in: .rect(cornerRadius: 12))
+      .accessibilityElement(children: .contain)
     } else if ProjectAttention.allGood(reads) {
-      Section {
-        Label(L10n.t("dashboard.attention.allGood"), systemImage: "checkmark.circle.fill")
-          .foregroundStyle(.green)
-          .accessibilityIdentifier("overview.allGood")
-      }
+      Label(L10n.t("dashboard.attention.allGood"), systemImage: "checkmark.circle.fill")
+        .foregroundStyle(.green)
+        .padding(.horizontal, Spacing.m)
+        .padding(.vertical, Spacing.s)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.green.opacity(0.10), in: .rect(cornerRadius: 12))
+        .accessibilityIdentifier("overview.allGood")
     }
   }
 
   private func serverSection(now: Date) -> some View {
-    Section {
-      // On a row that is always there: a Form's identifier does not reach the accessibility tree.
+    Card(L10n.t("dashboard.devServer"), symbol: ProjectPage.server.symbol) {
       Group {
         if server.state == .running, let options = server.options,
            let url = URL(string: "http://\(options.host.isEmpty ? "localhost" : options.host):\(options.port)") {
@@ -155,10 +166,8 @@ struct OverviewPage: View {
         Button(L10n.t("dashboard.restart"), systemImage: "arrow.clockwise", action: model.restartServer)
           .disabled(server.state != .running)
       }
-    } header: {
-      SectionHeader(title: L10n.t("dashboard.devServer"), symbol: ProjectPage.server.symbol) {
-        StateBadge(text: ServerStateText.text(server.state), color: server.state == .running ? .green : server.state == .error ? .red : .secondary)
-      }
+    } accessory: {
+      StateBadge(text: ServerStateText.text(server.state), color: server.state == .running ? .green : server.state == .error ? .red : .secondary)
     } footer: {
       PageLink(page: .server)
     }
@@ -178,7 +187,7 @@ struct OverviewPage: View {
   private var siteSection: some View {
     let config = model.attention.config
     let baseUrl = ProjectAttention.baseUrl(config)
-    return Section {
+    return Card(L10n.t("dashboard.site"), symbol: ProjectPage.config.symbol) {
       LabeledContent(L10n.t("dashboard.pageTitle"), value: nonEmpty(config?.configuration["pageTitle"]?.stringValue))
       LabeledContent(L10n.t("dashboard.baseUrl")) {
         if baseUrl.isEmpty {
@@ -189,9 +198,7 @@ struct OverviewPage: View {
       }
       LabeledContent(L10n.t("dashboard.locale"), value: nonEmpty(config?.configuration["locale"]?.stringValue))
       LabeledContent(L10n.t("dashboard.contentFolder")) { contentValue }
-    } header: {
-      SectionHeader(title: L10n.t("dashboard.site"), symbol: ProjectPage.config.symbol) { EmptyView() }
-    } footer: {
+    } accessory: { EmptyView() } footer: {
       PageLink(page: .config, configTab: .site)
     }
   }
@@ -223,7 +230,7 @@ struct OverviewPage: View {
   /// Read straight from git: no token, no network.
   private func gitSection(now: Date) -> some View {
     let git = model.attention.git
-    return Section {
+    return Card(L10n.t("projectLayout.tabs.sync"), symbol: ProjectPage.sync.symbol) {
       if let git {
         if git.readError != nil {
           Metric(L10n.t("dashboard.git.unreadable"), muted: true)
@@ -252,13 +259,11 @@ struct OverviewPage: View {
       } else {
         Metric("–", muted: true)
       }
-    } header: {
-      SectionHeader(title: L10n.t("projectLayout.tabs.sync"), symbol: ProjectPage.sync.symbol) {
-        if let operation = git?.inProgress {
-          StateBadge(text: L10n.t("dashboard.git.inProgress", ["operation": operation.rawValue]), color: .red)
-        } else if let branch = git?.branch {
-          Text(branch).font(.callout.monospaced())
-        }
+    } accessory: {
+      if let operation = git?.inProgress {
+        StateBadge(text: L10n.t("dashboard.git.inProgress", ["operation": operation.rawValue]), color: .red)
+      } else if let branch = git?.branch {
+        Text(branch).font(.callout.monospaced())
       }
     } footer: {
       PageLink(page: .sync)
@@ -266,7 +271,7 @@ struct OverviewPage: View {
   }
 
   private var pluginsSection: some View {
-    Section {
+    Card(L10n.t("projectLayout.tabs.plugins"), symbol: ProjectPage.plugins.symbol) {
       if let config = model.attention.config {
         let total = config.plugins.count
         let active = config.plugins.filter(\.enabled).count
@@ -276,9 +281,7 @@ struct OverviewPage: View {
       } else {
         ProgressView().controlSize(.small)
       }
-    } header: {
-      SectionHeader(title: L10n.t("projectLayout.tabs.plugins"), symbol: ProjectPage.plugins.symbol) { EmptyView() }
-    } footer: {
+    } accessory: { EmptyView() } footer: {
       PageLink(page: .plugins)
     }
   }
@@ -294,7 +297,7 @@ struct OverviewPage: View {
   }
 
   private var designSection: some View {
-    Section {
+    Card(L10n.t("projectLayout.groups.design"), symbol: ProjectPage.styles.symbol) {
       Metric(activeTheme ?? L10n.t("dashboard.design.stockTheme"))
       Note(L10n.t("dashboard.design.frames", ["count": String(model.frameCount ?? 0)], count: model.frameCount ?? 0) + " · "
            + L10n.t("dashboard.design.stylesheets", ["count": String(model.stylesheetCount ?? 0)], count: model.stylesheetCount ?? 0))
@@ -304,16 +307,14 @@ struct OverviewPage: View {
       case .error?: StateBadge(text: L10n.t("dashboard.design.cssError"), color: .red)
       case .unavailable?: StateBadge(text: L10n.t("dashboard.design.cssUnchecked"), color: .secondary)
       }
-    } header: {
-      SectionHeader(title: L10n.t("projectLayout.groups.design"), symbol: ProjectPage.styles.symbol) { EmptyView() }
-    } footer: {
+    } accessory: { EmptyView() } footer: {
       PageLink(page: .styles)
     }
   }
 
   /// Nothing records that a build happened: this is the output folder as it is on disk.
   private func buildSection(now: Date) -> some View {
-    Section {
+    Card(L10n.t("dashboard.build.title"), symbol: "hammer") {
       if buildRunning, let activity {
         Metric(L10n.t("dashboard.build.running"))
         ActivityLine(activity: activity)
@@ -333,15 +334,13 @@ struct OverviewPage: View {
         }
       }
       if let message = model.buildMessage { Note(message) }
-    } header: {
-      SectionHeader(title: L10n.t("dashboard.build.title"), symbol: "hammer") { EmptyView() }
-    } footer: {
+    } accessory: { EmptyView() } footer: {
       PageLink(page: .server)
     }
   }
 
   private var publishSection: some View {
-    Section {
+    Card(L10n.t("projectLayout.tabs.publish"), symbol: ProjectPage.publish.symbol) {
       if let targets = model.targets, !targets.isEmpty {
         Metric(String(targets.count), note: L10n.t("dashboard.publish.targets", count: targets.count))
         ForEach(targets.prefix(3), id: \.id) { target in
@@ -353,9 +352,7 @@ struct OverviewPage: View {
         Metric(L10n.t("dashboard.publish.none"), muted: true)
         Note(L10n.t("dashboard.publish.noneHint"))
       }
-    } header: {
-      SectionHeader(title: L10n.t("projectLayout.tabs.publish"), symbol: ProjectPage.publish.symbol) { EmptyView() }
-    } footer: {
+    } accessory: { EmptyView() } footer: {
       PageLink(page: .publish)
     }
   }
@@ -366,7 +363,7 @@ struct OverviewPage: View {
     let unknown = model.pluginUpdates?.filter { $0.state == .unknown }.count ?? 0
     let coreState = model.core?.state
     let count = (coreState == .behind || coreState == .pending ? 1 : 0) + behind
-    return Section {
+    return Card(L10n.t("projectLayout.tabs.updates"), symbol: ProjectPage.updates.symbol) {
       if model.updatesPending {
         HStack(spacing: 8) {
           ProgressView().controlSize(.small)
@@ -378,10 +375,8 @@ struct OverviewPage: View {
              : L10n.t("dashboard.updates.pluginsCurrent", ["count": String(model.pluginUpdates?.count ?? 0)], count: model.pluginUpdates?.count ?? 0))
         if unknown > 0 { Note(L10n.t("dashboard.updates.checkFailed", ["count": String(unknown)], count: unknown)) }
       }
-    } header: {
-      SectionHeader(title: L10n.t("projectLayout.tabs.updates"), symbol: ProjectPage.updates.symbol) {
-        if !model.updatesPending && count > 0 { StateBadge(text: String(count), color: .orange) }
-      }
+    } accessory: {
+      if !model.updatesPending && count > 0 { StateBadge(text: String(count), color: .orange) }
     } footer: {
       PageLink(page: .updates)
     }
@@ -397,7 +392,7 @@ struct OverviewPage: View {
   }
 
   private func snapshotsSection(now: Date) -> some View {
-    Section {
+    Card(L10n.t("projectLayout.tabs.backups"), symbol: ProjectPage.backups.symbol) {
       if let snapshots = model.snapshots, let newest = snapshots.first {
         Metric(String(snapshots.count), note: L10n.t("dashboard.backups.states", count: snapshots.count))
         Note(L10n.t("dashboard.backups.newest", ["when": Formats.relative(Formats.date(iso: newest.createdAt), now: now) ?? "–"]))
@@ -408,9 +403,7 @@ struct OverviewPage: View {
         Metric(L10n.t("dashboard.backups.none"), muted: true)
         Note(L10n.t("dashboard.backups.noneHint"))
       }
-    } header: {
-      SectionHeader(title: L10n.t("projectLayout.tabs.backups"), symbol: ProjectPage.backups.symbol) { EmptyView() }
-    } footer: {
+    } accessory: { EmptyView() } footer: {
       PageLink(page: .backups)
     }
   }
@@ -418,7 +411,7 @@ struct OverviewPage: View {
   // MARK: Toolbar
 
   @ToolbarContentBuilder private var actions: some ToolbarContent {
-    ToolbarItemGroup {
+    ToolbarItemGroup(placement: .primaryAction) {
       Button(model.busy.contains(.build) || buildRunning ? L10n.t("dashboard.build.running") : L10n.t("dashboard.build.run"),
              systemImage: "hammer") {
         Task { await model.runBuild() }

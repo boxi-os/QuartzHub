@@ -253,3 +253,75 @@ extension SettingsSection where Accessory == EmptyView {
     self.init(title, symbol: symbol, note: note, identifier: identifier, content: content) { EmptyView() }
   }
 }
+
+// MARK: - Card
+
+/// One tile of an overview (Übersicht, Layout ▸ Übersicht): its heading with the page's symbol and
+/// a state, the one number or name it is about, and the way to the page that owns it. Cards stand
+/// in a `CardGrid`, one column in a narrow window, up to three in a wide one.
+struct Card<Content: View, Accessory: View, Footer: View>: View {
+  let title: String
+  var symbol: String?
+  @ViewBuilder var content: () -> Content
+  @ViewBuilder var accessory: () -> Accessory
+  @ViewBuilder var footer: () -> Footer
+
+  init(_ title: String, symbol: String? = nil, @ViewBuilder content: @escaping () -> Content,
+       @ViewBuilder accessory: @escaping () -> Accessory, @ViewBuilder footer: @escaping () -> Footer) {
+    self.title = title
+    self.symbol = symbol
+    self.content = content
+    self.accessory = accessory
+    self.footer = footer
+  }
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: Spacing.xs) {
+      HStack(alignment: .firstTextBaseline, spacing: Spacing.xs) {
+        Group {
+          if let symbol { Label(title, systemImage: symbol) } else { Text(title) }
+        }
+        .font(.headline)
+        .accessibilityAddTraits(.isHeader)
+        Spacer(minLength: Spacing.xs)
+        accessory().font(.callout).foregroundStyle(.secondary)
+      }
+      VStack(alignment: .leading, spacing: Spacing.xxs + 2) { content() }
+        .labeledContentStyle(CardRow())
+      Spacer(minLength: 0)
+      footer()
+    }
+    .padding(Spacing.m)
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    .background(.fill.quinary, in: .rect(cornerRadius: 12))
+    .accessibilityElement(children: .contain)
+  }
+}
+
+/// A fact in a card: its name muted on the left, the value on the right.
+struct CardRow: LabeledContentStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    HStack(alignment: .firstTextBaseline, spacing: Spacing.s) {
+      configuration.label.foregroundStyle(.secondary)
+      Spacer(minLength: Spacing.xs)
+      configuration.content.multilineTextAlignment(.trailing).lineLimit(1)
+    }
+  }
+}
+
+/// Cards from 300 pt wide, as many columns as fit; a change of column count is animated.
+struct CardGrid<Content: View>: View {
+  @ViewBuilder var content: () -> Content
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @State private var columns = 1
+
+  var body: some View {
+    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Spacing.m, alignment: .top), count: columns),
+              alignment: .leading, spacing: Spacing.m) {
+      content()
+    }
+    .onGeometryChange(for: Int.self) { max(1, min(3, Int(($0.size.width + Spacing.m) / (300 + Spacing.m)))) } action: { next in
+      withAnimation(Motion.layout(reduce: reduceMotion)) { columns = next }
+    }
+  }
+}
