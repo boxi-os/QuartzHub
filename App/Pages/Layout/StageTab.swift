@@ -334,8 +334,7 @@ struct StageTab: View {
       }
       let missing = LayoutStage.missingPositions(facts.frame, breakpoint)
       if !missing.isEmpty {
-        Note(L10n.t("layoutEditor.frameBuilder.unassignedWarning", ["slots": missing.map(LayoutWords.position).joined(separator: ", ")]))
-          .foregroundStyle(.orange)
+        Callout(.warning, L10n.t("layoutEditor.frameBuilder.unassignedWarning", ["slots": missing.map(LayoutWords.position).joined(separator: ", ")]))
       }
     }
   }

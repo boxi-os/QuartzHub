@@ -570,22 +570,28 @@ struct FramesTab: View {
     let others = LayoutBoard.breakpoints.filter { $0 != breakpoint && FrameEditing.warningKeys(view, $0).contains { !here.contains($0) } }
     let never = view.areas.filter { a in LayoutBoard.breakpoints.allSatisfy { !view.isShown(a, on: $0) } }
     let positions = { (list: [String]) in list.map(LayoutWords.position).joined(separator: ", ") }
-    VStack(alignment: .leading, spacing: 6) {
+    let lines: [String] = {
+      var lines: [String] = []
       if !placements.overlapping.isEmpty {
-        Note(L10n.t("layoutEditor.frameBuilder.overlapWarning", ["pairs": placements.overlapping.map { "\(name($0.0)) + \(name($0.1))" }.joined(separator: ", ")]))
+        lines.append(L10n.t("layoutEditor.frameBuilder.overlapWarning", ["pairs": placements.overlapping.map { "\(name($0.0)) + \(name($0.1))" }.joined(separator: ", ")]))
       }
-      if !placements.outside.isEmpty { Note(L10n.t("layoutEditor.frameBuilder.outsideWarning", ["areas": placements.outside.map(name).joined(separator: ", ")])) }
-      if !slots.unassigned.isEmpty { Note(L10n.t("layoutEditor.frameBuilder.unassignedWarning", ["slots": positions(slots.unassigned)])) }
-      if !slots.homeless.isEmpty { Note(L10n.t("layoutEditor.frameBuilder.homelessWarning", ["slots": positions(slots.homeless)])) }
-      if !slots.doubled.isEmpty { Note(L10n.t("layoutEditor.frameBuilder.doubledWarning", ["slots": positions(slots.doubled)])) }
+      if !placements.outside.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.outsideWarning", ["areas": placements.outside.map(name).joined(separator: ", ")])) }
+      if !slots.unassigned.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.unassignedWarning", ["slots": positions(slots.unassigned)])) }
+      if !slots.homeless.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.homelessWarning", ["slots": positions(slots.homeless)])) }
+      if !slots.doubled.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.doubledWarning", ["slots": positions(slots.doubled)])) }
       if !slots.hiddenGroups.isEmpty {
-        Note(L10n.t("layoutEditor.frameBuilder.hiddenGroupsWarning", ["breakpoint": LayoutWords.breakpoint(breakpoint), "areas": slots.hiddenGroups.map(name).joined(separator: ", ")]))
+        lines.append(L10n.t("layoutEditor.frameBuilder.hiddenGroupsWarning", ["breakpoint": LayoutWords.breakpoint(breakpoint), "areas": slots.hiddenGroups.map(name).joined(separator: ", ")]))
       }
-      if !others.isEmpty { Note(L10n.t("layoutEditor.frameBuilder.otherBreakpointsWarning", ["breakpoints": others.map(LayoutWords.breakpoint).joined(separator: ", ")])) }
-      if !never.isEmpty { Note(L10n.t("layoutEditor.frameBuilder.neverVisibleWarning", ["areas": never.map(\.name).joined(separator: ", ")])) }
+      if !others.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.otherBreakpointsWarning", ["breakpoints": others.map(LayoutWords.breakpoint).joined(separator: ", ")])) }
+      if !never.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.neverVisibleWarning", ["areas": never.map(\.name).joined(separator: ", ")])) }
+      return lines
+    }()
+    if !lines.isEmpty {
+      Callout(.warning) {
+        ForEach(lines, id: \.self) { Text($0) }
+      }
+      .accessibilityIdentifier("layout.frames.warnings")
     }
-    .foregroundStyle(.orange)
-    .accessibilityIdentifier("layout.frames.warnings")
   }
 }
 
@@ -619,11 +625,11 @@ struct BreakpointWidthsSection: View {
           }
           .disabled(saving || !valid || !changed)
         }
-        if !valid { Text(L10n.t("layoutEditor.breakpoints.invalid")).font(.caption).foregroundStyle(.red) }
+        if !valid { FieldProblem(L10n.t("layoutEditor.breakpoints.invalid")) }
         if saved && !changed { Text(L10n.t("layoutEditor.breakpoints.saved")).font(.caption).foregroundStyle(.green) }
         // The widths rewrite every frame's CSS, which a running server does not reload.
         DevServerRestartHint(project: model.project, show: saved && !changed && !model.frames.isEmpty)
-        if let error { Text(error).font(.caption).foregroundStyle(.red).textSelection(.enabled) }
+        if let error { Callout(.error, error) }
       }
       .padding(.top, 6)
     }
@@ -764,7 +770,7 @@ struct FrameAreaInspector: View {
             }
             Button(L10n.t("layoutEditor.frameBuilder.removeArea"), role: .destructive) { Task { await remove(area, view) } }
           }
-          if let refusal { Text(refusal).foregroundStyle(.red).accessibilityIdentifier("layout.frames.refusal") }
+          if let refusal { Callout(.error) { Text(refusal).accessibilityIdentifier("layout.frames.refusal") } }
         }
       }
       .formStyle(.grouped)

@@ -75,7 +75,7 @@ struct ComponentInspector: View {
           .accessibilityIdentifier("layout.inspector.hideOnType")
           // Quartz excludes by name, so the switch reaches every instance.
           if isDuplicate {
-            Note(L10n.t("layoutEditor.excludeDuplicateHint", ["name": plugin.name], count: facts.counts[plugin.name] ?? 1)).foregroundStyle(.orange)
+            Callout(.warning, L10n.t("layoutEditor.excludeDuplicateHint", ["name": plugin.name], count: facts.counts[plugin.name] ?? 1))
           }
         }
       }
@@ -233,12 +233,12 @@ struct ComponentInspector: View {
   @ViewBuilder private var options: some View {
     if let schemaError {
       Section(L10n.t("layoutEditor.inspector.options")) {
-        Text(L10n.t("layoutEditor.inspector.optionsError", ["reason": schemaError])).foregroundStyle(.red)
+        Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": schemaError]))
       }
     } else if let schema {
       Section(L10n.t("layoutEditor.inspector.options")) {
         if let unreadable = schema.unreadable {
-          Text(L10n.t("pluginOptions.unreadable", ["reason": unreadable])).font(.callout).foregroundStyle(.orange)
+          Callout(.warning, L10n.t("pluginOptions.unreadable", ["reason": unreadable]))
         }
       }
       OptionsForm(schema: schema.schema, values: plugin.object["options"]?.objectValue ?? JSONObject(),
@@ -288,7 +288,7 @@ struct LayoutSummary: View {
         let shared = indices.count > 1 && reasons.count == 1 ? reasons.first.flatMap { $0.isEmpty ? nil : $0 } : nil
         Section(LayoutWords.position(position)) {
           if missing.contains(position), !indices.isEmpty {
-            Text(L10n.t("layoutEditor.summary.notInFrame")).font(.caption).foregroundStyle(.orange)
+            Callout(.warning, L10n.t("layoutEditor.summary.notInFrame"))
           }
           if let shared { Text(shared).font(.caption).foregroundStyle(.secondary) }
           if indices.isEmpty {
