@@ -16,9 +16,26 @@ struct LogConsole: View {
   var fills = false
   let clear: () -> Void
 
+  /// "Ausgabe leeren", kept in place while there is nothing to clear, so a row with it keeps its height.
+  static func clearButton(empty: Bool, action: @escaping () -> Void) -> some View {
+    Button(L10n.t("logConsole.clear"), action: action)
+      .buttonStyle(.link)
+      .font(.callout)
+      .opacity(empty ? 0 : 1)
+      .disabled(empty)
+      .accessibilityHidden(empty)
+  }
+
   var body: some View {
+    let empty = lines.lines.isEmpty
     VStack(alignment: .trailing, spacing: 4) {
-      if lines.lines.isEmpty {
+      // In a panel of its own the panel's head has "Ausgabe leeren" (`LogConsole.clearButton`), so
+      // two consoles side by side start at the same height, empty or not (seen 2026-11-12: the empty
+      // one sat a line higher, without a frame).
+      if !empty && !fills {
+        Self.clearButton(empty: empty, action: clear)
+      }
+      if empty {
         Text(L10n.t("logConsole.noOutput"))
           .font(.system(.callout, design: .monospaced))
           .foregroundStyle(.secondary)
@@ -27,14 +44,12 @@ struct LogConsole: View {
           .padding(.vertical, 6)
           // Filling, the empty console shows how high the pane is (Vorschau & Build).
           .frame(maxHeight: fills ? .infinity : nil, alignment: .topLeading)
-          .background(RoundedRectangle(cornerRadius: 6).fill(.background.secondary))
+          .background(Color(nsColor: .textBackgroundColor), in: .rect(cornerRadius: 6))
+          .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
           .accessibilityLabel(label)
           .accessibilityValue(L10n.t("logConsole.noOutput"))
           .accessibilityIdentifier(identifier)
       } else {
-        Button(L10n.t("logConsole.clear"), action: clear)
-          .buttonStyle(.link)
-          .font(.callout)
         LogTextView(lines: lines, label: label, identifier: identifier)
           .frame(height: fills ? nil : 288)
           .frame(maxHeight: fills ? .infinity : nil)

@@ -245,12 +245,12 @@ struct BuildServerPage: View {
       Divider()
       DisclosureGroup(isExpanded: $outputOpen.animation(reduceMotion ? nil : Motion.layout)) {
         HStack(alignment: .top, spacing: Spacing.m) {
-          console(L10n.t("buildServer.serverLogLabel")) {
+          console(L10n.t("buildServer.serverLogLabel"), empty: logs.server.lines.isEmpty, clear: { monitor.clearLog(project.id, .server) }) {
             LogConsole(lines: logs.server, label: L10n.t("buildServer.serverLogLabel"), identifier: "server.log.server", fills: true) {
               monitor.clearLog(project.id, .server)
             }
           }
-          console(L10n.t("buildServer.buildLogLabel")) {
+          console(L10n.t("buildServer.buildLogLabel"), empty: logs.build.lines.isEmpty, clear: { monitor.clearLog(project.id, .build) }) {
             LogConsole(lines: logs.build, label: L10n.t("buildServer.buildLogLabel"), identifier: "server.log.build", fills: true) {
               monitor.clearLog(project.id, .build)
             }
@@ -269,9 +269,14 @@ struct BuildServerPage: View {
     .background(.bar)
   }
 
-  private func console<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+  private func console<Content: View>(_ title: String, empty: Bool, clear: @escaping () -> Void,
+                                      @ViewBuilder content: () -> Content) -> some View {
     VStack(alignment: .leading, spacing: Spacing.xxs) {
-      Text(title).font(.caption).foregroundStyle(.secondary)
+      HStack(alignment: .firstTextBaseline) {
+        Text(title).font(.caption).foregroundStyle(.secondary)
+        Spacer(minLength: Spacing.xs)
+        LogConsole.clearButton(empty: empty, action: clear)
+      }
       content()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
