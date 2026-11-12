@@ -112,8 +112,8 @@ struct SaveButton: View {
 // MARK: - PageTabs
 
 /// The tabs of a page (Konfiguration, Plugins, Layout, Stile): one segmented control centred under
-/// the toolbar, in a bar of its own (`safeAreaBar`, the scroll edge effect runs under it). When the
-/// segments do not fit, a menu with the tab's name; the same rule on every page.
+/// the toolbar, in a row of its own above the content. When the segments do not fit, a menu with
+/// the tab's name; the same rule on every page.
 struct PageTabs: View {
   struct Tab: Identifiable {
     let id: String
@@ -145,9 +145,13 @@ struct PageTabs: View {
 
 extension View {
   /// The page's tabs above its content, the same height and spacing on every page.
+  ///
+  /// A row above, not a `safeAreaBar`: the bar's inset does not reach an AppKit view, and the four
+  /// Plugins editors (a `VSplitView`) drew their first lines under the tabs (seen at 1200 × 780).
   func pageTabs(_ tabs: [PageTabs.Tab], selection: Binding<String>, identifier: String) -> some View {
-    safeAreaBar(edge: .top, spacing: 0) {
+    VStack(spacing: 0) {
       PageTabs(tabs: tabs, selection: selection, identifier: identifier)
+      self.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
   }
 }
