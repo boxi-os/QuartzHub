@@ -11,7 +11,7 @@ liest dieselben Projekte.
 **Stand:** in Entwicklung, nicht veröffentlicht. Das erste Release kommt, wenn QuartzHub alles kann,
 was QuartzControl 1.3 kann. Bis dahin ist QuartzControl das Werkzeug.
 
-- macOS 15 oder neuer, Apple Silicon
+- macOS 26 oder neuer, Apple Silicon
 - Bringt ein eigenes Node.js (für Quartz) und git mit
 - Lizenz: GPL-3.0-or-later
 

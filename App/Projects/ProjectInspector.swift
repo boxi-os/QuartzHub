@@ -95,8 +95,7 @@ struct ProjectsContext: View {
         // Named rather than implied by the band's absence: "no warning" and "ready" look alike.
         if let report = model.environment, report.ok {
           Label {
-            Text(L10n.t("home.environment.ready")).fontWeight(.medium)
-              + Text(" · " + report.toolSummary()).foregroundStyle(.secondary)
+            Text("\(Text(L10n.t("home.environment.ready")).fontWeight(.medium))\(Text(" · " + report.toolSummary()).foregroundStyle(.secondary))")
           } icon: {
             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
           }

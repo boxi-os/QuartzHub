@@ -88,8 +88,7 @@ struct ActivityLine: View {
     TimelineView(.periodic(from: .now, by: 1)) { context in
       HStack(spacing: 6) {
         ProgressView().controlSize(.mini)
-        Text(Self.kind(activity.kind, time: Formats.elapsed(since: activity.startedAt, now: context.date)))
-          + Text(" · " + Self.phase(activity.phase)).foregroundStyle(.secondary)
+        Text("\(Self.kind(activity.kind, time: Formats.elapsed(since: activity.startedAt, now: context.date)))\(Text(" · " + Self.phase(activity.phase)).foregroundStyle(.secondary))")
       }
       .font(.callout)
     }

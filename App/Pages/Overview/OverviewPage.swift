@@ -111,7 +111,7 @@ struct OverviewPage: View {
         }
       } header: {
         Label {
-          Text(L10n.t("dashboard.attention.title")) + Text(" (\(issues.count))").foregroundStyle(.secondary)
+          Text("\(L10n.t("dashboard.attention.title"))\(Text(" (\(issues.count))").foregroundStyle(.secondary))")
         } icon: {
           Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
         }
@@ -243,7 +243,7 @@ struct OverviewPage: View {
           }
           .font(.title3.weight(.semibold))
           .accessibilityElement(children: .combine)
-          Text("\(git.changeCount) ").fontWeight(.semibold).monospacedDigit() + Text(L10n.t("dashboard.git.uncommitted")).foregroundStyle(.secondary)
+          Text("\(Text("\(git.changeCount) ").fontWeight(.semibold).monospacedDigit())\(Text(L10n.t("dashboard.git.uncommitted")).foregroundStyle(.secondary))")
           if let commit = git.lastCommit {
             Note("„\(commit.subject)“ · \(Formats.relative(Formats.date(iso: commit.date), now: now) ?? "–") · \(commit.author)")
               .lineLimit(1)

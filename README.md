@@ -10,7 +10,7 @@ written in Swift, and reads the same projects.
 **Status:** in development, not released. The first release comes when QuartzHub can do everything
 QuartzControl 1.3 does. Until then, use QuartzControl.
 
-- macOS 15 or later, Apple Silicon
+- macOS 26 or later, Apple Silicon
 - Brings its own Node.js (for Quartz) and git
 - License: GPL-3.0-or-later
 

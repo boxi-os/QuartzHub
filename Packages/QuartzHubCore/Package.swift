@@ -7,7 +7,7 @@ import PackageDescription
 let package = Package(
   name: "QuartzHubCore",
   defaultLocalization: "de",
-  platforms: [.macOS(.v15)],
+  platforms: [.macOS("26.0")],
   products: [
     .library(name: "QuartzHubCore", targets: ["QuartzHubCore"]),
     .executable(name: "qh-check", targets: ["qh-check"])

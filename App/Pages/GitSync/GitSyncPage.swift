@@ -187,7 +187,7 @@ struct GitSyncPage: View {
     if let last = status.lastCommit {
       LabeledContent(L10n.t("gitSync.lastCommit")) {
         VStack(alignment: .trailing, spacing: 2) {
-          (Text(verbatim: last.shortSha).font(.system(.body, design: .monospaced)) + Text(verbatim: " " + last.subject))
+          Text("\(Text(verbatim: last.shortSha).font(.system(.body, design: .monospaced)))\(Text(verbatim: " " + last.subject))")
             .lineLimit(2).multilineTextAlignment(.trailing)
           Text(verbatim: "\(last.author) · \(Self.when(last.date))").font(.callout).foregroundStyle(.secondary)
         }

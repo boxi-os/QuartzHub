@@ -4,7 +4,7 @@ name: QuartzHub
 options:
   bundleIdPrefix: io.github.boxios
   deploymentTarget:
-    macOS: "15.0"
+    macOS: "26.0"
   developmentLanguage: de
   createIntermediateGroups: true
   groupSortPosition: top
@@ -12,7 +12,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
     # Apple Silicon only (docs/plan.md).
     ARCHS: arm64
     # Ad hoc, like the releases: no team, no notarization.

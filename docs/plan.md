@@ -30,7 +30,7 @@ Entscheidungen des Nutzers (2026-11-05):
   Plugin-Optionen aus `.d.ts` (TypeScript) und Projektcode (sass, globby, quartz-forms-CLI).
 - **Kompatibel + Übernahme:** dieselben Projekte, `.quartz-gui/` im selben Format; beim ersten
   Start Übernahme von Projektliste, Einstellungen, Zugängen/Zielen samt Passwörtern.
-- Verteilung über GitHub-Releases, ad hoc signiert, **macOS 15+, nur Apple Silicon**.
+- Verteilung über GitHub-Releases, ad hoc signiert, **macOS 26+, nur Apple Silicon** (bis 2026-11-12: 15+, angehoben für die UI-Überarbeitung, decisions/ui-ueberarbeitung.md).
 - **Erstes Release erst bei Gleichstand** mit QuartzControl 1.3.
 - **GPL-3.0-or-later, Repo erst privat.** Tagged PDF ist verzichtbar.
 

@@ -7,7 +7,7 @@ Anweisungen für Claude Code in diesem Repository.
 **QuartzHub** ist die native macOS-Nachfolgerin von QuartzControl (Electron, Wartung seit 1.3.0,
 Repo `~/Development/QuartzControl`): eine App, die [Quartz 5](https://quartz.jzhao.xyz/)-Projekte
 verwaltet, Logik und Oberfläche in Swift. Node reist nur für Quartz mit und für drei kurze
-Helfer-Skripte (YAML-Roundtrip, Plugin-Optionen aus `.d.ts`, SCSS-Prüfung mit dem Sass des Projekts). macOS 15+, nur Apple Silicon,
+Helfer-Skripte (YAML-Roundtrip, Plugin-Optionen aus `.d.ts`, SCSS-Prüfung mit dem Sass des Projekts). macOS 26+, nur Apple Silicon,
 GPL-3.0-or-later, Bundle-ID `io.github.boxios.quartzhub`. Erstes Release erst bei Gleichstand mit
 QuartzControl 1.3.
 
@@ -98,6 +98,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Seiten, was der UI-Test dabei lernte
 - [`phase-5-gleichstand.md`](docs/decisions/phase-5-gleichstand.md) — was beim Schließen der Lücken gemessen und
   entschieden wurde
+- [`ui-ueberarbeitung.md`](docs/decisions/ui-ueberarbeitung.md) — die einheitliche Oberfläche (seit 2026-11-12):
+  Entscheidungen, macOS 26, Verlauf, Seitentypen, Bewegung
 - [`gleichstand.md`](docs/gleichstand.md) — jede Funktion von QuartzControl 1.3 und ob QuartzHub sie hat
   und an der App gemessen ist (Phase 5)
 

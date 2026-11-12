@@ -466,7 +466,7 @@ private func spawnChild(_ command: Command, path: String, stdin: Int32?, stdout:
     }
   }
   if let directory = command.directory {
-    posix_spawn_file_actions_addchdir_np(&actions, directory)
+    posix_spawn_file_actions_addchdir(&actions, directory)
   }
 
   var all = sigset_t(), none = sigset_t()
