@@ -18,6 +18,13 @@ struct FramesTab: View {
   @State private var cells: [String: CGRect] = [:]
   @State private var resize: (id: String, start: FrameView.Placement, preview: FrameView.Placement)?
   @State private var trayTargeted = false
+  /// The area a drag on the board carries, set when the drag starts: the drop's payload is not
+  /// readable before the drop, and the board answers while it moves.
+  @State private var dragging: String?
+  /// Where the dragged area would land, and whether it may.
+  @State private var ghost: (placement: FrameView.Placement, allowed: Bool)?
+  /// True while a dragged edge is held back by another area or the grid's end.
+  @State private var resizeBlocked = false
   /// The width the board has: inside its sideways scroller nothing proposes one.
   @State private var boardWidth: CGFloat = 600
 
@@ -39,6 +46,7 @@ struct FramesTab: View {
       }
       .padding(Spacing.page)
       .frame(maxWidth: .infinity, alignment: .leading)
+      .background { deselectArea }
     }
     .toolbar { toolbar }
     .onExitCommand { selectedArea = "" }
@@ -224,126 +232,8 @@ struct FramesTab: View {
     let view = FrameView(draft)
     let layout = view.layout(breakpoint)
     return VStack(alignment: .leading, spacing: 16) {
-      settings(draft, layout)
       board(draft, view, layout)
       warnings(view)
-    }
-  }
-
-  private func text(_ key: String, _ value: String?, _ label: String, placeholder: String = "", width: CGFloat = 130) -> some View {
-    VStack(alignment: .leading, spacing: 3) {
-      Text(label).font(.caption).foregroundStyle(.secondary)
-      TextField(label, text: Binding(get: { value ?? "" }, set: { if let d = model.draft { set(FrameEditing.withSetting(d, breakpoint, key, .string($0))) } }),
-                prompt: Text(placeholder))
-        .labelsHidden()
-        .frame(width: width)
-    }
-  }
-
-  private func number(_ key: String, _ value: Int, _ label: String) -> some View {
-    VStack(alignment: .leading, spacing: 3) {
-      Text(label).font(.caption).foregroundStyle(.secondary)
-      Stepper(value: Binding(get: { value }, set: { if let d = model.draft { set(FrameEditing.withSetting(d, breakpoint, key, .number(Double($0)))) } }), in: 1...12) {
-        Text(verbatim: "\(value)").monospacedDigit().frame(minWidth: 20)
-      }
-      .accessibilityLabel(label)
-      .accessibilityValue("\(value)")
-    }
-  }
-
-  private func settings(_ draft: JSONValue, _ layout: FrameView.Layout) -> some View {
-    let hasMaxWidth = !(layout.maxWidth ?? "").trimmingCharacters(in: .whitespaces).isEmpty
-    return GroupBox {
-      VStack(alignment: .leading, spacing: 12) {
-        HStack {
-          Text(L10n.t("layoutEditor.frameBuilder.appliesTo", ["breakpoint": LayoutWords.breakpoint(breakpoint)])).font(.caption).foregroundStyle(.secondary)
-          Spacer()
-          ForEach(LayoutBoard.breakpoints.filter { $0 != breakpoint }, id: \.self) { bp in
-            Button(L10n.t("layoutEditor.frameBuilder.copyLayoutTo", ["target": LayoutWords.breakpoint(bp)])) {
-              set(FrameEditing.copyLayout(draft, from: breakpoint, to: bp))
-            }
-            .controlSize(.small)
-          }
-        }
-        FlowLayout(spacing: 14, minItem: 0, stretch: false) {
-          VStack(alignment: .leading, spacing: 3) {
-            Text(L10n.t("layoutEditor.frameBuilder.frameName")).font(.caption).foregroundStyle(.secondary)
-            TextField(L10n.t("layoutEditor.frameBuilder.frameName"), text: Binding(get: { model.draft.map { FrameView($0).frameName } ?? "" }, set: { name in
-              guard var object = model.draft?.objectValue else { return }
-              object["frameName"] = .string(name)
-              set(.object(object))
-            }), prompt: Text(L10n.t("layoutEditor.templateCustomPlaceholder")))
-              .labelsHidden().frame(width: 220)
-              .accessibilityIdentifier("layout.frames.name")
-          }
-          number("rows", layout.rows, L10n.t("layoutEditor.frameBuilder.rows"))
-          number("cols", layout.cols, L10n.t("layoutEditor.frameBuilder.cols"))
-          text("rowGap", layout.rowGap, L10n.t("layoutEditor.frameBuilder.rowGap"), width: 100)
-          text("columnGap", layout.columnGap, L10n.t("layoutEditor.frameBuilder.columnGap"), width: 100)
-          text("maxWidth", layout.maxWidth, L10n.t("layoutEditor.frameBuilder.maxWidth"), placeholder: L10n.t("layoutEditor.frameBuilder.maxWidthPlaceholder"), width: 110)
-          VStack(alignment: .leading, spacing: 3) {
-            Text(L10n.t("layoutEditor.frameBuilder.align")).font(.caption).foregroundStyle(.secondary)
-            Picker(L10n.t("layoutEditor.frameBuilder.align"), selection: Binding(get: { layout.align ?? "left" },
-                                                                                 set: { set(FrameEditing.withSetting(draft, breakpoint, "align", .string($0))) })) {
-              Text(L10n.t("layoutEditor.frameBuilder.alignOption.left")).tag("left")
-              Text(L10n.t("layoutEditor.frameBuilder.alignOption.center")).tag("center")
-              Text(L10n.t("layoutEditor.frameBuilder.alignOption.right")).tag("right")
-            }
-            .pickerStyle(.segmented).labelsHidden().fixedSize()
-          }
-          text("paddingBlock", layout.paddingBlock, L10n.t("layoutEditor.frameBuilder.paddingBlock"), placeholder: "0")
-          text("paddingInline", layout.paddingInline, L10n.t("layoutEditor.frameBuilder.paddingInline"), placeholder: "0")
-        }
-        tracks(L10n.t("layoutEditor.frameBuilder.columnSizesLabel"), key: "columnSizes", count: layout.cols, first: 1, placeholder: "1fr",
-               value: { i in layout.columnSizes.flatMap { $0.indices.contains(i) ? $0[i] : nil } }, line: false)
-        tracks(L10n.t("layoutEditor.frameBuilder.rowSizesLabel"), key: "rowSizes", count: layout.rows, first: 1, placeholder: "auto",
-               value: { i in layout.rowSizes.flatMap { $0.indices.contains(i) ? $0[i] : nil } }, line: false)
-        HStack(alignment: .firstTextBaseline) {
-          Note(hasMaxWidth ? L10n.t("layoutEditor.frameBuilder.boxHint") : L10n.t("layoutEditor.frameBuilder.boxHintNoMaxWidth"))
-          Spacer()
-          Button(L10n.t("layoutEditor.frameBuilder.resetTracks")) {
-            set(FrameEditing.withSetting(FrameEditing.withSetting(draft, breakpoint, "columnSizes", nil), breakpoint, "rowSizes", nil))
-          }
-          .buttonStyle(.link).font(.caption)
-        }
-        DisclosureGroup(L10n.t("layoutEditor.frameBuilder.lineNamesLabel")) {
-          VStack(alignment: .leading, spacing: 8) {
-            Note(L10n.t("layoutEditor.frameBuilder.lineNamesHint"))
-            tracks(L10n.t("layoutEditor.frameBuilder.columnLinesLabel"), key: "columnLineNames", count: layout.cols + 1, first: 0, placeholder: "",
-                   value: { i in lineName(draft, "columnLineNames", i) }, line: true)
-            tracks(L10n.t("layoutEditor.frameBuilder.rowLinesLabel"), key: "rowLineNames", count: layout.rows + 1, first: 0, placeholder: "",
-                   value: { i in lineName(draft, "rowLineNames", i) }, line: true)
-          }
-          .padding(.top, 6)
-        }
-        BreakpointWidthsSection(model: model)
-      }
-      .padding(4)
-    } label: {
-      Label(L10n.t("layoutEditor.frameBuilder.framePanelTitle"), systemImage: "rectangle.split.3x3").font(.headline)
-    }
-  }
-
-  private func lineName(_ draft: JSONValue, _ key: String, _ index: Int) -> String? {
-    draft["breakpoints"]?[breakpoint]?[key]?[String(index)]?.arrayValue?.first?.stringValue
-  }
-
-  /// One field per track or line (`TrackInputs`), numbered from `first`.
-  private func tracks(_ label: String, key: String, count: Int, first: Int, placeholder: String, value: @escaping (Int) -> String?, line: Bool) -> some View {
-    VStack(alignment: .leading, spacing: 3) {
-      Text(label).font(.caption).foregroundStyle(.secondary)
-      FlowLayout(spacing: 6, minItem: 0, stretch: false) {
-        ForEach(0..<max(count, 0), id: \.self) { i in
-          HStack(spacing: 3) {
-            Text(verbatim: "\(i + first)").font(.caption2).foregroundStyle(.secondary).monospacedDigit()
-            TextField("\(label) \(i + first)", text: Binding(get: { value(i) ?? "" }, set: { raw in
-              guard let draft = model.draft else { return }
-              set(line ? FrameEditing.withLineName(draft, breakpoint, key, i, raw) : FrameEditing.withTrackSize(draft, breakpoint, key, i, raw))
-            }), prompt: Text(placeholder))
-              .labelsHidden().frame(width: 90)
-          }
-        }
-      }
     }
   }
 
@@ -379,8 +269,10 @@ struct FramesTab: View {
             .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(selectedArea == area.id ? Color.accentColor : Color.accentColor.opacity(0.4),
                                                                     lineWidth: selectedArea == area.id ? 2 : 1))
             .fixedSize()
+            .contentShape(Rectangle())
             .onTapGesture { selectedArea = selectedArea == area.id ? "" : area.id }
-            .draggable("area:\(area.id)")
+            .pointerStyle(.grabIdle)
+            .onDrag { startDrag(area.id) }
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.isButton)
             .accessibilityLabel(L10n.t("layoutEditor.frameBuilder.selectArea", ["name": area.name]))
@@ -410,19 +302,32 @@ struct FramesTab: View {
               let p = resize?.id == area.id ? resize!.preview : view.placement(breakpoint, area.id)!
               placedBox(area, view, p).gridCell(row: p.row, col: p.col, rowSpan: p.rowSpan, colSpan: p.colSpan)
             }
+            if let ghost {
+              let tint: Color = ghost.allowed ? .accentColor : .red
+              RoundedRectangle(cornerRadius: 6)
+                .fill(tint.opacity(0.18))
+                .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(tint, style: StrokeStyle(lineWidth: 2, dash: ghost.allowed ? [] : [5, 3])))
+                .overlay { if !ghost.allowed { Image(systemName: "nosign").font(.title2).foregroundStyle(.red) } }
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+                .gridCell(row: ghost.placement.row, col: ghost.placement.col, rowSpan: ghost.placement.rowSpan, colSpan: ghost.placement.colSpan)
+            }
           }
           .coordinateSpace(.named("board"))
+          .onDrop(of: [.utf8PlainText], delegate: BoardDrop(tab: self, draft: draft))
           .frame(width: max(min(boardWidth - 16, StageGeometry.referenceWidth[breakpoint] ?? 1456), 120))
           .padding(FrameEditing.hasBox(layout) ? 4 : 0)
           .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(FrameEditing.hasBox(layout) ? Color.blue.opacity(0.5) : .clear,
                                                                   style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
           .frame(minWidth: boardWidth - 8)
           .padding(4)
+          .background { deselectArea }
         }
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { boardWidth = $0 }
         .accessibilityIdentifier("layout.frames.board")
       }
       .padding(4)
+      .background { deselectArea }
     }
   }
 
@@ -437,29 +342,13 @@ struct FramesTab: View {
       .frame(minHeight: 48)
       .contentShape(Rectangle())
       .onGeometryChange(for: CGRect.self) { $0.frame(in: .named("board")) } action: { cells["\(row):\(col)"] = $0 }
-      .dropDestination(for: String.self) { items, _ in
-        guard let id = Self.areaId(items.first), let current = model.draft else { return false }
-        switch FramePlacing.place(current, breakpoint, id, row: row, col: col) {
-        case .unchanged:
-          return true
-        case .placed(let next, let sentence):
-          set(next)
-          selectedArea = id
-          Announce.post(sentence)
-          return true
-        case .refused(let sentence):
-          model.frameMessage = L10n.t("layoutEditor.frameBuilder.overlapError")
-          Announce.post(sentence)
-          return false
-        case .unknown:
-          return false
-        }
-      }
+      .onTapGesture { selectedArea = "" }
       .accessibilityLabel(L10n.t("layoutEditor.frameBuilder.cellName", ["row": String(row), "col": String(col)]))
   }
 
   private func placedBox(_ area: FrameView.Area, _ view: FrameView, _ p: FrameView.Placement) -> some View {
     let selected = selectedArea == area.id
+    let held = resizeBlocked && resize?.id == area.id
     return VStack(alignment: .leading, spacing: 4) {
       HStack(spacing: 4) {
         Image(systemName: "line.3.horizontal").font(.caption2).foregroundStyle(.tertiary).accessibilityHidden(true)
@@ -480,11 +369,13 @@ struct FramesTab: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     .background(RoundedRectangle(cornerRadius: 6).fill(Color.accentColor.opacity(selected ? 0.18 : 0.1)))
     .background(RoundedRectangle(cornerRadius: 6).fill(.background))
-    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(selected ? Color.accentColor : Color.accentColor.opacity(0.4), lineWidth: selected ? 2 : 1))
+    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(held ? Color.red : selected ? Color.accentColor : Color.accentColor.opacity(0.4),
+                                                            lineWidth: selected ? 2 : 1))
     .overlay { if selected { handles(area, p) } }
     .contentShape(Rectangle())
     .onTapGesture { selectedArea = selected ? "" : area.id }
-    .draggable("area:\(area.id)") {
+    .pointerStyle(.grabIdle)
+    .onDrag { startDrag(area.id) } preview: {
       Text(verbatim: area.name).font(.caption.weight(.medium)).padding(6).background(RoundedRectangle(cornerRadius: 6).fill(Color.accentColor.opacity(0.3)))
     }
     .accessibilityElement(children: .combine)
@@ -498,9 +389,10 @@ struct FramesTab: View {
   /// Eight handles: four edges, four corners. An edge snaps to the nearest grid line of the board
   /// and stops before another area; written once, on release, and said.
   private func handles(_ area: FrameView.Area, _ p: FrameView.Placement) -> some View {
-    let specs: [(FrameEditing.Sides, Alignment)] = [
-      (.top, .top), (.bottom, .bottom), (.left, .leading), (.right, .trailing),
-      ([.top, .left], .topLeading), ([.top, .right], .topTrailing), ([.bottom, .left], .bottomLeading), ([.bottom, .right], .bottomTrailing),
+    let specs: [(FrameEditing.Sides, Alignment, FrameResizePosition)] = [
+      (.top, .top, .top), (.bottom, .bottom, .bottom), (.left, .leading, .leading), (.right, .trailing, .trailing),
+      ([.top, .left], .topLeading, .topLeading), ([.top, .right], .topTrailing, .topTrailing),
+      ([.bottom, .left], .bottomLeading, .bottomLeading), ([.bottom, .right], .bottomTrailing, .bottomTrailing),
     ]
     return ZStack {
       ForEach(Array(specs.enumerated()), id: \.offset) { _, spec in
@@ -511,6 +403,7 @@ struct FramesTab: View {
           .frame(width: corner ? 9 : horizontal ? 22 : 5, height: corner ? 9 : horizontal ? 5 : 22)
           .padding(1)
           .contentShape(Rectangle().inset(by: -4))
+          .pointerStyle(.frameResize(position: spec.2))
           .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: spec.1)
           .gesture(DragGesture(coordinateSpace: .named("board"))
             .onChanged { value in resizing(area, from: p, sides: spec.0, at: value.location) }
@@ -544,10 +437,16 @@ struct FramesTab: View {
     if sides.contains(.top) { toRow = nearest(Array(1...max(1, r1)), { cells["\($0):1"]?.minY }, point.y) }
     selectedArea = area.id
     let preview = FrameEditing.resized(view, breakpoint, area.id, from: start, sides: sides, toCol: toCol, toRow: toRow)
+    // Where the edge was asked to go, inside the grid; short of it, another area is in the way.
+    let wanted = (left: sides.contains(.left) ? min(toCol, c1) : c0, right: sides.contains(.right) ? max(toCol, c0) : c1,
+                  top: sides.contains(.top) ? min(toRow, r1) : r0, bottom: sides.contains(.bottom) ? max(toRow, r0) : r1)
+    resizeBlocked = preview.col != wanted.left || preview.col + preview.colSpan - 1 != wanted.right
+      || preview.row != wanted.top || preview.row + preview.rowSpan - 1 != wanted.bottom
     resize = (area.id, start, preview)
   }
 
   private func endResize(_ area: FrameView.Area) {
+    resizeBlocked = false
     guard let current = resize, current.id == area.id, let draft = model.draft else {
       resize = nil
       return
@@ -558,6 +457,91 @@ struct FramesTab: View {
     set(FrameEditing.withPlacement(draft, breakpoint, area.id, p))
     Announce.post(L10n.t("layoutEditor.frameBuilder.resized", ["name": area.name, "row": String(p.row), "col": String(p.col),
                                                                "rowSpan": String(p.rowSpan), "colSpan": String(p.colSpan)]))
+  }
+
+  /// A click on nothing deselects, as on a canvas, and the inspector shows the frame again. Under
+  /// the page, the board's box and its grid: each of them takes the click that lands on it.
+  private var deselectArea: some View {
+    Color.clear.contentShape(Rectangle()).onTapGesture { selectedArea = "" }
+  }
+
+  // MARK: dragging an area
+
+  private func startDrag(_ id: String) -> NSItemProvider {
+    dragging = id
+    return NSItemProvider(object: "area:\(id)" as NSString)
+  }
+
+  /// The cell under a point of the board.
+  fileprivate func cellAt(_ point: CGPoint) -> (row: Int, col: Int)? {
+    for (key, rect) in cells where rect.contains(point) {
+      let parts = key.split(separator: ":").compactMap { Int($0) }
+      if parts.count == 2 { return (parts[0], parts[1]) }
+    }
+    return nil
+  }
+
+  /// What a drop at a cell would do, shown while the drag moves: the area's new place, or the
+  /// cells it asked for in red when another area is in the way.
+  fileprivate func hover(_ draft: JSONValue, at cell: (row: Int, col: Int)?) -> DropProposal {
+    guard let id = dragging, let cell else {
+      ghost = nil
+      return DropProposal(operation: .forbidden)
+    }
+    let view = FrameView(draft)
+    let layout = view.layout(breakpoint)
+    switch FramePlacing.place(draft, breakpoint, id, row: cell.row, col: cell.col) {
+    case .placed(let next, _):
+      ghost = FrameView(next).placement(breakpoint, id).map { ($0, true) }
+      return DropProposal(operation: .move)
+    case .unchanged:
+      ghost = view.placement(breakpoint, id).map { ($0, true) }
+      return DropProposal(operation: .move)
+    case .refused:
+      let span = view.placement(breakpoint, id)
+      ghost = (FrameView.Placement(row: cell.row, col: cell.col,
+                                   rowSpan: min(span?.rowSpan ?? 1, max(layout.rows - cell.row + 1, 1)),
+                                   colSpan: min(span?.colSpan ?? 1, max(layout.cols - cell.col + 1, 1)), hidden: false), false)
+      return DropProposal(operation: .forbidden)
+    case .unknown:
+      ghost = nil
+      return DropProposal(operation: .forbidden)
+    }
+  }
+
+  fileprivate func drop(at cell: (row: Int, col: Int)?) -> Bool {
+    ghost = nil
+    defer { dragging = nil }
+    guard let id = dragging, let cell, let current = model.draft else { return false }
+    switch FramePlacing.place(current, breakpoint, id, row: cell.row, col: cell.col) {
+    case .unchanged:
+      return true
+    case .placed(let next, let sentence):
+      set(next)
+      selectedArea = id
+      Announce.post(sentence)
+      return true
+    case .refused(let sentence):
+      model.frameMessage = L10n.t("layoutEditor.frameBuilder.overlapError")
+      Announce.post(sentence)
+      return false
+    case .unknown:
+      return false
+    }
+  }
+
+  fileprivate func endHover() { ghost = nil }
+
+  /// The board as one drop target: the cells under the areas are reached too, and the pointer
+  /// says "not here" (`.forbidden`) where an area would overlap another (user test, 2026-11-12:
+  /// a drop on an area did nothing, without a sign).
+  private struct BoardDrop: DropDelegate {
+    let tab: FramesTab
+    let draft: JSONValue
+
+    func dropUpdated(info: DropInfo) -> DropProposal? { tab.hover(draft, at: tab.cellAt(info.location)) }
+    func dropExited(info: DropInfo) { tab.endHover() }
+    func performDrop(info: DropInfo) -> Bool { tab.drop(at: tab.cellAt(info.location)) }
   }
 
   // MARK: warnings
@@ -774,6 +758,8 @@ struct FrameAreaInspector: View {
         }
       }
       .formStyle(.grouped)
+    } else if model.draft != nil {
+      FrameSettingsInspector(model: model, breakpoint: breakpoint)
     } else {
       InspectorPageContext(page: .layout) {
         Section { Note(L10n.t("layoutEditor.frameBuilder.framePanelHint")) }

@@ -21083,6 +21083,57 @@
         }
       }
     },
+    "layoutEditor.frameBuilder.inspectorBox" : {
+      "comment" : "Section heading in the frame settings (inspector, Layout ▸ Frames).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breite und Innenabstand"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Width and padding"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.inspectorCopy" : {
+      "comment" : "Section heading in the frame settings (inspector, Layout ▸ Frames).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf andere Breakpoints übertragen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy to other breakpoints"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.inspectorGrid" : {
+      "comment" : "Section heading in the frame settings (inspector, Layout ▸ Frames): rows, columns and gaps of one breakpoint.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raster für {{breakpoint}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grid for {{breakpoint}}"
+          }
+        }
+      }
+    },
     "layoutEditor.frameBuilder.inspectorSaves" : {
       "comment" : "Layout, Frames tab, inspector of an area: says that it does not write at once",
       "localizations" : {
@@ -22012,6 +22063,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.trackColumn" : {
+      "comment" : "Label of one column's width in the frame settings (inspector, Layout ▸ Frames).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spalte {{n}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Column {{n}}"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.trackLine" : {
+      "comment" : "Label of one grid line's name in the frame settings (inspector, Layout ▸ Frames).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linie {{n}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Line {{n}}"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.trackRow" : {
+      "comment" : "Label of one row's height in the frame settings (inspector, Layout ▸ Frames).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile {{n}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row {{n}}"
           }
         }
       }
