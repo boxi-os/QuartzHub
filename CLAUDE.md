@@ -100,6 +100,11 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   entschieden wurde
 - [`ui-ueberarbeitung.md`](docs/decisions/ui-ueberarbeitung.md) — die einheitliche Oberfläche (seit 2026-11-12):
   Entscheidungen, macOS 26, Verlauf, Seitentypen, Bewegung
+- `~/Development/macos-ui-leitfaden` (eigenes Repo, außerhalb von QuartzHub) — die Regeln der
+  Oberfläche verallgemeinert für alle macOS-Apps des Nutzers (Regeln L1–L61, Prüfliste, Methode,
+  Bausteine aus `Design.swift`). Quelle der Messungen bleiben hier `docs/conventions.md` und
+  `ui-ueberarbeitung.md`; eine neue UI-Erkenntnis aus QuartzHub mit Regel und Messung dem Nutzer für
+  den Leitfaden vorschlagen, dort nur auf Wunsch ändern
 - [`gleichstand.md`](docs/gleichstand.md) — jede Funktion von QuartzControl 1.3 und ob QuartzHub sie hat
   und an der App gemessen ist (Phase 5)
 
