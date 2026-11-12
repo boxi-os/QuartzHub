@@ -30,7 +30,8 @@ while [ $# -gt 0 ]; do
 done
 [ -d "$PROJECT" ] || { echo "Erst scripts/handbook-demo.sh" >&2; exit 1; }
 
-# name | Zeile der Seitenleiste | Reiter (Position, leer = keiner) | s = mit laufender Vorschau
+# name | Zeile der Seitenleiste | Reiter (Position, leer = keiner) | s = mit laufender Vorschau,
+# w = länger warten (die Seite lädt aus dem Netz oder liest viel)
 # Zeilen: 1 Übersicht, 3 Konfiguration, 4 Plugins, 6 Layout, 7 Stile, 8 Vorlagen, 10 Vorschau & Build,
 # 11 Git-Sync, 12 Dokumente, 13 Veröffentlichen, 15 Updates, 16 Snapshots (2, 5, 9, 14: Gruppen).
 PAGES=(
@@ -39,8 +40,8 @@ PAGES=(
   "plugins|4|1" "plugins-navigationen|4|2|s" "plugins-zusaetzliche-inhalte|4|3|s"
   "plugins-mehrsprachigkeit|4|4|s" "plugins-formulare|4|5" "plugins-marktplatz|4|6"
   "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3"
-  "stile-basis|7|1" "stile-themes|7|2" "stile-variablen|7|3" "stile-css|7|4"
-  "vorlagen|8|"
+  "stile-basis|7|1" "stile-themes|7|2|w" "stile-variablen|7|3" "stile-css|7|4"
+  "vorlagen|8||w"
   "vorschau-und-build|10|" "git-sync|11|" "dokumente|12|" "veroeffentlichen|13|"
   "updates|15|" "snapshots|16|"
 )
@@ -195,6 +196,7 @@ for lang in $LANGS; do
         wanted $name || continue
         # The editors' previews need the dev server; started once, before the first of them.
         if [ "$flag" = s ] && [ $serving = 0 ]; then key r; sleep 30; serving=1; fi
+        [ "$flag" = w ] && sleep 10
         page $row; sleep 2
         [ -n "$t" ] && { tab $t; sleep 2; }
         shoot $name
