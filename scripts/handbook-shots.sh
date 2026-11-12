@@ -30,14 +30,14 @@ while [ $# -gt 0 ]; do
 done
 [ -d "$PROJECT" ] || { echo "Erst scripts/handbook-demo.sh" >&2; exit 1; }
 
-# name | Zeile der Seitenleiste | Reiter (Position, leer = keiner)
+# name | Zeile der Seitenleiste | Reiter (Position, leer = keiner) | s = mit laufender Vorschau
 # Zeilen: 1 Übersicht, 3 Konfiguration, 4 Plugins, 6 Layout, 7 Stile, 8 Vorlagen, 10 Vorschau & Build,
 # 11 Git-Sync, 12 Dokumente, 13 Veröffentlichen, 15 Updates, 16 Snapshots (2, 5, 9, 14: Gruppen).
 PAGES=(
   "uebersicht|1|"
   "konfiguration|3|1" "konfiguration-uebersetzungen|3|2"
-  "plugins|4|1" "plugins-navigationen|4|2" "plugins-zusaetzliche-inhalte|4|3"
-  "plugins-mehrsprachigkeit|4|4" "plugins-formulare|4|5" "plugins-marktplatz|4|6"
+  "plugins|4|1" "plugins-navigationen|4|2|s" "plugins-zusaetzliche-inhalte|4|3|s"
+  "plugins-mehrsprachigkeit|4|4|s" "plugins-formulare|4|5" "plugins-marktplatz|4|6"
   "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3"
   "stile-basis|7|1" "stile-themes|7|2" "stile-variablen|7|3" "stile-css|7|4"
   "vorlagen|8|"
@@ -188,13 +188,18 @@ for lang in $LANGS; do
       with_project $lang $theme
       # One build first, so the overview and Preview & build show its result.
       key b; sleep 40
+      serving=0
       for line in $PAGES; do
         name=${line%%|*}; rest=${line#*|}; row=${rest%%|*}; t=${rest#*|}
+        flag=""; [[ $t == *"|"* ]] && { flag=${t#*|}; t=${t%%|*}; }
         wanted $name || continue
+        # The editors' previews need the dev server; started once, before the first of them.
+        if [ "$flag" = s ] && [ $serving = 0 ]; then key r; sleep 30; serving=1; fi
         page $row; sleep 2
         [ -n "$t" ] && { tab $t; sleep 2; }
         shoot $name
       done
+      [ $serving = 1 ] && { key .; sleep 3; }
     fi
 
     if wanted projekte-leer; then
