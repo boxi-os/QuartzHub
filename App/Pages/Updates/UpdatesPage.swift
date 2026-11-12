@@ -162,7 +162,7 @@ struct UpdatesPage: View {
       if !intended.isEmpty { Note(L10n.t("updates.core.doctorIntended", ["names": intended.joined(separator: ", ")])) }
       BuiltinMigration(project: project, pending: model.pendingMigrations) { await model.checkAfterUpdate() }
       if model.markdownOrderProblem {
-        Label(L10n.t("pluginsInstalled.markdownOrder"), systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+        Callout(.warning, L10n.t("pluginsInstalled.markdownOrder"))
       }
       Button(L10n.t("updates.core.openPlugins")) { openPage(.plugins) }.buttonStyle(.link)
     }

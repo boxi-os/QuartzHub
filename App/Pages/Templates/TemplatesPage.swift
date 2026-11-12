@@ -117,10 +117,10 @@ struct TemplatesPage: View {
       }
       .disabled(model.running || model.planning)
       if model.unreadable {
-        Text(L10n.t("templates.previewError")).font(.callout).foregroundStyle(.red)
+        Callout(.error, L10n.t("templates.previewError"))
       }
       if model.plan == nil, let failure = model.failure {
-        Text(failure).font(.callout).foregroundStyle(.red).textSelection(.enabled)
+        Callout(.error, failure)
       }
       if let plan = model.plan {
         packageBox(plan)
@@ -172,7 +172,7 @@ struct TemplatesPage: View {
           ProgressView(value: Double(progress.done), total: Double(progress.total))
         }
         if let failure = model.failure {
-          Text(failure).font(.callout).foregroundStyle(.red).textSelection(.enabled)
+          Callout(.error, failure)
         }
         if let warnings = model.warnings {
           outcome(warnings)
@@ -206,9 +206,7 @@ struct TemplatesPage: View {
       ]))
       .font(.callout).foregroundStyle(.secondary)
       if !plan.unknownParts.isEmpty {
-        Label(L10n.t("templates.unknownParts", ["parts": plan.unknownParts.map { $0.stringValue ?? JSJSON.stringify($0) }.joined(separator: ", ")]),
-              systemImage: "exclamationmark.triangle")
-          .font(.callout).foregroundStyle(.orange)
+        Callout(.warning, L10n.t("templates.unknownParts", ["parts": plan.unknownParts.map { $0.stringValue ?? JSJSON.stringify($0) }.joined(separator: ", ")]))
       }
     }
     .accessibilityElement(children: .combine)
@@ -227,12 +225,9 @@ struct TemplatesPage: View {
         .font(.callout).foregroundStyle(.green)
         .accessibilityIdentifier("templates.outcome")
     } else {
-      VStack(alignment: .leading, spacing: 4) {
-        ForEach(Array(ImportWarnings.lines(warnings).enumerated()), id: \.offset) { _, line in
-          Text(line).font(.callout).foregroundStyle(.orange).textSelection(.enabled)
-        }
+      Callout(.warning) {
+        ForEach(Array(ImportWarnings.lines(warnings).enumerated()), id: \.offset) { _, line in Text(line) }
       }
-      .accessibilityElement(children: .contain)
       .accessibilityIdentifier("templates.outcome")
     }
   }
@@ -264,7 +259,7 @@ private struct PartRow<Extra: View>: View {
       VStack(alignment: .leading, spacing: 3) {
         Text(TemplateWords.description(id)).font(.callout).foregroundStyle(.secondary)
         ForEach(notes, id: \.self) { note in
-          Text(note).font(.callout).foregroundStyle(.orange)
+          Callout(.warning, note)
         }
         extra()
       }

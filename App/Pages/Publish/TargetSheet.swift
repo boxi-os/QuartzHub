@@ -138,7 +138,7 @@ struct TargetSheet: View {
         if let kind = PublishWords.requiredKind(draft.type) { connectionSection(kind) }
         optionsSection
         if let failure {
-          Text(failure).foregroundStyle(.red).textSelection(.enabled)
+          Callout(.error, failure)
         }
       }
       .formStyle(.grouped)
@@ -178,10 +178,10 @@ struct TargetSheet: View {
                   prompt: Text(L10n.t("publish.targetForm.remotePathPlaceholder")))
           .accessibilityIdentifier("target.remotePath")
         if let problem = draft.remotePathProblem {
-          Text(PublishWords.remotePathError(problem)).font(.callout).foregroundStyle(.red)
+          FieldProblem(PublishWords.remotePathError(problem))
         } else if let char = draft.rsyncChar {
-          Text(char.contains(where: \.isWhitespace) ? L10n.t("publish.targetForm.rsyncPathSpace")
-            : L10n.t("publish.targetForm.rsyncPathChar", ["char": char])).font(.callout).foregroundStyle(.red)
+          FieldProblem(char.contains(where: \.isWhitespace) ? L10n.t("publish.targetForm.rsyncPathSpace")
+            : L10n.t("publish.targetForm.rsyncPathChar", ["char": char]))
         } else {
           Note(L10n.t("publish.targetForm.remotePathHint"))
         }

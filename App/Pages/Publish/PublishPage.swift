@@ -199,7 +199,7 @@ struct PublishPage: View {
         Text(line.text).font(.callout).foregroundStyle(line.success ? .green : .red)
       }
       if let error = model.diffError ?? model.buildError {
-        Text(error).font(.callout).foregroundStyle(.red).textSelection(.enabled).accessibilityIdentifier("publish.diffError")
+        Callout(.error) { Text(error).accessibilityIdentifier("publish.diffError") }
       }
       if model.diff == nil && model.diffError == nil {
         Note(L10n.t("publish.noDiffYet"))
@@ -236,7 +236,7 @@ struct PublishPage: View {
           .accessibilityIdentifier("publish.outputDir")
       }
       Note(L10n.t("publish.outputDirShared"))
-      if let error = model.outputDirError { Text(error).font(.caption).foregroundStyle(.red) }
+      if let error = model.outputDirError { Callout(.error, error) }
     }
   }
 
@@ -345,7 +345,7 @@ private struct TargetInspector: View {
           .textSelection(.enabled)
           .accessibilityIdentifier("publish.inspector.destination")
         if let connection, ConnectionWords.missingCredential(connection) {
-          Text(L10n.t("publish.noSecretWarning")).foregroundStyle(.orange)
+          Callout(.warning, L10n.t("publish.noSecretWarning"))
         }
         if let connection, connection.kind == .ssh {
           Text(ConnectionWords.hostKey(connection)).font(.caption.monospaced()).foregroundStyle(.secondary).textSelection(.enabled)

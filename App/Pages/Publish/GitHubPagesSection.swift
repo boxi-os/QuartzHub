@@ -23,13 +23,13 @@ struct GitHubPagesSection: View {
 
   var body: some View {
     Section {
-      if let loadError { Text(loadError).foregroundStyle(.red).textSelection(.enabled) }
+      if let loadError { Callout(.error, loadError) }
       if loaded && info == nil { Note(L10n.t("publish.pages.noGithubOrigin")) }
-      if let error = info?.error { Text(error).foregroundStyle(.red).textSelection(.enabled) }
+      if let error = info?.error { Callout(.error, error) }
       if let info, !info.configured, info.error == nil { Note(L10n.t("publish.pages.notConfigured")) }
       if let info, info.configured { state(info) }
       if info != nil { settings }
-      if let applyError { Text(applyError).foregroundStyle(.red).textSelection(.enabled) }
+      if let applyError { Callout(.error, applyError) }
       if let output { RunOutput(text: output, label: L10n.t("publish.pages.title"), identifier: "publish.pages.output") }
     } header: {
       HStack {

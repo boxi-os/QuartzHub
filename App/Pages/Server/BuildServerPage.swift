@@ -422,11 +422,10 @@ struct BuildServerPage: View {
       // `quartz build` empties its folder first; a folder holding something that is not a build
       // is about to lose it. The build asks again before it runs (BuildOutputGuard).
       if case .success(let info)? = model.output, info.fileCount > 0, !info.looksLikeBuild {
-        Text(L10n.t("buildServer.exportDirForeign", ["count": String(info.fileCount)], count: info.fileCount))
-          .font(.caption).foregroundStyle(.orange)
+        Callout(.warning, L10n.t("buildServer.exportDirForeign", ["count": String(info.fileCount)], count: info.fileCount))
       }
       if let error = model.outputDirError {
-        Text(error).font(.caption).foregroundStyle(.red).accessibilityIdentifier("server.outputDir.error")
+        Callout(.error) { Text(error).accessibilityIdentifier("server.outputDir.error") }
       }
     }
   }

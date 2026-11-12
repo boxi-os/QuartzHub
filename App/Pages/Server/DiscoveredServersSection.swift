@@ -30,15 +30,10 @@ struct DiscoveredServersSection: View {
         ServerRow(server: server, stopping: model.stopping == server.pid) { confirming = server }
       }
       if let occupied = model.discovery?.occupiedPorts, !occupied.isEmpty {
-        Label(L10n.t("buildServer.discovery.portTaken", ["ports": occupied.map(String.init).joined(separator: ", ")]),
-              systemImage: "exclamationmark.triangle.fill")
-          .font(.callout)
-          .foregroundStyle(.orange)
+        Callout(.warning, L10n.t("buildServer.discovery.portTaken", ["ports": occupied.map(String.init).joined(separator: ", ")]))
       }
       if model.discovery?.servers.contains(where: { !$0.ownedByApp }) == true {
-        Label(L10n.t("buildServer.discovery.warning"), systemImage: "info.circle")
-          .font(.callout)
-          .foregroundStyle(.secondary)
+        Callout(.info, L10n.t("buildServer.discovery.warning"))
       }
     } header: {
       SectionHeader(title: L10n.t("buildServer.discovery.title"), symbol: "server.rack") {

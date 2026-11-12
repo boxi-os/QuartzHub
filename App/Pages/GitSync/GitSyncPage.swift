@@ -64,10 +64,9 @@ struct GitSyncPage: View {
       Group {
         if let status = model.status {
           if let readError = status.readError {
-            VStack(alignment: .leading, spacing: 6) {
-              Text(L10n.t("gitSync.readError")).foregroundStyle(.red)
+            Callout(.error) {
+              Text(L10n.t("gitSync.readError"))
               Text(verbatim: readError).font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary)
-                .textSelection(.enabled)
             }
           } else if !status.isRepo {
             Note(L10n.t("gitSync.notARepo"))

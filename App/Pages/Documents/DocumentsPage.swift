@@ -461,10 +461,7 @@ private struct BookInspector: View {
       Form {
         if let error = model.saveError {
           Section {
-            Label(error, systemImage: "exclamationmark.octagon.fill")
-              .foregroundStyle(.red)
-              .textSelection(.enabled)
-              .accessibilityIdentifier("documents.saveError")
+            Callout(.error) { Text(error).accessibilityIdentifier("documents.saveError") }
           }
         }
         Section {
