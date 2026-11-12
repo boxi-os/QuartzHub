@@ -307,10 +307,10 @@ Rückmeldung des Nutzers nach dem zweiten Start aus Xcode (2026-11-12), vier Pun
     jetzt dort (`FrameSettingsInspector`): Ist kein Bereich gewählt, ist der Frame selbst gewählt, wie
     auf einer Zeichenfläche. Das Raster beginnt bei 1680 × 1000 jetzt rund 400 statt 790 pt unter der Fensterkante.
 - **Akzentfarbe.** QuartzHub hat eine eigene, Petrol (`App/Assets.xcassets/AccentColor`, hell
-  `#1A7F8E`, dunkel `#23909F`, über `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` als
+  `#1A7F8E`, dunkel `#208998`, über `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` als
   `NSAccentColorName` im Info.plist). Sie gilt, wenn in den Systemeinstellungen „Bunt“ gewählt ist, wie
   bei Podcasts; eine feste Farbe dort geht vor. Die Töne sind so gewählt, dass weißer Text auf der
-  Auswahl so lesbar bleibt wie auf dem System-Blau (Kontrast hell 4,7, dunkel 3,8, nach dem Wunsch des Nutzers etwas dunkler als zuerst `#2A9AAA` mit 3,3; Blau rund 4 und
+  Auswahl so lesbar bleibt wie auf dem System-Blau (Kontrast hell 4,7, dunkel 4,1, nach dem Wunsch des Nutzers in zwei Schritten dunkler als zuerst `#2A9AAA` mit 3,3; Blau rund 4 und
   3,6). Umschaltbar in den Einstellungen ist sie nicht: gemessen mit `.tint(.orange)` am Projektfenster
   wurden Reiter, Schalter, Menüs und alle Knopftexte orange, die Seitenleiste, die Listenauswahl und
   alles, was `Color.accentColor` nimmt, blieben bei der Farbe aus dem Katalog. Eine Wahl zur Laufzeit
