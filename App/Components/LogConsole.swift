@@ -25,6 +25,8 @@ struct LogConsole: View {
           .frame(maxWidth: .infinity, alignment: .leading)
           .padding(.horizontal, 8)
           .padding(.vertical, 6)
+          // Filling, the empty console shows how high the pane is (Vorschau & Build).
+          .frame(maxHeight: fills ? .infinity : nil, alignment: .topLeading)
           .background(RoundedRectangle(cornerRadius: 6).fill(.background.secondary))
           .accessibilityLabel(label)
           .accessibilityValue(L10n.t("logConsole.noOutput"))

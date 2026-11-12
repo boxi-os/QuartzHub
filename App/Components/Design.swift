@@ -467,6 +467,21 @@ struct CardGrid<Content: View>: View {
 
 // MARK: - Panes
 
+extension EnvironmentValues {
+  /// The height `SplitPanes` gives its bottom pane, nil while it is folded: for content that cannot
+  /// fill by itself (a DisclosureGroup's). Measuring the pane from inside it fed back into its own
+  /// height and grew it without end (2026-11-12, the app at 99 % CPU).
+  @Entry var paneHeight: CGFloat?
+}
+
+/// The bottom pane's height, handed to content that needs it as a number.
+struct PaneHeight<Content: View>: View {
+  @Environment(\.paneHeight) private var height
+  @ViewBuilder var content: (CGFloat?) -> Content
+
+  var body: some View { content(height) }
+}
+
 extension View {
   /// One pane of a workspace split: on the card surface, its content clipped to the card's corners.
   /// A list in it leaves its own background off, so the card shows through.
@@ -483,7 +498,9 @@ extension View {
 /// saw that the Plugins editors could be resized (user test, 2026-11-12). The position is the top
 /// pane's share of the height, kept per window; a double click on the grip returns to `initial`.
 /// Three panes are two splits, the second one the bottom pane of the first; the panes put
-/// themselves on cards (`paneCard`).
+/// themselves on cards (`paneCard`). A bottom pane that folds away (the output under Vorschau &
+/// Build) passes `collapsed`: then it keeps its own height, the top pane takes the rest and the grip
+/// goes; the top pane stays the same view, so a web view in it is not loaded again.
 struct SplitPanes<Top: View, Bottom: View>: View {
   static var grip: CGFloat { Spacing.s }
 
@@ -493,11 +510,13 @@ struct SplitPanes<Top: View, Bottom: View>: View {
   private let bottomMin: CGFloat
   private let top: Top
   private let bottom: Bottom
+  private let collapsed: Bool
   @State private var dragFrom: CGFloat?
   @State private var hovering = false
 
-  init(_ key: String, initial: Double, topMin: CGFloat, bottomMin: CGFloat,
+  init(_ key: String, initial: Double, topMin: CGFloat, bottomMin: CGFloat, collapsed: Bool = false,
        @ViewBuilder top: () -> Top, @ViewBuilder bottom: () -> Bottom) {
+    self.collapsed = collapsed
     _share = SceneStorage(wrappedValue: initial, "split.\(key)")
     self.initial = initial
     self.topMin = topMin
@@ -515,9 +534,10 @@ struct SplitPanes<Top: View, Bottom: View>: View {
       let available = max(0, geometry.size.height - Self.grip)
       let height = clamped(available * share, in: available)
       VStack(spacing: 0) {
-        top.frame(height: height)
-        grip(height: height, available: available)
-        bottom.frame(maxHeight: .infinity)
+        top.frame(height: collapsed ? nil : height).frame(maxHeight: collapsed ? .infinity : nil)
+        if !collapsed { grip(height: height, available: available) }
+        bottom.frame(maxHeight: collapsed ? nil : .infinity)
+          .environment(\.paneHeight, collapsed ? nil : available - height)
       }
       .coordinateSpace(.named("split"))
     }

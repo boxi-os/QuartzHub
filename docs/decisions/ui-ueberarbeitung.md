@@ -284,8 +284,13 @@ Rückmeldung des Nutzers nach dem zweiten Start aus Xcode (2026-11-12), vier Pun
   dem Zeiger für Zeilenhöhe, Doppelklick stellt zurück, die Aufteilung bleibt je Fenster
   (`@SceneStorage`, Anteil der Höhe), mit Bedienungshilfe-Aktion ±40 pt. Gezogen und gemessen bei
   1680 × 1000: der Griff folgt, an der Mindesthöhe ist Schluss. Durchgesehen auf weitere Stellen:
-  Übersicht, Layout und Frames haben schon Karten; die Ausgabe unter Vorschau & Build ist eine feste,
-  einklappbare Konsole und ließe sich mit demselben Griff ziehbar machen, ist aber nicht gemacht.
+  Übersicht, Layout und Frames haben schon Karten. Die Ausgabe unter Vorschau & Build (bis dahin
+  fest 160 pt) hat auf Wunsch des Nutzers denselben Griff, ohne Karten: die Vorschau bleibt
+  randlos. Zugeklappt ist sie eine Zeile ohne Griff (`collapsed`), aufgeklappt wieder so hoch wie
+  gezogen. Ein `DisclosureGroup` gibt seinem Inhalt nur dessen eigene Höhe; die Höhe des Bereichs von
+  innen zu messen und den Konsolen zu geben, ließ ihn ohne Ende wachsen (die App bei 99 % CPU, das
+  Fenster für die Bedienungshilfen nicht mehr lesbar). `SplitPanes` reicht die Höhe deshalb von
+  außen herunter (`paneHeight`, `PaneHeight`).
 - **Frames-Editor.** Gemessen mit Aufnahmen samt Zeiger (`screencapture -C`), Ziehen per CGEvent:
   - Anfasser zeigen den Zeiger ihrer Kante oder Ecke (`.pointerStyle(.frameResize(position:))`), ein
     Bereich die Hand (`.grabIdle`).

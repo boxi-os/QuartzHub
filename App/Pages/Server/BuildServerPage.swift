@@ -17,6 +17,9 @@ struct BuildServerPage: View {
   @State private var previewRoom = 0.0
   @SceneStorage("server.previewFit") private var fit = true
   @SceneStorage("server.outputOpen") private var outputOpen = true
+  /// The height of the output's head: a DisclosureGroup gives its content only the content's own
+  /// height, so the consoles get the rest of the pane as a number (`PaneHeight`).
+  @State private var outputHead: CGFloat = 20
   @FocusState private var outputDirFocused: Bool
   @Environment(\.openPage) private var openPage
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -49,21 +52,25 @@ struct BuildServerPage: View {
 
   var body: some View {
     PageScaffold(page: .server) {
-      VStack(spacing: 0) {
-        notices
-        if embeddable, let url = URL(string: address) {
-          previewBar
-          Divider()
-          ScaledSite(url: url, reloadKey: "\(address)#\(model.previewNonce)", width: renderWidth, fit: fit,
-                     label: L10n.t("buildServer.livePreview"))
-            .onGeometryChange(for: Double.self) { $0.size.width } action: { previewRoom = $0 }
-            .transition(.opacity)
-        } else {
-          emptyPreview
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .transition(.opacity)
+      // The output's height is dragged at the grip above it, like the Plugins editors' panes.
+      SplitPanes("server.output", initial: 0.72, topMin: 240, bottomMin: 140, collapsed: !outputOpen) {
+        VStack(spacing: 0) {
+          notices
+          if embeddable, let url = URL(string: address) {
+            previewBar
+            Divider()
+            ScaledSite(url: url, reloadKey: "\(address)#\(model.previewNonce)", width: renderWidth, fit: fit,
+                       label: L10n.t("buildServer.livePreview"))
+              .onGeometryChange(for: Double.self) { $0.size.width } action: { previewRoom = $0 }
+              .transition(.opacity)
+          } else {
+            emptyPreview
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
+              .transition(.opacity)
+          }
         }
-        outputPanel
+      } bottom: {
+        PaneHeight { outputPanel(height: $0) }
       }
       .animation(reduceMotion ? nil : Motion.quick, value: embeddable)
       .toolbar { toolbar }
@@ -231,9 +238,9 @@ struct BuildServerPage: View {
     }
   }
 
-  /// Both consoles under the site, like Xcode's; folded away, one line. A DisclosureGroup, so its
-  /// state is said and its opening animated by the system.
-  private var outputPanel: some View {
+  /// Both consoles under the site, like Xcode's, as high as the grip above them says; folded away,
+  /// one line. A DisclosureGroup, so its state is said and its opening animated by the system.
+  private func outputPanel(height: CGFloat?) -> some View {
     VStack(spacing: 0) {
       Divider()
       DisclosureGroup(isExpanded: $outputOpen.animation(reduceMotion ? nil : Motion.layout)) {
@@ -249,14 +256,16 @@ struct BuildServerPage: View {
             }
           }
         }
-        .frame(height: 160, alignment: .top)
+        .frame(height: max(80, (height ?? 0) - outputHead - 1 - 4 * Spacing.xs), alignment: .top)
         .padding(.top, Spacing.xs)
       } label: {
         Text(L10n.t("buildServer.output")).fontWeight(.medium)
+          .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { outputHead = $0 }
       }
       .padding(.horizontal, Spacing.page)
       .padding(.vertical, Spacing.xs)
     }
+    .frame(maxHeight: outputOpen ? .infinity : nil, alignment: .top)
     .background(.bar)
   }
 
