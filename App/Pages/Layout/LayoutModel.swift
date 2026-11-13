@@ -146,12 +146,19 @@ final class LayoutModel {
     return true
   }
 
-  /// After the CLI registered or removed a frame: only `plugins:` is taken from the file, so edits
-  /// of the stage still count as unsaved and the new entry does not.
+  /// After the CLI registered or removed a frame: only what the CLI changed in `plugins:` is taken
+  /// from the file, so edits of the stage stay and still count as unsaved, and the new entry does
+  /// not. Taking the file's list whole dropped them (review 2026-11-13, H2).
   func syncPluginsFromDisk() async {
     let environment = await AppServices.current()
     guard let fresh = try? await ConfigFile.read(project: project.path, runtime: environment.runtime) else { return }
-    if config == nil { config = fresh } else { config?.plugins = fresh.plugins }
+    if let config, let saved {
+      self.config?.plugins = PluginListMerge.merge(base: saved.plugins, local: config.plugins, disk: fresh.plugins)
+    } else if config == nil {
+      config = fresh
+    } else {
+      config?.plugins = fresh.plugins
+    }
     saved = fresh
   }
 
