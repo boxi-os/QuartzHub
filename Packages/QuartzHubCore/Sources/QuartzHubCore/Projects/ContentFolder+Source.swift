@@ -6,9 +6,11 @@ extension ContentFolder {
 
   /// `createSnapshot(project, kind, label)`, before the switch.
   public typealias Snapshot = @Sendable (_ project: String, _ kind: String, _ label: String) async throws -> Void
-  /// After each entry the copy took: done so far, the files there are, the entry's path. The
-  /// count runs past the total: it counts every entry, hidden ones and folders too, the total only
-  /// what Quartz reads (`countFiles`), as in QuartzControl.
+  /// After each file the copy took: done so far, the files there are, the file's path. Counted as
+  /// the total is (`countFiles`: visible files, no folders), and never past it; QuartzControl
+  /// counted every entry, hidden ones and folders too, and showed „350 / 200“ (review 2026-11-13,
+  /// handbook, N13). A linked folder the total followed and the copy keeps as a link may leave the
+  /// count short of the total; the copy's end says it is done.
   public typealias Progress = (_ processed: Int, _ total: Int, _ path: String) -> Void
 
   /// `changeContentSource`: content/ becomes a copy of `source` or a link to it. Two nets first:
@@ -36,8 +38,13 @@ extension ContentFolder {
     var processed = 0
     try Posix.mkdirs(target)
     try TreeCopy.copy(from: source, to: target, verbatimSymlinks: false) { relative in
-      processed += 1
-      progress?(processed, total, relative.isEmpty ? source : NodePath.join(source, relative))
+      let path = relative.isEmpty ? source : NodePath.join(source, relative)
+      var info = stat()
+      let isFolder = stat(path, &info) == 0 && (info.st_mode & S_IFMT) == S_IFDIR
+      if !relative.isEmpty, !isFolder, !relative.split(separator: "/").contains(where: { $0.hasPrefix(".") }) {
+        processed = min(processed + 1, total)
+        progress?(processed, total, path)
+      }
       return true
     }
   }

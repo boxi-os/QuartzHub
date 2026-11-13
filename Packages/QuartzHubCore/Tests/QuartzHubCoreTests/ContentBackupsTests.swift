@@ -116,11 +116,25 @@ import Testing
         } else { result }
         #expect(adjusted.masked(work) == step["result"], "\(name): \(JSJSON.compact(adjusted.masked(work)))")
       }
+      // A deliberate deviation (review 2026-11-13, handbook, N13): QuartzControl reported every entry
+      // the copy took, folders and hidden ones too, so its count ran past the total. QuartzHub
+      // reports the files the total counts and stops at it: QuartzControl's list less the source
+      // itself, folders and hidden entries, numbered 1…n up to the total.
       let expectedProgress = step["progress"]!
-      #expect(Double(progress.count) == expectedProgress["count"]?.numberValue, "\(name): progress")
-      #expect(JSONValue.array(Array(Set(progress.map(\.1))).sorted().map { .number(Double($0)) }) == expectedProgress["totals"], "\(name): totals")
-      #expect(JSONValue.array(progress.map(\.2).sorted { $0.utf16.lexicographicallyPrecedes($1.utf16) }.map(JSONValue.string)) == expectedProgress["files"], "\(name): files")
-      #expect(JSONValue.array(progress.map { .number(Double($0.0)) }) == expectedProgress["numbers"], "\(name): numbers")
+      let source = step["op"]!.stringValue! == "change" ? arg(0) : ""
+      let counted = (expectedProgress["files"]?.arrayValue ?? []).compactMap(\.stringValue).filter { masked in
+        let path = masked.replacingOccurrences(of: "@W@", with: work, options: .literal)
+        guard path != source, path.hasPrefix(source + "/") else { return false }
+        var info = stat()
+        if stat(path, &info) == 0, (info.st_mode & S_IFMT) == S_IFDIR { return false }
+        return !path.dropFirst(source.count + 1).split(separator: "/").contains { $0.hasPrefix(".") }
+      }
+      let total = Int(expectedProgress["totals"]?.arrayValue?.first?.numberValue ?? 0)
+      #expect(progress.count == counted.count, "\(name): progress")
+      #expect(progress.allSatisfy { $0.0 <= $0.1 }, "\(name): the count ran past the total")
+      #expect(JSONValue.array(Array(Set(progress.map(\.1))).sorted().map { .number(Double($0)) }) == (progress.isEmpty ? .array([]) : expectedProgress["totals"]), "\(name): totals")
+      #expect(progress.map(\.2).sorted { $0.utf16.lexicographicallyPrecedes($1.utf16) } == counted, "\(name): files")
+      #expect(progress.map(\.0) == Array((0..<counted.count).map { min($0 + 1, total) }), "\(name): numbers")
       #expect(JSONValue.array(snapshots.withLock { $0 }.map { .array($0.map(JSONValue.string)) }) == step["snapshots"], "\(name): snapshots")
       let files = Self.listing(work)
       // By bytes: Swift's == takes "Ü" and "U\u{308}" for one string, and the disk does not.
