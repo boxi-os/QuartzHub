@@ -29,6 +29,44 @@ sed -i '' "s#$SRC/#$P/#g" "$P/quartz.config.yaml" "$P/quartz.lock.json"
 # Commits from Git-Sync or a snapshot would carry the global identity into a picture.
 git -C "$P" config user.name "QuartzHub Demo"
 git -C "$P" config user.email "demo@example.invalid"
+# A book and two publishing targets, so Dokumente and Veröffentlichen show something: a folder and a
+# document target, both under the demo folder (nothing leaves the Mac).
+mkdir -p "$P/quartz-books" "$DEMO/Ausgabe"
+cat > "$P/quartz-books/handbuch.json" <<JSON
+{
+  "title": "QuartzHub-Handbuch",
+  "subtitle": "Quartz-Websites auf dem Mac",
+  "author": "QuartzHub",
+  "language": "de",
+  "root": "",
+  "order": null,
+  "excluded": [],
+  "coverImage": "",
+  "toc": true,
+  "tagIndex": false,
+  "backlinks": false,
+  "outsideLinks": "site",
+  "pdf": { "pageSize": "A4", "landscape": false },
+  "version": 1
+}
+JSON
+cat > "$P/.quartz-gui/publish-targets.json" <<JSON
+[
+  {
+    "id": "6f1d6c1e-0000-4000-8000-0000000000a1",
+    "name": "Testordner",
+    "destination": { "type": "folder", "path": "$DEMO/Ausgabe/website", "deleteRemoved": true },
+    "excludes": []
+  },
+  {
+    "id": "6f1d6c1e-0000-4000-8000-0000000000a2",
+    "name": "Handbuch als PDF und ePub",
+    "destination": { "type": "document", "path": "$DEMO/Ausgabe/buch", "bookId": "handbuch", "formats": ["pdf", "epub"] },
+    "excludes": []
+  }
+]
+JSON
+
 # The copy's state as one commit, so Git-Sync shows a project that is up to date.
 git -C "$P" add -A
 git -C "$P" diff --cached --quiet || git -C "$P" commit -qm "Handbuch-Demo"

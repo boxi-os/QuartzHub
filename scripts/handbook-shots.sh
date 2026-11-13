@@ -118,6 +118,20 @@ press() {
  end repeat"
 }
 
+# A button of the project window by its label, German or English (toolbar buttons have no
+# identifier the accessibility tree passes on).
+press_label() {
+  ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXButton\" and (description of e is \"$1\" or description of e is \"$2\" or name of e is \"$1\" or name of e is \"$2\") then
+    click e
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
+
 # Types into the n-th text field of the front window (sheets included).
 type_into() {
   ax "set n to 0
@@ -194,6 +208,8 @@ for lang in $LANGS; do
         name=${line%%|*}; rest=${line#*|}; row=${rest%%|*}; t=${rest#*|}
         flag=""; [[ $t == *"|"* ]] && { flag=${t#*|}; t=${t%%|*}; }
         wanted $name || continue
+        # Snapshots shows a list: one taken from the overview first (they add up over runs).
+        if [ $name = snapshots ]; then page 1; sleep 2; press_label "Snapshot anlegen" "Take snapshot"; sleep 8; fi
         # The editors' previews need the dev server; started once, before the first of them.
         if [ "$flag" = s ] && [ $serving = 0 ]; then key r; sleep 30; serving=1; fi
         [ "$flag" = w ] && sleep 10
