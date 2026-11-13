@@ -20,6 +20,7 @@ struct DocumentsPage: View {
   /// The list's highlight: a book ("book:<id>") or a row of its own order ("entry:<n>"), which
   /// Anordnen moves. Its own state, so a switch the leave question cancels can move it back.
   @State private var highlighted: String?
+  @State private var adding = false
 
   init(project: ProjectContext) {
     self.project = project
@@ -53,9 +54,15 @@ struct DocumentsPage: View {
       .unsavedChanges(model.dirty, canSave: !model.saving && model.draft != nil) { await model.save() }
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
-          Button(action: create) { Label(L10n.t("documents.newBook"), systemImage: "plus") }
+          Button { adding = true } label: { Label(L10n.t("documents.newBook"), systemImage: "plus") }
             .help(L10n.t("documents.newBook"))
             .disabled(model.creating)
+            .popover(isPresented: $adding, arrowEdge: .bottom) {
+              AddBookForm(taken: model.takenIDs) { title in
+                adding = false
+                create(title)
+              } cancel: { adding = false }
+            }
             .accessibilityIdentifier("documents.newBook")
         }
         // No badge beside Speichern: it is enabled only with something to save, and the dot in the
@@ -134,10 +141,10 @@ struct DocumentsPage: View {
     }
   }
 
-  private func create() {
+  private func create(_ title: String) {
     Task {
       if model.dirty, let unsaved, await !unsaved.confirmLeave() { return }
-      await model.create()
+      await model.create(title: title)
     }
   }
 
@@ -543,5 +550,49 @@ private struct BookInspector: View {
       Toggle(label, isOn: isOn).accessibilityIdentifier("documents.field.\(id)")
       Note(hint)
     }
+  }
+}
+
+/// ➕ Neues Buch: the title first, because the file takes its name from it and keeps it, and the
+/// exported files are named after the file (N14 of the handbook review). Shows the name as it
+/// will be.
+private struct AddBookForm: View {
+  let taken: Set<String>
+  let add: (String) -> Void
+  let cancel: () -> Void
+
+  @State private var title = ""
+  @FocusState private var focused: Bool
+
+  private var trimmed: String { title.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 10) {
+      Text(L10n.t("documents.newBook")).font(.headline)
+      TextField(L10n.t("documents.fields.title"), text: $title, prompt: Text(L10n.t("documents.newBookTitle")))
+        .textFieldStyle(.roundedBorder)
+        .focused($focused)
+        .onSubmit(submit)
+        .accessibilityIdentifier("documents.newBook.title")
+      Text(L10n.t("documents.newBookFile", ["file": "\(BookFile.directory)/\(BookFile.id(fromTitle: trimmed, taken: taken)).json"]))
+        .font(.caption).foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+        .accessibilityIdentifier("documents.newBook.file")
+      HStack {
+        Spacer()
+        Button(L10n.t("common.cancel"), action: cancel).keyboardShortcut(.cancelAction)
+        Button(L10n.t("formsEditor.addSubmit"), action: submit).keyboardShortcut(.defaultAction)
+          .disabled(trimmed.isEmpty)
+          .accessibilityIdentifier("documents.newBook.create")
+      }
+    }
+    .padding()
+    .frame(width: 340)
+    .onAppear { focused = true }
+  }
+
+  private func submit() {
+    guard !trimmed.isEmpty else { return }
+    add(trimmed)
   }
 }

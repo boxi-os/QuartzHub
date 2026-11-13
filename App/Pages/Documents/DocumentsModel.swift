@@ -175,13 +175,18 @@ final class DocumentsModel {
     open(selectedId)
   }
 
+  /// The names a new book's file may not take.
+  var takenIDs: Set<String> { Set(books.map(\.id) + unreadable.map(\.id)) }
+
   // MARK: Writing
 
-  func create() async {
+  /// The file name comes from the title here and stays (`BookFile.id(fromTitle:)`), so the title is
+  /// asked first (review 2026-11-13, handbook, N14: every book was neues-buch.json).
+  func create(title: String) async {
     creating = true
     defer { creating = false }
     do {
-      let book = try Books(project: path).save(BookFile.empty(title: L10n.t("documents.newBookTitle")))
+      let book = try Books(project: path).save(BookFile.empty(title: title))
       createError = nil
       load(select: book.id)
       Announce.post(L10n.t("documents.createdAnnounce", ["name": book.title]))

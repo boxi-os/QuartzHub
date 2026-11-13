@@ -7594,6 +7594,25 @@
         }
       }
     },
+    "documents.newBookFile" : {
+      "comment" : "Documents, popover of New book: the file name the title gives",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Datei heißt {{file}}, die ausgegebenen Dateien ebenso. Der Name bleibt, auch wenn sich der Titel später ändert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file will be {{file}}, and so will the exported files. The name stays when the title changes later."
+          }
+        }
+      }
+    },
     "documents.newBookTitle" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
