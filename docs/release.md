@@ -133,7 +133,9 @@ Cache), QuartzControl 1.3 auch. Am Release-Tag, nach Punkt 8:
 - `Resources/templates/qc-basic.qtpl` dorthin kopieren (Wegwerf-Klon mit `gh repo clone`); das
   Paket trägt ein neueres `createdAt` als das alte, sonst gewinnt ein Cache;
 - die README des Repos nennt QuartzHub;
-- der Fußzeilen-Link der Vorlage zeigt auf QuartzHub (`parts/plugins.json`), nicht auf QuartzControl;
+- der Fußzeilen-Link der Vorlage zeigt auf QuartzHub (`parts/plugins.json`), nicht auf QuartzControl
+  (seit 2026-11-14 so in `Resources/templates/qc-basic.qtpl`, ebenso der Kommentar in
+  `parts/styles.json`; `createdBy.app` und die Marker `QuartzControl:syntax:` sind Format und bleiben);
 - **die Example-Vorlage** `qc-example.qtpl` baut auf der Grundvorlage auf und wird mit ihr neu erzeugt
   (Entscheidung 2026-11-13, docs/plan.md): mit QuartzHub, „Vorlagen ▸ Erstellen“ am Example-Projekt.
 
