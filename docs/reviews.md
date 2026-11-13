@@ -92,3 +92,16 @@ Seite Updates zu N2 (echtes Kern-Update), der Ladezustand zu 14 (zu kurz ohne la
 Unterwegs aufgefallen, nicht geändert: Eine Vorlage aus einem 5.1-Projekt bringt `sidebars` auch in
 ein 5.0-Projekt; unter `Packages/QuartzHubCore/file:/…` liegen 128 versionierte Dateien, ein
 Testrückstand vom 2026-11-06 (eine URL als Pfad).
+
+## 2026-11-13: Befunde aus dem Handbuch
+
+Bericht `REVIEW-2026-11-13-handbuch.md` (Stand `6bfb1fa`, kein Auftrag: gesammelt beim Schreiben des
+Handbuchs): 2 Hoch, 4 Mittel, 13 Niedrig, rund 100 nebenbei. Der Nutzer wählte zuerst H1 und H2;
+die übrigen sind offen.
+
+| Befund | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| H1 | „Auch den Projekt-Commit zurücksetzen“ lässt einen Content-Ordner, den der Store ausnimmt, wie er ist (gemischter Reset, außerhalb von `content/` wie `--hard`) | `6094280` |
+| H2 | Speichern oder Löschen eines Frames behält ungespeicherte Änderungen der Bühne (`PluginListMerge`, Dreiwege-Abgleich) | `f8dd175` |
+
+Im Handbuch nachgezogen: 5.4 und 7.3 (Vault `d6c3234`).
