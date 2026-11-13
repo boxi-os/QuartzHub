@@ -833,7 +833,7 @@ in einem eigenen Wegwerf-Schlüsselbund, danach gelöscht.
   aus „en-US“.“, fr nur mit eingeschaltetem quartz-multilanguage), mehrere Einträge (de, de-DE),
   unbekannter Text als Hinweis des Plugins. Die ältere Fassung lässt sich mit der Kopie nicht
   nachstellen: ihr Code liefert die Texte trotz Versionsnummer.
-- **Relay:** Unterordner „..“ abgewiesen; Absender und „https://quartzmac.borkel.net eintragen“ in
+- **Relay:** Unterordner „..“ abgewiesen; Absender und „https://quartzmac.example.net eintragen“ in
   `.quartz-gui/forms-relay.json`; Adressen und Captcha-Secret gespeichert, ersetzt, entfernt
   (`relay-secrets.json` nur mit Namen); sendmail, Zähler-Ordner, 0644, `-f`; „Neues Secret erzeugen“
   mit Rückfrage; „Noch nicht bereit: Kein Ziel gewählt. Kein Absender. …“; als Ordner gespeichert
@@ -1074,7 +1074,7 @@ Schalter im `Form`), nicht als Beschreibung; `focusfield.swift` nimmt deshalb au
 ## Veröffentlichen an der App gemessen
 
 Sechzehnter Durchgang, am 2026-11-10, an der Veröffentlichen-Kopie aus Phase 4 (`pub/proj`) in
-1400×860, dunkel, ein Blick hell. Ohne Netz: Die echten Ziele der Kopie (borkel.net, GitHub, Ordner
+1400×860, dunkel, ein Blick hell. Ohne Netz: Die echten Ziele der Kopie (example.net, GitHub, Ordner
 auf dem Schreibtisch) waren für den Durchgang aus `publish-targets.json` genommen. Im Wegwerf-Profil
 standen dazu erfundene Zugänge mit Hosts unter `.invalid` (Passwort, Schlüsseltext, gespeicherter
 Host-Key, FTP ohne Passwort, Webhook ohne URL). Gelaufen ist nur das Ordner-Ziel in den Scratchpad.
@@ -1797,7 +1797,7 @@ rund 25 s „Export erfolgreich.“:
 
 - „124 Seiten in der eigenen Reihenfolge des Buchs.“ (121 am Ende angefügt)
 - „2 Formulare, eingebettete Inhalte, Videos oder Leinwände wurden durch einen Satz mit Adresse
-  ersetzt.“; im HTML „Hier steht auf der Website ein Formular: https://quartzmac.borkel.net/…“
+  ersetzt.“; im HTML „Hier steht auf der Website ein Formular: https://quartzmac.example.net/…“
 - „PDF: 324 Seiten, Lesezeichen 10/33/112/323/630/35, 3.5 MB.“, „ePub: 124 Kapitel, 0 Bilder,
   1.9 MB.“, „HTML: eine Datei, 3.7 MB.“
 - „ePub/HTML: 2 Formeln als Bild.“, „ePub/HTML: 11 Diagramme als Bild.“ (im ePub
@@ -1805,7 +1805,7 @@ rund 25 s „Export erfolgreich.“:
 - „Stylesheets, Schriften oder Bilder kamen aus dem Netz: cdn.jsdelivr.net, fonts.googleapis.com,
   cdnjs.cloudflare.com“
 - „128 Anfragen der Website wurden nicht geladen (Skripte, Rahmen, Statistik): cdn.jsdelivr.net,
-  quartzmac.borkel.net, challenges.cloudflare.com“
+  quartzmac.example.net, challenges.cloudflare.com“
 
 Im PDF (Seite 4) ist die Formel von KaTeX gesetzt; das Bild im ePub zeigt dieselbe Blockformel. Ein
 Diagramm von `grundlagen/farben` steht im PDF (Seite 15) und im ePub gleich da. Dort überdeckt der
@@ -1818,9 +1818,9 @@ Kein Befund. Offen: Video und Leinwand als Ersatzsatz (kommen in gui-test nicht 
 ## Relay auf debian-vm an der App gemessen
 
 Am 2026-11-10, mit Freigabe des Nutzers für das Relay auf debian-vm, am Relay-Klon. Die
-Formular-Config zeigte vorher auf `quartzmac.borkel.net`; `transport.url` wurde im Klon auf
+Formular-Config zeigte vorher auf `quartzmac.example.net`; `transport.url` wurde im Klon auf
 `https://debian.local:8441/qhrelay/send.php` gestellt, damit die Prüfung nach dem Hochladen nur die
-VM fragt („Vorschlag übernehmen“ mit borkel.net blieb ungedrückt). Zugänge: FTP als `qchost`
+VM fragt („Vorschlag übernehmen“ mit example.net blieb ungedrückt). Zugänge: FTP als `qchost`
 (Passwort nur im Speicher) und SSH als `boxi` mit Schlüsseldatei (ein eigener Testschlüssel bei
 qchost wurde schon früher abgelehnt, siehe „Veröffentlichen gegen debian-vm“). `boxi` darf nicht in
 die Webroot `/srv/qc/www` schreiben (qchost, 755), daher ging SFTP nach `/home/boxi`.
@@ -1941,19 +1941,19 @@ Nutzer trug das Token selbst ein.
   die API antwortet ohne Anmeldung mit `"visibility": "public"`, `origin` ist die https-Adresse
   ohne Token. Danach `origin` zurück auf das Test-Repo; das angelegte Repo löscht der Nutzer.
 
-- **Eigene Domain und HTTPS:** `gh-test.borkel.net` (CNAME auf `boxi-os.github.io.`, vom Nutzer
+- **Eigene Domain und HTTPS:** `gh-test.example.net` (CNAME auf `boxi-os.github.io.`, vom Nutzer
   angelegt). Mit Domain wird „HTTPS erzwingen“ frei; sofort gespeichert: „Domain gesetzt:
-  gh-test.borkel.net“ und der „zu früh“-Satz mit GitHubs „The certificate does not exist yet“,
-  Zustand „Wird gebaut“ mit `http://gh-test.borkel.net/`. Das Zertifikat (Let's Encrypt) war nach
+  gh-test.example.net“ und der „zu früh“-Satz mit GitHubs „The certificate does not exist yet“,
+  Zustand „Wird gebaut“ mit `http://gh-test.example.net/`. Das Zertifikat (Let's Encrypt) war nach
   rund einer Minute da; erneut gespeichert: „HTTPS erzwingen: an“, Karte mit
-  `https://gh-test.borkel.net/`.
+  `https://gh-test.example.net/`.
 - **Befund, offen: ein Deploy verwirft die eigene Domain.** Beim Setzen der Domain über die API legt
   GitHub für ein Branch-Deploy selbst einen Commit „Create CNAME“ auf `gh-pages` (Eltern der
-  letzte Deploy, Autor `boxi-os <boxi@borkel.net>`, die Hauptadresse des Kontos, auch wenn das Projekt
+  letzte Deploy, Autor `boxi-os <boxi@example.net>`, die Hauptadresse des Kontos, auch wenn das Projekt
   eine Noreply-Identität hat). Der nächste Deploy zeigt im Diff „Entfernt (1): CNAME“, ersetzt den
   Branch per Lease (`+ cd77152...438890c (forced update)`), und GitHub verwirft daraufhin die Domain:
   „Status neu laden“ zeigt wieder `https://boxi-os.github.io/test-repo/` ohne Domain, unter
-  `gh-test.borkel.net` liefert eine Unterseite 404 (die Startseite kam noch aus dem CDN-Cache,
+  `gh-test.example.net` liefert eine Unterseite 404 (die Startseite kam noch aus dem CDN-Cache,
   `x-cache: HIT`). QuartzControls `decisions/publishing-and-credentials.md` sagt das Gegenteil („a
   domain set here is stored by GitHub itself and does [survive]“), gemessen war es dort nicht; der
   Kommentar in `GitHubPagesSection.swift` übernimmt den Satz. Folge für Nutzer beider Apps: Wer eine
@@ -1965,7 +1965,7 @@ Nutzer trug das Token selbst ein.
   gewinnt, Codeberg bekommt nichts. Gemessen am Test-Repo, Domain diesmal ohne DNS-Eintrag (nichts
   zu übernehmen): GitHub legt wieder „Create CNAME“ an; mit geändertem Build zeigt der Diff nur
   `index.html`, der Deploy-Commit enthält `CNAME`, und nach GitHubs Bau zeigt „Status neu laden“
-  weiter `https://gh-test.borkel.net/` mit HTTPS. Domain in QuartzHub entfernt: GitHub legt selbst
+  weiter `https://gh-test.example.net/` mit HTTPS. Domain in QuartzHub entfernt: GitHub legt selbst
   „Delete CNAME“ an, der nächste Deploy meldet „Keine Änderungen gegenüber dem veröffentlichten
   Stand, Push übersprungen.“; die alte Domain kommt nicht zurück. Im Kern
   `aPagesDomainOnTheBranchSurvivesTheDeploy` (GitHubs Commit nachgestellt am lokalen Bare-Repo);
@@ -2015,7 +2015,7 @@ Updates „Nicht prüfbar“.
   nennt den Snapshot als zweiten Weg, die Übersicht nicht.
 
 Dabei ein Fehler meinerseits: Eine Suche nach Projekten, die hinter Quartz liegen, lief auch über
-`hinterland-history` (zwei git-Abfragen nach der Historie, keine Inhalte gelesen, nichts
+ein privates Projekt (zwei git-Abfragen nach der Historie, keine Inhalte gelesen, nichts
 geschrieben). Solche Suchen laufen nur noch über die Scratch-Kopien.
 
 ## Warnungen nach dem Anlegen an der App gemessen
@@ -2083,11 +2083,11 @@ Lockfile `resolved` und Commit `56de4bb`. Ein Build danach: „Erfolgreich in 1,
 der Ausgabe meldet Quartz zum Frame `frame-index` der Vorlage „failed to load its entry module (only
 its components/frames were loaded)“, wie schon beim Build nach dem Anlegen; nicht untersucht.
 
-## Relay auf qh-test.borkel.net (all-inkl) an der App gemessen
+## Relay auf qh-test.example.net (all-inkl) an der App gemessen
 
 Am 2026-11-11, mit einer echten Subdomain des Nutzers mit Let's-Encrypt-Zertifikat und einem
 FTP-Zugang nur für deren Ordner (Passwort vom Nutzer eingetragen). Am Relay-Klon `$S/rel`:
-`baseUrl` und `transport.url` auf `qh-test.borkel.net`, `origin` entfernt, ein Ziel „qh-test“ (FTP,
+`baseUrl` und `transport.url` auf `qh-test.example.net`, `origin` entfernt, ein Ziel „qh-test“ (FTP,
 `/`, löscht nichts).
 
 - **Befund, behoben: das FTP-Passwort stand im Klartext in der Ausgabe.** Das Passwort endete
@@ -2120,12 +2120,12 @@ FTP-Zugang nur für deren Ordner (Passwort vom Nutzer eingetragen). Am Relay-Klo
 Die Urteile der Prüfung nach dem Hochladen, je mit geänderter `transport.url` und neuem Hochladen
 (kein Urteil brauchte eigene Dateien auf dem Server):
 
-- **ok:** „Das Relay antwortet unter https://qh-test.borkel.net/qhrelay/send.php.“ Von außen gibt
+- **ok:** „Das Relay antwortet unter https://qh-test.example.net/qhrelay/send.php.“ Von außen gibt
   `config.php` 200 mit 0 Byte (PHP läuft als der Benutzer, 0600 reicht), `counters/` 403.
 - **Origin:** mit einer fremden Adresse in den Origins „Das Relay unter … nimmt keine Anfragen von
-  https://qh-test.borkel.net an, der Adresse aus der Basis-URL des Projekts. …“; danach zurück.
+  https://qh-test.example.net an, der Adresse aus der Basis-URL des Projekts. …“; danach zurück.
 - **Weiterleitung ohne Relay:** `…/qhrelay` (ohne `send.php`, Server antwortet 301): „Unter
-  https://qh-test.borkel.net/qhrelay leitet der Server auf https://qh-test.borkel.net/qhrelay/
+  https://qh-test.example.net/qhrelay leitet der Server auf https://qh-test.example.net/qhrelay/
   weiter, und dort antwortet kein Relay. …“
 - **404:** `…/qhrelay/nix.php`: „Unter … antwortet kein Relay (HTTP 404). Stimmen Ziel, Unterordner
   und Adresse von send.php?“
@@ -2133,7 +2133,7 @@ Die Urteile der Prüfung nach dem Hochladen, je mit geänderter `transport.url` 
   verweigert den Zugriff auf … (HTTP 403). Meist liegt das an den Rechten des Ordners oder an einer
   Firewall des Hosters.“
 - **Befund, behoben: jeder Zertifikatsfehler hieß in der App „keine verschlüsselte Verbindung“.**
-  `qh-nix.borkel.net` (die DNS-Wildcard greift, das Zertifikat nennt den Namen nicht): „Das Relay
+  `qh-nix.example.net` (die DNS-Wildcard greift, das Zertifikat nennt den Namen nicht): „Das Relay
   konnte nicht geprüft werden: Mit dem Server kam keine verschlüsselte Verbindung zustande
   (net::ERR_SSL_PROTOCOL_ERROR). Spricht er HTTPS?“, erwartet war ERR_CERT_COMMON_NAME_INVALID.
   Ursache ist App Transport Security: Dieselbe Session (ephemeral, Delegate mit
@@ -2147,7 +2147,7 @@ Die Urteile der Prüfung nach dem Hochladen, je mit geänderter `transport.url` 
   Meldung nennt den gemerkten Grund vor dem allgemeinen Fehler. `RelayProbeTLSTests` gegen einen
   lokalen TLS-Server (Node `https`, Zertifikate von `openssl`): falscher Name mit eigenem Anker,
   unbekannter Aussteller ohne; ohne das Merken drei rote Erwartungen. An der App (Relay in ein
-  Ordner-Ziel, danach die Prüfung): `qh-nix.borkel.net` „Das Zertifikat des Servers wird nicht
+  Ordner-Ziel, danach die Prüfung): `qh-nix.example.net` „Das Zertifikat des Servers wird nicht
   anerkannt (net::ERR_CERT_COMMON_NAME_INVALID). Browser lehnen dort auch das Formular ab.“; die
   gültige Adresse kommt weiter durch („… antwortet kein Relay (HTTP 404) …“, das Relay war entfernt).
 - **Befund, behoben: eine Relay-Adresse mit http:// zeigte eine englische Systemmeldung.** „Das Relay

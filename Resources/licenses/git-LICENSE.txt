@@ -1,5 +1,5 @@
-QuartzControl liefert git mit
-=============================
+QuartzHub liefert git mit
+=========================
 
 Diese App enthält eine unveränderte, lediglich ausgedünnte Kopie von git 2.53.0, gebaut vom
 Projekt dugite-native (https://github.com/desktop/dugite-native, Release v2.53.0, Build 6981a1f)
@@ -15,7 +15,7 @@ Quelltext
 Der Quelltext von git 2.53.0 liegt unter https://github.com/git/git/tree/v2.53.0 und ist dort
 als Archiv herunterladbar. Der Bauvorgang, aus dem die hier mitgelieferten Binärdateien stammen,
 ist unter https://github.com/desktop/dugite-native dokumentiert. Wer den Quelltext lieber auf
-einem Datenträger möchte, meldet sich unter boxi@borkel.net.
+einem Datenträger möchte, meldet sich über https://github.com/boxi-os/QuartzHub/issues.
 
 ------------------------------------------------------------------------------------------------
 

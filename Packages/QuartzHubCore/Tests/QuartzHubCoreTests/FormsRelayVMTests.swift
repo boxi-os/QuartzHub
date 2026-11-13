@@ -66,7 +66,7 @@ struct FormsRelayVMTests {
       "ftp": FTPAdapter(connections: connections, runtime: HelperRuntime.runtime, ca: ca)
     ]
     let deploy = Deploy(project: project, connections: connections, adapters: adapters)
-    let cli = FormsCLI(project: project, source: PluginSource(.string("/Users/boxi/Development/quartz-forms"))!, environment: environment)
+    let cli = FormsCLI(project: project, source: PluginSource(.string(ProcessInfo.processInfo.environment["QH_FORMS_REPO"] ?? "\(NSHomeDirectory())/Development/quartz-forms"))!, environment: environment)
     var relayProbe = RelayProbe()
     relayProbe.anchors = Self.anchors
     let relay = FormsRelay(projectId: "vm-\(way)", cli: cli, connections: connections, deploy: deploy, probe: relayProbe)
@@ -90,7 +90,7 @@ struct FormsRelayVMTests {
       #expect(JSText.includes(modes, "\(line)\n"), "\(way): \(line)\n\(modes)")
     }
     // Under mod_php (www-data) a config.php of the account with 0600 stops PHP before send.php answers.
-    #expect(await relayProbe.check(url: modPHP, origin: "https://quartzmac.borkel.net", form: "kontakt", generation: generation) == .phpError(url: modPHP))
+    #expect(await relayProbe.check(url: modPHP, origin: "https://quartzmac.example.net", form: "kontakt", generation: generation) == .phpError(url: modPHP))
     // Without the test CA, the certificate is the answer.
     let untrusted = await RelayProbe().check(url: fpm, origin: nil, form: "kontakt", generation: nil)
     #expect(untrusted == .unreachable(url: fpm, reason: L10n.t("main.relayCheckCertificate", ["code": "net::ERR_CERT_AUTHORITY_INVALID"])), "\(untrusted)")

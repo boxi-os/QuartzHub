@@ -129,7 +129,7 @@ import Testing
     var object = JSONObject([("id", .string("x")), ("kind", .string("ssh")), ("host", .string("debian.local")),
                              ("port", .number(22)), ("username", .string("boxi"))])
     object["authMethod"] = .string("privateKey")
-    object["keyPath"] = .string("/Users/boxi/.ssh/id_ed25519")
+    object["keyPath"] = .string("/Users/demo/.ssh/id_ed25519")
     let connection = Connection(stored: StoredConnection(object: object))
     let deletion = """
       rsync: [generator] delete_file: unlink(gesperrt/alt.html) failed: Permission denied (13)
@@ -137,7 +137,7 @@ import Testing
       .d..t.... ./
       """
     #expect(SSHFailure.translate(deletion, connection: connection) == nil)
-    let who = ["user": "boxi", "host": "debian.local", "identity": "/Users/boxi/.ssh/id_ed25519"]
+    let who = ["user": "boxi", "host": "debian.local", "identity": "/Users/demo/.ssh/id_ed25519"]
     for refused in ["boxi@debian.local: Permission denied (publickey).", "boxi@debian.local: Permission denied (password).",
                     "boxi@debian.local: Permission denied (publickey,password,keyboard-interactive)."] {
       #expect(SSHFailure.translate(refused, connection: connection)?.hasPrefix(L10n.t("main.rsyncKeyRejected", who)) == true, "\(refused)")

@@ -2692,19 +2692,19 @@
  ],
  "identifiers": [
   {
-   "site": "https://quartzmac.borkel.net",
+   "site": "https://quartzmac.example.net",
    "id": "handbuch",
-   "result": "urn:uuid:f533875b-8c8b-51fe-b480-cec441903dab"
+   "result": "urn:uuid:e3592bd0-9ad1-5153-8aa2-257ee7ae9220"
   },
   {
-   "site": "https://quartzmac.borkel.net",
+   "site": "https://quartzmac.example.net",
    "id": "a",
-   "result": "urn:uuid:1d20b43d-bca2-5670-9f18-fb5246ff5589"
+   "result": "urn:uuid:599c99ba-dc29-50b8-8086-7719a0810956"
   },
   {
-   "site": "https://quartzmac.borkel.net",
+   "site": "https://quartzmac.example.net",
    "id": "",
-   "result": "urn:uuid:3a9719c4-71f6-57de-98e2-e57b72e57663"
+   "result": "urn:uuid:a8058352-b11a-5b85-af45-f383af72fc3f"
   },
   {
    "site": "/Users/x/Projekt",

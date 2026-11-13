@@ -43,10 +43,10 @@ import Testing
     #expect(ExportBook.networkLines(fetched: [], refused: []).isEmpty)
     let lines = ExportBook.networkLines(
       fetched: [("cdn.jsdelivr.net", 3), ("(data)", 1), ("fonts.gstatic.com", 2)],
-      refused: [("script cdn.jsdelivr.net", 414), ("xhr quartzmac.borkel.net", 2), ("frame (about)", 1), ("script cdn.jsdelivr.net-x", 1)])
+      refused: [("script cdn.jsdelivr.net", 414), ("xhr quartzmac.example.net", 2), ("frame (about)", 1), ("script cdn.jsdelivr.net-x", 1)])
     #expect(lines == [
       L10n.t("main.exportReportNetwork", ["hosts": "cdn.jsdelivr.net, fonts.gstatic.com"]),
-      L10n.t("main.exportReportRefused", ["count": "418", "hosts": "cdn.jsdelivr.net, quartzmac.borkel.net, cdn.jsdelivr.net-x"])
+      L10n.t("main.exportReportRefused", ["count": "418", "hosts": "cdn.jsdelivr.net, quartzmac.example.net, cdn.jsdelivr.net-x"])
     ])
   }
 }

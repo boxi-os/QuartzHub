@@ -355,31 +355,31 @@
         "name": "obsidian-plugin-excalidraw"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-1787519243386",
+        "source": "/Users/demo/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-1787519243386",
         "enabled": true,
         "order": 50,
         "name": "frame-1787519243386"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-drawing",
+        "source": "/Users/demo/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-drawing",
         "enabled": true,
         "order": 50,
         "name": "frame-drawing"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-editorial",
+        "source": "/Users/demo/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-editorial",
         "enabled": true,
         "order": 50,
         "name": "frame-editorial"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-focus",
+        "source": "/Users/demo/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-focus",
         "enabled": true,
         "order": 50,
         "name": "frame-focus"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-index",
+        "source": "/Users/demo/Documents/QuartzProjekte/gui-test/.quartz-gui/authored-frames/frame-index",
         "enabled": true,
         "order": 50,
         "name": "frame-index"
@@ -502,7 +502,7 @@
         "name": "quartz-navigations"
       },
       {
-        "source": "/Users/boxi/Development/quartz-forms",
+        "source": "/Users/demo/Development/quartz-forms",
         "enabled": true,
         "order": 70,
         "layout": {

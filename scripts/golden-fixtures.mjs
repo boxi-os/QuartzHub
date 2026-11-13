@@ -11,7 +11,7 @@
 // that is not already in that form, so a fixture never claims a form the source did not have.
 //
 // Only gui-test and Example are read (docs/conventions.md: never the real profile, never
-// hinterland-history). Deploy manifests are skipped except the small relay one: the site
+// a private project). Deploy manifests are skipped except the small relay one: the site
 // manifests hold hundreds of paths and add nothing the relay one does not show.
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
 import { join, dirname } from 'node:path'

@@ -24,7 +24,7 @@ Support-Matrix (bis QuartzHub eine eigene hat: `../QuartzControl/docs/support-ma
 
 1. **Nachstellen.** Erst messen, wie er wirklich auftritt: an der gebauten App (Skill `run-app`),
    per Swift-Test oder am echten Projekt (nur Kopien von `gui-test`/`Example`, nie
-   `hinterland-history`).
+   ein privates Projekt des Nutzers).
 2. **Fix.** Minimal, im Stil der Datei. Neue Texte mit `node scripts/strings.mjs add` in beiden
    Sprachen. Berührt der Fix eine Funktion, die ein früherer Befund dieser Liste geändert hat:
    dessen Messung wiederholen.

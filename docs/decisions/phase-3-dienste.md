@@ -492,8 +492,8 @@ geladen, nicht nachgebaut, die Config wie im Skript als ganzer YAML-Wert gelesen
 `source` gezählt und übergangen).
 
 - **Gemessen an acht Projekten** (gui-test, Example, navigations-testprojekt,
-  quartz-plugins-handbuch, QuartzControl-Handbuch, QuartzControl-Web, testmitcss, brain-handbuch;
-  nur lesend, hinterland-history nicht): Die Tabelle ist jedes Mal byte-gleich mit
+  quartz-plugins-handbuch, QuartzControl-Handbuch, QuartzControl-Web und zwei
+  eigenen Projekten; nur lesend, ein privates nicht): Die Tabelle ist jedes Mal byte-gleich mit
   `npm run check:option-schema`. Die `--dump`-Ausgabe, das ganze Schema jedes Plugins samt den
   Schlüsseln aus seiner Config, ist bei allen 475 Plugins in der kanonischen Form gleich. Der
   Vergleich ist gegengeprüft: Mit einem geänderten `hasDefault` oder `kind` meldet er das Plugin.

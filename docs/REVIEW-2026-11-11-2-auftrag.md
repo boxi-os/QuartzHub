@@ -174,7 +174,7 @@ Oberfläche ist kein Schwerpunkt; melde dort nur, was dir auf dem Weg begegnet.
 `~/Documents/QuartzProjekte`. Arbeite in Kopien in deinem Ordner. Im Folgenden heißt er `<r2>`; der
 Pfad steht in der Nachricht, mit der du gestartet wurdest.
 
-- **Lies nie etwas aus einem Projekt oder Vault namens `HinterlandHistory`/`hinterland-history`.**
+- **Lies nie etwas aus einem privaten Projekt oder Vault des Nutzers.**
   Das gilt auch für eine Schleife oder ein `grep` über alle Projekte: Nimm es aus jeder Liste,
   **bevor** du sie durchläufst. Nenn den Namen nicht in deinem Bericht.
 - **Keine Anfrage an einen Host außerhalb dieses Rechners** außer an `debian-vm`. Ausnahme: der

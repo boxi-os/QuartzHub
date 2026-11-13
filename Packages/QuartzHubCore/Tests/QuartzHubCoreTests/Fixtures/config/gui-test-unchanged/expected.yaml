@@ -6,7 +6,7 @@ configuration:
   enablePopovers: true
   analytics: null
   locale: de-DE
-  baseUrl: quartzmac.borkel.net
+  baseUrl: quartzmac.example.net
   ignorePatterns:
     - private
     - templates
@@ -539,7 +539,7 @@ plugins:
           recipient: TestKontakt
       transport:
         kind: relay
-        url: https://quartzmac.borkel.net/forms/send.php
+        url: https://quartzmac.example.net/forms/send.php
       keys:
         boxi-test:
           armored: |-

@@ -3841,74 +3841,74 @@
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "index",
     ""
    ],
-   "result": "https://quartzmac.borkel.net/"
+   "result": "https://quartzmac.example.net/"
   },
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "a/index",
     "#k"
    ],
-   "result": "https://quartzmac.borkel.net/a/#k"
+   "result": "https://quartzmac.example.net/a/#k"
   },
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "a/b",
     ""
    ],
-   "result": "https://quartzmac.borkel.net/a/b"
+   "result": "https://quartzmac.example.net/a/b"
   },
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "a b/ü",
     "#t%C3%BC"
    ],
-   "result": "https://quartzmac.borkel.net/a%20b/%C3%BC#t%C3%BC"
+   "result": "https://quartzmac.example.net/a%20b/%C3%BC#t%C3%BC"
   },
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "x?y",
     ""
    ],
-   "result": "https://quartzmac.borkel.net/x%3Fy"
+   "result": "https://quartzmac.example.net/x%3Fy"
   },
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "a/index/",
     ""
    ],
-   "result": "https://quartzmac.borkel.net/a/index/"
+   "result": "https://quartzmac.example.net/a/index/"
   },
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "😀",
     ""
    ],
-   "result": "https://quartzmac.borkel.net/%F0%9F%98%80"
+   "result": "https://quartzmac.example.net/%F0%9F%98%80"
   },
   {
    "fn": "outsideUrl",
    "args": [
-    "quartzmac.borkel.net/",
+    "quartzmac.example.net/",
     "it's(1)!*~",
     ""
    ],
-   "result": "https://quartzmac.borkel.net/it's(1)!*~"
+   "result": "https://quartzmac.example.net/it's(1)!*~"
   },
   {
    "fn": "outsideUrl",

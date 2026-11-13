@@ -333,19 +333,19 @@
         "name": "note-properties"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-editorial",
+        "source": "/Users/demo/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-editorial",
         "enabled": true,
         "order": 50,
         "name": "frame-editorial"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-index",
+        "source": "/Users/demo/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-index",
         "enabled": true,
         "order": 50,
         "name": "frame-index"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-focus",
+        "source": "/Users/demo/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-focus",
         "enabled": true,
         "order": 50,
         "name": "frame-focus"
@@ -357,7 +357,7 @@
         "name": "obsidian-plugin-excalidraw"
       },
       {
-        "source": "/Users/boxi/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-drawing",
+        "source": "/Users/demo/Documents/QuartzProjekte/Example/.quartz-gui/authored-frames/frame-drawing",
         "enabled": true,
         "order": 50,
         "name": "frame-drawing"

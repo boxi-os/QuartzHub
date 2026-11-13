@@ -135,7 +135,7 @@ Diese Punkte kennt der Nutzer. Melde einen nur, wenn er mehr kostet als hier ste
 `~/Documents/QuartzProjekte`. Arbeite in Kopien in deinem Ordner (im Folgenden `<r1>`, der Pfad
 steht in der Nachricht, mit der du gestartet wurdest).
 
-- **Lies nie etwas aus einem Projekt oder Vault namens `HinterlandHistory`/`hinterland-history`**,
+- **Lies nie etwas aus einem privaten Projekt oder Vault des Nutzers**,
   auch nicht in einer Schleife oder einem `grep` über alle Projekte. Nimm es aus jeder Liste,
   **bevor** du sie durchläufst. Nenn den Namen nicht in deinem Bericht.
 - **Keine Anfrage an einen Host außerhalb dieses Rechners** außer an `debian-vm`. Kein `git push`,

@@ -85,7 +85,7 @@ const resolveCases = [
 ]
 for (const [book, navigation, available] of resolveCases) cases.push({ fn: 'resolveOrder', args: [book, navigation, [...available]], result: m.resolveOrder(book, navigation, available) })
 
-for (const base of [undefined, '', 'https://example.com', 'https://example.com/', 'example.com', 'http://x.y/sub/', 'https://', '///', 'quartzmac.borkel.net/', ' x ', 'HTTPS://Groß.de']) {
+for (const base of [undefined, '', 'https://example.com', 'https://example.com/', 'example.com', 'http://x.y/sub/', 'https://', '///', 'quartzmac.example.net/', ' x ', 'HTTPS://Groß.de']) {
   for (const [slug, hash] of [['index', ''], ['a/index', '#k'], ['a/b', ''], ['a b/ü', '#t%C3%BC'], ['x?y', ''], ['a/index/', ''], ['😀', ''], ["it's(1)!*~", '']]) call('outsideUrl', base, slug, hash)
 }
 

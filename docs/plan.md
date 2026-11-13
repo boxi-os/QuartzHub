@@ -100,7 +100,7 @@ App-ID ~~`io.github.boxi_os.quartzhub`~~ **`io.github.boxios.quartzhub`** (so he
     `layout-breakpoints.json`, Snapshot-Store, `running-servers.json` u. a.
   - Im Stylesheet: die Marker in `custom.scss` und `_quartzcontrol.scss`
 - **Codable-Modelle mit Golden-File-Tests** gegen echte Dateien aus Kopien von `gui-test` und
-  `Example` (nie das echte Profil, nie `hinterland-history`). Schreiben über Temp-Datei, `fsync`
+  `Example` (nie das echte Profil, nie ein privates Projekt). Schreiben über Temp-Datei, `fsync`
   und `rename` (Muster `jsonStore.ts`).
 - **Übernahme beim ersten Start:**
   - Projektliste und Einstellungen kopieren

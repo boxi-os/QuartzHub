@@ -12,7 +12,7 @@
 // compare the sentence without its wording.
 //
 // Inputs: the configs of gui-test and Example with the home folder masked, and small files for
-// the edges. Only these two projects are read (never the real profile, never hinterland-history).
+// the edges. Only these two projects are read (never the real profile, never a private project).
 import { loadQuartzControl } from './lib/qc-bundle.mjs'
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'

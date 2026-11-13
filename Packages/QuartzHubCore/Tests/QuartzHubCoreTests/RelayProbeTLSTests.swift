@@ -4,7 +4,7 @@ import Testing
 @testable import QuartzHubCore
 
 /// The certificate the relay check refused, named from the probe's own trust evaluation. At
-/// qh-test.borkel.net (2026-11-11) the app said "no encrypted connection" for a wrong name: App
+/// qh-test.example.net (2026-11-11) the app said "no encrypted connection" for a wrong name: App
 /// Transport Security turns every certificate failure into -1200 with stream code -9802, where a
 /// process without an app bundle (this test) still sees -1202 and the stream code. Against a local
 /// TLS server (Node's https) with certificates from openssl.

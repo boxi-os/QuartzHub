@@ -110,7 +110,7 @@ const keywords = [
 ]
 
 const identifiers = []
-for (const site of ['https://quartzmac.borkel.net', '/Users/x/Projekt', '', 'ü']) for (const id of ['handbuch', 'a', '']) identifiers.push({ site, id, result: service.bookIdentifier(site, id) })
+for (const site of ['https://quartzmac.example.net', '/Users/x/Projekt', '', 'ü']) for (const id of ['handbuch', 'a', '']) identifiers.push({ site, id, result: service.bookIdentifier(site, id) })
 const megabytes = [0, 1, 1048575, 1048576, 1572864, 123456789, 52428, 262144, 786432, 1310720, 52429, 157286].map((bytes) => ({ bytes, result: service.mb(bytes) }))
 
 // ── the cover picture ───────────────────────────────────────────────────────────────────────
