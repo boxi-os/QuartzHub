@@ -157,7 +157,7 @@ struct BasicsTab: View {
 
   @ViewBuilder private func fontField(_ slot: String) -> some View {
     let name = family(slot)
-    let label = L10n.t("themeEditor.fontFor", ["slot": slot])
+    let label = L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle(slot)])
     let overridden = overriddenByTheme(Self.fontVariable[slot]!)
     let ownVariable = model.overrides.contains { $0.key == Self.fontVariable[slot]! }
     let trimmed = StylesModel.trim(name)
@@ -233,8 +233,11 @@ struct BasicsTab: View {
         HStack(alignment: .firstTextBaseline) {
           warning(L10n.t("themeEditor.delivery.quartzStillDownloads"))
           Spacer()
-          // The page's own save: it also writes whatever else is pending, and resets `dirty`.
-          Button(fetching ? L10n.t("themeEditor.delivery.fetching") : L10n.t("themeEditor.delivery.fetchNow")) {
+          // The page's own save: it also writes whatever else is pending, and resets `dirty`. With
+          // other edits pending the button says so; "Jetzt ins Projekt holen" saved them silently
+          // (review 2026-11-13, nebenbei).
+          Button(fetching ? L10n.t("themeEditor.delivery.fetching")
+                 : model.dirty ? L10n.t("themeEditor.delivery.saveAndFetch") : L10n.t("themeEditor.delivery.fetchNow")) {
             Task {
               fetching = true
               await savePage()
@@ -352,7 +355,7 @@ struct BasicsTab: View {
         TextField(L10n.t("themeEditor.localFontFamily"), text: $importFamily)
         Picker(L10n.t("themeEditor.localFontSlot"), selection: $importSlot) {
           Text(L10n.t("themeEditor.localFontNoSlot")).tag("")
-          ForEach(Self.slots, id: \.self) { Text(L10n.t("themeEditor.fontFor", ["slot": $0])).tag($0) }
+          ForEach(Self.slots, id: \.self) { Text(L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle($0)])).tag($0) }
         }
         HStack {
           Spacer()
@@ -471,11 +474,30 @@ struct BasicsTab: View {
       }
     }
     ForEach(colors.keys.filter { colors[$0]?.objectValue != nil }, id: \.self) { mode in
-      SettingsSection(leaves.isEmpty ? "\(L10n.t("themeEditor.colors")) · \(mode)" : mode) {
+      SettingsSection(leaves.isEmpty ? "\(L10n.t("themeEditor.colors")) · \(Self.modeTitle(mode))" : Self.modeTitle(mode)) {
         ForEach((colors[mode]?.objectValue?.keys ?? []).filter { colors[mode]?[$0]?.stringValue != nil }, id: \.self) { key in
           colorRow(path: [mode, key], name: key)
         }
       }
+    }
+  }
+
+  /// The palettes and font slots in words; their keys are Quartz's ("lightMode", "header"), shown
+  /// as they are only when QuartzHub has no word (review 2026-11-13, nebenbei).
+  static func modeTitle(_ mode: String) -> String {
+    switch mode {
+    case "lightMode": L10n.t("themeEditor.modes.light")
+    case "darkMode": L10n.t("themeEditor.modes.dark")
+    default: mode
+    }
+  }
+
+  static func slotTitle(_ slot: String) -> String {
+    switch slot {
+    case "header": L10n.t("themeEditor.slots.header")
+    case "body": L10n.t("themeEditor.slots.body")
+    case "code": L10n.t("themeEditor.slots.code")
+    default: slot
     }
   }
 

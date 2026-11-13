@@ -54399,13 +54399,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzHub schreibt diese Datei selbst. Was zwischen den QuartzControl-Markern steht, schreibt jede Änderung an Ladereihenfolge, Schriften oder Variablen auf dieser Seite neu; Text außerhalb der Marker bleibt."
+            "value" : "QuartzHub schreibt diese Datei selbst. Was zwischen den Markierungen „…:managed:…:start“ und „…:end“ steht, schreibt jede Änderung an Ladereihenfolge, Schriften oder Variablen auf dieser Seite neu; Text außerhalb der Markierungen bleibt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzHub writes this file itself. What stands between the QuartzControl markers is rewritten by every change to the load order, fonts or variables on this page; text outside the markers is kept."
+            "value" : "QuartzHub writes this file itself. What stands between the markers “…:managed:…:start” and “…:end” is rewritten by every change to the load order, fonts or variables on this page; text outside the markers is kept."
           }
         }
       }
@@ -54451,15 +54451,39 @@
       "generatesSymbol" : false,
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Variable(n) überschrieben."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Eine Variable überschrieben."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Variablen überschrieben."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} variable(s) overridden."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "One variable overridden."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} variables overridden."
+                }
+              }
+            }
           }
         }
       }
@@ -54471,13 +54495,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reihenfolge: Basis → Community-Theme → Variablen → eigenes CSS. Das Theme „{{themeId}}“ ist aktiv und überschreibt die Basisfarben."
+            "value" : "Reihenfolge: Basis → Community-Theme → Stylesheets aus custom/ und imported/ → Variablen → eigenes CSS in custom.scss. Das Theme „{{themeId}}“ ist aktiv und überschreibt die Basisfarben."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Order: basics → community theme → variables → custom CSS. The theme “{{themeId}}” is active and overrides the base colors."
+            "value" : "Order: basics → community theme → stylesheets in custom/ and imported/ → variables → your CSS in custom.scss. The theme “{{themeId}}” is active and overrides the base colors."
           }
         }
       }
@@ -54489,13 +54513,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reihenfolge: Basis → Community-Theme → Variablen → eigenes CSS. Kein Community-Theme aktiv: Es gelten deine Basis-Farben und -Schriften."
+            "value" : "Reihenfolge: Basis → Community-Theme → Stylesheets aus custom/ und imported/ → Variablen → eigenes CSS in custom.scss. Kein Community-Theme aktiv: Es gelten deine Basis-Farben und -Schriften."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Order: basics → community theme → variables → custom CSS. No community theme active: your base colors and fonts apply."
+            "value" : "Order: basics → community theme → stylesheets in custom/ and imported/ → variables → your CSS in custom.scss. No community theme active: your base colors and fonts apply."
           }
         }
       }
@@ -60592,6 +60616,25 @@
         }
       }
     },
+    "themeEditor.delivery.saveAndFetch" : {
+      "comment" : "Stile ▸ Basis, font delivery: the fetch button while the page has other unsaved edits (they are saved with it)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles speichern und Schriften holen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save everything and fetch the fonts"
+          }
+        }
+      }
+    },
     "themeEditor.delivery.selfHost" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -61331,7 +61374,45 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nothing is loaded; the font has to be present locally already, e.g. via “Import your own font” below."
+            "value" : "Nothing is loaded; the font has to be present locally already, e.g. via “Import a custom font” below."
+          }
+        }
+      }
+    },
+    "themeEditor.modes.dark" : {
+      "comment" : "Stile ▸ Basis: the dark palette (Quartz's darkMode)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dunkel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        }
+      }
+    },
+    "themeEditor.modes.light" : {
+      "comment" : "Stile ▸ Basis: the light palette (Quartz's lightMode)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hell"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
           }
         }
       }
@@ -61440,6 +61521,63 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The values apply again once the theme is turned off. While the theme is active, they can be overridden individually in the Variables tab."
+          }
+        }
+      }
+    },
+    "themeEditor.slots.body" : {
+      "comment" : "Stile ▸ Basis: font slot body",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fließtext"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Body text"
+          }
+        }
+      }
+    },
+    "themeEditor.slots.code" : {
+      "comment" : "Stile ▸ Basis: font slot code",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code"
+          }
+        }
+      }
+    },
+    "themeEditor.slots.header" : {
+      "comment" : "Stile ▸ Basis: font slot header",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überschriften"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Headings"
           }
         }
       }
@@ -61727,13 +61865,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieses Plugin ({{source}}) überschreibt die Farben aus der Basis-Ebene. Änderungen unten wirken sich direkt auf die Vorschau aus."
+            "value" : "Dieses Plugin ({{source}}) überschreibt die Farben aus der Basis-Ebene. Deine Variablen werden danach geladen und gehen ihm deshalb vor."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This plugin ({{source}}) overrides the colors from the Basics layer. Changes below take effect immediately in the preview."
+            "value" : "This plugin ({{source}}) overrides the colors from the Basics layer. Your variables load after it and so take precedence."
           }
         }
       }
@@ -62382,6 +62520,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete preset"
+          }
+        }
+      }
+    },
+    "themes.presets.deletedAnnounce" : {
+      "comment" : "Stile ▸ Community-Themes: VoiceOver after a preset was deleted",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preset „{{name}}“ gelöscht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preset “{{name}}” deleted."
           }
         }
       }

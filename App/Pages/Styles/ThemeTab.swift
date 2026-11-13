@@ -37,6 +37,9 @@ struct ThemeTab: View {
   @State private var presetName = ""
   @State private var optionQuery = ""
   @State private var catalogLoading = false
+  /// What went wrong with a preset (saving, applying, deleting): said under the list, not only to
+  /// VoiceOver, and never swallowed (review 2026-11-13, nebenbei).
+  @State private var presetMessage: String?
 
   static let visibleLimit = 30
 
@@ -158,7 +161,8 @@ struct ThemeTab: View {
       savingPreset = false
       Task { await reloadPresets() }
     } catch {
-      Announce.post(StylesModel.message(error))
+      presetMessage = StylesModel.message(error)
+      Announce.post(presetMessage!)
     }
   }
 
@@ -238,7 +242,10 @@ struct ThemeTab: View {
           Text(name)
           Text(L10n.t("themes.presets.basisLabel", ["base": preset["baseThemeId"]?.stringValue ?? ""])).foregroundStyle(.secondary)
           Spacer()
-          if let theme = preset["options"]?["theme"]?.stringValue, theme == activeThemeId {
+          // Active when the theme runs with exactly the preset's options: two presets of one theme
+          // were both "Aktiv" while the ID alone was compared.
+          if let plugin, FontDelivery.enabled(plugin),
+             Self.sameValue(plugin.object["options"] ?? .object(JSONObject()), preset["options"] ?? .object(JSONObject())) {
             StateBadge(text: L10n.t("themes.presets.active"), color: .green)
           } else {
             Button(L10n.t("themes.presets.apply")) { Task { await applyPreset(preset) } }
@@ -252,6 +259,19 @@ struct ThemeTab: View {
           .buttonStyle(.borderless)
         }
       }
+      if let presetMessage { Callout(.error, presetMessage) }
+    }
+  }
+
+  /// Equal as data, whatever order the keys were written in (the config's YAML may reorder them).
+  static func sameValue(_ a: JSONValue, _ b: JSONValue) -> Bool {
+    switch (a, b) {
+    case (.object(let x), .object(let y)):
+      Set(x.keys) == Set(y.keys) && x.keys.allSatisfy { sameValue(x[$0]!, y[$0]!) }
+    case (.array(let x), .array(let y)):
+      x.count == y.count && zip(x, y).allSatisfy { sameValue($0, $1) }
+    default:
+      a == b
     }
   }
 
@@ -263,7 +283,20 @@ struct ThemeTab: View {
   /// Installs the preset's theme first (npm), then takes over its options.
   private func applyPreset(_ preset: JSONValue) async {
     guard let base = preset["baseThemeId"]?.stringValue else { return }
-    _ = try? await ThemeServices.marketplace.install(themeId: base, project: model.project.path)
+    presetMessage = nil
+    // A failed npm install left the options of a theme that is not there (it was ignored).
+    do {
+      let result = try await ThemeServices.marketplace.install(themeId: base, project: model.project.path)
+      guard result.success else {
+        presetMessage = L10n.t("themes.catalog.installFailed", ["id": base, "output": String(result.output.prefix(300))])
+        Announce.post(presetMessage!)
+        return
+      }
+    } catch {
+      presetMessage = StylesModel.message(error)
+      Announce.post(presetMessage!)
+      return
+    }
     var next = plugin ?? PluginEntry(object: JSONObject([("name", .string(base)), ("source", .string("@quartz-themes/core")), ("enabled", .bool(true))]))
     next.object["enabled"] = .bool(true)
     next.object["options"] = .object(preset["options"]?.objectValue ?? JSONObject())
@@ -275,7 +308,14 @@ struct ThemeTab: View {
     let (question, detail) = Confirm.split(L10n.t("themes.presets.confirmDelete", ["name": name]))
     guard await Confirm.ask(question, detail: detail, confirm: L10n.t("themes.presets.confirmDeleteAction"), destructive: true,
                             window: unsaved?.window) else { return }
-    try? ThemePresets.delete(id: preset["id"]?.stringValue ?? "", project: model.project.path)
+    presetMessage = nil
+    do {
+      try ThemePresets.delete(id: preset["id"]?.stringValue ?? "", project: model.project.path)
+      Announce.post(L10n.t("themes.presets.deletedAnnounce", ["name": name]))
+    } catch {
+      presetMessage = StylesModel.message(error)
+      Announce.post(presetMessage!)
+    }
     await reloadPresets()
   }
 
