@@ -276,9 +276,11 @@ for lang in $LANGS; do
         if [ $name = snapshots ]; then page 1; sleep 2; press_label "Snapshot anlegen" "Take snapshot"; sleep 8; fi
         # The editors' previews need the dev server; started once, before the first of them.
         if [ "$flag" = s ] && [ $serving = 0 ]; then key r; sleep 30; serving=1; fi
-        [ "$flag" = w ] && sleep 10
         page $row; sleep 2
         [ -n "$t" ] && { tab $t; sleep 2; }
+        # After the page is open: before it, the wait was spent on the previous page and Vorlagen
+        # was taken while it still said „Lade…“ (2026-11-13).
+        [ "$flag" = w ] && sleep 10
         # A form chosen: its fields under a closed "Allgemein", the first one open; the preview goes
         # to a page that embeds it.
         if [ $name = plugins-formulare-formular ]; then
