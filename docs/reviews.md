@@ -97,13 +97,14 @@ Testrückstand vom 2026-11-06 (eine URL als Pfad).
 
 Bericht `REVIEW-2026-11-13-handbuch.md` (Stand `6bfb1fa`, kein Auftrag: gesammelt beim Schreiben des
 Handbuchs): 2 Hoch, 4 Mittel, 13 Niedrig, rund 100 nebenbei; mit den Büchern kamen M5, N14 und N15 dazu. Der
-Nutzer wählte zuerst H1 und H2, dann M5, N14 und N15; die übrigen sind offen.
+Nutzer wählte zuerst H1 und H2, dann M5, N14, N15 und die übrigen.
 
 | Befund | Was jetzt stimmt | Commit |
 | --- | --- | --- |
 | H1 | „Auch den Projekt-Commit zurücksetzen“ lässt einen Content-Ordner, den der Store ausnimmt, wie er ist (gemischter Reset, außerhalb von `content/` wie `--hard`) | `6094280` |
 | H2 | Speichern oder Löschen eines Frames behält ungespeicherte Änderungen der Bühne (`PluginListMerge`, Dreiwege-Abgleich) | `f8dd175` |
 | M5 | Im PDF bleibt „ff“ und „ffi“ als Text lesbar: Druck ohne gewöhnliche Ligaturen (`DocumentHTML.webKitPrintRules`); vorher 200 Wörter unlesbar, danach keins | `f64d2d9` |
+| M1 | Ungespeicherte Übersetzungen fragen vor einer anderen Sprache, beim Schließen und Beenden; Verwerfen verwirft wirklich | `5cacfa8` |
 | N14 | ➕ Neues Buch fragt zuerst nach dem Titel und zeigt den Dateinamen, der daraus wird | `731bc55` |
 | N15 | Die Format-Schalter des Ziels „Dokument“ sind drei Elemente mit eigener Kennung; ein Klick schaltet das richtige | `83e2271` |
 

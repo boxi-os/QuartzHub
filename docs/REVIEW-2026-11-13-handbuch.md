@@ -65,7 +65,7 @@ ungespeicherte Änderungen auf der Bühne, ohne zu fragen.** *(gelesen)*
 ### Mittel
 
 **M1. Ungespeicherte Übersetzungen schützt keine Nachfrage: Ein Wechsel der Sprache im Reiter
-verwirft sie still, Beenden und Fenster schließen ebenso.** *(gelesen)*
+verwirft sie still, Beenden und Fenster schließen ebenso.** *(gelesen)* **Erledigt** (`5cacfa8`).
 
 - Ort: `App/Pages/Config/LocalizationTab.swift:39` (`onChange(of: model.code)` → `loadEntries`),
   `:198-203` (`edits = [:]`, wenn die Sprache wechselt), `:220` (`dirtyKeys`); `ConfigPage.swift:61`
