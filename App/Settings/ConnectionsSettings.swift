@@ -83,7 +83,7 @@ struct ConnectionsSettings: View {
             .labelsHidden()
             .textFieldStyle(.roundedBorder)
             .accessibilityIdentifier("settings.githubToken")
-          Button(model.savingGithub ? L10n.t("common.saving") : L10n.t("settings.github.saveAndCheck")) {
+          Button(model.savingGithub ? L10n.t("settings.github.checking") : L10n.t("settings.github.saveAndCheck")) {
             Task {
               if await model.saveGithub(token) { token = "" }
             }

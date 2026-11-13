@@ -314,3 +314,12 @@ extension Error {
     #expect(!FileManager.default.fileExists(atPath: "\(site)/sub/alt.html"))
   }
 }
+
+/// A cancelled document export is its own outcome, not a failure (review 2026-11-13, nebenbei).
+@Suite struct DeployCancelledTests {
+  @Test func theExportsOwnCancellationIsCancelled() {
+    #expect(DeployResult.failed(PublishFailure(L10n.t("main.exportCancelled"))).cancelled)
+    #expect(!DeployResult.failed(PublishFailure(L10n.t("main.folderIsProject"))).cancelled)
+    #expect(!DeployResult.failed(CancellationError()).cancelled, "only the export's sentence, as ExportBook throws it")
+  }
+}

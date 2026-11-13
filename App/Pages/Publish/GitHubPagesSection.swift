@@ -80,7 +80,7 @@ struct GitHubPagesSection: View {
     HStack {
       // Two actions behind one button: before Pages reads this branch it points it here, after
       // that it only saves the domain and HTTPS.
-      Button(applying ? L10n.t("common.saving")
+      Button(applying ? L10n.t("publish.github.applying")
         : info?.configured == true && info?.sourceBranch?.stringValue == branch ? L10n.t("publish.pages.saveSettings")
         : L10n.t("publish.pages.apply", ["branch": branch])) { Task { await apply() } }
         .disabled(applying)

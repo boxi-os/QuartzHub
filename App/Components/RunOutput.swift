@@ -6,11 +6,17 @@ struct OutcomeTitle: View {
   let success: Bool
   /// Done, with something left over (files a target would not delete).
   var partial = false
+  /// Stopped on purpose: neither red nor green.
+  var cancelled = false
 
   var body: some View {
     if let title {
-      Label(title, systemImage: !success ? "xmark.octagon.fill" : partial ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")
-        .foregroundStyle(!success ? .red : partial ? .orange : .green)
+      if cancelled {
+        Label(title, systemImage: "stop.circle").foregroundStyle(.secondary)
+      } else {
+        Label(title, systemImage: !success ? "xmark.octagon.fill" : partial ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")
+          .foregroundStyle(!success ? .red : partial ? .orange : .green)
+      }
     }
   }
 }

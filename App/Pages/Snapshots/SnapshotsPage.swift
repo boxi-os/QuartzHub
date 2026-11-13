@@ -101,7 +101,7 @@ struct SnapshotsPage: View {
         .fixedSize(horizontal: false, vertical: true)
       HStack {
         Spacer()
-        Button(model.creating ? L10n.t("common.saving") : L10n.t("backups.create"), action: create)
+        Button(model.creating ? L10n.t("backups.creating") : L10n.t("backups.create"), action: create)
           .keyboardShortcut(.defaultAction)
           .disabled(model.creating)
           .accessibilityIdentifier("backups.create")

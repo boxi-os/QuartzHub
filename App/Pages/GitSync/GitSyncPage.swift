@@ -82,7 +82,8 @@ struct GitSyncPage: View {
         } else {
           HStack(spacing: 8) {
             ProgressView().controlSize(.small)
-            Note(L10n.t("dashboard.updates.checking"))
+            // Not "Prüfe auf Updates…": this reads git's status (review 2026-11-13, nebenbei).
+            Note(L10n.t("gitSync.loading"))
           }
         }
       }

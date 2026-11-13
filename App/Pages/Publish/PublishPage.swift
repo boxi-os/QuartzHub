@@ -104,7 +104,7 @@ struct PublishPage: View {
       ToolbarSpacer(.fixed, placement: .primaryAction)
       ToolbarItem(placement: .primaryAction) {
         Button { Task { await model.publish(window: unsaved?.window) } } label: {
-          Label(running ? L10n.t("common.saving") : document ? L10n.t("publish.exportButton") : L10n.t("publish.deployButton"),
+          Label(running ? (document ? L10n.t("publish.exporting") : L10n.t("publish.deploying")) : document ? L10n.t("publish.exportButton") : L10n.t("publish.deployButton"),
                 systemImage: ProjectPage.publish.symbol)
             .labelStyle(.titleAndIcon)
         }
@@ -185,14 +185,14 @@ struct PublishPage: View {
   private func diffSection(_ target: PublishTarget) -> some View {
     Section {
       HStack {
-        Button(model.building ? L10n.t("common.saving") : L10n.t("publish.buildNow")) { Task { await model.buildNow() } }
+        Button(model.building ? L10n.t("buildServer.building") : L10n.t("publish.buildNow")) { Task { await model.buildNow() } }
           .disabled(model.building || model.running)
           .accessibilityIdentifier("publish.build")
         Button(model.diffing ? L10n.t("common.loading") : L10n.t("publish.refreshDiff")) { Task { await model.refreshDiff() } }
           .disabled(model.diffing || model.running)
           .accessibilityIdentifier("publish.refreshDiff")
         if model.canExclude, !model.selectedIsRsync {
-          Button(model.forgetting ? L10n.t("common.saving") : L10n.t("publish.uploadEverything")) { Task { await model.forgetManifest() } }
+          Button(model.forgetting ? L10n.t("publish.forgetting") : L10n.t("publish.uploadEverything")) { Task { await model.forgetManifest() } }
             .disabled(model.forgetting || model.diffing || model.running)
             .help(L10n.t("publish.uploadEverythingHint"))
             .accessibilityIdentifier("publish.uploadEverything")
@@ -264,7 +264,8 @@ struct PublishPage: View {
       // Its own view: only it reads the progress, so an event redraws one row and not the page.
       if running { DeployProgress(model: model) }
       if let result = model.result, result.targetId == target.id {
-        OutcomeTitle(title: model.resultTitle(result.value, document: document), success: result.value.success, partial: !result.value.kept.isEmpty)
+        OutcomeTitle(title: model.resultTitle(result.value, document: document), success: result.value.success, partial: !result.value.kept.isEmpty,
+                     cancelled: result.value.cancelled)
           .accessibilityIdentifier("publish.result")
         RunOutput(text: result.value.output, label: L10n.t("publish.deployHeading"), identifier: "publish.output")
       }

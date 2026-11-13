@@ -451,6 +451,25 @@
         }
       }
     },
+    "backups.creating" : {
+      "comment" : "Snapshots: the create button while a snapshot is taken",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lege an…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating…"
+          }
+        }
+      }
+    },
     "backups.diffLabel" : {
       "comment" : "Snapshots, diff sheet: accessibility label of the diff text",
       "extractionState" : "manual",
@@ -5662,7 +5681,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saving…"
+            "value" : "Creating…"
           }
         }
       }
@@ -19742,13 +19761,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jeder Sync committet zuerst deine Änderungen (falls unten aktiviert), holt dann den Branch „{{branch}}“ von origin und pusht deinen aktuellen Branch per Force-Push."
+            "value" : "Jede Richtung committet zuerst deine Änderungen (falls unten aktiviert). „Pull“ holt dann den Branch „{{branch}}“ von origin, „Push“ pusht deinen aktuellen Branch per Force-Push, „Push + Pull“ tut beides."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Every sync first commits your changes (when enabled below), then fetches the branch “{{branch}}” from origin and pushes your current branch as a force push."
+            "value" : "Every direction first commits your changes (when enabled below). “Pull” then fetches the branch “{{branch}}” from origin, “Push” pushes your current branch as a force push, “Push + pull” does both."
           }
         }
       }
@@ -19983,6 +20002,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Last commit"
+          }
+        }
+      }
+    },
+    "gitSync.loading" : {
+      "comment" : "Git-Sync: while git status is read on opening the page",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lese den Stand des Repositorys…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading the repository’s state…"
           }
         }
       }
@@ -46108,6 +46146,25 @@
         }
       }
     },
+    "publish.deploying" : {
+      "comment" : "Veröffentlichen: the run button while a deploy runs",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veröffentliche…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publishing…"
+          }
+        }
+      }
+    },
     "publish.description" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -46162,6 +46219,25 @@
         }
       }
     },
+    "publish.exportStopped" : {
+      "comment" : "Veröffentlichen: the run's title after a document export was cancelled (not a failure)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export abgebrochen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export cancelled."
+          }
+        }
+      }
+    },
     "publish.exportSuccess" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -46176,6 +46252,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export successful."
+          }
+        }
+      }
+    },
+    "publish.exporting" : {
+      "comment" : "Veröffentlichen: the run button while a document export runs",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportiere…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporting…"
           }
         }
       }
@@ -46198,6 +46293,25 @@
         }
       }
     },
+    "publish.forgetting" : {
+      "comment" : "Veröffentlichen: 'upload everything next time' while the manifest is forgotten",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setze zurück…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resetting…"
+          }
+        }
+      }
+    },
     "publish.ftpPlaintextWarning" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -46212,6 +46326,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "FTP sends the password and the files in the clear; anyone on the same network can read along. Turn on FTPS if your provider supports it, or use SFTP."
+          }
+        }
+      }
+    },
+    "publish.github.applying" : {
+      "comment" : "Veröffentlichen, GitHub Pages: the button while Pages is set up",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Richte ein…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setting up…"
           }
         }
       }
@@ -47197,13 +47330,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Welche Seiten in welcher Reihenfolge, steht im Buch. Die Dateien heißen wie das Buch."
+            "value" : "Welche Seiten in welcher Reihenfolge, steht im Buch. Die Dateien heißen wie die Datei des Buchs in quartz-books/, nicht wie sein Titel."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Which pages in which order is in the book. The files are named after the book."
+            "value" : "Which pages in which order is in the book. The files are named after the book’s file in quartz-books/, not its title."
           }
         }
       }
@@ -54755,6 +54888,25 @@
         }
       }
     },
+    "styles.fixes.adding" : {
+      "comment" : "Stile ▸ Basis, fixes: the add button while it runs",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge hinzu…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adding…"
+          }
+        }
+      }
+    },
     "styles.fixes.alreadyAdded" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -61489,6 +61641,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import a custom font"
+          }
+        }
+      }
+    },
+    "themeEditor.localFontImporting" : {
+      "comment" : "Stile ▸ Basis: importing a font file",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importiere…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importing…"
           }
         }
       }

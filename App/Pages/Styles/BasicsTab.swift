@@ -301,7 +301,7 @@ struct BasicsTab: View {
               Text(L10n.t("styles.fixes.alreadyAdded", ["file": existing.name])).font(.callout).foregroundStyle(.secondary)
               Button(L10n.t("styles.fixes.open")) { goTo(.customCss) }.buttonStyle(.link)
             } else {
-              Button(fixBusy == fix.id ? L10n.t("common.saving") : L10n.t("styles.fixes.add")) { Task { await add(fix) } }
+              Button(fixBusy == fix.id ? L10n.t("styles.fixes.adding") : L10n.t("styles.fixes.add")) { Task { await add(fix) } }
                 .disabled(fixBusy != nil)
             }
           }
@@ -360,7 +360,7 @@ struct BasicsTab: View {
         HStack {
           Spacer()
           Button(L10n.t("common.cancel")) { pendingFont = nil }
-          Button(importing ? L10n.t("common.saving") : L10n.t("themeEditor.localFontConfirm")) { Task { await importFont() } }
+          Button(importing ? L10n.t("themeEditor.localFontImporting") : L10n.t("themeEditor.localFontConfirm")) { Task { await importFont() } }
             .disabled(importing || StylesModel.trim(importFamily).isEmpty)
         }
       }

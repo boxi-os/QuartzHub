@@ -7,11 +7,21 @@ public struct DeployResult: Equatable, Sendable {
   /// Files the target refused to delete and still has (the output names each). A run with these
   /// is a success, not a clean one: the title says so (review 2026-11-11, N5).
   public var kept: [String]
+  /// Stopped by the user (a document export's Abbrechen): not a failure, and the page must not
+  /// call it "Veröffentlichung fehlgeschlagen" in red (review 2026-11-13, nebenbei).
+  public var cancelled: Bool
 
-  public init(success: Bool, output: String, kept: [String] = []) {
+  public init(success: Bool, output: String, kept: [String] = [], cancelled: Bool = false) {
     self.success = success
     self.output = output
     self.kept = kept
+    self.cancelled = cancelled
+  }
+
+  /// A run that threw: cancelled when it was the export's own cancellation.
+  static func failed(_ error: Error) -> DeployResult {
+    DeployResult(success: false, output: PublishFailure.message(of: error),
+                 cancelled: (error as? PublishFailure) == PublishFailure(L10n.t("main.exportCancelled")))
   }
 }
 
@@ -181,7 +191,7 @@ public struct Deploy: Sendable {
       do {
         result = try await adapter.run(context, excluding: excluded)
       } catch {
-        return DeployResult(success: false, output: PublishFailure.message(of: error))
+        return DeployResult.failed(error)
       }
       guard let notes = staging?.notes, !notes.isEmpty else { return result }
       return DeployResult(success: result.success, output: (notes + ["", result.output]).joined(separator: "\n"), kept: result.kept)

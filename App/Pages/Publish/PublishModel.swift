@@ -302,6 +302,7 @@ final class PublishModel {
   }
 
   func resultTitle(_ result: DeployResult, document: Bool) -> String {
+    if result.cancelled { return L10n.t("publish.exportStopped") }
     if !result.success { return L10n.t("publish.deployFailed") }
     // Files the target would not delete are still live: not the plain "erfolgreich".
     if !result.kept.isEmpty { return L10n.t("publish.deployPartial", ["count": String(result.kept.count)], count: result.kept.count) }
