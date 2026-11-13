@@ -186,6 +186,17 @@ public struct GitHubAPI: Sendable {
       let created = try await api(path, method: "POST", body: .object(JSONObject([("source", source)])))
       if created.status != 201 { return Self.failure(created, L10n.t("main.githubPagesSetupFailed")) }
       output += "\(L10n.t("main.githubPagesCreated", ["branch": branch]))\n"
+      // GitHub's POST takes only the source (docs.github.com/en/rest/pages/pages); the domain goes
+      // in a PUT after it. QuartzControl sent none, so a domain typed before the first set-up was
+      // lost (review 2026-11-13, handbook, M2; a deviation from its golden file).
+      if let domain = cname ?? nil, !domain.isEmpty {
+        let named = try await api(path, method: "PUT", body: .object(JSONObject([("source", source), ("cname", .string(domain))])))
+        if named.status != 204 {
+          let failed = Self.failure(named, L10n.t("main.githubPagesSaveFailed"))
+          return ActionResult(success: false, output: output + failed.output)
+        }
+        output += "\(L10n.t("main.githubDomainSet", ["domain": domain]))\n"
+      }
     } else {
       var body = JSONObject([("source", source)])
       if let cname { body["cname"] = (cname ?? "").isEmpty ? .null : .string(cname!) }

@@ -145,4 +145,45 @@ final class GitHubNet: URLProtocol, @unchecked Sendable {
       }
     }
   }
+
+  /// Not in QuartzControl's golden file, which has its mistake (review 2026-11-13, handbook, M2):
+  /// a new site with a domain sends the domain in a PUT after the POST, and says so; a refused PUT
+  /// is a failure that still names the created site.
+  @Test func aNewSiteKeepsItsDomain() async throws {
+    let root = TemplatePackageTests.realpath(TestFolder.make("qh-github-domain"))
+    defer { try? FileManager.default.removeItem(atPath: root) }
+    try Posix.write("\(root)/gitconfig", Data())
+    let environment = ToolEnvironment(
+      base: ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_CONFIG_GLOBAL": "\(root)/gitconfig", "GIT_CONFIG_NOSYSTEM": "1"],
+      hostPath: HostPath(entries: ["/usr/bin", "/bin"], source: .inherited, added: []), nodeMode: .system, runtime: .repository, git: nil,
+      bundledGitFailure: nil)
+    let project = "\(root)/Gärten-Ü"
+    try Posix.mkdirs(project)
+    _ = await ProcessRunner.run(environment.command("git", ["init", "-q"], in: project))
+    _ = await ProcessRunner.run(environment.command("git", ["remote", "add", "origin", "https://github.com/boxi-os/site.git"], in: project))
+    let api = GitHubAPI(environment: environment, token: { "ghp_token" }, configuration: GitHubNet.configuration)
+
+    GitHubNet.state.withLock { $0 = GitHubNet.State(answers: [
+      .object(JSONObject([("status", .number(404)), ("body", .string("{}"))])),
+      .object(JSONObject([("status", .number(201)), ("body", .string("{}"))])),
+      .object(JSONObject([("status", .number(204))])),
+    ]) }
+    let result = try await api.configurePages(project, branch: "gh-pages", cname: .some("blog.example.org"))
+    let requests = GitHubNet.state.withLock { $0.requests }
+    #expect(result.success)
+    #expect(requests.map { "\($0["method"]!.stringValue!) \($0["body"]?.stringValue ?? "")" } == [
+      "GET ", #"POST {"source":{"branch":"gh-pages","path":"/"}}"#,
+      #"PUT {"source":{"branch":"gh-pages","path":"/"},"cname":"blog.example.org"}"#,
+    ])
+    #expect(result.output.contains(L10n.t("main.githubDomainSet", ["domain": "blog.example.org"])), "\(result.output)")
+
+    GitHubNet.state.withLock { $0 = GitHubNet.State(answers: [
+      .object(JSONObject([("status", .number(404)), ("body", .string("{}"))])),
+      .object(JSONObject([("status", .number(201)), ("body", .string("{}"))])),
+      .object(JSONObject([("status", .number(422)), ("body", .string(#"{"message":"The CNAME is already taken"}"#))])),
+    ]) }
+    let refused = try await api.configurePages(project, branch: "gh-pages", cname: .some("blog.example.org"))
+    #expect(!refused.success)
+    #expect(refused.output.contains(L10n.t("main.githubPagesCreated", ["branch": "gh-pages"])) && refused.output.contains("The CNAME is already taken"))
+  }
 }
