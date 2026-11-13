@@ -129,9 +129,11 @@ public struct TemplatePackage: Sendable {
   // MARK: - Names
 
   /// The save dialog's suggestion; the manifest keeps every character of the name.
-  public static func slugifyFileName(_ name: String) -> String {
+  /// QuartzControl's slug; `fallback` for a name with no ASCII letter or digit ("vorlage" there,
+  /// the app passes its language's word).
+  public static func slugifyFileName(_ name: String, fallback: String = "vorlage") -> String {
     let slug = JSText.replaceAll(JSText.replaceAll(JS.trim(name).lowercased(), "[^a-z0-9]+", with: "-"), #"\A-+|-+\z"#, with: "")
-    return slug.isEmpty ? "vorlage" : slug
+    return slug.isEmpty ? fallback : slug
   }
 
   // MARK: - Export
@@ -139,16 +141,35 @@ public struct TemplatePackage: Sendable {
   /// What every part would bring from this project, for the export form's counts. A part that
   /// fails is left out, as there.
   public func inspect(project: String) async -> [Summary] {
+    await inspection(project: project).parts
+  }
+
+  /// The parts a template could take, and the ones that refused to be collected with their
+  /// sentence (the static and content ceilings). Those vanished from the list without a word
+  /// (review 2026-11-13, nebenbei).
+  public struct Inspection: Equatable, Sendable {
+    public var parts: [Summary]
+    public var refused: [String: String]
+  }
+
+  public func inspection(project: String) async -> Inspection {
     var out: [Summary] = []
+    var refused: [String: String] = [:]
     for id in Self.partIds {
       if id == "translations" {
         guard let stats = try? await probeTranslations(project) else { continue }
         if stats.keys.contains(where: { (stats[$0]?.numberValue ?? 0) > 0 }) { out.append(Summary(id: id, stats: stats, requires: [])) }
         continue
       }
-      if let collected = try? await collect(id, project, scope: .changed) { out.append(Summary(id: id, stats: collected.stats, requires: collected.requires)) }
+      do {
+        if let collected = try await collect(id, project, scope: .changed) { out.append(Summary(id: id, stats: collected.stats, requires: collected.requires)) }
+      } catch let failure as TemplateFailure {
+        refused[id] = failure.message
+      } catch {
+        continue
+      }
     }
-    return out
+    return Inspection(parts: out, refused: refused)
   }
 
   public func export(project: String, to file: String, name: String, description: String? = nil, parts: [String], scope: TranslationScope) async throws -> Exported {

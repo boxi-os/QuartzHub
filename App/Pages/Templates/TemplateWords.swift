@@ -116,6 +116,11 @@ enum TemplateWords {
   /// `planNotes`: the sentences a part's plan wants said before the click.
   static func planNotes(_ plan: TemplatePackage.PartPlan, strategy: TemplatePackage.Strategy, pluginsSelected: Bool) -> [String] {
     var notes: [String] = []
+    // Under "Projekt gewinnt" these two are not applied at all (`appearanceSkipped`,
+    // `layoutSkipped`); the list let them be ticked without a word (review 2026-11-13, nebenbei).
+    if strategy == .projectWins, TemplatesModel.skippedWhenProjectWins.contains(plan.id) {
+      return [L10n.t("templates.planSkippedProjectWins")]
+    }
     func listed(_ kind: String) -> [String] {
       plan.notes.filter { $0.hasPrefix("\(kind):") }.flatMap { $0.dropFirst(kind.count + 1).split(separator: ",", omittingEmptySubsequences: false).map(String.init) }
     }

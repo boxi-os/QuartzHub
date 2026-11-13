@@ -35856,13 +35856,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Inhalt dieses Projekts ist größer als {{limit}} MB. Eine Vorlage ist eine Gestaltung, keine Sicherung. Nimm den Baustein „Inhalt“ heraus."
+            "value" : "Die Notizen dieses Projekts sind zusammen größer als {{limit}} MB. Eine Vorlage ist eine Gestaltung, keine Sicherung; der Baustein kann deshalb nicht mit."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This project’s content is larger than {{limit}} MB. A template is a design, not a backup. Leave the “content” part out."
+            "value" : "This project’s notes add up to more than {{limit}} MB. A template is a design, not a backup, so the part cannot go along."
           }
         }
       }
@@ -35874,13 +35874,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Dateien unter quartz/static sind zusammen größer als {{limit}} MB. Eine Vorlage trägt Schnipsel, Logos und Bilder mit, keine Mediathek. Nimm den Baustein „Statische Dateien“ heraus."
+            "value" : "Die Dateien unter quartz/static sind zusammen größer als {{limit}} MB. Eine Vorlage trägt Snippets, Logos und Bilder mit, keine Mediathek; der Baustein kann deshalb nicht mit."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The files under quartz/static add up to more than {{limit}} MB. A template carries snippets, logos and images, not a media library. Leave the “Static files” part out."
+            "value" : "The files under quartz/static add up to more than {{limit}} MB. A template carries snippets, logos and images, not a media library, so the part cannot go along."
           }
         }
       }
@@ -57029,13 +57029,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bündelt die Gestaltung dieses Projekts in einer Datei: Farben, Theme, CSS, Schriften, Layout, Frames, Plugins und Übersetzungen, vollständig oder in Teilen. Nach dem Import in ein anderes Projekt ist dort alles so eingestellt wie hier."
+            "value" : "Bündelt dieses Projekt in einer Datei: Notizen, Farben und Schriften, Community-Theme, CSS-Variablen, eigenes CSS, Schriftdateien, statische Dateien, Layout, eigene Frames, Plugins, Übersetzungen und Theme-Presets, vollständig oder in Teilen. Ein anderes Projekt übernimmt beim Import die gewählten Bausteine; was es selbst schon hat, regelt die Konfliktregel."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bundles this project’s design into a single file: colours, theme, CSS, fonts, layout, frames, plugins and translations, in whole or in part. After importing into another project, everything there is set up the way it is here."
+            "value" : "Bundles this project into a single file: notes, colours and fonts, community theme, CSS variables, custom CSS, font files, static files, layout, custom frames, plugins, translations and theme presets, in whole or in part. Another project takes over the chosen parts on import; the conflict rule decides about what it already has."
           }
         }
       }
@@ -57137,13 +57137,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Es wird eine einzelne .qtpl-Datei geschrieben, die du weitergeben kannst. Ausgewählt ist alles, was dieses Projekt beinhaltet."
+            "value" : "Es wird eine einzelne .qtpl-Datei geschrieben, die du weitergeben kannst. Ausgewählt ist alles, was dieses Projekt beinhaltet; Übersetzungen nur, wenn du Texte geändert hast."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Writes a single .qtpl file you can pass on. Everything this project contains is preselected."
+            "value" : "Writes a single .qtpl file you can pass on. Everything this project contains is preselected; translations only when you changed texts."
           }
         }
       }
@@ -57180,6 +57180,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saving…"
+          }
+        }
+      }
+    },
+    "templates.fileNameFallback" : {
+      "comment" : "Vorlagen: the suggested file name when the template's name has no letter or digit to make one from",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vorlage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "template"
           }
         }
       }
@@ -57443,13 +57462,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inhalt"
+            "value" : "Notizen (content/)"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Content"
+            "value" : "Notes (content/)"
           }
         }
       }
@@ -57677,13 +57696,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alles unter quartz/static außer den Schriften: Logos, Bilder und die Textschnipsel, auf die Plugin-Optionen zeigen."
+            "value" : "Alles unter quartz/static außer den Schriften: Logos, Bilder und die Snippets, auf die Plugin-Optionen zeigen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Everything under quartz/static except the fonts: logos, images and the text snippets plugin options point at."
+            "value" : "Everything under quartz/static except the fonts: logos, images and the snippets plugin options point at."
           }
         }
       }
@@ -57821,13 +57840,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inhalt"
+            "value" : "Bausteine"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contents"
+            "value" : "Parts"
           }
         }
       }
@@ -58756,6 +58775,25 @@
         }
       }
     },
+    "templates.planSkippedProjectWins" : {
+      "comment" : "Vorlagen, applying: under a part QuartzHub skips whole when the project wins (colours & fonts, layout)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird bei „Projekt gewinnt“ nicht übernommen: Dieses Projekt behält seine eigenen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not taken over with “Project wins”: this project keeps its own."
+          }
+        }
+      }
+    },
     "templates.planUnrecordedIconKept" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -58872,6 +58910,49 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This is not a readable template (no manifest.json found)."
+          }
+        }
+      }
+    },
+    "templates.progressContent" : {
+      "comment" : "Vorlagen, applying: how far the notes of the content part are",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "eine Datei geschrieben"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Dateien geschrieben"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "one file written"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} files written"
+                }
+              }
+            }
           }
         }
       }
@@ -59603,13 +59684,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Was dieses Projekt schon hat, bleibt; nur Fehlendes kommt hinzu."
+            "value" : "Was dieses Projekt schon hat, bleibt; nur Fehlendes kommt hinzu. „Farben & Schriften“ und „Layout“ bleiben ganz, wie sie sind."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Whatever this project already has stays; only what is missing is added."
+            "value" : "Whatever this project already has stays; only what is missing is added. “Colours & fonts” and “Layout” stay entirely as they are."
           }
         }
       }

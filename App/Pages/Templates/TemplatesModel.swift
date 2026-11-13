@@ -44,6 +44,14 @@ final class TemplatesModel {
   static let displayOrder = ["content", "appearance", "theme", "cssVariables", "styles", "fonts", "static", "layout", "frames", "plugins",
                              "translations", "presets"]
 
+  /// The parts "Projekt gewinnt" leaves out whole (TemplatePackage's applyAppearance/applyLayout).
+  static let skippedWhenProjectWins: Set<String> = ["appearance", "layout"]
+
+  /// What the import will apply: the ticked parts, less those the strategy skips.
+  var appliedParts: [String] {
+    strategy == .projectWins ? importSelected.filter { !Self.skippedWhenProjectWins.contains($0) } : importSelected
+  }
+
   static func sortedForDisplay<T>(_ items: [T], id: (T) -> String) -> [T] {
     items.sorted { (displayOrder.firstIndex(of: id($0)) ?? displayOrder.count) < (displayOrder.firstIndex(of: id($1)) ?? displayOrder.count) }
   }
@@ -58,6 +66,10 @@ final class TemplatesModel {
   /// nil until the project was read the first time: then everything it has is ticked.
   var available: [TemplatePackage.Summary]?
   var exportSelected: [String]?
+  /// Parts the project has that a template cannot take, with the reason (too large).
+  var refused: [String: String] = [:]
+  /// Every part seen so far: a part that appears later is ticked like the first ones were.
+  private var seenParts: Set<String> = []
   var scope: TemplatePackage.TranslationScope = .changed
   var exporting = false
   var exportResult: Message?
@@ -105,14 +117,19 @@ final class TemplatesModel {
   }
 
   func inspect() async {
-    let parts = await templates().inspect(project: path)
+    let inspection = await templates().inspection(project: path)
+    let parts = inspection.parts
     available = parts
+    refused = inspection.refused
     // Everything the project has is ticked: a template is normally "all of it". Translations are
     // the exception: the part is offered even when no change was found (so "Alle Texte" can be
     // reached), and ticking it there would put an empty part in every package.
-    if exportSelected == nil {
-      exportSelected = parts.filter { $0.id != "translations" || ($0.stats["entries"]?.numberValue ?? 0) > 0 }.map(\.id)
-    }
+    // Again on every read, not once: a part the project gained later stayed unticked, and one it
+    // lost stayed ticked, counted ("12 von 11") and exported (review 2026-11-13, nebenbei).
+    let ids = parts.map(\.id)
+    let fresh = parts.filter { !seenParts.contains($0.id) && ($0.id != "translations" || ($0.stats["entries"]?.numberValue ?? 0) > 0) }.map(\.id)
+    exportSelected = (exportSelected ?? []).filter { ids.contains($0) } + fresh
+    seenParts.formUnion(ids)
   }
 
   func toggleExport(_ id: String) {
@@ -128,13 +145,11 @@ final class TemplatesModel {
   /// The target is chosen here, in a save panel, as QuartzControl chose it in the main process.
   func export(window: NSWindow?) async {
     let panel = NSSavePanel()
-    panel.nameFieldStringValue = TemplatePackage.slugifyFileName(name)
+    panel.nameFieldStringValue = TemplatePackage.slugifyFileName(name, fallback: L10n.t("templates.fileNameFallback"))
     if let type = UTType(filenameExtension: "qtpl") { panel.allowedContentTypes = [type] }
     let response = if let window { await panel.beginSheetModal(for: window) } else { panel.runModal() }
-    guard response == .OK, let url = panel.url else {
-      exportResult = Message(ok: true, text: L10n.t("templates.exportCancelled"))
-      return
-    }
+    // A closed panel needs no sentence; "Abgebrochen." stood there in the green of a success.
+    guard response == .OK, let url = panel.url else { return }
     exporting = true
     exportResult = nil
     defer { exporting = false }
@@ -223,7 +238,7 @@ final class TemplatesModel {
   /// clone and build (the plan's `cliInstall:` notes).
   var missingPackages: [String] {
     var seen: [String] = []
-    for part in plan?.parts ?? [] where importSelected.contains(part.id) {
+    for part in plan?.parts ?? [] where appliedParts.contains(part.id) {
       for name in part.missingPackages.map(\.name) where !seen.contains(name) { seen.append(name) }
     }
     return seen
@@ -231,7 +246,7 @@ final class TemplatesModel {
 
   var clonedPlugins: [String] {
     var seen: [String] = []
-    for part in plan?.parts ?? [] where importSelected.contains(part.id) {
+    for part in plan?.parts ?? [] where appliedParts.contains(part.id) {
       for note in part.notes where note.hasPrefix("cliInstall:") {
         let name = String(note.dropFirst("cliInstall:".count))
         if !seen.contains(name) { seen.append(name) }

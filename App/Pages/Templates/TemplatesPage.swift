@@ -52,6 +52,9 @@ struct TemplatesPage: View {
             exportRow(part)
           }
         }
+        ForEach(TemplatesModel.sortedForDisplay(Array(model.refused.keys), id: { $0 }), id: \.self) { id in
+          Callout(.warning, "\(TemplateWords.label(id)): \(model.refused[id] ?? "")")
+        }
       } else {
         HStack(spacing: 8) {
           ProgressView().controlSize(.small)
@@ -75,7 +78,7 @@ struct TemplatesPage: View {
       }
       if let translations = model.available?.first(where: { $0.id == "translations" }),
          case let undetermined = Int(translations.stats["undetermined"]?.numberValue ?? 0), undetermined > 0,
-         (model.exportSelected ?? []).contains("translations") {
+         (model.exportSelected ?? []).contains("translations"), model.scope == .changed {
         Note(L10n.t("templates.baselineHint", count: undetermined))
       }
     }
@@ -215,6 +218,11 @@ struct TemplatesPage: View {
 
   private func progressLine(_ progress: TemplatesModel.Progress) -> String {
     guard let id = progress.partId else { return L10n.t("templates.importPreparing") }
+    // The service's "content:25" is a count, as QuartzControl sent it; shown, it read
+    // "Inhalt — content:25" (review 2026-11-13, nebenbei).
+    if progress.message.hasPrefix("content:"), let count = Int(progress.message.dropFirst("content:".count)) {
+      return TemplateWords.label(id) + " — " + L10n.t("templates.progressContent", ["count": String(count)], count: count)
+    }
     return TemplateWords.label(id) + (progress.message.isEmpty ? "" : " — \(progress.message)")
   }
 
