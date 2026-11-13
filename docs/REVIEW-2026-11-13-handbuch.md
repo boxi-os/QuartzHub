@@ -156,7 +156,7 @@ Beim Anlegen und Exportieren der zwei Bücher über **Dokumente** und **Veröffe
 QuartzHub-Web *(gesehen)*:
 
 **M5. Im PDF ist „ff“ als Text verloren: Die Suche findet „Veröffentlichen“ und „öffnen“ nicht.**
-*(gesehen, gemessen)*
+*(gesehen, gemessen)* **Erledigt** (Chronik in `docs/reviews.md`).
 
 - Messung: Text des deutschen PDFs über PDFKit (`PDFDocument.string`): „Verö!entlichen“ 42-mal,
   „ö!nen“ 33-mal; `findString("Veröffentlichen")` trifft 2-mal, obwohl das Wort auf rund 40 Seiten
@@ -164,9 +164,12 @@ QuartzHub-Web *(gesehen)*:
   richtig aus; nur die Zuordnung zum Text fehlt (Ligatur „ff“ der Noto Sans, `fontOrigin: local`).
 - Folge: Suchen, Kopieren und Vorlesen im PDF scheitern an jedem Wort mit „ff“. ePub und HTML sind
   nicht betroffen (dort ist es Text).
-- Ursache nicht gesucht: ob WebKits PDF die Zuordnung schon nicht hat oder `PDFWrite` sie beim
-  Nachbearbeiten verliert. Erster Versuch: `font-variant-ligatures: no-common-ligatures` im
-  Druck-Stylesheet von `DocumentHTML`, dann dieselbe Messung.
+- Ursache: Die Schrift (latin-Subset) hat für keinen Ligatur-Codepunkt U+FB00–FB04 einen
+  cmap-Eintrag (CoreText `CTFontGetGlyphsForCharacters`); WebKits PDF bekommt für die Ligaturglyphe
+  so keinen Text. „ffi“ war ebenso betroffen („Su"x“ statt „Suffix“).
+- Fix: `font-variant-ligatures: no-common-ligatures` im Druck-Stylesheet (`webKitPrintRules`), nur
+  für `body.pdf`. Gemessen mit `qh-check export-book --pdf` am Handbuch: 200 Wörter unlesbar vorher,
+  keins nachher; „Veröffentlichen“ 2 → 59 Treffer der Suche; Seiten und Lesezeichen gleich.
 - Handbuch: nicht betroffen, aber das PDF des Handbuchs selbst.
 
 **N14. ➕ Neues Buch fragt nicht nach einem Namen: Die Datei heißt immer `neues-buch.json`

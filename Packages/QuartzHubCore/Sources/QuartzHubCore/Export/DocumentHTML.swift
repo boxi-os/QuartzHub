@@ -125,7 +125,13 @@ public enum DocumentHTML {
   /// every `img` `content-visibility: auto`, and WebKit's print leaves such an element blank when
   /// it lies outside the window (measured 2026-11-13: the handbook's screenshots were empty gaps in
   /// the PDF and present in the ePub; a 5000 px spacer reproduces it, `visible` brings them back).
-  static let webKitPrintRules = "body.pdf * { content-visibility: visible !important; }"
+  /// And no common ligatures: WebKit's PDF gives a glyph its text through the font's cmap, and a
+  /// ligature glyph a web font's subset does not map (Noto Sans latin has no U+FB00) comes out as
+  /// no text at all - "Veröffentlichen" read "Verö!entlichen", 200 words of the handbook could not
+  /// be found or copied (measured 2026-11-13, review of the handbook, M5). The ePub and the HTML
+  /// are text and keep their ligatures.
+  static let webKitPrintRules = "body.pdf * { content-visibility: visible !important; } "
+    + "body.pdf, body.pdf * { font-variant-ligatures: no-common-ligatures !important; }"
 
   public static func printCss(pageSize: String, landscape: Bool, title: String) -> String {
     let p = paper(pageSize)

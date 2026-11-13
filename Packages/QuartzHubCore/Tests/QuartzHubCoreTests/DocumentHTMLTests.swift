@@ -72,10 +72,15 @@ import Testing
     return webKit.replacingOccurrences(of: ".cover { height: 230mm;", with: ".cover { height: \(own)mm;")
   }
 
-  /// The one rule WebKit needs beyond QuartzControl's (`webKitPrintRules`), once in every document.
-  @Test func printsSkippedContent() {
+  /// The rules WebKit needs beyond QuartzControl's (`webKitPrintRules`), once in every document:
+  /// skipped content printed, and no common ligatures, whose glyphs WebKit's PDF leaves without
+  /// text (M5 of the handbook review; measured with `qh-check export-book --pdf`: 200 words with
+  /// "ff" or "ffi" unreadable before, none after). Both only for the PDF's body.
+  @Test func printsSkippedContentAndReadableLetters() {
     let css = DocumentHTML.printCss(pageSize: "A4", landscape: false, title: "T")
     #expect(css.components(separatedBy: DocumentHTML.webKitPrintRules).count == 2)
+    #expect(DocumentHTML.webKitPrintRules.contains("body.pdf, body.pdf * { font-variant-ligatures: no-common-ligatures !important; }"))
+    #expect(DocumentHTML.webKitPrintRules.contains("body.pdf * { content-visibility: visible !important; }"))
   }
 
   /// The text area less QuartzControl's 27 mm: A4 portrait is its 230 mm, the others fit their page

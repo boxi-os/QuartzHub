@@ -2813,3 +2813,9 @@ und Text; `localhost` und `boxi-os` stehen im Handbuchtext selbst.
 Was dabei auffiel, steht als M5 (ff-Ligatur im PDF ohne Text), N14 (Name eines neuen Buchs) und
 N15 (Format-Schalter für die Bedienungshilfen ein Element) in `docs/REVIEW-2026-11-13-handbuch.md`.
 Die Dateinamen der Bücher sind von Hand umbenannt (N14).
+
+Nachtrag M5 (gleicher Tag): Die Ligatur „ff“ der Noto Sans hat im latin-Subset keinen Codepunkt in
+der cmap, und WebKits PDF gibt einer Glyphe ihren Text über die cmap; „ff“ und „ffi“ waren im PDF
+deshalb kein Text. Das Druckdokument setzt jetzt `font-variant-ligatures: no-common-ligatures`
+(nur `body.pdf`; ePub und HTML behalten ihre Ligaturen). `qh-check export-book --pdf` am Handbuch:
+200 unlesbare Wörter vorher, keins nachher; die Bücher sind damit neu exportiert.
