@@ -78,7 +78,7 @@ verwirft sie still, Beenden und Fenster schließen ebenso.** *(gelesen)* **Erled
 - Handbuch: 4.4 Übersetzungen.
 
 **M2. Beim ersten Einrichten von GitHub Pages geht eine eingetragene eigene Domain verloren.**
-*(gelesen)*
+*(gelesen)* **Erledigt** (`5f92c12`).
 
 - Ort: `Publishing/GitHubAPI.swift:185-188` (`POST …/pages` nur mit `source`; `cname` wird nur im
   `PUT`-Zweig gesendet). QuartzControl hat denselben Fehler (`githubService.ts:177-179`).

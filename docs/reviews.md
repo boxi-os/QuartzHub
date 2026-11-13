@@ -105,6 +105,7 @@ Nutzer wählte zuerst H1 und H2, dann M5, N14, N15 und die übrigen.
 | H2 | Speichern oder Löschen eines Frames behält ungespeicherte Änderungen der Bühne (`PluginListMerge`, Dreiwege-Abgleich) | `f8dd175` |
 | M5 | Im PDF bleibt „ff“ und „ffi“ als Text lesbar: Druck ohne gewöhnliche Ligaturen (`DocumentHTML.webKitPrintRules`); vorher 200 Wörter unlesbar, danach keins | `f64d2d9` |
 | M1 | Ungespeicherte Übersetzungen fragen vor einer anderen Sprache, beim Schließen und Beenden; Verwerfen verwirft wirklich | `5cacfa8` |
+| M2 | Beim ersten Einrichten von GitHub Pages geht die eingetragene Domain mit (PUT nach dem POST); nicht gegen GitHub selbst gemessen | `5f92c12` |
 | N14 | ➕ Neues Buch fragt zuerst nach dem Titel und zeigt den Dateinamen, der daraus wird | `731bc55` |
 | N15 | Die Format-Schalter des Ziels „Dokument“ sind drei Elemente mit eigener Kennung; ein Klick schaltet das richtige | `83e2271` |
 
