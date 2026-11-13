@@ -1865,13 +1865,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Port {{ports}} is taken, but not by anything recognisable as a Quartz server. A start moves on to the next free port."
+                  "value" : "Port {{ports}} is taken, but not by anything recognizable as a Quartz server. A start moves on to the next free port."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Ports {{ports}} are taken, but not by anything recognisable as a Quartz server. A start moves on to the next free ports."
+                  "value" : "Ports {{ports}} are taken, but not by anything recognizable as a Quartz server. A start moves on to the next free ports."
                 }
               }
             }
@@ -1908,13 +1908,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Port {{ports}} is taken, but not by anything recognisable as a Quartz server. With a host set the server then does not start, because the tunnel points at this port."
+                  "value" : "Port {{ports}} is taken, but not by anything recognizable as a Quartz server. With a host set the server then does not start, because the tunnel points at this port."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Ports {{ports}} are taken, but not by anything recognisable as a Quartz server. With a host set the server then does not start, because the tunnel points at these ports."
+                  "value" : "Ports {{ports}} are taken, but not by anything recognizable as a Quartz server. With a host set the server then does not start, because the tunnel points at these ports."
                 }
               }
             }
@@ -5777,7 +5777,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Build failed. The output is on Preview & build."
+            "value" : "Build failed. The output is on Preview & Build."
           }
         }
       }
@@ -6287,7 +6287,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git could not read the state of this project (more under Git sync)."
+            "value" : "git could not read the state of this project (more under Git Sync)."
           }
         }
       }
@@ -17315,7 +17315,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "How the plugin recognises a form embedded in a page."
+            "value" : "How the plugin recognizes a form embedded in a page."
           }
         }
       }
@@ -18611,7 +18611,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "quartz-forms has no wording of its own for “{{code}}”; the grey one is from “{{locale}}”."
+            "value" : "quartz-forms has no wording of its own for “{{code}}”; the gray one is from “{{locale}}”."
           }
         }
       }
@@ -18629,7 +18629,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The plugin’s wording stands in grey; what you enter replaces it exactly, with spaces at the edges and even empty. The plugin fills in placeholders like {max}."
+            "value" : "The plugin’s wording stands in gray; what you enter replaces it exactly, with spaces at the edges and even empty. The plugin fills in placeholders like {max}."
           }
         }
       }
@@ -20437,7 +20437,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Git sync"
+            "value" : "Git Sync"
           }
         }
       }
@@ -20510,7 +20510,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Plugin catalogue on GitHub"
+            "value" : "Plugin catalog on GitHub"
           }
         }
       }
@@ -20582,7 +20582,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Colours, fonts, themes, layout"
+            "value" : "Colors, fonts, themes, layout"
           }
         }
       }
@@ -20654,7 +20654,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preview, build, Git sync, upload"
+            "value" : "Preview, build, Git Sync, upload"
           }
         }
       }
@@ -22548,7 +22548,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A finished design to start from: colours for light and dark mode, authored page grids, locally served typefaces and every component styled individually. Plus the quartz-forms plugin with a contact form that sends nothing yet."
+            "value" : "A finished design to start from: colors for light and dark mode, authored page grids, locally served typefaces and every component styled individually. Plus the quartz-forms plugin with a contact form that sends nothing yet."
           }
         }
       }
@@ -29114,24 +29114,6 @@
         }
       }
     },
-    "main.aboutLicense" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Freie Software unter der GNU General Public License, Version 3 oder später.\nQuelltext: https://github.com/boxi-os/QuartzControl"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Free software under the GNU General Public License, version 3 or later.\nSource: https://github.com/boxi-os/QuartzControl"
-          }
-        }
-      }
-    },
     "main.bookNotAnObject" : {
       "comment" : "Documents - books",
       "extractionState" : "manual",
@@ -29239,7 +29221,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No “origin” remote configured. Git sync has to connect the project to a repository first (git remote add origin <url>)."
+            "value" : "No “origin” remote configured. Git Sync has to connect the project to a repository first (git remote add origin <url>)."
           }
         }
       }
@@ -29511,7 +29493,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The dev server is writing into “{{dir}}” right now. Stop it under “Preview & build” or pick a different output folder."
+            "value" : "The dev server is writing into “{{dir}}” right now. Stop it under “Preview & Build” or pick a different output folder."
           }
         }
       }
@@ -30009,7 +29991,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "There is no build in “{{dir}}” yet. Build first or pick a different output folder under Preview & build."
+            "value" : "There is no build in “{{dir}}” yet. Build first or pick a different output folder under Preview & Build."
           }
         }
       }
@@ -33160,24 +33142,6 @@
         }
       }
     },
-    "main.ipcInvalidArguments" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuartzControl hat „{{channel}}“ mit unerwarteten Daten aufgerufen. Das ist ein Fehler in QuartzControl und keine Folge deiner Eingabe. Technische Details:"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuartzControl called “{{channel}}” with unexpected data. That is a bug in QuartzControl, not a result of what you entered. Technical details:"
-          }
-        }
-      }
-    },
     "main.keychainFailed" : {
       "comment" : "status is the OSStatus number.",
       "extractionState" : "manual",
@@ -33228,7 +33192,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The licence texts are missing from this installation."
+            "value" : "The license texts are missing from this installation."
           }
         }
       }
@@ -33270,24 +33234,6 @@
         }
       }
     },
-    "main.menuAbout" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Über QuartzControl"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About QuartzControl"
-          }
-        }
-      }
-    },
     "main.menuDataFolder" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -33301,7 +33247,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open QuartzHub’s data folder"
+            "value" : "Open QuartzHub’s Data Folder"
           }
         }
       }
@@ -33337,7 +33283,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Send feedback…"
+            "value" : "Send Feedback…"
           }
         }
       }
@@ -33409,7 +33355,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open licences"
+            "value" : "Open Licenses"
           }
         }
       }
@@ -33427,7 +33373,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Plugin catalog"
+            "value" : "Plugin Catalog"
           }
         }
       }
@@ -33445,7 +33391,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quartz documentation"
+            "value" : "Quartz Documentation"
           }
         }
       }
@@ -35172,7 +35118,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A server for this project is already running that was not started from QuartzHub (port {{port}}, process {{pid}}). A second one would build into the same output folder. In the inspector of Preview & build the section “Servers running on this machine” shows it and can stop it."
+            "value" : "A server for this project is already running that was not started from QuartzHub (port {{port}}, process {{pid}}). A second one would build into the same output folder. In the inspector of Preview & Build the section “Servers running on this machine” shows it and can stop it."
           }
         }
       }
@@ -36249,7 +36195,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your own changes are in the way; git names the files below. Commit or discard them under Git sync and try again.\n\n"
+            "value" : "Your own changes are in the way; git names the files below. Commit or discard them under Git Sync and try again.\n\n"
           }
         }
       }
@@ -45197,7 +45143,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preview & build"
+            "value" : "Preview & Build"
           }
         }
       }
@@ -45233,7 +45179,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Git sync"
+            "value" : "Git Sync"
           }
         }
       }
@@ -45413,7 +45359,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pushes the build as a single commit to that branch of the “origin” remote (the same one Git sync uses). GitHub Pages must be pointed at this branch in the repository settings."
+            "value" : "Pushes the build as a single commit to that branch of the “origin” remote (the same one Git Sync uses). GitHub Pages must be pointed at this branch in the repository settings."
           }
         }
       }
@@ -46742,7 +46688,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This project’s “origin” remote does not point at github.com. Pages can only be set up from here once the repository lives on GitHub (see Git sync)."
+            "value" : "This project’s “origin” remote does not point at github.com. Pages can only be set up from here once the repository lives on GitHub (see Git Sync)."
           }
         }
       }
@@ -49901,7 +49847,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "git is licensed under the GPL v2; the full licence text ships with QuartzHub."
+            "value" : "git is licensed under the GPL v2; the full license text ships with QuartzHub."
           }
         }
       }
@@ -50692,25 +50638,6 @@
         }
       }
     },
-    "shell.page.pending" : {
-      "comment" : "Platzhalter für eine Seite, die noch nicht portiert ist (Phase 4). Fällt mit der letzten Seite weg.",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuartzHub baut diese Seite noch nach. Bis dahin gibt es sie in QuartzControl."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuartzHub is still rebuilding this page. Until then, it is available in QuartzControl."
-          }
-        }
-      }
-    },
     "shell.projects.baseUrl" : {
       "comment" : "Projects window inspector: the site's baseUrl from quartz.config.yaml",
       "extractionState" : "manual",
@@ -51159,7 +51086,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The dev server runs through a remote host and cannot be embedded here. Open it on the “Preview & build” page."
+            "value" : "The dev server runs through a remote host and cannot be embedded here. Open it on the “Preview & Build” page."
           }
         }
       }
@@ -53189,7 +53116,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This file kept its colours in a <style> block that would style every page of the site; it was removed for that reason. Export with “presentation attributes” or set the colours in the site’s CSS."
+            "value" : "This file kept its colors in a <style> block that would style every page of the site; it was removed for that reason. Export with “presentation attributes” or set the colors in the site’s CSS."
           }
         }
       }
@@ -57054,7 +56981,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No colour in this mode"
+            "value" : "No color in this mode"
           }
         }
       }
@@ -57090,7 +57017,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your values here beat the theme “{{themeId}}”, even where it sets the same variable. The exception is colours a theme sets for one kind of element only (callouts, for instance); change those under “Custom CSS”."
+            "value" : "Your values here beat the theme “{{themeId}}”, even where it sets the same variable. The exception is colors a theme sets for one kind of element only (callouts, for instance); change those under “Custom CSS”."
           }
         }
       }
@@ -57349,7 +57276,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bundles this project into a single file: notes, colours and fonts, community theme, CSS variables, custom CSS, font files, static files, layout, custom frames, plugins, translations and theme presets, in whole or in part. Another project takes over the chosen parts on import; the conflict rule decides about what it already has."
+            "value" : "Bundles this project into a single file: notes, colors and fonts, community theme, CSS variables, custom CSS, font files, static files, layout, custom frames, plugins, translations and theme presets, in whole or in part. Another project takes over the chosen parts on import; the conflict rule decides about what it already has."
           }
         }
       }
@@ -57728,7 +57655,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The base colours for light and dark, the three font roles, and where the font files come from."
+            "value" : "The base colors for light and dark, the three font roles, and where the font files come from."
           }
         }
       }
@@ -57746,7 +57673,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Colours & fonts"
+            "value" : "Colors & fonts"
           }
         }
       }
@@ -59425,13 +59352,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} colour"
+                  "value" : "{{count}} color"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} colours"
+                  "value" : "{{count}} colors"
                 }
               }
             }
@@ -60004,7 +59931,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Whatever this project already has stays; only what is missing is added. “Colours & fonts” and “Layout” stay entirely as they are."
+            "value" : "Whatever this project already has stays; only what is missing is added. “Colors & fonts” and “Layout” stay entirely as they are."
           }
         }
       }
@@ -60076,7 +60003,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Colours and fonts were left unchanged."
+            "value" : "Colors and fonts were left unchanged."
           }
         }
       }
