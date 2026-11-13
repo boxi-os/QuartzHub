@@ -150,11 +150,14 @@ private struct ChangeSourceSheet: View {
     let path = project.path, source = source, strategy = strategy
     do {
       // Off the main actor: the copy reports from there, and the report hops back.
+      // Quitting during the copy asks, as during a restore (review 2026-11-13, handbook, N6).
       try await Task.detached {
-        try await ContentFolder.changeSource(
-          project: path, source: source, strategy: strategy,
-          snapshot: { project, kind, label in _ = try await take(project, kind, label) },
-          progress: { processed, total, _ in report.post(processed, total) })
+        try await RunningWork.during(.restore, project: path) {
+          try await ContentFolder.changeSource(
+            project: path, source: source, strategy: strategy,
+            snapshot: { project, kind, label in _ = try await take(project, kind, label) },
+            progress: { processed, total, _ in report.post(processed, total) })
+        }
       }.value
       busy = false
       await done()

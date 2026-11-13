@@ -221,8 +221,14 @@ final class SnapshotsModel {
   func restoreFolder(_ entry: ContentBackups.Entry, window: NSWindow?) async {
     guard await Confirm.ask(L10n.t("backups.confirmRestoreFolder"), confirm: L10n.t("backups.confirmRestoreFolderAction"),
                             destructive: true, window: window) else { return }
-    await folderAction {
-      try ContentBackups.restore(project: $0, content: ContentFolder.path(project: $0), id: entry.id, now: Date())
+    // A restore like any other: quitting while the folder is being copied back asks (RunningWork),
+    // as it does for a snapshot (review 2026-11-13, handbook, N6). No snapshot of its own: the
+    // folder it replaces is set aside first, which the question says.
+    let id = entry.id
+    await folderAction { project in
+      try await RunningWork.during(.restore, project: project) {
+        try ContentBackups.restore(project: project, content: ContentFolder.path(project: project), id: id, now: Date())
+      }
     }
   }
 
@@ -235,13 +241,13 @@ final class SnapshotsModel {
   }
 
   /// A copy or a removal of a whole folder, off the main thread.
-  private func folderAction(_ body: @escaping @Sendable (String) throws -> Void) async {
+  private func folderAction(_ body: @escaping @Sendable (String) async throws -> Void) async {
     folderBusy = true
     defer { folderBusy = false }
     error = nil
     let path = path
     do {
-      try await Task.detached { try body(path) }.value
+      try await Task.detached { try await body(path) }.value
     } catch {
       self.error = Self.text(error)
     }
