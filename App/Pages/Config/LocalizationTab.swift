@@ -13,6 +13,8 @@ struct LocalizationTab: View {
   /// The locale quartz.config.yaml names, the first choice when nothing was picked yet.
   let configured: String?
 
+  @State private var pendingCode: String?
+
   var body: some View {
     Form {
       if let error = model.listError {
@@ -35,6 +37,20 @@ struct LocalizationTab: View {
       }
     }
     .formStyle(.grouped)
+    .alert(L10n.t("projectLayout.unsavedWarningWithSave"), isPresented: Binding(get: { pendingCode != nil }, set: { if !$0 { pendingCode = nil } })) {
+      Button(L10n.t("common.cancel"), role: .cancel) { pendingCode = nil }
+      Button(L10n.t("projectLayout.unsavedSave")) {
+        guard let next = pendingCode else { return }
+        pendingCode = nil
+        Task { if await model.saveAll() { model.code = next } }
+      }
+      Button(L10n.t("projectLayout.unsavedLeave"), role: .destructive) {
+        guard let next = pendingCode else { return }
+        pendingCode = nil
+        model.discardEdits()
+        model.code = next
+      }
+    }
     .task { await model.load(configured: configured) }
     .onChange(of: model.code) { _, _ in Task { await model.loadEntries() } }
   }
@@ -59,7 +75,10 @@ struct LocalizationTab: View {
   private func toolbarSection(_ locales: [String]) -> some View {
     Section {
       HStack(spacing: 10) {
-        Picker(L10n.t("siteSettings.locale"), selection: $model.code) {
+        Picker(L10n.t("siteSettings.locale"), selection: Binding(get: { model.code }, set: { next in
+          // Another locale drops this one's edits: asked first (review 2026-11-13, handbook, M1).
+          if model.dirty, next != model.code { pendingCode = next } else { model.code = next }
+        })) {
           ForEach(locales, id: \.self) { Text(verbatim: $0).tag($0) }
         }
         // Named by its hidden title: an added label made VoiceOver read "Sprache der Website,
@@ -232,8 +251,17 @@ final class LocalizationModel {
     }
   }
 
-  func saveAll() async {
-    guard let entries, !saving else { return }
+  var dirty: Bool { !dirtyKeys.isEmpty }
+
+  /// "Änderungen verwerfen": the edits of the current locale, gone for good.
+  func discardEdits() {
+    edits = [:]
+    errors = [:]
+  }
+
+  /// true when every edit is on disk.
+  @discardableResult func saveAll() async -> Bool {
+    guard let entries, !saving else { return false }
     saving = true
     defer { saving = false }
     let files = await files()
@@ -255,6 +283,7 @@ final class LocalizationModel {
     }
     gitAttributesActive = await files.gitAttributesActive(project: path)
     Announce.post(failed.isEmpty ? L10n.t("common.saved") : L10n.t("localization.saveError"))
+    return failed.isEmpty
   }
 
   /// For a project with translations to protect that was not edited here yet: the badge would

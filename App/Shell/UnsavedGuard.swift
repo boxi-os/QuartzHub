@@ -19,6 +19,9 @@ final class UnsavedGuard {
   struct Page {
     let token: UUID
     let save: (@MainActor () async -> Bool)?
+    /// What "Änderungen verwerfen" has to undo itself: edits a page keeps beyond its own lifetime
+    /// (the translations, kept per project) would otherwise come back.
+    var discard: (@MainActor () -> Void)?
   }
 
   private(set) var page: Page?
@@ -40,8 +43,8 @@ final class UnsavedGuard {
 
   var dirty: Bool { page != nil }
 
-  func register(_ token: UUID, save: (@MainActor () async -> Bool)?) {
-    page = Page(token: token, save: save)
+  func register(_ token: UUID, save: (@MainActor () async -> Bool)?, discard: (@MainActor () -> Void)? = nil) {
+    page = Page(token: token, save: save, discard: discard)
     // The dot in the close button: the platform's own way of saying "not saved".
     window?.isDocumentEdited = true
   }
@@ -82,6 +85,7 @@ final class UnsavedGuard {
       guard let save = page.save, await save() else { return false }
       return true
     default:
+      page.discard?()
       self.page = nil
       window?.isDocumentEdited = false
       return true
@@ -193,16 +197,17 @@ extension View {
   /// A page that edits a document: registered with its window's guard while `dirty`, and its save
   /// on ⌘S. `save` nil while there is nothing it can do (a save running). `command: false` keeps
   /// the guard but not ⌘S (Konfiguration's Übersetzungen tab saves elsewhere, as in QuartzControl).
-  func unsavedChanges(_ dirty: Bool, save: (@MainActor () async -> Bool)?, command: Bool = true) -> some View {
-    modifier(UnsavedChanges(dirty: dirty, save: save, command: command))
+  func unsavedChanges(_ dirty: Bool, save: (@MainActor () async -> Bool)?, command: Bool = true,
+                      discard: (@MainActor () -> Void)? = nil) -> some View {
+    modifier(UnsavedChanges(dirty: dirty, save: save, command: command, discard: discard))
   }
 
   /// The same with the condition apart: a save that is only there while `canSave`. Written as
   /// `canSave ? { … } : nil` at the page, the closure got its type without the parameter's and
   /// Swift warned of a non-Sendable function converted to a main-actor one.
-  func unsavedChanges(_ dirty: Bool, canSave: Bool, command: Bool = true,
+  func unsavedChanges(_ dirty: Bool, canSave: Bool, command: Bool = true, discard: (@MainActor () -> Void)? = nil,
                       save: @escaping @MainActor () async -> Bool) -> some View {
-    unsavedChanges(dirty, save: canSave ? save : nil, command: command)
+    unsavedChanges(dirty, save: canSave ? save : nil, command: command, discard: discard)
   }
 }
 
@@ -210,6 +215,7 @@ private struct UnsavedChanges: ViewModifier {
   let dirty: Bool
   let save: (@MainActor () async -> Bool)?
   let command: Bool
+  let discard: (@MainActor () -> Void)?
 
   @Environment(\.unsavedGuard) private var unsaved
   @State private var token = UUID()
@@ -223,7 +229,7 @@ private struct UnsavedChanges: ViewModifier {
   }
 
   private func sync(_ dirty: Bool) {
-    if dirty { unsaved?.register(token, save: save) } else { unsaved?.clear(token) }
+    if dirty { unsaved?.register(token, save: save, discard: discard) } else { unsaved?.clear(token) }
   }
 }
 

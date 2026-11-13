@@ -403,6 +403,68 @@ final class SmokeTests: XCTestCase {
   }
 
 
+  /// Übersetzungen (review 2026-11-13, handbook, M1): another locale asks before it drops the
+  /// edits, "Abbrechen" keeps them, "Änderungen verwerfen" drops them for good; closing the window
+  /// asks too, and "Speichern" writes the locale file.
+  func testTranslationsAskBeforeLosingEdits() throws {
+    let (profile, project) = try scratchProject()
+    let locales = project.appendingPathComponent("quartz/i18n/locales")
+    try FileManager.default.createDirectory(at: locales, withIntermediateDirectories: true)
+    for (code, title) in [("de-DE", "Unbenannt"), ("en-US", "Untitled")] {
+      let text = "import { Translation } from \"./definition\"\n\nexport default {\n  propertyDefaults: {\n    title: \"\(title)\",\n  },\n} as const satisfies Translation\n"
+      try Data(text.utf8).write(to: locales.appendingPathComponent("\(code).ts"))
+    }
+    let app = launch(profile: profile, open: project)
+    let window = projectWindow(app)
+    XCTAssertTrue(window.waitForExistence(timeout: 10))
+    let any = window.descendants(matching: .any)
+    any["sidebar.config"].firstMatch.click()
+    let tabs = any["config.tabs"].firstMatch
+    XCTAssertTrue(tabs.waitForExistence(timeout: 5), "no tab switcher")
+    tabs.radioButtons["Übersetzungen"].firstMatch.click()
+
+    let field = window.textFields["propertyDefaults.title"].firstMatch
+    XCTAssertTrue(field.waitForExistence(timeout: 15), "no entry field")
+    func edit() {
+      field.click()
+      field.typeKey("a", modifierFlags: .command)
+      field.typeText("Ohne Titel")
+      XCTAssertTrue(any["localization.unsaved"].firstMatch.waitForExistence(timeout: 5), "the edit is not counted")
+    }
+    func pick(_ code: String) {
+      let picker = window.popUpButtons.firstMatch
+      picker.click()
+      picker.menuItems[code].click()
+    }
+    edit()
+
+    pick("en-US")
+    let cancel = window.sheets.buttons["Abbrechen"].firstMatch
+    XCTAssertTrue(cancel.waitForExistence(timeout: 5), "another locale did not ask")
+    cancel.click()
+    XCTAssertTrue(any["localization.unsaved"].firstMatch.exists, "\"Abbrechen\" dropped the edit")
+    XCTAssertEqual(field.value as? String, "Ohne Titel")
+
+    pick("en-US")
+    let discard = window.sheets.buttons["Änderungen verwerfen"].firstMatch
+    XCTAssertTrue(discard.waitForExistence(timeout: 5))
+    discard.click()
+    pick("de-DE")
+    XCTAssertTrue(window.textFields["propertyDefaults.title"].firstMatch.waitForExistence(timeout: 10))
+    XCTAssertEqual(window.textFields["propertyDefaults.title"].firstMatch.value as? String, "Unbenannt", "a discarded edit came back")
+
+    edit()
+    window.typeKey("w", modifierFlags: .command)
+    let save = window.sheets.buttons["Speichern"].firstMatch
+    XCTAssertTrue(save.waitForExistence(timeout: 5), "closing the window with an edit did not ask")
+    save.click()
+    let file = locales.appendingPathComponent("de-DE.ts")
+    let written = expectation(for: NSPredicate { _, _ in
+      (try? String(contentsOf: file, encoding: .utf8))?.contains("title: \"Ohne Titel\"") == true
+    }, evaluatedWith: nil)
+    wait(for: [written], timeout: 10)
+  }
+
   /// Plugins ▸ Installiert writes at once: Anordnen ▸ Nach unten renumbers the sequence in the
   /// file, the inspector's switch writes `enabled`, and the count says what the list holds.
   func testPluginsReorderAndSwitchWriteTheConfig() throws {
