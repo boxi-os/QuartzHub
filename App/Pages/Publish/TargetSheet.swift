@@ -261,7 +261,12 @@ struct TargetSheet: View {
     .accessibilityIdentifier("target.book")
     Note(gone ? L10n.t("publish.targetForm.documentBookGone", ["id": bookId])
       : model.books.isEmpty ? L10n.t("publish.targetForm.documentNoBooks") : L10n.t("publish.targetForm.documentBookHint"))
-    LabeledContent(L10n.t("publish.targetForm.documentFormats")) {
+    // A row of its own, not LabeledContent: that made the three toggles one element named after
+    // its label, without names of their own - System Events saw three checkboxes "Formate" at one
+    // place, and a click on the second switched PDF (review 2026-11-13, handbook, N15).
+    HStack(alignment: .firstTextBaseline) {
+      Text(L10n.t("publish.targetForm.documentFormats"))
+      Spacer()
       HStack(spacing: 16) {
         ForEach(TargetDraft.formatOrder, id: \.self) { format in
           Toggle(PublishWords.format(format), isOn: Binding(get: { draft.formats.contains(format) }, set: { on in
@@ -269,9 +274,11 @@ struct TargetSheet: View {
             draft.destination["formats"] = .array(next.map(JSONValue.string))
           }))
           .toggleStyle(.checkbox)
+          .accessibilityIdentifier("target.format.\(format)")
         }
       }
     }
+    .accessibilityElement(children: .contain)
   }
 
   /// Two books of one title are told apart by their file name.
