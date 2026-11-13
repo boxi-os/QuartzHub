@@ -382,9 +382,19 @@ struct CssTab: View {
   private func importFile() async {
     guard let picked = FilePick.one(extensions: ["scss", "css"], message: L10n.t("styleEditor.importFile")) else { return }
     actionError = nil
+    // A file of the same name is asked about, not replaced silently, and stays once in the order
+    // (review 2026-11-13, handbook, N5: it was overwritten and written into the order twice).
+    let name = NodePath.basename(picked)
+    if FileManager.default.fileExists(atPath: "\(StyleSheets.stylesDirectory(model.project.path))/imported/\(name)") {
+      let (question, detail) = Confirm.split(L10n.t("styleEditor.importReplaceConfirm", ["name": name]))
+      guard await Confirm.ask(question, detail: detail, confirm: L10n.t("snippets.replace"), destructive: true,
+                              window: NSApp.keyWindow) else { return }
+    }
     do {
       let result = try await StyleFiles.importFile(picked, project: model.project.path)
-      try await StyleSheets.setImportOrder(imported.map(\.relativePath) + [result.relativePath], project: model.project.path)
+      let order = imported.map(\.relativePath)
+      try await StyleSheets.setImportOrder(order.contains(result.relativePath) ? order : order + [result.relativePath],
+                                           project: model.project.path)
       await afterFileOp()
       open(result.relativePath)
     } catch {
