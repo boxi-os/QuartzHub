@@ -116,8 +116,15 @@ struct GitHubPagesSection: View {
     let domain = cname.trimmingCharacters(in: .whitespaces)
     do {
       let applied = try await api().configurePages(project, branch: branch, cname: .some(domain.isEmpty ? nil : domain), httpsEnforced: httpsEnforced)
-      output = applied.output
-      applyError = nil
+      // A refusal from the Pages API is an error, not output beside a success (review
+      // 2026-11-13, nebenbei).
+      if applied.success {
+        output = applied.output
+        applyError = nil
+      } else {
+        output = nil
+        applyError = applied.output
+      }
     } catch {
       applyError = PublishFailure.message(of: error)
     }

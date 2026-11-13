@@ -29893,13 +29893,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "{{path}} konnte auf dem Server nicht gelöscht werden ({{reason}}). Der nächste Upload versucht es wieder.\n"
+            "value" : "{{path}} konnte am Ziel nicht gelöscht werden ({{reason}}). Der nächste Lauf versucht es wieder.\n"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "{{path}} could not be deleted on the server ({{reason}}). The next upload tries again.\n"
+            "value" : "{{path}} could not be deleted at the target ({{reason}}). The next run tries again.\n"
           }
         }
       }
@@ -34509,13 +34509,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "{{path}} konnte auf dem Server nicht gelöscht werden ({{reason}}).\n"
+            "value" : "{{path}} konnte am Ziel nicht gelöscht werden ({{reason}}).\n"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "{{path}} could not be deleted on the server ({{reason}}).\n"
+            "value" : "{{path}} could not be deleted at the target ({{reason}}).\n"
           }
         }
       }
@@ -34852,13 +34852,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auf diesem Rechner ist kein rsync installiert. Unter Debian und Ubuntu: sudo apt install rsync. Bis dahin überträgt SFTP dieselben Dateien."
+            "value" : "Auf diesem Mac ist kein rsync zu finden. Bis eines da ist, überträgt SFTP dieselben Dateien."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No rsync is installed on this machine. On Debian and Ubuntu: sudo apt install rsync. Until then SFTP transfers the same files."
+            "value" : "No rsync was found on this Mac. Until there is one, SFTP transfers the same files."
           }
         }
       }
@@ -46385,6 +46385,25 @@
         }
       }
     },
+    "publish.inspector.excludes" : {
+      "comment" : "Veröffentlichen, inspector: the paths a target leaves out, one per line",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie veröffentlichen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never publish"
+          }
+        }
+      }
+    },
     "publish.manageConnections" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -46525,6 +46544,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No publish target yet. Create one with “New target”, e.g. GitHub Pages, a webspace over SFTP, or a local folder."
+          }
+        }
+      }
+    },
+    "publish.noWebhookUrlWarning" : {
+      "comment" : "Veröffentlichen, inspector: the webhook's address is missing",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(keine URL hinterlegt)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(no URL stored)"
           }
         }
       }
@@ -48701,13 +48739,32 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "kein Passwort/Key"
+            "value" : "kein Passwort oder Schlüssel hinterlegt"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "no password/key"
+            "value" : "no password or key stored"
+          }
+        }
+      }
+    },
+    "settings.connections.noWebhookUrl" : {
+      "comment" : "Einstellungen ▸ Zugänge: under a webhook whose address is missing from the keychain",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "keine URL hinterlegt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no URL stored"
           }
         }
       }

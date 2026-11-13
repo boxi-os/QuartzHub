@@ -152,9 +152,10 @@ final class PublishModel {
 
   /// A deploy that worked refreshes the diff itself, and keeps its result: clearing it there wiped
   /// the very lines that say what was published.
-  func refreshDiff(keepResult: Bool = false) async {
+  /// The run's result stays: it is the target's (`result.targetId`), and once it was cleared here
+  /// the page said "Seit dem Öffnen noch kein Lauf" after a run (review 2026-11-13, nebenbei).
+  func refreshDiff() async {
     guard let target = selected else { return }
-    if !keepResult, !running { result = nil }
     diffing = true
     defer { diffing = false }
     do {
@@ -196,7 +197,7 @@ final class PublishModel {
     forgetting = true
     defer { forgetting = false }
     DeployManifests(project: path).forget(target.id)
-    await refreshDiff(keepResult: true)
+    await refreshDiff()
   }
 
   func isExcluded(_ path: String) -> Bool { excluded.contains(Array(path.utf8)) }
@@ -242,6 +243,12 @@ final class PublishModel {
       let (question, detail) = Confirm.split(L10n.t("publish.confirmDeployWebhook", ["target": target.name]))
       guard await Confirm.ask(question, detail: detail, confirm: L10n.t("publish.confirmDeployAction"), window: window) else { return }
     default:
+      // The counts of the diff as it is now: the one on screen may be older than the last build
+      // (review 2026-11-13, nebenbei). The files unticked stay unticked where they still are.
+      let unticked = excluded
+      await refreshDiff()
+      guard selectedId == target.id, diffError == nil else { return }
+      excluded = unticked.filter { path in (diff ?? []).contains { Array($0.path.utf8) == path } }
       let entries = (diff ?? []).filter { !isExcluded($0.path) }
       // Removed files are deleted only where the target says so, by the rule the run itself reads
       // (`DeployContext.deleteRemoved`). With deleting off, the question said "1 Datei(en) werden
@@ -293,7 +300,7 @@ final class PublishModel {
     Announce.post(resultTitle(outcome, document: target.destination["type"] == .string("document")))
     // A deploy is where a host key gets pinned: the connection shown is stale the moment it ends.
     reloadConnections()
-    if outcome.success, selectedId == target.id, hasFileDiff { await refreshDiff(keepResult: true) }
+    if outcome.success, selectedId == target.id, hasFileDiff { await refreshDiff() }
   }
 
   func cancelExport() {
@@ -316,6 +323,8 @@ final class PublishModel {
                             window: window) else { return false }
     do {
       try PublishTargets(project: path).delete(target.id)
+      // The record of what was sent goes with it; it stayed in .quartz-gui/ (review 2026-11-13).
+      DeployManifests(project: path).forget(target.id)
       failure = nil
     } catch {
       failure = error.message

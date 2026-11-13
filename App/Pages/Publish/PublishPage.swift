@@ -350,7 +350,7 @@ private struct TargetInspector: View {
           .textSelection(.enabled)
           .accessibilityIdentifier("publish.inspector.destination")
         if let connection, ConnectionWords.missingCredential(connection) {
-          Callout(.warning, L10n.t("publish.noSecretWarning"))
+          Callout(.warning, ConnectionWords.missingCredentialText(connection, sentence: true))
         }
         if let connection, connection.kind == .ssh {
           Text(ConnectionWords.hostKey(connection)).font(.caption.monospaced()).foregroundStyle(.secondary).textSelection(.enabled)
@@ -359,8 +359,10 @@ private struct TargetInspector: View {
           }
         }
         if !target.excludes.isEmpty {
-          LabeledContent(L10n.t("publish.targetForm.excludes")) {
-            Text(target.excludes.joined(separator: ", ")).textSelection(.enabled)
+          // One per line, as they are entered, under the label without the form's instruction:
+          // "(ein Pfad pro Zeile)" stood above a comma list (review 2026-11-13, nebenbei).
+          LabeledContent(L10n.t("publish.inspector.excludes")) {
+            Text(target.excludes.joined(separator: "\n")).textSelection(.enabled).multilineTextAlignment(.trailing)
           }
         }
       } header: {

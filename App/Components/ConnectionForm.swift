@@ -138,6 +138,15 @@ enum ConnectionWords {
     return !connection.hasSecret
   }
 
+  /// What is missing, in the connection's own words: a webhook keeps its address, not a password
+  /// (review 2026-11-13, nebenbei: "kein Passwort/Key" stood under a webhook).
+  static func missingCredentialText(_ connection: Connection, sentence: Bool) -> String {
+    if connection.kind == .webhook {
+      return sentence ? L10n.t("publish.noWebhookUrlWarning") : L10n.t("settings.connections.noWebhookUrl")
+    }
+    return sentence ? L10n.t("publish.noSecretWarning") : L10n.t("settings.connections.noSecret")
+  }
+
   static func hostKey(_ connection: Connection) -> String {
     connection.hostKey.map { "\(L10n.t("publish.hostKeyPinned")): \($0.fingerprint)" } ?? L10n.t("publish.hostKeyUnknown")
   }

@@ -168,7 +168,7 @@ struct ConnectionsSettings: View {
           .font(.caption).foregroundStyle(.secondary)
         // In words, not only as a colour: what is missing, or open.
         if ConnectionWords.missingCredential(connection) {
-          Text(L10n.t("settings.connections.noSecret")).font(.caption).foregroundStyle(.orange)
+          Text(ConnectionWords.missingCredentialText(connection, sentence: false)).font(.caption).foregroundStyle(.orange)
         }
         if connection.kind == .ftp && !connection.secure {
           Text(L10n.t("settings.connections.plaintext")).font(.caption).foregroundStyle(.orange)
@@ -261,10 +261,11 @@ final class ConnectionsSettingsModel {
     let ids = connections.map(\.id)
     usage = await Task.detached {
       var counts: [String: Int] = [:]
+      // Projects, as the sentence says: two targets of one project on the same connection counted
+      // as two projects (review 2026-11-13, nebenbei).
       for project in projects {
-        for target in PublishTargets(project: project).list() {
-          if let id = target.connectionId, ids.contains(id) { counts[id, default: 0] += 1 }
-        }
+        let used = Set(PublishTargets(project: project).list().compactMap(\.connectionId).filter(ids.contains))
+        for id in used { counts[id, default: 0] += 1 }
       }
       return counts
     }.value
