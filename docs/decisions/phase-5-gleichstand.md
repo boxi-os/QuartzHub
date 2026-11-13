@@ -2849,3 +2849,27 @@ Die vier letzten `fehlt`-Zeilen der Gleichstand-Liste (Plan, Handbuch 7).
   ist auf 10 der 12 Seiten zu sehen (nicht auf Dokumente und Veröffentlichen mit Auswahl). UI-Test
   `testHandbookLinksAndNewerVersionBand`; Gegenprobe: zeigte „Diese Seite im Handbuch“ auf die
   Startseite, schlug er fehl.
+
+## Snapshots vor einem Kern-Update und die Update-Quelle (2026-11-13)
+
+Zwei Punkte aus der Nebenbei-Liste der Handbuch-Review, vom Nutzer entschieden.
+
+**Der Snapshot „Vor Kern-Update“ bleibt.** QuartzControls Ausdünnen behielt je Tag (Woche, Monat) einen
+automatischen Snapshot gleich welcher Art, den jüngsten. Ein Kern-Update um 10 Uhr und eine
+Konfigurationsänderung um 16 Uhr ließen am nächsten Tag nur den von 16 Uhr übrig, der das Update schon
+enthält; der Stand davor war weg. Jetzt gilt für `coreUpdate` dasselbe wie für eigene Snapshots: nie
+ausgedünnt und nie übersprungen, auch wenn sich seit dem letzten nichts geändert hat (sonst läge der Stand
+nur in einem Snapshot, den das Ausdünnen nimmt). Er löst das Ausdünnen der anderen weiter aus
+(`SnapshotStore.keptAutomaticKinds`). Gemessen mit `theSnapshotBeforeACoreUpdateIsKept`, Gegenprobe ohne
+die Art: der Test scheitert. Der Abgleich mit QuartzControls Schritten bleibt grün, weil dessen
+Kern-Update-Snapshot dort allein in seinem Monat liegt; er unterscheidet die Regeln nicht. Beide Apps
+teilen den Speicher: QuartzControl dünnt diese Snapshots weiter aus, QuartzHub behält nur mehr.
+
+**Die Update-Quelle bleibt, wie sie ist, mit Hinweis.** Der Status fragt `ProjectCreator.templateRepository`
+(jackyzha0/quartz), der Lauf holt vom Remote `quartz-upstream` des Projekts, den QuartzHub beim ersten
+Update mit derselben Adresse anlegt. Zeigt er woandershin (eine eigene Kopie), sagt die Updates-Seite das
+(`CoreUpdate.divergingUpstream`, nur `git remote get-url`, kein Netz). Den Status gegen diesen Remote zu
+prüfen, hätte beim Öffnen der Seite eine Adresse aus der git-Konfiguration eines fremden Projektordners
+angesprochen; den Lauf fest auf jackyzha0 umzustellen, hätte eine eingerichtete Kopie still übergangen.
+Test: `aDivergingUpstreamIsNamed` (ohne Remote nichts, dieselbe Adresse anders geschrieben nichts, eine
+andere wird genannt), Gegenprobe scheitert; an der App gesehen auf einer Kopie mit Fork-Remote.

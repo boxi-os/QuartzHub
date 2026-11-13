@@ -515,6 +515,29 @@ import Testing
     #expect(await h.store.list(project: p).map(\.label) == ["bleibt auch", "bleibt"])
   }
 
+  /// The state before a core update survives the thinning and is taken even when nothing changed
+  /// (decision of the user, 2026-11-13). QuartzControl's rule kept one snapshot per day of any
+  /// kind: a config change at 16:00 took the update's at 10:00 on the next day.
+  @Test func theSnapshotBeforeACoreUpdateIsKept() async throws {
+    let h = try Harness()
+    let day = SnapshotStore.date("2026-11-09T10:00:00.000Z")!
+    h.box.now.withLock { $0 = day }
+    let p = try await Self.project(h)
+    let first = try await h.store.create(project: p, kind: "configChange", label: "")
+    #expect(first != nil)
+    // Nothing changed since, and still one before the update.
+    let update = try await h.store.create(project: p, kind: "coreUpdate", label: "")
+    #expect(update != nil, "a core update is never skipped")
+    h.box.now.withLock { $0 = day.addingTimeInterval(6 * 3600) }
+    try Harness.write(h.path("p/quartz.config.yaml"), "configuration:\n  pageTitle: Zwei\n")
+    _ = try await h.store.create(project: p, kind: "configChange", label: "")
+    h.box.now.withLock { $0 = day.addingTimeInterval(2 * 86_400) }
+    _ = try await h.store.pruneAutomatic(project: p)
+    let kinds = await h.store.list(project: p).map(\.kind)
+    #expect(kinds.contains("coreUpdate"), "\(kinds)")
+    #expect(kinds.filter { $0 == "configChange" }.count == 1, "the others are thinned as before: \(kinds)")
+  }
+
   /// argv has a ceiling (5000 paths of ~55 characters spawned, 10000 failed in QuartzControl's
   /// measurement); the golden's 2150 paths stay far below it, so the size is asked here.
   @Test func namedPathsGoInBatchesOfAThousand() {

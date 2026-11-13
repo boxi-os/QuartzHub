@@ -75,6 +75,12 @@ struct UpdatesPage: View {
       .accessibilityElement(children: .contain)
       .accessibilityIdentifier("page.updates")
 
+      // The run fetches from this remote, the line above asks jackyzha0/quartz (decision of the
+      // user, 2026-11-13: said here, not changed).
+      if let upstream = model.divergingUpstream {
+        Callout(.info, L10n.t("updates.core.divergingUpstream", ["url": upstream]))
+      }
+
       // Read from git rather than from the last result: a half-finished merge is there after the
       // page was left, and this is the way out of it (QuartzControl's banner, as on Git-Sync).
       if let operation = model.git?.inProgress {

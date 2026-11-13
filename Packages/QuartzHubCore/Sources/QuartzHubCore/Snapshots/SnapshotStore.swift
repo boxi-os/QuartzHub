@@ -46,6 +46,13 @@ public struct SnapshotStore: Sendable {
   static let coalescingKinds: Set<String> = ["configChange"]
   /// Never skipped when nothing changed, never thinned.
   static let keptKinds: Set<String> = ["manual", "styleMigration"]
+  /// Automatic, so taking one thins the others, but itself never skipped and never thinned, unlike
+  /// QuartzControl (decision of the user, 2026-11-13): the thinning keeps one snapshot per day of
+  /// any kind, so a config change later that day took the state before the update; and a skipped
+  /// one left that state only in a snapshot the thinning could take. QuartzControl still thins it
+  /// in the store both apps share; QuartzHub only keeps more.
+  static let keptAutomaticKinds: Set<String> = ["coreUpdate"]
+  static func isKept(_ kind: String) -> Bool { keptKinds.contains(kind) || keptAutomaticKinds.contains(kind) }
   /// ARG_MAX on macOS took 5000 paths of ~55 characters and failed at 10000 (QuartzControl's
   /// measurement); a selection of up to 20000 goes in parts.
   static let pathBatch = 1000
@@ -319,7 +326,7 @@ public struct SnapshotStore: Sendable {
     let tree = JS.trim(await git(op, ["write-tree"]).stdout)
     guard !tree.isEmpty else { throw Failure(message: L10n.t("main.snapshotWriteTreeFailed")) }
 
-    if !Self.keptKinds.contains(kind) {
+    if !Self.isKept(kind) {
       let existing = await listUnlocked(op)
       if let newest = existing.first {
         let previous = JS.trim(await git(op, ["rev-parse", "\(newest.commit)^{tree}"]).stdout)

@@ -211,6 +211,22 @@ import Testing
     #expect(try await service.abort(project: project.path).sentences != [L10n.t("main.updateAlreadyRunning")])
   }
 
+  /// The hint on the Updates page: a quartz-upstream that is not the repository the status asks,
+  /// read from the project's git config alone (decision of the user, 2026-11-13).
+  @Test func aDivergingUpstreamIsNamed() async throws {
+    let harness = try Harness()
+    let service = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in nil },
+                             templateRepository: "https://github.com/jackyzha0/quartz.git")
+    let project = harness.path("p")
+    try Posix.mkdirs(project)
+    _ = await harness.git(["init", "-q"], project)
+    #expect(await service.divergingUpstream(project: project) == nil, "no remote yet: the run adds it")
+    _ = await harness.git(["remote", "add", "quartz-upstream", "https://github.com/jackyzha0/Quartz/"], project)
+    #expect(await service.divergingUpstream(project: project) == nil, "the same repository written otherwise")
+    _ = await harness.git(["remote", "set-url", "quartz-upstream", "https://github.com/someone/quartz-fork.git"], project)
+    #expect(await service.divergingUpstream(project: project) == "https://github.com/someone/quartz-fork.git")
+  }
+
   @Test func deadlines() {
     #expect(CoreUpdate.Deadlines().fetch == .seconds(60))
     #expect(CoreUpdate.Deadlines().lsRemote == .seconds(20))

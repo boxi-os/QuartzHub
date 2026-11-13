@@ -150,7 +150,8 @@ Zwei Kerntests waren unter der Last des Gesamtlaufs je einmal rot und allein gr�
 
 Im Handbuch nachgezogen: 4.x und 8.2 (Translations), 5.5, 5.9, 7.1, 7.2, die englischen Seitennamen (Vault `5c9c4d4`, `85a7028`,
 `6083395`, `271c380`, `d4a68e5`). Nicht an der App gesehen: Marktplatz (Netz), Plugin-Editoren (nur Texte), Abbruch eines Exports
-und Veröffentlichen (die Ziele der Kopien sind echt). Zur Entscheidung offen: gemeinsame Fächer beim Ausdünnen der Snapshots
-(QuartzControls Regel, Golden File) und die Update-Quelle (Status jackyzha0/quartz, Lauf `quartz-upstream`). Nebenbei
+und Veröffentlichen (die Ziele der Kopien sind echt). Danach vom Nutzer entschieden: Snapshots vor einem
+Kern-Update werden nie ausgedünnt und nie übersprungen; die Update-Quelle bleibt, mit Hinweis auf einen abweichenden
+`quartz-upstream` (decisions/phase-5-gleichstand.md, Commit unten). Nebenbei
 aufgefallen: Neu starten von Vorschau & Build nimmt die Optionen des laufenden Servers, nicht die der Seite
 (`BuildService.restartServer`).

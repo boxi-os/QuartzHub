@@ -33,6 +33,8 @@ final class UpdatesModel {
 
   let project: ProjectContext
   var core: CoreUpdate.Status?
+  /// The project's quartz-upstream when it is not the repository the status asks (see CoreUpdate).
+  private(set) var divergingUpstream: String?
   var plugins: [PluginUpdates.Status]?
   var git: GitStatus?
   /// Checks in flight; only the newest one's answer is kept.
@@ -100,9 +102,12 @@ final class UpdatesModel {
     async let core = updater.status(project: path, resolveInstalled: true)
     async let plugins = PluginUpdates.status(project: path, core: updater)
     async let git = GitStatus.read(project: path, environment: environment)
+    async let upstream = updater.divergingUpstream(project: path)
     let answers = await (core, plugins, git)
+    let diverging = await upstream
     guard mine == round else { return }
     (self.core, self.plugins, self.git) = answers
+    divergingUpstream = diverging
     let latest = answers.0.latestCommit
     let versions = await updater.versions(project: path, latestCommit: latest)
     var ahead: [ReleaseNotes.Section] = []

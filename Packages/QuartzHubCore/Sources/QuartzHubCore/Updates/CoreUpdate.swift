@@ -102,6 +102,28 @@ public final class CoreUpdate: Sendable {
   // MARK: Status
 
   /// Asked first: "an earlier run still owes something" is true whatever the network says.
+  /// The project's `quartz-upstream` when it points somewhere other than the repository the
+  /// status asks: the run fetches from that remote, the status does not (decision of the user,
+  /// 2026-11-13: said, not changed). Only the local git config is read, nothing goes out; nil when
+  /// the remote is missing (the run adds it) or is the same repository.
+  public func divergingUpstream(project: String) async -> String? {
+    let result = await git(project, ["remote", "get-url", "quartz-upstream"])
+    guard result.success else { return nil }
+    let url = JS.trim(result.stdout)
+    return Self.sameRepository(url, templateRepository) ? nil : url
+  }
+
+  /// One repository written two ways: with or without ".git" or a trailing "/", any case.
+  static func sameRepository(_ a: String, _ b: String) -> Bool {
+    func normal(_ url: String) -> String {
+      var text = JS.trim(url).lowercased()
+      while text.hasSuffix("/") { text.removeLast() }
+      if text.hasSuffix(".git") { text.removeLast(4) }
+      return text
+    }
+    return normal(a) == normal(b)
+  }
+
   public func status(project: String, resolveInstalled: Bool = false) async -> Status {
     let outstanding = await outstandingInstall(project)
     let head = await git(project, ["rev-parse", "HEAD"])

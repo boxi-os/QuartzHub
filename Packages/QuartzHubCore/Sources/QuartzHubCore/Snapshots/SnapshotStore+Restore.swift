@@ -285,7 +285,8 @@ extension SnapshotStore {
   // MARK: - Retention
 
   /// Automatic snapshots thinned to a resolution that falls with age: all of the last day, one per
-  /// day for a week, one per week up to eight, then one per month. Manual ones are never touched.
+  /// day for a week, one per week up to eight, then one per month. Manual ones and those before a
+  /// core update are never touched (`isKept`).
   public func pruneAutomatic(project: String) async throws -> Int {
     try await Self.lock.run(project) {
       try await withIndex(project) { op in await pruneUnlocked(op) }
@@ -305,7 +306,7 @@ extension SnapshotStore {
     var kept: Set<String> = []
     var doomed: [String] = []
     // Newest first: the first to claim a bucket survives it.
-    for snapshot in await listUnlocked(op) where !Self.keptKinds.contains(snapshot.kind) {
+    for snapshot in await listUnlocked(op) where !Self.isKept(snapshot.kind) {
       guard let createdAt = Self.date(snapshot.createdAt),
             let bucket = Self.retentionBucket(age: now.timeIntervalSince(createdAt), createdAt: createdAt) else { continue }
       if kept.contains(bucket) { doomed.append(snapshot.id) } else { kept.insert(bucket) }

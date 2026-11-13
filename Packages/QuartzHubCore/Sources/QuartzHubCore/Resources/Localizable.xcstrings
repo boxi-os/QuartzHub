@@ -935,13 +935,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Noch keine Snapshots. QuartzHub legt automatisch einen an, bevor es das Projekt ändert, sofern sich seit dem letzten etwas geändert hat; ältere automatische werden ausgedünnt (einer je Tag, Woche, Monat), deine eigenen nie."
+            "value" : "Noch keine Snapshots. QuartzHub legt automatisch einen an, bevor es das Projekt ändert, sofern sich seit dem letzten etwas geändert hat; ältere automatische werden ausgedünnt (einer je Tag, Woche, Monat), deine eigenen und die vor einem Kern-Update nie."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No snapshots yet. QuartzHub takes one automatically before it changes the project, provided something changed since the last; older automatic ones are thinned out (one per day, week, month), your own never."
+            "value" : "No snapshots yet. QuartzHub takes one automatically before it changes the project, provided something changed since the last; older automatic ones are thinned out (one per day, week, month), never your own or those before a core update."
           }
         }
       }
@@ -63024,6 +63024,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conflicts in these files:"
+          }
+        }
+      }
+    },
+    "updates.core.divergingUpstream" : {
+      "comment" : "Updates ▸ Quartz core: the project's upstream remote is not the official repository the status asks",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Remote „quartz-upstream“ dieses Projekts zeigt auf {{url}}. Der Stand oben ist der von jackyzha0/quartz; „Update“ holt aber von {{url}}."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This project’s remote “quartz-upstream” points to {{url}}. The state above is that of jackyzha0/quartz; “Update” fetches from {{url}}, though."
           }
         }
       }
