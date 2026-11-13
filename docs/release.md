@@ -39,8 +39,8 @@ umgekehrt.
     swift run --package-path Packages/QuartzHubCore qh-check i18n
     swift run --package-path Packages/QuartzHubCore qh-check handbook
 
-Der Rauchtest bewegt Maus und Tastatur (rund 1,5 min). `docs/gleichstand.md` hat keine Zeile
-„fehlt“ oder „gebaut“.
+Der Rauchtest bewegt Maus und Tastatur (rund 4 min, 2026-11-14). `docs/gleichstand.md` hat keine Zeile
+„fehlt“ oder „gebaut“ (die Wörter stehen nur im Kopf der Übersichtstabelle).
 
 ## 4. Die eigenen Plugins sind veröffentlicht, und die App liest gegen sie
 
@@ -75,11 +75,16 @@ Dann an der DMG selbst, nicht an `build/`:
 - `Resources/licenses/` vollständig (`git-LICENSE.txt` nennt QuartzHub);
 - aus dem gemounteten Abbild gestartet, mit Wegwerf-Profil
   (`--args -QHProfileDir <scratch> -QHMigrationSource ""`): das Fenster „Projekte“ sagt
-  „Werkzeuge bereit“ mit dem mitgelieferten Node, npm und git;
+  „Werkzeuge bereit“, Node und npm „in QuartzHub“; git kommt vom System, wenn es eines gibt
+  (`GitRuntime.resolve`), sonst das mitgelieferte. Das mitgelieferte deshalb direkt prüfen:
+  `GIT_EXEC_PATH=<app>/Contents/Resources/git/libexec/git-core <app>/Contents/Resources/git/bin/git ls-remote https://github.com/boxi-os/QuartzHub HEAD`;
 - **erster Start wie beim Nutzer:** Eine heruntergeladene DMG trägt die Quarantäne; Gatekeeper
   verweigert den ersten Start, „Dennoch öffnen“ unter Systemeinstellungen ▸ Datenschutz & Sicherheit
   lässt ihn zu. So steht es im Handbuch (1.2 „Installieren und erster Start“) und in den Notizen
-  (Punkt 8). Einmal je Release mit der DMG aus dem Release-Entwurf nachgehen.
+  (Punkt 8). Ohne Herunterladen: eine Kopie der DMG mit
+  `xattr -w com.apple.quarantine "0083;$(printf %x $(date +%s));Safari;" <kopie>`, gemountet sagt
+  `spctl -a -vv -t exec <mnt>/QuartzHub.app` „rejected“. Den Weg über „Dennoch öffnen“ geht einmal je
+  Release ein Mensch, mit der DMG aus dem Release-Entwurf (Punkt 8).
 
 ## 7. Der Tag
 
@@ -90,9 +95,11 @@ Annotierter Tag auf dem Commit, der die Fassungsnummer trägt, und pushen:
 
 ## 8. Die Release-Seite
 
-    gh release create v<fassung> build/package/QuartzHub-<fassung>-arm64.dmg --title "QuartzHub <fassung>" --notes-file <notizen>
+    gh release create v<fassung> build/package/QuartzHub-<fassung>-arm64.dmg --title "QuartzHub <fassung>" --notes-file <notizen> --draft
 
-Weder `--draft` noch `--prerelease` (Punkt 1). Die Notizen haben, in Englisch:
+Erst als Entwurf: die DMG von der Seite herunterladen, Prüfsumme vergleichen, ersten Start (Punkt 6)
+mit ihr nachgehen. Dann `gh release edit v<fassung> --draft=false`. Nie `--prerelease` (Punkt 1);
+solange der Entwurf steht, sieht ihn `releases/latest` nicht. Die Notizen haben, in Englisch:
 
 - **was neu ist** (für 1.0.0: die Nachfolgerin von QuartzControl, nativ, liest dieselben Projekte);
 - **Voraussetzungen:** macOS 26 oder neuer, Apple Silicon;

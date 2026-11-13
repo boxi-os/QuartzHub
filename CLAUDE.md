@@ -37,7 +37,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `xcodebuild -project QuartzHub.xcodeproj -scheme QuartzHub -derivedDataPath build/DerivedData build` — Debug-Bau
 - `xcodebuild … -scheme QuartzHub -derivedDataPath build/DerivedData test` — UI-Rauchtest (jede
   Seite in zwei Fenstergrößen, Inspektor, Menü, ⌃⌘I) und die Kerntests. Braucht die Erlaubnis
-  für Bedienungshilfen; bewegt Maus und Tastatur, rund 1,5 min
+  für Bedienungshilfen; bewegt Maus und Tastatur, rund 4 min
 - `swift test --package-path Packages/QuartzHubCore` — nur die Kerntests, ohne Xcode-Projekt
 - `swift run --package-path Packages/QuartzHubCore qh-check i18n` — Schlüssel der Aufrufe gegen
   den Katalog, Parität de/en, Platzhalter. Exit 0 gut, 1 Befunde, 2 Aufruf falsch, 3 nicht alles geprüft
