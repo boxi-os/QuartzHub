@@ -70,7 +70,7 @@ struct ConnectionsSettings: View {
         HStack {
           Button(L10n.t("settings.github.recheck")) { Task { await model.checkGithub() } }
             .disabled(model.githubStatus == .checking)
-          Button(L10n.t("settings.github.remove")) { model.removeGithub() }
+          Button(L10n.t("settings.github.remove")) { Task { await model.removeGithub() } }
         }
       }
       // As the default folder in Allgemein: a labelled field of a grouped form was plain and as
@@ -287,9 +287,20 @@ final class ConnectionsSettingsModel {
     }
   }
 
+  /// Asked GitHub first: a token it rejects is not saved, so it does not replace a working one
+  /// (review 2026-11-13, handbook, N11). Without an answer (offline) it is saved, and the status
+  /// says it could not be checked.
   func saveGithub(_ token: String) async -> Bool {
     savingGithub = true
     defer { savingGithub = false }
+    let probe = GitHubAPI(environment: await AppServices.current(), token: { token })
+    // `viewer()` answers nil for a token GitHub refuses and throws when it cannot ask.
+    var rejected = false
+    do { rejected = try await probe.viewer() == nil } catch { rejected = false }
+    if rejected {
+      githubFailure = L10n.t("settings.connections.githubRejected")
+      return false
+    }
     do {
       try store.save(SaveConnectionInput(id: github?.id, kind: .github, name: "GitHub", secret: token))
       AppDeploy.ConnectionsVersion.shared.bump()
@@ -302,8 +313,12 @@ final class ConnectionsSettingsModel {
     return true
   }
 
-  func removeGithub() {
+  /// Asks first, as deleting any other connection does (review 2026-11-13, handbook, N11).
+  func removeGithub() async {
     guard let github else { return }
+    let (question, detail) = Confirm.split(L10n.t("settings.connections.githubRemoveConfirm"))
+    guard await Confirm.ask(question, detail: detail, confirm: L10n.t("common.remove"), destructive: true,
+                            window: NSApp.keyWindow) else { return }
     do {
       try store.delete(github.id)
       AppDeploy.ConnectionsVersion.shared.bump()
@@ -311,7 +326,7 @@ final class ConnectionsSettingsModel {
     } catch {
       githubFailure = error.message
     }
-    Task { await reload() }
+    await reload()
   }
 
   /// Asked either way: even an unused connection holds a password or key that exists only here.

@@ -47777,6 +47777,44 @@
         }
       }
     },
+    "settings.connections.githubRejected" : {
+      "comment" : "Settings, Connections: a new GitHub token GitHub refuses is not saved",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub hat diesen Token abgelehnt; er wurde nicht gespeichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub rejected this token; it was not saved."
+          }
+        }
+      }
+    },
+    "settings.connections.githubRemoveConfirm" : {
+      "comment" : "Settings, Connections: question before removing the GitHub token",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den GitHub-Token entfernen?\n\nVeröffentlichen auf GitHub und das Einrichten von GitHub Pages gehen danach erst wieder mit einem neuen Token."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the GitHub token?\n\nPublishing to GitHub and setting up GitHub Pages only work again with a new token."
+          }
+        }
+      }
+    },
     "settings.connections.newHeading" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
