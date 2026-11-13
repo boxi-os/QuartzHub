@@ -41550,13 +41550,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzHub schreibt seine Frames vor jedem Build und Dev-Server-Start neu. Bleibt der Befund danach, speichere den Frame im Layout-Editor noch einmal."
+            "value" : "QuartzHub schreibt seine Frames vor jedem Build und Dev-Server-Start neu. Bleibt der Befund danach, speichere den Frame unter „Layout“ noch einmal."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzHub rewrites its frames before every build and dev server start. If the finding stays after that, save the frame in the layout editor once more."
+            "value" : "QuartzHub rewrites its frames before every build and dev server start. If the finding remains, save the frame under “Layout” once more."
           }
         }
       }
@@ -41709,6 +41709,25 @@
         }
       }
     },
+    "pluginsInstalled.filterLabel" : {
+      "comment" : "Plugins ▸ Installiert: the segmented filter (all, enabled, disabled), its name for VoiceOver",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show"
+          }
+        }
+      }
+    },
     "pluginsInstalled.filters.active" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -41788,13 +41807,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eigener Frame aus dem Layout-Editor"
+            "value" : "Eigener Frame, gebaut unter „Layout“"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your own frame from the Layout editor"
+            "value" : "Your own frame, built under “Layout”"
           }
         }
       }
@@ -41804,15 +41823,39 @@
       "generatesSymbol" : false,
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Bereiche"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Bereich"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Bereiche"
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} areas"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} area"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} areas"
+                }
+              }
+            }
           }
         }
       }
@@ -41824,13 +41867,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Im Layout-Editor gebaute eigene Frames. Quartz registriert jeden davon als Plugin. Eingestellt werden sie im Layout-Editor."
+            "value" : "Deine eigenen Frames, gebaut unter „Layout“. Quartz registriert jeden davon als Plugin; eingestellt werden sie unter „Layout“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your own frames built in the Layout editor. Quartz registers each one as a plugin. They are configured in the Layout editor."
+            "value" : "Your own frames, built under “Layout”. Quartz registers each one as a plugin; they are set up under “Layout”."
           }
         }
       }
@@ -42154,13 +42197,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Buttons arbeiten an den heruntergeladenen Plugins in .quartz/plugins und ändern nichts an Konfiguration und Website. Nach dem Klonen auf einem anderen Rechner stellst du den Ordner hier aus quartz.lock.json wieder her, fehlende npm-Pakete werden dabei zuerst installiert."
+            "value" : "Die Buttons arbeiten an den heruntergeladenen Plugins in .quartz/plugins; Konfiguration und Notizen bleiben, wie sie sind. Nach dem Klonen auf einem anderen Rechner stellst du den Ordner hier aus quartz.lock.json wieder her, fehlende npm-Pakete werden dabei zuerst installiert."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "These buttons work on the downloaded plugins in .quartz/plugins and change nothing about the configuration or your site. After cloning on another machine, restore the folder here from quartz.lock.json; missing npm packages are installed first."
+            "value" : "These buttons work on the downloaded plugins in .quartz/plugins; the configuration and your notes stay as they are. After cloning on another machine, restore the folder here from quartz.lock.json; missing npm packages are installed first."
           }
         }
       }
@@ -42294,6 +42337,25 @@
         }
       }
     },
+    "pluginsInstalled.noPosition" : {
+      "comment" : "Plugins ▸ Installiert: group and summary of components whose layout names no position (Quartz then uses the plugin's default or does not place it)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Position"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No position"
+          }
+        }
+      }
+    },
     "pluginsInstalled.none" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -42337,7 +42399,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Im Layout-Editor"
+            "value" : "Im Layout öffnen"
           }
         },
         "en" : {
@@ -42470,6 +42532,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transformers, filters & emitters"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.packageNotInstalled" : {
+      "comment" : "Plugins ▸ Installiert, inspector: the options of a plugin whose package is missing",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Paket dieses Plugins ist nicht installiert, deshalb kennt QuartzHub seine Optionen nicht. „Aus quartz.lock.json wiederherstellen“ unter „Wartung“ holt es."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This plugin's package is not installed, so QuartzHub does not know its options. “Restore from quartz.lock.json” under “Maintenance” fetches it."
           }
         }
       }
@@ -42924,6 +43005,25 @@
         }
       }
     },
+    "pluginsInstalled.sourceUnreadable" : {
+      "comment" : "Plugins ▸ Installiert, inspector: reason after 'The options could not be read:' for an entry whose source is not a plugin source",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Quelle des Eintrags nennt kein Paket, das QuartzHub lesen kann."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The entry's source names no package QuartzHub can read."
+          }
+        }
+      }
+    },
     "pluginsInstalled.summaryActive" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -42967,13 +43067,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "order: {{order}}"
+            "value" : "Reihenfolge {{order}}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "order: {{order}}"
+            "value" : "order {{order}}"
           }
         }
       }
@@ -42985,13 +43085,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "position: {{position}} · priority: {{priority}}"
+            "value" : "{{position}} · Priorität {{priority}}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "position: {{position}} · priority: {{priority}}"
+            "value" : "{{position}} · priority {{priority}}"
           }
         }
       }
@@ -43230,6 +43330,49 @@
         }
       }
     },
+    "pluginsMarketplace.noPluginsOnlyOther" : {
+      "comment" : "Plugins ▸ Marktplatz: a search that matches only repositories without the plugin topic",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Keine Plugins gefunden, aber ein Treffer unter den anderen Repositories unten."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Keine Plugins gefunden, aber {{count}} Treffer unter den anderen Repositories unten."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No plugins found, but one match among the other repositories below."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No plugins found, but {{count}} matches among the other repositories below."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "pluginsMarketplace.noResults" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -43244,6 +43387,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No plugins found."
+          }
+        }
+      }
+    },
+    "pluginsMarketplace.notMarkedPlugin" : {
+      "comment" : "Plugins ▸ Marktplatz, inspector: above Install for a repository from 'other repositories'",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Repository ist nicht als Quartz-Plugin markiert. Die Installation gelingt meistens nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This repository is not marked as a Quartz plugin. Installing it mostly fails."
           }
         }
       }

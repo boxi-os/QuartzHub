@@ -178,7 +178,7 @@ public final class PluginSchemaReader: Sendable {
     guard stat(path, &info) == 0 else {
       // Not installed (yet) is the ordinary case for a plugin that was just added: no schema, no
       // complaint. Anything else is a package that is there and broken, and says so.
-      if errno == ENOENT { return .answer(PluginOptionSchemaResult()) }
+      if errno == ENOENT { return .answer(PluginOptionSchemaResult(notInstalled: true)) }
       return .answer(unreadable(String(cString: strerror(errno))))
     }
     if info.st_size > maxPackageJSONBytes {
@@ -411,12 +411,17 @@ public struct PluginOptionSchemaResult: Equatable, Sendable {
   /// `quartz.category` as a list ("component", "transformer", "emitter", …): switching a
   /// component off with `enabled: false` switches off the whole plugin.
   public var categories: [String]?
+  /// No package.json where the package belongs: not installed (yet). "No options" would be the
+  /// wrong sentence for it (review 2026-11-13, nebenbei).
+  public var notInstalled = false
 
-  public init(schema: NormalizedOptionSchema? = nil, packageVersion: String? = nil, unreadable: String? = nil, categories: [String]? = nil) {
+  public init(schema: NormalizedOptionSchema? = nil, packageVersion: String? = nil, unreadable: String? = nil, categories: [String]? = nil,
+              notInstalled: Bool = false) {
     self.schema = schema
     self.packageVersion = packageVersion
     self.unreadable = unreadable
     self.categories = categories
+    self.notInstalled = notInstalled
   }
 
   /// scripts/lib/option-schema-canon.mjs, `canonResult`.

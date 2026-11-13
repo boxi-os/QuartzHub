@@ -66,7 +66,9 @@ struct InstalledTab: View {
     var seenPositions: [String] = []
     for item in plugins {
       guard let layout = item.layout else { continue }
-      let position = layout["position"]?.stringValue ?? "body"
+      // No position: Quartz takes the plugin manifest's default, or does not place it at all;
+      // "Im Inhalt" claimed a place (review 2026-11-13, nebenbei).
+      let position = layout["position"]?.stringValue ?? ""
       if byPosition[position] == nil { seenPositions.append(position) }
       byPosition[position, default: []].append(item)
     }
@@ -96,9 +98,16 @@ struct InstalledTab: View {
     case "beforeBody": L10n.t("positions.beforeBody")
     case "afterBody": L10n.t("positions.afterBody")
     case "footer": L10n.t("positions.footer")
-    case "body": L10n.t("positions.body")
+    case "": L10n.t("pluginsInstalled.noPosition")
     default: key
     }
+  }
+
+  /// Where a component stands, in words: its position, its priority when it has one.
+  static func placementLine(_ layout: JSONObject) -> String {
+    let position = positionTitle(layout["position"]?.stringValue ?? "")
+    guard let priority = layout["priority"], priority != .null, !JSRead.string(priority).isEmpty else { return position }
+    return L10n.t("pluginsInstalled.summaryPosPriority", ["position": position, "priority": JSRead.string(priority)])
   }
 
   var body: some View {
@@ -120,7 +129,7 @@ struct InstalledTab: View {
           .textFieldStyle(.roundedBorder)
           .frame(maxWidth: 260)
           .accessibilityIdentifier("plugins.search")
-        Picker(L10n.t("pluginsInstalled.filters.all"), selection: $filterID) {
+        Picker(L10n.t("pluginsInstalled.filterLabel"), selection: $filterID) {
           ForEach(Filter.allCases, id: \.self) { Text($0.title).tag($0.rawValue) }
         }
         .pickerStyle(.segmented)
@@ -296,7 +305,8 @@ struct InstalledTab: View {
       Button(L10n.t("common.removeNamed", ["name": item.displayName]), role: .destructive) {
         Task { await model.remove(item, window: unsaved?.window) }
       }
-      .disabled(model.busy)
+      // Removing runs the CLI on .quartz/plugins, which a maintenance run is rewriting too.
+      .disabled(model.busy || model.maintenance != nil)
     }
     .accessibilityActions {
       if let group, up { Button(L10n.t("pluginsInstalled.moveUp", ["name": item.displayName])) { move(item, by: -1, in: group) } }
@@ -372,7 +382,7 @@ private struct PluginRow: View {
         if let description = builtin ? L10n.t("pluginsInstalled.builtinDescription") : item.description {
           Text(description).font(.caption).foregroundStyle(.secondary).lineLimit(1).help(description)
         }
-        if let summary { Text(verbatim: summary).font(.system(.caption2, design: .monospaced)).foregroundStyle(.secondary) }
+        if let summary { Text(verbatim: summary).font(.caption).foregroundStyle(.secondary) }
       }
       .opacity(item.enabled ? 1 : 0.6)
     }
@@ -383,10 +393,7 @@ private struct PluginRow: View {
 
   private var summary: String? {
     if let layout = item.layout {
-      return L10n.t("pluginsInstalled.summaryPosPriority", [
-        "position": layout["position"].map { JSRead.string($0) } ?? "–",
-        "priority": layout["priority"].map { JSRead.string($0) } ?? "–"
-      ])
+      return InstalledTab.placementLine(layout)
     }
     if let frame = item.frame {
       let count = frame["areas"]?.arrayValue?.count ?? 0

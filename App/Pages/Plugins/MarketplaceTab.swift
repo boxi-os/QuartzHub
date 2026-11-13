@@ -73,7 +73,10 @@ struct MarketplaceTab: View {
         if model.result == nil {
           Text(L10n.t("pluginsMarketplace.loading")).foregroundStyle(.secondary)
         } else if lists.plugins.isEmpty {
-          Text(L10n.t("pluginsMarketplace.noResults")).foregroundStyle(.secondary)
+          // "Keine Plugins gefunden." stood above other repositories that matched.
+          Text(lists.other.isEmpty ? L10n.t("pluginsMarketplace.noResults")
+               : L10n.t("pluginsMarketplace.noPluginsOnlyOther", ["count": String(lists.other.count)], count: lists.other.count))
+            .foregroundStyle(.secondary)
         }
         if !lists.plugins.isEmpty {
           Section {
@@ -221,6 +224,11 @@ struct MarketplaceInspector: View {
             .help(L10n.t("pluginsMarketplace.openRepo"))
           }
           if let description = plugin.description { Text(description).foregroundStyle(.secondary) }
+          // "Meistens nicht als Plugin installierbar" was said of the list, and the button offered
+          // it without a word (review 2026-11-13, nebenbei).
+          if !installed, !plugin.isMarkedPlugin {
+            Callout(.warning, L10n.t("pluginsMarketplace.notMarkedPlugin"))
+          }
         }
         HStack {
           Text(verbatim: "★ \(plugin.stars ?? 0)").font(.caption).foregroundStyle(.secondary).monospacedDigit()

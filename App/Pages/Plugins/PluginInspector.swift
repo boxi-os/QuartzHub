@@ -166,8 +166,9 @@ struct PluginInspector: View {
   }
 
   private func placementSummary(_ layout: JSONObject) -> String {
-    var parts = [InstalledTab.positionTitle(layout["position"].map { JSRead.string($0) } ?? "undefined"),
-                 L10n.t("pluginsInstalled.placementPriority", ["priority": layout["priority"].map { JSRead.string($0) } ?? ""])]
+    // "undefined" and an empty "Priorität" for what the file does not say (review 2026-11-13,
+    // nebenbei): the words of the list's row.
+    var parts = [InstalledTab.placementLine(layout)]
     if let group = layout["group"], JSRead.string(group) != "", group != .null {
       parts.append(L10n.t("pluginsInstalled.placementGroup", ["group": JSRead.string(group)]))
     }
@@ -184,6 +185,10 @@ struct PluginInspector: View {
     if let schemaError {
       Section(L10n.t("pluginsInstalled.optionsHeading")) {
         Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": schemaError]))
+      }
+    } else if let schema, schema.notInstalled {
+      Section(L10n.t("pluginsInstalled.optionsHeading")) {
+        Callout(.warning, L10n.t("pluginsInstalled.packageNotInstalled"))
       }
     } else if let schema {
       if let unreadable = schema.unreadable {
@@ -209,8 +214,9 @@ struct PluginInspector: View {
   private func loadSchema() async {
     schema = nil
     schemaError = nil
+    // An empty reason read "Die Optionen konnten nicht gelesen werden: " (review 2026-11-13).
     guard let source = PluginSource(item.entry.source) else {
-      schemaError = ""
+      schemaError = L10n.t("pluginsInstalled.sourceUnreadable")
       return
     }
     let environment = await AppServices.current()

@@ -252,7 +252,8 @@ final class PluginsModel {
   }
 
   func toggleEnabled(_ index: Int) async {
-    await commit { plugins in
+    // The word beside the name for a switch too, as for a field (review 2026-11-13, nebenbei).
+    let done = await commit { plugins in
       plugins.enumerated().map { offset, plugin in
         guard offset == index else { return plugin }
         var changed = plugin
@@ -260,6 +261,7 @@ final class PluginsModel {
         return changed
       }
     }
+    if done { flagSaved(index) }
   }
 
   /// The visible half is a word beside the name; the spoken half names the entry, because
@@ -269,14 +271,14 @@ final class PluginsModel {
     await writes?.value
   }
 
-  func flagSaved(_ index: Int) {
+  func flagSaved(_ index: Int, announce: Bool = true) {
     savedIndex = index
     savedTimer?.cancel()
     savedTimer = Task {
       try? await Task.sleep(for: .seconds(2))
       if !Task.isCancelled { savedIndex = nil }
     }
-    if let name = config?.plugins[safe: index]?.name {
+    if announce, let name = config?.plugins[safe: index]?.name {
       Announce.post(L10n.t("pluginsInstalled.savedAnnounce", ["name": name]))
     }
   }
@@ -302,6 +304,8 @@ final class PluginsModel {
       return next
     }
     guard done, let position = group.firstIndex(where: { $0.index == moved.index }) else { return }
+    // Seen at the row; heard as the move, which says more than "Gespeichert".
+    flagSaved(moved.index, announce: false)
     Announce.post(L10n.t("pluginsInstalled.reorderedAnnounce",
                          ["name": moved.displayName, "position": String(position + 1), "total": String(group.count)]))
   }
@@ -309,6 +313,8 @@ final class PluginsModel {
   // MARK: Removing and maintenance
 
   func remove(_ item: IndexedPlugin, window: NSWindow?) async {
+    // The context menu says so too; this is the rule (review 2026-11-13, nebenbei).
+    guard maintenance == nil else { return }
     let question = item.frame != nil ? L10n.t("pluginsInstalled.removeFrameConfirm", ["name": item.displayName])
       : L10n.t("pluginsInstalled.removeConfirm", ["name": item.displayName])
     guard await Confirm.ask(question, confirm: L10n.t("common.remove"), destructive: true, window: window) else { return }

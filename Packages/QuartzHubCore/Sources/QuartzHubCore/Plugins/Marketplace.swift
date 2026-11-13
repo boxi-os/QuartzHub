@@ -15,6 +15,9 @@ public struct MarketplacePlugin: Sendable, Equatable {
   public var url: String
   public var topics: [String]?
   public var archived: Bool?
+
+  /// In the plugin list rather than "Andere Repositories": the topic, and not archived.
+  public var isMarkedPlugin: Bool { (topics ?? []).contains(MarketplaceResult.pluginTopic) && archived != true }
 }
 
 /// What one catalog read produced. `unavailable` is its own answer rather than an empty list: an
@@ -234,7 +237,7 @@ extension MarketplaceResult {
       q.isEmpty || plugin.name.lowercased().contains(q) || plugin.fullName.lowercased().contains(q)
         || (plugin.description ?? "").lowercased().contains(q)
     }
-    let isPlugin = { (plugin: MarketplacePlugin) in (plugin.topics ?? []).contains(Self.pluginTopic) && plugin.archived != true }
+    let isPlugin = { (plugin: MarketplacePlugin) in plugin.isMarkedPlugin }
     func byStars(_ list: [MarketplacePlugin]) -> [MarketplacePlugin] {
       list.enumerated().sorted { a, b in
         let (x, y) = (a.element.stars ?? 0, b.element.stars ?? 0)
