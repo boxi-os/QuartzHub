@@ -354,8 +354,8 @@ struct NewSnippetRow: View {
 
 /// One snippet file in the code editor. It writes the file with its own button, "Snippet
 /// speichern", not with the options: a knob that saves part of a page carries its reach in its
-/// name. The draft survives a change of page (per file, in the window's scene storage); closing
-/// with unsaved changes asks.
+/// name. The draft is kept per file in the window's scene storage; closing the editor, leaving the
+/// page, closing the window or quitting with unsaved changes asks.
 struct SnippetEditor: View {
   let projectPath: String
   let dir: String
@@ -420,6 +420,13 @@ struct SnippetEditor: View {
     .padding(8)
     .background(RoundedRectangle(cornerRadius: 7).fill(.quaternary.opacity(0.4)))
     .task(id: "\(projectPath)\n\(dir)\n\(file)") { await load() }
+    // The window's guard knows the draft: closing the window or quitting lost it without a
+    // question (review 2026-11-13, handbook, N4). Leaving the page now asks too, as every page with
+    // unsaved edits does; „Verwerfen“ drops the draft for good.
+    .unsavedChanges(dirty, canSave: true, discard: { draft = nil }) {
+      await save()
+      return !dirty
+    }
   }
 
   private func load() async {
