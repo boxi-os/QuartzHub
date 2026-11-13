@@ -18881,6 +18881,25 @@
         }
       }
     },
+    "gitSync.abortDropsConfirm" : {
+      "comment" : "Git-Sync: question before Merge abbrechen when it would drop staged files",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Abbrechen gehen diese vorgemerkten Änderungen verloren: {{files}}\n\ngit nimmt mit dem Merge auch zurück, was danach von Hand vorgemerkt wurde. Wer sie behalten will, sichert die Dateien vorher."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelling loses these staged changes: {{files}}\n\ngit takes back what was staged by hand after the merge, together with the merge. To keep them, copy the files first."
+          }
+        }
+      }
+    },
     "gitSync.abortMerge" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -22956,6 +22975,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Two areas are called “{{names}}”. An area name may only appear once."
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.areaNameSaved" : {
+      "comment" : "Layout, Frames, area inspector: under the name field when the typed name is not what is saved",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gespeichert als „{{name}}“: Ein Bereichsname besteht nur aus Kleinbuchstaben, Ziffern und Bindestrichen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved as “{{name}}”: an area's name has only lowercase letters, digits and hyphens."
           }
         }
       }
@@ -53519,6 +53557,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import file…"
+          }
+        }
+      }
+    },
+    "styleEditor.importReplaceConfirm" : {
+      "comment" : "Styles, Eigenes CSS: importing a file whose name is already under imported/",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„{{name}}“ gibt es unter imported/ schon. Durch die gewählte Datei ersetzen?\n\nDie bisherige Fassung geht dabei verloren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“{{name}}” already exists under imported/. Replace it with the chosen file?\n\nThe previous version is lost."
           }
         }
       }

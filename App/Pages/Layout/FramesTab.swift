@@ -711,7 +711,14 @@ struct FrameAreaInspector: View {
             nameDraft = raw
             set(FrameEditing.withAreaName(draft, area.id, raw))
           }))
+          // Return shows what was saved (review 2026-11-13, handbook, N10: „Fußzeile“ stood in the
+          // field while „fu-zeile“ was saved, without a word).
+          .onSubmit { nameDraft = nil }
           .accessibilityIdentifier("layout.frames.areaName")
+          if let typed = nameDraft, typed != area.name {
+            Note(L10n.t("layoutEditor.frameBuilder.areaNameSaved", ["name": area.name]))
+              .accessibilityIdentifier("layout.frames.areaNameSaved")
+          }
           Picker(L10n.t("layoutEditor.frameBuilder.areaSlot"), selection: Binding(get: { area.slot ?? "" }, set: {
             set(FrameEditing.withAreaSlot(draft, area.id, $0.isEmpty ? nil : $0))
           })) {
