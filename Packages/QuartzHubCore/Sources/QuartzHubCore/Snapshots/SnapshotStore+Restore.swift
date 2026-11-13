@@ -125,9 +125,14 @@ extension SnapshotStore {
     let touchesContent = touched.contains(where: Self.isContent)
     let write = { () async throws -> PluginCommands.Result? in
       if resetProjectHead, let head = snapshot?.projectHead {
-        let (reset, command) = await projectGit(project, ["reset", "--hard", head])
-        guard reset.success else { return PluginCommands.Result(success: false, output: reset.report(for: command)) }
-        output.append(reset.output)
+        if leaveContent, !settings.contentIsSymlink {
+          if let failure = try await resetKeepingContent(project, head, &output) { return failure }
+          contentLeftAlone = true
+        } else {
+          let (reset, command) = await projectGit(project, ["reset", "--hard", head])
+          guard reset.success else { return PluginCommands.Result(success: false, output: reset.report(for: command)) }
+          output.append(reset.output)
+        }
       }
       guard let effectivePaths else {
         let read = await git(op, ["read-tree", "-u", "--reset", target])
@@ -166,6 +171,30 @@ extension SnapshotStore {
       if !install.success { return PluginCommands.Result(success: false, output: output.joined(separator: "\n")) }
     }
     return PluginCommands.Result(success: true, output: JS.trim(output.joined(separator: "\n")))
+  }
+
+  /// `git reset --hard <head>` for everything but content/: the store leaves the notes out, so no
+  /// snapshot holds what a hard reset would overwrite there (an edit not committed, a note committed
+  /// since). The branch and the index move, the files outside content/ follow them, content/ stays
+  /// as it is on disk and shows as changes against the old commit (review 2026-11-13, H1).
+  func resetKeepingContent(_ project: String, _ head: String, _ output: inout [String]) async throws -> PluginCommands.Result? {
+    let outside = [".", ":(exclude)content"]
+    // What the index tracks outside content/ and the old commit does not have: --hard removes it.
+    let (added, listCommand) = await projectGit(project, ["diff-index", "--cached", "--name-only", "-z", "--no-renames",
+                                                          "--diff-filter=A", head, "--"] + outside)
+    guard added.success else { return PluginCommands.Result(success: false, output: added.report(for: listCommand)) }
+    let (reset, resetCommand) = await projectGit(project, ["reset", "-q", head])
+    guard reset.success else { return PluginCommands.Result(success: false, output: reset.report(for: resetCommand)) }
+    for path in added.stdout.components(separatedBy: "\0") where !path.isEmpty {
+      try Self.removeFile("\(project)/\(path)")
+      // As git does: folders left empty go too (rmdir refuses one that is not).
+      var folder = NodePath.dirname(path)
+      while folder != ".", folder != "", rmdir("\(project)/\(folder)") == 0 { folder = NodePath.dirname(folder) }
+    }
+    let (checkout, checkoutCommand) = await projectGit(project, ["checkout", head, "--"] + outside)
+    guard checkout.success else { return PluginCommands.Result(success: false, output: checkout.report(for: checkoutCommand)) }
+    output.append(checkout.output)
+    return nil
   }
 
   static func contentLeftAloneNote(_ settings: Settings) -> String {

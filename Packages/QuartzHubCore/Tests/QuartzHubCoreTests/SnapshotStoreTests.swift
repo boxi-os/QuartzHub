@@ -620,4 +620,67 @@ import Testing
     let held = await ProcessRunner.run(h.environment.command("git", ["--git-dir", h.path("p/.quartz-gui/snapshots.git"), "show", "\(safety.commit):content/Über.md"]))
     #expect(held.stdout == "v2, neuer Text\n", "\(held.output)")
   }
+
+  // MARK: - Resetting the project commit with content/ left out (review 2026-11-13, H1)
+
+  /// "Also reset the project commit" ran `git reset --hard` in the project: with the content
+  /// switch off, a note committed since the snapshot went back to its old text and an uncommitted
+  /// edit was lost, while the output said content/ was left untouched. Now the project's branch
+  /// moves and everything outside content/ follows it; the notes stay as they are on disk.
+  @Test func resettingTheProjectCommitLeavesContentAlone() async throws {
+    let h = try Harness()
+    h.box.now.withLock { $0 = Date() }
+    let p = try await Self.project(h)
+    let env = ["GIT_AUTHOR_NAME": "T", "GIT_AUTHOR_EMAIL": "t@example.com", "GIT_COMMITTER_NAME": "T", "GIT_COMMITTER_EMAIL": "t@example.com"]
+    let head = JS.trim(try await h.git(["rev-parse", "HEAD"], in: p))
+    _ = try await h.store.saveSettings(project: p, includeContent: false)
+    let s1 = try await h.store.create(project: p, kind: "manual", label: "vor dem Update")!
+    #expect(s1.projectHead == head)
+
+    // A later commit: the config, a new file outside content/, a note.
+    let note = h.path("p/content/Über.md")
+    try Harness.write(h.path("p/quartz.config.yaml"), "configuration:\n  pageTitle: Zwei\n")
+    try Harness.write(h.path("p/quartz/neu.ts"), "export default 2\n")
+    try Harness.write(note, "v2, committet\n")
+    for args in [["add", "-A"], ["commit", "-q", "-m", "Update"]] { try await h.git(args, in: p, env: env) }
+    // Then, not committed: the note again and a new one.
+    try Harness.write(note, "v3, nicht committet\n")
+    try Harness.write(h.path("p/content/Neu.md"), "Neu\n")
+
+    let result = try await h.store.restore(project: p, id: s1.id, resetProjectHead: true)
+    #expect(result.success, "\(result.output)")
+    #expect(JS.trim(try await h.git(["rev-parse", "HEAD"], in: p)) == head)
+    #expect(try String(contentsOfFile: h.path("p/quartz.config.yaml"), encoding: .utf8) == "configuration:\n  pageTitle: Eins\n")
+    #expect(!FileManager.default.fileExists(atPath: h.path("p/quartz")), "the folder git made goes with its file")
+    #expect(try String(contentsOfFile: note, encoding: .utf8) == "v3, nicht committet\n")
+    #expect(try String(contentsOfFile: h.path("p/content/Neu.md"), encoding: .utf8) == "Neu\n")
+    #expect(result.output.contains(L10n.t("main.snapshotContentUntouched")), "\(result.output)")
+    // The notes are now changes against the old commit, nothing is lost from git's view either.
+    let status = try await h.git(["status", "--porcelain", "-uall"], in: p)
+    #expect(status.contains(" M \"content/\\303\\234ber.md\"") || status.contains(" M content/Über.md"), "\(status)")
+    #expect(!status.contains("quartz/"), "\(status)")
+  }
+
+  /// The counter-check: with content/ in the store the reset still takes the notes back, and the
+  /// snapshot taken before the restore holds the edit.
+  @Test func resettingTheProjectCommitWithContentIncludedRestoresTheNotes() async throws {
+    let h = try Harness()
+    h.box.now.withLock { $0 = Date() }
+    let p = try await Self.project(h)
+    let env = ["GIT_AUTHOR_NAME": "T", "GIT_AUTHOR_EMAIL": "t@example.com", "GIT_COMMITTER_NAME": "T", "GIT_COMMITTER_EMAIL": "t@example.com"]
+    let head = JS.trim(try await h.git(["rev-parse", "HEAD"], in: p))
+    let s1 = try await h.store.create(project: p, kind: "manual", label: "vor dem Update")!
+    let note = h.path("p/content/Über.md")
+    try Harness.write(note, "v2, committet\n")
+    for args in [["add", "-A"], ["commit", "-q", "-m", "Update"]] { try await h.git(args, in: p, env: env) }
+    try Harness.write(note, "v3, nicht committet\n")
+
+    let result = try await h.store.restore(project: p, id: s1.id, resetProjectHead: true)
+    #expect(result.success && !result.output.contains(L10n.t("main.snapshotContentUntouched")), "\(result.output)")
+    #expect(JS.trim(try await h.git(["rev-parse", "HEAD"], in: p)) == head)
+    #expect(try String(contentsOfFile: note, encoding: .utf8) == "Über\n")
+    let safety = await h.store.list(project: p).first { $0.kind == "restore" }!
+    let held = await ProcessRunner.run(h.environment.command("git", ["--git-dir", h.path("p/.quartz-gui/snapshots.git"), "show", "\(safety.commit):content/Über.md"]))
+    #expect(held.stdout == "v3, nicht committet\n", "\(held.output)")
+  }
 }
