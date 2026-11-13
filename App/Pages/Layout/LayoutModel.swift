@@ -61,7 +61,10 @@ final class LayoutModel {
 
   var dirty: Bool { config != nil && config != saved }
   var saving: Bool { status == .saving }
-  var draftDirty: Bool { draft != nil && draft != draftBaseline }
+  /// A frame not yet written counts as unsaved even before its first edit: a new frame, a copy (which
+  /// carries the edits of the draft it came from) or the customised standard went without a
+  /// question when another frame or page was opened (review 2026-11-13, handbook, N3).
+  var draftDirty: Bool { draft != nil && (draftIsNew || draft != draftBaseline) }
 
   var standardMeasures: ScssCheck.Measures {
     if case .ok(let measures)? = measures { return measures }
