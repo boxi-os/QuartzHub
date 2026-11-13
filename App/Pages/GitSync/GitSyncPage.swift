@@ -153,7 +153,7 @@ struct GitSyncPage: View {
         Text(Self.inProgressText(operation))
         Spacer(minLength: 8)
         if operation == .merge {
-          Button(L10n.t("gitSync.abortMerge")) { Task { await model.abortMerge() } }
+          Button(L10n.t("gitSync.abortMerge")) { Task { await model.abortMerge(window: NSApp.keyWindow) } }
             .disabled(model.aborting || model.busy != nil)
             .accessibilityIdentifier("gitSync.abortMerge")
         }

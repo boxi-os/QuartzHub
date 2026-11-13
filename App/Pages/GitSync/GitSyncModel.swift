@@ -122,11 +122,21 @@ final class GitSyncModel {
   /// one Updates uses: a plain `git merge --abort` with the content symlink parked. It answers with
   /// a sentence rather than a throw, and what is said is QuartzHub's sentences, never git's text
   /// (QuartzControl's twenty-seventh and twenty-ninth reviews).
-  func abortMerge() async {
+  func abortMerge(window: NSWindow? = nil) async {
     aborting = true
     notice = nil
     let environment = await environment()
     let updater = CoreUpdate(environment: environment, snapshot: SnapshotStore.live(environment: environment).take)
+    // What the abort would take away is said before, not only after (review 2026-11-13, handbook,
+    // N7): notes staged by hand during the stuck merge go with it.
+    let dropping = await updater.filesAbortWouldDrop(project: path)
+    if !dropping.isEmpty {
+      let (question, detail) = Confirm.split(L10n.t("gitSync.abortDropsConfirm", ["files": dropping.joined(separator: ", ")]))
+      guard await Confirm.ask(question, detail: detail, confirm: L10n.t("gitSync.abortMerge"), destructive: true, window: window) else {
+        aborting = false
+        return
+      }
+    }
     do {
       let answer = try await updater.abort(project: path)
       let output = answer.output.trimmingCharacters(in: .whitespacesAndNewlines)

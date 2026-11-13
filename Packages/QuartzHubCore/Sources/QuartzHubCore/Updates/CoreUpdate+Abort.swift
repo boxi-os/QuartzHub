@@ -11,6 +11,13 @@ extension CoreUpdate {
     }
   }
 
+  /// The staged files an abort would take away, for a question before it (Git-Sync; review
+  /// 2026-11-13, handbook, N7). Read without parking the content link: a linked content folder's
+  /// notes are not in this repository's index.
+  public func filesAbortWouldDrop(project: String) async -> [String] {
+    await stagedOutsideMerge(project).files
+  }
+
   func abortParked(_ project: String) async -> AbortResult {
     let losing = await stagedOutsideMerge(project)
     let uncheckedAfter = losing.unchecked ? [L10n.t("main.updateAbortStagedUnchecked")] : []
