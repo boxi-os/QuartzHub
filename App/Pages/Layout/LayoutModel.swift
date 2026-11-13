@@ -220,6 +220,9 @@ final class LayoutModel {
     // The name the page types know this frame by, before the save renames it.
     let oldName = draftIsNew ? nil : frames.first { $0.id == FrameView(draft).id }?.frameName
     do {
+      // A new frame gets its snapshot from `plugin add`; an edited one was rewritten without one
+      // (review 2026-11-13, nebenbei). Frames are plugins, so the kind QuartzControl knows.
+      if !draftIsNew { _ = try await take(project.path, "pluginChange", FrameView(draft).frameName) }
       let result = try await LayoutFrames(plugins: .cli(environment: { await AppServices.current() }, snapshot: take))
         .saveFrame(draft, project: project.path)
       guard result.success else {
@@ -282,6 +285,8 @@ final class LayoutModel {
   func saveWidths(tablet: Double, mobile: Double) async -> String? {
     let environment = await AppServices.current()
     do {
+      // They rewrite every frame: the state before is worth one (review 2026-11-13, nebenbei).
+      _ = try await SnapshotStore.live(environment: environment).take(project.path, "pluginChange", L10n.t("layoutEditor.breakpoints.title"))
       try await LayoutFrames(plugins: .cli(environment: { environment }, snapshot: nil))
         .saveWidths((tablet: tablet, mobile: mobile), project: project.path)
       widths = (tablet, mobile)

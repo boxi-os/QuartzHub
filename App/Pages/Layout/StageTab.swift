@@ -580,6 +580,7 @@ struct StageTab: View {
                 var next = groups
                 next[name] = nil
                 setGroups(next)
+                if let plugins = model.config?.plugins { model.config?.plugins = LayoutBoard.withoutGroup(plugins, named: name) }
               } label: { Label(L10n.t("common.deleteNamed", ["name": name]), systemImage: "trash") }
                 .labelStyle(.iconOnly).buttonStyle(.borderless)
             }
@@ -605,7 +606,11 @@ struct StageTab: View {
             // fields read "0.75rem" and "10" with nothing saying what they are (measured 2026-11-10).
             FlowLayout(spacing: 12, minItem: 0, stretch: false) {
               LabeledContent(L10n.t("layoutEditor.groupsPanel.gap")) {
-                TextField(L10n.t("layoutEditor.groupsPanel.gap"), text: Binding(get: { group["gap"]?.stringValue ?? "" }, set: { update(name, "gap", .string($0)) }),
+                TextField(L10n.t("layoutEditor.groupsPanel.gap"), text: Binding(get: { group["gap"]?.stringValue ?? "" }, set: { typed in
+                  // Emptied, the key goes and Quartz takes its own gap; "" was written as the value
+                  // (review 2026-11-13, nebenbei).
+                  update(name, "gap", typed.trimmingCharacters(in: .whitespaces).isEmpty ? nil : .string(typed))
+                }),
                           prompt: Text(verbatim: "0.5rem"))
                   .labelsHidden()
                   .frame(width: 140)
@@ -637,7 +642,11 @@ struct StageTab: View {
             setGroups(next)
             newGroup = ""
           }
-          .disabled(newGroup.trimmingCharacters(in: .whitespaces).isEmpty)
+          .disabled(newGroup.trimmingCharacters(in: .whitespaces).isEmpty || groups[newGroup.trimmingCharacters(in: .whitespaces)] != nil)
+        }
+        // A name that is taken did nothing, without a word (review 2026-11-13, nebenbei).
+        if groups[newGroup.trimmingCharacters(in: .whitespaces)] != nil {
+          FieldProblem(L10n.t("layoutEditor.groupsPanel.nameTaken", ["name": newGroup.trimmingCharacters(in: .whitespaces)]))
         }
       }
       .frame(maxWidth: .infinity, alignment: .leading)

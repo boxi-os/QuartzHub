@@ -133,6 +133,19 @@ public enum LayoutBoard {
     withLayout(plugins, index) { $0["group"] = group.isEmpty ? nil : .string(group) }
   }
 
+  /// A deleted group's members leave it: `group` and `groupOptions` go from each, the rest of the
+  /// layout stays. Deleting only `layout.groups[name]` left them grouped under a name no group had
+  /// any more (review 2026-11-13, nebenbei).
+  public static func withoutGroup(_ plugins: [PluginEntry], named name: String) -> [PluginEntry] {
+    plugins.indices.reduce(plugins) { next, index in
+      guard next[index].object["layout"]?["group"]?.stringValue == name else { return next }
+      return withLayout(next, index) { layout in
+        layout["group"] = nil
+        layout["groupOptions"] = nil
+      }
+    }
+  }
+
   /// `withDisplay`: "all" (or nothing) writes no key; Quartz's base.scss does the rest.
   public static func withDisplay(_ plugins: [PluginEntry], _ index: Int, _ display: String?) -> [PluginEntry] {
     withLayout(plugins, index) { $0["display"] = display.flatMap { $0.isEmpty || $0 == "all" ? nil : .string($0) } }

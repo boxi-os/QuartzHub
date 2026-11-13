@@ -22423,7 +22423,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The window widths at which your own frames switch to the tablet and mobile layout. Quartz’ built-in frames (default, full-width, minimal) and community themes carry their own values. The default is 1200 / 800 (the values Quartz uses)."
+            "value" : "The window widths at which your own frames switch to the tablet and mobile layout. Quartz’s built-in frames (default, full-width, minimal) and community themes carry their own values. The default is 1200 / 800 (the values Quartz uses)."
           }
         }
       }
@@ -22435,13 +22435,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mobil muss kleiner als Tablet sein (240–3840 px)."
+            "value" : "Mobil muss kleiner als Tablet sein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mobile must be smaller than tablet (240–3840 px)."
+            "value" : "Mobile must be smaller than tablet."
           }
         }
       }
@@ -22460,6 +22460,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mobile up to (px)"
+          }
+        }
+      }
+    },
+    "layoutEditor.breakpoints.notWhole" : {
+      "comment" : "Layout ▸ Frames, switching widths: a field holds no whole number",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beide Breiten sind ganze Pixelzahlen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both widths are whole numbers of pixels."
+          }
+        }
+      }
+    },
+    "layoutEditor.breakpoints.outOfRange" : {
+      "comment" : "Layout ▸ Frames, switching widths: a value outside the range",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beide Breiten liegen zwischen 240 und 3840 px."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both widths lie between 240 and 3840 px."
           }
         }
       }
@@ -22675,7 +22713,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drag a component onto a slot to insert another instance. Switched-off components are switched back on when you drag them in."
+            "value" : "Drag a component onto an area to insert another instance. Switched-off components are switched back on when you drag them in."
           }
         }
       }
@@ -22711,7 +22749,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Switched off. Drag the component onto a slot to switch it back on there."
+            "value" : "Switched off. Drag the component onto an area to switch it back on there."
           }
         }
       }
@@ -24781,6 +24819,25 @@
         }
       }
     },
+    "layoutEditor.frameBuilder.standardPanelHint" : {
+      "comment" : "Layout ▸ Frames, inspector while Quartz's standard frame is shown (no frame open)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den Quartz-Standard kannst du hier nur ansehen. „Als eigenen Frame anpassen“ macht einen Frame daraus, dessen Bereiche du anklickst und hier einstellst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz’s default can only be viewed here. “Customize as your own frame” turns it into a frame whose areas you click and set up here."
+          }
+        }
+      }
+    },
     "layoutEditor.frameBuilder.standardShapeDiffers" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -25214,6 +25271,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gap"
+          }
+        }
+      }
+    },
+    "layoutEditor.groupsPanel.nameTaken" : {
+      "comment" : "Layout ▸ Komponenten ▸ Gruppen: the name typed for a new group is taken",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Gruppe „{{name}}“ gibt es schon."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There is already a group “{{name}}”."
           }
         }
       }
@@ -26619,13 +26695,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Klick auf eine Komponente, einen Seitentyp oder einen Frame öffnet die Stelle, an der er eingestellt wird."
+            "value" : "Ein Klick auf eine Komponente, einen Seitentyp, den Quartz-Standard oder einen eigenen Frame öffnet die Stelle, an der er eingestellt wird. Die übrigen Frames, aus Quartz und aus Plugins, stellt QuartzHub nicht ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Click a component, a page type or a frame to open the place where it is set."
+            "value" : "Click a component, a page type, Quartz’s default or a frame of your own to open the place where it is set. The other frames, Quartz’s and those from plugins, are not set in QuartzHub."
           }
         }
       }
@@ -28270,6 +28346,25 @@
         }
       }
     },
+    "layoutEditor.summary.notInFrameOn" : {
+      "comment" : "Layout ▸ Komponenten, summary: the frame leaves this position out on some widths (Desktop, Tablet, Mobil)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Frame hat dafür keinen Bereich auf {{breakpoints}}. Was hier steht, erscheint dort nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This frame has no area for it on {{breakpoints}}. What is placed here does not appear there."
+          }
+        }
+      }
+    },
     "layoutEditor.summary.parked" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -28617,7 +28712,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your wording lives in Quartz’ own files. The protection keeps a core update from overwriting it; it is set up automatically on the next save."
+            "value" : "Your wording lives in Quartz’s own files. The protection keeps a core update from overwriting it; it is set up automatically on the next save."
           }
         }
       }
@@ -57672,7 +57767,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The texts you changed in Quartz’ language files."
+            "value" : "The texts you changed in Quartz’s language files."
           }
         }
       }

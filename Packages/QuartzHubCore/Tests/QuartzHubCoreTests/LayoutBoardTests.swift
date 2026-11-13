@@ -300,4 +300,18 @@ import Testing
     #expect(LayoutBoard.removing(plugins, 1, selected: 1).selected == nil)
     #expect(LayoutBoard.removing(plugins, 1, selected: nil).plugins.map(\.name) == ["n0", "n2", "n3"])
   }
+
+  /// Deleting a group takes its members out of it, and only its members.
+  @Test func aDeletedGroupsMembersLeaveIt() {
+    func entry(_ layout: JSONObject) -> PluginEntry { PluginEntry(object: JSONObject([("source", .string("x")), ("layout", .object(layout))])) }
+    let plugins = [
+      entry(JSONObject([("position", .string("header")), ("group", .string("toolbar")), ("groupOptions", .object(JSONObject([("grow", .bool(true))])))])),
+      entry(JSONObject([("position", .string("header")), ("group", .string("andere"))])),
+      entry(JSONObject([("position", .string("left"))])),
+    ]
+    let next = LayoutBoard.withoutGroup(plugins, named: "toolbar")
+    #expect(next[0].object["layout"]?.objectValue == JSONObject([("position", .string("header"))]))
+    #expect(next[1] == plugins[1])
+    #expect(next[2] == plugins[2])
+  }
 }

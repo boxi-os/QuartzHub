@@ -591,7 +591,8 @@ struct BreakpointWidthsSection: View {
 
   var body: some View {
     let t = Int(tablet), m = Int(mobile)
-    let valid = t != nil && m != nil && m! >= 240 && t! <= 3840 && m! < t!
+    let problem = Self.problem(tablet: t, mobile: m)
+    let valid = problem == nil
     let changed = Double(t ?? 0) != model.widths.tablet || Double(m ?? 0) != model.widths.mobile
     Fold(L10n.t("layoutEditor.breakpoints.title")) {
       VStack(alignment: .leading, spacing: 8) {
@@ -605,12 +606,13 @@ struct BreakpointWidthsSection: View {
               error = await model.saveWidths(tablet: Double(t!), mobile: Double(m!))
               saved = error == nil
               saving = false
+              // Save greys out once saved, as elsewhere; no green word beside it.
+              if saved { Announce.post(L10n.t("common.saved")) }
             }
           }
           .disabled(saving || !valid || !changed)
         }
-        if !valid { FieldProblem(L10n.t("layoutEditor.breakpoints.invalid")) }
-        if saved && !changed { Text(L10n.t("layoutEditor.breakpoints.saved")).font(.caption).foregroundStyle(.green) }
+        if let problem { FieldProblem(problem) }
         // The widths rewrite every frame's CSS, which a running server does not reload.
         DevServerRestartHint(project: model.project, show: saved && !changed && !model.frames.isEmpty)
         if let error { Callout(.error, error) }
@@ -621,6 +623,15 @@ struct BreakpointWidthsSection: View {
     .onChange(of: "\(model.widths.tablet)|\(model.widths.mobile)") { reset() }
     .onChange(of: tablet) { saved = false }
     .onChange(of: mobile) { saved = false }
+  }
+
+  /// What is wrong with the two widths, in the order a user fixes them: one sentence said
+  /// "Mobil muss kleiner als Tablet sein" for a letter or 100 px too (review 2026-11-13, nebenbei).
+  static func problem(tablet: Int?, mobile: Int?) -> String? {
+    guard let tablet, let mobile else { return L10n.t("layoutEditor.breakpoints.notWhole") }
+    guard (240...3840).contains(tablet), (240...3840).contains(mobile) else { return L10n.t("layoutEditor.breakpoints.outOfRange") }
+    guard mobile < tablet else { return L10n.t("layoutEditor.breakpoints.invalid") }
+    return nil
   }
 
   private func reset() {
@@ -768,8 +779,10 @@ struct FrameAreaInspector: View {
     } else if model.draft != nil {
       FrameSettingsInspector(model: model, breakpoint: breakpoint)
     } else {
+      // No frame open: the tab shows Quartz's standard, whose preview has nothing to click
+      // (review 2026-11-13, nebenbei: "Klicke im Raster auf einen Bereich" stood here).
       InspectorPageContext(page: .layout) {
-        Section { Note(L10n.t("layoutEditor.frameBuilder.framePanelHint")) }
+        Section { Note(L10n.t("layoutEditor.frameBuilder.standardPanelHint")) }
       }
     }
   }

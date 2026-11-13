@@ -90,12 +90,15 @@ struct ComponentInspector: View {
             HStack {
               Button { move(-1, list, place) } label: { Label(L10n.t("layoutEditor.inspector.earlier"), systemImage: "arrow.up") }
                 .disabled(place == 0)
-                .keyboardShortcut(.upArrow, modifiers: [.option, .command])
               Button { move(1, list, place) } label: { Label(L10n.t("layoutEditor.inspector.later"), systemImage: "arrow.down") }
                 .disabled(place == list.count - 1)
-                .keyboardShortcut(.downArrow, modifiers: [.option, .command])
             }
           }
+          // ⌥⌘↑/↓ through Anordnen like every list: on the buttons as well, the menu showed the
+          // same keys greyed out on this page (review 2026-11-13, nebenbei).
+          .focusedSceneValue(\.moveSelection, MoveSelectionAction(canMoveUp: place > 0, canMoveDown: place < list.count - 1) {
+            move($0, list, place)
+          })
           Text(L10n.t("layoutEditor.inspector.orderOf", ["n": String(place + 1), "count": String(list.count)])).font(.caption).foregroundStyle(.secondary)
         }
         Picker(L10n.t("layoutEditor.displayLabel"), selection: Binding(get: { layout["display"]?.stringValue ?? "all" },
@@ -275,7 +278,11 @@ struct LayoutSummary: View {
   @Binding var selected: String
 
   var body: some View {
-    let missing = Set(LayoutStage.missingPositions(facts.frame, "desktop"))
+    // Every width, not desktop only: a frame may leave a position out on tablet or mobile alone
+    // (review 2026-11-13, nebenbei).
+    let missingOn: [String: [String]] = LayoutBoard.breakpoints.reduce(into: [:]) { result, bp in
+      for position in LayoutStage.missingPositions(facts.frame, bp) { result[position, default: []].append(bp) }
+    }
     let own: FrameView? = if case .own(let frame) = facts.frame { frame } else { nil }
     InspectorPageContext(page: .layout) {
       Section(L10n.t("layoutEditor.summary.title")) {
@@ -288,8 +295,9 @@ struct LayoutSummary: View {
         let reasons = Set(indices.map { pageTypeHidden($0) ?? "" })
         let shared = indices.count > 1 && reasons.count == 1 ? reasons.first.flatMap { $0.isEmpty ? nil : $0 } : nil
         Section(LayoutWords.position(position)) {
-          if missing.contains(position), !indices.isEmpty {
-            Callout(.warning, L10n.t("layoutEditor.summary.notInFrame"))
+          if let widths = missingOn[position], !indices.isEmpty {
+            Callout(.warning, widths.count == LayoutBoard.breakpoints.count ? L10n.t("layoutEditor.summary.notInFrame")
+                    : L10n.t("layoutEditor.summary.notInFrameOn", ["breakpoints": widths.map(LayoutWords.breakpoint).joined(separator: ", ")]))
           }
           if let shared { Text(shared).font(.caption).foregroundStyle(.secondary) }
           if indices.isEmpty {
