@@ -2766,3 +2766,31 @@ Das Druck-Stylesheet setzt deshalb `body.pdf * { content-visibility: visible !im
 (`DocumentHTML.webKitPrintRules`), die einzige Regel über QuartzControls hinaus;
 `DocumentHTMLTests` fügt sie in dessen Goldens ein. Danach: 20 statt 17 Seiten, alle sechs
 Aufnahmen im PDF.
+
+## Zitatprüfung des Handbuchs (2026-11-13)
+
+QuartzControls `check:handbook` prüfte Blockzitate. Im QuartzHub-Handbuch sind alle Blockzitate
+Callouts, also eigener Text; zitiert wird inline: „…“ (Deutsch), “…” (Englisch) und fett als Name
+eines Knopfs oder als Menüpfad mit ▸. `qh-check handbook` (`HandbookQuoteCheck`) prüft deshalb:
+
+- **Zitate und jeden Schritt eines Menüpfads** gegen den Katalog der Sprache der Seite: ganzer Text,
+  ein Satz daraus, der Text vor einer Klammer („Nie veröffentlichen“ für „Nie veröffentlichen (ein
+  Pfad pro Zeile)“), ein Platzhalter mit Beispielwert, eine Lücke „…“ oder `<…>` im Zitat, ab 25 Zeichen
+  auch ein Stück aus der Mitte. Normalisiert wie bei QuartzControl.
+- **Anderes Fett** ist so oft Hervorhebung wie Knopfname. Gemeldet wird es nur als Beinahe-Treffer
+  (Levenshtein-Ähnlichkeit ab 0,85 zu einem Katalogtext, nicht gleich): Das ist, was ein umbenannter
+  Knopf hinterlässt. Am Prototyp: bei 0,75 37 Meldungen, fast alle Hervorhebungen; bei 0,85 vier.
+- **Ausnahmen** (macOS-Texte, Quartz, Beispielwerte, im Code zusammengesetzte Zeilen) stehen mit Grund
+  in `<vault>/private/zitat-ausnahmen.txt`, außerhalb der Website. Eine Ausnahme, die nichts mehr
+  trifft, ist selbst ein Befund.
+
+Der erste Lauf meldete nur sechs Zitate: Katalogtexte, die nur aus einem Platzhalter bestehen
+(`{{name}}`), wurden zum Muster „passt auf alles“. Muster brauchen jetzt mindestens vier feste
+Zeichen; `HandbookQuoteCheckTests.aPlaceholderAloneMatchesNothing` hält das (ohne die Regel drei rote
+Tests). Danach: 67 Zitate, 6 Pfade, 4 Beinahe-Treffer. Echt falsch waren zwei englische Zitate (4.6
+“Only applies to the variant …”, die App sagt “with the variant”; 5.7 “further variables”, die App
+sagt “other”) und in 1.1 „Verknüpfung“, wo die Wahl „Verknüpfen“ heißt; der Rest kam in die
+Ausnahmen. Stand: 236 Zitate, 151 Menüpfade, 1914 fette Namen, keine Befunde.
+
+Nebenbei gesehen: `FrameEditing.swift` hängt an ein dupliziertes Frame fest „-kopie“, auch in der
+englischen Oberfläche.

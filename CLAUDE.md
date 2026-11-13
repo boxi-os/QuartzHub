@@ -44,6 +44,9 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]` —
   wie viele Optionen je Plugin QuartzHub darstellen kann; dieselbe Tabelle wie QuartzControls
   `check:option-schema` (nur lesend; Exit 3, wenn etwas nicht lesbar war)
+- `swift run --package-path Packages/QuartzHubCore qh-check handbook [vault]` — Zitate („…“, “…”) und Menüpfade
+  (**A ▸ B**) des Handbuchs gegen den Katalog, je Sprache, dazu fette Namen, die einem Text fast gleichen;
+  Ausnahmen mit Grund in `<vault>/private/zitat-ausnahmen.txt`, eine veraltete Ausnahme ist ein Befund
 - `swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]` — der SVG-Bereiniger gegen
   WebKit, mit einem Projekt mit quartz-layout-box auch durch dessen Markdown-Kette (Exit 3 ohne)
 - `Runtime/node/bin/node scripts/cdn-build.mjs <build> <kopie>`, dann `… scripts/export-pages-golden.mjs <kopie> <chrome.json>`

@@ -346,7 +346,7 @@ nach Abhängigkeit:
   3. Aufnahmen mit `scripts/handbook-shots.sh` (1440 × 900, hell und dunkel über die Einstellung
      im Wegwerf-Profil, de und en) an einer Kopie des Handbuch-Projekts.
   4. Englisch je Teil gleich nach dem Deutschen.
-  5. `qh-check handbook`: wörtliche Zitate gegen den Katalog, beide Sprachen.
+  5. `qh-check handbook`: wörtliche Zitate gegen den Katalog, beide Sprachen (fertig 2026-11-13).
   6. PDF und ePub über die Seite „Dokumente“, je Sprache ein Buch; epubcheck und `check:export`.
   7. Anbinden: Hilfe ▸ Handbuch, „Im Handbuch nachlesen“ im Inspektor, Link im Fenster „Projekte“,
      dazu der Hinweis auf eine neuere Fassung (die vier offenen Zeilen der Gleichstand-Liste).

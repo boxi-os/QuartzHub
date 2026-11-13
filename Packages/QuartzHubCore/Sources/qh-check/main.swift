@@ -2,6 +2,7 @@
 // instead of copying it. Successor of QuartzControl's `npm run check:*` scripts.
 //
 //   swift run --package-path Packages/QuartzHubCore qh-check i18n [--root <repo>] [--unused]
+//   swift run --package-path Packages/QuartzHubCore qh-check handbook [vault] [--root <repo>]
 //   swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]
 //   swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]
 //   swift run --package-path Packages/QuartzHubCore qh-check export-window
@@ -19,6 +20,10 @@ func usage() -> Never {
 
     i18n [--root <repo>] [--unused]   Schlüssel der Aufrufe gegen den Katalog, Parität de/en,
                                       Platzhalter; --unused listet ungenutzte Schlüssel
+    handbook [vault] [--root <repo>]  Zitate („…“, “…”) und Menüpfade (**A ▸ B**) des Handbuchs
+                                      gegen den Katalog, je Sprache; fette Namen, die einem Text
+                                      fast gleichen; Ausnahmen in <vault>/private/zitat-ausnahmen.txt
+                                      (ohne Angabe ~/Obsidian/QuartzProjekte/QuartzHub-Handbuch)
     option-schema <projekt> [--plugin <name>] [--dump]
                                       wie viele Optionen je Plugin QuartzHub darstellen kann
                                       (Feld, nur Text, unsichtbar); --dump das Schema als JSON
@@ -123,6 +128,41 @@ case "i18n":
     exit(3)
   }
   print("\nAlles geprüft, keine Befunde.")
+case "handbook":
+  let root = repositoryRoot()
+  let given = arguments.first { !$0.hasPrefix("--") && $0 != option("--root") }
+  let vault = given ?? NSHomeDirectory() + "/Obsidian/QuartzProjekte/QuartzHub-Handbuch"
+  guard FileManager.default.fileExists(atPath: vault) else {
+    print("Handbuch-Vault nicht gefunden: \(vault)")
+    exit(3)
+  }
+  let catalogPath = "\(root)/Packages/QuartzHubCore/Sources/QuartzHubCore/Resources/Localizable.xcstrings"
+  let report: HandbookQuoteCheck.Report
+  do {
+    report = try HandbookQuoteCheck.run(catalog: try StringCatalog.load(from: catalogPath), vault: vault)
+  } catch {
+    print("Nicht lesbar: \(error)")
+    exit(3)
+  }
+  print("\(report.files) Seiten: \(report.quotes) Zitate, \(report.paths) Menüpfade, \(report.bold) fette Namen")
+  let titles: [(HandbookQuoteCheck.Kind, String)] = [
+    (.quote, "Zitate, die QuartzHub so nicht sagt"),
+    (.path, "Menüpfade mit einem Schritt, den QuartzHub so nicht nennt"),
+    (.nearMiss, "Fett, und fast ein Text von QuartzHub"),
+    (.staleException, "Ausnahmen, die nichts mehr betreffen"),
+  ]
+  for (kind, title) in titles {
+    let found = report.findings.filter { $0.kind == kind }
+    guard !found.isEmpty else { continue }
+    print("\n\(title) (\(found.count)):")
+    for f in found {
+      let near = f.resembles.map { "  ≈ „\($0)“" } ?? ""
+      print("  \(f.file):\(f.line) [\(f.language)] \(f.text)\(near)")
+    }
+  }
+  if !report.findings.isEmpty { exit(1) }
+  print("\nAlles geprüft, keine Befunde.")
+
 case "option-schema":
   // Report only, as QuartzControl's check:option-schema: an invisible option is a number in the
   // table, not an exit code. What could not be read is (3).
