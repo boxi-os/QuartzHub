@@ -127,9 +127,11 @@ final class OverviewModel {
 
   // MARK: Actions
 
+  /// With the port and host set on Vorschau & Build, as the menu and the editors' preview start
+  /// it; here it took the defaults (review 2026-11-13, nebenbei).
   func startServer() {
-    let project = project
-    Task { _ = await AppServices.shared.builds.startServer(projectId: project.id, project: project.path) }
+    let project = project, options = BuildServerMemory.shared[project.id].options
+    Task { _ = await AppServices.shared.builds.startServer(projectId: project.id, project: project.path, options: options) }
   }
 
   func stopServer() {
@@ -138,8 +140,8 @@ final class OverviewModel {
   }
 
   func restartServer() {
-    let project = project
-    Task { _ = await AppServices.shared.builds.restartServer(projectId: project.id, project: project.path) }
+    let project = project, options = BuildServerMemory.shared[project.id].options
+    Task { _ = await AppServices.shared.builds.restartServer(projectId: project.id, project: project.path, options: options) }
   }
 
   func runBuild() async {

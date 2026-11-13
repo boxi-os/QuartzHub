@@ -67,6 +67,9 @@ public actor BuildService {
     public var duration: Duration
     /// nil when it never ran, or ended on a signal (Node's `code: null`).
     public var exitCode: Int32?
+    /// The npm packages whose absence kept the build from running at all: a result line said
+    /// "Fehlgeschlagen in 0,0 s" for it (review 2026-11-13, nebenbei).
+    public var missingDependencies: [String]? = nil
   }
 
   /// Why a build was refused before anything ran; each with the sentence the page shows.
@@ -207,7 +210,7 @@ public actor BuildService {
     if let missing = ProjectDependencies.missingDependencies(project: project), !missing.isEmpty {
       let names = missing.prefix(3).joined(separator: ", ") + (missing.count > 3 ? " …" : "")
       log(.build, projectId, .warn, L10n.t("main.dependenciesMissing", ["names": names]) + "\n")
-      return Result(success: false, duration: .zero, exitCode: nil)
+      return Result(success: false, duration: .zero, exitCode: nil, missingDependencies: missing)
     }
     await prepare(projectId: projectId, project: project, into: .build)
 

@@ -20,6 +20,11 @@ final class BuildMonitor {
   /// The consoles, per project: not observed as a whole, so a line of one project redraws only
   /// that project's console.
   @ObservationIgnored private var logs: [String: ProjectLogs] = [:]
+  /// The last one-off build per project, for the line on Vorschau & Build.
+  private var buildResults: [String: BuildService.Result] = [:]
+
+  func buildResult(_ projectId: String) -> BuildService.Result? { buildResults[projectId] }
+  func setBuildResult(_ projectId: String, _ result: BuildService.Result?) { buildResults[projectId] = result }
 
   func status(_ projectId: String) -> BuildService.ServerStatus {
     statuses[projectId] ?? BuildService.ServerStatus(state: .stopped)

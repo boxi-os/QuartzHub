@@ -122,7 +122,9 @@ import Testing
     try Posix.write("\(project)/package.json", Data(#"{"dependencies":{"@jackyzha0/quartz":"5","left-pad":"1","a":"1","b":"1"}}"#.utf8))
     let events = Events()
     let result = try await service(try environment(), events).build(projectId: "p", project: project, outputDir: nil)
-    #expect(result == BuildService.Result(success: false, duration: .zero, exitCode: nil))
+    // The packages too, so the page says "Nicht gebaut" rather than "Fehlgeschlagen in 0,0 s".
+    #expect(result == BuildService.Result(success: false, duration: .zero, exitCode: nil,
+                                          missingDependencies: ["@jackyzha0/quartz", "left-pad", "a", "b"]))
     #expect(events.logs(.warn) == L10n.t("main.dependenciesMissing", ["names": "@jackyzha0/quartz, left-pad, a …"]) + "\n")
     #expect(callLines.isEmpty)
     #expect(events.activities.map { $0?.kind } == [.build, nil])

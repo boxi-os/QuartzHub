@@ -48,7 +48,6 @@ final class BuildServerModel {
   private var savedOutputDir = ""
   var outputDirError: String?
   var output: Result<BuildOutput.Info, BuildOutput.Unreadable>?
-  var buildResult: BuildService.Result?
   /// Between the click and the service reporting the build.
   var clicked = false
 
@@ -109,18 +108,23 @@ final class BuildServerModel {
   /// (review 2026-11-13, handbook, M3). A refused folder builds nothing.
   func runBuild() async {
     clicked = true
-    buildResult = nil
     defer { clicked = false }
     await commitOutputDir(outputDir)
     guard outputDirError == nil else { return }
-    buildResult = await Self.build(project, outputDir: savedOutputDir)
+    _ = await Self.build(project, outputDir: savedOutputDir)
     await refreshOutput()
   }
 
+  /// The last build's line, whoever ran it: the page's button, ⌘B from any page. It lived on the
+  /// page's model, and ⌘B never reached it (review 2026-11-13, nebenbei).
+  var buildResult: BuildService.Result? { BuildMonitor.shared.buildResult(project.id) }
+
   /// The build of this page and of Projekt ▸ Build ausführen (⌘B), which can run from any page.
   static func build(_ project: ProjectContext, outputDir: String) async -> BuildService.Result? {
+    BuildMonitor.shared.setBuildResult(project.id, nil)
     switch await BuildAction.run(projectId: project.id, project: project.path, outputDir: outputDir.isEmpty ? nil : outputDir) {
     case .finished(let result):
+      BuildMonitor.shared.setBuildResult(project.id, result)
       Announce.post(resultLine(result))
       return result
     case .refused(let message):
@@ -134,6 +138,9 @@ final class BuildServerModel {
   }
 
   static func resultLine(_ result: BuildService.Result) -> String {
+    if let missing = result.missingDependencies {
+      return L10n.t("buildServer.resultNotRun", ["names": missing.prefix(3).joined(separator: ", ") + (missing.count > 3 ? " …" : "")])
+    }
     let seconds = Double(result.duration.components.seconds) + Double(result.duration.components.attoseconds) / 1e18
     return L10n.t("buildServer.resultLine", [
       "status": result.success ? L10n.t("buildServer.success") : L10n.t("buildServer.failed"),

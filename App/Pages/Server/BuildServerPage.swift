@@ -86,7 +86,7 @@ struct BuildServerPage: View {
         let now = max(context.date, Date())
         InspectorPageContext(page: .server) {
           serverSection(now: now)
-          DiscoveredServersSection(ports: [liveOptions.port, liveOptions.wsPort]) {
+          DiscoveredServersSection(ports: [liveOptions.port, liveOptions.wsPort], behindTunnel: !liveOptions.host.isEmpty) {
             Task { await BuildMonitor.shared.refresh(project.id, from: AppServices.shared.builds) }
           }
           buildSection(now: now)
@@ -220,7 +220,8 @@ struct BuildServerPage: View {
       ContentUnavailableView {
         Label(L10n.t("buildServer.livePreview"), systemImage: "play.display")
       } description: {
-        Text(L10n.t("sitePreview.remote"))
+        // Not "open it on Vorschau & Build": this is that page.
+        Text(L10n.t("buildServer.remotePreview"))
       }
     } else if status.state == .starting {
       ProgressView(L10n.t("sitePreview.starting")).frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -1823,15 +1823,82 @@
       "generatesSymbol" : false,
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Port {{ports}} ist belegt, aber von keinem erkennbaren Quartz-Server. Ein Start weicht auf den nächsten freien Port aus."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Port {{ports}} ist belegt, aber von keinem erkennbaren Quartz-Server. Ein Start weicht auf den nächsten freien Port aus."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Die Ports {{ports}} sind belegt, aber von keinem erkennbaren Quartz-Server. Ein Start weicht auf die nächsten freien Ports aus."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Port {{ports}} is taken, but not by anything recognisable as a Quartz server. A start moves on to the next free port."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Port {{ports}} is taken, but not by anything recognisable as a Quartz server. A start moves on to the next free port."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ports {{ports}} are taken, but not by anything recognisable as a Quartz server. A start moves on to the next free ports."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "buildServer.discovery.portTakenTunnel" : {
+      "comment" : "Vorschau & Build, servers on this Mac: taken ports while a host (tunnel) is set; the start is refused, not moved",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Port {{ports}} ist belegt, aber von keinem erkennbaren Quartz-Server. Mit einem eingetragenen Host startet der Server dann nicht, weil der Tunnel auf diesen Port zeigt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Die Ports {{ports}} sind belegt, aber von keinem erkennbaren Quartz-Server. Mit einem eingetragenen Host startet der Server dann nicht, weil der Tunnel auf diese Ports zeigt."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Port {{ports}} is taken, but not by anything recognisable as a Quartz server. With a host set the server then does not start, because the tunnel points at this port."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ports {{ports}} are taken, but not by anything recognisable as a Quartz server. With a host set the server then does not start, because the tunnel points at these ports."
+                }
+              }
+            }
           }
         }
       }
@@ -2511,6 +2578,25 @@
         }
       }
     },
+    "buildServer.remotePreview" : {
+      "comment" : "Vorschau & Build: the preview area while the server runs behind a tunnel (the editors' previews point to this page instead)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Dev-Server läuft über einen entfernten Host und lässt sich hier nicht einbetten. Öffne ihn im Browser."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The dev server runs through a remote host and cannot be embedded here. Open it in the browser."
+          }
+        }
+      }
+    },
     "buildServer.reset" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -2561,6 +2647,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "{{status}} in {{seconds}}s"
+          }
+        }
+      }
+    },
+    "buildServer.resultNotRun" : {
+      "comment" : "Vorschau & Build: the result line of a build that did not run because packages are missing",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht gebaut: Es fehlen npm-Pakete ({{names}})."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not built: npm packages are missing ({{names}})."
           }
         }
       }
@@ -33512,13 +33617,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beenden"
+            "value" : "Server beenden"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quit"
+            "value" : "Stop servers"
           }
         }
       }
@@ -35023,13 +35128,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für dieses Projekt läuft schon ein Server, der nicht aus QuartzHub gestartet wurde (Port {{port}}, Prozess {{pid}}). Ein zweiter würde in denselben Ausgabeordner bauen. Die Karte „Laufende Server auf diesem Rechner“ zeigt ihn und kann ihn beenden."
+            "value" : "Für dieses Projekt läuft schon ein Server, der nicht aus QuartzHub gestartet wurde (Port {{port}}, Prozess {{pid}}). Ein zweiter würde in denselben Ausgabeordner bauen. Im Inspektor von Vorschau & Build zeigt ihn der Abschnitt „Laufende Server auf diesem Rechner“, dort lässt er sich beenden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A server for this project is already running that was not started from QuartzHub (port {{port}}, process {{pid}}). A second one would build into the same output folder. The card “Servers running on this machine” shows it and can stop it."
+            "value" : "A server for this project is already running that was not started from QuartzHub (port {{port}}, process {{pid}}). A second one would build into the same output folder. In the inspector of Preview & build the section “Servers running on this machine” shows it and can stop it."
           }
         }
       }
@@ -50864,7 +50969,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The dev server runs through a remote host and cannot be embedded here. Open it on the “Preview & Build” page."
+            "value" : "The dev server runs through a remote host and cannot be embedded here. Open it on the “Preview & build” page."
           }
         }
       }

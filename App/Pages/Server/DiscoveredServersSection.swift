@@ -12,6 +12,8 @@ import SwiftUI
 /// outlive npx by a moment. Only the latest scan writes.
 struct DiscoveredServersSection: View {
   let ports: [Int]
+  /// A host is set (a tunnel): a taken port refuses the start instead of moving it.
+  var behindTunnel = false
   /// After a stop: the page asks the service for its own server's state again.
   let changed: () -> Void
 
@@ -30,7 +32,11 @@ struct DiscoveredServersSection: View {
         ServerRow(server: server, stopping: model.stopping == server.pid) { confirming = server }
       }
       if let occupied = model.discovery?.occupiedPorts, !occupied.isEmpty {
-        Callout(.warning, L10n.t("buildServer.discovery.portTaken", ["ports": occupied.map(String.init).joined(separator: ", ")]))
+        // One sentence per case: behind a tunnel BuildService refuses rather than moves on, and
+        // "Port 8080, 3001 ist belegt" wanted its plural (review 2026-11-13, nebenbei).
+        let list = ["ports": occupied.map(String.init).joined(separator: ", ")]
+        Callout(.warning, behindTunnel ? L10n.t("buildServer.discovery.portTakenTunnel", list, count: occupied.count)
+                : L10n.t("buildServer.discovery.portTaken", list, count: occupied.count))
       }
       if model.discovery?.servers.contains(where: { !$0.ownedByApp }) == true {
         Callout(.info, L10n.t("buildServer.discovery.warning"))
