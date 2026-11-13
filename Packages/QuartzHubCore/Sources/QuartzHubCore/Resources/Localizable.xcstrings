@@ -51,13 +51,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Commit"
+            "value" : "Projekt-Commit"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Commit"
+            "value" : "Project commit"
           }
         }
       }
@@ -899,13 +899,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Snapshot sichert Konfiguration, Plugin-Sperrdatei, Layout-Frames, eigene Stylesheets, Übersetzungen und Veröffentlichungsziele. node_modules, der Build-Ordner und installierte Plugin-Dateien sind nicht enthalten, sie entstehen beim nächsten Build neu."
+            "value" : "Ein Snapshot sichert das ganze Projekt außer node_modules, dem Build-Ordner, den installierten Plugin-Dateien und der git-Geschichte; den Content-Ordner nur, wenn er unten mitgesichert wird. Was fehlt, entsteht beim nächsten Build oder npm install neu."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A snapshot captures the configuration, the plugin lockfile, layout frames, your own stylesheets, translations and publish targets. node_modules, the build folder and installed plugin files are not included; the next build produces them anew."
+            "value" : "A snapshot captures the whole project except node_modules, the build folder, the installed plugin files and the git history; the content folder only when it is included below. What is left out is made again by the next build or npm install."
           }
         }
       }
@@ -935,13 +935,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Noch keine Snapshots. Vor jedem Kern-Update, jeder Plugin-Änderung, jedem Content-Wechsel und jedem Vorlagen-Import wird automatisch einer angelegt."
+            "value" : "Noch keine Snapshots. QuartzHub legt automatisch einen an, bevor es das Projekt ändert, sofern sich seit dem letzten etwas geändert hat; ältere automatische werden ausgedünnt (einer je Tag, Woche, Monat), deine eigenen nie."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No snapshots yet. One is taken automatically before every core update, plugin change, content switch and template import."
+            "value" : "No snapshots yet. QuartzHub takes one automatically before it changes the project, provided something changed since the last; older automatic ones are thinned out (one per day, week, month), your own never."
           }
         }
       }
@@ -63024,7 +63024,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check failed"
+            "value" : "Cannot check"
           }
         }
       }
@@ -63090,13 +63090,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Konflikte in folgenden Dateien (außer den durch .gitattributes geschützten Locale-Dateien):"
+            "value" : "Konflikte in folgenden Dateien:"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conflicts in these files (aside from the locale files .gitattributes protects):"
+            "value" : "Conflicts in these files:"
           }
         }
       }
@@ -63570,6 +63570,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reading …"
+          }
+        }
+      }
+    },
+    "updates.plugins.confirmAll" : {
+      "comment" : "Updates ▸ Plugins: question before Update all",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Plugins aktualisieren?\n\nIhre Dateien und ihre Einträge in quartz.lock.json werden ersetzt. Vorher wird automatisch ein Snapshot angelegt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update all plugins?\n\nTheir files and their entries in quartz.lock.json are replaced. A snapshot is taken automatically first."
+          }
+        }
+      }
+    },
+    "updates.plugins.confirmOne" : {
+      "comment" : "Updates ▸ Plugins: question before one plugin is updated",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„{{name}}“ aktualisieren?\n\nDie Dateien des Plugins und sein Eintrag in quartz.lock.json werden ersetzt. Vorher wird automatisch ein Snapshot angelegt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update “{{name}}”?\n\nThe plugin's files and its entry in quartz.lock.json are replaced. A snapshot is taken automatically first."
           }
         }
       }

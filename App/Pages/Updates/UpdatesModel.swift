@@ -206,7 +206,14 @@ final class UpdatesModel {
     (plugins ?? []).filter { $0.state == .behind || $0.state == .unknown }
   }
 
-  func updatePlugin(_ name: String?) async {
+  /// Asks first, as the core does: it rewrites the plugin's files and its lockfile pin, and ran
+  /// on one click (review 2026-11-13, nebenbei).
+  func updatePlugin(_ name: String?, window: NSWindow?) async {
+    let text = name.map { L10n.t("updates.plugins.confirmOne", ["name": $0]) }
+      ?? L10n.t("updates.plugins.confirmAll")
+    let (question, detail) = Confirm.split(text)
+    guard await Confirm.ask(question, detail: detail, confirm: name == nil ? L10n.t("updates.plugins.updateAll") : L10n.t("updates.plugins.update"),
+                            window: window) else { return }
     pluginRun = name.map { .one($0) } ?? .all
     pluginResult = nil
     let environment = await environment()

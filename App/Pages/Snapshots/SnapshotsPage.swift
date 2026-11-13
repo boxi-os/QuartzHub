@@ -154,8 +154,10 @@ struct SnapshotsPage: View {
       }
       .width(min: 120, ideal: 190)
       if wide {
+        // The project's commit when it was taken, the one the reset switch goes back to; it showed
+        // the store's own commit, which says nothing outside it (review 2026-11-13, nebenbei).
         TableColumn(L10n.t("backups.column.commit")) { snapshot in
-          Text(verbatim: String(snapshot.commit.prefix(7))).font(.system(.body, design: .monospaced)).foregroundStyle(.secondary)
+          Text(verbatim: snapshot.projectHead.map { String($0.prefix(7)) } ?? "–").font(.system(.body, design: .monospaced)).foregroundStyle(.secondary)
         }
         .width(min: 70, ideal: 80, max: 100)
       }
@@ -338,7 +340,9 @@ private struct SnapshotInspector: View {
           Note(L10n.t("backups.contentNotCompared"))
         }
         ForEach(changes, id: \.path) { change in fileRow(change) }
-        if !changes.isEmpty { restore }
+        // Also with no file to restore: the project's commit may still differ, and the switch that
+        // sets it back was out of reach (review 2026-11-13, nebenbei).
+        if !changes.isEmpty || model.headDiffers(snapshot) { restore(filesDiffer: !changes.isEmpty) }
       } else {
         HStack(spacing: 8) {
           ProgressView().controlSize(.small)
@@ -376,7 +380,7 @@ private struct SnapshotInspector: View {
     }
   }
 
-  @ViewBuilder private var restore: some View {
+  @ViewBuilder private func restore(filesDiffer: Bool) -> some View {
     // Moving the project's own branch back is its own decision, off by default: it rewrites git
     // history rather than files.
     if model.headDiffers(snapshot), let head = snapshot.projectHead {
@@ -388,7 +392,7 @@ private struct SnapshotInspector: View {
     // One under the other: side by side they were cut off at the inspector's width.
     VStack(alignment: .leading, spacing: 6) {
       Button(L10n.t("backups.restoreAll")) { run(nil) }
-        .disabled(model.restoring)
+        .disabled(model.restoring || (!filesDiffer && !model.resetHead))
         .accessibilityIdentifier("backups.restoreAll")
       Button(L10n.t("backups.restoreSelected", ["count": String(model.picked.count)])) { run(model.picked.sorted()) }
         .disabled(model.restoring || model.picked.isEmpty)

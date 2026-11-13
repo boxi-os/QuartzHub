@@ -221,7 +221,7 @@ struct UpdatesPage: View {
         } else {
           ForEach(plugins, id: \.name) { plugin in pluginRow(plugin) }
           HStack(spacing: 8) {
-            Button(L10n.t("updates.plugins.updateAll")) { Task { await model.updatePlugin(nil) } }
+            Button(L10n.t("updates.plugins.updateAll")) { Task { await model.updatePlugin(nil, window: unsaved?.window) } }
               .disabled(model.pluginRun != nil || model.actionablePlugins.isEmpty)
               .accessibilityIdentifier("updates.updateAll")
             if model.pluginRun == .all {
@@ -262,7 +262,7 @@ struct UpdatesPage: View {
           ProgressView().controlSize(.small)
           Note(L10n.t("updates.plugins.running"))
         } else {
-          Button(L10n.t("updates.plugins.update")) { Task { await model.updatePlugin(plugin.name) } }
+          Button(L10n.t("updates.plugins.update")) { Task { await model.updatePlugin(plugin.name, window: unsaved?.window) } }
             .disabled(model.pluginRun != nil)
             .accessibilityLabel("\(L10n.t("updates.plugins.update")): \(plugin.name)")
         }
