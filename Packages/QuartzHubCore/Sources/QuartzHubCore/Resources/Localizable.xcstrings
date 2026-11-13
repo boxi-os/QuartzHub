@@ -8757,6 +8757,25 @@
         }
       }
     },
+    "extraContent.files.exists" : {
+      "comment" : "Plugins ▸ Zusätzliche Inhalte ▸ Dateien: a file of that name is already there (replace or cancel)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„{{name}}“ gibt es in {{dir}} schon. Ersetzen?\n\nErsetzen überschreibt die Datei; wer sie benutzt, bekommt die neue."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“{{name}}” already exists in {{dir}}. Replace it?\n\nReplacing overwrites the file; whatever uses it gets the new one."
+          }
+        }
+      }
+    },
     "extraContent.files.imageRenameConfirm" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -8800,7 +8819,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„benutzt von“ sucht in den Boxen und ihren Schnipseln, nicht in den Seiten, den Stylesheets oder anderen Plugins."
+            "value" : "„benutzt von“ sucht in den Boxen und ihren Snippets, nicht in den Seiten, den Stylesheets oder anderen Plugins."
           }
         },
         "en" : {
@@ -8908,13 +8927,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kommt aus dem Projektbild unter Konfiguration → Website. In einem Schnipsel bindest du es mit dem Pfad darunter ein."
+            "value" : "Kommt aus dem Projektbild unter Konfiguration ▸ Website. In einem Snippet bindest du es mit dem Pfad darunter ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comes from the project image under Configuration → Site. A snippet includes it with the path below."
+            "value" : "Comes from the project image under Configuration ▸ Site. A snippet includes it with the path below."
           }
         }
       }
@@ -9094,7 +9113,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schnipsel in {{dir}}"
+            "value" : "Snippets in {{dir}}"
           }
         },
         "en" : {
@@ -9460,13 +9479,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installiere das Plugin über den Marktplatz; danach erscheinen seine Boxen hier."
+            "value" : "Dieser Reiter bearbeitet die Boxen des Plugins quartz-layout-box. Installiere es im Marktplatz über „boxi-os/quartz-layout-box“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Install the plugin from the marketplace; its boxes then show up here."
+            "value" : "This tab edits the boxes of the quartz-layout-box plugin. Install it in the marketplace via “boxi-os/quartz-layout-box”."
           }
         }
       }
@@ -9874,13 +9893,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle Optionen"
+            "value" : "Alle Optionen in der Plugin-Liste"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All options"
+            "value" : "All options in the plugin list"
           }
         }
       }
@@ -10546,13 +10565,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ kopieren"
+            "value" : "„{{name}}“ duplizieren"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy “{{name}}”"
+            "value" : "Duplicate “{{name}}”"
           }
         }
       }
@@ -10672,13 +10691,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eingeschaltet"
+            "value" : "Formulare aktiv"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Switched on"
+            "value" : "Forms enabled"
           }
         }
       }
@@ -10696,7 +10715,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Forms switched on."
+            "value" : "Forms turned on."
           }
         }
       }
@@ -10714,7 +10733,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Switched off, the site builds without forms. Pages that embed one then show the code block or the placeholder."
+            "value" : "When off, the site builds without forms. Pages that embed one then show the code block or the placeholder."
           }
         }
       }
@@ -13937,6 +13956,63 @@
         }
       }
     },
+    "formsEditor.placeholders.keyName" : {
+      "comment" : "Plugins ▸ Formulare ▸ Schlüssel: example in the empty key name field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "redaktion"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "editors"
+          }
+        }
+      }
+    },
+    "formsEditor.placeholders.recipientName" : {
+      "comment" : "Plugins ▸ Formulare ▸ Relay: example in the empty recipient name field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kontakt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "contact"
+          }
+        }
+      }
+    },
+    "formsEditor.placeholders.successSlug" : {
+      "comment" : "Plugins ▸ Formulare: example in the empty success-page slug field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "danke"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks"
+          }
+        }
+      }
+    },
     "formsEditor.pluginTexts" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -16326,7 +16402,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Folder"
+            "value" : "Subfolder"
           }
         }
       }
@@ -34350,6 +34426,25 @@
         }
       }
     },
+    "main.relaySecretsMissing" : {
+      "comment" : "Relay upload: its secrets could not be read back from the keychain (not a connection, so not Settings ▸ Connections)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Adressen und das Secret des Relays fehlen im Schlüsselbund, etwa weil der Eintrag dort gelöscht wurde. Trage die Adressen unter Plugins ▸ Formulare im Abschnitt „Relay“ neu ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The relay’s addresses and secret are missing from the Keychain, for example because the item was deleted there. Enter the addresses again under Plugins ▸ Forms in the “Relay” section."
+          }
+        }
+      }
+    },
     "main.relaySubdirInvalid" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -34724,13 +34819,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die gespeicherten Zugangsdaten fehlen im Schlüsselbund, etwa weil der Eintrag dort gelöscht wurde. Gib sie unter Einstellungen → Zugänge neu ein."
+            "value" : "Die gespeicherten Zugangsdaten fehlen im Schlüsselbund, etwa weil der Eintrag dort gelöscht wurde. Gib sie unter Einstellungen ▸ Zugänge neu ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The stored credentials are missing from the Keychain, for example because the item was deleted there. Enter them again under Settings → Connections."
+            "value" : "The stored credentials are missing from the Keychain, for example because the item was deleted there. Enter them again under Settings ▸ Connections."
           }
         }
       }
@@ -37150,13 +37245,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle Optionen"
+            "value" : "Alle Optionen in der Plugin-Liste"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All options"
+            "value" : "All options in the plugin list"
           }
         }
       }
@@ -37175,6 +37270,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A new code does not rename folders or files in the content; default language and publishing follow it."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.codeLabel" : {
+      "comment" : "Plugins ▸ Mehrsprachigkeit, new language: the field for its code (config key code)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprachcode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language code"
           }
         }
       }
@@ -37366,13 +37480,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eingeschaltet"
+            "value" : "Mehrsprachigkeit aktiv"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On"
+            "value" : "Multiple languages enabled"
           }
         }
       }
@@ -37552,13 +37666,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ohne die Beschreibung des Plugins gibt es keine Gliederung. Was die Konfiguration setzt, steht unter „Weitere Optionen“; alles andere unter „Alle Optionen“."
+            "value" : "Ohne die Beschreibung des Plugins gibt es keine Gliederung. Was die Konfiguration setzt, steht unter „Weitere Optionen“; alles andere unter „Alle Optionen in der Plugin-Liste“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Without the plugin’s description there are no groups. What the configuration sets is under “More options”; everything else under “All options”."
+            "value" : "Without the plugin’s description there are no groups. What the configuration sets is under “More options”; everything else under “All options in the plugin list”."
           }
         }
       }
@@ -37588,13 +37702,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieser Reiter bearbeitet die Sprachen einer Website mit quartz-multilanguage. Installiere das Plugin im Marktplatz, dann erscheinen sie hier."
+            "value" : "Dieser Reiter bearbeitet die Sprachen einer Website mit quartz-multilanguage. Installiere es im Marktplatz über „boxi-os/quartz-multilanguage“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This tab edits the languages of a site with quartz-multilanguage. Install the plugin from the marketplace and they appear here."
+            "value" : "This tab edits the languages of a site with quartz-multilanguage. Install it in the marketplace via “boxi-os/quartz-multilanguage”."
           }
         }
       }
@@ -38386,7 +38500,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Navigation active"
+            "value" : "Navigation enabled"
           }
         }
       }
@@ -38473,7 +38587,7 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Navigation"
+                  "value" : "Eine Navigation"
                 }
               },
               "other" : {
@@ -38491,7 +38605,7 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Navigation"
+                  "value" : "One navigation"
                 }
               },
               "other" : {
@@ -41182,13 +41296,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Speichert ohne Button: Schalter sofort, Textfelder beim Verlassen."
+            "value" : "Schalter speichern sofort, Textfelder beim Verlassen; was einen eigenen Button hat, speichert erst damit."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saves without a button: switches right away, text fields when you leave them."
+            "value" : "Switches save right away, text fields when you leave them; anything with its own button saves only with it."
           }
         }
       }
@@ -41462,7 +41576,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "{{active}} of {{total}} active"
+            "value" : "{{active}} of {{total}} enabled"
           }
         }
       }
@@ -41741,7 +41855,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Active"
+            "value" : "Enabled"
           }
         }
       }
@@ -41777,7 +41891,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inactive"
+            "value" : "Disabled"
           }
         }
       }
@@ -43037,7 +43151,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Active"
+            "value" : "Enabled"
           }
         }
       }
@@ -50559,13 +50673,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "„{{name}}“ kommt auf dieser Seite nicht mehr vor. „Neu suchen“ liest die Seiten erneut."
+            "value" : "„{{name}}“ kommt auf dieser Seite nicht mehr vor. „Neu suchen“ unter „Einbinden“ im Inspektor liest die Seiten erneut."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“{{name}}” is no longer on this page. “Search again” reads the pages again."
+            "value" : "“{{name}}” is no longer on this page. “Search again” under “Embedding” in the inspector reads the pages again."
           }
         }
       }

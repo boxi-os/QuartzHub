@@ -135,11 +135,12 @@ struct ExtraContentFiles: View {
     reload += 1
   }
 
-  /// An existing file is a question with three answers: replace, keep the one there, or stop.
-  private func replaceOrKeep(_ name: String, _ dir: String) async -> Confirm.Choice {
-    let (question, detail) = Confirm.split(L10n.t("snippets.fileExists", ["name": name, "dir": dir]))
-    return await Confirm.choose(question, detail: detail, alternative: L10n.t("snippets.useExisting"), confirm: L10n.t("snippets.replace"),
-                                destructive: true, window: unsaved?.window)
+  /// An existing file: replace it or stop. Two answers here, not the field's three: "Vorhandene
+  /// verwenden" selects the file for a field, and this list has nothing to select, so the
+  /// answer did what "Abbrechen" does (review 2026-11-13, nebenbei).
+  private func askReplace(_ name: String, _ dir: String) async -> Bool {
+    let (question, detail) = Confirm.split(L10n.t("extraContent.files.exists", ["name": name, "dir": dir]))
+    return await Confirm.ask(question, detail: detail, confirm: L10n.t("snippets.replace"), destructive: true, window: unsaved?.window)
   }
 
   private func addSnippet(_ dir: String) async {
@@ -148,7 +149,7 @@ struct ExtraContentFiles: View {
       let project = projectPath
       var result = try await Task.detached { try Snippets().importSnippet(project: project, dir: dir, source: source, name: nil, overwrite: false) }.value
       if case .exists(let name) = result {
-        guard await replaceOrKeep(name, dir) == .confirm else { return }
+        guard await askReplace(name, dir) else { return }
         result = try await Task.detached { try Snippets().importSnippet(project: project, dir: dir, source: source, name: nil, overwrite: true) }.value
       }
       if case .written(let name) = result { Announce.post(L10n.t("extraContent.files.addedAnnounce", ["name": name])) }
@@ -162,7 +163,7 @@ struct ExtraContentFiles: View {
       switch result {
       case .written(let file): Announce.post(L10n.t("extraContent.files.addedAnnounce", ["name": file]))
       case .exists(let file):
-        guard await replaceOrKeep(file, dir) == .confirm else { return }
+        guard await askReplace(file, dir) else { return }
         _ = try await Task.detached { try Snippets().writeSnippet(project: project, dir: dir, file: file, content: "", overwrite: true) }.value
         Announce.post(L10n.t("extraContent.files.addedAnnounce", ["name": file]))
       }
@@ -178,7 +179,7 @@ struct ExtraContentFiles: View {
       if case .exists(let path) = result {
         // The name alone: with the folder named after it, the question read „„images/x.png“ gibt
         // es in quartz/static/images schon“, the folder twice (measured 2026-11-09).
-        guard await replaceOrKeep(String(path.dropFirst("images/".count)), LayoutBoxes.imagesDir) == .confirm else { return }
+        guard await askReplace(String(path.dropFirst("images/".count)), LayoutBoxes.imagesDir) else { return }
         result = try await Task.detached { try Snippets().importImage(project: project, source: source, name: nil, overwrite: true) }.value
       }
       if case .written(let path) = result {

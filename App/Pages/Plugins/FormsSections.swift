@@ -44,7 +44,7 @@ struct FormsKeysSection: View {
         VStack(alignment: .leading, spacing: 4) {
           Text(L10n.t("formsEditor.keys.name"))
           TextField(L10n.t("formsEditor.keys.name"), text: Binding(get: { name }, set: { name = $0.trimmingCharacters(in: .whitespacesAndNewlines) }),
-                    prompt: Text(verbatim: "owner"))
+                    prompt: Text(L10n.t("formsEditor.placeholders.keyName")))
             .textFieldStyle(.roundedBorder).labelsHidden()
           Text(L10n.t("formsEditor.keys.nameHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
           if !name.isEmpty, let problem { FieldProblem(Self.nameProblem(problem)) }

@@ -191,7 +191,9 @@ public struct FormsRelay: Sendable {
   func secretsFor() throws(PublishFailure) -> RelaySecrets {
     if let stored = try connections.relaySecrets(projectId) { return stored }
     try connections.saveRelaySecrets(projectId, RelaySecretsChange())
-    guard let made = try connections.relaySecrets(projectId) else { throw PublishFailure(L10n.t("main.secretMissingInKeychain")) }
+    // Its addresses are entered in the forms editor; Settings ▸ Connections has nothing for them
+    // (review 2026-11-13, nebenbei).
+    guard let made = try connections.relaySecrets(projectId) else { throw PublishFailure(L10n.t("main.relaySecretsMissing")) }
     return made
   }
 

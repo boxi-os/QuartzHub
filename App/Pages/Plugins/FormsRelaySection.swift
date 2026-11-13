@@ -738,7 +738,7 @@ struct RelayRecipientField: View {
         VStack(alignment: .leading, spacing: 6) {
           Text(L10n.t("formsEditor.recipientPick.name"))
           TextField(L10n.t("formsEditor.recipientPick.name"), text: Binding(get: { newName }, set: { newName = $0.trimmingCharacters(in: .whitespacesAndNewlines) }),
-                    prompt: Text(verbatim: "kontakt"))
+                    prompt: Text(L10n.t("formsEditor.placeholders.recipientName")))
             .textFieldStyle(.roundedBorder).labelsHidden()
           Text(L10n.t("formsEditor.recipientPick.nameHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
           if !newName.isEmpty, let nameProblem { FieldProblem(nameProblem) }

@@ -320,7 +320,7 @@ struct BoxInspector: View {
                     root: LayoutBoxes.root(options: options, installed: installed), projectPath: model.project.path)
       } else {
         Section(L10n.t("extraContent.optionsHeading")) {
-          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": ""]))
+          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": L10n.t("pluginsInstalled.sourceUnreadable")]))
         }
       }
     }

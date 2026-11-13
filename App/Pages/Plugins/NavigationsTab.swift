@@ -318,7 +318,7 @@ struct NavigationInspector: View {
                     root: NavigationVariants.root(options: options, fields: schema.schema?.fields ?? [], lang: language))
       } else {
         Section(L10n.t("navigationsEditor.optionsHeading")) {
-          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": ""]))
+          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": L10n.t("pluginsInstalled.sourceUnreadable")]))
         }
       }
     }

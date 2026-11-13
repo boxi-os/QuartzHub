@@ -257,8 +257,9 @@ struct ComponentInspector: View {
   private func loadSchema() async {
     schema = nil
     schemaError = nil
+    // Not an empty reason after "konnten nicht gelesen werden:" (review 2026-11-13, nebenbei).
     guard let source = PluginSource(plugin.source) else {
-      schemaError = ""
+      schemaError = L10n.t("pluginsInstalled.sourceUnreadable")
       return
     }
     let environment = await AppServices.current()

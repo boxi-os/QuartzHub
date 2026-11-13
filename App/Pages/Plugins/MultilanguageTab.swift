@@ -375,8 +375,8 @@ private struct AddLanguageForm: View {
   var body: some View {
     let problem = MultilanguageOptions.codeProblem(code, languages)
     VStack(alignment: .leading, spacing: 8) {
-      Text(verbatim: "code").font(.system(.callout, design: .monospaced)).foregroundStyle(.secondary)
-      TextField("code", text: $code, prompt: Text(verbatim: "fr"))
+      Text(L10n.t("multilanguageEditor.codeLabel")).font(.callout).foregroundStyle(.secondary)
+      TextField(L10n.t("multilanguageEditor.codeLabel"), text: $code, prompt: Text(verbatim: "fr"))
         .textFieldStyle(.roundedBorder)
         .labelsHidden()
         .focused($focused)

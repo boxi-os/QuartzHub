@@ -682,7 +682,7 @@ struct SlugField: View {
       TextField(L10n.t("formsEditor.successSlug"), text: Binding(get: { text }, set: { next in
         draft = next
         if slugs.contains(next), next != value { commit(next) }
-      }), prompt: Text(verbatim: "danke"))
+      }), prompt: Text(L10n.t("formsEditor.placeholders.successSlug")))
         .textFieldStyle(.roundedBorder)
         .labelsHidden()
         .focused($focused)
