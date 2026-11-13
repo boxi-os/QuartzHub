@@ -57,8 +57,10 @@ struct StylesPage: View {
         // Once read, and again for a different theme: that is a different variable table.
         if model.config != nil { await model.reloadGraph() }
       }
-      .unsavedChanges(model.dirty, canSave: !model.saving && model.config != nil) { [tab] in
-        await model.save(from: tab)
+      // The same save as the button: ⌘S and „Speichern“ in the leave question skipped the SCSS
+      // check of Eigenes CSS and the fonts' reread (review 2026-11-13, handbook, M4).
+      .unsavedChanges(model.dirty, canSave: !model.saving && model.config != nil) {
+        await save()
       }
       .toolbar {
         // Speichern only with something to save, no badge beside it (as on Konfiguration). Eigenes
