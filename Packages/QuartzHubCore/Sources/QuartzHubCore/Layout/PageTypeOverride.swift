@@ -156,6 +156,21 @@ public enum PageTypeOverride {
     with(config, pageType, [("template", template.map(JSONValue.string))])
   }
 
+  /// A frame renamed: every page type whose `template` named it names the new name, so the page
+  /// types keep their frame (review 2026-11-13, handbook, N2: they fell back to the default
+  /// without a word). Returns the config and the page types it changed, in the file's order.
+  public static func renamingTemplate(_ config: QuartzConfig, from old: String, to new: String) -> (QuartzConfig, [String]) {
+    guard old != new, !old.isEmpty else { return (config, []) }
+    var next = config
+    var changed: [String] = []
+    let byPageType = LayoutBoxes.spread(config.layout?["byPageType"])
+    for pageType in byPageType.keys where byPageType[pageType]?["template"] == .string(old) {
+      next = withTemplate(next, pageType, new)
+      changed.append(pageType)
+    }
+    return (next, changed)
+  }
+
   /// The whole key, also one that customizes nothing (how a stray `{}` from 1.0 leaves the file).
   public static func without(_ config: QuartzConfig, _ pageType: String) -> QuartzConfig {
     var byPageType = LayoutBoxes.spread(config.layout?["byPageType"])

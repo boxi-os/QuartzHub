@@ -214,6 +214,8 @@ final class LayoutModel {
     defer { frameSaving = false }
     let environment = await AppServices.current()
     let take = SnapshotStore.live(environment: environment).take
+    // The name the page types know this frame by, before the save renames it.
+    let oldName = draftIsNew ? nil : frames.first { $0.id == FrameView(draft).id }?.frameName
     do {
       let result = try await LayoutFrames(plugins: .cli(environment: { await AppServices.current() }, snapshot: take))
         .saveFrame(draft, project: project.path)
@@ -233,8 +235,28 @@ final class LayoutModel {
     frameSavedAt = draft
     reloadFrames()
     await syncPluginsFromDisk()
+    if let oldName { await renameTemplates(from: oldName, to: FrameView(draft).frameName) }
     Announce.post(L10n.t("layoutEditor.frameBuilder.saved"))
     return true
+  }
+
+  /// The page types that named the frame by its old name name the new one: in the file, and in the
+  /// stage's open state and its baseline alike, so unsaved stage edits stay unsaved and nothing
+  /// else turns dirty (review 2026-11-13, handbook, N2).
+  private func renameTemplates(from old: String, to new: String) async {
+    let environment = await AppServices.current()
+    guard old != new, let fresh = try? await ConfigFile.read(project: project.path, runtime: environment.runtime) else { return }
+    let (renamed, changed) = PageTypeOverride.renamingTemplate(fresh, from: old, to: new)
+    guard !changed.isEmpty else { return }
+    do {
+      try await ConfigFile.write(renamed, project: project.path, runtime: environment.runtime,
+                                 snapshot: SnapshotStore.live(environment: environment).take)
+    } catch {
+      frameMessage = String(describing: error)
+      return
+    }
+    if let config { self.config = PageTypeOverride.renamingTemplate(config, from: old, to: new).0 }
+    if let saved { self.saved = PageTypeOverride.renamingTemplate(saved, from: old, to: new).0 }
   }
 
   func deleteFrame(_ id: String) async {
