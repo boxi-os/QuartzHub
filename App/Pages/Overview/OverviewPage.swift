@@ -106,27 +106,23 @@ struct OverviewPage: View {
     let issues = ProjectAttention.issues(reads)
     // The band above the cards, across the whole width.
     if !issues.isEmpty {
-      VStack(alignment: .leading, spacing: Spacing.s) {
-        Label {
-          Text("\(L10n.t("dashboard.attention.title"))\(Text(" (\(issues.count))").foregroundStyle(.secondary))")
-        } icon: {
-          Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
-        }
-        .font(.headline)
-        .accessibilityAddTraits(.isHeader)
-        .accessibilityIdentifier("overview.attention")
-        ForEach(issues) { issue in
-          IssueRow(issue: issue, installing: model.busy.contains(.install)) {
-            Task { await model.installDependencies() }
-          } open: {
-            open(issue)
+      // A Callout like every other warning (the orange band of its own is gone, review 2026-11-13).
+      Callout(.warning) {
+        Text("\(L10n.t("dashboard.attention.title"))\(Text(" (\(issues.count))").foregroundStyle(.secondary))")
+          .font(.headline)
+          .accessibilityAddTraits(.isHeader)
+          .accessibilityIdentifier("overview.attention")
+        VStack(alignment: .leading, spacing: Spacing.s) {
+          ForEach(issues) { issue in
+            IssueRow(issue: issue, installing: model.busy.contains(.install)) {
+              Task { await model.installDependencies() }
+            } open: {
+              open(issue)
+            }
           }
         }
+        .padding(.top, Spacing.xxs)
       }
-      .padding(Spacing.m)
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .background(Color.orange.opacity(0.10), in: .rect(cornerRadius: 12))
-      .accessibilityElement(children: .contain)
     } else if ProjectAttention.allGood(reads) {
       Label(L10n.t("dashboard.attention.allGood"), systemImage: "checkmark.circle.fill")
         .foregroundStyle(.green)
@@ -252,7 +248,7 @@ struct OverviewPage: View {
           .accessibilityElement(children: .combine)
           Text("\(Text("\(git.changeCount) ").fontWeight(.semibold).monospacedDigit())\(Text(L10n.t("dashboard.git.uncommitted")).foregroundStyle(.secondary))")
           if let commit = git.lastCommit {
-            Note("„\(commit.subject)“ · \(Formats.relative(Formats.date(iso: commit.date), now: now) ?? "–") · \(commit.author)")
+            Note("\(L10n.t("common.quoted", ["value": commit.subject])) · \(Formats.relative(Formats.date(iso: commit.date), now: now) ?? "–") · \(commit.author)")
               .lineLimit(1)
           }
         }

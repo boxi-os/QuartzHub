@@ -74,10 +74,18 @@ struct MarkedSite: NSViewRepresentable {
   })
   """
 
+  /// Light or dark as QuartzHub shows itself. Quartz's darkmode script keeps the last scheme in
+  /// `localStorage["theme"]` (on a click and on every change of the system's) and from then on no
+  /// longer asks `prefers-color-scheme`; the preview's store outlives a launch, so the site stayed
+  /// dark in a QuartzHub set to light (review 2026-11-13, nebenbei; measured with the plugin's own
+  /// script in WebKit: "dark" before, "light" after). Forgotten before the site's script runs.
+  static let followAppearance = "try { localStorage.removeItem('theme') } catch {}"
+
   func makeNSView(context: Context) -> CutView {
     let configuration = WKWebViewConfiguration()
     let scripts = WKUserContentController()
     scripts.addUserScript(WKUserScript(source: Self.relay, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+    scripts.addUserScript(WKUserScript(source: Self.followAppearance, injectionTime: .atDocumentStart, forMainFrameOnly: true))
     scripts.add(context.coordinator, name: Self.handler)
     configuration.userContentController = scripts
     let web = WKWebView(frame: CGRect(origin: .zero, size: size), configuration: configuration)

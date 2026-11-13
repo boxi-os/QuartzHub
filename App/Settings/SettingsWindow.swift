@@ -65,7 +65,6 @@ private struct GeneralSettings: View {
   @State private var model = SettingsModel()
   @State private var directory = ""
   @State private var directoryFailure: String?
-  @State private var saved = false
 
   var body: some View {
     Form {
@@ -114,7 +113,7 @@ private struct GeneralSettings: View {
                 saveDirectory()
               }
             }
-            Button(saved ? L10n.t("common.saved") : L10n.t("common.save"), action: saveDirectory)
+            Button(L10n.t("common.save"), action: saveDirectory)
               .disabled(directory == (model.file.defaultProjectDirectory ?? ""))
           }
         }
@@ -161,11 +160,9 @@ private struct GeneralSettings: View {
       directoryFailure = nil
       directory = value ?? ""
       model.update { $0.defaultProjectDirectory = value }
-      saved = true
-      Task {
-        try? await Task.sleep(for: .seconds(2))
-        saved = false
-      }
+      // The button greys out once saved; no "Gespeichert" beside it (conventions, toolbar rule),
+      // VoiceOver hears it as on every page with a document.
+      Announce.post(L10n.t("common.saved"))
     } catch let failure as SettingsStore.Failure {
       directoryFailure = failure.message
     } catch {

@@ -354,9 +354,9 @@ extension ProjectOverview {
     return nil
   }
 
-  /// `„Titel“ · adresse`, as QuartzControl's card wrote it.
+  /// `„Titel“ · adresse`, as QuartzControl's card wrote it; the marks are the language's.
   var siteLine: String? {
-    let parts = [siteTitle.map { "„\($0)“" }, baseUrl].compactMap { $0 }
+    let parts = [siteTitle.map { L10n.t("common.quoted", ["value": $0]) }, baseUrl].compactMap { $0 }
     return parts.isEmpty ? nil : parts.joined(separator: " · ")
   }
 

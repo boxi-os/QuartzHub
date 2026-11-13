@@ -3892,6 +3892,25 @@
         }
       }
     },
+    "common.quoted" : {
+      "comment" : "A name or title in quotation marks, in the language's own marks (Projects window, overview)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„{{value}}“"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“{{value}}”"
+          }
+        }
+      }
+    },
     "common.remove" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -5290,7 +5309,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Liefert das Plugin „Fonts“ die Schriften aus, schlägt der Build ohne Base-URL fehl."
+            "value" : "Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Liefert das Plugin „Fonts“ die Schriften aus, schlägt der Build ohne Basis-URL fehl."
           }
         },
         "en" : {
@@ -20798,13 +20817,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nicht mitkopiert werden: Snapshots, beiseitegelegte Content-Ordner und die Veröffentlichungsziele. Die Basis-URL wird übernommen; ändere sie unter „Einrichtung“, wenn das Duplikat woanders stehen soll."
+            "value" : "Nicht mitkopiert werden: Snapshots, beiseitegelegte Content-Ordner und die Veröffentlichungsziele. Die Basis-URL wird übernommen; ändere sie unter „Konfiguration“, wenn das Duplikat woanders stehen soll."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not copied along: snapshots, set-aside content folders and the publishing destinations. The base URL is taken over; change it under “Setup” if the copy belongs somewhere else."
+            "value" : "Not copied along: snapshots, set-aside content folders and the publishing destinations. The base URL is taken over; change it under “Configuration” if the copy belongs somewhere else."
           }
         }
       }
@@ -48656,13 +48675,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hier liegen Projektliste, Einstellungen und die verschlüsselten Zugänge."
+            "value" : "Hier liegen Projektliste, Einstellungen und Zugänge; ihre Passwörter und Token liegen im Schlüsselbund."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Holds the project list, the settings, and the encrypted connections."
+            "value" : "Holds the project list, the settings and the connections; their passwords and tokens are in the keychain."
           }
         }
       }
@@ -49774,6 +49793,25 @@
         }
       }
     },
+    "shell.menu.runBuild" : {
+      "comment" : "Menu Project: build the site (⌘B); title case in English like every menu item",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Build ausführen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run Build"
+          }
+        }
+      }
+    },
     "shell.menu.startServer" : {
       "comment" : "Project menu, while Vorschau & Build is shown",
       "extractionState" : "manual",
@@ -50764,7 +50802,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Adresse, unter der die Website später erreichbar ist (ohne https://). Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Liefert das Plugin „Fonts“ die Schriften aus, schlägt der Build ohne Base-URL fehl."
+            "value" : "Die Adresse, unter der die Website später erreichbar ist (ohne https://). Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Liefert das Plugin „Fonts“ die Schriften aus, schlägt der Build ohne Basis-URL fehl."
           }
         },
         "en" : {
@@ -59697,13 +59735,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dafür muss eine Basis-URL gesetzt sein (Konfiguration → Basis-URL). Die Schrift-URLs werden darauf umgeschrieben, sonst bricht der Build ab."
+            "value" : "Dafür muss eine Basis-URL gesetzt sein (Konfiguration ▸ Basis-URL). Die Schrift-URLs werden darauf umgeschrieben, sonst bricht der Build ab."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This needs a base URL (Configuration → base URL). The font URLs are rewritten to it, and the build fails without one."
+            "value" : "This needs a base URL (Configuration ▸ Base URL). The font URLs are rewritten to it, and the build fails without one."
           }
         }
       }

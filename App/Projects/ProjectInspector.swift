@@ -165,14 +165,11 @@ struct EnvironmentBand: View {
 
   var body: some View {
     let broken = report.broken
-    VStack(alignment: .leading, spacing: 6) {
-      Label {
-        // "Fehlen" is only true while none of them is there.
-        Text(broken.allSatisfy { $0.path == nil } ? L10n.t("home.environment.titleProblem") : L10n.t("home.environment.titleUnusable"))
-          .font(.headline)
-      } icon: {
-        Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
-      }
+    // A Callout like every other warning (the orange band of its own is gone, review 2026-11-13).
+    Callout(.warning) {
+      // "Fehlen" is only true while none of them is there.
+      Text(broken.allSatisfy { $0.path == nil } ? L10n.t("home.environment.titleProblem") : L10n.t("home.environment.titleUnusable"))
+        .font(.headline)
       Text(L10n.t("home.environment.description")).foregroundStyle(.secondary)
       ForEach(broken, id: \.name) { tool in
         Text("\(tool.name) — \(tool.incompatible ? L10n.t("home.environment.incompatibleTool") : tool.path != nil ? L10n.t("home.environment.brokenTool") : L10n.t("home.environment.missing"))")
@@ -183,9 +180,6 @@ struct EnvironmentBand: View {
         .foregroundStyle(.secondary)
       Button(L10n.t("home.environment.recheck"), action: recheck)
     }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(12)
-    .background(.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
     .padding([.horizontal, .top], 12)
     .accessibilityElement(children: .contain)
     .accessibilityIdentifier("environment.band")

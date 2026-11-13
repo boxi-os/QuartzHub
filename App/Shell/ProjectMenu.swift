@@ -17,7 +17,7 @@ struct ProjectMenu: Commands {
         .keyboardShortcut(".", modifiers: .command)
         .disabled(actions?.canStop != true)
       Divider()
-      Button(L10n.t("dashboard.build.run")) { actions?.build() }
+      Button(L10n.t("shell.menu.runBuild")) { actions?.build() }
         .keyboardShortcut("b", modifiers: .command)
         .disabled(actions == nil)
       Divider()
