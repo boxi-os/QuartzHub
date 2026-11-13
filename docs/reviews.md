@@ -130,3 +130,27 @@ vorliest; System Events zeigt bei keiner SwiftUI-Checkbox der App einen Titel.
 Zwei Kerntests waren unter der Last des Gesamtlaufs je einmal rot und allein grün:
 `BuildServerTests.twoClicksOnStartAreOneServerAndARestartKeepsItsPorts`, `GitBranchTests.aRemoteThatNeverAnswersEndsAtTheDeadline`
 (Fristen), dazu `HostPathTests.nothingFoundStaysInherited` (8 s).
+
+### Nebenbei (2026-11-13)
+
+| Bereich | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| Selbst gesehen | Anführungszeichen der Sprache, Warnungen als `Callout`, kein „Gespeichert.“ neben Speichern, „Basis-URL“, „Run Build“; die Vorschau folgt Hell/Dunkel von QuartzHub (Quartz' `localStorage["theme"]` wird vor dem Laden vergessen) | `04e5b40` |
+| Konfiguration | Plural, Reiter „Translations“, Fehler der Übersetzungen in QuartzHubs Worten, Update-Schutz ohne git erklärt, Links/Frontmatter wieder einschaltbar, Statistik-Felder mit Namen, relative Quellpfade relativ zum Projekt | `f693c8c` |
+| Plugins | Platzierung in Worten, „Ohne Position“, fehlendes Paket benannt, Entfernen während der Wartung gesperrt, Marktplatz warnt vor nicht markierten Repositories | `d483ecb` |
+| Plugin-Editoren | ein Wort je Ding (aktiv/enabled, duplizieren, Snippet), keine leeren Gründe, Dateien-Frage mit zwei Antworten, Relay-Geheimnisse mit eigenem Satz | `719ba67` |
+| Layout | ⌥⌘↑/↓ über „Anordnen“ auf der Bühne, Gruppe löschen löst die Mitglieder, Gap ohne Wert fällt auf Quartz' Vorgabe, Snapshot vor Frame-Bearbeitung und Umschaltbreiten | `89bdf0c` |
+| Stile | wahre Ladereihenfolge, Presets „Aktiv“ nach Optionen, Fehler beim Anwenden und Löschen gesagt, Hell/Dunkel und Schriftrollen mit Namen | `76556dc` |
+| Vorlagen | Häkchen folgen dem Projekt, zu große Bausteine mit Grund, „Projekt gewinnt“ zeigt die übersprungenen Bausteine, „Bausteine“ und „Notizen (content/)“ | `b5fe6e5` |
+| Vorschau & Build | Übersicht startet mit den Optionen der Seite, Port-Warnung hinter einem Tunnel, ⌘B-Ergebnis auf der Seite, „Nicht gebaut“ bei fehlenden Paketen | `68391c1` |
+| Git-Sync, Dokumente | eigene Wörter beim Laden und Laufen, ein abgebrochener Export ist grau „abgebrochen“, kein „Speichere…“ auf Knöpfen, die nicht speichern | `ce5edde` |
+| Veröffentlichen | frische Zahlen vor der Rückfrage, das Ergebnis bleibt nach „Diff aktualisieren“, Manifest geht mit dem Ziel, Nutzung zählt Projekte, Webhook-Wort | `19e59d0` |
+| Updates, Snapshots | Ausdünnen und Überspringen gesagt, Spalte „Projekt-Commit“, Reset auch ohne geänderte Dateien, Rückfrage vor Plugin-Updates | `32597c8` |
+| Texte allgemein | amerikanisches Englisch, Menüs in Title Case, vier QuartzControl-Texte aus dem Katalog | `3e13d34` |
+
+Im Handbuch nachgezogen: 4.x und 8.2 (Translations), 5.5, 5.9, 7.1, 7.2, die englischen Seitennamen (Vault `5c9c4d4`, `85a7028`,
+`6083395`, `271c380`, `d4a68e5`). Nicht an der App gesehen: Marktplatz (Netz), Plugin-Editoren (nur Texte), Abbruch eines Exports
+und Veröffentlichen (die Ziele der Kopien sind echt). Zur Entscheidung offen: gemeinsame Fächer beim Ausdünnen der Snapshots
+(QuartzControls Regel, Golden File) und die Update-Quelle (Status jackyzha0/quartz, Lauf `quartz-upstream`). Nebenbei
+aufgefallen: Neu starten von Vorschau & Build nimmt die Optionen des laufenden Servers, nicht die der Seite
+(`BuildService.restartServer`).

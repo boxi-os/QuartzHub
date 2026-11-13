@@ -197,6 +197,13 @@ System Events nachmessen.
 
 Nach Bereich. Ohne Kennzeichnung: *(Faktenblatt)*.
 
+**Abgearbeitet am 2026-11-13**, ein Commit je Bereich (Chronik in `docs/reviews.md`). Nicht geändert,
+mit Grund: die 15 s beim Aufnehmen (nicht nachstellbar, 0,8 s), die Kollisionswarnung der Stile (sie
+prüft zu Recht nur custom.scss), das Kern-Update, das nur die Paketdateien zurücklegt (QuartzControls
+Ablauf; was sonst geändert ist, meldet git beim Merge), der Merge-Betreff. Zur Entscheidung offen: das
+Ausdünnen der Snapshots mit gemeinsamen Fächern und die Update-Quelle (Status gegen jackyzha0/quartz,
+Lauf gegen `quartz-upstream`).
+
 **Selbst gesehen** *(gesehen)*
 
 - Fenster Projekte (Zeile der Website) und Übersicht (Git-Karte): „…“ deutsche Anführungszeichen fest
