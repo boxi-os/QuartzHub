@@ -311,6 +311,10 @@ public struct FormsRelay: Sendable {
     }
     let configModeChanged = last?["configReadable"].map { $0 != settings["configReadable"] } ?? false
     let operatorChanged = last?["operator"].map { $0 != .string(Self.operatorStamp(settings, info.fingerprint)) } ?? false
+    // storageAvailable stays in the state for QuartzControl's format (Electron's safeStorage could be
+    // missing on Linux); on macOS the Keychain is always there, so it is true, and the two hints
+    // for "no storage" are gone from the page - their sentence about placeholders was not even
+    // what the export does (review 2026-11-13, handbook, N9).
     return RelayState(settings: settings, lastUpload: last, removedAt: last == nil ? file.removedAt : nil,
                       secrets: .init(stored: info.stored, recipients: info.recipients, captchaSecret: info.captchaSecret,
                                      captchaSecrets: info.captchaSecrets, storageAvailable: true, missing: info.missing),

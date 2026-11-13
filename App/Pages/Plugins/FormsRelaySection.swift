@@ -113,7 +113,6 @@ import SwiftUI
 
   static func blockers(_ r: RelayState, missing: [String], missingCaptcha: [String]) -> [String] {
     var out: [String] = []
-    if !r.secrets.storageAvailable { out.append(L10n.t("formsEditor.relay.blockStorage")) }
     if r.settings["targetId"]?.stringValue.map({ $0.isEmpty }) ?? true { out.append(L10n.t("formsEditor.relay.blockTarget")) }
     if (r.settings["from"]?.stringValue ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { out.append(L10n.t("formsEditor.relay.blockFrom")) }
     if !missing.isEmpty { out.append(L10n.t("formsEditor.relay.blockRecipients", ["names": missing.joined(separator: ", ")])) }
@@ -197,7 +196,6 @@ struct FormsRelaySection: View {
           Text(verbatim: problem).font(.system(.caption, design: .monospaced)).textSelection(.enabled)
         }
       }
-      if !r.secrets.storageAvailable { Callout(.warning, L10n.t("formsEditor.relay.noStorage")) }
       if r.secrets.missing { Callout(.warning, L10n.t("relay.secretsMissing")) }
       if let message { Callout(.error, message) }
     }
