@@ -367,6 +367,14 @@ nach Abhängigkeit:
   `Resources/templates/qc-basic.qtpl` dorthin kopieren, die README des Repos und den
   Fußzeilen-Link der Vorlage (`QuartzControl` → ?) nachziehen. QuartzHub liefert keine Kopie aus;
   bis dahin bekommt ein Release-Bau die Online-Fassung.
+- **Die Example-Vorlage bleibt im Angebot** (Entscheidung 2026-11-13): `qc-example.qtpl` im Vorlagen-Repo
+  zeigt fast alle Möglichkeiten samt Gestaltung. Sie baut immer auf der aktuellen Grundvorlage `qc-basic`
+  auf: dieselbe Gestaltung, dazu der Inhalt des Example-Vaults (`~/Obsidian/QuartzProjekte/Example`,
+  öffentlich als `boxi-os/Quartz-Example-Template`). Ändert sich `qc-basic`, wird die Example-Vorlage neu
+  erzeugt. Erzeugt wird sie mit QuartzHub („Vorlagen ▸ Erstellen“ am Example-Projekt), nicht mehr mit
+  QuartzControls `build-example-template.mjs`. Die Fassung von 1.2.0 im Repo stammt noch von vor Quartz 5.1.
+  Neu erzeugt wird sie nach dem Umstellen des Vaults auf QuartzHub (338 Stellen in 98 Dateien,
+  Stand 2026-11-13), zusammen mit dem Plugin-Handbuch nach dem Abschalten von QuartzControl.
 - **Bei jedem Quartz-Update: mehrfache Plugins prüfen** (Entscheidung 2026-11-11). layout-box und
   navigations stehen je Box bzw. Navigation einmal in der Config; `plugin doctor` nennt das einen
   Fehler, QuartzHub kennzeichnet ihn als „gewollt“. Nachsehen, ob `quartz/plugins/loader/config-loader.ts`
