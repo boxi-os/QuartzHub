@@ -146,7 +146,10 @@ final class OverviewModel {
     busy.insert(.build)
     defer { busy.remove(.build) }
     buildMessage = nil
-    switch await BuildAction.run(projectId: project.id, project: path) {
+    // Into the folder the project saved, as ⌘B and Veröffentlichen build: without it the overview
+    // built into public/ while Veröffentlichen uploaded dist (review 2026-11-13, handbook, M3).
+    let saved = ProjectPrefsStore.read(project: path).outputDir
+    switch await BuildAction.run(projectId: project.id, project: path, outputDir: saved.isEmpty ? nil : saved) {
     case .finished(let result):
       buildMessage = result.success ? L10n.t("dashboard.build.done") : L10n.t("dashboard.build.failed")
       Announce.post(buildMessage!)

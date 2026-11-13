@@ -104,11 +104,16 @@ final class BuildServerModel {
 
   // MARK: Build
 
+  /// The field is taken first, as Return or leaving it would: the build goes where the project
+  /// says it builds, checked, and not into a value typed a moment ago that nothing else knows
+  /// (review 2026-11-13, handbook, M3). A refused folder builds nothing.
   func runBuild() async {
     clicked = true
     buildResult = nil
     defer { clicked = false }
-    buildResult = await Self.build(project, outputDir: outputDir)
+    await commitOutputDir(outputDir)
+    guard outputDirError == nil else { return }
+    buildResult = await Self.build(project, outputDir: savedOutputDir)
     await refreshOutput()
   }
 
