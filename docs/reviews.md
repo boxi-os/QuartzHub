@@ -97,7 +97,8 @@ Testrückstand vom 2026-11-06 (eine URL als Pfad).
 
 Bericht `REVIEW-2026-11-13-handbuch.md` (Stand `6bfb1fa`, kein Auftrag: gesammelt beim Schreiben des
 Handbuchs): 2 Hoch, 4 Mittel, 13 Niedrig, rund 100 nebenbei; mit den Büchern kamen M5, N14 und N15 dazu. Der
-Nutzer wählte zuerst H1 und H2, dann M5, N14, N15 und die übrigen.
+Nutzer wählte zuerst H1 und H2, dann M5, N14, N15 und die übrigen; N2 bis N13 hat vorher ein
+Agent im Code nachgelesen (6 bestätigt, 6 teilweise, keiner widerlegt). Offen ist nur die Liste nebenbei.
 
 | Befund | Was jetzt stimmt | Commit |
 | --- | --- | --- |
@@ -108,8 +109,24 @@ Nutzer wählte zuerst H1 und H2, dann M5, N14, N15 und die übrigen.
 | M2 | Beim ersten Einrichten von GitHub Pages geht die eingetragene Domain mit (PUT nach dem POST); nicht gegen GitHub selbst gemessen | `5f92c12` |
 | M3 | Alle Wege bauen in den gespeicherten Ausgabeordner; „Jetzt bauen“ übernimmt das Feld vorher (der zweite Teil war mit der Maus nicht nachzustellen) | `7341206` |
 | M4 | ⌘S und „Speichern“ beim Verlassen auf Stile speichern wie der Knopf, mit SCSS-Prüfung danach | `2144a5f` |
+| N1 | Eine Plugin-Quelle mit „-“ am Anfang erreicht `quartz plugin add` nicht (PluginSource im Kern) | `98c7a97` |
+| N2 | Umbenennen eines Frames zieht die Seitentypen mit; Löschen fragte schon | `5f433c0` |
+| N3 | Ein neuer, kopierter oder angepasster Frame gilt bis zum Speichern als ungespeichert | `f005600` |
+| N4 | Der Snippet-Entwurf fragt beim Schließen des Fensters und Beenden (nicht an der App gemessen) | `68cb6cc` |
+| N5 | Importieren fragt vor dem Ersetzen und trägt die Datei nicht doppelt ein (nicht an der App gemessen) | `55e81ed` |
+| N6 | Zurückholen und Quelle wechseln laufen als RunningWork; der Rest des Befunds hielt nicht (nicht an der App gemessen) | `54e0492` |
+| N7 | „Merge abbrechen“ nennt vorher die vorgemerkten Dateien; die Wortwahl „Update“ bleibt (nicht an der App gemessen) | `22a6e79` |
+| N8 | Entfernen eines von mehreren gleichnamigen Einträgen nimmt den versprochenen Snapshot (nicht an der App gemessen) | `ff2d692` |
+| N9 | Keine Hinweise mehr für einen Schlüsselbund, der unter macOS nicht fehlen kann | `40580c1` |
+| N10 | Der Bereichsname sagt, als was er gespeichert wird (nicht an der App gemessen) | `6827abe` |
+| N11 | Token entfernen fragt; ein abgelehnter Token wird nicht gespeichert (Einstellungen ▸ Zugänge) | `363c08b` |
+| N12 | rsync: kein „Alles neu hochladen“, kein falscher Hinweis, eine klare Warnung beim Löschen (nicht an der App gemessen) | `258e028` |
+| N13 | Der Kopierfortschritt zählt sichtbare Dateien und nie über die Gesamtzahl | `0e33f62` |
 | N14 | ➕ Neues Buch fragt zuerst nach dem Titel und zeigt den Dateinamen, der daraus wird | `731bc55` |
 | N15 | Die Format-Schalter des Ziels „Dokument“ sind drei Elemente mit eigener Kennung; ein Klick schaltet das richtige | `83e2271` |
 
 Im Handbuch nachgezogen: 5.4 und 7.3 (Vault `d6c3234`). Zu N14: 6.6 (Vault, mit Schritt 7). Nicht gemessen zu N15: was VoiceOver
 vorliest; System Events zeigt bei keiner SwiftUI-Checkbox der App einen Titel.
+Zwei Kerntests waren unter der Last des Gesamtlaufs je einmal rot und allein grün:
+`BuildServerTests.twoClicksOnStartAreOneServerAndARestartKeepsItsPorts`, `GitBranchTests.aRemoteThatNeverAnswersEndsAtTheDeadline`
+(Fristen), dazu `HostPathTests.nothingFoundStaysInherited` (8 s).

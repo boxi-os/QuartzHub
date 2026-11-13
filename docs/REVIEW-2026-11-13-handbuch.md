@@ -116,13 +116,16 @@ in der Symbolleiste danach tut (SCSS-Prüfung des eigenen CSS, Schriften neu les
 ### Niedrig
 
 **N1. Eine von Hand eingetragene Quelle im Marktplatz geht ungeprüft an `npx quartz plugin add`,
-auch mit „-“ am Anfang.** *(gelesen)* `App/Pages/Plugins/MarketplaceTab.swift:158-162` →
+auch mit „-“ am Anfang.** *(gelesen)* **Erledigt** (`98c7a97`). `App/Pages/Plugins/MarketplaceTab.swift:158-162` →
 `Plugins/PluginCommands.swift:41`, ohne `--`. `PluginSource.swift:16` hat die Prüfung
 (`!source.hasPrefix("-")`, Länge), wird hier aber nicht benutzt. Getippt vom Nutzer selbst, daher
 Niedrig; widerspricht der Regel „ein Name, der einem Programm übergeben wird, beginnt nie mit -“.
 Dazu: Die Beschreibung sagt „owner/repo“, der Platzhalter „github:owner/repo“.
 
 Die folgenden nur aus Faktenblättern *(Faktenblatt)*:
+
+Am 2026-11-13 von einem Agenten im Code nachgelesen und alle abgearbeitet; was dabei nicht hielt, steht
+in der Chronik (`docs/reviews.md`). **Alle erledigt.**
 
 - **N2.** Frame umbenennen bricht `byPageType.*.template`, das auf den alten Namen zeigt, ohne
   Warnung; Frame löschen lässt solche Verweise verwaist zurück.
