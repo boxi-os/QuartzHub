@@ -348,6 +348,9 @@ nach Abhängigkeit:
   4. Englisch je Teil gleich nach dem Deutschen.
   5. `qh-check handbook`: wörtliche Zitate gegen den Katalog, beide Sprachen (fertig 2026-11-13).
   6. PDF und ePub über die Seite „Dokumente“, je Sprache ein Buch; epubcheck und `check:export`.
+     Fertig 2026-11-13: `quartz-books/quartzhub-handbuch.json` und `quartzhub-handbook.json`, zwei Ziele
+     „Dokument“ nach `~/Documents/QuartzProjekte/QuartzHub-Web-Dokumente` (PDF und ePub); Befunde M5, N14, N15
+     in `REVIEW-2026-11-13-handbuch.md`.
   7. Anbinden: Hilfe ▸ Handbuch, „Im Handbuch nachlesen“ im Inspektor, Link im Fenster „Projekte“,
      dazu der Hinweis auf eine neuere Fassung (die vier offenen Zeilen der Gleichstand-Liste).
   8. Online (Repo `boxi-os/QuartzHub-Handbuch`, GitHub Pages über „Veröffentlichen“) erst nach

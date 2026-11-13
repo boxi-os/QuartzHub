@@ -12,7 +12,7 @@ Wie belastbar ein Befund ist, steht dahinter:
 - *(Faktenblatt)*: nur aus dem Faktenblatt eines Subagenten, nicht nachgelesen. Vor einem Fix
   erst nachstellen; einzelne können falsch sein (zwei waren es, siehe „Verworfen“).
 
-Kurz: **2 Hoch, 4 Mittel, 13 Niedrig, rund 100 nebenbei** (meist Texte und Uneinheitliches). Beide
+Kurz: **2 Hoch, 5 Mittel, 15 Niedrig, rund 100 nebenbei** (meist Texte und Uneinheitliches; M5, N14 und N15 kamen mit den Büchern dazu). Beide
 Hoch-Befunde verlieren Arbeit des Nutzers ohne Frage: Ein Restore mit „Auch den Projekt-Commit
 zurücksetzen“ kann ungesicherte Notizen verwerfen, und Speichern eines Frames verwirft ungespeicherte
 Änderungen auf der Bühne. Bei H1, H2 und M1 sagt das Handbuch, wie man den Fehler umgeht; nach einem
@@ -149,6 +149,41 @@ Die folgenden nur aus Faktenblättern *(Faktenblatt)*:
   löscht.
 - **N13.** Konfiguration: Der Kopierfortschritt beim Wechsel der Content-Quelle kann über 100 %
   gehen (zählt Ordner und versteckte Dateien mit).
+
+### Nachtrag: aus den Büchern des Handbuchs (Plan, Handbuch 6; 2026-11-13)
+
+Beim Anlegen und Exportieren der zwei Bücher über **Dokumente** und **Veröffentlichen** am Projekt
+QuartzHub-Web *(gesehen)*:
+
+**M5. Im PDF ist „ff“ als Text verloren: Die Suche findet „Veröffentlichen“ und „öffnen“ nicht.**
+*(gesehen, gemessen)*
+
+- Messung: Text des deutschen PDFs über PDFKit (`PDFDocument.string`): „Verö!entlichen“ 42-mal,
+  „ö!nen“ 33-mal; `findString("Veröffentlichen")` trifft 2-mal, obwohl das Wort auf rund 40 Seiten
+  steht. Englisch dasselbe („di!erently“, „o!ers“). „fi“ und „fl“ sind heil. Die Glyphen sehen
+  richtig aus; nur die Zuordnung zum Text fehlt (Ligatur „ff“ der Noto Sans, `fontOrigin: local`).
+- Folge: Suchen, Kopieren und Vorlesen im PDF scheitern an jedem Wort mit „ff“. ePub und HTML sind
+  nicht betroffen (dort ist es Text).
+- Ursache nicht gesucht: ob WebKits PDF die Zuordnung schon nicht hat oder `PDFWrite` sie beim
+  Nachbearbeiten verliert. Erster Versuch: `font-variant-ligatures: no-common-ligatures` im
+  Druck-Stylesheet von `DocumentHTML`, dann dieselbe Messung.
+- Handbuch: nicht betroffen, aber das PDF des Handbuchs selbst.
+
+**N14. ➕ Neues Buch fragt nicht nach einem Namen: Die Datei heißt immer `neues-buch.json`
+(englisch `new-book.json`), und so heißen auch PDF und ePub.** *(gesehen)*
+`App/Pages/Documents/DocumentsModel.swift:184` legt das Buch sofort mit dem Platzhaltertitel an;
+der Name entsteht daraus (`BookFile.id(fromTitle:)`) und bleibt. Wie QuartzControl
+(`routes/Documents/index.tsx:136`). Umbenennen geht nur im Finder. Vorschlag: wie ➕ Neues Formular
+zuerst nach dem Titel fragen. Für die Bücher des Handbuchs von Hand umbenannt.
+Handbuch: 6.6 beschreibt es jetzt so, wie es ist.
+
+**N15. Die drei Format-Schalter im Ziel „Dokument“ sind für die Bedienungshilfen ein einziges
+Element.** *(gesehen)* `App/Pages/Publish/TargetSheet.swift:264-269`: Die Toggles stehen in einem
+`LabeledContent`; System Events sieht drei Markierungsfelder, alle mit dem Namen „Formate“ und an
+derselben Position, und ein Klick auf das zweite schaltete PDF aus. VoiceOver erreicht ePub und HTML
+damit nicht. Vorschlag: jedem Toggle sein eigenes Label lassen (`accessibilityLabel` mit dem
+Format) oder die Gruppe mit `accessibilityElement(children: .contain)` öffnen; danach per
+System Events nachmessen.
 
 ---
 

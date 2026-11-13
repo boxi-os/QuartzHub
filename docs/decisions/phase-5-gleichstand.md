@@ -2794,3 +2794,22 @@ Ausnahmen. Stand: 236 Zitate, 151 Menüpfade, 1914 fette Namen, keine Befunde.
 
 Nebenbei gesehen: `FrameEditing.swift` hängt an ein dupliziertes Frame fest „-kopie“, auch in der
 englischen Oberfläche.
+
+## Die Bücher des Handbuchs (2026-11-13)
+
+Gemacht wie ein Nutzer: im Projekt QuartzHub-Web (Wegwerf-Profil, `-QHOpenProject`) über **Dokumente**
+zwei Bücher, Sprache Deutsch und Englisch, Ordner leer (die Sprache wählt die Seiten: je 60), Autor
+leer, Deckblatt das Projektbild; über **Veröffentlichen** je ein Ziel „Dokument“ mit PDF und ePub in
+einen Ordner neben dem Projekt. Ergebnis: Deutsch PDF 141 Seiten (8,7 MB), ePub 60 Kapitel und 33
+Bilder (8,2 MB); Englisch PDF 136 Seiten. Export je Buch rund 40 s; Stylesheets und Schriften kamen
+von cdn.jsdelivr.net.
+
+Geprüft mit QuartzControls `check:export -- --files … --book <id>`: Seiten, Lesezeichen
+9/51/223/1, Titel, Sprache (de-DE, en-US), 314 interne Verweise, ePub-Aufbau, keine fremden
+Ressourcen, epubcheck 5.4.0 auf debian-vm 0 Fehler und 0 Warnungen; einziger Befund „nicht getaggt“
+(darauf verzichtet, siehe Plan). Persönliches: keins in Metadaten (Creator „QuartzHub“, kein Autor)
+und Text; `localhost` und `boxi-os` stehen im Handbuchtext selbst.
+
+Was dabei auffiel, steht als M5 (ff-Ligatur im PDF ohne Text), N14 (Name eines neuen Buchs) und
+N15 (Format-Schalter für die Bedienungshilfen ein Element) in `docs/REVIEW-2026-11-13-handbuch.md`.
+Die Dateinamen der Bücher sind von Hand umbenannt (N14).
