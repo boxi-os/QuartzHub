@@ -38,7 +38,8 @@ PAGES=(
   "uebersicht|1|"
   "konfiguration|3|1" "konfiguration-uebersetzungen|3|2"
   "plugins|4|1" "plugins-navigationen|4|2|s" "plugins-zusaetzliche-inhalte|4|3|s"
-  "plugins-mehrsprachigkeit|4|4|s" "plugins-formulare|4|5" "plugins-marktplatz|4|6"
+  "plugins-mehrsprachigkeit|4|4|s" "plugins-formulare|4|5|s" "plugins-formulare-formular|4|5|s"
+  "plugins-marktplatz|4|6"
   "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3"
   "stile-basis|7|1" "stile-themes|7|2|w" "stile-variablen|7|3" "stile-css|7|4"
   "vorlagen|8||w"
@@ -132,6 +133,69 @@ press_label() {
  end repeat"
 }
 
+# Selects row n of the project window's list with the given accessibility identifier (row 1 can be
+# a section header).
+list_row() {
+  ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXOutline\" and value of attribute \"AXIdentifier\" of e is \"$1\" then
+    set selected of row $2 of e to true
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
+
+# Clicks the n-th disclosure triangle of the inspector (a Fold's header): the right quarter of the
+# project window, since the site in a preview has triangles of its own.
+disclose() {
+  ax "set n to 0
+ set w to $project_window
+ set edge to (item 1 of (position of w as list)) + (item 1 of (size of w as list)) * 3 / 4
+ set els to entire contents of w
+ repeat with e in els
+  try
+   if role of e is \"AXDisclosureTriangle\" and (item 1 of (position of e as list)) > edge then
+    set n to n + 1
+    if n is $1 then
+     click e
+     exit repeat
+    end if
+   end if
+  end try
+ end repeat"
+}
+
+# The page a preview shows (the field with the identifier preview.page), then Return.
+preview_page() {
+  ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXTextField\" and value of attribute \"AXIdentifier\" of e is \"preview.page\" then
+    set focused of e to true
+    set value of e to \"$1\"
+    exit repeat
+   end if
+  end try
+ end repeat
+ delay 0.5
+ key code 36"
+}
+
+# The first button of the project window whose accessibility value is the German or English word.
+press_value() {
+  ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXButton\" and ((value of e as text) is \"$1\" or (value of e as text) is \"$2\") then
+    click e
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
+
 # Types into the n-th text field of the front window (sheets included).
 type_into() {
   ax "set n to 0
@@ -215,6 +279,12 @@ for lang in $LANGS; do
         [ "$flag" = w ] && sleep 10
         page $row; sleep 2
         [ -n "$t" ] && { tab $t; sleep 2; }
+        # A form chosen: its fields under a closed "Allgemein", the first one open; the preview goes
+        # to a page that embeds it.
+        if [ $name = plugins-formulare-formular ]; then
+          preview_page $([ $lang = de ] && echo kontakt || echo en/contact); sleep 4
+          list_row forms.list 2; sleep 2; disclose 1; sleep 1; press_value zugeklappt collapsed; sleep 4
+        fi
         shoot $name
       done
       [ $serving = 1 ] && { key .; sleep 3; }

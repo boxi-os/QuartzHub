@@ -6,8 +6,9 @@
 # Die Aufnahmen zeigen Pfade, Projektnamen und Ziele. Damit nichts Persönliches ins Handbuch kommt,
 # liegt das Demo unter /Users/Shared/QuartzHub-Demo: eine Kopie des Handbuch-Projekts, der Inhalt
 # eine Kopie des Vaults (kein Link, sonst stünde dessen Pfad im Bild), ohne Snapshots, Logs und
-# Ziele, mit je einem Profil für hell und dunkel ohne Zugänge. Quellen: QH_HANDBOOK_PROJECT und
-# QH_HANDBOOK_VAULT, sonst die Orte aus docs/plan.md.
+# Ziele, mit je einem Profil für hell und dunkel ohne Zugänge, dazu quartz-forms mit zwei Formularen
+# (braucht dafür Netz). Quellen: QH_HANDBOOK_PROJECT und QH_HANDBOOK_VAULT, sonst die Orte aus
+# docs/plan.md.
 set -eu
 SRC=${QH_HANDBOOK_PROJECT:-$HOME/Documents/QuartzProjekte/QuartzHub-Web}
 VAULT=${QH_HANDBOOK_VAULT:-$HOME/Obsidian/QuartzProjekte/QuartzHub-Handbuch}
@@ -26,6 +27,62 @@ rsync -a --delete --exclude .git --exclude private --exclude .obsidian --exclude
 # The own frames are named by the project's path (ProjectPaths), in the config and in Quartz's
 # lock file; the copy names its own.
 sed -i '' "s#$SRC/#$P/#g" "$P/quartz.config.yaml" "$P/quartz.lock.json"
+# quartz-forms for Plugins ▸ Formulare: two forms that send nothing (transport "demo", so no relay,
+# no address and no secret), embedded on one page per language. From GitHub, not from a local
+# clone: the plugin list shows the source, and a clone's path is personal. Needs the net.
+(cd "$P" && PATH="${0:A:h:h}/Runtime/node/bin:$PATH" npx quartz plugin add github:boxi-os/quartz-forms >/dev/null)
+python3 - "$P/quartz.config.yaml" <<'PY'
+import sys
+path = sys.argv[1]
+text = open(path, encoding="utf-8").read()
+old = "      forms: {}\n      transport:\n        kind: relay\n"
+new = """      forms:
+        kontakt:
+          template: contact
+          title:
+            de: Kontakt
+            en: Contact
+        feedback:
+          template: feedback
+          title:
+            de: War diese Seite hilfreich?
+            en: Was this page helpful?
+          pageContext: true
+      transport:
+        kind: demo
+"""
+if text.count(old) != 1:
+    sys.exit("quartz-forms: its default options are not where expected")
+open(path, "w", encoding="utf-8").write(text.replace(old, new))
+PY
+cat > "$P/content/kontakt.md" <<'MD'
+---
+title: Kontakt
+description: Fragen und Rückmeldungen zum Handbuch.
+translationKey: kontakt
+form: kontakt
+---
+
+Fragen zum Handbuch oder zu QuartzHub? Dieses Formular ist eine Vorführung und sendet nichts.
+
+```quartz-form
+feedback
+```
+MD
+cat > "$P/content/en/contact.md" <<'MD'
+---
+title: Contact
+description: Questions and feedback on the handbook.
+translationKey: kontakt
+form: kontakt
+---
+
+Questions about the handbook or QuartzHub? This form is a demonstration and sends nothing.
+
+```quartz-form
+feedback
+```
+MD
 # Commits from Git-Sync or a snapshot would carry the global identity into a picture.
 git -C "$P" config user.name "QuartzHub Demo"
 git -C "$P" config user.email "demo@example.invalid"

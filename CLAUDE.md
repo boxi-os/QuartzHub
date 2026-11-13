@@ -58,7 +58,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   die Dateien heißen `check-export.*` und gehen an dasselbe `check:export -- --files`
 - `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text
 - `scripts/handbook-demo.sh` — Demo-Projekt für die Handbuch-Aufnahmen unter `/Users/Shared/QuartzHub-Demo`
-  (Kopie von QuartzHub-Web, Inhalt aus dem Vault kopiert, Profile für hell und dunkel, neutrale git-Identität)
+  (Kopie von QuartzHub-Web, Inhalt aus dem Vault kopiert, Profile für hell und dunkel, neutrale git-Identität,
+  quartz-forms aus GitHub mit zwei Formularen, die nichts senden; braucht dafür Netz)
 - `scripts/handbook-shots.sh [--lang de|en] [--theme light|dark] [--only …] [--out …]` — Aufnahmen
   des Projektfensters nach `<vault>/assets/screenshots/`; bewegt Maus und Tastatur
 - `swift scripts/handbook-private.swift <vault> [dateien…]` — Handbuch-Texte und, per Texterkennung,
