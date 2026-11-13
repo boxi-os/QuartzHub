@@ -37,6 +37,12 @@ public final class PluginCommands: Sendable {
   /// `installPluginSource`, for the template import (48 plugins would leave 48 snapshots behind).
   public func add(source: String, project: String, environment: ToolEnvironment, deadlines: Deadlines = Deadlines(),
                   snapshot: SnapshotStore.Take? = nil) async -> Result {
+    // The source goes to the CLI as an argument: one starting with "-" would be read as an option
+    // (docs/conventions.md, „Was aus einer Datei kommt …“; review 2026-11-13, handbook, N1: the
+    // marketplace's own field passed it unchecked). PluginSource is the rule QuartzControl had.
+    guard PluginSource(.string(source)) != nil else {
+      return Result(success: false, output: L10n.t("main.pluginSourceInvalid", ["source": String(source.prefix(80))]))
+    }
     if let failure = await Self.snapshotFirst(snapshot, project, source) { return failure }
     return await quartz(["plugin", "add", source], project, environment, deadlines.network)
   }

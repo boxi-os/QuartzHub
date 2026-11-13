@@ -134,6 +134,21 @@ import Testing
     #expect(seen.withLock { $0 } == [0, 1, 3, 5])
   }
 
+  /// A source that would read as an option never reaches the CLI, and takes no snapshot (review
+  /// 2026-11-13, handbook, N1: the marketplace's field passed it on unchecked).
+  @Test func aSourceStartingWithADashIsRefused() async throws {
+    let project = "\(w)/P"
+    try ProjectDuplicatorTests.layOut(.object(JSONObject([("quartz.config.yaml", .string("plugins: []\n"))])), at: project) { $0 }
+    let environment = try environment(answers: .object(JSONObject()))
+    let calls = SnapshotCalls()
+    let result = await PluginCommands().add(source: "--registry=http://evil", project: project, environment: environment,
+                                            snapshot: calls.take { _ in })
+    #expect(!result.success)
+    #expect(result.output.contains("--registry=http://evil"))
+    #expect(self.calls.isEmpty && calls.all.isEmpty)
+    #expect(await PluginCommands().add(source: "", project: project, environment: environment).success == false)
+  }
+
   /// Quartz 5.1's doctor: a snapshot before `--fix` only, the check alone writes nothing; "found
   /// errors" (exit 1) is no success, and the output goes back either way.
   @Test func doctorFixTakesASnapshotFirstAndTheCheckDoesNot() async throws {

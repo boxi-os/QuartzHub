@@ -33228,6 +33228,25 @@
         }
       }
     },
+    "main.pluginSourceInvalid" : {
+      "comment" : "Plugins, marketplace: a typed source refused before quartz plugin add runs",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„{{source}}“ ist keine Quelle für ein Plugin: Sie darf nicht mit „-“ beginnen und höchstens 2048 Zeichen lang sein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“{{source}}” is not a plugin source: it may not start with “-” and has at most 2048 characters."
+          }
+        }
+      }
+    },
     "main.projectAlreadyRegistered" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
