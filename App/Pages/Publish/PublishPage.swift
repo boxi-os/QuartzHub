@@ -191,7 +191,7 @@ struct PublishPage: View {
         Button(model.diffing ? L10n.t("common.loading") : L10n.t("publish.refreshDiff")) { Task { await model.refreshDiff() } }
           .disabled(model.diffing || model.running)
           .accessibilityIdentifier("publish.refreshDiff")
-        if model.canExclude {
+        if model.canExclude, !model.selectedIsRsync {
           Button(model.forgetting ? L10n.t("common.saving") : L10n.t("publish.uploadEverything")) { Task { await model.forgetManifest() } }
             .disabled(model.forgetting || model.diffing || model.running)
             .help(L10n.t("publish.uploadEverythingHint"))
@@ -258,7 +258,7 @@ struct PublishPage: View {
       if !running, model.result?.targetId != target.id {
         Note(L10n.t("publish.deployHint"))
       }
-      if target.destination["deleteRemoved"] == .bool(false) {
+      if target.destination["deleteRemoved"] == .bool(false), !model.selectedIsRsync {
         Note(L10n.t("publish.deleteDisabledHint"))
       }
       // Its own view: only it reads the progress, so an event redraws one row and not the page.

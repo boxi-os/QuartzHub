@@ -46408,6 +46408,25 @@
         }
       }
     },
+    "publish.targetForm.deleteRemovedRsync" : {
+      "comment" : "Publish, target sheet: under the delete toggle when the transfer is rsync",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit rsync heißt das: Im Zielordner wird alles gelöscht, was nicht zum Build gehört, auch Dateien, die nie von QuartzHub kamen. Die Vorschau der Änderungen zeigt sie vor dem Veröffentlichen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With rsync this means: everything in the target folder that is not part of the build is deleted, files that never came from QuartzHub too. The preview of the changes lists them before publishing."
+          }
+        }
+      }
+    },
     "publish.targetForm.documentBook" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

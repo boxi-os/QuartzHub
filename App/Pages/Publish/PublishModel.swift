@@ -216,6 +216,12 @@ final class PublishModel {
     return type != "git-branch" && type != "document"
   }
 
+  /// rsync compares the folder itself and keeps no manifest: "Alles neu hochladen" and the count of
+  /// files kept do not apply to it (review 2026-11-13, handbook, N12).
+  var selectedIsRsync: Bool {
+    selected?.destination["type"]?.stringValue == "sftp" && selected?.destination["transfer"]?.stringValue == "rsync"
+  }
+
   var canDeploy: Bool { selected != nil && !running && (!hasFileDiff || diff != nil) }
 
   // MARK: Publishing

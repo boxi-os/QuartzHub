@@ -327,6 +327,9 @@ struct TargetSheet: View {
         if let deleteRemoved = draft.deleteRemoved {
           Toggle(L10n.t("publish.targetForm.deleteRemoved"), isOn: Binding(get: { deleteRemoved }, set: { draft.destination["deleteRemoved"] = .bool($0) }))
             .accessibilityIdentifier("target.deleteRemoved")
+          if deleteRemoved, draft.type == "sftp", draft.text("transfer") == "rsync" {
+            Note(L10n.t("publish.targetForm.deleteRemovedRsync"))
+          }
         }
         // The paths this target never publishes, kept between runs; not for a branch, where
         // leaving a file out deletes it from the live site.
