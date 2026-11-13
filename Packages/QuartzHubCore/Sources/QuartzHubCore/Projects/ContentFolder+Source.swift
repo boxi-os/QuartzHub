@@ -16,13 +16,14 @@ extension ContentFolder {
   /// `changeContentSource`: content/ becomes a copy of `source` or a link to it. Two nets first:
   /// a snapshot of the project as it is, and the old content folder moved aside (a linked vault is
   /// not in the snapshot). `source` stays a string, written into a link as it was given.
-  public static func changeSource(project: String, source: String, strategy: SourceStrategy, snapshot: Snapshot,
+  public static func changeSource(project: String, source given: String, strategy: SourceStrategy, snapshot: Snapshot,
                                   now: Date = Date(), progress: Progress? = nil) async throws {
+    let source = sourcePath(given, project: project)
     guard Posix.exists(source) else {
       throw ContentBackups.Failure(message: L10n.t("main.contentSourceMissing", ["path": source]))
     }
     let target = "\(project)/content"
-    let from = FramePaths.resolve(source.hasPrefix("/") ? source : FileManager.default.currentDirectoryPath + "/" + source)
+    let from = FramePaths.resolve(source)
     let to = FramePaths.resolve(target)
     if contains(to, from) { throw ContentBackups.Failure(message: L10n.t("main.contentSourceInsideTarget", ["target": target])) }
     if contains(from, to) { throw ContentBackups.Failure(message: L10n.t("main.contentTargetInsideSource", ["target": target])) }
@@ -47,6 +48,17 @@ extension ContentFolder {
       }
       return true
     }
+  }
+
+  /// A typed folder as a path: "~" is the home folder, anything else relative is the project's.
+  /// QuartzControl took it against Electron's working directory, which the user never sees; here
+  /// that was QuartzHub's, "/" from the Finder, so "../notes" was checked and copied from the
+  /// wrong place (review 2026-11-13, nebenbei). Absolute paths stay as given, slash included.
+  static func sourcePath(_ source: String, project: String) -> String {
+    if source == "~" { return NSHomeDirectory() }
+    if source.hasPrefix("~/") { return NSHomeDirectory() + source.dropFirst(1) }
+    if source.hasPrefix("/") { return source }
+    return NodePath.join(project, source)
   }
 
   /// `relative()` rather than a prefix: /notes-old is no child of /notes.

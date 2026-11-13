@@ -6,8 +6,9 @@ import SwiftUI
 /// Übersetzungen are the fixed texts of the site. Colours and fonts are the Styles page's.
 ///
 /// The page owns quartz.config.yaml (docs/conventions.md, „Eine Seite besitzt ihr Dokument“):
-/// "Speichern" in the toolbar and ⌘S write it on the Website tab, and leaving with edits asks
-/// (`UnsavedGuard`) from either tab. Übersetzungen save per locale from their own row.
+/// "Speichern" in the toolbar writes it on the Website tab. Übersetzungen save the open locale
+/// with the button beside its picker. ⌘S, and the question on leaving with edits (`UnsavedGuard`),
+/// cover both tabs at once.
 struct ConfigPage: View {
   enum Tab: String, CaseIterable, Identifiable {
     case site, localization

@@ -60,6 +60,9 @@ struct LocalizationTab: View {
       HStack {
         if model.gitAttributesActive == true {
           StateBadge(text: L10n.t("localization.gitAttributesOk"), color: .green)
+        } else if model.isRepository == false {
+          // Nothing to switch on: the button wrote the line and stayed "nicht aktiv".
+          StateBadge(text: L10n.t("localization.gitAttributesMissing"), color: .secondary)
         } else {
           StateBadge(text: L10n.t("localization.gitAttributesMissing"), color: .orange)
           Spacer()
@@ -67,7 +70,7 @@ struct LocalizationTab: View {
             .disabled(model.enabling)
         }
       }
-      Note(L10n.t("localization.gitAttributesExplain"))
+      Note(model.isRepository == false ? L10n.t("localization.gitAttributesNoRepository") : L10n.t("localization.gitAttributesExplain"))
     }
   }
 
@@ -75,14 +78,15 @@ struct LocalizationTab: View {
   private func toolbarSection(_ locales: [String]) -> some View {
     Section {
       HStack(spacing: 10) {
-        Picker(L10n.t("siteSettings.locale"), selection: Binding(get: { model.code }, set: { next in
+        // Which locale's texts are edited, not the site's language (that is on Website).
+        Picker(L10n.t("localization.localePicker"), selection: Binding(get: { model.code }, set: { next in
           // Another locale drops this one's edits: asked first (review 2026-11-13, handbook, M1).
           if model.dirty, next != model.code { pendingCode = next } else { model.code = next }
         })) {
           ForEach(locales, id: \.self) { Text(verbatim: $0).tag($0) }
         }
-        // Named by its hidden title: an added label made VoiceOver read "Sprache der Website,
-        // Sprache der Website" (measured 2026-11-09).
+        // Named by its hidden title: an added label made VoiceOver read the name twice (measured
+        // 2026-11-09).
         .labelsHidden()
         .fixedSize()
         TextField(L10n.t("localization.searchPlaceholder"), text: $model.query, prompt: Text(L10n.t("localization.searchPlaceholder")))
@@ -185,6 +189,7 @@ final class LocalizationModel {
   var query = ""
   private(set) var saving = false
   private(set) var gitAttributesActive: Bool?
+  private(set) var isRepository: Bool?
   private(set) var enabling = false
   /// The locale the edits belong to: a real switch drops them, coming back to the page does not.
   private var editsCode: String?
@@ -211,6 +216,7 @@ final class LocalizationModel {
     } catch {
       listError = String(describing: error)
     }
+    isRepository = await files.isRepository(project: path)
     gitAttributesActive = await files.gitAttributesActive(project: path)
   }
 
@@ -244,10 +250,23 @@ final class LocalizationModel {
     }
   }
 
+  /// The key, the saved value and the text being typed: a word just written is found too.
   var filtered: [(key: String, entry: LocaleFiles.Entry)] {
     let q = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     return (entries ?? []).map { (Self.key($0), $0) }.filter { item in
       q.isEmpty || item.0.lowercased().contains(q) || item.1.value.lowercased().contains(q)
+        || (edits[item.0]?.lowercased().contains(q) ?? false)
+    }
+  }
+
+  /// A failed save in QuartzHub's words; the core's sentences are QuartzControl's English.
+  static func message(_ failure: LocaleFiles.SaveResult.Failure?) -> String {
+    switch failure {
+    case .fileMissing(let code)?: L10n.t("localization.errors.fileMissing", ["code": code])
+    case .noTranslationObject?: L10n.t("localization.errors.noTranslationObject")
+    case .keyMissing(let key)?: L10n.t("localization.errors.keyMissing", ["key": key])
+    case .syntax(let message)?: L10n.t("localization.errors.syntax", ["message": message])
+    case nil: L10n.t("localization.saveError")
     }
   }
 
@@ -271,7 +290,7 @@ final class LocalizationModel {
       let key = Self.key(entry)
       do {
         let result = try await files.save(project: path, code: code, path: entry.path, kind: entry.kind, value: edits[key] ?? entry.value)
-        if !result.success { failed[key] = result.error ?? L10n.t("localization.saveError") }
+        if !result.success { failed[key] = Self.message(result.failure) }
       } catch {
         failed[key] = String(describing: error)
       }

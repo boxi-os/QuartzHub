@@ -19,10 +19,27 @@ public struct LocaleFiles: Sendable {
     public var value: String
   }
 
-  /// The English sentences are QuartzControl's: the channel answered them as they are.
+  /// The English sentences are QuartzControl's: the channel answered them as they are. `failure`
+  /// says the same for the app to put in its own words (review 2026-11-13, nebenbei: the tab
+  /// showed these English sentences in German too).
   public struct SaveResult: Sendable, Equatable {
     public var success: Bool
     public var error: String?
+    public var failure: Failure?
+
+    public enum Failure: Sendable, Equatable {
+      case fileMissing(code: String)
+      case noTranslationObject
+      case keyMissing(key: String)
+      /// TypeScript's message, which has no other words.
+      case syntax(String)
+    }
+
+    init(success: Bool, error: String?, failure: Failure? = nil) {
+      self.success = success
+      self.error = error
+      self.failure = failure
+    }
   }
 
   /// Where "unchanged" came from: a copy taken before the first edit, git's HEAD, or nowhere.
@@ -119,7 +136,7 @@ public struct LocaleFiles: Sendable {
   public func save(project: String, code: String, path: [String], kind: Kind, value: String) async throws -> SaveResult {
     let file = Self.localeFile(project, code)
     guard Self.isLocaleCode(code), FileManager.default.fileExists(atPath: file) else {
-      return SaveResult(success: false, error: "Locale file not found: \(code)")
+      return SaveResult(success: false, error: "Locale file not found: \(code)", failure: .fileMissing(code: code))
     }
     // Before the first edit, not after: once the file is written the untouched version is gone.
     // Also when the save below fails, as in QuartzControl.
@@ -130,9 +147,9 @@ public struct LocaleFiles: Sendable {
                            ("path", .array(path.map(JSONValue.string))), ("replacement", .string(replacement))])
     let answer = try await Helper.call("locale-edit", JSONObject([("calls", .array([.object(call)]))]), runtime: environment.runtime)
     let result = answer["results"]?.arrayValue?.first ?? .null
-    if result["noRoot"] == .bool(true) { return SaveResult(success: false, error: "Could not find the default-exported translation object") }
-    if result["notFound"] == .bool(true) { return SaveResult(success: false, error: "Key not found: \(path.joined(separator: "."))") }
-    if let syntax = result["syntax"]?.stringValue { return SaveResult(success: false, error: syntax) }
+    if result["noRoot"] == .bool(true) { return SaveResult(success: false, error: "Could not find the default-exported translation object", failure: .noTranslationObject) }
+    if result["notFound"] == .bool(true) { return SaveResult(success: false, error: "Key not found: \(path.joined(separator: "."))", failure: .keyMissing(key: path.joined(separator: "."))) }
+    if let syntax = result["syntax"]?.stringValue { return SaveResult(success: false, error: syntax, failure: .syntax(syntax)) }
     guard let next = result["text"]?.stringValue else { throw Helper.Failure.refused("locale-edit answered no text") }
     // In place, as writeFileSync.
     try Posix.write(file, Data(next.utf8))
@@ -202,6 +219,14 @@ public struct LocaleFiles: Sendable {
   func hasMergeDriver(_ project: String) async -> Bool {
     let result = await ProcessRunner.run(environment.command("git", ["config", "--get", "merge.ours.driver"], in: project, timeout: .seconds(30)))
     return result.success && !JS.trim(result.stdout).isEmpty
+  }
+
+  /// Whether the project is (inside) a git work tree. Without one there is no core update to
+  /// protect against, and the driver can not be set: "nicht aktiv" then needs its reason
+  /// (review 2026-11-13, nebenbei).
+  public func isRepository(project: String) async -> Bool {
+    let result = await ProcessRunner.run(environment.command("git", ["rev-parse", "--is-inside-work-tree"], in: project, timeout: .seconds(30)))
+    return result.success && JS.trim(result.stdout) == "true"
   }
 
   public func gitAttributesActive(project: String) async -> Bool {

@@ -43,6 +43,14 @@ import Testing
     return .object(JSONObject(fields))
   }
 
+  /// A typed folder that is not absolute: the project's, or the home folder's with "~".
+  @Test func aRelativeSourceIsTheProjects() {
+    #expect(ContentFolder.sourcePath("../notizen-Ü", project: "/w/projekt") == "/w/notizen-Ü")
+    #expect(ContentFolder.sourcePath("vault", project: "/w/projekt") == "/w/projekt/vault")
+    #expect(ContentFolder.sourcePath("~/Notizen", project: "/w/projekt") == NSHomeDirectory() + "/Notizen")
+    #expect(ContentFolder.sourcePath("/abs/v/", project: "/w/projekt") == "/abs/v/")
+  }
+
   @Test func replaysQuartzControlsSteps() async throws {
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps.json")))
     let steps = golden["steps"]!.arrayValue!

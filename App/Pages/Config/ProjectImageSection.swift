@@ -19,6 +19,9 @@ struct ProjectImageSection: View {
   @State private var installing = false
   @State private var error: String?
   @State private var confirmInstall = false
+  /// "Wird mit Speichern übernommen" stays in view until it is: as an announcement alone only
+  /// VoiceOver heard it (review 2026-11-13, nebenbei).
+  @State private var installedNote = false
 
   private var plugins: [PluginEntry] { model.plugins }
   private var savedPlugins: [PluginEntry] { model.saved?.plugins ?? [] }
@@ -52,6 +55,9 @@ struct ProjectImageSection: View {
       }
       darkRow
       headerRow
+      if installedNote, model.dirty {
+        Callout(.info, L10n.t("projectImage.header.installed"))
+      }
       if let error {
         Callout(.error, error)
       }
@@ -208,6 +214,7 @@ struct ProjectImageSection: View {
       // Exactly one layout box exists now, the one the CLI just wrote: it becomes the header picture.
       let index = fresh.plugins.firstIndex(where: ProjectImageBox.isLayoutBox)
       model.setPlugins(ProjectImageBox.with(fresh.plugins, hasDark: hasDark, replaceIndex: index))
+      installedNote = true
       Announce.post(L10n.t("projectImage.header.installed"))
     } catch {
       self.error = ConfigModel.message(error)

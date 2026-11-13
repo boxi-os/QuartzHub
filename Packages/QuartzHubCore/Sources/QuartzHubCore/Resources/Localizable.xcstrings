@@ -3123,6 +3123,25 @@
         }
       }
     },
+    "builtins.frontmatter.enabled" : {
+      "comment" : "Konfiguration ▸ Frontmatter (Quartz 5.1): turns the built-in frontmatter reading on or off",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frontmatter lesen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read frontmatter"
+          }
+        }
+      }
+    },
     "builtins.frontmatter.heading" : {
       "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): configuration.frontmatter",
       "extractionState" : "manual",
@@ -3214,6 +3233,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Such links get the class “broken”."
+          }
+        }
+      }
+    },
+    "builtins.links.enabled" : {
+      "comment" : "Konfiguration ▸ Links (Quartz 5.1): turns the built-in link processing on or off",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links verarbeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Process links"
           }
         }
       }
@@ -4192,13 +4230,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Grundeinstellungen deiner Website: der Ordner mit deinen Notizen, Titel, Adresse und Sprache."
+            "value" : "Grundeinstellungen deiner Website: der Ordner mit deinen Notizen, das Projektbild, Titel, Adresse und Sprache, was ausgeschlossen wird, die Statistik und, ab Quartz 5.1, wie Quartz Links, Entwürfe und Frontmatter verarbeitet."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basic settings for your site: the folder with your notes, title, address and language."
+            "value" : "Basic settings for your site: the folder with your notes, the project image, title, address and language, what is excluded, analytics and, from Quartz 5.1 on, how Quartz processes links, drafts and frontmatter."
           }
         }
       }
@@ -4288,7 +4326,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Localization"
+            "value" : "Translations"
           }
         }
       }
@@ -4568,15 +4606,39 @@
       "generatesSymbol" : false,
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} Dateien"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Datei"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Dateien"
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} files"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} file"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} files"
+                }
+              }
+            }
           }
         }
       }
@@ -28372,6 +28434,82 @@
         }
       }
     },
+    "localization.errors.fileMissing" : {
+      "comment" : "Konfiguration ▸ Übersetzungen: a value could not be saved, under its row",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sprachdatei {{code}} gibt es nicht mehr."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The locale file {{code}} no longer exists."
+          }
+        }
+      }
+    },
+    "localization.errors.keyMissing" : {
+      "comment" : "Konfiguration ▸ Übersetzungen: a value could not be saved, under its row",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den Schlüssel {{key}} gibt es in der Sprachdatei nicht mehr."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The key {{key}} is no longer in the locale file."
+          }
+        }
+      }
+    },
+    "localization.errors.noTranslationObject" : {
+      "comment" : "Konfiguration ▸ Übersetzungen: a value could not be saved, under its row",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In der Sprachdatei steht kein Übersetzungsobjekt, das sie exportiert; der Wert wurde nicht gespeichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The locale file exports no translation object; the value was not saved."
+          }
+        }
+      }
+    },
+    "localization.errors.syntax" : {
+      "comment" : "Konfiguration ▸ Übersetzungen: a value could not be saved, under its row",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit diesem Wert wäre die Sprachdatei kein gültiges TypeScript mehr: {{message}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With this value the locale file would no longer be valid TypeScript: {{message}}"
+          }
+        }
+      }
+    },
     "localization.gitAttributesEnable" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -28426,6 +28564,25 @@
         }
       }
     },
+    "localization.gitAttributesNoRepository" : {
+      "comment" : "Konfiguration ▸ Übersetzungen: why the update protection is not active in a project without git",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Projekt ist kein git-Repository, deshalb gibt es kein Kern-Update, das deine Formulierungen überschreiben könnte. Wird es eines, richtet das nächste Speichern den Schutz ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The project is no git repository, so there is no core update that could overwrite your wording. Once it is one, the next save sets up the protection."
+          }
+        }
+      }
+    },
     "localization.gitAttributesOk" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -28476,6 +28633,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The locale “{{code}}” could not be loaded."
+          }
+        }
+      }
+    },
+    "localization.localePicker" : {
+      "comment" : "Konfiguration ▸ Übersetzungen: the picker naming which locale's texts are edited (VoiceOver; the title is hidden)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache der Texte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language of the texts"
           }
         }
       }
@@ -29071,13 +29247,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml steht keine Zuordnung aus Schlüsseln und Werten. QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
+            "value" : "In quartz.config.yaml steht keine Zuordnung aus Schlüsseln und Werten. QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder stelle einen Snapshot wieder her."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "quartz.config.yaml does not hold a mapping of keys and values. QuartzHub will not read it; fix it in an editor or use a restore point."
+            "value" : "quartz.config.yaml does not hold a mapping of keys and values. QuartzHub will not read it; fix it in an editor or restore a snapshot."
           }
         }
       }
@@ -29090,13 +29266,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "quartz.config.yaml lässt sich nicht als YAML lesen: {{reason}}. Repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
+            "value" : "quartz.config.yaml lässt sich nicht als YAML lesen: {{reason}}. Repariere sie in einem Editor oder stelle einen Snapshot wieder her."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "quartz.config.yaml cannot be read as YAML: {{reason}}. Fix it in an editor or use a restore point."
+            "value" : "quartz.config.yaml cannot be read as YAML: {{reason}}. Fix it in an editor or restore a snapshot."
           }
         }
       }
@@ -29109,13 +29285,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml nennt Eintrag {{index}} unter „plugins“ kein Plugin (es fehlt „source“). QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
+            "value" : "In quartz.config.yaml nennt Eintrag {{index}} unter „plugins“ kein Plugin (es fehlt „source“). QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder stelle einen Snapshot wieder her."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml, entry {{index}} under “plugins” names no plugin (“source” is missing). QuartzHub will not read it; fix it in an editor or use a restore point."
+            "value" : "In quartz.config.yaml, entry {{index}} under “plugins” names no plugin (“source” is missing). QuartzHub will not read it; fix it in an editor or restore a snapshot."
           }
         }
       }
@@ -29127,13 +29303,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml ist „plugins“ keine Liste. QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder nimm einen Wiederherstellungspunkt."
+            "value" : "In quartz.config.yaml ist „plugins“ keine Liste. QuartzHub liest die Datei deshalb nicht; repariere sie in einem Editor oder stelle einen Snapshot wieder her."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In quartz.config.yaml, “plugins” is not a list. QuartzHub will not read it; fix it in an editor or use a restore point."
+            "value" : "In quartz.config.yaml, “plugins” is not a list. QuartzHub will not read it; fix it in an editor or restore a snapshot."
           }
         }
       }
@@ -35847,13 +36023,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese eigenen Pakete stehen nicht mehr in package.json: {{packages}}. Behebe den Fehler oben und starte das Update erneut, oder nimm den Wiederherstellungspunkt mit dem Schalter „Auch den Projekt-Commit zurücksetzen“."
+            "value" : "Diese eigenen Pakete stehen nicht mehr in package.json: {{packages}}. Behebe den Fehler oben und starte das Update erneut, oder stelle den Snapshot mit dem Schalter „Auch den Projekt-Commit zurücksetzen“ wieder her."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "These packages of yours are no longer in package.json: {{packages}}. Fix the error above and run the update again, or use the restore point with the “Also reset the project commit” switch on."
+            "value" : "These packages of yours are no longer in package.json: {{packages}}. Fix the error above and run the update again, or restore the snapshot with the “Also reset the project commit” switch on."
           }
         }
       }
@@ -35865,13 +36041,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese eigenen Pakete stehen gerade nicht in package.json: {{packages}}. „Merge abbrechen“ oben trägt sie wieder ein, und der Wiederherstellungspunkt bringt sie ebenfalls zurück."
+            "value" : "Diese eigenen Pakete stehen gerade nicht in package.json: {{packages}}. „Merge abbrechen“ oben trägt sie wieder ein, und der Snapshot bringt sie ebenfalls zurück."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "These packages of yours are currently not in package.json: {{packages}}. “Abort merge” above puts them back, and so does the restore point."
+            "value" : "These packages of yours are currently not in package.json: {{packages}}. “Abort merge” above puts them back, and so does the snapshot."
           }
         }
       }
@@ -50566,13 +50742,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veraltet: Seit Quartz 5.1 heißt das Feld apiHost."
+            "value" : "Veraltet: Seit Quartz 5.1 heißt das Feld „API-Host“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deprecated: since Quartz 5.1 the field is apiHost."
+            "value" : "Deprecated: since Quartz 5.1 the field is “API host”."
           }
         }
       }
@@ -50584,13 +50760,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Projekt-ID"
+            "value" : "ID des Projekts im Konto des Anbieters"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Project id"
+            "value" : "The project’s id in your provider account"
           }
         }
       }
@@ -50657,13 +50833,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mess-ID, z. B. G-XXXXXXX"
+            "value" : "Zum Beispiel G-XXXXXXX"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Measurement ID, e.g. G-XXXXXXX"
+            "value" : "For example G-XXXXXXX"
           }
         }
       }
@@ -50676,13 +50852,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adresse der PostHog-Oberfläche, wenn sie von apiHost abweicht."
+            "value" : "Adresse der PostHog-Oberfläche, wenn sie vom API-Host abweicht."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Address of the PostHog interface when it differs from apiHost."
+            "value" : "Address of the PostHog interface when it differs from the API host."
           }
         }
       }
@@ -50719,6 +50895,215 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Analytics"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.apiHost" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"apiHost\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API-Host"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API host"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.apiKey" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"apiKey\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API-Key"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API key"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.host" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"host\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Host"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Host"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.personProfiles" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"personProfiles\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personenprofile"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Person profiles"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.projectId" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"projectId\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projekt-ID"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project ID"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.script" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"script\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriptname"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Script name"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.scriptSrc" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"scriptSrc\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skript-URL"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Script URL"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.siteId" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"siteId\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Site-ID"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Site ID"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.tagId" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"tagId\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mess-ID"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Measurement ID"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.uiHost" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"uiHost\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UI-Host"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UI host"
+          }
+        }
+      }
+    },
+    "siteSettings.analyticsLabels.websiteId" : {
+      "comment" : "Konfiguration ▸ Statistik: label of the provider's field \"websiteId\" (config key)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website-ID"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website ID"
           }
         }
       }

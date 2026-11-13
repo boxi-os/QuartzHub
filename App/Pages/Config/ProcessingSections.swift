@@ -30,26 +30,32 @@ struct ProcessingSections: View {
   private func links(_ plan: BuiltinProcessing.Plan) -> some View {
     SettingsSection(L10n.t("builtins.links.heading"), symbol: "link") {
       state(plan[.links])
-      FormField(hint: L10n.t("builtins.links.resolutionHint")) {
-        Picker(L10n.t("builtins.links.resolution"), selection: text(.links, "markdownLinkResolution")) {
-          Text(L10n.t("builtins.links.resolutionShortest")).tag("shortest")
-          Text(L10n.t("builtins.links.resolutionRelative")).tag("relative")
-          Text(L10n.t("builtins.links.resolutionAbsolute")).tag("absolute")
-          unknown(.links, "markdownLinkResolution", known: ["shortest", "relative", "absolute"])
+      // Its own switch, outside the rest: with the section disabled whole, a built-in turned off
+      // could not be turned on again here (review 2026-11-13, nebenbei).
+      Toggle(L10n.t("builtins.links.enabled"), isOn: enabled(.links, plan))
+        .accessibilityIdentifier("config.links.enabled")
+      Group {
+        FormField(hint: L10n.t("builtins.links.resolutionHint")) {
+          Picker(L10n.t("builtins.links.resolution"), selection: text(.links, "markdownLinkResolution")) {
+            Text(L10n.t("builtins.links.resolutionShortest")).tag("shortest")
+            Text(L10n.t("builtins.links.resolutionRelative")).tag("relative")
+            Text(L10n.t("builtins.links.resolutionAbsolute")).tag("absolute")
+            unknown(.links, "markdownLinkResolution", known: ["shortest", "relative", "absolute"])
+          }
+          .accessibilityIdentifier("config.links.resolution")
         }
-        .accessibilityIdentifier("config.links.resolution")
+        FormField(hint: L10n.t("builtins.links.prettyLinksHint")) {
+          Toggle(L10n.t("builtins.links.prettyLinks"), isOn: flag(.links, "prettyLinks"))
+        }
+        Toggle(L10n.t("builtins.links.openLinksInNewTab"), isOn: flag(.links, "openLinksInNewTab"))
+        Toggle(L10n.t("builtins.links.externalLinkIcon"), isOn: flag(.links, "externalLinkIcon"))
+        Toggle(L10n.t("builtins.links.lazyLoad"), isOn: flag(.links, "lazyLoad"))
+        FormField(hint: L10n.t("builtins.links.brokenHint")) {
+          Toggle(L10n.t("builtins.links.broken"), isOn: flag(.links, "disableBrokenWikilinks"))
+        }
       }
-      FormField(hint: L10n.t("builtins.links.prettyLinksHint")) {
-        Toggle(L10n.t("builtins.links.prettyLinks"), isOn: flag(.links, "prettyLinks"))
-      }
-      Toggle(L10n.t("builtins.links.openLinksInNewTab"), isOn: flag(.links, "openLinksInNewTab"))
-      Toggle(L10n.t("builtins.links.externalLinkIcon"), isOn: flag(.links, "externalLinkIcon"))
-      Toggle(L10n.t("builtins.links.lazyLoad"), isOn: flag(.links, "lazyLoad"))
-      FormField(hint: L10n.t("builtins.links.brokenHint")) {
-        Toggle(L10n.t("builtins.links.broken"), isOn: flag(.links, "disableBrokenWikilinks"))
-      }
+      .disabled(!plan[.links].enabled)
     }
-    .disabled(!plan[.links].enabled)
   }
 
   private func drafts(_ plan: BuiltinProcessing.Plan) -> some View {
@@ -101,19 +107,29 @@ struct ProcessingSections: View {
   private func frontmatter(_ plan: BuiltinProcessing.Plan) -> some View {
     SettingsSection(L10n.t("builtins.frontmatter.heading"), symbol: "doc.text") {
       state(plan[.frontmatter])
-      FormField(hint: L10n.t("builtins.frontmatter.delimitersHint")) {
-        TextField(L10n.t("builtins.frontmatter.delimiters"), text: text(.frontmatter, "delimiters"))
+      Toggle(L10n.t("builtins.frontmatter.enabled"), isOn: enabled(.frontmatter, plan))
+        .accessibilityIdentifier("config.frontmatter.enabled")
+      Group {
+        FormField(hint: L10n.t("builtins.frontmatter.delimitersHint")) {
+          TextField(L10n.t("builtins.frontmatter.delimiters"), text: text(.frontmatter, "delimiters"))
+        }
+        Picker(L10n.t("builtins.frontmatter.language"), selection: text(.frontmatter, "language")) {
+          Text(verbatim: "YAML").tag("yaml")
+          Text(verbatim: "TOML").tag("toml")
+          unknown(.frontmatter, "language", known: ["yaml", "toml"])
+        }
       }
-      Picker(L10n.t("builtins.frontmatter.language"), selection: text(.frontmatter, "language")) {
-        Text(verbatim: "YAML").tag("yaml")
-        Text(verbatim: "TOML").tag("toml")
-        unknown(.frontmatter, "language", known: ["yaml", "toml"])
-      }
+      .disabled(!plan[.frontmatter].enabled)
     }
-    .disabled(!plan[.frontmatter].enabled)
   }
 
   // MARK: pieces
+
+  /// Whether the build runs it; on writes `enabled: true`, which also wins over an old plugin
+  /// entry that is off and over a plugin providing the same (`BuiltinProcessing`).
+  private func enabled(_ builtin: Builtin, _ plan: BuiltinProcessing.Plan) -> Binding<Bool> {
+    Binding(get: { plan[builtin].enabled }, set: { model.setBuiltin(builtin, "enabled", .bool($0)) })
+  }
 
   /// Why a built-in is off, in one line; nothing while it runs.
   @ViewBuilder private func state(_ planned: BuiltinProcessing.Planned) -> some View {

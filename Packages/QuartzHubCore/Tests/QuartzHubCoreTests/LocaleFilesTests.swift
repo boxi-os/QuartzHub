@@ -105,6 +105,17 @@ struct LocaleFilesTests {
 
   /// QuartzControl's template import handed a package's locale code on unchecked; here a code
   /// that is no locale code reads nothing and writes nothing, even where the file exists.
+  /// The protection's reason: a folder is no repository until `git init`, and then is one.
+  @Test func aFolderIsARepositoryOnlyAfterGitInit() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
+    let locales = LocaleFiles(environment: environment)
+    #expect(await locales.isRepository(project: scratch.path) == false)
+    let initialized = await ProcessRunner.run(environment.command("git", ["init", "-q"], in: scratch.path, timeout: .seconds(30)))
+    #expect(initialized.success)
+    #expect(await locales.isRepository(project: scratch.path))
+  }
+
   @Test func aCodeThatIsNoLocaleCodeIsNoFile() async throws {
     let scratch = try HostPathTests.Scratch(umlaut: true)
     let project = "\(scratch.path)/project"
@@ -116,7 +127,7 @@ struct LocaleFilesTests {
     let locales = LocaleFiles(environment: await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded))
     #expect(try await locales.entries(project: project, code: "../../util/path").isEmpty)
     let saved = try await locales.save(project: project, code: "../../util/path", path: ["title"], kind: .string, value: "y")
-    #expect(saved == LocaleFiles.SaveResult(success: false, error: "Locale file not found: ../../util/path"))
+    #expect(saved == LocaleFiles.SaveResult(success: false, error: "Locale file not found: ../../util/path", failure: .fileMissing(code: "../../util/path")))
     #expect(String(decoding: try Posix.read(target), as: UTF8.self) == text)
     #expect(!FileManager.default.fileExists(atPath: "\(project)/.quartz-gui"))
   }

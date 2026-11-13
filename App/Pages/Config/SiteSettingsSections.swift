@@ -181,10 +181,10 @@ private struct AnalyticsSection: View {
       .accessibilityIdentifier("config.analytics")
       ForEach(fields, id: \.key) { field in
         FormField(hint: Self.hint(field, provider: provider, analytics51: model.features.analytics51)) {
-          TextField(field.key + (field.required ? " *" : ""), text: text(field.key))
+          TextField(Self.label(field.key) + (field.required ? " *" : ""), text: text(field.key))
         }
       }
-      let missing = fields.filter { $0.required && JSRead.string(value?[$0.key]).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.map(\.key)
+      let missing = fields.filter { $0.required && JSRead.string(value?[$0.key]).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.map { Self.label($0.key) }
       if !provider.isEmpty, !missing.isEmpty {
         Callout(.warning, L10n.t("siteSettings.analyticsMissing", ["fields": missing.joined(separator: ", ")]))
       }
@@ -203,6 +203,25 @@ private struct AnalyticsSection: View {
         next[key] = typed.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : .string(typed)
         model.config?.configuration["analytics"] = .object(next)
       })
+  }
+
+  /// A field's name in words; the config key it writes is the provider's (review 2026-11-13,
+  /// nebenbei: the form showed "tagId *"). A key QuartzHub has no name for shows as it is.
+  static func label(_ key: String) -> String {
+    switch key {
+    case "host": L10n.t("siteSettings.analyticsLabels.host")
+    case "tagId": L10n.t("siteSettings.analyticsLabels.tagId")
+    case "websiteId": L10n.t("siteSettings.analyticsLabels.websiteId")
+    case "script": L10n.t("siteSettings.analyticsLabels.script")
+    case "scriptSrc": L10n.t("siteSettings.analyticsLabels.scriptSrc")
+    case "apiKey": L10n.t("siteSettings.analyticsLabels.apiKey")
+    case "apiHost": L10n.t("siteSettings.analyticsLabels.apiHost")
+    case "uiHost": L10n.t("siteSettings.analyticsLabels.uiHost")
+    case "personProfiles": L10n.t("siteSettings.analyticsLabels.personProfiles")
+    case "siteId": L10n.t("siteSettings.analyticsLabels.siteId")
+    case "projectId": L10n.t("siteSettings.analyticsLabels.projectId")
+    default: key
+    }
   }
 
   /// `host` is the one key whose meaning flips: optional everywhere, the address of your own
