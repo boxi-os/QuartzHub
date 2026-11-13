@@ -70,7 +70,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   Aufnahmen auf Persönliches (Konto, `/Users/…`, Mails, `<vault>/private/privat.txt`, Farbprofil mit Bildschirmnamen); Exit 1 bei Fund
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)
-- `scripts/package.sh` — Release-Bau, `.app` mit Runtime und Helfern, ad hoc signiert, DMG nach `build/package/`
+- `scripts/package.sh` — Release-Bau, `.app` mit Runtime und Helfern, ad hoc signiert, DMG nach `build/package/`; was ein Release außerdem braucht (Tag, Release-Seite, Handbuch online, Vorlagen-Repo), steht in `docs/release.md`
 - `Runtime/node/bin/node scripts/golden-fixtures.mjs` — Golden Files der Kerntests neu aus `gui-test` und
   `Example` (`.quartz-gui/*.json`, maskiert, nur Dateien in QuartzControls Form)
 - `Runtime/node/bin/node scripts/config-golden.mjs` — Golden Files der Config-Tests, erzeugt von

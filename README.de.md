@@ -8,8 +8,10 @@ und Offline-HTML. QuartzHub ist die Nachfolgerin von
 [QuartzControl](https://github.com/boxi-os/QuartzControl) (Electron), geschrieben in Swift, und
 liest dieselben Projekte.
 
-**Stand:** in Entwicklung, nicht veröffentlicht. Das erste Release kommt, wenn QuartzHub alles kann,
-was QuartzControl 1.3 kann. Bis dahin ist QuartzControl das Werkzeug.
+**Fassung 1.0.0.** Die DMG gibt es unter [Releases](https://github.com/boxi-os/QuartzHub/releases/latest);
+das [Handbuch](https://boxi-os.github.io/QuartzHub/) erklärt jedes Fenster und jede Seite. QuartzHub ist
+nicht notarisiert: Der erste Start braucht „Dennoch öffnen“ unter Systemeinstellungen ▸ Datenschutz &
+Sicherheit.
 
 - macOS 26 oder neuer, Apple Silicon
 - Bringt ein eigenes Node.js (für Quartz) und git mit
