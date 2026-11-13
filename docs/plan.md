@@ -353,6 +353,9 @@ nach Abhängigkeit:
      in `REVIEW-2026-11-13-handbuch.md`.
   7. Anbinden: Hilfe ▸ Handbuch, „Im Handbuch nachlesen“ im Inspektor, Link im Fenster „Projekte“,
      dazu der Hinweis auf eine neuere Fassung (die vier offenen Zeilen der Gleichstand-Liste).
+     Fertig 2026-11-13: `Handbook` (Tabelle Seite/Reiter → Kapitel je Sprache), Hilfe ▸ Handbuch und
+     „Diese Seite im Handbuch“, `HandbookLink` im Inspektor und im Fenster „Projekte“, `AppUpdateCheck` (GitHubs
+     `releases/latest`); die Gleichstand-Liste hat keine fehlende Zeile mehr.
   8. Online (Repo `boxi-os/QuartzHub-Handbuch`, GitHub Pages über „Veröffentlichen“) erst nach
      Freigabe.
   Teil für Teil, je Teil ein Commit im Vault; nach Teil 1 Durchsicht mit dem Nutzer.

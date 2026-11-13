@@ -35,19 +35,19 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Die letzte `gebaut`-Zeile, die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, ist beim echten ersten Start des Nutzers gemessen (2026-11-11); keine Zeile steht mehr auf `gebaut`.
+gezählt, zuletzt am 2026-11-13 nach den vier Handbuch-Zeilen (decisions/phase-5-gleichstand.md, „Die App verweist aufs Handbuch“); davor am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Die letzte `gebaut`-Zeile, die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, ist beim echten ersten Start des Nutzers gemessen (2026-11-11); keine Zeile steht mehr auf `gebaut`.
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 192 | 0 | 20 | 0 | 4 | 216 |
+| Einrichtung | 194 | 0 | 22 | 0 | 0 | 216 |
 | Plugins und Wartung | 254 | 0 | 7 | 0 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 234 | 0 | 9 | 0 | 0 | 243 |
-| **Summe** | **680** | **0** | **36** | **0** | **4** | **720** |
+| **Summe** | **682** | **0** | **38** | **0** | **0** | **720** |
 
-Die Kanäle: 159 mit Gegenstück in Kern und App, 18 bewusst anders (Fortschritt und Protokoll über
+Die Kanäle: 160 mit Gegenstück in Kern und App, 19 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
-auch QuartzControls Oberfläche nie aufruft), zwei fehlen (`appUpdate:check`, `dialog:openHandbook`;
-beide stehen unten).
+auch QuartzControls Oberfläche nie aufruft); keiner fehlt mehr (`dialog:openHandbook` und
+`appUpdate:check`, dieser anders, kamen am 2026-11-13).
 
 ## Was fehlt
 

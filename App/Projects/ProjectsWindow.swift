@@ -39,6 +39,9 @@ struct ProjectsWindow: View {
       if let report = model.environment, !report.ok {
         EnvironmentBand(report: report) { Task { await model.checkEnvironment() } }
       }
+      if case .newer(let current, let latest, let url)? = model.appUpdate {
+        NewerVersionBand(current: current, latest: latest, url: url)
+      }
       content
     }
       .navigationTitle(L10n.t("shell.projects.title"))
@@ -72,6 +75,7 @@ struct ProjectsWindow: View {
       .task {
         await model.reload()
         await model.checkEnvironment()
+        await model.checkAppUpdate()
       }
       .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
         Task { await model.reload() }

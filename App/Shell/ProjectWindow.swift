@@ -146,7 +146,8 @@ struct ProjectWindow: View {
       forwardTitle: history.forward.last.map(NavigationHistory.label),
       step: travel,
       open: { go(to: $0) },
-      current: current))
+      current: current,
+      handbookPlace: Handbook.place(page: current.rawValue, tab: history.current?.page == current ? history.current?.tab : nil)))
     .focusedSceneValue(\.projectActions, ProjectActions(
       project: ProjectContext(id: row.id, name: row.name, path: row.path),
       state: BuildMonitor.shared.status(row.id).state))

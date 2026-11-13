@@ -2819,3 +2819,33 @@ der cmap, und WebKits PDF gibt einer Glyphe ihren Text über die cmap; „ff“ 
 deshalb kein Text. Das Druckdokument setzt jetzt `font-variant-ligatures: no-common-ligatures`
 (nur `body.pdf`; ePub und HTML behalten ihre Ligaturen). `qh-check export-book --pdf` am Handbuch:
 200 unlesbare Wörter vorher, keins nachher; die Bücher sind damit neu exportiert.
+
+## Die App verweist aufs Handbuch (2026-11-13)
+
+Die vier letzten `fehlt`-Zeilen der Gleichstand-Liste (Plan, Handbuch 7).
+
+- **Wohin:** `Handbook.pages` im Kern, ein Schlüssel je Ort (Seite, auf Seiten mit Reitern
+  „Seite/Reiter“, dazu „projects“ und „settings“) mit dem deutschen und dem englischen Pfad, wie
+  QuartzControls `handbookPages.ts`. Ein Reiter ohne eigene Zeile nimmt die seiner Seite. Die
+  Sprache der App wählt den Pfad. `qh-check handbook` meldet jede Seite der Tabelle, die der Vault
+  nicht hat (52 Dateien, beide Sprachen; Test `theAppsLinksMustExist`). Die Adressen antworten erst,
+  wenn das Handbuch online ist; gefragt wird vorher nicht, wie in QuartzControl.
+- **Wo:** Hilfe ▸ Handbuch (Startseite) und neu „Diese Seite im Handbuch“: Seite und Reiter des
+  vorderen Projektfensters, aus dem Verlauf des Fensters (`WindowNavigation.handbookPlace`); ohne
+  Projektfenster aus. Im Inspektor „Im Handbuch nachlesen“ unter dem Kontext der Seite, also nur,
+  wenn nichts gewählt ist: Die Regel „rechts nur der Inspektor“ lässt keinen Kopf je Seite wie in
+  QuartzControl. Auf Dokumente und Veröffentlichen ist meist etwas gewählt; dort führt das Menü
+  hin. Im Fenster „Projekte“ „Handbuch zu QuartzHub“ neben Quartz-Dokumentation und Plugin-Katalog.
+- **Neuere Fassung:** `AppUpdateCheck` fragt GitHubs `releases/latest` von `boxi-os/QuartzHub` statt
+  einer `latest.json` wie QuartzControl: eine Datei weniger, die bei jedem Release nachzuziehen
+  wäre, und Entwürfe und Vorabversionen bleiben ohnehin draußen. Höchstens alle sechs Stunden, 8 s
+  Frist, alles Unlesbare ist „unbekannt“ und zeigt nichts; die Seite des Release nur, wenn sie in
+  diesem Repo liegt. Heute ist das Repo privat, GitHub antwortet 404 (gemessen), es erscheint kein
+  Band. Zum Ansehen und für den UI-Test spielt `-QHAppUpdateLatest <version>` (nur Debug) GitHubs
+  Antwort durch dieselbe Auswertung; `-QHNoUpdateCheck` fragt nicht.
+- **Gemessen:** an der App über `-QHOpenLog`, de und en: Plugins ▸ Formulare → `4-einrichtung/09-formulare`,
+  Konfiguration ▸ Übersetzungen (en) → `en/4-setup/04-translations`, Inspektor auf Snapshots (en) →
+  `en/7-maintenance/02-snapshots`, Variablen → `5-gestaltung/07-variablen`; der Inspektor-Verweis
+  ist auf 10 der 12 Seiten zu sehen (nicht auf Dokumente und Veröffentlichen mit Auswahl). UI-Test
+  `testHandbookLinksAndNewerVersionBand`; Gegenprobe: zeigte „Diese Seite im Handbuch“ auf die
+  Startseite, schlug er fehl.

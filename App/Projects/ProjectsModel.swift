@@ -23,6 +23,8 @@ final class ProjectsModel {
   let list: ProjectList
   /// What the tools answered; nil until the first probe.
   private(set) var environment: EnvironmentReport?
+  /// Whether GitHub has a later QuartzHub (`AppUpdateCheck`); nil until asked.
+  private(set) var appUpdate: AppUpdateCheck.Status?
 
   private init() {
     let profile = AppProfile.own
@@ -36,6 +38,23 @@ final class ProjectsModel {
   /// to change on "Erneut prüfen".
   func checkEnvironment() async {
     environment = await EnvironmentReport.probe(await AppServices.shared.environment.value)
+  }
+
+  /// Off the window's way: the list comes up at the speed of the local reads, this goes to the
+  /// network. Not with `-QHNoUpdateCheck` (DEBUG), which keeps looking at the app offline.
+  func checkAppUpdate() async {
+    let current = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    #if DEBUG
+    // `-QHAppUpdateLatest 9.9.9`: GitHub's answer played, through the same reading, for looking at
+    // the band and for the UI test while the repository is private (GitHub answers 404).
+    if let latest = LaunchArgument.string("QHAppUpdateLatest") {
+      let answer = #"{"tag_name": "v\#(latest)", "html_url": "https://github.com/boxi-os/QuartzHub/releases/tag/v\#(latest)"}"#
+      appUpdate = AppUpdateCheck.status(data: Data(answer.utf8), statusCode: 200, current: current)
+      return
+    }
+    #endif
+    if LaunchArgument.flag("QHNoUpdateCheck") { return }
+    appUpdate = await AppUpdateCheck.check(current: current)
   }
 
   func reload() async {

@@ -19,7 +19,8 @@ import Foundation
 /// may also leave a gap with „…“ or <…>. An exception that matches nothing any more is a finding
 /// too, so the list does not hide a quote that later becomes wrong.
 public struct HandbookQuoteCheck: Sendable {
-  public enum Kind: String, Sendable { case quote, path, nearMiss, staleException }
+  /// `appLink`: a page the app links to (`Handbook.pages`) that the vault does not have.
+  public enum Kind: String, Sendable { case quote, path, nearMiss, staleException, appLink }
 
   public struct Finding: Sendable, Equatable {
     public var file: String
@@ -37,6 +38,8 @@ public struct HandbookQuoteCheck: Sendable {
     public var paths = 0
     public var bold = 0
     public var files = 0
+    /// Pages the app links to, both languages.
+    public var appLinks = 0
   }
 
   /// One excepted text per line: language, a space, the text as the handbook has it, then
@@ -87,7 +90,7 @@ public struct HandbookQuoteCheck: Sendable {
             }
           }
           if bad { report.findings.append(Finding(file: relative, line: item.line, kind: .path, language: language, text: item.text)) }
-        case .nearMiss, .staleException:
+        case .nearMiss, .staleException, .appLink:
           report.bold += 1
           if matcher.says(item.text) { continue }
           guard let near = matcher.nearMiss(item.text) else { continue }
@@ -96,6 +99,10 @@ public struct HandbookQuoteCheck: Sendable {
         }
       }
     }
+    for file in Handbook.files where !FileManager.default.fileExists(atPath: "\(vault)/\(file)") {
+      report.findings.append(Finding(file: file, line: 0, kind: .appLink, language: file.hasPrefix("en/") ? "en" : "de", text: file))
+    }
+    report.appLinks = Handbook.files.count
     for (index, exception) in exceptions.enumerated() where !used.contains(index) {
       report.findings.append(Finding(file: exceptionsFile, line: exception.line, kind: .staleException,
                                      language: exception.language, text: exception.text))

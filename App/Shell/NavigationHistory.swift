@@ -135,6 +135,8 @@ struct WindowNavigation {
   let step: (NavigationHistory.Step) -> Void
   let open: (ProjectPage) -> Void
   let current: ProjectPage
+  /// The page and its tab as a key of `Handbook.pages`.
+  let handbookPlace: String
 }
 
 extension FocusedValues {

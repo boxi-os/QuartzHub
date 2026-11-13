@@ -21,7 +21,8 @@ final class SmokeTests: XCTestCase {
     return url
   }
 
-  private func launch(size: CGSize? = nil, profile: URL? = nil, migrationSource: String = "", open project: URL? = nil) -> XCUIApplication {
+  private func launch(size: CGSize? = nil, profile: URL? = nil, migrationSource: String = "", open project: URL? = nil,
+                      extra: [String] = []) -> XCUIApplication {
     let app = XCUIApplication()
     // A fresh window state every run: no restored page, inspector at its default. The takeover
     // from QuartzControl is off unless a test hands it a source profile.
@@ -31,6 +32,7 @@ final class SmokeTests: XCTestCase {
     if let profile { app.launchArguments += ["-QHProfileDir", profile.path] }
     if let project { app.launchArguments += ["-QHOpenProject", project.path] }
     if let size { app.launchArguments += ["-QHWindowSize", "\(Int(size.width))x\(Int(size.height))"] }
+    app.launchArguments += extra
     app.launch()
     return app
   }
@@ -168,6 +170,41 @@ final class SmokeTests: XCTestCase {
     XCTAssertTrue(app.menuItems["Inspektor einblenden"].exists, "menu item did not change its title")
     app.typeKey("i", modifierFlags: [.control, .command])
     XCTAssertTrue(context.waitForExistence(timeout: 5), "⌃⌘I did not show the inspector")
+  }
+
+  /// The handbook from the app (Handbook): Hilfe ▸ Handbuch the start, „Diese Seite im Handbuch“ the
+  /// tab in front, the inspector's link its page; the addresses read from `-QHOpenLog`, so no
+  /// browser opens. And the band of a newer version, from GitHub's answer played with
+  /// `-QHAppUpdateLatest` (the repository is private, GitHub answers 404).
+  func testHandbookLinksAndNewerVersionBand() throws {
+    let (profile, project) = try scratchProject()
+    let log = try scratchDirectory("open").appendingPathComponent("open.log")
+    let app = launch(profile: profile, open: project, extra: ["-QHOpenLog", log.path, "-QHAppUpdateLatest", "9.9.9"])
+    XCTAssertTrue(app.descendants(matching: .any)["appUpdate.band"].firstMatch.waitForExistence(timeout: 10), "no band for a newer version")
+
+    let window = projectWindow(app)
+    XCTAssertTrue(window.waitForExistence(timeout: 10), "project window did not open")
+    window.click()
+    window.descendants(matching: .any)["sidebar.plugins"].firstMatch.click()
+    XCTAssertTrue(window.descendants(matching: .any)["page.plugins"].firstMatch.waitForExistence(timeout: 5))
+    window.radioButtons["Formulare"].firstMatch.click()
+    app.menuItems["Diese Seite im Handbuch"].click()
+    app.menuItems["Handbuch"].click()
+    window.descendants(matching: .any)["sidebar.updates"].firstMatch.click()
+    let link = window.descendants(matching: .any)["handbook.link"].firstMatch
+    XCTAssertTrue(link.waitForExistence(timeout: 5), "no handbook link in the inspector")
+    link.click()
+
+    let base = "https://boxi-os.github.io/QuartzHub/"
+    let expected = ["open \(base)4-einrichtung/09-formulare", "open \(base)", "open \(base)7-wartung/01-updates"]
+    let deadline = Date().addingTimeInterval(5)
+    var lines: [String] = []
+    while Date() < deadline {
+      lines = ((try? String(contentsOf: log, encoding: .utf8)) ?? "").split(separator: "\n").map(String.init)
+      if lines.count >= expected.count { break }
+      usleep(200_000)
+    }
+    XCTAssertEqual(lines, expected)
   }
 
   /// The Projects window: a project in the list opens its own window by double click, and removing

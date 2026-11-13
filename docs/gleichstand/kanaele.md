@@ -21,7 +21,7 @@ anders gelöst · `fehlt` = nichts gefunden.
 | `project:create` | `createService.ts:createProject` + `addProject` | `Projects/ProjectCreation.swift:47` `ProjectCreation.run` (→ `ProjectCreator.create`) | `App/Projects/CreateProjectSheet.swift:208` | da |
 | `project:duplicate` | `duplicateService.ts:duplicateProject` + `addProject` | `Projects/ProjectList.swift:39` `ProjectList.duplicate` (→ `ProjectDuplicator.duplicate`) | `App/Projects/DuplicateProjectSheet.swift:121` | da |
 | `project:missingDependencies` | `projectDependencies.ts:missingDependencies`/`missingAuthoredFrames` + `pluginService.isInstallingFromLock` | `Projects/ProjectDependencies.swift:14/81`, `Plugins/PluginCommands.swift:100` `isInstallingFromLock` | `App/Pages/Overview/OverviewModel.swift:112-118` | da |
-| `appUpdate:check` | `appUpdateService.ts:checkAppUpdate` | — | — | fehlt (laut `docs/plan.md:205` und `phase-3-dienste.md:1285` bewusst auf Phase 5 verschoben, kein Release-Kanal) |
+| `appUpdate:check` | `appUpdateService.ts:checkAppUpdate` | `AppUpdateCheck.check` | `ProjectsModel.checkAppUpdate` | anders (2026-11-13: GitHubs `releases/latest` statt `latest.json`) |
 | `templatePackage:builtin` | `builtinTemplateService.ts:getBuiltinTemplate` | `Templates/BuiltinTemplate.swift:118` `BuiltinTemplate.find` | `App/Projects/CreateProjectSheet.swift:51`, `App/Pages/Templates/TemplatesModel.swift:172` | da |
 
 ## projectIcon
@@ -302,7 +302,7 @@ anders gelöst · `fehlt` = nichts gefunden.
 |---|---|---|---|---|
 | `dialog:pickFolder` | `showOpenDialog({openDirectory})` | — (App-Sache) | `App/Projects/ProjectsModel.swift:82` `pickFolder` (aus `SettingsWindow.swift:106`, `ContentFolderSection.swift:112`, …) | anders (NSOpenPanel in der App) |
 | `dialog:revealUserData` | `shell.showItemInFolder(userData/settings.json)` | — | `App/Settings/SettingsWindow.swift:282` | anders (NSWorkspace.activateFileViewerSelecting) |
-| `dialog:openHandbook` | `menu.ts:openHandbook` | — | — | fehlt (Handbuch-Link laut `docs/plan.md:281` auf Phase 5 verschoben) |
+| `dialog:openHandbook` | `menu.ts:openHandbook` | `Handbook.url` | `HelpCommands`, `HandbookLink` | gemessen (2026-11-13) |
 | `dialog:openExternal` | `shell.openExternal` (nur https) | — | `App/Projects/ProjectInspector.swift:109`, `App/Pages/Plugins/PluginInspector.swift:40`, `App/Pages/GitSync/GitSyncPage.swift:175` | anders (SwiftUI `Link`/`openURL`) |
 | `dialog:confirm` | `dialog.showMessageBox` | — | `App/Components/Confirm.swift:10` `Confirm.ask` (z. B. `ConnectionsSettings.swift:261`), `confirmationDialog` (z. B. `ProjectsWindow.swift:87`) | anders (native Dialoge in der App) |
 

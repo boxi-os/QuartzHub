@@ -32,9 +32,12 @@ import Testing
     deinit { try? FileManager.default.removeItem(atPath: path) }
   }
 
+  /// The quote checks; the app's links have a test of their own (this small vault has none of them).
   static func run(_ files: [String: String]) throws -> HandbookQuoteCheck.Report {
     let vault = try Vault(files)
-    return try HandbookQuoteCheck.run(catalog: catalog, vault: vault.path)
+    var report = try HandbookQuoteCheck.run(catalog: catalog, vault: vault.path)
+    report.findings.removeAll { $0.kind == .appLink }
+    return report
   }
 
   /// Whole texts, a shortened label, a filled-in placeholder, a gap, a sentence from the middle,
@@ -97,5 +100,15 @@ import Testing
     ])
     #expect(report.findings.map { "\($0.kind.rawValue) \($0.file):\($0.line)" }
       == ["quote en/page.md:1", "staleException private/zitat-ausnahmen.txt:4"], "\(report.findings)")
+  }
+
+  /// Every page the app links to must be in the vault, both languages; one missing is a finding.
+  @Test func theAppsLinksMustExist() throws {
+    var files = Dictionary(uniqueKeysWithValues: Handbook.files.map { ($0, "# x\n") })
+    files["en/7-maintenance/02-snapshots.md"] = nil
+    let vault = try Vault(files)
+    let report = try HandbookQuoteCheck.run(catalog: Self.catalog, vault: vault.path)
+    #expect(report.findings.map { "\($0.kind.rawValue) \($0.file)" } == ["appLink en/7-maintenance/02-snapshots.md"], "\(report.findings)")
+    #expect(report.appLinks == Handbook.files.count)
   }
 }

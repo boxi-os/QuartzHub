@@ -4,9 +4,11 @@ import SwiftUI
 
 /// The Help menu, QuartzControl's in `electron/main/menu.ts` (user, 2026-11-09: all of it): where
 /// the truth lives (Quartz's docs, the plugin organisation) and where the data is, from any window.
-/// Hilfe ▸ Handbuch comes with the handbook (docs/plan.md, Phase 5). The system keeps its search
-/// field at the top.
+/// Hilfe ▸ Handbuch opens the handbook's start, „Diese Seite im Handbuch“ the chapter for the front
+/// project window's page and tab (`Handbook`). The system keeps its search field at the top.
 struct HelpCommands: Commands {
+  @FocusedValue(\.windowNavigation) private var navigation
+
   /// A constant, not a setting: this app's own repository. A report only arrives once the
   /// repository is public; GitHub answers 404 for a private one to everyone but collaborators
   /// (QuartzControl measured it on 2026-09-09).
@@ -17,6 +19,12 @@ struct HelpCommands: Commands {
   var body: some Commands {
     let _ = AppAppearance.shared.revision
     CommandGroup(replacing: .help) {
+      Button(L10n.t("main.menuHandbook")) { ExternalOpen.open(Handbook.url(for: nil, language: L10n.language)) }
+      Button(L10n.t("shell.help.handbookHere")) {
+        if let place = navigation?.handbookPlace { ExternalOpen.open(Handbook.url(for: place, language: L10n.language)) }
+      }
+      .disabled(navigation == nil)
+      Divider()
       Button(L10n.t("main.menuFeedback")) { Self.sendFeedback() }
       Divider()
       Button(L10n.t("main.menuQuartzDocs")) { Self.open(Self.quartzDocs) }

@@ -144,12 +144,13 @@ case "handbook":
     print("Nicht lesbar: \(error)")
     exit(3)
   }
-  print("\(report.files) Seiten: \(report.quotes) Zitate, \(report.paths) Menüpfade, \(report.bold) fette Namen")
+  print("\(report.files) Seiten: \(report.quotes) Zitate, \(report.paths) Menüpfade, \(report.bold) fette Namen, \(report.appLinks) Verweise aus der App")
   let titles: [(HandbookQuoteCheck.Kind, String)] = [
     (.quote, "Zitate, die QuartzHub so nicht sagt"),
     (.path, "Menüpfade mit einem Schritt, den QuartzHub so nicht nennt"),
     (.nearMiss, "Fett, und fast ein Text von QuartzHub"),
     (.staleException, "Ausnahmen, die nichts mehr betreffen"),
+    (.appLink, "Verweise aus der App (Handbook.pages) auf Seiten, die es nicht gibt"),
   ]
   for (kind, title) in titles {
     let found = report.findings.filter { $0.kind == kind }

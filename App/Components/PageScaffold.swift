@@ -41,6 +41,12 @@ struct PageScaffold<Content: View, Inspector: View>: View {
 struct InspectorPageContext<Extra: View>: View {
   let page: ProjectPage
   @ViewBuilder var extra: () -> Extra
+  @Environment(\.history) private var history
+
+  /// The page and, on a tabbed page, the tab it shows, as the window's history knows it.
+  private var place: String {
+    Handbook.place(page: page.rawValue, tab: history?.current?.page == page ? history?.current?.tab : nil)
+  }
 
   var body: some View {
     Form {
@@ -57,6 +63,9 @@ struct InspectorPageContext<Extra: View>: View {
         }
       }
       extra()
+      Section {
+        HandbookLink(place: place)
+      }
     }
     .formStyle(.grouped)
   }

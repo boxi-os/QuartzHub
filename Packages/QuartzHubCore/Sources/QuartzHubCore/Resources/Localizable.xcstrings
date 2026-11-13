@@ -20202,13 +20202,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Handbuch zu QuartzControl"
+            "value" : "Handbuch zu QuartzHub"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QuartzControl handbook"
+            "value" : "QuartzHub handbook"
           }
         }
       }
@@ -49295,6 +49295,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Content folder linked again"
+          }
+        }
+      }
+    },
+    "shell.help.handbookHere" : {
+      "comment" : "Help menu: opens the handbook's chapter for the page and tab of the front project window",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Seite im Handbuch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Page in the Handbook"
           }
         }
       }

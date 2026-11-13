@@ -104,6 +104,7 @@ struct ProjectsContext: View {
       }
       Section(L10n.t("home.aboutQuartz.title")) {
         Text(L10n.t("home.aboutQuartz.body")).foregroundStyle(.secondary)
+        HandbookLink(place: nil, title: L10n.t("home.aboutQuartz.handbook"), showsIcon: false)
         Link(L10n.t("home.aboutQuartz.docs"), destination: URL(string: "https://quartz.jzhao.xyz/")!)
         Link(L10n.t("home.aboutQuartz.catalog"), destination: URL(string: "https://github.com/quartz-community")!)
       }
@@ -188,5 +189,25 @@ struct EnvironmentBand: View {
     .padding([.horizontal, .top], 12)
     .accessibilityElement(children: .contain)
     .accessibilityIdentifier("environment.band")
+  }
+}
+
+/// A newer QuartzHub on GitHub (QuartzControl's `NewerVersionBand`): the two versions and the way
+/// to the release page. Nothing when it could not be asked: "could not check" is not news.
+struct NewerVersionBand: View {
+  let current: String
+  let latest: String
+  let url: String?
+
+  var body: some View {
+    Callout(.info) {
+      HStack(alignment: .firstTextBaseline) {
+        Text(L10n.t("home.update.available", ["latest": latest, "current": current]))
+        Spacer()
+        Link(L10n.t("home.update.get"), destination: URL(string: url ?? "https://github.com/boxi-os/QuartzHub/releases/latest")!)
+      }
+    }
+    .padding([.horizontal, .top], 12)
+    .accessibilityIdentifier("appUpdate.band")
   }
 }
