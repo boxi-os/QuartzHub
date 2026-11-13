@@ -106,6 +106,8 @@ Nutzer wählte zuerst H1 und H2, dann M5, N14, N15 und die übrigen.
 | M5 | Im PDF bleibt „ff“ und „ffi“ als Text lesbar: Druck ohne gewöhnliche Ligaturen (`DocumentHTML.webKitPrintRules`); vorher 200 Wörter unlesbar, danach keins | `f64d2d9` |
 | M1 | Ungespeicherte Übersetzungen fragen vor einer anderen Sprache, beim Schließen und Beenden; Verwerfen verwirft wirklich | `5cacfa8` |
 | M2 | Beim ersten Einrichten von GitHub Pages geht die eingetragene Domain mit (PUT nach dem POST); nicht gegen GitHub selbst gemessen | `5f92c12` |
+| M3 | Alle Wege bauen in den gespeicherten Ausgabeordner; „Jetzt bauen“ übernimmt das Feld vorher (der zweite Teil war mit der Maus nicht nachzustellen) | `7341206` |
+| M4 | ⌘S und „Speichern“ beim Verlassen auf Stile speichern wie der Knopf, mit SCSS-Prüfung danach | `2144a5f` |
 | N14 | ➕ Neues Buch fragt zuerst nach dem Titel und zeigt den Dateinamen, der daraus wird | `731bc55` |
 | N15 | Die Format-Schalter des Ziels „Dokument“ sind drei Elemente mit eigener Kennung; ein Klick schaltet das richtige | `83e2271` |
 

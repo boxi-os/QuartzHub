@@ -90,7 +90,7 @@ verwirft sie still, Beenden und Fenster schließen ebenso.** *(gelesen)* **Erled
 - Handbuch: 6.8 GitHub Pages erwähnt den Fehler nicht und beschreibt den Weg, nach dem er auftritt.
 
 **M3. „Build ausführen“ auf der Übersicht baut immer nach `public/`, „Jetzt bauen“ auf Vorschau &
-Build in den eben getippten, noch nicht übernommenen Ausgabeordner.** *(gelesen)*
+Build in den eben getippten, noch nicht übernommenen Ausgabeordner.** *(gelesen)* **Erledigt** (`7341206`).
 
 - Ort: `App/Pages/Overview/OverviewModel.swift:149` (`BuildAction.run` ohne `outputDir`);
   `App/Pages/Server/BuildServerModel.swift:111,117` (nimmt `outputDir`, das Feld, nicht
@@ -104,7 +104,7 @@ Build in den eben getippten, noch nicht übernommenen Ausgabeordner.** *(gelesen
 - Handbuch: 3.1 und 6.2 erwähnen den Fehler nicht; 6.2 beschreibt den Ausgabeordner so, wie ihn die Seite Vorschau & Build verwendet.
 
 **M4. ⌘S und „Speichern“ im Dialog beim Verlassen überspringen auf der Seite Stile, was der Knopf
-in der Symbolleiste danach tut (SCSS-Prüfung des eigenen CSS, Schriften neu lesen).** *(gelesen)*
+in der Symbolleiste danach tut (SCSS-Prüfung des eigenen CSS, Schriften neu lesen).** *(gelesen)* **Erledigt** (`2144a5f`).
 
 - Ort: `App/Pages/Styles/StylesPage.swift:60-62` (`.unsavedChanges { await model.save(from: tab) }`)
   gegen `:197-202` (`save()`: dazu `savedRound += 1` und `runCssCheck()` auf Eigenes CSS).
