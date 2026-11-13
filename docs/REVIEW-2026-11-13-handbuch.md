@@ -173,7 +173,7 @@ QuartzHub-Web *(gesehen)*:
 - Handbuch: nicht betroffen, aber das PDF des Handbuchs selbst.
 
 **N14. ➕ Neues Buch fragt nicht nach einem Namen: Die Datei heißt immer `neues-buch.json`
-(englisch `new-book.json`), und so heißen auch PDF und ePub.** *(gesehen)*
+(englisch `new-book.json`), und so heißen auch PDF und ePub.** *(gesehen)* **Erledigt** (`731bc55`).
 `App/Pages/Documents/DocumentsModel.swift:184` legt das Buch sofort mit dem Platzhaltertitel an;
 der Name entsteht daraus (`BookFile.id(fromTitle:)`) und bleibt. Wie QuartzControl
 (`routes/Documents/index.tsx:136`). Umbenennen geht nur im Finder. Vorschlag: wie ➕ Neues Formular
@@ -181,7 +181,7 @@ zuerst nach dem Titel fragen. Für die Bücher des Handbuchs von Hand umbenannt.
 Handbuch: 6.6 beschreibt es jetzt so, wie es ist.
 
 **N15. Die drei Format-Schalter im Ziel „Dokument“ sind für die Bedienungshilfen ein einziges
-Element.** *(gesehen)* `App/Pages/Publish/TargetSheet.swift:264-269`: Die Toggles stehen in einem
+Element.** *(gesehen)* **Erledigt** (`83e2271`; was VoiceOver vorliest, nicht gemessen). `App/Pages/Publish/TargetSheet.swift:264-269`: Die Toggles stehen in einem
 `LabeledContent`; System Events sieht drei Markierungsfelder, alle mit dem Namen „Formate“ und an
 derselben Position, und ein Klick auf das zweite schaltete PDF aus. VoiceOver erreicht ePub und HTML
 damit nicht. Vorschlag: jedem Toggle sein eigenes Label lassen (`accessibilityLabel` mit dem
