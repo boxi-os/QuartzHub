@@ -317,6 +317,16 @@ final class PluginsModel {
     // `plugin remove` refuses a name that matches more than one entry, and with the same source
     // twice the full source does not tell them apart either (measured on gui-test, 2026-11-11).
     if item.frame == nil, item.of > 1 {
+      // The snapshot the question promised, as `plugin remove` takes it: the config write alone
+      // takes a configChange, which the 15-minute rule may skip (review 2026-11-13, handbook, N8).
+      await writes?.value
+      let environment = await AppServices.current()
+      do {
+        _ = try await SnapshotStore.live(environment: environment).take(project.path, "pluginChange", item.displayName)
+      } catch {
+        message = String(describing: error)
+        return
+      }
       await commit { plugins in plugins.enumerated().filter { $0.offset != item.index }.map(\.element) }
       return
     }
