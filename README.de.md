@@ -6,7 +6,7 @@ Eine native macOS-App, mit der man [Quartz 5](https://quartz.jzhao.xyz/)-Website
 Konfiguration, Plugins, Layout, Stile, Vorschau und Build, Veröffentlichen und Export als PDF, ePub
 und Offline-HTML, geschrieben in Swift.
 
-**Fassung 1.0.0.** Die DMG gibt es unter [Releases](https://github.com/boxi-os/QuartzHub/releases/latest);
+**Fassung 1.0.1.** Die DMG gibt es unter [Releases](https://github.com/boxi-os/QuartzHub/releases/latest);
 das [Handbuch](https://boxi-os.github.io/QuartzHub/) erklärt jedes Fenster und jede Seite. QuartzHub ist
 nicht notarisiert: Der erste Start braucht „Dennoch öffnen“ unter Systemeinstellungen ▸ Datenschutz &
 Sicherheit.
