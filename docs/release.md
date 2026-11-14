@@ -106,12 +106,11 @@ Erst als Entwurf: die DMG von der Seite herunterladen, Prüfsumme vergleichen, e
 mit ihr nachgehen. Dann `gh release edit v<fassung> --draft=false`. Nie `--prerelease` (Punkt 1);
 solange der Entwurf steht, sieht ihn `releases/latest` nicht. Die Notizen haben, in Englisch:
 
-- **was neu ist** (für 1.0.0: die Nachfolgerin von QuartzControl, nativ, liest dieselben Projekte);
+- **was neu ist**;
 - **Voraussetzungen:** macOS 26 oder neuer, Apple Silicon;
+- **Aktualisieren:** die DMG laden und die App ersetzen; Projekte, Einstellungen und Zugänge bleiben;
+  beim ersten Lesen eines Zugangs fragt macOS einmal („Always Allow“), denn die Signatur ist ad hoc;
 - **erster Start:** nicht notarisiert, „Dennoch öffnen“ (Punkt 6) oder `xattr -dr com.apple.quarantine`;
-- **neben QuartzControl:** QuartzHub übernimmt beim ersten Start Projektliste, Einstellungen und
-  Zugänge aus QuartzControl, ohne dessen Dateien zu ändern; beide lesen dieselben Projekte im Format
-  von 1.3;
 - **Prüfsummen** als eigener Abschnitt „Checksums (SHA-256)“: `shasum -a 256 <dmg>`, nach dem
   Hochladen gegen die Datei auf der Seite gehalten.
 
@@ -136,32 +135,23 @@ Release-Seite. Danach jede Seite, auf die die App verweist, mit 200:
       done | grep -v '^200'
 
 Still heißt gut (52 Adressen: 25 Seiten je Sprache und die zwei Startseiten, Stand 2026-11-14). Die Seite der Website und die Start-Seiten `/` und `/en/` dazu im Browser ansehen.
-PDF und ePub des Handbuchs kommen erst, wenn QuartzControl vom Netz ist und aus den Handbüchern
-entfernt (Entscheidung 2026-11-13); bis dahin hat die Website keine Download-Links auf sie.
+PDF und ePub des Handbuchs: die Bedingung (QuartzControl aus den Handbüchern, Entscheidung 2026-11-13)
+ist seit 2026-11-14 erfüllt; ob und wann die Website Download-Links auf sie bekommt, entscheidet der
+Nutzer.
 
 ## 10. Die Grundvorlage liegt im Vorlagen-Repo
 
 QuartzHub holt `qc-basic.qtpl` aus `boxi-os/quartzcontrol-templates` (`BuiltinTemplate.url`, ein Tag
-Cache), QuartzControl 1.3 auch. Am Release-Tag, nach Punkt 8:
+Cache; der Name des Repos ist Adresse und bleibt). Ändert sich eine Vorlage, am Release-Tag nach Punkt 8:
 
 - `Resources/templates/qc-basic.qtpl` dorthin kopieren (Wegwerf-Klon mit `gh repo clone`); das
   Paket trägt ein neueres `createdAt` als das alte, sonst gewinnt ein Cache;
 - die README des Repos nennt QuartzHub;
-- der Fußzeilen-Link der Vorlage zeigt auf QuartzHub (`parts/plugins.json`), nicht auf QuartzControl
-  (seit 2026-11-14 so in `Resources/templates/qc-basic.qtpl`, ebenso der Kommentar in
-  `parts/styles.json` und die Druck-Regel in `a11y.scss`; `createdBy.app` und die Marker `QuartzControl:syntax:` sind Format und bleiben);
+- `createdBy.app` alter Pakete und die Marker `QuartzControl:syntax:` sind Format und bleiben;
 - **die Example-Vorlage** `qc-example.qtpl` baut auf der Grundvorlage auf und wird mit ihr neu erzeugt
   (Entscheidung 2026-11-13, docs/plan.md): mit QuartzHub, „Vorlagen ▸ Erstellen“ am Example-Projekt.
   Vorher die Bausteine gegen `qc-basic` halten (Frames, Theme, Farben, Layout, Variablen, Schriften,
   Stylesheets gleich; 2026-11-14 wich nur `a11y.scss` ab, die Druck-Regel des Example kam darauf
   in `qc-basic`) und die gebaute Example-Seite auf `<br>` an jedem Zeilenende prüfen: Die Seiten sind
   bei Spalte 100 umbrochen, und Quartz 5.1 macht daraus ohne `strictLineBreaks: true` bei
-  Obsidian-Markdown sichtbare Umbrüche (3.081 auf 228 Seiten). Zuletzt erzeugt 2026-11-14 für 1.0.0.
-
-`latest.json` im selben Repo ist QuartzControls Update-Kanal, nicht QuartzHubs; ob es zum Abschalten
-von QuartzControl auf QuartzHub zeigt, ist eine eigene Entscheidung.
-
-## 11. QuartzControl nennt seine Nachfolgerin
-
-QuartzControls `README.md` und `README.de.md` verweisen auf QuartzHub und dessen Release-Seite
-(Commit in `../QuartzControl` auf `main`).
+  Obsidian-Markdown sichtbare Umbrüche (3.081 auf 228 Seiten). Zuletzt erzeugt 2026-11-14 für 1.0.1.
