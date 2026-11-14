@@ -91,9 +91,7 @@ public struct SavePublishTargetInput: Equatable, Sendable {
 /// The project's publish targets (`publishTargetsService.ts`): `.quartz-gui/publish-targets.json`,
 /// in the project because a target says what this project publishes where, carries no secret
 /// (that is the connection's half) and travels with the folder.
-///
-/// Targets staged from before QuartzControl's first release (`legacy-publish-targets.json`) are not
-/// claimed: the takeover did not bring that file along.
+
 public struct PublishTargets: Sendable {
   public let project: String
   let makeID: @Sendable () -> String

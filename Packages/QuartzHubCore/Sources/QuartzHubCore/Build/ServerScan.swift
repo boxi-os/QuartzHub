@@ -193,8 +193,24 @@ public enum ServerScan {
   /// hands numbers out again. The tracked pid is npx's, whose title npm rewrites to the arguments
   /// QuartzHub passed; QuartzHub's own path says "QuartzHub", capital Q.
   public static func isQuartzServer(_ pid: Int32) -> Bool {
-    guard pid > 0, kill(pid, 0) == 0, let command = Coexistence.commandLine(pid) else { return false }
+    guard pid > 0, kill(pid, 0) == 0, let command = commandLine(pid) else { return false }
     return command.contains("quartz") && command.contains("--serve")
+  }
+
+  /// `ps -p <pid> -o command=`, as QuartzControl asks; nil when the process is gone.
+  static func commandLine(_ pid: Int32) -> String? {
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/bin/ps") // path boundary: Process takes a URL; the path is a constant
+    process.arguments = ["-p", String(pid), "-o", "command="]
+    let output = Pipe()
+    process.standardOutput = output
+    process.standardError = FileHandle.nullDevice
+    do { try process.run() } catch { return nil }
+    let data = output.fileHandleForReading.readDataToEndOfFile()
+    process.waitUntilExit()
+    guard process.terminationStatus == 0 else { return nil }
+    let text = String(decoding: data, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+    return text.isEmpty ? nil : text
   }
 
   // MARK: process table

@@ -167,12 +167,4 @@ JSON
   printf '{\n  "theme": "%s",\n  "defaultProjectDirectory": "%s"\n}\n' "$theme" "$DEMO/QuartzProjekte" > "$prof/settings.json"
   printf '[]\n' > "$prof/running-servers.json"
 done
-# A profile of QuartzControl for the question at the first start: one project and settings, no
-# connections and no secrets (so nothing asks for the keychain).
-qc="$DEMO/quartzcontrol-profile"
-mkdir -p "$qc"
-# Only the first project: the question counts what it found.
-python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); json.dump(d[:1], open(sys.argv[2], "w"), indent=2)' \
-  "$DEMO/profile-light/projects.json" "$qc/projects.json"
-printf '{\n  "theme": "system",\n  "language": "system"\n}\n' > "$qc/settings.json"
 echo "Demo: $P"

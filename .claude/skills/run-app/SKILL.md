@@ -18,14 +18,10 @@ Startargumente: `-QHLanguage de|en` (Sprache unabhängig vom Mac), `-QHWindowSiz
 (Startgröße; entfernt gespeicherte Fensterrahmen, die eigenen des Nutzers legt sein nächster Start
 ohne `-QHProfileDir` und `-QHWindowSize` zurück, `WindowFrames`), `-ApplePersistenceIgnoreState YES` (kein
 wiederhergestelltes Fenster), `-QHProfileDir <ordner>` (QuartzHubs Profil woanders, sonst
-`~/Library/Application Support/QuartzHub`), `-QHMigrationSource <ordner>` (Profil von QuartzControl
-für die Übernahme; leer = aus), `-QHOpenProject <ordner>` (nimmt den Ordner in die Liste auf und
+`~/Library/Application Support/QuartzHub`), `-QHOpenProject <ordner>` (nimmt den Ordner in die Liste auf und
 öffnet sein Fenster), `-QHNoUpdateCheck YES` (nur Debug: die Übersicht fragt nicht bei GitHub nach
-Updates; ohne ihn geht jedes Öffnen der Übersicht per `git ls-remote` ins Netz). **Ohne diese beiden bietet die App die Übernahme aus dem echten
-QuartzControl-Profil an, solange QuartzHubs eigenes keine `projects.json` hat**; „Übernehmen“ liest
-dann den echten Schlüsselbund-Eintrag. Zum bloßen Ansehen `-QHMigrationSource ""` setzen. Die
-Übernahme-Tasten im Dialog: System Events findet den Button im Sheet nicht über `entire contents`;
-Return löst „Übernehmen“ aus (Standardtaste). Nur Debug: `-QHNoUpdateCheck YES` (kein Netz für Prüfungen, Basis-Template, Dokument-Export) und `-QHMemorySecrets YES` (Zugänge und Token nur im Speicher, nie im Schlüsselbund; beim Beenden weg), `-QHOpenLog <datei>` (schreibt, was QuartzHub im Browser oder Finder öffnen würde, statt es zu öffnen) und `-QHAppUpdateLatest <version>` (spielt GitHubs Antwort auf die Frage nach einer neueren Fassung). Für das Release-Paket: `scripts/package.sh`, dann
+Updates; ohne ihn geht jedes Öffnen der Übersicht per `git ls-remote` ins Netz). System Events findet
+Buttons in einem Sheet nicht über `entire contents`; Return löst die Standardtaste aus. Nur Debug: `-QHNoUpdateCheck YES` (kein Netz für Prüfungen, Basis-Template, Dokument-Export) und `-QHMemorySecrets YES` (Zugänge und Token nur im Speicher, nie im Schlüsselbund; beim Beenden weg), `-QHOpenLog <datei>` (schreibt, was QuartzHub im Browser oder Finder öffnen würde, statt es zu öffnen) und `-QHAppUpdateLatest <version>` (spielt GitHubs Antwort auf die Frage nach einer neueren Fassung). Für das Release-Paket: `scripts/package.sh`, dann
 `build/package/QuartzHub.app`.
 
 Beenden: `pkill -x QuartzHub`.

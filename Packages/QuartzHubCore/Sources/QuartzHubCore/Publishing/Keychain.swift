@@ -2,12 +2,11 @@ import Foundation
 import Security
 
 /// Generic passwords in the login Keychain. QuartzHub keeps one item per secret under the service
-/// "QuartzHub" (account `connection:<id>`, `relay:<projectId>`), and reads QuartzControl's
-/// "QuartzControl Safe Storage" once, to take the old secrets over.
+/// "QuartzHub" (account `connection:<id>`, `relay:<projectId>`).
 ///
 /// The file-based login Keychain, not the data-protection one: that needs a keychain-access-group
-/// entitlement, which an ad hoc signature cannot carry. The price is QuartzControl's: an item's
-/// access list names the app's signature, so after a new ad hoc build macOS asks again.
+/// entitlement, which an ad hoc signature cannot carry. The price: an item's access list names the
+/// app's signature, so after a new ad hoc build macOS asks again.
 public enum Keychain {
   public enum Failure: Error, Equatable {
     case notFound

@@ -68,8 +68,8 @@ public enum JSONStore {
     }
   }
 
-  /// Reads without moving anything aside: for a file that belongs to someone else, such as
-  /// QuartzControl's profile during the takeover. Unreadable is reported, never fixed.
+  /// Reads without moving anything aside: for a file that belongs to someone else, or one only
+  /// looked at. Unreadable is reported, never fixed.
   public static func peek(_ path: String) -> ReadResult {
     let data: Data
     do {

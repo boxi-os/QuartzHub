@@ -150,14 +150,12 @@ public struct JSONMap<Item: JSONView>: Equatable, Sendable {
   }
 }
 
-/// The profile files under one directory. QuartzControl's lives at
-/// `~/Library/Application Support/QuartzControl`; Electron's `--user-data-dir` moves it.
+/// The profile files under one directory, QuartzHub's at `~/Library/Application Support/QuartzHub`
+/// (`-QHProfileDir` moves it), in the form QuartzControl 1.3 wrote them.
 public struct ProfileDirectory: Sendable {
   public let path: String
 
   public init(_ path: String) { self.path = path }
-
-  public static var quartzControl: ProfileDirectory { ProfileDirectory("\(Posix.path(URL.applicationSupportDirectory))/QuartzControl") } // path boundary
 
   public static var quartzHub: ProfileDirectory { ProfileDirectory("\(Posix.path(URL.applicationSupportDirectory))/QuartzHub") } // path boundary
 

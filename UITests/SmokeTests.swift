@@ -21,14 +21,13 @@ final class SmokeTests: XCTestCase {
     return url
   }
 
-  private func launch(size: CGSize? = nil, profile: URL? = nil, migrationSource: String = "", open project: URL? = nil,
+  private func launch(size: CGSize? = nil, profile: URL? = nil, open project: URL? = nil,
                       extra: [String] = []) -> XCUIApplication {
     let app = XCUIApplication()
-    // A fresh window state every run: no restored page, inspector at its default. The takeover
-    // from QuartzControl is off unless a test hands it a source profile.
+    // A fresh window state every run: no restored page, inspector at its default.
     // No update check: the overview would ask GitHub on every run (DEBUG only, OverviewModel).
     app.launchArguments += ["-QHLanguage", "de", "-ApplePersistenceIgnoreState", "YES",
-                            "-QHMigrationSource", migrationSource, "-QHNoUpdateCheck", "YES"]
+                            "-QHNoUpdateCheck", "YES"]
     if let profile { app.launchArguments += ["-QHProfileDir", profile.path] }
     if let project { app.launchArguments += ["-QHOpenProject", project.path] }
     if let size { app.launchArguments += ["-QHWindowSize", "\(Int(size.width))x\(Int(size.height))"] }
@@ -303,49 +302,6 @@ final class SmokeTests: XCTestCase {
     field.typeText("Dokumente\r")
     XCTAssertTrue(settings.staticTexts["Das ist kein vollständiger Pfad. Er muss mit „/“ oder „~/“ beginnen, oder du wählst den Ordner aus."]
       .waitForExistence(timeout: 3), "a relative folder was not refused")
-  }
-
-  /// The takeover against a QuartzControl profile made here (two projects, no secrets, so no
-  /// Keychain prompt): offered, carried out, and not offered again once QuartzHub has a list.
-  func testMigrationIsOfferedOnceAndWritesTheProjectList() throws {
-    let source = try scratchDirectory("qc")
-    let own = try scratchDirectory("qh")
-    let projects = """
-      [
-        {
-          "id": "6b0a7c9e-0000-4000-8000-000000000001",
-          "name": "eins",
-          "path": "/nowhere/eins",
-          "addedAt": "2026-11-01T00:00:00.000Z"
-        },
-        {
-          "id": "6b0a7c9e-0000-4000-8000-000000000002",
-          "name": "zwei",
-          "path": "\(source.path)",
-          "addedAt": "2026-11-02T00:00:00.000Z"
-        }
-      ]
-      """
-    try Data(projects.utf8).write(to: source.appendingPathComponent("projects.json"))
-
-    let app = launch(profile: own, migrationSource: source.path)
-    let sheet = app.descendants(matching: .any)["migration"].firstMatch
-    XCTAssertTrue(sheet.waitForExistence(timeout: 10), "takeover not offered")
-    XCTAssertTrue(app.staticTexts["2 Projekte"].exists, "project count missing")
-    XCTAssertTrue(app.staticTexts["1 davon wurde nicht mehr gefunden"].exists, "missing folder not named")
-    app.buttons["migration.confirm"].click()
-    XCTAssertTrue(app.buttons["migration.done"].waitForExistence(timeout: 10), "takeover did not finish")
-    app.buttons["migration.done"].click()
-    XCTAssertTrue(sheet.waitForNonExistence(timeout: 5))
-    app.terminate()
-
-    let written = try String(contentsOf: own.appendingPathComponent("projects.json"), encoding: .utf8)
-    XCTAssertEqual(written, projects, "project list not taken over byte for byte")
-
-    let again = launch(profile: own, migrationSource: source.path)
-    XCTAssertTrue(again.windows.firstMatch.waitForExistence(timeout: 10))
-    XCTAssertFalse(again.descendants(matching: .any)["migration"].firstMatch.waitForExistence(timeout: 3),
-                   "takeover offered a second time")
   }
 
   /// Konfiguration owns quartz.config.yaml: an edit says it is unsaved, leaving through the sidebar

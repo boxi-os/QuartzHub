@@ -17,7 +17,7 @@ final class ServerQuestionsTests: XCTestCase {
 
   private func launch(profile: URL, startServerFor project: String?) -> XCUIApplication {
     let app = XCUIApplication()
-    app.launchArguments += ["-QHLanguage", "de", "-ApplePersistenceIgnoreState", "YES", "-QHMigrationSource", "",
+    app.launchArguments += ["-QHLanguage", "de", "-ApplePersistenceIgnoreState", "YES",
                             "-QHProfileDir", profile.path]
     if let project { app.launchArguments += ["-QHStartServerFor", project] }
     app.launch()

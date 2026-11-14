@@ -21,15 +21,6 @@ struct ProjectsWindow: View {
   @State private var duplicating: ProjectOverview?
   @SceneStorage("inspector.presented") private var inspectorPresented = true
   @Environment(\.openWindow) private var openWindow
-  /// The takeover from QuartzControl, offered while QuartzHub has no project list of its own.
-  @State private var migration: (source: ProfileDirectory, plan: ProfileMigration.Plan)? = ProjectsWindow.pendingMigration()
-
-  private static func pendingMigration() -> (source: ProfileDirectory, plan: ProfileMigration.Plan)? {
-    guard let source = AppProfile.quartzControl,
-          ProfileMigration.shouldOffer(source: source, target: AppProfile.own) else { return nil }
-    let plan = ProfileMigration.plan(source: source)
-    return plan.isEmpty ? nil : (source, plan)
-  }
 
   private var sorted: [ProjectOverview] { ProjectOverviews.sorted(model.rows) }
   private var shown: [ProjectOverview] { ProjectOverviews.filter(sorted, query: query) }
@@ -124,15 +115,6 @@ struct ProjectsWindow: View {
             selection = id
             open(row)
           }
-        }
-      }
-      .sheet(isPresented: migrationPresented) {
-        if let migration {
-          MigrationSheet(source: migration.source, plan: migration.plan) {
-            self.migration = nil
-            Task { await model.reload() }
-          }
-          .interactiveDismissDisabled()
         }
       }
   }
@@ -243,10 +225,6 @@ struct ProjectsWindow: View {
 
   private var failurePresented: Binding<Bool> {
     Binding(get: { failure != nil }, set: { if !$0 { failure = nil } })
-  }
-
-  private var migrationPresented: Binding<Bool> {
-    Binding(get: { migration != nil }, set: { if !$0 { migration = nil } })
   }
 }
 

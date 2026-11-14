@@ -128,13 +128,8 @@ struct ProjectWindow: View {
       .accessibilityLabel(L10n.t("projectLayout.navLabel"))
       .accessibilityIdentifier("sidebar")
     } detail: {
-      // Above the page, not a safe-area inset over it: the band appears after the page has laid
-      // out, and an inset then left the page's first row under it, showing through.
-      VStack(spacing: 0) {
-        CoexistenceBand(projectPath: row.path)
-        page(current, ProjectContext(id: row.id, name: row.name, path: row.path))
-          .id(pageID)
-      }
+      page(current, ProjectContext(id: row.id, name: row.name, path: row.path))
+        .id(pageID)
     }
     // The place, not the project: its name is at the top of the sidebar (Apple: "Don't title
     // windows with your app name"). The tab is the page's subtitle (PageScaffold); the Window menu

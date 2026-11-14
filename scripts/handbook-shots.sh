@@ -46,7 +46,7 @@ PAGES=(
   "vorschau-und-build|10|" "git-sync|11|" "dokumente|12|" "veroeffentlichen|13|"
   "updates|15|" "snapshots|16|"
 )
-SCENES=(projekte-leer uebernahme projekte projekte-fehlt neues-projekt duplizieren
+SCENES=(projekte-leer projekte projekte-fehlt neues-projekt duplizieren
   einstellungen-allgemein einstellungen-zugaenge einstellungen-laufzeit einstellungen-daten vorschau-und-build-laeuft)
 
 wanted() { [ -z "$ONLY" ] || [[ $ONLY == *",$1,"* ]]; }
@@ -232,7 +232,7 @@ launch() {
 
 # The project window asks GitHub for updates (git ls-remote, read only), so Updates and the
 # overview show a real answer rather than "Nicht prüfbar"; the other windows stay offline.
-with_project() { launch $1 "$DEMO/profile-$2" 2 -QHMigrationSource "" -QHOpenProject "$PROJECT"; ax "perform action \"AXRaise\" of $project_window"; }
+with_project() { launch $1 "$DEMO/profile-$2" 2 -QHOpenProject "$PROJECT"; ax "perform action \"AXRaise\" of $project_window"; }
 offline=(-QHNoUpdateCheck YES)
 
 # An empty profile in the given theme, made again for every use: the question at the first start
@@ -293,15 +293,11 @@ for lang in $LANGS; do
     fi
 
     if wanted projekte-leer; then
-      launch $lang "$(empty_profile $theme)" 1 -QHMigrationSource "" $offline
+      launch $lang "$(empty_profile $theme)" 1 $offline
       shoot projekte-leer
     fi
-    if wanted uebernahme; then
-      launch $lang "$(empty_profile $theme)" 1 -QHMigrationSource "$DEMO/quartzcontrol-profile" $offline
-      sleep 2; shoot uebernahme; escape
-    fi
     if wanted projekte || wanted projekte-fehlt || wanted neues-projekt || wanted duplizieren; then
-      launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource "" $offline
+      launch $lang "$DEMO/profile-$theme" 1 $offline
       if wanted projekte; then project_row 1; sleep 1; shoot projekte; fi
       if wanted projekte-fehlt; then project_row 3; sleep 1; shoot projekte-fehlt; fi
       if wanted neues-projekt; then key n; sleep 3; shoot neues-projekt; escape; sleep 1; fi
@@ -313,7 +309,7 @@ for lang in $LANGS; do
     fi
     # The settings, one shot per tab (toolbar buttons in order).
     if wanted einstellungen-allgemein || wanted einstellungen-zugaenge || wanted einstellungen-laufzeit || wanted einstellungen-daten; then
-      launch $lang "$DEMO/profile-$theme" 1 -QHMigrationSource "" $offline
+      launch $lang "$DEMO/profile-$theme" 1 $offline
     fi
     n=0
     for t in allgemein zugaenge laufzeit daten; do

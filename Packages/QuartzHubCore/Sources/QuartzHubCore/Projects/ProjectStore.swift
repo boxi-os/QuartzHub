@@ -2,8 +2,7 @@ import Foundation
 import Synchronization
 
 /// The list of projects, `projects.json` in QuartzHub's profile. A port of
-/// `electron/main/services/projectStore.ts`, in the form QuartzControl writes it (`ProjectEntry`),
-/// so the takeover (`ProfileMigration`) copies the file as it is and this reads it on.
+/// `electron/main/services/projectStore.ts`, in the form QuartzControl wrote it (`ProjectEntry`).
 ///
 /// - **One writer at a time.** Every change reads the file, changes it and writes it back. In
 ///   QuartzControl two of those could interleave between their awaits; here they are serialized,

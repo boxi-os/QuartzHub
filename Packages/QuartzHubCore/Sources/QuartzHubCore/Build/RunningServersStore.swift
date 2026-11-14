@@ -6,8 +6,6 @@ import Synchronization
 /// QuartzControl's form (`runningServersStore.ts`, measured in RunningServersStoreTests). Not
 /// "this server should be running": there is no such intent across a restart, only leftovers.
 ///
-/// QuartzControl's file stays QuartzControl's: `Coexistence` reads it, nothing here writes it.
-///
 /// Beyond QuartzControl:
 /// - Every change reads, changes and writes under one lock. QuartzControl fired its writes with
 ///   `void` and let them interleave between their awaits; a record right after a remove could be

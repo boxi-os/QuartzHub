@@ -6,10 +6,10 @@ import Testing
 /// the app's persistent domain; one `defaults write` moved every later session.
 @Suite struct LaunchArgumentTests {
   @Test func onlyThisLaunchsArgumentsCount() {
-    let args = ["/Applications/QuartzHub.app/Contents/MacOS/QuartzHub", "-QHProfileDir", "/tmp/p", "-QHMigrationSource", "", "-QHLanguage"]
+    let args = ["/Applications/QuartzHub.app/Contents/MacOS/QuartzHub", "-QHProfileDir", "/tmp/p", "-QHOpenProject", "", "-QHLanguage"]
     #expect(LaunchArgument.string("QHProfileDir", arguments: args) == "/tmp/p")
-    // Empty is a value: it turns the takeover off.
-    #expect(LaunchArgument.string("QHMigrationSource", arguments: args) == "")
+    // Empty is a value, not a missing one.
+    #expect(LaunchArgument.string("QHOpenProject", arguments: args) == "")
     // A switch without a value, or none at all, is nil.
     #expect(LaunchArgument.string("QHLanguage", arguments: args) == nil)
     #expect(LaunchArgument.string("QHWindowSize", arguments: args) == nil)

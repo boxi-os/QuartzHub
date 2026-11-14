@@ -4,8 +4,7 @@ import Foundation
 /// Dev servers a previous run of QuartzHub left behind: a crash, a force quit, "Weiterlaufen
 /// lassen" at quit (QuartzControl's `detectOrphanedServers` and `killOrphanedServers`). Found
 /// once at the start and asked about; never stopped without the user's answer, since a server may
-/// have been left running on purpose. A server QuartzControl started is never one of these: it is
-/// in QuartzControl's file, which `Coexistence` reads.
+/// have been left running on purpose. Only QuartzHub's own file is read.
 public enum OrphanedServers {
   public struct Orphan: Sendable, Equatable {
     public var projectId: String

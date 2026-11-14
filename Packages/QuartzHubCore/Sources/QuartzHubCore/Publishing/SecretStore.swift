@@ -19,8 +19,8 @@ extension SecretStore {
   public func contains(account: String) throws(Keychain.Failure) -> Bool { try read(account: account) != nil }
 }
 
-/// The login Keychain under the service "QuartzHub" (`Keychain`), the same items the takeover from
-/// QuartzControl writes: `connection:<id>` and `relay:<projectId>`.
+/// The login Keychain under the service "QuartzHub" (`Keychain`): `connection:<id>` and
+/// `relay:<projectId>`.
 public struct KeychainSecrets: SecretStore {
   public init() {}
 

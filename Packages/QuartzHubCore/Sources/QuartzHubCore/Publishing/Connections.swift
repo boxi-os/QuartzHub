@@ -245,10 +245,8 @@ public struct RelaySecretInfo: Equatable, Sendable {
 /// the secrets in the Keychain, one item per secret (`SecretStore`). The relay's secrets sit
 /// beside it in `relay-secrets.json`, keyed by project id.
 ///
-/// The file has QuartzControl's form with one field exchanged, as the takeover writes it
-/// (docs/formats.md): where QuartzControl has `encryptedSecret`, QuartzHub has
-/// `secretInKeychain: true`, in the same place. Nothing from before QuartzControl's first release
-/// is migrated (`deploy-secrets.json`, a token in settings.json): the takeover did not take it.
+/// The file has QuartzControl's form with one field exchanged (docs/formats.md): where QuartzControl
+/// had `encryptedSecret`, QuartzHub has `secretInKeychain: true`, in the same place.
 ///
 /// A read never writes: QuartzControl wrote `[]` the first time it found no file (the migration's
 /// empty result); here a missing file is just an empty list.
