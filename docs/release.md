@@ -145,6 +145,11 @@ Cache), QuartzControl 1.3 auch. Am Release-Tag, nach Punkt 8:
   `parts/styles.json`; `createdBy.app` und die Marker `QuartzControl:syntax:` sind Format und bleiben);
 - **die Example-Vorlage** `qc-example.qtpl` baut auf der Grundvorlage auf und wird mit ihr neu erzeugt
   (Entscheidung 2026-11-13, docs/plan.md): mit QuartzHub, „Vorlagen ▸ Erstellen“ am Example-Projekt.
+  Vorher die Bausteine gegen `qc-basic` halten (Frames, Theme, Farben, Layout, Variablen, Schriften,
+  Stylesheets gleich; 2026-11-14 wich nur `a11y.scss` ab, das Example hat dort die neuere
+  Druck-Regel) und die gebaute Example-Seite auf `<br>` an jedem Zeilenende prüfen: Die Seiten sind
+  bei Spalte 100 umbrochen, und Quartz 5.1 macht daraus ohne `strictLineBreaks: true` bei
+  Obsidian-Markdown sichtbare Umbrüche (3.081 auf 228 Seiten). Zuletzt erzeugt 2026-11-14 für 1.0.0.
 
 `latest.json` im selben Repo ist QuartzControls Update-Kanal, nicht QuartzHubs; ob es zum Abschalten
 von QuartzControl auf QuartzHub zeigt, ist eine eigene Entscheidung.
