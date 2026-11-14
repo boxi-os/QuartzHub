@@ -328,7 +328,7 @@ struct FormsTab: View {
     let unknown = view.unknownUses
     // The intro is in the inspector, adding is ➕ in the toolbar.
     return VStack(alignment: .leading, spacing: Spacing.xs) {
-      if let installed = state.schema?.packageVersion, installed != FormsOptions.readAgainst {
+      if let installed = state.schema?.packageVersion, installed != FormsOptions.readAgainst, !FormsOptions.sameCode.contains(installed) {
         Callout(.warning, L10n.t("plugins.readAgainst", ["plugin": FormsOptions.plugin, "read": FormsOptions.readAgainst, "installed": installed]))
       }
       if let message = model.message { Callout(.error) { Text(message).textSelection(.enabled) } }

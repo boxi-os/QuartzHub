@@ -2897,3 +2897,9 @@ bleiben. Handbuch, READMEs und Example nennen QuartzControl nicht mehr.
 
 `ps -p <pid> -o command=` lebte in `Coexistence` und wird von `ServerScan.isQuartzServer` gebraucht;
 es steht jetzt dort. `Keychain` zog von `Migration/` nach `Publishing/`.
+
+Nachgezogen am selben Tag: quartz-forms 0.6.1 nennt QuartzHub statt QuartzControl (Kommentare und der
+Kopf der erzeugten `relay-config.php`), QuartzHub 1.0.2 nimmt 0.6.1 als gleichen Code (`FormsOptions.sameCode`,
+der Formulare-Reiter fragt es wie die drei anderen). An einer Kopie von gui-test gemessen: 0.6.1 ohne
+Hinweis, 0.6.2 mit „Dieser Editor kennt quartz-forms 0.6.0, installiert ist 0.6.2“. Die Fassung liest
+`PluginSchemaReader` aus `quartz.version` des Pakets, nicht aus dem `version` oben.

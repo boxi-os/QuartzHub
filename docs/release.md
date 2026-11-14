@@ -60,8 +60,10 @@ Ein Commit nach dem Tag, der nur Tests, README oder `AGENTS.md` ändert, braucht
 er gepusht ist. Eine neue Fassung mit geändertem `src` heißt: den Editor gegen sie lesen und
 `readAgainst` heben, sonst `sameCode` ergänzen.
 
-**Stand 2026-11-14:** layout-box `v0.4.2` (+2: README, Test), multilanguage `v0.3.0`, navigations
-`v0.4.3` (+1), forms `v0.6.0` (+1: README); App liest 0.4.2, 0.3.0, 0.4.2 (0.4.3 gleicher Code), 0.6.0.
+**Stand 2026-11-14 (1.0.2):** layout-box `v0.4.2` (+4: README, LICENSE), multilanguage `v0.3.0` (+2: README),
+navigations `v0.4.3` (+1), forms `v0.6.1`; App liest 0.4.2, 0.3.0, 0.4.2 (0.4.3 gleicher Code), 0.6.0
+(0.6.1 gleicher Code: nur Kommentare und der Kopf der Relay-Datei). Die Fassung, die QuartzHub vergleicht,
+steht in `package.json` unter `quartz.version`, nicht oben.
 
 ## 5. Die Liste der Google-Schriften ist nicht zu alt
 
