@@ -1,9 +1,14 @@
 # Vor einem Release
 
-> **Noch nie durchlaufen.** Das erste Release ist 1.0.0 (Entscheidung 2026-11-13: Gleichstand mit
+> **Durchlaufen am 2026-11-14 für 1.0.0** (Tag auf 8b13528; Entscheidung 2026-11-13: Gleichstand mit
 > QuartzControl 1.3 erreicht, 682 Funktionen gemessen, 38 bewusst anders, keine fehlt). Wer die Liste
 > durchläuft, schreibt hier oben, wann, auf welchem Commit und was ihm dabei auffiel. Ein neuer
 > Handgriff kommt mit dem Anlass dazu, der ihn erzwungen hat.
+>
+> Aufgefallen 2026-11-14: QuartzHub-Web hatte weder `origin` noch ein Ziel „GitHub Pages“ (Punkt 9);
+> der installierte QuartzHub fragte beim ersten Zugriff auf den GitHub-Zugang nach dem Schlüsselbund
+> („Immer erlauben“); „Jetzt veröffentlichen“ wird erst nach einem Build oder Diff aktiv; das
+> Example-Projekt hatte einen Ausgabeordner ohne Seiten, und QuartzHub fragte vor dem Leeren.
 
 Was außer `scripts/package.sh` getan werden muss, damit ein Release vollständig ist. Vorbild ist
 QuartzControls `docs/release.md` (dort mit Messungen und Begründungen je Punkt), ohne das, was nur
@@ -119,7 +124,9 @@ Hinweis; ansehen lässt er sich ohne zweites Release mit `-QHAppUpdateLatest <fa
 Das Projekt `~/Documents/QuartzProjekte/QuartzHub-Web` baut aus dem Vault
 `~/Obsidian/QuartzProjekte/QuartzHub-Handbuch` (Entscheidung 2026-11-13: GitHub Pages im Repo
 `boxi-os/QuartzHub` selbst, Branch `gh-pages`, nie `main`; Adresse `https://boxi-os.github.io/QuartzHub/`
-= `Handbook.base`). Veröffentlicht wird über QuartzHub („Veröffentlichen“, Ziel „GitHub Pages“), erst
+= `Handbook.base`). Das Projekt hat dafür `origin` = `https://github.com/boxi-os/QuartzHub.git` und das
+Ziel „GitHub Pages“ (Branch `gh-pages`, seit 2026-11-14); **Git-Sync dort nie benutzen**, es schöbe den
+Quartz-Branch `v5` ins App-Repo. Veröffentlicht wird über QuartzHub („Veröffentlichen“, Ziel „GitHub Pages“), erst
 nach Punkt 8, denn der Download-Kasten (`quartz/static/snippets/download*.html`) zeigt auf die
 Release-Seite. Danach jede Seite, auf die die App verweist, mit 200:
 
