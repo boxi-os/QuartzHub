@@ -137,9 +137,15 @@ Release-Seite. Danach jede Seite, auf die die App verweist, mit 200:
       done | grep -v '^200'
 
 Still heißt gut (52 Adressen: 25 Seiten je Sprache und die zwei Startseiten, Stand 2026-11-14). Die Seite der Website und die Start-Seiten `/` und `/en/` dazu im Browser ansehen.
-PDF und ePub des Handbuchs: die Bedingung (QuartzControl aus den Handbüchern, Entscheidung 2026-11-13)
-ist seit 2026-11-14 erfüllt; ob und wann die Website Download-Links auf sie bekommt, entscheidet der
-Nutzer.
+**PDF und ePub des Handbuchs** liegen seit 2026-11-14 auf der Website unter `downloads/`
+(`quartzhub-handbuch.pdf`/`.epub`, `quartzhub-handbook.pdf`/`.epub`); verlinkt sind sie im Kasten
+„Über dieses Handbuch“ (`quartz/static/snippets/sidebar-note*.md`). Das Ziel „GitHub Pages“ nimmt die
+zuletzt exportierten Bücher mit (`withDocuments`). Ändert sich das Handbuch, deshalb vor dem
+Veröffentlichen „Handbuch (de)“ und „Handbook (en)“ exportieren (je Ziel erst „Jetzt bauen“, sonst
+bleibt „Jetzt exportieren“ gesperrt), dann prüfen: kein Persönliches und nichts Überholtes im Text
+(PDFKit für das PDF, das ePub entpackt), QuartzControls `npm run check:export -- --files <ordner>
+--book <id> --formats pdf,epub` (bekannt: „nicht getaggt“), und nach dem Veröffentlichen die vier
+Adressen mit 200.
 
 ## 10. Die Grundvorlage liegt im Vorlagen-Repo
 
