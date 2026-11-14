@@ -2873,3 +2873,27 @@ prüfen, hätte beim Öffnen der Seite eine Adresse aus der git-Konfiguration ei
 angesprochen; den Lauf fest auf jackyzha0 umzustellen, hätte eine eingerichtete Kopie still übergangen.
 Test: `aDivergingUpstreamIsNamed` (ohne Remote nichts, dieselbe Adresse anders geschrieben nichts, eine
 andere wird genannt), Gegenprobe scheitert; an der App gesehen auf einer Kopie mit Fork-Remote.
+
+## QuartzControl verschwindet (2026-11-14)
+
+Entschieden (Nutzer, 2026-11-14, nach dem Release von 1.0.0): QuartzControl hatte keine Nutzer, also
+kommt es überall heraus. Drei Fragen, drei Antworten:
+
+- **Die App:** Die Übernahme aus QuartzControl (Dialog beim ersten Start, „Aus QuartzControl
+  übernehmen“ unter Zugänge, `ProfileMigration`, `ChromiumSafeStorage`) und das Band neben einem
+  laufenden QuartzControl (`Coexistence`, `CoexistenceBand`) sind entfernt, ebenso der Startschalter
+  `-QHMigrationSource`, ihre 28 Texte und Tests. Die Umstellungen alter Formate bleiben, ihre Hinweise
+  sagen „eine ältere Fassung“. Die Übernahme des Nutzers war am 2026-11-11 gelaufen; sein Profil hat
+  keine Zugänge mit `encryptedSecret` mehr, die Abfrage dafür fehlt also niemandem.
+- **Das Dateiformat bleibt:** die Marker `QuartzControl:managed/variables/syntax`,
+  `_quartzcontrol.scss`, `.quartz-gui/`, Stash-Name und Merge-Betreff des Kern-Updates,
+  `createdBy.app` alter Pakete und die Adresse `quartzcontrol-templates`. Sie stehen in den Projekten;
+  umbenennen hieße alle umstellen, ohne Nutzen für den Leser.
+- **Im Netz:** QuartzControls Repo wird privat (damit sind Releases und Website weg), `latest.json`
+  im Vorlagen-Repo wird gelöscht.
+
+QuartzControls Code bleibt hier die Spezifikation, aus dem lokalen Klon; die Golden-Tests gegen ihn
+bleiben. Handbuch, READMEs und Example nennen QuartzControl nicht mehr.
+
+`ps -p <pid> -o command=` lebte in `Coexistence` und wird von `ServerScan.isQuartzServer` gebraucht;
+es steht jetzt dort. `Keychain` zog von `Migration/` nach `Publishing/`.

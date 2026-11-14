@@ -79,7 +79,7 @@ Dann an der DMG selbst, nicht an `build/`:
 - gemountet, `Info.plist` trägt die Fassung aus Punkt 1, `codesign -v` gültig;
 - `Resources/licenses/` vollständig (`git-LICENSE.txt` nennt QuartzHub);
 - aus dem gemounteten Abbild gestartet, mit Wegwerf-Profil
-  (`--args -QHProfileDir <scratch> -QHMigrationSource ""`): das Fenster „Projekte“ sagt
+  (`--args -QHProfileDir <scratch>`): das Fenster „Projekte“ sagt
   „Werkzeuge bereit“, Node und npm „in QuartzHub“; git kommt vom System, wenn es eines gibt
   (`GitRuntime.resolve`), sonst das mitgelieferte. Das mitgelieferte deshalb direkt prüfen:
   `GIT_EXEC_PATH=<app>/Contents/Resources/git/libexec/git-core <app>/Contents/Resources/git/bin/git ls-remote https://github.com/boxi-os/QuartzHub HEAD`;

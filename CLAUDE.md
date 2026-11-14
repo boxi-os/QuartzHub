@@ -179,9 +179,12 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Tests laufen in Ordnern mit „Gärten-Ü“, maskieren mit `.literal` und vergleichen Namen nach
   UTF-8-Bytes, nicht mit `==`.
 - **QuartzControl ist seit 2026-11-11 eingestellt** (1.3.0 die letzte Fassung, keine Fixes mehr;
-  Anlass Quartz 5.1, decisions/phase-5-gleichstand.md). Sein Repo bleibt die Spezifikation und die
-  Quelle der Übernahme; QuartzHubs Dateien bleiben in 1.3s Format, solange es keine Entscheidung
-  dagegen gibt.
+  Anlass Quartz 5.1, decisions/phase-5-gleichstand.md). Sein lokaler Klon bleibt die Spezifikation;
+  QuartzHubs Dateien bleiben in 1.3s Format, solange es keine Entscheidung dagegen gibt.
+- **QuartzHub 1.0.0 erschienen am 2026-11-14.** Danach kam QuartzControl überall heraus
+  (decisions/phase-5-gleichstand.md, „QuartzControl verschwindet“): keine Übernahme, kein Band neben
+  ihm, kein Wort im Handbuch; die Namen im Dateiformat (`QuartzControl:managed`, `_quartzcontrol.scss`,
+  `.quartz-gui/`) bleiben.
 
 ## Arbeitsweise
 

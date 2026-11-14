@@ -3,9 +3,8 @@
 *[Deutsch](README.de.md)*
 
 A native macOS app for managing [Quartz 5](https://quartz.jzhao.xyz/) websites: configuration,
-plugins, layout, styles, preview and build, publishing, and export as PDF, ePub and offline HTML.
-QuartzHub is the successor of [QuartzControl](https://github.com/boxi-os/QuartzControl) (Electron),
-written in Swift, and reads the same projects.
+plugins, layout, styles, preview and build, publishing, and export as PDF, ePub and offline HTML,
+written in Swift.
 
 **Version 1.0.0.** [Download](https://github.com/boxi-os/QuartzHub/releases/latest) the DMG; the
 [handbook](https://boxi-os.github.io/QuartzHub/en/) explains every window and page. QuartzHub is not

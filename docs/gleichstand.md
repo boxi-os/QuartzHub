@@ -35,14 +35,14 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-13 nach den vier Handbuch-Zeilen (decisions/phase-5-gleichstand.md, „Die App verweist aufs Handbuch“); davor am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Die letzte `gebaut`-Zeile, die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, ist beim echten ersten Start des Nutzers gemessen (2026-11-11); keine Zeile steht mehr auf `gebaut`.
+gezählt, zuletzt am 2026-11-13 nach den vier Handbuch-Zeilen (decisions/phase-5-gleichstand.md, „Die App verweist aufs Handbuch“); davor am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Die letzte `gebaut`-Zeile, die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, ist beim echten ersten Start des Nutzers gemessen (2026-11-11); keine Zeile steht mehr auf `gebaut`. Am 2026-11-14 kamen die vier Zeilen der Übernahme aus QuartzControl und des Bands neben ihm heraus: beide Funktionen sind entfernt (decisions/phase-5-gleichstand.md, „QuartzControl verschwindet“).
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
-| Einrichtung | 194 | 0 | 22 | 0 | 0 | 216 |
+| Einrichtung | 190 | 0 | 22 | 0 | 0 | 212 |
 | Plugins und Wartung | 254 | 0 | 7 | 0 | 0 | 261 |
 | Gestaltung und Veröffentlichen | 234 | 0 | 9 | 0 | 0 | 243 |
-| **Summe** | **682** | **0** | **38** | **0** | **0** | **720** |
+| **Summe** | **678** | **0** | **38** | **0** | **0** | **716** |
 
 Die Kanäle: 160 mit Gegenstück in Kern und App, 19 bewusst anders (Fortschritt und Protokoll über
 Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
