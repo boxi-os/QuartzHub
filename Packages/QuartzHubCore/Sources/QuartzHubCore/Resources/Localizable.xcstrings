@@ -43326,6 +43326,25 @@
         }
       }
     },
+    "pluginsInstalled.allOptions" : {
+      "comment" : "Plugins, Installiert, inspector of an own plugin: folds out the whole options form below the jump to its tab",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Optionen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All options"
+          }
+        }
+      }
+    },
     "pluginsInstalled.builtinBadge" : {
       "comment" : "Plugins ▸ Installiert, Quartz 5.1: badge and inspector heading of crawl-links, remove-draft, content-index",
       "extractionState" : "manual",
@@ -44539,6 +44558,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transformers, filters & emitters"
+          }
+        }
+      }
+    },
+    "pluginsInstalled.ownTabHint" : {
+      "comment" : "Plugins, Installiert, inspector of an own plugin: above the jump to its tab",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub führt in einem eigenen Reiter in Schritten durch die Optionen dieses Plugins."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub leads through this plugin's options in steps on a tab of its own."
           }
         }
       }

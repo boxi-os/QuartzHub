@@ -270,6 +270,28 @@ final class SetupStepsTests: XCTestCase {
     XCTAssertTrue(heading(window, says: "von 8"), "no navigation in the inspector")
   }
 
+  /// Installiert, an own plugin: its options lead to its tab, the whole form is folded.
+  func testInstalledLeadsAnOwnPluginToItsTab() throws {
+    let (profile, project) = try project()
+    let (_, window) = open(profile, project, tab: "Installiert", list: "plugins.search")
+    let any = window.descendants(matching: .any)
+    let row = any["plugins.row.quartz-navigations"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 10), "no quartz-navigations in the list")
+    row.click()
+    let edit = any["plugins.inspector.editOnTab"].firstMatch
+    XCTAssertTrue(edit.waitForExistence(timeout: 10), "no way to the tab")
+    // The form's search stands above every plugin's form with eight options or more.
+    let search = any["options.search"].firstMatch
+    XCTAssertFalse(search.exists, "the form is open before „Alle Optionen“")
+    let fold = any["plugins.inspector.allOptions"].firstMatch
+    XCTAssertTrue(fold.waitForExistence(timeout: 5), "no „Alle Optionen“")
+    fold.click()
+    XCTAssertTrue(search.waitForExistence(timeout: 5), "„Alle Optionen“ shows no form")
+    edit.click()
+    XCTAssertTrue(any["page.plugins.navigations"].firstMatch.waitForExistence(timeout: 10), "not on Navigationen")
+    XCTAssertTrue(heading(window, says: "von 8"), "no navigation in the inspector")
+  }
+
   /// N1: choosing another entry ends the run; coming back shows the steps of an existing entry.
   func testChoosingAnotherEntryEndsTheFirstRun() throws {
     let (profile, project) = try project()

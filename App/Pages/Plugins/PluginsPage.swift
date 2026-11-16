@@ -146,7 +146,7 @@ struct PluginsPage: View {
       }
     } inspector: {
       if tab == .installed, let selected, let item = model.items.first(where: { $0.id == selected }) {
-        PluginInspector(item: item, model: model)
+        PluginInspector(item: item, model: model) { show(model.config?.plugins ?? [], item.index) }
           .id(item.id)
       } else if tab == .navigations, let navigationSelected,
                 let item = NavigationInstance.all(model.config?.plugins ?? []).first(where: { $0.occurrence == navigationSelected }) {
@@ -280,7 +280,11 @@ struct PluginsPage: View {
   private func takeHandOver() {
     guard let target = handOver?.target else { return }
     handOver?.target = nil
-    let (plugins, index) = target
+    show(target.plugins, target.index)
+  }
+
+  /// The entry on the tab that edits its options, selected there.
+  private func show(_ plugins: [PluginEntry], _ index: Int) {
     guard plugins.indices.contains(index) else { return }
     let entry = plugins[index]
     let tab = Self.tab(for: entry)

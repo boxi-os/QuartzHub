@@ -92,3 +92,18 @@ Texte über `scripts/strings.mjs`.
 2. Die rohen Platzierungsfelder in Installiert fallen weg; `priority` als Zahl entfällt.
    `groupOptions.justify` braucht keinen Ersatz: Quartz' `Flex.tsx` schreibt es als `justify-self`,
    und das wirkt in einer Flex-Reihe nicht (beim Umsetzen gelesen, 2026-11-16).
+
+## Umgesetzt (2026-11-16)
+
+- Punkte 1 und 4 in einem Commit (der Sprung hat ohne den Knopf keinen Aufrufer): Layouts Inspektor
+  zeigt `OptionsSummary` (Variante einer Navigation, Zahl der geänderten Optionen) und
+  „In „<Reiter>“ bearbeiten“; `OpenPluginsAction` mit `PluginsHandOver`, die Plugins-Seite wählt
+  Reiter und Eintrag (`show`). UI-Test `testLayoutLeadsBackToTheNavigationsOptions`, ohne die
+  Übergabe rot (Reiter da, Navigation nicht).
+- Punkt 2: Installiert zeigt die Platzierung als Zeile mit „Auf der Bühne zeigen“; bei den vier
+  eigenen Plugins die Zusammenfassung, den Sprung in ihren Reiter und „Alle Optionen“ zugeklappt
+  (`plugins.allOptionsOpen`). UI-Test `testInstalledLeadsAnOwnPluginToItsTab`, mit immer offenem
+  Formular rot.
+- Die Bühne liest nach der Rückkehr neu: `ProjectWindow.page` legt jede Seite beim Wechsel neu an,
+  `LayoutPage` lädt in `.task` (im Code gelesen, nicht an der App gemessen).
+

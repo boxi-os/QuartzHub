@@ -237,19 +237,12 @@ struct ComponentInspector: View {
 
   /// Last, as before: what the entry's options set, and the way to where they are edited.
   private var options: some View {
-    let count = plugin.object["options"]?.objectValue?.keys.count ?? 0
     let tab = PluginsPage.tab(for: plugin)
     return Section(L10n.t("layoutEditor.inspector.options")) {
       if let schemaError {
         Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": schemaError]))
       }
-      if tab == .navigations {
-        let variant = NavigationVariants.variant(plugin.object["options"]?.objectValue ?? JSONObject())
-        LabeledContent(L10n.t("navigationsEditor.variantHeading"), value: NavigationVariants.catalog(NavigationVariants.label(variant), nil))
-      }
-      Text(count == 0 ? L10n.t("layoutEditor.inspector.optionsNone")
-           : L10n.t("layoutEditor.inspector.optionsCount", ["count": String(count)], count: count))
-        .foregroundStyle(.secondary)
+      OptionsSummary(entry: plugin)
       Button(L10n.t("layoutEditor.inspector.editOptions", ["tab": tab.title])) { openPlugins(plugins, index) }
         .accessibilityIdentifier("layout.inspector.editOptions")
       Note(L10n.t("layoutEditor.inspector.optionsElsewhere"))
