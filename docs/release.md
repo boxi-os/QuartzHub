@@ -162,4 +162,6 @@ Cache; der Name des Repos ist Adresse und bleibt). Ändert sich eine Vorlage, am
   Stylesheets gleich; 2026-11-14 wich nur `a11y.scss` ab, die Druck-Regel des Example kam darauf
   in `qc-basic`) und die gebaute Example-Seite auf `<br>` an jedem Zeilenende prüfen: Die Seiten sind
   bei Spalte 100 umbrochen, und Quartz 5.1 macht daraus ohne `strictLineBreaks: true` bei
-  Obsidian-Markdown sichtbare Umbrüche (3.081 auf 228 Seiten). Zuletzt erzeugt 2026-11-14 für 1.0.1.
+  Obsidian-Markdown sichtbare Umbrüche (3.081 auf 228 Seiten). Zuletzt erzeugt 2026-11-16 auf der Grundvorlage mit vollem Kopf und Fuß:
+  Das Example-Projekt bekam dafür dieselben Frames, Variablen und drei Stylesheets, danach glichen alle gemeinsamen Bausteine
+  denen von `qc-basic`, und gegen das alte Paket unterschieden sich nur diese Einträge und das Manifest.
