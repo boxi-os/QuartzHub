@@ -144,7 +144,8 @@ zuletzt exportierten Bücher mit (`withDocuments`). Ändert sich das Handbuch, d
 Veröffentlichen „Handbuch (de)“ und „Handbook (en)“ exportieren (je Ziel erst „Jetzt bauen“, sonst
 bleibt „Jetzt exportieren“ gesperrt), dann prüfen: kein Persönliches und nichts Überholtes im Text
 (PDFKit für das PDF, das ePub entpackt), QuartzControls `npm run check:export -- --files <ordner>
---book <id> --formats pdf,epub` (bekannt: „nicht getaggt“), und nach dem Veröffentlichen die vier
+--book <id> --formats pdf,epub` mit dem epubcheck aus `scripts/epubcheck.sh` (Aufruf im Kopf des Skripts;
+bekannt: „nicht getaggt“), und nach dem Veröffentlichen die vier
 Adressen mit 200.
 
 ## 10. Die Grundvorlage liegt im Vorlagen-Repo

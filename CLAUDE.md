@@ -56,7 +56,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `swift run --package-path Packages/QuartzHubCore qh-check export-book <build> <ordner> [--offline] [--pdf]` — ein Build durch den
   Export (Reihenfolge, Seiten, Kapitel, Formeln und Diagramme als PNG); schreibt `content.json`, `pictures/`, `book.epub`, `book.html`,
   mit `--pdf` auch `book.pdf`. Geprüft mit QuartzControls `npm run check:export -- --files <ordner> --book <id>` (Dateien als `<id>.pdf` usw.;
-  epubcheck mit `--epubcheck-ssh debian-vm:/home/boxi/epubcheck/epubcheck-5.4.0/epubcheck.jar`)
+  epubcheck lokal: `PATH="$(scripts/epubcheck.sh --java-bin):$PATH"` davor, `--epubcheck-jar "$(scripts/epubcheck.sh --jar)"` dahinter)
 - `swift run --package-path Packages/QuartzHubCore qh-check export-document <build> <ordner> --config <quartz.config.yaml> [--formats …] [--cancel-after <s>]` —
   der Export wie „Jetzt veröffentlichen“ (Wegwerf-Projekt, Buch über die ganze Website, Ziel „Dokument“, `Deploy.run`), ohne Netz;
   die Dateien heißen `check-export.*` und gehen an dasselbe `check:export -- --files`
@@ -69,6 +69,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `swift scripts/handbook-private.swift <vault> [dateien…]` — Handbuch-Texte und, per Texterkennung,
   Aufnahmen auf Persönliches (Konto, `/Users/…`, Mails, `<vault>/private/privat.txt`, Farbprofil mit Bildschirmnamen); Exit 1 bei Fund
 - `scripts/fetch-runtime.sh` — Node 24 und git nach `Runtime/` (gepinnt, SHA-256 im Skript)
+- `scripts/epubcheck.sh <datei.epub>` — epubcheck mit einem Java (Temurin-JRE), beides gepinnt unter `.tools/`; `--jar`, `--java-bin` für `check:export`
 - `scripts/build-helpers.sh` — JS-Helfer bauen (mit dem Node aus `Runtime/`)
 - `scripts/package.sh` — Release-Bau, `.app` mit Runtime und Helfern, ad hoc signiert, DMG nach `build/package/`; was ein Release außerdem braucht (Tag, Release-Seite, Handbuch online, Vorlagen-Repo), steht in `docs/release.md`
 - `Runtime/node/bin/node scripts/golden-fixtures.mjs` — Golden Files der Kerntests neu aus `gui-test` und
