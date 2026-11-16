@@ -63,6 +63,8 @@ struct PluginsPage: View {
   @SceneStorage("forms.selected") private var formSelected: String?
   @State private var forms = FormsState()
   @Environment(\.pluginsHandOver) private var handOver
+  /// What the Layout page handed over, until the file is read (`arrive`).
+  @State private var arriving: (plugins: [PluginEntry], index: Int)?
   /// quartz-multilanguage's schema: its groups are the rows of the tab and the panels of the inspector.
   @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
@@ -140,6 +142,7 @@ struct PluginsPage: View {
       .onAppear(perform: takeHandOver)
       .task {
         await model.load()
+        arrive()
         let path = project.path
         styled = Set((try? await Task.detached { try SiteFonts.takenClasses(project: path, prefixes: InstanceClass.prefixes) }.value) ?? [])
         await model.checkOutdated()
@@ -277,10 +280,32 @@ struct PluginsPage: View {
 
   /// „Optionen bearbeiten“ from the Layout page: the entry's tab, the entry selected. The forms
   /// plugin's component is the layout form; the language switcher has the site's languages.
+  ///
+  /// The tab at once, the entry once the file is read: the Layout page hands over its draft, and
+  /// after „Änderungen verwerfen“ that is not the file's list (review 2026-11-17, M1).
   private func takeHandOver() {
     guard let target = handOver?.target else { return }
     handOver?.target = nil
-    show(target.plugins, target.index)
+    guard target.plugins.indices.contains(target.index) else { return }
+    tabID = Self.tab(for: target.plugins[target.index]).rawValue
+    arriving = target
+  }
+
+  /// The handed-over entry in the file's list; not there, the tab without a selection.
+  private func arrive() {
+    guard let target = arriving else { return }
+    arriving = nil
+    let plugins = model.config?.plugins ?? []
+    if let index = LayoutEntries.counterpart(of: target.index, in: target.plugins, among: plugins) {
+      show(plugins, index)
+      return
+    }
+    switch Self.tab(for: target.plugins[target.index]) {
+    case .navigations: navigationSelected = nil
+    case .extras: boxSelected = nil
+    case .installed: selected = nil
+    case .forms, .languages, .marketplace: break
+    }
   }
 
   /// The entry on the tab that edits its options, selected there.

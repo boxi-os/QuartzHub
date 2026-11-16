@@ -68,7 +68,7 @@ final class SetupStepsTests: XCTestCase {
 
   /// A scratch profile and the test project: the config above, the four packages under
   /// `.quartz/plugins`, one page.
-  private func project() throws -> (profile: URL, project: URL) {
+  private func project(config: String = SetupStepsTests.config) throws -> (profile: URL, project: URL) {
     let files = FileManager.default
     let root = files.temporaryDirectory.appendingPathComponent("qh-ui-setup-\(UUID().uuidString)")
     addTeardownBlock { try? FileManager.default.removeItem(at: root) }
@@ -81,7 +81,7 @@ final class SetupStepsTests: XCTestCase {
     }
     try files.createDirectory(at: project.appendingPathComponent("content"), withIntermediateDirectories: true)
     try Data("# Start\n".utf8).write(to: project.appendingPathComponent("content/index.md"))
-    try Data(Self.config.utf8).write(to: project.appendingPathComponent("quartz.config.yaml"))
+    try Data(config.utf8).write(to: project.appendingPathComponent("quartz.config.yaml"))
     return (profile, project)
   }
 
@@ -268,6 +268,49 @@ final class SetupStepsTests: XCTestCase {
     edit.click()
     XCTAssertTrue(any["page.plugins.navigations"].firstMatch.waitForExistence(timeout: 10), "not on Plugins ▸ Navigationen")
     XCTAssertTrue(heading(window, says: "von 8"), "no navigation in the inspector")
+  }
+
+  /// Review 2026-11-17, M1: the Layout page hands over its draft. With a box removed there and the
+  /// question answered „Änderungen verwerfen“, Plugins selected the box after the one asked for
+  /// („Website“ for „Handbuch“): the draft's index was read in the file's list.
+  func testLayoutLeadsToTheSameBoxAfterDiscarding() throws {
+    let box = SetupStepsTests.config.components(separatedBy: "  - source: github:boxi-os/quartz-layout-box\n")[1]
+      .components(separatedBy: "  - source: github:boxi-os/quartz-forms")[0]
+    let boxes = ["Mark", "Website", "Handbuch"].map { title in
+      "  - source: github:boxi-os/quartz-layout-box\n" + box.replacingOccurrences(of: "title: Info", with: "title: \(title)")
+        .replacingOccurrences(of: "className: layout-box-neue-box", with: "className: layout-box-\(title.lowercased())")
+    }.joined()
+    let config = SetupStepsTests.config.replacingOccurrences(of: "  - source: github:boxi-os/quartz-layout-box\n" + box, with: boxes)
+    XCTAssertTrue(config.contains("title: Handbuch") && config.contains("title: Mark"), "the config has not three boxes")
+    let (profile, project) = try project(config: config)
+    let before = read(project)
+    let (_, window) = open(profile, project, tab: "Installiert", list: "plugins.search")
+    let any = window.descendants(matching: .any)
+    let row = any["plugins.row.quartz-layout-box#2"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 10), "no second box in the list")
+    row.click()
+    let show = window.buttons["Auf der Bühne zeigen"].firstMatch
+    XCTAssertTrue(show.waitForExistence(timeout: 5), "no „Auf der Bühne zeigen“")
+    show.click()
+    let remove = window.buttons["Duplikat entfernen"].firstMatch
+    XCTAssertTrue(remove.waitForExistence(timeout: 10), "the stage did not select the second box")
+    remove.click()
+    // „Handbuch“, the third box of the file, is the second of the draft.
+    let chip = any["layout.chip.quartz-layout-box #2"].firstMatch
+    XCTAssertTrue(chip.waitForExistence(timeout: 5), "no second box on the stage")
+    chip.click()
+    let edit = any["layout.inspector.editOptions"].firstMatch
+    XCTAssertTrue(edit.waitForExistence(timeout: 5), "no „In … bearbeiten“")
+    edit.click()
+    let discard = window.buttons["Änderungen verwerfen"].firstMatch
+    XCTAssertTrue(discard.waitForExistence(timeout: 5), "leaving the edited Layout page did not ask")
+    discard.click()
+    XCTAssertTrue(any["page.plugins.extras"].firstMatch.waitForExistence(timeout: 10), "not on Zusätzliche Inhalte")
+    let name = any["extras.inspector.name"].firstMatch
+    XCTAssertTrue(name.waitForExistence(timeout: 10), "no box in the inspector")
+    let says = "\(name.label) \(name.value as? String ?? "") \(name.title)"
+    XCTAssertTrue(says.contains("Handbuch"), "another box than the one on the stage: \(says)")
+    XCTAssertEqual(read(project), before, "the discarded draft was written")
   }
 
   /// Installiert, an own plugin: its options lead to its tab, the whole form is folded.

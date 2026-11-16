@@ -150,4 +150,21 @@ public enum LayoutEntries {
     }
     return (next, plugins.count)
   }
+
+  /// Entry `index` of `draft` (the Layout page's unsaved list) in `plugins` (the file): the entry
+  /// with the same source and options, the n-th of its equals as in the draft. The Layout page
+  /// changes placement, never options, so these two say which entry it is whether the draft was
+  /// saved or discarded. nil when the file has no such entry (review 2026-11-17, M1: the draft's
+  /// index was taken as the file's, and after a removed component and „Änderungen verwerfen“ the
+  /// Plugins page selected the box after the one asked for).
+  public static func counterpart(of index: Int, in draft: [PluginEntry], among plugins: [PluginEntry]) -> Int? {
+    guard draft.indices.contains(index) else { return nil }
+    let entry = draft[index]
+    func same(_ other: PluginEntry) -> Bool {
+      other.source == entry.source && other.object["options"] == entry.object["options"]
+    }
+    let nth = draft[...index].filter(same).count
+    let matches = plugins.indices.filter { same(plugins[$0]) }
+    return matches.count >= nth ? matches[nth - 1] : nil
+  }
 }

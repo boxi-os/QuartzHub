@@ -314,4 +314,28 @@ import Testing
     #expect(next[1] == plugins[1])
     #expect(next[2] == plugins[2])
   }
+
+  /// Review 2026-11-17, M1: the Layout page hands its draft's entry to Plugins, which has read the
+  /// file. A component removed in the draft and discarded moves every later index by one.
+  @Test func anEntryOfTheDraftIsFoundInTheFile() {
+    func box(_ title: String, priority: Double) -> PluginEntry {
+      var entry = Self.entry("quartz-layout-box", JSONObject([("position", .string("left")), ("priority", .number(priority))]))
+      entry.object["options"] = .object(JSONObject([("title", .string(title))]))
+      return entry
+    }
+    let file = [box("mark", priority: 10), box("Website", priority: 20), box("Handbuch", priority: 30)]
+    // The draft without the first box, the others renumbered: „Handbuch“ is #1 there, #2 in the file.
+    let draft = [box("Website", priority: 10), box("Handbuch", priority: 20)]
+    #expect(LayoutEntries.counterpart(of: 1, in: draft, among: file) == 2)
+    #expect(LayoutEntries.counterpart(of: 0, in: draft, among: file) == 1)
+    // Saved, draft and file are one list.
+    #expect(LayoutEntries.counterpart(of: 1, in: file, among: file) == 1)
+    // Two equal entries: the second stays the second.
+    let twins = [box("A", priority: 10), box("A", priority: 20)]
+    #expect(LayoutEntries.counterpart(of: 1, in: twins, among: twins) == 1)
+    // A copy only the draft has, and an index outside the draft: nothing.
+    #expect(LayoutEntries.counterpart(of: 1, in: twins, among: [twins[0]]) == nil)
+    #expect(LayoutEntries.counterpart(of: 0, in: [box("neu", priority: 10)], among: file) == nil)
+    #expect(LayoutEntries.counterpart(of: 5, in: draft, among: file) == nil)
+  }
 }
