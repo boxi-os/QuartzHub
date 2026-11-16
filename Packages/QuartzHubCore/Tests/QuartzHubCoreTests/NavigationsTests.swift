@@ -23,8 +23,8 @@ import Testing
     let positions = try #require(golden["variantPositions"]?.objectValue)
     #expect(positions.keys == NavigationVariants.Variant.quartzControl.map(\.rawValue))
     for variant in NavigationVariants.Variant.quartzControl { #expect(positions[variant.rawValue] == .string(variant.position)) }
-    #expect(golden["readAgainst"] == .string(NavigationVariants.readAgainst))
-    #expect(Self.strings(golden["sameCode"]) == NavigationVariants.sameCode)
+    #expect(golden["readAgainst"] == .string(NavigationVariants.quartzControlReadAgainst))
+    #expect(Self.strings(golden["sameCode"]) == NavigationVariants.quartzControlSameCode)
 
     let cases = try #require(golden["noEffect"]?.arrayValue)
     #expect(cases.count > 3000)

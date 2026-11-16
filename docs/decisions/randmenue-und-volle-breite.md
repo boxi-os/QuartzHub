@@ -24,8 +24,9 @@ Menü und die Rail bekommt nur Styles.
 - **Die Kacheln folgen dem installierten Plugin** (`NavigationVariants.offered`): die Rail nur, wenn
   das Schema des Projekts `rail` im Enum von `variant` hat. Ein Plugin vor 0.5 machte aus `rail`
   stillschweigend `tree`.
-- **Offen bis zum Release des Plugins**: `readAgainst` bleibt `0.4.2`. Mit dem Release `readAgainst`
-  auf die neue Fassung setzen; die Regeln der zehn alten Varianten sind dort unverändert.
+- **Mit dem Release 0.5.0** (2026-11-16) liest QuartzHub gegen 0.5.0 (`readAgainst`). Ein Projekt
+  mit 0.4.x bekommt im Inspektor den Hinweis, dass QuartzHub gegen eine andere Fassung gelesen hat;
+  die Regeln seiner zehn Varianten sind dieselben, die Rail-Kachel fehlt dort (Schema).
 
 ## Bereiche über die volle Fensterbreite
 

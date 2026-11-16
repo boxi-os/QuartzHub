@@ -8,10 +8,14 @@ import Foundation
 public enum NavigationVariants {
   /// The plugin's name as the config loader derives it from github:boxi-os/quartz-navigations.
   public static let plugin = "quartz-navigations"
-  /// The version whose render.tsx the tables below are read from.
-  public static let readAgainst = "0.4.2"
-  /// Versions whose src/ is the same as that one's (`git diff v0.4.0 v0.4.3 -- src` is empty).
-  public static let sameCode = ["0.4.0", "0.4.1", "0.4.3"]
+  /// The version whose render.tsx the tables below are read from: 0.5.0, the first with the rail.
+  public static let readAgainst = "0.5.0"
+  /// Versions whose src/ is the same as that one's: none yet.
+  public static let sameCode: [String] = []
+  /// What QuartzControl had read its tables from (its golden cases): the rules of its ten variants
+  /// are unchanged in 0.5.0, which only adds the rail.
+  static let quartzControlReadAgainst = "0.4.2"
+  static let quartzControlSameCode = ["0.4.0", "0.4.1", "0.4.3"]
 
   public enum Variant: String, CaseIterable, Sendable {
     case tree, accordion, flyout, bar, dropdown, mega, tabs, columns, select, pager, rail
