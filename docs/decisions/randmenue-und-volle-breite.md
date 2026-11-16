@@ -45,7 +45,7 @@ kleiner, ginge das nur, solange die Lücke kleiner ist als der Innenabstand; im 
 umgekehrt (Lücke 4rem/3rem, Abstand 20px), der Inhalt wäre auf dem Tablet um 28px je Seite
 eingerückt worden. Deshalb reicht das Raster um eine Lücke je Seite über die Seite hinaus
 (`width: calc(100% + 2 * gap)`, `margin-inline: calc(-1 * gap)`), der volle Bereich nimmt sie mit
-`margin-inline: gap` zurück, und `#quartz-body` schneidet den Rest mit `overflow-x: clip` ab (kein
+seinem Rand zurück, und `#quartz-body` schneidet den Rest mit `overflow-x: clip` ab (kein
 Scroll-Container, eine Sticky-Kopfzeile bleibt sticky). `#quartz-body` verliert dabei Quartz' eigenen
 Innenabstand unterhalb der Desktop-Breite, sonst endeten die vollen Bereiche 1rem vor dem Rand; der
 Innenabstand des Frames ist dann der einzige.
@@ -69,5 +69,9 @@ Breakpoints dieselben Selektoren überschreiben.
 
 Schiebt eine Rail die Seite (`content: push`), rückt das Plugin `<body>` um
 `--quartz-nav-rail-offset-left|right` ein; eine volle Kopfzeile würde mitrücken, obwohl das Panel
-unter ihr beginnt. Das README des Plugins zeigt jetzt die zwei Regeln, mit denen sie stehen bleibt;
-das Basis-Template bringt sie mit.
+unter ihr beginnt. Der Rand eines vollen Bereichs ist deshalb
+`calc(<Lücke> - var(--qgframe-bleed-left, 0px))` (rechts entsprechend, physische Seiten wie bei der
+Rail): Eine Site zieht ihn über diese zwei Variablen weiter hinaus, ohne die Lücke des Frames zu
+kennen. Das Frame-CSS kennt das Plugin nicht; das Basis-Template verbindet beides
+(`--qgframe-bleed-left: var(--quartz-nav-rail-offset-left)` an der Kopfzeile, nicht am Fuß, den das
+Panel bis zum Fensterboden überdeckt). Das README des Plugins zeigt dasselbe für Sites ohne Frame.

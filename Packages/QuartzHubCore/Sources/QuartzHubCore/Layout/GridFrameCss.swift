@@ -253,9 +253,8 @@ public enum GridFrameCss {
     for area in areas {
       let name = JS.string(try field(area, "name"))
       if fullWidth && isFullWidth(area) {
-        let margin = full.contains(area) ? JS.string(layout["columnGap"]) : "0"
         rules.append(isVisible(try placements(layout, area))
-          ? ".qgframe-area-\(name) { grid-area: \(name); margin-inline: \(margin); }"
+          ? ".qgframe-area-\(name) { grid-area: \(name); \(fullAreaMargin(full.contains(area) ? JS.string(layout["columnGap"]) : nil)) }"
           : ".qgframe-area-\(name) { display: none; }")
         continue
       }
@@ -264,6 +263,15 @@ public enum GridFrameCss {
         : ".qgframe-area-\(name) { display: none; }")
     }
     return rules.joined(separator: "\n")
+  }
+
+  /// A full area's margin: the column gap the widened grid reaches past the page, taken back, less
+  /// `--qgframe-bleed-left|right`, which a site sets to pull the area further out (over the room a
+  /// menu at the window edge pushes the page aside by). Physical sides, as such a menu has them.
+  /// nil: the area stays in the grid in this breakpoint.
+  static func fullAreaMargin(_ gap: String?) -> String {
+    guard let gap else { return "margin-left: 0; margin-right: 0;" }
+    return "margin-left: calc(\(gap) - var(--qgframe-bleed-left, 0px)); margin-right: calc(\(gap) - var(--qgframe-bleed-right, 0px));"
   }
 
   /// `grid-template-areas` with one more cell at each end of a row: the full area's name in the
