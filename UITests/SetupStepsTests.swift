@@ -2,7 +2,7 @@ import XCTest
 
 /// The inspector in steps (docs/plan-assistenten.md) at the running app, on a navigation: the
 /// first run of a new entry ends with that entry, a cancel takes back exactly what ➕ wrote, and
-/// the setup takes one snapshot. Review 2026-11-16, M1, N2.
+/// the setup takes one snapshot. Review 2026-11-16, M1, N1, N2.
 ///
 /// The project is a scratch folder with one navigation of quartz-navigations; the plugin's package
 /// is not there, so the steps of its options say they cannot be read. The steps QuartzHub draws
@@ -128,6 +128,19 @@ final class SetupStepsTests: XCTestCase {
     waitFor("the copy's own class is the freed one") { self.read(project).contains("className: layout-box-neue-box layout-box-neue-box-2") }
     XCTAssertTrue(any["steps.heading"].firstMatch.waitForExistence(timeout: 5), "the copy is not in the inspector")
     XCTAssertFalse(any["steps.cancel"].firstMatch.waitForExistence(timeout: 2), "the copy took over the removed box's first run")
+  }
+
+  /// N1: choosing another entry ends the run; coming back shows the steps of an existing entry.
+  func testChoosingAnotherEntryEndsTheFirstRun() throws {
+    let (profile, project) = try project()
+    let (_, window) = open(profile, project)
+    addBar(window, project)
+    let any = window.descendants(matching: .any)
+    window.staticTexts.matching(identifier: "navigations.row.1").firstMatch.click()
+    XCTAssertFalse(any["steps.cancel"].firstMatch.waitForExistence(timeout: 2), "the first run shows on another entry")
+    window.staticTexts.matching(identifier: "navigations.row.2").firstMatch.click()
+    XCTAssertTrue(any["steps.heading"].firstMatch.waitForExistence(timeout: 5), "the new navigation is not in the inspector")
+    XCTAssertFalse(any["steps.cancel"].firstMatch.waitForExistence(timeout: 2), "the first run outlived leaving the entry")
   }
 
   /// N2, the plan's smoke test: ➕, every step, a move in the placement step, cancel. The file is

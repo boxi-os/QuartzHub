@@ -89,12 +89,14 @@ import Testing
   }
 
   /// A first run ends with its entry: removed some other way, the run must not live on and take
-  /// the next entry under the same name (review 2026-11-16, M1).
-  @Test func aRunLastsWhileItsEntryIsThere() {
+  /// the next entry under the same name (review 2026-11-16, M1); nor with another entry chosen (N1).
+  @Test func aRunLastsWhileItsEntryIsThereAndChosen() {
     let run = SetupRun(key: "nav-bar-2", before: [])
-    #expect(run.lasts(keys: ["nav-bar", "nav-bar-2"]))
-    #expect(!run.lasts(keys: ["nav-bar"]))
-    #expect(!run.lasts(keys: []))
+    #expect(run.lasts(keys: ["nav-bar", "nav-bar-2"], selected: "nav-bar-2"))
+    #expect(!run.lasts(keys: ["nav-bar"], selected: "nav-bar-2"))
+    #expect(!run.lasts(keys: [], selected: nil))
+    #expect(!run.lasts(keys: ["nav-bar", "nav-bar-2"], selected: "nav-bar"))
+    #expect(!run.lasts(keys: ["nav-bar", "nav-bar-2"], selected: nil))
   }
 
   /// quartz-layout-box's schema as gui-test has it (0.4.2, `Fixtures/option-schema/real`).

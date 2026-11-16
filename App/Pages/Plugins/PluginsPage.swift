@@ -132,6 +132,10 @@ struct PluginsPage: View {
       .pageTabs(Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "plugins.tabs")
       .historyTab(page: .plugins, tab: $tabID)
       .onChange(of: model.config?.plugins) { endSetups() }
+      .onChange(of: navigationSelected) { endSetups() }
+      .onChange(of: boxSelected) { endSetups() }
+      .onChange(of: formSelected) { endSetups() }
+      .onChange(of: languageSelected) { endSetups() }
       .task {
         await model.load()
         let path = project.path
@@ -215,20 +219,31 @@ struct PluginsPage: View {
     }
   }
 
-  /// A first run ends with its entry, however that left (review 2026-11-16, M1).
+  /// A first run ends with its entry, however that left, and when another entry is chosen
+  /// (review 2026-11-16, M1, N1).
   private func endSetups() {
     guard let plugins = model.config?.plugins else { return }
-    if let run = navigationSetup, !run.lasts(keys: NavigationInstance.all(plugins).compactMap { InstanceClass.own($0.entry) }) {
-      navigationSetup = nil
+    if let run = navigationSetup {
+      let all = NavigationInstance.all(plugins)
+      let selected = all.first { $0.occurrence == navigationSelected }.flatMap { InstanceClass.own($0.entry) }
+      if !run.lasts(keys: all.compactMap { InstanceClass.own($0.entry) }, selected: selected) { navigationSetup = nil }
     }
-    if let run = boxSetup, !run.lasts(keys: LayoutBoxes.boxes(plugins).compactMap { InstanceClass.own($0.plugin) }) {
-      boxSetup = nil
+    if let run = boxSetup {
+      let all = LayoutBoxes.boxes(plugins)
+      let selected = all.first { $0.occurrence == boxSelected }.flatMap { InstanceClass.own($0.plugin) }
+      if !run.lasts(keys: all.compactMap { InstanceClass.own($0.plugin) }, selected: selected) { boxSetup = nil }
     }
-    let forms = FormsOptions.entries(plugins).first.map { FormsOptions.forms($0.plugin.object["options"]?.objectValue).map(\.id) } ?? []
-    if let run = formSetup, !run.lasts(keys: forms) { formSetup = nil }
-    let languages = MultilanguageOptions.entries(plugins).first
-      .map { MultilanguageOptions.languages($0.plugin.object["options"]?.objectValue ?? JSONObject()).map(\.code) } ?? []
-    if let run = languageSetup, !run.lasts(keys: languages) { languageSetup = nil }
+    if let run = formSetup {
+      let forms = FormsOptions.entries(plugins).first.map { FormsOptions.forms($0.plugin.object["options"]?.objectValue).map(\.id) } ?? []
+      let selected = formSelected.flatMap { $0.hasPrefix("form:") ? String($0.dropFirst(5)) : nil }
+      if !run.lasts(keys: forms, selected: selected) { formSetup = nil }
+    }
+    if let run = languageSetup {
+      let languages = MultilanguageOptions.entries(plugins).first
+        .map { MultilanguageOptions.languages($0.plugin.object["options"]?.objectValue).map(\.code) } ?? []
+      let selected = languageSelected.flatMap { $0.hasPrefix("lang:") ? String($0.dropFirst(5)) : nil }
+      if !run.lasts(keys: languages, selected: selected) { languageSetup = nil }
+    }
   }
 
   @ViewBuilder private var introSection: some View {

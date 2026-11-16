@@ -94,12 +94,14 @@ public struct SetupRun: Equatable, Sendable {
     self.before = before
   }
 
-  /// Whether the run still has its entry: `keys` are what names each entry of its kind now. An
-  /// entry removed some other way (its row, the plugin list, the file) ends the run, so a later
-  /// entry under the same name, a copy with the freed class, is not taken for the new one
-  /// (review 2026-11-16, M1).
-  public func lasts(keys: [String]) -> Bool {
-    keys.contains(key)
+  /// Whether the run still has its entry before it: `keys` are what names each entry of its kind
+  /// now, `selected` the one the inspector shows. An entry removed some other way (its row, the
+  /// plugin list, the file) ends the run, so a later entry under the same name, a copy with the
+  /// freed class, is not taken for the new one (review 2026-11-16, M1). Choosing another entry
+  /// ends it too, as „Fertig“ would: what the steps wrote stays, and the entry, chosen again, takes
+  /// a snapshot before its next change like any other (N1).
+  public func lasts(keys: [String], selected: String?) -> Bool {
+    selected == key && keys.contains(key)
   }
 }
 
