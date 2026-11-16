@@ -171,17 +171,67 @@ public enum GridFrameCss {
     }
   }
 
+  // MARK: areas across the full window (QuartzHub, not in QuartzControl)
+
+  /// An area marked `fullWidth: true` (QuartzHub's addition to frame.json): it reaches both edges
+  /// of the window while the other areas keep the frame's width, alignment and padding.
+  public static func isFullWidth(_ area: JSONValue) -> Bool { area["fullWidth"] == .bool(true) }
+
+  /// Whether a frame has any such area; without one its CSS is QuartzControl's, byte for byte.
+  public static func hasFullWidth(_ def: JSONValue) -> Bool {
+    (def["areas"]?.arrayValue ?? []).contains(where: isFullWidth)
+  }
+
+  /// Whether an area is visible in this breakpoint and fills whole rows: from the first column over
+  /// all of them. Only then can it run past the frame's edges, since its rows hold nothing else.
+  public static func fillsRows(_ layout: JSONValue?, _ area: JSONValue) -> Bool {
+    guard let layout, let placement = try? placements(layout, area), isVisible(placement) else { return false }
+    return number(placement["col"]) == 1 && number(placement["colSpan"]) >= JS.toNumber(layout["cols"])
+  }
+
+  /// The grid widened by one track on each side, the frame's box moved into those tracks: their
+  /// size is the frame's padding plus the room `maxWidth` and `align` leave, so the inner tracks
+  /// keep exactly the width they had. The grid itself reaches past the page by one column gap on
+  /// each side, because the gap also stands between an edge track and the first inner one; a full
+  /// area takes that back with its margin (`fullAreaMargin`), and `#quartz-body` clips the rest.
+  static func fullWidthTracks(_ columns: String, _ layout: JSONValue, _ box: Box) -> (columns: String, width: String, margin: String) {
+    let gap = JS.string(layout["columnGap"])
+    let pad = box.paddingInline
+    let align = layout["align"].flatMap { $0 == .null ? nil : $0 } ?? .string("left")
+    // `100%` is the grid's own width here, the page's plus two gaps.
+    let room = box.maxWidth == "none" ? nil : "(100% - 2 * (\(gap)) - \(box.maxWidth))"
+    let left: String, right: String
+    switch (room, align) {
+    case (nil, _): (left, right) = (pad, pad)
+    case (let room?, .string("center")): (left, right) = ("calc(\(pad) + max(0px, \(room) / 2))", "calc(\(pad) + max(0px, \(room) / 2))")
+    case (let room?, .string("right")): (left, right) = ("calc(\(pad) + max(0px, \(room)))", pad)
+    case (let room?, _): (left, right) = (pad, "calc(\(pad) + max(0px, \(room)))")
+    }
+    return ("[qgframe-full-start] \(left) \(columns) \(right) [qgframe-full-end]", "calc(100% + 2 * (\(gap)))", "calc(-1 * (\(gap)))")
+  }
+
   /// One breakpoint's rules for `selector`: the grid itself, a `grid-area` per visible area and a
   /// `display: none` for every other one (an area left out of `grid-template-areas` would otherwise
   /// be auto-placed). Every value is written out, also when unset: the narrower breakpoints are
   /// overrides of the same selector, and a desktop-only value would still apply on mobile.
-  static func breakpointBlock(_ selector: String, _ layout: JSONValue?, _ areasValue: JSONValue?) throws -> String {
+  ///
+  /// `fullWidth`: the frame has areas across the full window. In a breakpoint where one of them
+  /// fills its rows, the grid gets the edge tracks of `fullWidthTracks`; every full area's margin is
+  /// written in every breakpoint, for the same reason as above.
+  static func breakpointBlock(_ selector: String, _ layout: JSONValue?, _ areasValue: JSONValue?, fullWidth: Bool = false) throws -> String {
     guard let layout, layout != .null else { throw JS.readError(layout, "columnSizes") }
-    let columns = try trackList(layout["columnSizes"], count: layout["cols"], fallback: "1fr", lineNames: layout["columnLineNames"])
+    var columns = try trackList(layout["columnSizes"], count: layout["cols"], fallback: "1fr", lineNames: layout["columnLineNames"])
     let rows = try trackList(layout["rowSizes"], count: layout["rows"], fallback: "auto", lineNames: layout["rowLineNames"])
     let areas = try areaList(areasValue)
-    let template = try templateAreas(layout, areas)
-    let box = try box(layout)
+    var template = try templateAreas(layout, areas)
+    var box = try box(layout)
+    let full = fullWidth ? areas.filter { isFullWidth($0) && fillsRows(layout, $0) } : []
+    if !full.isEmpty {
+      let tracks = fullWidthTracks(columns, layout, box)
+      columns = tracks.columns
+      template = try edgeCells(layout, areas, full)
+      box = Box(width: tracks.width, maxWidth: "none", marginInline: tracks.margin, paddingBlock: box.paddingBlock, paddingInline: "0")
+    }
     var rules = [
       "\(selector) {",
       "  display: grid;",
@@ -202,11 +252,41 @@ public enum GridFrameCss {
     ]
     for area in areas {
       let name = JS.string(try field(area, "name"))
+      if fullWidth && isFullWidth(area) {
+        let margin = full.contains(area) ? JS.string(layout["columnGap"]) : "0"
+        rules.append(isVisible(try placements(layout, area))
+          ? ".qgframe-area-\(name) { grid-area: \(name); margin-inline: \(margin); }"
+          : ".qgframe-area-\(name) { display: none; }")
+        continue
+      }
       rules.append(isVisible(try placements(layout, area))
         ? ".qgframe-area-\(name) { grid-area: \(name); }"
         : ".qgframe-area-\(name) { display: none; }")
     }
     return rules.joined(separator: "\n")
+  }
+
+  /// `grid-template-areas` with one more cell at each end of a row: the full area's name in the
+  /// rows it fills, "." elsewhere.
+  static func edgeCells(_ layout: JSONValue, _ areas: [JSONValue], _ full: [JSONValue]) throws -> String {
+    let lines = try templateAreas(layout, areas).components(separatedBy: "\n      ")
+    var edges = Array(repeating: ".", count: lines.count)
+    for area in full {
+      guard let placement = try placements(layout, area) else { continue }
+      let first = Int(number(placement["row"])), span = Int(number(placement["rowSpan"]))
+      let lower = max(first, 1), upper = min(first + span - 1, lines.count)
+      guard lower <= upper else { continue }
+      for row in lower...upper { edges[row - 1] = JS.string(area["name"]) }
+    }
+    return zip(lines, edges).map { line, edge in "\"\(edge) \(line.dropFirst().dropLast()) \(edge)\"" }.joined(separator: "\n      ")
+  }
+
+  /// What a frame with full areas needs around its grid: `#quartz-body` without Quartz's own
+  /// padding below the desktop width (the frame's padding is the inset now; with it the full areas
+  /// would stop short of the edges) and clipping the gap the widened grid reaches past it.
+  /// `overflow-x: clip` makes no scroll container, so a sticky header keeps working.
+  static func fullWidthOverride(_ page: String) -> String {
+    ["\(page) > #quartz-body {", "  padding-inline: 0;", "  overflow-x: clip;", "}"].joined(separator: "\n")
   }
 
   // MARK: the frame around the grid
@@ -315,9 +395,10 @@ public enum GridFrameCss {
   /// the narrowing breakpoints.
   public static func frameCss(_ def: JSONValue, widths: (tablet: Double, mobile: Double)) throws -> String {
     var blocks: [String] = []
+    let fullWidth = hasFullWidth(def)
     for breakpoint in breakpoints {
       guard let all = def["breakpoints"], all != .null else { throw JS.readError(def["breakpoints"], breakpoint) }
-      let block = try breakpointBlock(".qgframe-grid", member(all, breakpoint), def["areas"])
+      let block = try breakpointBlock(".qgframe-grid", member(all, breakpoint), def["areas"], fullWidth: fullWidth)
       let maxWidth: Double? = breakpoint == "tablet" ? widths.tablet : breakpoint == "mobile" ? widths.mobile : nil
       if let maxWidth, maxWidth != 0, !maxWidth.isNaN {
         blocks.append("@media (max-width: \(JSJSON.numberToString(maxWidth))px) {\n\(block)\n}")
@@ -331,6 +412,7 @@ public enum GridFrameCss {
       parts.append(layered(quartzBreakpointCompat(page, widths)))
       parts.append(layered(pluginBreakpointCompat(page, widths)))
     }
+    if fullWidth { parts.append(fullWidthOverride(page)) }
     return (parts + blocks).joined(separator: "\n\n")
   }
 

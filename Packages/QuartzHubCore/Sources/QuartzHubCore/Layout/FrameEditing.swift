@@ -352,6 +352,21 @@ public enum FrameEditing {
     withArea(def, id) { area in area["group"] = own ? area["name"] : nil }
   }
 
+  /// QuartzHub's own: the area across the full window (`GridFrameCss.isFullWidth`). Off removes
+  /// the key, so a frame without it stays in QuartzControl's form.
+  public static func withAreaFullWidth(_ def: JSONValue, _ id: String, _ on: Bool) -> JSONValue {
+    withArea(def, id) { area in area["fullWidth"] = on ? .bool(true) : nil }
+  }
+
+  /// The breakpoints in which a full-width area does not fill whole rows and so stays in the grid.
+  public static func fullWidthShortRows(_ def: JSONValue, _ id: String) -> [String] {
+    guard let area = areas(def).first(where: { $0["id"]?.stringValue == id }), GridFrameCss.isFullWidth(area) else { return [] }
+    return GridFrameCss.breakpoints.filter { bp in
+      guard let layout = def["breakpoints"]?[bp], let placement = try? GridFrameCss.placements(layout, area) else { return false }
+      return GridFrameCss.isVisible(placement) && !GridFrameCss.fillsRows(layout, area)
+    }
+  }
+
   public enum Refusal: Error, Equatable, Sendable {
     /// Another shown area is in the way.
     case overlap

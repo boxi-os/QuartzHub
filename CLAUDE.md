@@ -111,6 +111,8 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   entschieden wurde
 - [`ui-ueberarbeitung.md`](docs/decisions/ui-ueberarbeitung.md) — die einheitliche Oberfläche (seit 2026-11-12):
   Entscheidungen, macOS 26, Verlauf, Seitentypen, Bewegung
+- [`randmenue-und-volle-breite.md`](docs/decisions/randmenue-und-volle-breite.md) — die Rail von quartz-navigations
+  in QuartzHub und Frame-Bereiche über die volle Fensterbreite (`fullWidth`, QuartzHubs erste Erweiterung des Frame-Formats)
 - `~/Development/macos-ui-leitfaden` (eigenes Repo, außerhalb von QuartzHub) — die Regeln der
   Oberfläche verallgemeinert für alle macOS-Apps des Nutzers (Regeln L1–L61, Prüfliste, Methode,
   Bausteine aus `Design.swift`). Quelle der Messungen bleiben hier `docs/conventions.md` und

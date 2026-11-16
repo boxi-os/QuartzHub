@@ -101,7 +101,9 @@ public enum FrameDefinitionCheck {
     ("frameName", string(min: 1, max: 120)),
     ("areas", array(object([
       ("id", string(max: 128)), ("name", cssIdent),
-      ("slot", optional(enumeration(positions + ["pageBody"]))), ("group", optional(cssIdent))
+      ("slot", optional(enumeration(positions + ["pageBody"]))), ("group", optional(cssIdent)),
+      // QuartzHub's own key (GridFrameCss.isFullWidth); QuartzControl's zod object let it pass.
+      ("fullWidth", optional(boolean))
     ]), max: 200)),
     ("breakpoints", object([("desktop", layout), ("tablet", layout), ("mobile", layout)]))
   ])

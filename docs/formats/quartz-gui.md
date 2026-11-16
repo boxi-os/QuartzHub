@@ -146,7 +146,8 @@ Geprüft: `gui-test/.quartz-gui/logs/` = `dev-server-13404.err.log`, `dev-server
    type FrameSlot = LayoutPosition | 'pageBody'
    type FrameAlign = 'left' | 'center' | 'right'
    interface GridAreaPlacement { row: number; col: number; rowSpan: number; colSpan: number; hidden?: boolean } // 1-basiert
-   interface GridFrameArea { id: string; name: string; slot?: FrameSlot; group?: string }
+   interface GridFrameArea { id: string; name: string; slot?: FrameSlot; group?: string
+                             fullWidth?: boolean }                // nur QuartzHub, siehe unten
    interface GridBreakpointLayout {
      rows: number; cols: number
      columnSizes?: string[]; rowSizes?: string[]        // fehlend/kürzer → '1fr' bzw. 'auto'
@@ -163,6 +164,11 @@ Geprüft: `gui-test/.quartz-gui/logs/` = `dev-server-13404.err.log`, `dev-server
    Geschrieben wird das Objekt, wie es aus `migrateGridFrameDefinition` kommt (Renderer bzw. `.qtpl`),
    geprüft vorher durch `frameDefinitionProblem()` (`:629-651`: zod `gridFrameDefinition` aus
    `ipc/schemas.ts`, eindeutige Bereichsnamen, keine Doppelbelegung slot+group).
+
+   **`fullWidth`** (QuartzHub, seit 2026-11-16): der Bereich läuft über die ganze Fensterbreite, wo
+   er ganze Zeilen füllt (`GridFrameCss.fillsRows`). QuartzControl 1.3 lässt den Schlüssel durch und
+   ignoriert ihn; ohne ihn ist das CSS byte-gleich mit 1.3. Wirkung und Messung:
+   `decisions/randmenue-und-volle-breite.md`.
 
    `package.json` (`generatePackageJson`, `:393-405`), exakt:
    ```json
