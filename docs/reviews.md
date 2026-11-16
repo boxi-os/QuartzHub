@@ -155,3 +155,40 @@ Kern-Update werden nie ausgedünnt und nie übersprungen; die Update-Quelle blei
 `quartz-upstream` (decisions/phase-5-gleichstand.md, Commit unten). Nebenbei
 aufgefallen: Neu starten von Vorschau & Build nimmt die Optionen des laufenden Servers, nicht die der Seite
 (`BuildService.restartServer`).
+
+## 2026-11-16: Schritte im Inspektor
+
+Bericht `REVIEW-2026-11-16.md` (Stand `54feb73`, frischer Subagent ohne Verlauf): 0 Hoch, 5 Mittel,
+2 Niedrig, 8 nebenbei. Der Nutzer ließ die ganze Liste abarbeiten. Gemessen an der App mit dem neuen
+UI-Test `UITests/SetupStepsTests` (Navigation und Box, Projekt im Temp-Ordner) und an einer Kopie von
+gui-test (Formular, Sprachen), sonst mit Kerntests; die Messung steht je im Commit.
+
+| Befund | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| M1 | Ein erster Durchlauf endet mit seinem Eintrag, wie immer der verschwindet; die Kopie einer Box mit der frei gewordenen Klasse ist kein neuer Eintrag mehr (`SetupRun.lasts`, im Kern) | `f0de736` |
+| N1 | Ein anderer Eintrag gewählt, endet der Lauf wie mit „Fertig“; danach schreibt der Eintrag wieder mit Snapshot | `d685ec0` |
+| M2 | Abbrechen setzt nur die Prioritäten zurück, die der Lauf selbst geschrieben hat und die seither niemand geändert hat | `613debc` |
+| M3 | Eine neue eigene Klasse in der Zusammenfassung nimmt Lauf und Schritt mit (Navigation, Box) | `91344d5` |
+| M4 | Abbrechen gibt das Layout-Formular zurück und schreibt Standard- und veröffentlichte Sprachen nur zurück, wo es sie noch gibt; an der App: Diff nach Formular-Abbruch leer | `85b9aed` |
+| M5 | Ein gescheitertes oder abgewiesenes Schreiben verbraucht den einen Snapshot nicht (`SnapshotOnce`); nicht an der App nachgestellt | `0ce7a81` |
+| N2 | Die zwei Erwartungen, die nicht scheitern konnten, sind ersetzt (Gegenprobe rot); den Rauchtest des Plans gibt es als `SetupStepsTests` | `eadefd2` |
+
+Die Nebenbei-Punkte:
+
+| Punkt | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| 1 | „Sprachwechsler dieser Eintrag“ statt „Sprachwechsler diese“ | `a00ccd6` |
+| 2 | Ein Problem-Abzeichen für Formulare und Schritte (`ProblemBadge`), ein Katalogschlüssel | `a00ccd6` |
+| 3 | Ohne eigene Klasse merkt sich der Inspektor den Schritt nicht unter einem Listenindex | `dc6308d` |
+| 4 | Aus der Zusammenfassung der Sprach-Einrichtung verlassen, beginnt die nächste bei „Sprachen“ | `dc6308d` |
+| 5 | Die Häkchen gehören dem Lauf und überstehen das Umbenennen (Umbenennen selbst nicht an der App wiederholt) | `dc6308d` |
+| 6 | Gemessen, nichts zu ändern: ⌥⌘↓ erreicht im Schritt „Sprachwechsler“ den Platz-Schritt | — |
+| 7 | „Wirkt nicht“ bei „Darstellung“ stimmt auch für `columns` | `a00ccd6` |
+| 8 | Nichts zu tun (kein Kürzelkonflikt) | — |
+
+Im Handbuch nachgezogen: 4.6 und 4.8, de und en (Vault `b016fad`, nicht online). Bleibt, wie es ist:
+Ein `configChange`-Snapshot eines bestehenden Eintrags wird wie bei jedem Editor innerhalb von 15
+Minuten mit dem davor zusammengefasst (zweite Hälfte von N1; die Regel des Snapshot-Stores). Leert man
+im ersten Durchlauf die Klasse, endet der Lauf. Der UI-Test deckt Formular und Sprache nicht ab: Dafür
+bräuchte das Testprojekt deren Plugins. Gesamtlauf: `xcodebuild test` grün (17 UI-Tests, einer ohne
+seine Umgebung übersprungen), `swift test` 642 Tests, `qh-check i18n` und `handbook` ohne Befund.

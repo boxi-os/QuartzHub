@@ -187,6 +187,10 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   (decisions/phase-5-gleichstand.md, „QuartzControl verschwindet“): keine Übernahme, kein Band neben
   ihm, kein Wort im Handbuch; die Namen im Dateiformat (`QuartzControl:managed`, `_quartzcontrol.scss`,
   `.quartz-gui/`) bleiben.
+- **Der Inspektor in Schritten seit 2026-11-16** ([`plan-assistenten.md`](docs/plan-assistenten.md)): Navigationen,
+  Boxen, Formulare und Sprachen, ein erster Durchlauf je neuem Eintrag (`SetupRun` im Kern). Review
+  `docs/REVIEW-2026-11-16.md` abgearbeitet: 5 Mittel, 2 Niedrig, 8 nebenbei, Chronik in `docs/reviews.md`;
+  der Rauchtest dazu ist `UITests/SetupStepsTests`.
 
 ## Arbeitsweise
 
