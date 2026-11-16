@@ -143,6 +143,29 @@ public struct SetupRun: Equatable, Sendable {
   }
 }
 
+/// When an inspector in steps takes its one snapshot (docs/plan-assistenten.md): with the first
+/// write after it opened, none in a first run (➕ took it), none once taken. "Taken" counts only
+/// while no write failed since: a write that failed may have failed at the snapshot, or been
+/// refused before it, so the next one takes it again (review 2026-11-16, M5).
+public struct SnapshotOnce: Equatable, Sendable {
+  /// The writer's count of failed writes when the snapshot was asked for.
+  private var takenAt: Int?
+
+  public init() {}
+
+  /// Whether this write takes the snapshot; `failures` is the writer's count of failed writes.
+  public mutating func take(firstRun: Bool = false, failures: Int) -> Bool {
+    if firstRun || takenAt == failures { return false }
+    takenAt = failures
+    return true
+  }
+
+  /// „Fertig“: the run's snapshot was ➕'s; the next write takes none.
+  public mutating func taken(failures: Int) {
+    takenAt = failures
+  }
+}
+
 extension NavigationVariants {
   /// A navigation's steps: the kind first, because it decides what the later steps can do; the
   /// place next, so the preview shows it from the second step on. The groups are the plugin's

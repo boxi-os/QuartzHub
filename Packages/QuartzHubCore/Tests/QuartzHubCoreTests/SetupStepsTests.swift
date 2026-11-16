@@ -107,6 +107,29 @@ import Testing
     #expect(!run.lasts(keys: ["nav-bar", "nav-bar-2"], selected: nil))
   }
 
+  /// One snapshot per inspector, and again after a write failed (review 2026-11-16, M5).
+  @Test func theOneSnapshotIsTakenAgainAfterAFailedWrite() {
+    var once = SnapshotOnce()
+    // `#expect` cannot call a mutating method: each answer first, then the expectation.
+    let inFirstRun = once.take(firstRun: true, failures: 0)
+    let first = once.take(failures: 0)
+    let second = once.take(failures: 0)
+    // The first write failed (at the snapshot, or refused): the next one takes it again.
+    let afterFailure = once.take(failures: 1)
+    let thenNone = once.take(failures: 1)
+    #expect(!inFirstRun && first && !second && afterFailure && !thenNone)
+    var done = SnapshotOnce()
+    done.taken(failures: 2)
+    let afterDone = done.take(failures: 2)
+    #expect(!afterDone)
+    // Gegenprobe, the rule before: a flag set when asked, whatever became of the write.
+    var flag = false
+    func old() -> Bool { if flag { return false }; flag = true; return true }
+    let oldFirst = old()
+    let oldAfterFailure = old()
+    #expect(oldFirst && !oldAfterFailure)
+  }
+
   /// quartz-layout-box's schema as gui-test has it (0.4.2, `Fixtures/option-schema/real`).
   static let boxFields: [OptionField] = {
     let url = PluginSchemaReaderTests.fixtures.appendingPathComponent("real/.quartz/plugins/quartz-layout-box/package.json")

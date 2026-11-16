@@ -28,7 +28,7 @@ struct FormInspector: View {
   @State private var idReset = 0
   @State private var copied: String?
   @State private var visited: Set<String> = []
-  @State private var snapshotTaken = false
+  @State private var snapshot = SnapshotOnce()
 
   private var lang: String { FormsView.lang }
   private var options: JSONObject { view.options }
@@ -169,14 +169,12 @@ struct FormInspector: View {
   /// One snapshot per setup: ➕ took it for a new form; an existing one takes it with the first
   /// write after the inspector opened.
   private func policy() -> PluginsModel.SnapshotPolicy {
-    if firstRun || snapshotTaken { return .none }
-    snapshotTaken = true
-    return .each
+    model.once(&snapshot, firstRun: firstRun)
   }
 
   private func finish() {
     setup = nil
-    snapshotTaken = true
+    snapshot.taken(failures: model.failures)
     Announce.post(L10n.t("formsEditor.steps.doneAnnounce", ["name": view.title(id, def)]))
   }
 

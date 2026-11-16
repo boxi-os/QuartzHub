@@ -213,14 +213,28 @@ final class PluginsModel {
     case none
   }
 
+  /// Writes that failed, refused or not: an inspector's one snapshot is asked for again after one
+  /// (`SnapshotOnce`, review 2026-11-16, M5).
+  private(set) var failures = 0
+
+  /// The policy of an inspector in steps: `.each` (or `labeled`) once, see `SnapshotOnce`.
+  func once(_ state: inout SnapshotOnce, firstRun: Bool = false, labeled label: String? = nil) -> SnapshotPolicy {
+    guard state.take(firstRun: firstRun, failures: failures) else { return .none }
+    return label.map(SnapshotPolicy.labeled) ?? .each
+  }
+
   @discardableResult
   func commit(sayRefusal: Bool = true, snapshot policy: SnapshotPolicy = .each, _ mutate: ([PluginEntry]) -> [PluginEntry]) async -> Bool {
     if removing {
+      failures += 1
       refused = true
       if sayRefusal { Announce.post(L10n.t("pluginsInstalled.busyRemoving")) }
       return false
     }
-    guard var next = config else { return false }
+    guard var next = config else {
+      failures += 1
+      return false
+    }
     next.plugins = mutate(next.plugins)
     config = next
     generation += 1
@@ -251,6 +265,7 @@ final class PluginsModel {
     writes = Task { _ = await write.value }
     if let error = await write.value {
       // What the file holds, back on screen, and the failure said.
+      failures += 1
       await reload()
       message = ConfigModel.message(error)
       return false

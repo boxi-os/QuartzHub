@@ -267,7 +267,7 @@ struct BoxInspector: View {
   @State private var schema: PluginOptionSchemaResult?
   @State private var loaded = false
   @State private var visited: Set<String> = []
-  @State private var snapshotTaken = false
+  @State private var snapshot = SnapshotOnce()
 
   private var options: JSONObject { box.plugin.object["options"]?.objectValue ?? JSONObject() }
   private var entryKey: String { InstanceClass.own(box.plugin) ?? "#\(box.occurrence)" }
@@ -430,27 +430,25 @@ struct BoxInspector: View {
   /// 2026-11-16, M3). The policy is asked before: with the run renamed, `firstRun` would be false
   /// until the file has the new class.
   private func writeOptions(_ next: JSONObject?) async {
-    let snapshot = policy()
+    let rule = policy()
     let value = next.map(JSONValue.object)
     let after = PluginEntry(object: OptionSchema.setting(value, at: ["options"], in: box.plugin.object))
     if let to = InstanceClass.own(after), to != InstanceClass.own(box.plugin) {
       if firstRun, let run = setup { setup = run.renamed(to) }
       if let split = stored.lastIndex(of: ":"), stored[..<split] == entryKey { stored = "\(to):\(stored[stored.index(after: split)...])" }
     }
-    await model.updateField(box.index, path: ["options"], value: value, snapshot: snapshot)
+    await model.updateField(box.index, path: ["options"], value: value, snapshot: rule)
   }
 
   /// One snapshot per setup: ➕ took it for a new box; an existing one takes it with the first
   /// write after the inspector opened.
   private func policy() -> PluginsModel.SnapshotPolicy {
-    if firstRun || snapshotTaken { return .none }
-    snapshotTaken = true
-    return .each
+    model.once(&snapshot, firstRun: firstRun)
   }
 
   private func finish() {
     setup = nil
-    snapshotTaken = true
+    snapshot.taken(failures: model.failures)
     Announce.post(L10n.t("extraContent.steps.doneAnnounce", ["name": label]))
   }
 

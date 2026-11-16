@@ -291,7 +291,7 @@ struct NavigationInspector: View {
   @State private var schema: PluginOptionSchemaResult?
   @State private var loaded = false
   @State private var visited: Set<String> = []
-  @State private var snapshotTaken = false
+  @State private var snapshot = SnapshotOnce()
 
   private var language: OptionFormText.Language { L10n.language == "en" ? .en : .de }
   private var entryKey: String { InstanceClass.own(item.entry) ?? "#\(item.occurrence)" }
@@ -444,22 +444,20 @@ struct NavigationInspector: View {
   /// 2026-11-16, M3). The policy is asked before: with the run renamed, `firstRun` would be false
   /// until the file has the new class.
   private func writeOptions(_ next: JSONObject?) async {
-    let snapshot = policy()
+    let rule = policy()
     let value = next.map(JSONValue.object)
     let after = PluginEntry(object: OptionSchema.setting(value, at: ["options"], in: item.entry.object))
     if let to = InstanceClass.own(after), to != InstanceClass.own(item.entry) {
       if firstRun, let run = setup { setup = run.renamed(to) }
       if let split = stored.lastIndex(of: ":"), stored[..<split] == entryKey { stored = "\(to):\(stored[stored.index(after: split)...])" }
     }
-    await model.updateField(item.index, path: ["options"], value: value, snapshot: snapshot)
+    await model.updateField(item.index, path: ["options"], value: value, snapshot: rule)
   }
 
   /// One snapshot per setup: ➕ took it for a new navigation; an existing one takes it with the
   /// first write after the inspector opened.
   private func policy() -> PluginsModel.SnapshotPolicy {
-    if firstRun || snapshotTaken { return .none }
-    snapshotTaken = true
-    return .each
+    model.once(&snapshot, firstRun: firstRun)
   }
 
   /// The variant, and in the first run the place with it: still where ➕ put it for the old
@@ -485,7 +483,7 @@ struct NavigationInspector: View {
 
   private func finish() {
     setup = nil
-    snapshotTaken = true
+    snapshot.taken(failures: model.failures)
     Announce.post(L10n.t("navigationsEditor.steps.doneAnnounce", ["name": label]))
   }
 

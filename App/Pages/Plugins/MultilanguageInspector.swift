@@ -18,7 +18,7 @@ struct LanguageInspector: View {
   @SceneStorage("multilanguage.step") private var stored = ""
   @State private var codeDraft: String?
   @State private var visited: Set<String> = []
-  @State private var snapshotTaken = false
+  @State private var snapshot = SnapshotOnce()
 
   /// The fields of a language, in the order of the plugin's schema.
   private static let fields = ["label", "native", "locale"]
@@ -162,14 +162,12 @@ struct LanguageInspector: View {
   /// One snapshot per setup: ➕ took it for a new language; an existing one takes it with the first
   /// write after the inspector opened.
   private func policy() -> PluginsModel.SnapshotPolicy {
-    if firstRun || snapshotTaken { return .none }
-    snapshotTaken = true
-    return .each
+    model.once(&snapshot, firstRun: firstRun)
   }
 
   private func finish() {
     setup = nil
-    snapshotTaken = true
+    snapshot.taken(failures: model.failures)
     Announce.post(L10n.t("multilanguageEditor.steps.doneAnnounce", ["name": MultilanguageView.name(language)]))
   }
 
@@ -381,7 +379,7 @@ struct SiteLanguageSetup: View {
   @Binding var selection: String?
   @SceneStorage("multilanguage.siteStep") private var step = "languages"
   @State private var visited: Set<String> = ["languages"]
-  @State private var snapshotTaken = false
+  @State private var snapshot = SnapshotOnce()
   @State private var code = ""
   @State private var tried = false
 
@@ -517,9 +515,7 @@ struct SiteLanguageSetup: View {
 
   /// One snapshot for the whole setup, named after it, with the first write.
   private func policy() -> PluginsModel.SnapshotPolicy {
-    if snapshotTaken { return .none }
-    snapshotTaken = true
-    return .labeled(L10n.t("multilanguageEditor.site.snapshotLabel"))
+    model.once(&snapshot, labeled: L10n.t("multilanguageEditor.site.snapshotLabel"))
   }
 
   private func set(_ change: @escaping (JSONObject) -> JSONObject) async {
