@@ -281,11 +281,17 @@ for lang in $LANGS; do
         # After the page is open: before it, the wait was spent on the previous page and Vorlagen
         # was taken while it still said „Lade…“ (2026-11-13).
         [ "$flag" = w ] && sleep 10
-        # A form chosen: its fields under a closed "Allgemein", the first one open; the preview goes
-        # to a page that embeds it.
+        # A navigation chosen: the inspector shows its first step.
+        if [ $name = plugins-navigationen ]; then
+          list_row navigations.list 2; sleep 3
+        fi
+        # A form chosen: the step "Felder"; the preview goes to a page that embeds it. Back to the
+        # first step whatever the window remembered, then one on.
         if [ $name = plugins-formulare-formular ]; then
           preview_page $([ $lang = de ] && echo kontakt || echo en/contact); sleep 4
-          list_row forms.list 2; sleep 2; disclose 1; sleep 1; press_value zugeklappt collapsed; sleep 4
+          list_row forms.list 2; sleep 2
+          repeat 6 { ax "key code 123 using {command down, option down}"; sleep 0.3 }
+          ax "key code 124 using {command down, option down}"; sleep 4
         fi
         shoot $name
       done

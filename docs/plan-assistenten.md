@@ -1,7 +1,7 @@
 # Plan: Schritte im Inspektor für die vier eigenen Plugins
 
-Stand 2026-11-16: Punkt 1 bis 4 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen,
-Layout-Box, Formulare, Sprachen), siehe „Umgesetzt“ am Ende; Punkt 5 (Handbuch) offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
+Stand 2026-11-16: alle fünf Punkte umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen,
+Layout-Box, Formulare, Sprachen, Handbuch), siehe „Umgesetzt“ am Ende. Betrifft die Editoren unter **Plugins ▸ Navigationen,
 Zusätzliche Inhalte, Mehrsprachigkeit, Formulare** (quartz-navigations, quartz-layout-box,
 quartz-multilanguage, quartz-forms).
 
@@ -268,4 +268,19 @@ nur im Code. Das Handbuch beschreibt den Inspektor noch ohne Schritte (Punkt 5).
 - Beim Bauen gefunden: Eine Zuweisung an `languageSelected` innerhalb von `if let languageSelected`
   ließ den Swift-Compiler (Xcode 27 SDK) mit einer Assertion abstürzen, statt den Fehler zu melden;
   `self.languageSelected` behebt es. Mein Filter auf „error“ hatte das „BUILD FAILED“ verschluckt.
+
+### Punkt 5, 2026-11-16: Handbuch
+
+- 4.6 bis 4.9, de und en: „So sind die Editor-Reiter gebaut“ beschreibt Schritte, ersten Durchlauf,
+  Abbrechen, Snapshot und den Platz-Schritt; 4.6 eine Tabelle der Schritte einer Navigation, 4.8
+  „Mehrsprachigkeit einrichten“. `qh-check handbook` und `handbook-private.swift` ohne Befund.
+- Neue Aufnahmen der fünf Editor-Bilder, beide Sprachen, hell. Dafür hat das Demo-Projekt
+  (`/Users/Shared/QuartzHub-Demo`) quartz-navigations 0.5.0 bekommen (Tag aus dem lokalen Repo, Commit
+  in seiner `quartz.lock.json`), sonst stünde der Hinweis „gegen 0.5.0 gelesen“ im Bild. Seine Quelle,
+  das Projekt der Handbuch-Website, hat noch 0.4.3; ein neues `handbook-demo.sh` holt das zurück.
+- `handbook-shots.sh`: die Navigation ist gewählt, das Formular steht auf „Felder“ (⌥⌘← bis zum
+  Anfang, dann ⌥⌘→). `handbook-private.swift` lässt „layout-boxi“ durch: die Texterkennung liest
+  „quartz-layout-box“ mit schließendem Anführungszeichen am Zeilenende so.
+- Nicht aufgeklappt bekommen: die Schrittliste in der Aufnahme (`disclose` trifft im rechten Viertel
+  auch Dreiecke der Vorschau). Die Bildunterschriften sagen nur, was zu sehen ist.
 

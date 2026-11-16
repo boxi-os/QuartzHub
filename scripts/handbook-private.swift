@@ -26,7 +26,9 @@ if let extra = try? String(contentsOfFile: "\(vault)/private/privat.txt", encodi
 }
 // The project's public GitHub name may stand (the account's short name is often a part of it),
 // and the placeholder of the folder fields ("/Users/du/Dokumente", "/Users/you/Documents").
-let allowed = ["boxi-os", "/Users/du/", "/Users/you/"]
+// "layout-boxi": the text recognition reads „quartz-layout-box“ at a line end with its closing quote
+// as an "i" (the description of Plugins ▸ Zusätzliche Inhalte, 2026-11-16).
+let allowed = ["boxi-os", "layout-boxi", "/Users/du/", "/Users/you/"]
 let patterns = [#"/Users/(?!Share)[^/\s]+"#, #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"#]
 
 func findings(in text: String) -> [String] {
