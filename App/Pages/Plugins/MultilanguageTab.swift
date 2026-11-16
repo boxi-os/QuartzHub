@@ -116,6 +116,8 @@ struct MultilanguageTab: View {
   /// `lang:<code>` or `section:<id>`: a code and a group's id are stable, a row's place is not.
   @Binding var selection: String?
   @Binding var schema: PluginOptionSchemaResult?
+  /// The language ➕ just added: the inspector sets it up in steps.
+  @Binding var setup: SetupRun?
   let showAllOptions: () -> Void
   @Environment(\.unsavedGuard) private var unsaved
   @State private var adding = false
@@ -288,8 +290,15 @@ struct MultilanguageTab: View {
 
   /// The plugin's options changed against the newest state; no options left removes the key.
   @discardableResult
-  private func update(_ change: @escaping (JSONObject) -> JSONObject) async -> Bool {
-    await model.commit { plugins in
+  private func update(snapshot: PluginsModel.SnapshotPolicy = .each, _ change: @escaping (JSONObject) -> JSONObject) async -> Bool {
+    await Self.update(model, snapshot: snapshot, change)
+  }
+
+  /// The same for the inspectors.
+  @discardableResult
+  static func update(_ model: PluginsModel, snapshot: PluginsModel.SnapshotPolicy = .each,
+                     _ change: @escaping (JSONObject) -> JSONObject) async -> Bool {
+    await model.commit(snapshot: snapshot) { plugins in
       guard let entry = MultilanguageOptions.entries(plugins).first else { return plugins }
       var object = entry.plugin.object
       let next = change(object["options"]?.objectValue ?? JSONObject())
@@ -303,7 +312,11 @@ struct MultilanguageTab: View {
   private func add(_ code: String) async {
     let c = MultilanguageOptions.normalizeCode(code)
     selection = "lang:\(c)"
-    if await update({ MultilanguageOptions.withLanguages($0, MultilanguageOptions.languages($0) + [MultilanguageOptions.Language(code: c)]) }) {
+    // The inspector takes over in steps; this write is the setup's one snapshot.
+    setup = model.config.map { SetupRun(key: c, before: $0.plugins) }
+    if await update(snapshot: .labeled(L10n.t("multilanguageEditor.steps.snapshotLabel", ["code": c])), {
+      MultilanguageOptions.withLanguages($0, MultilanguageOptions.languages($0) + [MultilanguageOptions.Language(code: c)])
+    }) {
       Announce.post(L10n.t("multilanguageEditor.addedAnnounce", ["code": c]))
     }
   }

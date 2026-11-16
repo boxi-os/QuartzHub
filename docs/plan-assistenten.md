@@ -1,7 +1,7 @@
 # Plan: Schritte im Inspektor für die vier eigenen Plugins
 
-Stand 2026-11-16: Punkt 1 bis 3 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen,
-Layout-Box, Formulare), siehe „Umgesetzt“ am Ende; Punkt 4 und 5 offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
+Stand 2026-11-16: Punkt 1 bis 4 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen,
+Layout-Box, Formulare, Sprachen), siehe „Umgesetzt“ am Ende; Punkt 5 (Handbuch) offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
 Zusätzliche Inhalte, Mehrsprachigkeit, Formulare** (quartz-navigations, quartz-layout-box,
 quartz-multilanguage, quartz-forms).
 
@@ -240,4 +240,28 @@ nur im Code. Das Handbuch beschreibt den Inspektor noch ohne Schritte (Punkt 5).
 - `@SceneStorage("forms.parts")` (welche Teile offen standen) ist ersetzt durch `forms.step`.
 - An der App: Anlegen, alle Schritte bis zur Zusammenfassung, Abbrechen; `diff` gegen die
   Konfiguration von vorher leer.
+
+### Punkt 4, 2026-11-16: Sprachen
+
+- **Eine Sprache** (`MultilanguageOptions.languageSteps`, `LanguageInspector`): Code und Name,
+  Startseite und Flagge, Veröffentlichen und Reihenfolge, Zusammenfassung. ➕ fragt den Code wie bisher
+  im Popover und nimmt den einen Snapshot („Sprache hinzufügen: fr“). Abbrechen entfernt die Sprache und
+  setzt `defaultLanguage` und `publishLanguages` auf den Stand vor ➕ zurück: Schritt 3 kann die neue
+  Sprache zur Standardsprache machen, und `remove` setzt dann die erste Sprache, nicht die alte. An der
+  App: „fr“ anlegen, zur Standardsprache machen, abbrechen; `diff` leer. Umbenennen nimmt den Lauf mit.
+- **Mehrsprachigkeit einrichten** (`MultilanguageOptions.siteSteps`, `SiteLanguageSetup`): Sprachen,
+  Standard und veröffentlicht, Sprache einer Seite (Gruppe „Detection and linking“), Sprachwechsler
+  (Platz-Schritt für den Eintrag des Plugins und die Optionen von `switcher`), Zusammenfassung mit
+  Knöpfen zu den übrigen Gruppen (Adressen, Weiterleitungen, Hinweise, Links). Er beginnt mit dem Knopf
+  in der Übersicht, solange die Website weniger als zwei Sprachen hat, und ist dann die Auswahl
+  `setup:site` bis „Fertig“: Sonst endete er mitten im ersten Schritt, sobald die zweite Sprache
+  dazukommt. Kein Abbrechen, denn er legt keinen Eintrag an; ein Snapshot mit dem ersten Schreiben.
+- **Anders als oben geplant:** Der Schritt „Inhalt je Sprache (Ordner, Startseite)“ ist „Sprache einer
+  Seite“: Ordner und Startseite sind keine eigenen Optionen, sondern folgen aus der Erkennung
+  (`detection`) und der Startseite je Sprache (`home`, im Assistenten der Sprache).
+- Ein Test prüft die Schritte gegen das Schema von gui-test (0.2.0): Jedes Feld einer Sprache hat
+  seinen Schritt, und für die Zusammenfassung bleiben genau die vier Gruppen, zu denen sie Knöpfe hat.
+- Beim Bauen gefunden: Eine Zuweisung an `languageSelected` innerhalb von `if let languageSelected`
+  ließ den Swift-Compiler (Xcode 27 SDK) mit einer Assertion abstürzen, statt den Fehler zu melden;
+  `self.languageSelected` behebt es. Mein Filter auf „error“ hatte das „BUILD FAILED“ verschluckt.
 

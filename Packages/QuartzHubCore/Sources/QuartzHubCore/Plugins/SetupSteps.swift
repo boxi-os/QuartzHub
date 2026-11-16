@@ -143,3 +143,26 @@ extension FormsOptions {
     part == .more ? "finish" : part.rawValue
   }
 }
+
+extension MultilanguageOptions {
+  /// One language's steps, keyed by the fields of an item of `languages`: its code and names, its
+  /// home page and flag, then default, published and order, which live in the plugin's options.
+  public static let languageSteps: [SetupStep] = [
+    SetupStep(id: "name", keys: ["code", "label", "native", "locale"]),
+    SetupStep(id: "home", keys: ["home", "flag"]),
+    SetupStep(id: "publish", keys: ["defaultLanguage", "publishLanguages"]),
+    SetupStep(id: "finish", part: .finish)
+  ]
+
+  /// Setting up the site's languages, while it has fewer than two: the languages, which of them is
+  /// the default and published, how a page finds its language, where the switcher stands. The
+  /// groups after that (addresses, redirects, notices, links) are the summary's, each a row of the
+  /// list as before.
+  public static let siteSteps: [SetupStep] = [
+    SetupStep(id: "languages", keys: ["languages"]),
+    SetupStep(id: "publish", keys: ["defaultLanguage", "publishLanguages"]),
+    SetupStep(id: "detection", groups: ["Detection and linking"]),
+    SetupStep(id: "switcher", part: .placement, groups: ["Language switcher"]),
+    SetupStep(id: "finish", part: .finish)
+  ]
+}

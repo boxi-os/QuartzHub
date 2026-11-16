@@ -134,4 +134,29 @@ import Testing
       #expect(FormsOptions.steps.contains { $0.id == FormsOptions.step(of: part) }, "\(part)")
     }
   }
+
+  /// quartz-multilanguage's schema as gui-test has it: the site's steps take the languages, the
+  /// detection and the switcher; what is left are the groups the summary lists.
+  @Test func siteLanguageStepsAgainstTheSchema() throws {
+    let url = PluginSchemaReaderTests.fixtures.appendingPathComponent("real/.quartz/plugins/quartz-multilanguage/package.json")
+    let package = try JSJSON.parse(Data(contentsOf: url))
+    let fields = OptionSchema.normalize(jsonSchema: try #require(package["quartz"]?["configSchema"]), source: .configSchema).fields
+    try #require(fields.count > 10)
+    let assigned = SetupSteps.assign(MultilanguageOptions.siteSteps, fields: fields)
+    #expect(assigned["languages"] == "languages" && assigned["defaultLanguage"] == "publish" && assigned["publishLanguages"] == "publish")
+    #expect(assigned["detection"] == "detection" && assigned["linking"] == "detection" && assigned["switcher"] == "switcher")
+    let rest = Set(fields.filter { assigned[$0.key] == "finish" }.compactMap(\.group))
+    #expect(rest == ["Addresses (SEO)", "Redirects", "Notices", "Links and dates"])
+    // A language's fields: every one of an item of `languages` has its step.
+    guard case .array(let items)? = fields.first(where: { $0.key == "languages" })?.node else { Issue.record("no items"); return }
+    var itemKeys: [String] = []
+    switch items {
+    case .object(let f, _): itemKeys = f.map(\.key)
+    case .union(let variants): for case .object(let f, _) in variants { itemKeys = f.map(\.key) }
+    default: break
+    }
+    try #require(!itemKeys.isEmpty)
+    let languageKeys = Set(MultilanguageOptions.languageSteps.flatMap(\.keys))
+    #expect(Set(itemKeys).isSubset(of: languageKeys), "\(Set(itemKeys).subtracting(languageKeys))")
+  }
 }

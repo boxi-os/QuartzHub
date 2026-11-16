@@ -38857,6 +38857,595 @@
         }
       }
     },
+    "multilanguageEditor.site.addCode" : {
+      "comment" : "SiteLanguageSetup, step Sprachen: label of the code field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add language"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.detection" : {
+      "comment" : "SiteLanguageSetup: a step of setting up the site's languages",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache einer Seite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A page's language"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.detectionHint" : {
+      "comment" : "SiteLanguageSetup: what the step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woran das Plugin die Sprache einer Seite erkennt und wie es Übersetzungen einander zuordnet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How the plugin finds a page's language, and how it matches translations."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.doneAnnounce" : {
+      "comment" : "SiteLanguageSetup: VoiceOver after Fertig",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehrsprachigkeit eingerichtet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Languages set up."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.finish" : {
+      "comment" : "SiteLanguageSetup: a step of setting up the site's languages; the last one",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfassung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.finishHint" : {
+      "comment" : "SiteLanguageSetup: what the step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was eingestellt ist. Adressen, Weiterleitungen, Hinweise und Links stehen als eigene Bereiche in der Liste."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What is set. Addresses, redirects, notices and links are areas of their own in the list."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.languages" : {
+      "comment" : "SiteLanguageSetup: a step of setting up the site's languages",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprachen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Languages"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.languagesHint" : {
+      "comment" : "SiteLanguageSetup: what the step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sprachen der Website. Namen, Startseite und Flagge stellst du danach je Sprache in der Liste ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The site's languages. Names, home page and flag are set per language in the list afterwards."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.moreGroups" : {
+      "comment" : "SiteLanguageSetup, summary: heading over buttons to the remaining settings groups",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Bereiche"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More areas"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.publish" : {
+      "comment" : "SiteLanguageSetup: a step of setting up the site's languages",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard und veröffentlicht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default and published"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.publishHint" : {
+      "comment" : "SiteLanguageSetup: what the step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welche Sprache Seiten ohne erkannte Sprache bekommen, und welche Sprachen die Website baut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Which language pages without a detected one get, and which languages the site is built with."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.snapshotLabel" : {
+      "comment" : "Label of the one snapshot of SiteLanguageSetup",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehrsprachigkeit einrichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up languages"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.start" : {
+      "comment" : "Overview of Mehrsprachigkeit while the site has fewer than two languages: starts SiteLanguageSetup",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehrsprachigkeit einrichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Up Languages"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.startHint" : {
+      "comment" : "Under multilanguageEditor.site.start",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Führt in Schritten durch Sprachen, Standardsprache, Erkennung und Sprachwechsler."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goes through languages, default language, detection and switcher in steps."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.switcher" : {
+      "comment" : "SiteLanguageSetup: a step of setting up the site's languages",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprachwechsler"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language switcher"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.switcherHint" : {
+      "comment" : "SiteLanguageSetup: what the step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wo der Sprachwechsler auf der Seite steht und wie er aussieht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where the language switcher sits on the page and how it looks."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.switcherName" : {
+      "comment" : "SiteLanguageSetup: the switcher's name in the placement step",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprachwechsler"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language switcher"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.site.title" : {
+      "comment" : "SiteLanguageSetup: heading of the inspector",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehrsprachigkeit einrichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setting up languages"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.cancelQuestion" : {
+      "comment" : "LanguageInspector: asked by Einrichten abbrechen; question, blank line, detail",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die neue Sprache entfernen?\n\nSie steht schon in der Konfiguration. Entfernen nimmt sie mit allem, was du in den Schritten eingestellt hast, wieder heraus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the new language?\n\nIt is already in the configuration. Removing it takes it out again, with everything set in the steps."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.cancelRemove" : {
+      "comment" : "LanguageInspector: the destructive answer to cancelQuestion",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Language"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.cancelledAnnounce" : {
+      "comment" : "LanguageInspector: VoiceOver after cancelling",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Sprache entfernt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New language removed."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.doneAnnounce" : {
+      "comment" : "LanguageInspector: VoiceOver after Fertig",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache „{{name}}“ eingerichtet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language “{{name}}” set up."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.finish" : {
+      "comment" : "LanguageInspector: a step of one language; the last one",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfassung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.finishHint" : {
+      "comment" : "LanguageInspector: what a step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was für diese Sprache eingestellt ist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What is set for this language."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.home" : {
+      "comment" : "LanguageInspector: a step of one language",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startseite und Flagge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home page and flag"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.homeHint" : {
+      "comment" : "LanguageInspector: what a step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wohin der Sprachwechsler führt, wenn eine Seite keine Übersetzung hat, und das Zeichen davor."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where the switcher leads when a page has no translation, and the sign in front."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.name" : {
+      "comment" : "LanguageInspector: a step of one language",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code und Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code and name"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.nameHint" : {
+      "comment" : "LanguageInspector: what a step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woran Ordner, Dateinamen und Frontmatter die Sprache erkennen, und wie sie heißt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How folders, file names and frontmatter name the language, and what it is called."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.publish" : {
+      "comment" : "LanguageInspector: a step of one language",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veröffentlichen und Reihenfolge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publishing and order"
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.publishHint" : {
+      "comment" : "LanguageInspector: what a step is for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ob die Website mit dieser Sprache gebaut wird und wo sie im Sprachwechsler steht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whether the site is built with this language, and where it stands in the switcher."
+          }
+        }
+      }
+    },
+    "multilanguageEditor.steps.snapshotLabel" : {
+      "comment" : "Label of the one snapshot taken when ➕ adds a language",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache hinzufügen: {{code}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add language: {{code}}"
+          }
+        }
+      }
+    },
     "multilanguageEditor.summaryDefault" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

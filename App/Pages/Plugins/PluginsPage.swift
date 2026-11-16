@@ -71,6 +71,8 @@ struct PluginsPage: View {
   @State private var boxSetup: SetupRun?
   /// The form ➕ just created, likewise.
   @State private var formSetup: SetupRun?
+  /// The language ➕ just added, likewise.
+  @State private var languageSetup: SetupRun?
 
   init(project: ProjectContext) {
     self.project = project
@@ -98,7 +100,7 @@ struct PluginsPage: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins.extras")
         case .languages:
-          MultilanguageTab(model: model, selection: $languageSelected, schema: $multilanguageSchema) {
+          MultilanguageTab(model: model, selection: $languageSelected, schema: $multilanguageSchema, setup: $languageSetup) {
             if let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first { showAllOptions(entry.plugin, index: entry.index) }
           }
           .accessibilityElement(children: .contain)
@@ -157,8 +159,10 @@ struct PluginsPage: View {
       } else if tab == .languages, let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first,
                 let languageSelected {
         let view = MultilanguageView(entry: entry, schema: multilanguageSchema?.schema)
-        if languageSelected.hasPrefix("lang:"), let language = view.languages.first(where: { "lang:\($0.code)" == languageSelected }) {
-          LanguageInspector(language: language, view: view, model: model, selection: $languageSelected)
+        if languageSelected == "setup:site" {
+          SiteLanguageSetup(view: view, model: model, selection: $languageSelected)
+        } else if languageSelected.hasPrefix("lang:"), let language = view.languages.first(where: { "lang:\($0.code)" == languageSelected }) {
+          LanguageInspector(language: language, view: view, model: model, selection: $languageSelected, setup: $languageSetup)
             .id(languageSelected)
         } else if languageSelected.hasPrefix("section:"), let group = view.groups.first(where: { "section:\($0.id)" == languageSelected }) {
           SettingsGroupInspector(group: group, view: view, model: model)
@@ -166,7 +170,7 @@ struct PluginsPage: View {
         } else {
           InspectorPageContext(page: .plugins) {
             introSection
-            MultilanguageOverview(view: view)
+            MultilanguageOverview(view: view) { self.languageSelected = "setup:site" }
           }
         }
       } else if tab == .forms, let entry = FormsOptions.entries(model.config?.plugins ?? []).first, let formSelected {
@@ -202,7 +206,7 @@ struct PluginsPage: View {
             Section(L10n.t("extraContent.panelEmptyTitle")) { Note(L10n.t("extraContent.panelEmptyText")) }
           }
           if tab == .languages, let entry = MultilanguageOptions.entries(model.config?.plugins ?? []).first {
-            MultilanguageOverview(view: MultilanguageView(entry: entry, schema: multilanguageSchema?.schema))
+            MultilanguageOverview(view: MultilanguageView(entry: entry, schema: multilanguageSchema?.schema)) { self.languageSelected = "setup:site" }
           }
           if tab == .forms { FormsOverview() }
         }
