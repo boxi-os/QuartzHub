@@ -28,10 +28,18 @@ struct NavigationInstance: Identifiable {
   }
 }
 
+/// A navigation ➕ just created, while the inspector sets it up for the first time.
+struct NavigationSetupRun: Equatable {
+  /// The new navigation's class, its key while the run lasts.
+  let className: String
+  /// `plugins:` before ➕: cancelling puts back the priorities the placement step renumbered.
+  let before: [PluginEntry]
+}
+
 /// Navigationen (QuartzControl's `routes/Plugins/Navigations.tsx`): the navigations of
 /// quartz-navigations as a list, the selected one in the inspector (`NavigationInspector`), the
 /// real site below. It starts from the question the generic form leaves for last, which kind of
-/// navigation; placement stays on the Layout page and every option in the plugin list.
+/// navigation; the inspector then goes through the rest in steps, the placement among them.
 ///
 /// Every change goes through the plugin list's write queue (`PluginsModel.commit`).
 struct NavigationsTab: View {
@@ -40,6 +48,8 @@ struct NavigationsTab: View {
   /// The classes the project's stylesheets and plugins already name, read once: a new class must
   /// not be one a rule is written for.
   @Binding var styled: Set<String>
+  /// The navigation ➕ just created: the inspector sets it up in steps.
+  @Binding var setup: NavigationSetupRun?
   @Environment(\.unsavedGuard) private var unsaved
   @State private var adding = false
   /// The variants the installed plugin knows (`NavigationVariants.offered`), read from its schema.
@@ -188,7 +198,10 @@ struct NavigationsTab: View {
     object["layout"] = .object(JSONObject([("position", .string(position)), ("priority", .number(priority))]))
     let count = instances.count
     selection = count + 1
-    if await model.commit({ $0 + [PluginEntry(object: object)] }) {
+    // The inspector takes over in steps; this write is the setup's one snapshot.
+    setup = object["options"]?["className"]?.stringValue.map { NavigationSetupRun(className: $0, before: plugins) }
+    let label = L10n.t("navigationsEditor.steps.snapshotLabel", ["variant": NavigationVariants.catalog(NavigationVariants.label(variant), nil)])
+    if await model.commit(snapshot: .labeled(label), { $0 + [PluginEntry(object: object)] }) {
       Announce.post(L10n.t("navigationsEditor.addedAnnounce", ["variant": NavigationVariants.catalog(NavigationVariants.label(variant), nil),
                                                                 "position": InstalledTab.positionTitle(position)]))
     }
@@ -264,25 +277,55 @@ struct VariantTiles: View {
   }
 }
 
-/// The selected navigation in the inspector: on or off, its variant as tiles, then the options
-/// that variant reads; what it does not read stays in sight, greyed, with the variants it works with.
+/// The selected navigation in the inspector, in steps (docs/plan-assistenten.md, `InspectorSteps`):
+/// the variant first, then its place, then the plugin's options by the steps of
+/// `NavigationVariants.steps`. A step whose options all do nothing for the variant says so; inside
+/// a step, what does nothing stays in sight, greyed, with the variants it works with.
+///
+/// Writes go at once, with one snapshot: the one ➕ took for a new navigation, else the first
+/// write after the inspector opened.
 struct NavigationInspector: View {
   let item: NavigationInstance
   let label: String
   @Bindable var model: PluginsModel
+  /// The navigation ➕ just created, while its first run lasts.
+  @Binding var setup: NavigationSetupRun?
+  @Binding var selection: Int?
   let showAllOptions: () -> Void
   @Environment(\.openLayout) private var openLayout
+  @Environment(\.unsavedGuard) private var unsaved
+  /// "<entry>:<step>": where this window was, by the navigation's class rather than its index.
+  @SceneStorage("navigations.step") private var stored = ""
   @State private var schema: PluginOptionSchemaResult?
   @State private var loaded = false
+  @State private var visited: Set<String> = []
+  @State private var snapshotTaken = false
 
   private var language: OptionFormText.Language { L10n.language == "en" ? .en : .de }
+  private var entryKey: String { item.options["className"]?.stringValue ?? "#\(item.occurrence)" }
+  private var firstRun: Bool { setup != nil && setup?.className == item.options["className"]?.stringValue }
+  private var fields: [OptionField] { schema?.schema?.fields ?? [] }
+
+  private var current: Binding<String> {
+    Binding(get: {
+      guard let split = stored.lastIndex(of: ":"), stored[..<split] == entryKey else { return firstRun ? "place" : "variant" }
+      return String(stored[stored.index(after: split)...])
+    }, set: { step in
+      stored = "\(entryKey):\(step)"
+      visited.insert(step)
+    })
+  }
 
   var body: some View {
     let options = item.options
+    let steps = NavigationVariants.steps.map { step in
+      InspectorStep(id: step.id, title: Self.title(step.id),
+                    noEffect: loaded && schema != nil && !NavigationVariants.stepHasEffect(step, options: options, fields: fields))
+    }
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
-          Label(label, systemImage: "list.bullet.indent").font(.headline)
+          Label(label, systemImage: item.variant.symbol).font(.headline)
             .accessibilityIdentifier("navigations.inspector.name")
           HStack(spacing: 6) {
             if case .string(let position)? = item.entry.object["layout"]?["position"] {
@@ -299,39 +342,19 @@ struct NavigationInspector: View {
           }
         }
         Toggle(L10n.t("navigationsEditor.enabled"), isOn: Binding(get: { item.entry.enabled }, set: { _ in
-          Task { await model.toggleEnabled(item.index) }
+          Task { await model.toggleEnabled(item.index, snapshot: policy()) }
         }))
         .accessibilityIdentifier("navigations.inspector.enabled")
       }
-      Section(L10n.t("navigationsEditor.variantHeading")) {
-        // The current variant stays in sight even if the plugin's schema could not be read.
-        let offered = NavigationVariants.offered(schema?.schema?.fields)
-        VariantTiles(variants: offered.contains(item.variant) ? offered : offered + [item.variant], selected: item.variant) { variant in
-          var next = options
-          next["variant"] = .string(variant.rawValue)
-          Task { await model.updateField(item.index, path: ["options"], value: .object(next)) }
+      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: visited, finish: finish,
+                     cancel: { Task { await cancel() } }) { step in
+        Section { Note(Self.hint(step.id)) }
+        if step.noEffect {
+          Section {
+            Callout(.info, L10n.t("navigationsEditor.steps.noEffect", ["variant": NavigationVariants.catalog(NavigationVariants.label(item.variant), nil)]))
+          }
         }
-        // Below each other: side by side, both were cut off in the inspector's width.
-        VStack(alignment: .leading, spacing: 6) {
-          Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], item.index)) }
-          Button(L10n.t("navigationsEditor.allOptions"), action: showAllOptions)
-            .accessibilityIdentifier("navigations.allOptions")
-        }
-      }
-      if !loaded {
-        Section(L10n.t("navigationsEditor.optionsHeading")) {
-          Text(L10n.t("layoutEditor.inspector.optionsLoading")).foregroundStyle(.secondary)
-        }
-      } else if let schema {
-        Section {} header: { Text(L10n.t("navigationsEditor.optionsHeading")) }
-        OptionsForm(schema: schema.schema, values: options,
-                    onChange: { next in Task { await model.updateField(item.index, path: ["options"], value: next.map(JSONValue.object)) } },
-                    explicitEmpty: true, languages: model.config?.siteLanguages ?? [], pick: { $0 != "variant" }, freeKeys: false,
-                    root: NavigationVariants.root(options: options, fields: schema.schema?.fields ?? [], lang: language))
-      } else {
-        Section(L10n.t("navigationsEditor.optionsHeading")) {
-          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": L10n.t("pluginsInstalled.sourceUnreadable")]))
-        }
+        stepContent(step.id, values: options)
       }
     }
     .formStyle(.grouped)
@@ -345,6 +368,165 @@ struct NavigationInspector: View {
         schema = nil
       }
       loaded = true
+    }
+    .onAppear {
+      // ➕ answered the first step already.
+      if firstRun { visited = ["variant", current.wrappedValue] }
+    }
+  }
+
+  @ViewBuilder private func stepContent(_ id: String, values: JSONObject) -> some View {
+    switch NavigationVariants.steps.first(where: { $0.id == id })?.part ?? .options {
+    case .variant:
+      Section(L10n.t("navigationsEditor.variantHeading")) {
+        // The current variant stays in sight even if the plugin's schema could not be read.
+        let offered = NavigationVariants.offered(schema?.schema?.fields)
+        VariantTiles(variants: offered.contains(item.variant) ? offered : offered + [item.variant], selected: item.variant) { variant in
+          Task { await choose(variant) }
+        }
+      }
+    case .placement:
+      PlacementStep(index: item.index, name: label,
+                    suggested: (item.variant.position, NavigationVariants.catalog(NavigationVariants.label(item.variant), nil)),
+                    model: model) { mutate in await model.commit(snapshot: policy(), mutate) }
+    case .options:
+      options(for: id, values: values)
+    case .finish:
+      Section {
+        LabeledContent(L10n.t("navigationsEditor.variantHeading"), value: NavigationVariants.catalog(NavigationVariants.label(item.variant), nil))
+        LabeledContent(L10n.t("layoutEditor.inspector.position"), value: placeText)
+        LabeledContent(L10n.t("navigationsEditor.steps.summaryChanged"), value: String(values.keys.filter { $0 != "variant" }.count))
+        VStack(alignment: .leading, spacing: 6) {
+          Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], item.index)) }
+          Button(L10n.t("navigationsEditor.allOptions"), action: showAllOptions)
+            .accessibilityIdentifier("navigations.allOptions")
+        }
+      }
+      options(for: id, values: values)
+    }
+  }
+
+  /// The plugin's options of one step, as the form of the plugin list shows them.
+  @ViewBuilder private func options(for id: String, values: JSONObject) -> some View {
+    if !loaded {
+      Section { Text(L10n.t("layoutEditor.inspector.optionsLoading")).foregroundStyle(.secondary) }
+    } else if let schema {
+      let assigned = SetupSteps.assign(NavigationVariants.steps, fields: schema.schema?.fields ?? [])
+      let last = NavigationVariants.steps.last?.id
+      OptionsForm(schema: schema.schema, values: values,
+                  onChange: { next in Task { await model.updateField(item.index, path: ["options"], value: next.map(JSONValue.object), snapshot: policy()) } },
+                  explicitEmpty: true, languages: model.config?.siteLanguages ?? [],
+                  // A key no schema names (written by hand) belongs to the last step, so nothing is lost.
+                  pick: { key in assigned[key] == id || (assigned[key] == nil && id == last) },
+                  freeKeys: false, root: root(for: id, values: values, fields: schema.schema?.fields ?? []), searchable: false)
+    } else {
+      Section {
+        Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": L10n.t("pluginsInstalled.sourceUnreadable")]))
+      }
+    }
+  }
+
+  /// The variant's own options lead "Darstellung" under its name; elsewhere the groups are plain
+  /// sections, the step being the fold.
+  private func root(for id: String, values: JSONObject, fields: [OptionField]) -> OptionRoot {
+    var root = NavigationVariants.root(options: values, fields: fields, lang: language)
+    if id != "look" {
+      root.lead = nil
+      root.flat = true
+    }
+    return root
+  }
+
+  private var placeText: String {
+    let plugins = model.config?.plugins ?? []
+    guard case .string(let position)? = item.entry.object["layout"]?["position"] else { return L10n.t("navigationsEditor.notPlaced") }
+    let list = LayoutEntries.positionMap(plugins)[position] ?? []
+    guard let place = list.firstIndex(of: item.index) else { return InstalledTab.positionTitle(position) }
+    return "\(InstalledTab.positionTitle(position)), \(L10n.t("layoutEditor.inspector.orderOf", ["n": String(place + 1), "count": String(list.count)]))"
+  }
+
+  // MARK: Writing
+
+  /// One snapshot per setup: ➕ took it for a new navigation; an existing one takes it with the
+  /// first write after the inspector opened.
+  private func policy() -> PluginsModel.SnapshotPolicy {
+    if firstRun || snapshotTaken { return .none }
+    snapshotTaken = true
+    return .each
+  }
+
+  /// The variant, and in the first run the place with it: still where ➕ put it for the old
+  /// variant, the navigation moves where the new one belongs.
+  private func choose(_ variant: NavigationVariants.Variant) async {
+    let old = item.variant
+    let index = item.index
+    var next = item.options
+    next["variant"] = .string(variant.rawValue)
+    let follows = firstRun && variant.position != old.position
+      && LayoutEntries.layout(item.entry)?["position"] == .string(old.position)
+    let done = await model.commit(snapshot: policy()) { plugins in
+      var out = plugins.enumerated().map { offset, plugin in
+        offset == index ? PluginEntry(object: OptionSchema.setting(.object(next), at: ["options"], in: plugin.object)) : plugin
+      }
+      if follows {
+        out = LayoutEntries.place(out, index: index, position: variant.position, insertIndex: variant.placedFirst ? 0 : nil)
+      }
+      return out
+    }
+    if done { model.flagSaved(index) }
+  }
+
+  private func finish() {
+    setup = nil
+    snapshotTaken = true
+    Announce.post(L10n.t("navigationsEditor.steps.doneAnnounce", ["name": label]))
+  }
+
+  /// Takes the new navigation out again, after asking; the safe answer first.
+  private func cancel() async {
+    let parts = L10n.t("navigationsEditor.steps.cancelQuestion").components(separatedBy: "\n\n")
+    guard await Confirm.ask(parts[0], detail: parts.dropFirst().joined(separator: "\n\n"),
+                            confirm: L10n.t("navigationsEditor.steps.cancelRemove"), destructive: true,
+                            cancel: L10n.t("navigationsEditor.steps.cancelKeep"), window: unsaved?.window) else { return }
+    let index = item.index
+    let before = setup?.before ?? []
+    setup = nil
+    selection = nil
+    let done = await model.commit(snapshot: .none) { plugins in
+      LayoutEntries.restoringPriorities(plugins.enumerated().filter { $0.offset != index }.map(\.element), from: before)
+    }
+    if done {
+      Announce.post(L10n.t("navigationsEditor.steps.cancelledAnnounce"))
+    }
+  }
+
+  // MARK: Words
+
+  static func title(_ id: String) -> String {
+    switch id {
+    case "variant": L10n.t("navigationsEditor.steps.variant")
+    case "place": L10n.t("navigationsEditor.steps.place")
+    case "pages": L10n.t("navigationsEditor.steps.pages")
+    case "hide": L10n.t("navigationsEditor.steps.hide")
+    case "look": L10n.t("navigationsEditor.steps.look")
+    case "mobile": L10n.t("navigationsEditor.steps.mobile")
+    case "labels": L10n.t("navigationsEditor.steps.labels")
+    case "finish": L10n.t("navigationsEditor.steps.finish")
+    default: id
+    }
+  }
+
+  static func hint(_ id: String) -> String {
+    switch id {
+    case "variant": L10n.t("navigationsEditor.steps.variantHint")
+    case "place": L10n.t("navigationsEditor.steps.placeHint")
+    case "pages": L10n.t("navigationsEditor.steps.pagesHint")
+    case "hide": L10n.t("navigationsEditor.steps.hideHint")
+    case "look": L10n.t("navigationsEditor.steps.lookHint")
+    case "mobile": L10n.t("navigationsEditor.steps.mobileHint")
+    case "labels": L10n.t("navigationsEditor.steps.labelsHint")
+    case "finish": L10n.t("navigationsEditor.steps.finishHint")
+    default: ""
     }
   }
 }

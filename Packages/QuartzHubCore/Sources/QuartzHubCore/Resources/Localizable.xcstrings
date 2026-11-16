@@ -22553,6 +22553,177 @@
         }
       }
     },
+    "inspectorSteps.announce" : {
+      "comment" : "InspectorSteps: VoiceOver after changing the step",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritt {{n}} von {{count}}: {{title}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step {{n}} of {{count}}: {{title}}"
+          }
+        }
+      }
+    },
+    "inspectorSteps.cancel" : {
+      "comment" : "InspectorSteps: during a new entry's first run; asks before removing it",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einrichten abbrechen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Setup…"
+          }
+        }
+      }
+    },
+    "inspectorSteps.done" : {
+      "comment" : "InspectorSteps: last step of a new entry's first run",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "inspectorSteps.heading" : {
+      "comment" : "InspectorSteps: the fold above a setup's steps in the inspector",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritt {{n}} von {{count}} · {{title}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step {{n}} of {{count}} · {{title}}"
+          }
+        }
+      }
+    },
+    "inspectorSteps.menuNext" : {
+      "comment" : "Menu Gehe zu, while a setup in steps is in the inspector (⌥⌘→)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächster Schritt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next Step"
+          }
+        }
+      }
+    },
+    "inspectorSteps.menuPrevious" : {
+      "comment" : "Menu Gehe zu, while a setup in steps is in the inspector (⌥⌘←)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorheriger Schritt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous Step"
+          }
+        }
+      }
+    },
+    "inspectorSteps.next" : {
+      "comment" : "InspectorSteps: button to the next step",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
+    },
+    "inspectorSteps.stateCurrent" : {
+      "comment" : "InspectorSteps: VoiceOver value of the shown step",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aktuell"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "current"
+          }
+        }
+      }
+    },
+    "inspectorSteps.stateDone" : {
+      "comment" : "InspectorSteps: VoiceOver value of a step already seen in the first run",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "erledigt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "done"
+          }
+        }
+      }
+    },
     "layoutEditor.breakpoints.hint" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -38140,13 +38311,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Welche Variante? Die Navigation wird dort platziert, wo diese Variante üblicherweise steht. Die Position lässt sich auf der Layout-Bühne verändern."
+            "value" : "Welche Variante? Die Navigation kommt dorthin, wo diese Variante üblicherweise steht. Danach führt der Inspektor durch die weiteren Schritte, auch den Platz."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Which variant? The navigation is placed where that variant usually stands. Its position can be changed on the layout stage."
+            "value" : "Which variant? The navigation goes where that variant usually stands. The inspector then takes you through the next steps, the placement among them."
           }
         }
       }
@@ -38248,13 +38419,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jede Navigation ist ein eigener Eintrag von quartz-navigations. Wähle eine aus, um ihre Variante und Optionen einzustellen; wo sie steht, legst du auf der Layout-Bühne fest. Jede Änderung wird sofort gespeichert, und die Vorschau lädt nach dem Neubau von selbst."
+            "value" : "Jede Navigation ist ein eigener Eintrag von quartz-navigations. Wähle eine aus: Der Inspektor zeigt ihre Einstellungen in Schritten, von der Variante über den Platz bis zur Beschriftung. Jede Änderung wird sofort gespeichert, und die Vorschau lädt nach dem Neubau von selbst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Each navigation is an entry of its own of quartz-navigations. Pick one to set its variant and options; where it stands is set on the layout stage. Every change is saved at once, and the preview reloads by itself after the rebuild."
+            "value" : "Each navigation is an entry of its own of quartz-navigations. Pick one: the inspector shows its settings in steps, from the variant and its placement to the labels. Every change is saved at once, and the preview reloads by itself after the rebuild."
           }
         }
       }
@@ -38651,6 +38822,462 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "“{{name}}” removed."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.cancelKeep" : {
+      "comment" : "NavigationInspector: the safe answer to cancelQuestion",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter einrichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue Setup"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.cancelQuestion" : {
+      "comment" : "NavigationInspector: asked by Einrichten abbrechen; question, blank line, detail",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die neue Navigation entfernen?\n\nSie steht schon in der Konfiguration. Entfernen nimmt sie mit allem, was du in den Schritten eingestellt hast, wieder heraus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the new navigation?\n\nIt is already in the configuration. Removing it takes it out again, with everything set in the steps."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.cancelRemove" : {
+      "comment" : "NavigationInspector: the destructive answer to cancelQuestion",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Navigation"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.cancelledAnnounce" : {
+      "comment" : "NavigationInspector: VoiceOver after cancelling the setup",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Navigation entfernt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New navigation removed."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.doneAnnounce" : {
+      "comment" : "NavigationInspector: VoiceOver after Fertig",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation „{{name}}“ eingerichtet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation “{{name}}” set up."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.finish" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation; the last one",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfassung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.finishHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was eingestellt ist, dazu die Optionen, die zu keinem Schritt gehören."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What is set, and the options that belong to no step."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.hide" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausblenden und Reihenfolge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiding and order"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.hideHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was die Navigation weglässt und in welcher Reihenfolge der Rest steht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What the navigation leaves out, and in which order the rest appears."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.labels" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschriftung und Icons"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labels and icons"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.labelsHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überschrift und Icons der Navigation."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The navigation's heading and icons."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.look" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darstellung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.lookHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Einstellungen, die nur die gewählte Variante liest."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The settings only the chosen variant reads."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.mobile" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf dem Smartphone"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On smartphones"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.mobileHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie sich die Navigation auf schmalen Bildschirmen verhält."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How the navigation behaves on narrow screens."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.noEffect" : {
+      "comment" : "NavigationInspector: callout in a step all of whose options do nothing for the chosen variant",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit der Variante „{{variant}}“ wirkt in diesem Schritt nichts. Die Optionen hier gehören zu anderen Varianten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With the “{{variant}}” variant, nothing in this step has an effect. The options here belong to other variants."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.pages" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welche Seiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Which pages"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.pagesHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcher Teil der Website in der Navigation erscheint."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Which part of the site the navigation shows."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.place" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Platz"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placement"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.placeHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wo die Navigation auf der Seite steht und auf welchen Bildschirmen sie erscheint."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where the navigation sits on the page and on which screens it appears."
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.snapshotLabel" : {
+      "comment" : "Label of the one snapshot taken when ➕ creates a navigation (Snapshots page)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation einrichten: {{variant}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up navigation: {{variant}}"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.summaryChanged" : {
+      "comment" : "NavigationInspector, step Zusammenfassung: label before the number of options the entry sets",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesetzte Optionen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Options set"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.variant" : {
+      "comment" : "NavigationInspector: a step of setting up a navigation",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variante"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variant"
+          }
+        }
+      }
+    },
+    "navigationsEditor.steps.variantHint" : {
+      "comment" : "NavigationInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Variante bestimmt, welche Einstellungen in den späteren Schritten wirken."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The variant decides which settings in the later steps have an effect."
           }
         }
       }
@@ -39085,6 +39712,139 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "With “{{variant}}” only when {{mobile}} is chosen for smartphones."
+          }
+        }
+      }
+    },
+    "placement.neighbours" : {
+      "comment" : "PlacementStep: heading over the entries in the chosen position, in their order",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im selben Bereich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In the same area"
+          }
+        }
+      }
+    },
+    "placement.notInFrame" : {
+      "comment" : "PlacementStep: warning when the content pages' frame leaves the position out everywhere",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Frame der Inhaltsseiten hat für „{{position}}“ keinen Bereich. Was hier steht, erscheint dort nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The content pages' frame has no area for “{{position}}”. What is placed here does not appear there."
+          }
+        }
+      }
+    },
+    "placement.notInFrameOn" : {
+      "comment" : "PlacementStep: warning when the content pages' frame leaves the position out on some widths",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Frame der Inhaltsseiten hat für „{{position}}“ keinen Bereich auf {{breakpoints}}. Was hier steht, erscheint dort nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The content pages' frame has no area for “{{position}}” on {{breakpoints}}. What is placed here does not appear there."
+          }
+        }
+      }
+    },
+    "placement.positionAnnounce" : {
+      "comment" : "PlacementStep: VoiceOver after choosing a position",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} steht jetzt in „{{position}}“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} is now in “{{position}}”."
+          }
+        }
+      }
+    },
+    "placement.suggested" : {
+      "comment" : "PlacementStep: under the position picker when another position is chosen",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für die Variante „{{variant}}“ empfiehlt das Plugin „{{position}}“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For the “{{variant}}” variant the plugin recommends “{{position}}”."
+          }
+        }
+      }
+    },
+    "placement.thisEntry" : {
+      "comment" : "PlacementStep: marks the entry being set up in the list of its neighbours",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "diese"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "this one"
+          }
+        }
+      }
+    },
+    "placement.useSuggested" : {
+      "comment" : "PlacementStep: button beside placement.suggested",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dorthin setzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move There"
           }
         }
       }

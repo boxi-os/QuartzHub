@@ -65,6 +65,8 @@ struct PluginsPage: View {
   /// quartz-multilanguage's schema: its groups are the rows of the tab and the panels of the inspector.
   @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
+  /// The navigation ➕ just created, by its class, while the inspector sets it up in steps.
+  @State private var navigationSetup: NavigationSetupRun?
 
   init(project: ProjectContext) {
     self.project = project
@@ -84,7 +86,7 @@ struct PluginsPage: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins")
         case .navigations:
-          NavigationsTab(model: model, selection: $navigationSelected, styled: $styled)
+          NavigationsTab(model: model, selection: $navigationSelected, styled: $styled, setup: $navigationSetup)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins.navigations")
         case .extras:
@@ -136,7 +138,8 @@ struct PluginsPage: View {
       } else if tab == .navigations, let navigationSelected,
                 let item = NavigationInstance.all(model.config?.plugins ?? []).first(where: { $0.occurrence == navigationSelected }) {
         let count = NavigationInstance.all(model.config?.plugins ?? []).count
-        NavigationInspector(item: item, label: item.label(among: count), model: model) {
+        NavigationInspector(item: item, label: item.label(among: count), model: model, setup: $navigationSetup,
+                            selection: $navigationSelected) {
           showAllOptions(item.entry, index: item.index)
         }
         .id(item.occurrence)

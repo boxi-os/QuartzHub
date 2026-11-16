@@ -203,8 +203,17 @@ final class PluginsModel {
   /// The one way an edit on this tab reaches the file: fields, the switch and both kinds of
   /// reordering. Nothing is committed while a removal is queued: the state it would mutate still
   /// holds the entry being removed, and its save would put it back.
+  /// When a write takes its snapshot: before each write (the editors' default), with a label of its
+  /// own (the first write of a setup in steps), or not at all (the setup's later writes: one
+  /// snapshot per setup, docs/plan-assistenten.md).
+  enum SnapshotPolicy: Equatable {
+    case each
+    case labeled(String)
+    case none
+  }
+
   @discardableResult
-  func commit(sayRefusal: Bool = true, _ mutate: ([PluginEntry]) -> [PluginEntry]) async -> Bool {
+  func commit(sayRefusal: Bool = true, snapshot policy: SnapshotPolicy = .each, _ mutate: ([PluginEntry]) -> [PluginEntry]) async -> Bool {
     if removing {
       refused = true
       if sayRefusal { Announce.post(L10n.t("pluginsInstalled.busyRemoving")) }
@@ -221,9 +230,14 @@ final class PluginsModel {
     let write = Task { @MainActor () -> Error? in
       await previous?.value
       let environment = await AppServices.current()
+      let take = SnapshotStore.live(environment: environment).take
+      let snapshotTake: SnapshotStore.Take? = switch policy {
+      case .each: take
+      case .labeled(let label): { project, kind, _ in try await take(project, kind, label) }
+      case .none: nil
+      }
       do {
-        try await ConfigFile.write(snapshot, project: project, runtime: environment.runtime,
-                                   snapshot: SnapshotStore.live(environment: environment).take)
+        try await ConfigFile.write(snapshot, project: project, runtime: environment.runtime, snapshot: snapshotTake)
         return nil
       } catch {
         return error
@@ -241,8 +255,8 @@ final class PluginsModel {
     return true
   }
 
-  func updateField(_ index: Int, path: [String], value: JSONValue?) async {
-    let done = await commit { plugins in
+  func updateField(_ index: Int, path: [String], value: JSONValue?, snapshot: SnapshotPolicy = .each) async {
+    let done = await commit(snapshot: snapshot) { plugins in
       plugins.enumerated().map { offset, plugin in
         guard offset == index else { return plugin }
         return PluginEntry(object: OptionSchema.setting(value, at: path, in: plugin.object))
@@ -251,9 +265,9 @@ final class PluginsModel {
     if done { flagSaved(index) }
   }
 
-  func toggleEnabled(_ index: Int) async {
+  func toggleEnabled(_ index: Int, snapshot: SnapshotPolicy = .each) async {
     // The word beside the name for a switch too, as for a field (review 2026-11-13, nebenbei).
-    let done = await commit { plugins in
+    let done = await commit(snapshot: snapshot) { plugins in
       plugins.enumerated().map { offset, plugin in
         guard offset == index else { return plugin }
         var changed = plugin

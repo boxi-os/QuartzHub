@@ -1,6 +1,7 @@
 # Plan: Schritte im Inspektor für die vier eigenen Plugins
 
-Stand 2026-11-16, noch nicht umgesetzt. Betrifft die Editoren unter **Plugins ▸ Navigationen,
+Stand 2026-11-16: Punkt 1 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen), siehe
+„Umgesetzt“ am Ende; Punkt 2 bis 5 offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
 Zusätzliche Inhalte, Mehrsprachigkeit, Formulare** (quartz-navigations, quartz-layout-box,
 quartz-multilanguage, quartz-forms).
 
@@ -92,7 +93,7 @@ In allen vier Assistenten, mit derselben Komponente:
 | 3 | Welche Seiten | `rootPath`, `scope`, `depth`, `showHome`, `indexEntry`, `folderLink` | Gruppe „Page selection“ |
 | 4 | Ausblenden und Reihenfolge | Gruppen „Hide“ und „Order“ | Schema |
 | 5 | Darstellung | die Optionen der Variante (Lead-Sektion von heute), z. B. Rail: `rest`, `side`, `expand`, `content`, `pin` | `NavigationVariants.root` |
-| 6 | Auf dem Smartphone | `mobile`, `breakpoints`; „wirkt nicht“ bei `select`/`pager` | Gruppe „On smartphones“ |
+| 6 | Auf dem Smartphone | `mobile`, `breakpoints` | Gruppe „On smartphones“ |
 | 7 | Beschriftung und Icons | `title`, `icons`, `nodeIcons`, `iconNames` | Gruppe „Labels and icons“ |
 | – | Fertig | Zusammenfassung, Klasse (`className`), „Alle Optionen“ | Gruppe „Technical“ |
 
@@ -152,3 +153,51 @@ Je Punkt ein Commit mit Bau, `qh-check i18n`, Tests und Ansehen (Skill `run-app`
 - App: Rauchtest legt je Plugin einen Eintrag über alle Schritte an und bricht einen zweiten ab
   (der Eintrag ist danach weg, die Config gleich der vorherigen).
 - Ein Snapshot je Assistent: Zahl der Snapshots vor und nach einem Durchlauf.
+
+## Umgesetzt
+
+### Punkt 1, 2026-11-16: Navigationen
+
+- **Kern**: `SetupStep`/`SetupSteps` (`Plugins/SetupSteps.swift`): Zuordnung erst nach Schlüssel, dann
+  nach Gruppe, sonst letzter Schritt; `unplaced` nennt, was nur die Ausweichregel gefangen hat.
+  `NavigationVariants.steps` und `stepHasEffect`. `LayoutEntries.restoringPriorities` für das
+  Abbrechen. Tests in `SetupStepsTests` gegen das Schema von 0.4 (QuartzControls Fixture) und 0.5.0
+  (`Fixtures/navigations/schema-0.5.0.json`, aus der package.json des Plugins).
+- **App**: `InspectorSteps` (App/Components), `PlacementStep` (App/Pages/Plugins),
+  `NavigationInspector` in Schritten; Gehe zu ▸ Vorheriger/Nächster Schritt (⌥⌘← ⌥⌘→, nur solange
+  ein Assistent im Inspektor steht); `PluginsModel.commit(snapshot:)` mit `.each`, `.labeled`, `.none`;
+  `OptionsForm(searchable:)`; `Confirm.ask(cancel:)` für „Weiter einrichten“.
+- **Wörter**: Die App sagt „Navigation“ und „Variante“, nicht „Menü“ und „Art“ (ein Wort, ein Name).
+  Die Schritte heißen Variante, Platz, Welche Seiten, Ausblenden und Reihenfolge, Darstellung, Auf dem
+  Smartphone, Beschriftung und Icons, Zusammenfassung.
+
+**Anders als oben geplant:**
+
+- **➕ beantwortet Schritt 1.** Das Popover mit den Kacheln bleibt; der Inspektor beginnt danach mit
+  „Platz“, „Variante“ ist abgehakt. Wechselt man im ersten Durchlauf die Variante und steht die
+  Navigation noch am Platz der alten, zieht sie an den Platz der neuen mit.
+- **„Auf dem Smartphone“ wirkt auch bei `select` und `pager`**: Beide bekommen die Klasse
+  `quartz-nav--mobile-<wert>` (render.tsx 0.5.0, `rootClass`), `mobile: hidden` blendet sie aus. „Wirkt
+  nicht“ steht nicht in einer Tabelle, sondern folgt aus den Feldern: Ein Schritt wirkt nicht, wenn
+  keines seiner Felder für die Variante wirkt (`hasNoEffect`, `x-quartz-when`). Gemessen: „Darstellung“
+  wirkt nicht bei `tree` (ohne `mobile: accordion`) und bei `columns`, denn das Plugin liest
+  `columns.max` und verwendet es nirgends.
+- **Abbrechen stellt die Datei wieder her**, nicht nur den Eintrag: Der Platz-Schritt nummeriert die
+  Nachbarn neu (`LayoutEntries.place`), und ohne Rückgabe blieben ihre Prioritäten verschoben.
+  `restoringPriorities` gibt Einträgen, die sich nur in der Priorität unterscheiden, den Wert von
+  vor ➕ zurück; jede andere Änderung bleibt. An der App gemessen: Anlegen, „Später“, Abbrechen,
+  danach `diff` gegen die Konfiguration von vorher leer.
+- **Ein Snapshot je Assistent**: ➕ nimmt ihn mit eigenem Namen („Navigation einrichten: Randmenü“),
+  die Schritte danach keinen. Ein bestehender Eintrag nimmt ihn beim ersten Schreiben nach dem
+  Öffnen des Inspektors. An der App gezählt: 13 vor dem Anlegen, 14 danach, 14 nach Verschieben, einem
+  Schalter und dem Abbrechen. Ein zweiter Durchlauf vom selben Stand legte keinen weiteren an: Der
+  Snapshot-Store legt einen inhaltsgleichen Stand nicht doppelt an.
+- **Kein „gültig“ je Schritt**: Bei Navigationen kann kein Schritt ungültig sein; das Feld kommt mit
+  dem Formular (Name, `formIdProblem`).
+- **Gruppen im Platz-Schritt** aus der Konfiguration und den Frames (`LayoutBoard.groupNames`); der
+  Hinweis auf einen fehlenden Bereich gilt dem Frame der Inhaltsseiten, je Breite
+  (`LayoutStage.missingPositions`).
+
+**Nicht geprüft**: Hell (nur Dunkel angesehen, die Bausteine nutzen nur Systemstile); VoiceOver-Ansagen
+nur im Code. Das Handbuch beschreibt den Inspektor noch ohne Schritte (Punkt 5).
+

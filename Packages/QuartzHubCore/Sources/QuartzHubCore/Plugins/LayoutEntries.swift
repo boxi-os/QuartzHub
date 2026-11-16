@@ -105,6 +105,20 @@ public enum LayoutEntries {
     }
   }
 
+  /// Cancelling a setup: an entry that differs from the one at its index in `before` only in its
+  /// layout's priority gets `before`'s back. That undoes the renumbering of the placement step and
+  /// keeps every other change. The setup's own entry must be gone already.
+  public static func restoringPriorities(_ plugins: [PluginEntry], from before: [PluginEntry]) -> [PluginEntry] {
+    plugins.enumerated().map { index, plugin in
+      guard before.indices.contains(index), plugin != before[index],
+            var own = layout(plugin), let old = layout(before[index]) else { return plugin }
+      own["priority"] = old["priority"]
+      var object = plugin.object
+      object["layout"] = .object(own)
+      return PluginEntry(object: object) == before[index] ? before[index] : plugin
+    }
+  }
+
   private static func truthy(_ value: JSONValue?) -> Bool {
     switch value {
     case nil, .null?, .bool(false)?, .number(0)?, .string("")?: false

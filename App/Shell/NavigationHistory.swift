@@ -169,6 +169,7 @@ struct HistoryButtons: ToolbarContent {
 /// Gehe zu: back, forward (⌘[ ⌘], as in Finder and Safari) and every page of the window.
 struct GoCommands: Commands {
   @FocusedValue(\.windowNavigation) private var navigation
+  @FocusedValue(\.setupSteps) private var setupSteps
 
   var body: some Commands {
     let _ = AppAppearance.shared.revision
@@ -179,6 +180,15 @@ struct GoCommands: Commands {
       Button(L10n.t("shell.history.forward")) { navigation?.step(.forward) }
         .keyboardShortcut("]", modifiers: .command)
         .disabled(navigation?.forwardTitle == nil)
+      if let setupSteps {
+        Divider()
+        Button(L10n.t("inspectorSteps.menuPrevious")) { setupSteps.step(-1) }
+          .keyboardShortcut(.leftArrow, modifiers: [.command, .option])
+          .disabled(!setupSteps.canBack)
+        Button(L10n.t("inspectorSteps.menuNext")) { setupSteps.step(1) }
+          .keyboardShortcut(.rightArrow, modifiers: [.command, .option])
+          .disabled(!setupSteps.canForward)
+      }
       Divider()
       ForEach(ProjectPage.allCases) { page in
         Toggle(isOn: Binding(get: { navigation?.current == page }, set: { _ in navigation?.open(page) })) {

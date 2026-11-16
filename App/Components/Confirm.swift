@@ -7,13 +7,14 @@ import QuartzHubCore
 /// the default: Return cancels.
 @MainActor
 enum Confirm {
+  /// `cancel`: the safe answer's name where "Abbrechen" would be ambiguous (cancelling a setup).
   static func ask(_ question: String, detail: String? = nil, confirm: String, destructive: Bool = false,
-                  window: NSWindow?) async -> Bool {
+                  cancel: String? = nil, window: NSWindow?) async -> Bool {
     let alert = NSAlert()
     alert.alertStyle = .warning
     alert.messageText = question
     if let detail { alert.informativeText = detail }
-    alert.addButton(withTitle: L10n.t("common.cancel"))
+    alert.addButton(withTitle: cancel ?? L10n.t("common.cancel"))
     let proceed = alert.addButton(withTitle: confirm)
     proceed.hasDestructiveAction = destructive
     let response = if let window { await alert.beginSheetModal(for: window) } else { alert.runModal() }

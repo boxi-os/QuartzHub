@@ -29,6 +29,8 @@ struct OptionsForm: View {
   /// The project the options belong to, for the editors that read and write its files (snippets);
   /// without it they are text fields.
   var projectPath: String?
+  /// The search above eight options; off where a step shows only a slice of them.
+  var searchable = true
 
   @State private var search = ""
 
@@ -50,9 +52,10 @@ struct OptionsForm: View {
     let context = OptionsFormContext(language: language, explicitEmpty: explicitEmpty, languages: languages, query: query,
                                      mark: query, entryReason: root?.entryReason, projectPath: projectPath)
     let incomplete = schema == nil || schema?.source == .defaults || !(schema?.notes.isEmpty ?? true)
-    if merged.fields.count >= Self.searchFrom || schema?.source == .defaults || merged.fields.isEmpty || !(schema?.notes.isEmpty ?? true) {
+    let searches = searchable && merged.fields.count >= Self.searchFrom
+    if searches || schema?.source == .defaults || merged.fields.isEmpty || !(schema?.notes.isEmpty ?? true) {
       Section {
-        if merged.fields.count >= Self.searchFrom {
+        if searches {
           TextField(L10n.t("pluginOptions.searchPlaceholder"), text: $search, prompt: Text(L10n.t("pluginOptions.searchPlaceholder")))
             .textFieldStyle(.roundedBorder)
             .labelsHidden()
