@@ -294,8 +294,8 @@ struct NavigationInspector: View {
   @State private var snapshotTaken = false
 
   private var language: OptionFormText.Language { L10n.language == "en" ? .en : .de }
-  private var entryKey: String { item.options["className"]?.stringValue ?? "#\(item.occurrence)" }
-  private var firstRun: Bool { setup != nil && setup?.key == item.options["className"]?.stringValue }
+  private var entryKey: String { InstanceClass.own(item.entry) ?? "#\(item.occurrence)" }
+  private var firstRun: Bool { setup != nil && setup?.key == InstanceClass.own(item.entry) }
   private var fields: [OptionField] { schema?.schema?.fields ?? [] }
 
   private var current: Binding<String> {

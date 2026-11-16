@@ -88,6 +88,15 @@ import Testing
     #expect(Array(removed.prefix(2)) != Array(before.prefix(2)))
   }
 
+  /// A first run ends with its entry: removed some other way, the run must not live on and take
+  /// the next entry under the same name (review 2026-11-16, M1).
+  @Test func aRunLastsWhileItsEntryIsThere() {
+    let run = SetupRun(key: "nav-bar-2", before: [])
+    #expect(run.lasts(keys: ["nav-bar", "nav-bar-2"]))
+    #expect(!run.lasts(keys: ["nav-bar"]))
+    #expect(!run.lasts(keys: []))
+  }
+
   /// quartz-layout-box's schema as gui-test has it (0.4.2, `Fixtures/option-schema/real`).
   static let boxFields: [OptionField] = {
     let url = PluginSchemaReaderTests.fixtures.appendingPathComponent("real/.quartz/plugins/quartz-layout-box/package.json")

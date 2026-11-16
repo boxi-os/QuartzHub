@@ -131,6 +131,7 @@ struct PluginsPage: View {
       // menu there, or the window was pushed wider than the screen (measured at 900 pt).
       .pageTabs(Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "plugins.tabs")
       .historyTab(page: .plugins, tab: $tabID)
+      .onChange(of: model.config?.plugins) { endSetups() }
       .task {
         await model.load()
         let path = project.path
@@ -212,6 +213,22 @@ struct PluginsPage: View {
         }
       }
     }
+  }
+
+  /// A first run ends with its entry, however that left (review 2026-11-16, M1).
+  private func endSetups() {
+    guard let plugins = model.config?.plugins else { return }
+    if let run = navigationSetup, !run.lasts(keys: NavigationInstance.all(plugins).compactMap { InstanceClass.own($0.entry) }) {
+      navigationSetup = nil
+    }
+    if let run = boxSetup, !run.lasts(keys: LayoutBoxes.boxes(plugins).compactMap { InstanceClass.own($0.plugin) }) {
+      boxSetup = nil
+    }
+    let forms = FormsOptions.entries(plugins).first.map { FormsOptions.forms($0.plugin.object["options"]?.objectValue).map(\.id) } ?? []
+    if let run = formSetup, !run.lasts(keys: forms) { formSetup = nil }
+    let languages = MultilanguageOptions.entries(plugins).first
+      .map { MultilanguageOptions.languages($0.plugin.object["options"]?.objectValue ?? JSONObject()).map(\.code) } ?? []
+    if let run = languageSetup, !run.lasts(keys: languages) { languageSetup = nil }
   }
 
   @ViewBuilder private var introSection: some View {

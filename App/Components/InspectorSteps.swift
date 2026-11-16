@@ -114,14 +114,6 @@ struct InspectorSteps<Content: View>: View {
   }
 }
 
-/// An entry ➕ just created, while the inspector sets it up for the first time.
-struct SetupRun: Equatable {
-  /// What names the new entry while the run lasts: a navigation's or a box's class, a form's id.
-  let key: String
-  /// `plugins:` before ➕: cancelling puts back the priorities the placement step renumbered.
-  let before: [PluginEntry]
-}
-
 /// Vorheriger / Nächster Schritt in Gehe zu (⌥⌘← ⌥⌘→), while a setup in steps is in the inspector;
 /// ⌘[ ⌘] stay the window's history.
 struct SetupStepsAction {

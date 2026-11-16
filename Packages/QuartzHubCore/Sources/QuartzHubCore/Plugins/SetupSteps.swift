@@ -81,6 +81,28 @@ public enum SetupSteps {
   }
 }
 
+/// An entry ➕ just created, while the inspector sets it up for the first time.
+public struct SetupRun: Equatable, Sendable {
+  /// What names the new entry while the run lasts: a navigation's or a box's own class, a form's
+  /// id, a language's code.
+  public let key: String
+  /// `plugins:` before ➕: cancelling puts back the priorities the placement step renumbered.
+  public let before: [PluginEntry]
+
+  public init(key: String, before: [PluginEntry]) {
+    self.key = key
+    self.before = before
+  }
+
+  /// Whether the run still has its entry: `keys` are what names each entry of its kind now. An
+  /// entry removed some other way (its row, the plugin list, the file) ends the run, so a later
+  /// entry under the same name, a copy with the freed class, is not taken for the new one
+  /// (review 2026-11-16, M1).
+  public func lasts(keys: [String]) -> Bool {
+    keys.contains(key)
+  }
+}
+
 extension NavigationVariants {
   /// A navigation's steps: the kind first, because it decides what the later steps can do; the
   /// place next, so the preview shows it from the second step on. The groups are the plugin's
