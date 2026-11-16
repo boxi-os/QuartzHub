@@ -191,7 +191,11 @@ Je Punkt ein Commit mit Bau, `qh-check i18n`, Tests und Ansehen (Skill `run-app`
   die Schritte danach keinen. Ein bestehender Eintrag nimmt ihn beim ersten Schreiben nach dem
   Öffnen des Inspektors. An der App gezählt: 13 vor dem Anlegen, 14 danach, 14 nach Verschieben, einem
   Schalter und dem Abbrechen. Ein zweiter Durchlauf vom selben Stand legte keinen weiteren an: Der
-  Snapshot-Store legt einen inhaltsgleichen Stand nicht doppelt an.
+  Snapshot-Store überspringt einen Stand, der dem neuesten Snapshot gleicht, und fasst `configChange`
+  innerhalb von 15 Minuten zusammen (`SnapshotStore.coalescingKinds`). Deshalb nimmt ein Assistent
+  seinen Snapshot seit Punkt 4 als `pluginChange`, wie das Entfernen eines Plugins: Sonst verschluckte
+  ihn eine Änderung kurz davor. Gemessen: „Navigation aktiv“ aus (`configChange` 08:50:23), fünf
+  Sekunden später ➕ Leiste: `pluginChange … Navigation einrichten: Leiste` (08:50:28).
 - **Kein „gültig“ je Schritt**: Bei Navigationen kann kein Schritt ungültig sein; das Feld kommt mit
   dem Formular (Name, `formIdProblem`).
 - **Gruppen im Platz-Schritt** aus der Konfiguration und den Frames (`LayoutBoard.groupNames`); der

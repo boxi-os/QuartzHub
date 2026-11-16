@@ -233,7 +233,11 @@ final class PluginsModel {
       let take = SnapshotStore.live(environment: environment).take
       let snapshotTake: SnapshotStore.Take? = switch policy {
       case .each: take
-      case .labeled(let label): { project, kind, _ in try await take(project, kind, label) }
+      // A setup is a deliberate act, like adding a plugin: `pluginChange` does not coalesce
+      // within 15 minutes as `configChange` does, so the setup's one snapshot is not swallowed by
+      // a save a minute before (SnapshotStore.coalescingKinds). It is still skipped when nothing
+      // changed since the newest snapshot.
+      case .labeled(let label): { project, _, _ in try await take(project, "pluginChange", label) }
       case .none: nil
       }
       do {
