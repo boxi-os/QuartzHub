@@ -193,5 +193,6 @@ im ersten Durchlauf die Klasse, endet der Lauf. Danach bekam der UI-Test ein Tes
 Plugins (Pakete aus den Kern-Fixtures) und deckt Formular und Sprache mit ab, acht Fälle. Nebenbei
 aufgefallen: Das „Gespeichert“ oben im Inspektor verschwindet nach einem Moment, und alles darunter
 rückt eine Zeile hoch, auch die Liste der Schritte; ein Klick kann dabei den Schritt darunter treffen
-(von Hand und im Test passiert). Gesamtlauf: `xcodebuild test` grün (17 UI-Tests, einer ohne
+(von Hand und im Test passiert). Behoben: „Gespeichert“ steht neben dem Titel, sein Platz bleibt frei
+(`TitleLine`); vorher rückte die Liste um 19 pt, danach nicht. Gesamtlauf: `xcodebuild test` grün (17 UI-Tests, einer ohne
 seine Umgebung übersprungen), `swift test` 642 Tests, `qh-check i18n` und `handbook` ohne Befund.

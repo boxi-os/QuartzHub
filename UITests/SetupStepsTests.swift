@@ -147,8 +147,8 @@ final class SetupStepsTests: XCTestCase {
     return false
   }
 
-  /// Into a step from the list, until the heading says it: the „Gespeichert“ above the steps goes
-  /// a moment after a write, and the rows move up by a line, sometimes between aiming and clicking.
+  /// Into a step from the list, until the heading says it (a click can still meet a list that is
+  /// being laid out anew).
   private func go(_ window: XCUIElement, to step: String, heading text: String) {
     let row = window.descendants(matching: .any)["steps.step.\(step)"].firstMatch
     for _ in 0..<3 {
@@ -283,6 +283,26 @@ final class SetupStepsTests: XCTestCase {
     XCTAssertTrue(any["steps.cancel"].firstMatch.waitForExistence(timeout: 5), "the new form is not in its first run")
   }
 
+  /// The steps stay where they are when „Gespeichert“ goes, two seconds after a write: on a line
+  /// of its own it moved them up by a line, and a click aimed at one step hit the next.
+  func testTheStepsStayPutWhenTheSavedWordGoes() throws {
+    let (profile, project) = try project()
+    let (app, window) = open(profile, project, tab: "Formulare", list: "forms.list")
+    let any = window.descendants(matching: .any)
+    any["forms.add"].firstMatch.click()
+    let create = app.popovers.buttons["Anlegen"].firstMatch
+    XCTAssertTrue(create.waitForExistence(timeout: 5), "no popover under ➕")
+    create.click()
+    let row = any["steps.step.embed"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 5))
+    let before = row.frame
+    // Measured while the word is there, or the comparison says nothing.
+    let saved = window.staticTexts.matching(NSPredicate(format: "value == %@ OR label == %@", "Gespeichert", "Gespeichert")).firstMatch
+    XCTAssertTrue(saved.exists && saved.isHittable, "„Gespeichert“ is not shown right after ➕")
+    sleep(3)
+    XCTAssertEqual(row.frame, before, "the steps moved when „Gespeichert“ went")
+  }
+
   /// M4: „Als Layout-Formular verwenden“ in the new form's first run, then cancel: the old layout
   /// form is back, the file byte for byte as before, one snapshot. Before the fix `layoutForm`
   /// was left empty.
@@ -391,6 +411,9 @@ final class SetupStepsTests: XCTestCase {
     // Back to the overview: choose the language, then take the choice away again.
     let row = window.staticTexts.matching(identifier: "multilanguage.language.de").firstMatch
     row.click()
+    // Taken away only once the language is in the inspector: a ⌘-click right after the click met
+    // the list before the choice had settled, once in a full run.
+    XCTAssertTrue(any["multilanguage.inspector.name"].firstMatch.waitForExistence(timeout: 5), "the language is not in the inspector")
     XCUIElement.perform(withKeyModifiers: .command) { row.click() }
     XCTAssertTrue(start.waitForExistence(timeout: 5), "the overview is not back")
     start.click()

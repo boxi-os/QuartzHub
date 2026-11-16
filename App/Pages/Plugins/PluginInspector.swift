@@ -25,13 +25,16 @@ struct PluginInspector: View {
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
-          Label(item.displayName, systemImage: item.frame != nil ? "rectangle.split.3x3" : item.layout != nil ? "square.stack.3d.up" : "puzzlepiece.extension")
-            .font(.headline)
-            .accessibilityIdentifier("plugins.inspector.name")
-          HStack(spacing: 6) {
-            if item.frame != nil { WordBadge(text: L10n.t("pluginsInstalled.frameBadge")) }
-            if model.outdated.contains(item.entry.name) { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable"), tint: .orange) }
-            if model.savedIndex == item.index { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
+          TitleLine(saved: model.savedIndex == item.index) {
+            Label(item.displayName, systemImage: item.frame != nil ? "rectangle.split.3x3" : item.layout != nil ? "square.stack.3d.up" : "puzzlepiece.extension")
+              .font(.headline)
+              .accessibilityIdentifier("plugins.inspector.name")
+          }
+          if item.frame != nil || model.outdated.contains(item.entry.name) {
+            HStack(spacing: 6) {
+              if item.frame != nil { WordBadge(text: L10n.t("pluginsInstalled.frameBadge")) }
+              if model.outdated.contains(item.entry.name) { WordBadge(text: L10n.t("pluginsInstalled.updateAvailable"), tint: .orange) }
+            }
           }
           Note(L10n.t("plugins.savesImmediately"))
           HStack(alignment: .firstTextBaseline, spacing: 4) {

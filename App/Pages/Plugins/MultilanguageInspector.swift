@@ -286,11 +286,12 @@ struct SettingsGroupInspector: View {
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
-          Label(view.title(group), systemImage: "slider.horizontal.3").font(.headline)
+          TitleLine(saved: model.savedIndex == view.entry.index) {
+            Label(view.title(group), systemImage: "slider.horizontal.3").font(.headline)
+          }
           if let sole, let description = OptionFormText.texts(sole, MultilanguageView.language).description {
             Text(description).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
           }
-          if model.savedIndex == view.entry.index { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
           Note(L10n.t("plugins.savesImmediately"))
         }
         if group.keys.contains("switcher") {
@@ -392,9 +393,10 @@ struct SiteLanguageSetup: View {
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
-          Label(L10n.t("multilanguageEditor.site.title"), systemImage: "globe").font(.headline)
-            .accessibilityIdentifier("multilanguage.site.title")
-          if model.savedIndex == view.entry.index { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
+          TitleLine(saved: model.savedIndex == view.entry.index) {
+            Label(L10n.t("multilanguageEditor.site.title"), systemImage: "globe").font(.headline)
+              .accessibilityIdentifier("multilanguage.site.title")
+          }
           Note(L10n.t("plugins.savesImmediately"))
         }
       }

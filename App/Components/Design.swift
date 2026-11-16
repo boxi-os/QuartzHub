@@ -645,3 +645,24 @@ struct ProblemBadge: View {
       .background(Capsule().fill(.red))
   }
 }
+
+// MARK: - TitleLine
+
+/// An inspector's title with „Gespeichert“ beside it, a moment after a write. Beside, with its room
+/// kept while it is gone: on a line of its own it pushed everything below down and, a moment
+/// later, back up, the steps of a setup too, and a click aimed at one step hit the next (measured
+/// 2026-11-16, by hand and in UITests/SetupStepsTests). The announcement is `flagSaved`'s.
+struct TitleLine<Title: View>: View {
+  let saved: Bool
+  @ViewBuilder let title: () -> Title
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline, spacing: 6) {
+      title()
+      Spacer(minLength: 0)
+      Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green)
+        .opacity(saved ? 1 : 0)
+        .accessibilityHidden(!saved)
+    }
+  }
+}

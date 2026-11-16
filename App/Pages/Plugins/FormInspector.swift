@@ -58,8 +58,9 @@ struct FormInspector: View {
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
-          Label(view.title(id, def), systemImage: "list.clipboard").font(.headline).accessibilityIdentifier("forms.inspector.title")
-          if model.savedIndex == view.entry.index { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
+          TitleLine(saved: model.savedIndex == view.entry.index) {
+            Label(view.title(id, def), systemImage: "list.clipboard").font(.headline).accessibilityIdentifier("forms.inspector.title")
+          }
           Note(L10n.t("plugins.savesImmediately"))
           // A change saved here reaches the server with the next upload of the relay, which only
           // the list row and the Relay section said, both out of sight.
@@ -809,9 +810,10 @@ struct FormsSectionInspector: View {
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
-          Label(FormsView.sectionTitle(id), systemImage: FormsView.sectionSymbol(id)).font(.headline)
+          TitleLine(saved: model.savedIndex == view.entry.index) {
+            Label(FormsView.sectionTitle(id), systemImage: FormsView.sectionSymbol(id)).font(.headline)
+          }
           Text(FormsView.sectionHint(id)).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-          if model.savedIndex == view.entry.index { Text(L10n.t("pluginsInstalled.savedFlash")).font(.caption).foregroundStyle(.green) }
           Note(L10n.t("plugins.savesImmediately"))
         }
         FormMessages(problems: messages.problems, hints: messages.hints)
