@@ -38,12 +38,16 @@ import Testing
     #expect(css.contains("  width: calc(100% + 2 * (4rem));\n  max-width: none;\n  margin-inline: calc(-1 * (4rem));"))
     #expect(css.contains("\"header header header header header header\"\n      \". . body body . .\""))
     #expect(css.contains(".qgframe-area-header { grid-area: header; margin-left: calc(4rem - var(--qgframe-bleed-left, 0px)); margin-right: calc(4rem - var(--qgframe-bleed-right, 0px)); }"))
+    // Its content keeps the frame's padding from the edges, overridable by any rule of the site.
+    #expect(css.components(separatedBy: ":where(.qgframe-area-header) { padding-inline: 20px; }").count == 3)
+    #expect(!css.contains(":where(.qgframe-area-body)"))
     // Tablet: maxWidth 100% leaves no room; the edge tracks are the padding.
     #expect(css.contains("grid-template-columns: [qgframe-full-start] 20px 1fr 1fr 1fr 1fr calc(20px + max(0px, (100% - 2 * (3rem) - 100%))) [qgframe-full-end];"))
     // Mobile: the header fills half a row, so the grid stays as it was, the margin goes back to 0.
     let mobile = try #require(css.components(separatedBy: "@media (max-width: 900px)").last)
     #expect(mobile.contains("grid-template-columns: 1fr 1fr 1fr 1fr;") && mobile.contains("padding-inline: 20px;"))
     #expect(mobile.contains(".qgframe-area-header { grid-area: header; margin-left: 0; margin-right: 0; }"))
+    #expect(mobile.contains(":where(.qgframe-area-header) { padding-inline: 0; }"))
     #expect(css.contains("> #quartz-body {\n  padding-inline: 0;\n}\nhtml:has(.page[data-frame=\"x\"]) {\n  overflow-x: clip;\n}"))
   }
 

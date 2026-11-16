@@ -24818,13 +24818,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Bereich reicht bis an beide Fensterränder, wo er ganze Zeilen füllt. Die anderen Bereiche behalten Breite und Abstand des Frames."
+            "value" : "Der Bereich reicht bis an beide Fensterränder, wo er ganze Zeilen füllt; sein Inhalt hält dabei den Innenabstand des Frames. Die anderen Bereiche behalten Breite und Abstand des Frames."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The area reaches both edges of the window where it fills whole rows. The other areas keep the frame's width and padding."
+            "value" : "The area reaches both edges of the window where it fills whole rows, its content keeping the frame's padding. The other areas keep the frame's width and padding."
           }
         }
       }

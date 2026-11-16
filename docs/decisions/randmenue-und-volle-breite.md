@@ -69,6 +69,16 @@ Breakpoints dieselben Selektoren überschreiben.
 | 1000 (Tablet) | 0–1000 | 20–980 | 20–980 (ohne Quartz' 1rem) | 1000 |
 | 600 (Mobil, Kopf halbe Zeile) | 20–148 | 20–580 | altes Raster | 600 |
 
+**Innenabstand des Inhalts** (2026-11-16, nach dem ersten Ausprobieren in gui-test): Ein voller
+Bereich hatte keinen Innenabstand; ohne eine Regel der Site (das Basis-Template hat
+`--tpl-header-inline-pad`) standen die Bedienelemente der Kopfzeile direkt an den Fensterrändern.
+Seitdem bekommt sein Inhalt den Innenabstand des Frames, wo er ganze Zeilen füllt, sonst `0`:
+`:where(.qgframe-area-<name>) { padding-inline: … }`. `:where()` hat keine Spezifität, denn das
+`<style>` des Frames steht später im Dokument und schlüge sonst jede gleich starke Regel der Site.
+Gemessen mit dem Testframe oben in WebKit: Inhalt bei 1600/1300/1000 px 20 px vom Rand; eine Regel
+`.qgframe-area-header { padding-inline: 50px }` *vor* dem Frame-CSS gewinnt (50 px), ohne `:where()`
+verlor sie (20 px).
+
 ## Rail und volle Kopfzeile
 
 Schiebt eine Rail die Seite (`content: push`), rückt das Plugin `<body>` um

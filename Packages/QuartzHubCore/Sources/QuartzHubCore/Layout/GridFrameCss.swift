@@ -225,6 +225,7 @@ public enum GridFrameCss {
     let areas = try areaList(areasValue)
     var template = try templateAreas(layout, areas)
     var box = try box(layout)
+    let framePadding = box.paddingInline
     let full = fullWidth ? areas.filter { isFullWidth($0) && fillsRows(layout, $0) } : []
     if !full.isEmpty {
       let tracks = fullWidthTracks(columns, layout, box)
@@ -253,9 +254,13 @@ public enum GridFrameCss {
     for area in areas {
       let name = JS.string(try field(area, "name"))
       if fullWidth && isFullWidth(area) {
-        rules.append(isVisible(try placements(layout, area))
-          ? ".qgframe-area-\(name) { grid-area: \(name); \(fullAreaMargin(full.contains(area) ? JS.string(layout["columnGap"]) : nil)) }"
-          : ".qgframe-area-\(name) { display: none; }")
+        guard isVisible(try placements(layout, area)) else {
+          rules.append(".qgframe-area-\(name) { display: none; }")
+          continue
+        }
+        let across = full.contains(area)
+        rules.append(".qgframe-area-\(name) { grid-area: \(name); \(fullAreaMargin(across ? JS.string(layout["columnGap"]) : nil)) }")
+        rules.append(fullAreaPadding(name, across ? framePadding : nil))
         continue
       }
       rules.append(isVisible(try placements(layout, area))
@@ -272,6 +277,14 @@ public enum GridFrameCss {
   static func fullAreaMargin(_ gap: String?) -> String {
     guard let gap else { return "margin-left: 0; margin-right: 0;" }
     return "margin-left: calc(\(gap) - var(--qgframe-bleed-left, 0px)); margin-right: calc(\(gap) - var(--qgframe-bleed-right, 0px));"
+  }
+
+  /// A full area's content keeps the frame's inline padding from the window's edges, as the other
+  /// areas do; without it a header's first and last controls touched the edges. `:where()` has no
+  /// specificity, so any rule of the site's own sets a different inset, though the frame's
+  /// `<style>` comes later in the document. nil: the area stays in the grid here, without one.
+  static func fullAreaPadding(_ name: String, _ padding: String?) -> String {
+    ":where(.qgframe-area-\(name)) { padding-inline: \(padding ?? "0"); }"
   }
 
   /// `grid-template-areas` with one more cell at each end of a row: the full area's name in the
