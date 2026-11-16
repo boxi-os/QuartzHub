@@ -13,6 +13,8 @@ public struct FrameView: Equatable, Sendable, Identifiable {
     /// One of the six positions or `pageBody`; nil for a spacer.
     public var slot: String?
     public var group: String?
+    /// QuartzHub's `fullWidth` (`GridFrameCss.isFullWidth`).
+    public var fullWidth = false
   }
 
   public struct Placement: Equatable, Sendable {
@@ -61,7 +63,8 @@ public struct FrameView: Equatable, Sendable, Identifiable {
     areas = (json["areas"]?.arrayValue ?? []).map { area in
       Area(id: Self.text(area["id"]) ?? "", name: Self.text(area["name"]) ?? "",
            slot: Self.text(area["slot"]).flatMap { $0.isEmpty ? nil : $0 },
-           group: Self.text(area["group"]).flatMap { $0.isEmpty ? nil : $0 })
+           group: Self.text(area["group"]).flatMap { $0.isEmpty ? nil : $0 },
+           fullWidth: GridFrameCss.isFullWidth(area))
     }
     var layouts: [String: Layout] = [:]
     for bp in GridFrameCss.breakpoints {

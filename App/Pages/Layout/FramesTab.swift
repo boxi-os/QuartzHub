@@ -743,6 +743,7 @@ struct FrameAreaInspector: View {
             Note(area.group != nil && area.group != area.name ? L10n.t("layoutEditor.frameBuilder.ownGroupRenamed", ["group": area.group!])
                  : L10n.t("layoutEditor.frameBuilder.ownGroupHint"))
           }
+          fullWidth(draft, area)
         }
         if let placement {
           Section {
@@ -784,6 +785,23 @@ struct FrameAreaInspector: View {
       InspectorPageContext(page: .layout) {
         Section { Note(L10n.t("layoutEditor.frameBuilder.standardPanelHint")) }
       }
+    }
+  }
+
+  /// QuartzHub's own switch (`fullWidth`, decisions/randmenue-und-volle-breite.md): where the area
+  /// fills whole rows it reaches both window edges; where it does not, the note says so.
+  @ViewBuilder private func fullWidth(_ draft: JSONValue, _ area: FrameView.Area) -> some View {
+    let on = area.fullWidth
+    Toggle(L10n.t("layoutEditor.frameBuilder.fullWidth"), isOn: Binding(get: { on }, set: {
+      set(FrameEditing.withAreaFullWidth(draft, area.id, $0))
+    }))
+    .accessibilityIdentifier("layout.frames.fullWidth")
+    let short = FrameEditing.fullWidthShortRows(draft, area.id)
+    if on && !short.isEmpty {
+      Note(L10n.t("layoutEditor.frameBuilder.fullWidthShort", ["breakpoints": short.map(LayoutWords.breakpoint).joined(separator: ", ")]))
+        .accessibilityIdentifier("layout.frames.fullWidthShort")
+    } else {
+      Note(L10n.t("layoutEditor.frameBuilder.fullWidthHint"))
     }
   }
 

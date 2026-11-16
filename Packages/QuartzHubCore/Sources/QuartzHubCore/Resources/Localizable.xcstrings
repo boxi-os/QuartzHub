@@ -23912,6 +23912,63 @@
         }
       }
     },
+    "layoutEditor.frameBuilder.fullWidth" : {
+      "comment" : "Layout ▸ Frames, area inspector: switch that lets the area reach both window edges",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volle Fensterbreite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full window width"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.fullWidthHint" : {
+      "comment" : "Layout ▸ Frames, area inspector: what the full window width switch does",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Bereich reicht bis an beide Fensterränder, wo er ganze Zeilen füllt. Die anderen Bereiche behalten Breite und Abstand des Frames."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The area reaches both edges of the window where it fills whole rows. The other areas keep the frame's width and padding."
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.fullWidthShort" : {
+      "comment" : "Layout ▸ Frames, area inspector: full window width is on, but the area does not span all columns at these breakpoints",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füllt bei {{breakpoints}} keine ganze Zeile und bleibt dort im Raster."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Does not fill a whole row at {{breakpoints}} and stays in the grid there."
+          }
+        }
+      }
+    },
     "layoutEditor.frameBuilder.hiddenGroupsWarning" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
