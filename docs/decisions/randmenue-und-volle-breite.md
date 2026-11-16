@@ -107,6 +107,17 @@ Panel bis zum Fensterboden überdeckt). Das README des Plugins zeigt dasselbe f�
 - `plugin-navigations.scss` gestaltet die Rail (Tokens, Button in Zielgröße, Monogramme, Scrim);
   das Akkordeon bleibt das Menü des Templates.
 
+**Die Gruppe „brand“ ist eine Flex-Reihe** (2026-11-16): Sie war ein Raster mit drei benannten
+Zellen (Marke, Name, Kapitel), damit das Kapitel zuerst kürzt. Ein Menü-Button in der Gruppe bekam
+keine Zelle und stand deshalb immer hinter dem Titel, gleich mit welcher Priorität; den Kapitel-Eintrag
+hatte keine Vorlage mehr. Jetzt ordnet die Priorität wie in jeder Gruppe, und nur die Namen dürfen
+schmaler werden (`min-width: 0` nur an ihnen), Marke und Menü-Button behalten ihre Breite. Unter
+900 px hält die App-Leiste vorn nur noch Platz für einen Auslöser frei, der über ihr liegt (Burger
+mit `mobile: offcanvas`, Explorer), sonst stand er leer vor dem Rail-Button. An gui-test gemessen
+(WebKit, Dev-Server): Burger, Marke, Titel bei 1600 px auf 24/66/106, bei 700 px auf 12/54/94
+(vorher 56); mit einem eingefügten Burger kommen die 56 px zurück. Das Template selbst ist nicht an
+einer gebauten Website angesehen, seine Regeln sind dieselben.
+
 **An der Website angesehen** (Kopie der Website-Vorlage mit dem Plugin aus dem Branch, WebKit, Dev-Server):
 1600 px Rail `rest: icons`, `content: push` offen: Kopfzeile 0–1600, Seite um 320 px eingerückt, Panel
 darunter; 1100 px hell mit offenem Menü über der Seite; 700 px Kopf und Fuß 0–700, kein seitliches
