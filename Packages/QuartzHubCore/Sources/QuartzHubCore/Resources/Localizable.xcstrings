@@ -26967,6 +26967,25 @@
         }
       }
     },
+    "layoutEditor.inspector.editOptions" : {
+      "comment" : "Layout, component inspector: button that opens the Plugins tab where the options are edited",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In „{{tab}}“ bearbeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit in “{{tab}}”"
+          }
+        }
+      }
+    },
     "layoutEditor.inspector.empty" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -27165,6 +27184,68 @@
         }
       }
     },
+    "layoutEditor.inspector.optionsCount" : {
+      "comment" : "Layout, component inspector: what the entry's options set, above the jump to Plugins",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 Option geändert"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Optionen geändert"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 option changed"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} options changed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "layoutEditor.inspector.optionsElsewhere" : {
+      "comment" : "Layout, component inspector: why the options are not edited here",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Optionen stellst du unter Plugins ein, dort wird sofort gespeichert. Hier geht es um den Platz."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Options are set under Plugins, where they are saved at once. This is about the place."
+          }
+        }
+      }
+    },
     "layoutEditor.inspector.optionsError" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -27197,6 +27278,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reading options…"
+          }
+        }
+      }
+    },
+    "layoutEditor.inspector.optionsNone" : {
+      "comment" : "Layout, component inspector: the entry sets no option",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Optionen wie vom Plugin vorgegeben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All options as the plugin sets them."
           }
         }
       }

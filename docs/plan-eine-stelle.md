@@ -85,10 +85,10 @@ dritte Stelle, fallen weg.
 Je Schritt ein Commit mit Bau, `qh-check i18n`, Kerntests, Rauchtest und der App angesehen; neue
 Texte über `scripts/strings.mjs`.
 
-## Fragen an den Nutzer
+## Entscheidungen des Nutzers (2026-11-16)
 
-1. Soll Installiert bei den eigenen Plugins das Formular ganz verlieren, oder als „Alle Optionen“
-   aufklappbar behalten (der Reiter Navigationen hat im letzten Schritt schon „Alle Optionen“)?
-2. Die rohen Platzierungsfelder in Installiert: weg (Vorschlag), oder für fremde Plugins behalten,
-   die keine Komponente auf der Bühne haben? (Heute erscheinen sie nur bei Plugins mit `layout`, die
-   auch auf der Bühne stehen.)
+1. Installiert behält bei den eigenen Plugins das Formular, zugeklappt als „Alle Optionen“; darüber
+   die Zusammenfassung und der Sprung in den Reiter.
+2. Die rohen Platzierungsfelder in Installiert fallen weg; `priority` als Zahl entfällt.
+   `groupOptions.justify` braucht keinen Ersatz: Quartz' `Flex.tsx` schreibt es als `justify-self`,
+   und das wirkt in einer Flex-Reihe nicht (beim Umsetzen gelesen, 2026-11-16).

@@ -2,12 +2,15 @@ import QuartzHubCore
 import SwiftUI
 
 /// The selected component in the inspector (QuartzControl's `LayoutEditor/Inspector.tsx`):
-/// everything about its place on the page, then its own options. It writes into the page's draft
-/// like a drop does; Speichern writes the file. It is also the keyboard's way to do what the stage
+/// everything about its place on the page. It writes into the page's draft like a drop does;
+/// Speichern writes the file. Its options are edited under Plugins, where they are saved at once:
+/// here a line says what they set and a button leads there (docs/plan-eine-stelle.md; until
+/// 2026-11-16 the whole form stood here and took effect only with Speichern). It is also the keyboard's way to do what the stage
 /// does by dragging: position and earlier/later answer every direction, "In den Vorrat legen" is
 /// the drop on the tray.
 struct ComponentInspector: View {
   @Bindable var model: LayoutModel
+  @Environment(\.openPlugins) private var openPlugins
   let index: Int
   let facts: StageFacts
   @Binding var selected: String
@@ -232,28 +235,24 @@ struct ComponentInspector: View {
 
   // MARK: options
 
-  /// Last, because it is the long part: the fields above are what the stage is about.
-  @ViewBuilder private var options: some View {
-    if let schemaError {
-      Section(L10n.t("layoutEditor.inspector.options")) {
+  /// Last, as before: what the entry's options set, and the way to where they are edited.
+  private var options: some View {
+    let count = plugin.object["options"]?.objectValue?.keys.count ?? 0
+    let tab = PluginsPage.tab(for: plugin)
+    return Section(L10n.t("layoutEditor.inspector.options")) {
+      if let schemaError {
         Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": schemaError]))
       }
-    } else if let schema {
-      Section(L10n.t("layoutEditor.inspector.options")) {
-        if let unreadable = schema.unreadable {
-          Callout(.warning, L10n.t("pluginOptions.unreadable", ["reason": unreadable]))
-        }
+      if tab == .navigations {
+        let variant = NavigationVariants.variant(plugin.object["options"]?.objectValue ?? JSONObject())
+        LabeledContent(L10n.t("navigationsEditor.variantHeading"), value: NavigationVariants.catalog(NavigationVariants.label(variant), nil))
       }
-      OptionsForm(schema: schema.schema, values: plugin.object["options"]?.objectValue ?? JSONObject(),
-                  onChange: { next in apply(LayoutBoard.withOptions(plugins, index, next)) },
-                  explicitEmpty: true, languages: model.config?.siteLanguages ?? [],
-                  root: OptionRoot.withoutTiles(plugin, fields: schema.schema?.fields ?? [], packageVersion: schema.packageVersion,
-                                                lang: L10n.language == "en" ? .en : .de),
-                  projectPath: model.project.path)
-    } else {
-      Section(L10n.t("layoutEditor.inspector.options")) {
-        Text(L10n.t("layoutEditor.inspector.optionsLoading")).foregroundStyle(.secondary)
-      }
+      Text(count == 0 ? L10n.t("layoutEditor.inspector.optionsNone")
+           : L10n.t("layoutEditor.inspector.optionsCount", ["count": String(count)], count: count))
+        .foregroundStyle(.secondary)
+      Button(L10n.t("layoutEditor.inspector.editOptions", ["tab": tab.title])) { openPlugins(plugins, index) }
+        .accessibilityIdentifier("layout.inspector.editOptions")
+      Note(L10n.t("layoutEditor.inspector.optionsElsewhere"))
     }
   }
 

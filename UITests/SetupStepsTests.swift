@@ -151,6 +151,8 @@ final class SetupStepsTests: XCTestCase {
   /// being laid out anew).
   private func go(_ window: XCUIElement, to step: String, heading text: String) {
     let row = window.descendants(matching: .any)["steps.step.\(step)"].firstMatch
+    // An existing entry's list of steps is folded: the heading opens it.
+    if !row.waitForExistence(timeout: 2) { window.descendants(matching: .any)["steps.heading"].firstMatch.click() }
     for _ in 0..<3 {
       XCTAssertTrue(row.waitForExistence(timeout: 5), "no step \(step)")
       row.click()
@@ -243,6 +245,29 @@ final class SetupStepsTests: XCTestCase {
     XCUIApplication(bundleIdentifier: "com.apple.finder").activate()
     waitFor("the typed class written") { self.read(project).contains("className: layout-box-ohne-return") }
     app.activate()
+  }
+
+  /// Options are edited under Plugins only (docs/plan-eine-stelle.md): from a navigation to its
+  /// place on the stage and back by „In „Navigationen“ bearbeiten“, the same navigation selected.
+  func testLayoutLeadsBackToTheNavigationsOptions() throws {
+    let (profile, project) = try project()
+    // From Installiert, so that arriving on Navigationen is the jump's doing, not the tab the page
+    // remembered.
+    let (_, window) = open(profile, project, tab: "Installiert", list: "plugins.search")
+    let any = window.descendants(matching: .any)
+    let row = any["plugins.row.quartz-navigations"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 10), "no quartz-navigations in the list")
+    row.click()
+    let show = window.buttons["Auf der Bühne zeigen"].firstMatch
+    XCTAssertTrue(show.waitForExistence(timeout: 5), "no „Auf der Bühne zeigen“")
+    show.click()
+    let edit = any["layout.inspector.editOptions"].firstMatch
+    XCTAssertTrue(edit.waitForExistence(timeout: 10), "the stage did not select the navigation")
+    XCTAssertFalse(window.textFields.matching(NSPredicate(format: "value == %@", "nav-bar")).firstMatch.exists,
+                   "the options form is still on the Layout page")
+    edit.click()
+    XCTAssertTrue(any["page.plugins.navigations"].firstMatch.waitForExistence(timeout: 10), "not on Plugins ▸ Navigationen")
+    XCTAssertTrue(heading(window, says: "von 8"), "no navigation in the inspector")
   }
 
   /// N1: choosing another entry ends the run; coming back shows the steps of an existing entry.

@@ -62,6 +62,7 @@ struct PluginsPage: View {
   /// `form:<id>` or `section:<id>`.
   @SceneStorage("forms.selected") private var formSelected: String?
   @State private var forms = FormsState()
+  @Environment(\.pluginsHandOver) private var handOver
   /// quartz-multilanguage's schema: its groups are the rows of the tab and the panels of the inspector.
   @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
@@ -136,6 +137,7 @@ struct PluginsPage: View {
       .onChange(of: boxSelected) { endSetups() }
       .onChange(of: formSelected) { endSetups() }
       .onChange(of: languageSelected) { endSetups() }
+      .onAppear(perform: takeHandOver)
       .task {
         await model.load()
         let path = project.path
@@ -253,9 +255,45 @@ struct PluginsPage: View {
   /// „Alle Optionen in der Plugin-Liste“, from all four editors: the plugin list knows the entry by
   /// its name and its number among the same-named. The way back leads to the editor.
   private func showAllOptions(_ plugin: PluginEntry, index: Int) {
-    let same = (model.config?.plugins ?? []).prefix(index + 1).filter { $0.name == plugin.name }.count
-    selected = same == 1 ? plugin.name : "\(plugin.name)#\(same)"
+    selected = Self.installedKey(model.config?.plugins ?? [], plugin, index: index)
     tabID = Tab.installed.rawValue
+  }
+
+  static func installedKey(_ plugins: [PluginEntry], _ plugin: PluginEntry, index: Int) -> String {
+    let same = plugins.prefix(index + 1).filter { $0.name == plugin.name }.count
+    return same == 1 ? plugin.name : "\(plugin.name)#\(same)"
+  }
+
+  /// The tab that edits an entry's options: an own plugin's, otherwise Installiert.
+  static func tab(for entry: PluginEntry) -> Tab {
+    switch PluginSource(entry.source)?.quartzName {
+    case NavigationVariants.plugin: .navigations
+    case LayoutBoxes.plugin: .extras
+    case FormsOptions.plugin: .forms
+    case MultilanguageOptions.plugin: .languages
+    default: .installed
+    }
+  }
+
+  /// „Optionen bearbeiten“ from the Layout page: the entry's tab, the entry selected. The forms
+  /// plugin's component is the layout form; the language switcher has the site's languages.
+  private func takeHandOver() {
+    guard let target = handOver?.target else { return }
+    handOver?.target = nil
+    let (plugins, index) = target
+    guard plugins.indices.contains(index) else { return }
+    let entry = plugins[index]
+    let tab = Self.tab(for: entry)
+    tabID = tab.rawValue
+    switch tab {
+    case .navigations: navigationSelected = NavigationInstance.all(plugins).first { $0.index == index }?.occurrence
+    case .extras: boxSelected = LayoutBoxes.boxes(plugins).first { $0.index == index }?.occurrence
+    case .forms:
+      let form = entry.object["options"]?["layoutForm"]?.stringValue ?? ""
+      formSelected = form.isEmpty ? nil : "form:\(form)"
+    case .languages: languageSelected = nil
+    case .installed, .marketplace: selected = Self.installedKey(plugins, entry, index: index)
+    }
   }
 
   /// Nothing selected on the Marktplatz: how to start, and how many of the catalog's plugins this

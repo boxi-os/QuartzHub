@@ -24,6 +24,7 @@ struct ProjectWindow: View {
   /// `@SceneStorage` keys: two properties of one key in one scene undo each other's writes
   /// (measured: the Layout page's tab picker stopped switching).
   @State private var layoutHandOver = LayoutHandOver()
+  @State private var pluginsHandOver = PluginsHandOver()
   /// Back and forward through the window's pages and tabs (⌘[ ⌘]).
   @State private var history = NavigationHistory()
   /// What putting back a vault link an interrupted run had parked found to say (review 2026-11-11, M1).
@@ -159,6 +160,13 @@ struct ProjectWindow: View {
         history.send(.layout, tab: tab.rawValue)
       }
     })
+    .environment(\.pluginsHandOver, pluginsHandOver)
+    .environment(\.openPlugins, OpenPluginsAction { plugins, index in
+      pluginsHandOver.target = (plugins, index)
+      go(to: .plugins) {
+        if plugins.indices.contains(index) { history.send(.plugins, tab: PluginsPage.tab(for: plugins[index]).rawValue) }
+      }
+    })
     .environment(\.history, history)
     .environment(\.unsavedGuard, unsaved)
     .onChange(of: highlighted) { _, page in
@@ -247,6 +255,21 @@ extension EnvironmentValues {
   @Entry var openPage = OpenPageAction { _, _ in }
   @Entry var openLayout = OpenLayoutAction { _ in }
   @Entry var layoutHandOver: LayoutHandOver?
+  @Entry var openPlugins = OpenPluginsAction { _, _ in }
+  @Entry var pluginsHandOver: PluginsHandOver?
+}
+
+/// The Plugins page's next entry, until the page takes it.
+@MainActor @Observable
+final class PluginsHandOver {
+  var target: (plugins: [PluginEntry], index: Int)?
+}
+
+/// Opens the Plugins page where an entry's options are edited („Optionen bearbeiten“ on the
+/// Layout page): the own plugins' tabs, every other plugin in Installiert (docs/plan-eine-stelle.md).
+struct OpenPluginsAction {
+  let open: ([PluginEntry], Int) -> Void
+  func callAsFunction(_ plugins: [PluginEntry], _ index: Int) { open(plugins, index) }
 }
 
 /// The Layout page's next place, until the page takes it.
