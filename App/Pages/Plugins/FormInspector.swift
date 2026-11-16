@@ -180,19 +180,21 @@ struct FormInspector: View {
     Announce.post(L10n.t("formsEditor.steps.doneAnnounce", ["name": view.title(id, def)]))
   }
 
-  /// Takes the new form out again, after asking; the safe answer first. Its steps place nothing:
-  /// the plugin's own position is the layout section's (`FormsPositionField`).
+  /// Takes the new form out again, after asking; the safe answer first. The layout form goes back
+  /// to the one before ➕ if the steps took it (`FormsOptions.cancelSetup`). The steps place
+  /// nothing: the plugin's own position is the layout section's (`FormsPositionField`).
   private func cancel() async {
     let (question, detail) = Confirm.split(L10n.t("formsEditor.steps.cancelQuestion"))
     guard await Confirm.ask(question, detail: detail, confirm: L10n.t("formsEditor.steps.cancelRemove"), destructive: true,
                             cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
     let id = id
+    let before = (setup?.before).flatMap { FormsOptions.entries($0).first?.plugin.object["options"]?.objectValue }
     setup = nil
     selection = nil
     let done = await model.commit(snapshot: .none) { plugins in
       guard let entry = FormsOptions.entries(plugins).first else { return plugins }
       var object = entry.plugin.object
-      let next = FormsOptions.remove(object["options"]?.objectValue ?? JSONObject(), id: id)
+      let next = FormsOptions.cancelSetup(object["options"]?.objectValue ?? JSONObject(), id: id, before: before)
       object["options"] = next.isEmpty ? nil : .object(next)
       var out = plugins
       out[entry.index] = PluginEntry(object: object)

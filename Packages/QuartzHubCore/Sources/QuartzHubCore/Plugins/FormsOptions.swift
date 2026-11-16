@@ -253,6 +253,21 @@ public enum FormsOptions {
     return next
   }
 
+  /// Cancelling a new form's first run: the form out, and the layout form back to what it was
+  /// before ➕ where the steps made the new one it; `remove` alone left none (review 2026-11-16,
+  /// M4). A layout form set to another form meanwhile stays.
+  public static func cancelSetup(_ options: JSONObject, id: String, before: JSONObject?) -> JSONObject {
+    var next = remove(options, id: id)
+    guard options["layoutForm"] == .string(id) else { return next }
+    let old = before?["layoutForm"]
+    switch old {
+    case nil: next["layoutForm"] = nil
+    case .string(let name)? where name.isEmpty || forms(next).contains(where: { $0.id == name }): next["layoutForm"] = old
+    default: break
+    }
+    return next
+  }
+
   /// A copy of a form right after it, under a free id.
   public static func duplicate(_ options: JSONObject, id: String) -> (options: JSONObject, id: String) {
     var list = forms(options).map { ($0.id, $0.def) }

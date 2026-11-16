@@ -50,6 +50,24 @@ public enum MultilanguageOptions {
     public var index: Int
   }
 
+  /// Cancelling a new language's first run: the language out, and the default and the published
+  /// languages back to what they were before ➕, where that still names languages of the site. A
+  /// code renamed or removed meanwhile keeps what `remove` made of it (review 2026-11-16, M4).
+  public static func cancelSetup(_ options: JSONObject, code: String, before: JSONObject?) -> JSONObject {
+    var next = remove(options, languages(options), code: code)
+    let codes = Set(languages(next).map(\.code))
+    func named(_ value: JSONValue?) -> Bool {
+      switch value {
+      case nil: true
+      case .string(let set)?: codes.contains(normalizeCode(set))
+      case .array(let list)?: list.allSatisfy { $0.stringValue.map { codes.contains(normalizeCode($0)) } ?? false }
+      default: false
+      }
+    }
+    for key in ["defaultLanguage", "publishLanguages"] where named(before?[key]) { next[key] = before?[key] }
+    return next
+  }
+
   public static func entries(_ plugins: [PluginEntry]) -> [Entry] {
     plugins.enumerated().compactMap { index, plugin in
       PluginRepository.quartzName(plugin.source) == Self.plugin ? Entry(plugin: plugin, index: index) : nil

@@ -32,6 +32,28 @@ import Testing
     }
   }
 
+  /// Cancelling a new language puts back the default and the published languages from before ➕,
+  /// but never a code the site no longer has (review 2026-11-16, M4).
+  @Test func cancellingANewLanguageRestoresOnlyWhatStillExists() throws {
+    func object(_ text: String) throws -> JSONObject { try #require(try JSJSON.parse(Data(text.utf8)).objectValue) }
+    let before = try object(#"{"languages":["de","en"],"defaultLanguage":"de","publishLanguages":["de"]}"#)
+    let run = try object(#"{"languages":["de","en","fr"],"defaultLanguage":"fr","publishLanguages":["de","fr"]}"#)
+    #expect(MultilanguageOptions.cancelSetup(run, code: "fr", before: before) == before)
+    // "de" renamed to "at" meanwhile: the old values would name a language the site no longer has.
+    let renamed = try object(#"{"languages":["at","en","fr"],"defaultLanguage":"fr","publishLanguages":["at","fr"]}"#)
+    let next = MultilanguageOptions.cancelSetup(renamed, code: "fr", before: before)
+    #expect(next["defaultLanguage"] == .string("at"))
+    #expect(next["publishLanguages"] == .array([.string("at")]))
+    // Gegenprobe: writing back blindly, as before, names "de".
+    var blind = MultilanguageOptions.remove(renamed, MultilanguageOptions.languages(renamed), code: "fr")
+    for key in ["defaultLanguage", "publishLanguages"] { blind[key] = before[key] }
+    #expect(blind["defaultLanguage"] == .string("de"))
+    // Not set before: not set after.
+    let plain = try object(#"{"languages":["de","en"]}"#)
+    let plainRun = try object(#"{"languages":["de","en","fr"],"defaultLanguage":"fr"}"#)
+    #expect(MultilanguageOptions.cancelSetup(plainRun, code: "fr", before: plain) == plain)
+  }
+
   @Test func languagesAndEveryStepAsQuartzControlWritesThem() throws {
     let golden = try #require(Self.golden)
     #expect(golden["readAgainst"] == .string(MultilanguageOptions.readAgainst))

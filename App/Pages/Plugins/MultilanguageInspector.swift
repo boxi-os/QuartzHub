@@ -174,20 +174,17 @@ struct LanguageInspector: View {
   }
 
   /// Takes the new language out again, after asking; the safe answer first. The plugin's options
-  /// get back what the steps changed about the default and the published languages.
+  /// get back the default and the published languages from before ➕, where they still name
+  /// languages of the site (`MultilanguageOptions.cancelSetup`).
   private func cancel() async {
     let (question, detail) = Confirm.split(L10n.t("multilanguageEditor.steps.cancelQuestion"))
     guard await Confirm.ask(question, detail: detail, confirm: L10n.t("multilanguageEditor.steps.cancelRemove"), destructive: true,
                             cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
     let code = language.code
-    let before = (setup?.before).flatMap { MultilanguageOptions.entries($0).first?.plugin.object["options"]?.objectValue } ?? JSONObject()
+    let before = (setup?.before).flatMap { MultilanguageOptions.entries($0).first?.plugin.object["options"]?.objectValue }
     setup = nil
     selection = nil
-    if await MultilanguageTab.update(model, snapshot: .none, { options in
-      var next = MultilanguageOptions.remove(options, MultilanguageOptions.languages(options), code: code)
-      for key in ["defaultLanguage", "publishLanguages"] { next[key] = before[key] }
-      return next
-    }) {
+    if await MultilanguageTab.update(model, snapshot: .none, { MultilanguageOptions.cancelSetup($0, code: code, before: before) }) {
       Announce.post(L10n.t("multilanguageEditor.steps.cancelledAnnounce"))
     }
   }

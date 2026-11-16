@@ -17,6 +17,27 @@ import Testing
   static func c(_ object: JSONObject) -> String { JSJSON.compact(.object(object)) }
   static func undefinedOr(_ value: JSONValue?) -> JSONValue { value ?? .string("__undefined") }
 
+  /// Cancelling a new form gives the layout form back that the steps took from another one, and
+  /// leaves one set meanwhile alone (review 2026-11-16, M4).
+  @Test func cancellingANewFormRestoresTheLayoutForm() throws {
+    func object(_ text: String) throws -> JSONObject { try #require(try JSJSON.parse(Data(text.utf8)).objectValue) }
+    let before = try object(#"{"forms":{"kontakt":{"title":"K"}},"layoutForm":"kontakt"}"#)
+    let run = try object(#"{"forms":{"kontakt":{"title":"K"},"umfrage":{}},"layoutForm":"umfrage"}"#)
+    #expect(FormsOptions.cancelSetup(run, id: "umfrage", before: before) == before)
+    // Gegenprobe: removing the form alone leaves no layout form.
+    #expect(FormsOptions.remove(run, id: "umfrage")["layoutForm"] == .string(""))
+    // No layout form before: none after, not an empty one.
+    let without = try object(#"{"forms":{"kontakt":{"title":"K"}}}"#)
+    let set = try object(#"{"forms":{"kontakt":{"title":"K"},"umfrage":{}},"layoutForm":"umfrage"}"#)
+    #expect(FormsOptions.cancelSetup(set, id: "umfrage", before: without) == without)
+    // Set to another form meanwhile: stays.
+    let other = try object(#"{"forms":{"kontakt":{"title":"K"},"umfrage":{},"neu":{}},"layoutForm":"neu"}"#)
+    #expect(FormsOptions.cancelSetup(other, id: "umfrage", before: before)["layoutForm"] == .string("neu"))
+    // The old one gone meanwhile: nothing to give back.
+    let gone = try object(#"{"forms":{"umfrage":{}},"layoutForm":"umfrage"}"#)
+    #expect(FormsOptions.cancelSetup(gone, id: "umfrage", before: before)["layoutForm"] == .string(""))
+  }
+
   @Test func constantsAreQuartzControls() throws {
     let k = try #require(Self.golden?["constants"])
     #expect(k["readAgainst"] == .string(FormsOptions.readAgainst))
