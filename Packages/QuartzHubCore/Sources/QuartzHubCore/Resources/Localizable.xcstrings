@@ -29165,13 +29165,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bildschirmhoch"
+            "value" : "Bleibt stehen, Komponenten scrollen einzeln"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Screen height"
+            "value" : "Stays put, components scroll one by one"
           }
         }
       }
@@ -29184,13 +29184,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Was die Seitenleiste tut, wenn ihr Inhalt höher als der Bildschirm ist. „Bildschirmhoch“ lässt die einzelnen Komponenten scrollen."
+            "value" : "Was die Seitenleiste beim Scrollen tut, wenn ihr Inhalt höher als das Fenster ist."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "What the sidebar does when its content is taller than the screen. “Screen height” lets the single components scroll."
+            "value" : "What the sidebar does on scrolling when its content is taller than the window."
           }
         }
       }
@@ -29279,13 +29279,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scrollt selbst"
+            "value" : "Bleibt stehen, scrollt als Ganzes"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scrolls itself"
+            "value" : "Stays put, scrolls as a whole"
           }
         }
       }

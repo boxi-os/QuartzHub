@@ -142,16 +142,25 @@ struct StageTab: View {
           viewPicker(ranges: own != nil).pickerStyle(.menu).fixedSize()
         }
       }
+      // Controls only: a sentence among them read as the start of the next one ("…: editorial
+      // Linke Seitenleiste", seen 2026-11-16); what explains stands below as a Note.
       FlowLayout(spacing: 12, minItem: 0, stretch: false) {
-        if let type = facts.pageType {
-          framePicker(facts, type)
-        } else {
-          Text(L10n.t("layoutEditor.pageType.allPagesFrame", ["name": LayoutWords.frame(facts.frameChoice.name)]))
-            .font(.callout).foregroundStyle(.secondary).fixedSize()
-        }
+        if let type = facts.pageType { framePicker(facts, type) }
         if model.features.sidebars {
-          sidebarPicker(facts, "left")
-          sidebarPicker(facts, "right")
+          // The two sides as one pair, side by side or one above the other where the column is too
+          // narrow (fixed side by side, the pair ran past the edge); where the frame ignores them,
+          // greyed with the Note below.
+          ViewThatFits(in: .horizontal) {
+            HStack(spacing: 12) {
+              sidebarPicker(facts, "left")
+              sidebarPicker(facts, "right")
+            }
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+              sidebarPicker(facts, "left")
+              sidebarPicker(facts, "right")
+            }
+          }
+          .disabled(sidebarsIdle(facts))
         }
         if let own {
           Button { editFrame(own) } label: { Label(L10n.t("layoutEditor.stage.editFrame"), systemImage: "rectangle.split.3x3") }
@@ -244,24 +253,28 @@ struct StageTab: View {
   @ViewBuilder private func hints(_ facts: StageFacts) -> some View {
     let dead = facts.override.map { PageTypeOverride.deadExcludes(facts.config, $0) } ?? []
     let unknownFrame: String? = if case .unknown(let name) = facts.frame, model.framesLoaded, model.pluginFrames != nil { name } else { nil }
-    // Quartz renders the sidebar modes in its default frame only (DefaultFrame's
-    // data-sidebar-mode); an own frame is a grid whose areas scroll with the page, and
-    // full-width/minimal have no sidebars (measured on the 5.1 copy of gui-test: no page carried it).
-    let sidebarsIdle: Bool = model.features.sidebars && {
-      switch facts.frame {
-      case .standard, .unknown: false
-      default: true
+    let sidebarsIdle = sidebarsIdle(facts)
+    VStack(alignment: .leading, spacing: Spacing.xs) {
+      if facts.pageType == nil {
+        Note(L10n.t("layoutEditor.pageType.allPagesFrame", ["name": LayoutWords.frame(facts.frameChoice.name)]))
       }
-    }()
-    if facts.pageType != nil || !dead.isEmpty || unknownFrame != nil || sidebarsIdle {
-      VStack(alignment: .leading, spacing: Spacing.xs) {
-        if facts.pageType != nil { Note(L10n.t("layoutEditor.pageType.scopeHint", ["type": facts.typeLabel])) }
-        if sidebarsIdle { Note(L10n.t("layoutEditor.sidebars.idleHint")) }
-        if !dead.isEmpty {
-          Callout(.warning, L10n.t("layoutEditor.excludeDeadHint", ["names": dead.joined(separator: ", ")], count: dead.count))
-        }
-        if let unknownFrame { Callout(.warning, L10n.t("layoutEditor.pageType.unknownFrame", ["frame": unknownFrame])) }
+      if facts.pageType != nil { Note(L10n.t("layoutEditor.pageType.scopeHint", ["type": facts.typeLabel])) }
+      if sidebarsIdle { Note(L10n.t("layoutEditor.sidebars.idleHint")) }
+      if !dead.isEmpty {
+        Callout(.warning, L10n.t("layoutEditor.excludeDeadHint", ["names": dead.joined(separator: ", ")], count: dead.count))
       }
+      if let unknownFrame { Callout(.warning, L10n.t("layoutEditor.pageType.unknownFrame", ["frame": unknownFrame])) }
+    }
+  }
+
+  /// Quartz renders the sidebar modes in its default frame only (DefaultFrame's
+  /// data-sidebar-mode); an own frame is a grid whose areas scroll with the page, and
+  /// full-width/minimal have no sidebars (measured on the 5.1 copy of gui-test: no page carried it).
+  private func sidebarsIdle(_ facts: StageFacts) -> Bool {
+    guard model.features.sidebars else { return false }
+    switch facts.frame {
+    case .standard, .unknown: return false
+    default: return true
     }
   }
 
