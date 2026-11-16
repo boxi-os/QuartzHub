@@ -270,6 +270,8 @@ struct FormsTab: View {
   let state: FormsState
   /// `form:<id>` or `section:<id>`: an id is stable, a row's place is not.
   @Binding var selection: String?
+  /// The form ➕ just created: the inspector sets it up in steps.
+  @Binding var setup: SetupRun?
   let showAllOptions: () -> Void
   @Environment(\.unsavedGuard) private var unsaved
   @State private var adding = false
@@ -507,7 +509,10 @@ struct FormsTab: View {
   private func add(_ id: String, start: String) async {
     selection = "form:\(id)"
     let label = L10n.t("formsEditor.messageLabel")
-    if await FormsTab.update(model, { FormsOptions.withForm($0, id: id, def: FormsOptions.newForm(start, messageLabel: label)) }) {
+    // The inspector takes over in steps; this write is the setup's one snapshot.
+    setup = model.config.map { SetupRun(key: id, before: $0.plugins) }
+    if await FormsTab.update(model, snapshot: .labeled(L10n.t("formsEditor.steps.snapshotLabel", ["id": id])),
+                             { FormsOptions.withForm($0, id: id, def: FormsOptions.newForm(start, messageLabel: label)) }) {
       Announce.post(L10n.t("formsEditor.addedAnnounce", ["id": id]))
     }
   }
@@ -538,9 +543,10 @@ struct FormsTab: View {
 
   /// The plugin's options changed against the newest state; no options left removes the key.
   @discardableResult
-  static func update(_ model: PluginsModel, _ change: @escaping (JSONObject) -> JSONObject) async -> Bool {
+  static func update(_ model: PluginsModel, snapshot: PluginsModel.SnapshotPolicy = .each,
+                     _ change: @escaping (JSONObject) -> JSONObject) async -> Bool {
     var index: Int?
-    let done = await model.commit { plugins in
+    let done = await model.commit(snapshot: snapshot) { plugins in
       guard let entry = FormsOptions.entries(plugins).first else { return plugins }
       index = entry.index
       var object = entry.plugin.object

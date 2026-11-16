@@ -1,7 +1,7 @@
 # Plan: Schritte im Inspektor für die vier eigenen Plugins
 
-Stand 2026-11-16: Punkt 1 und 2 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen,
-Layout-Box), siehe „Umgesetzt“ am Ende; Punkt 3 bis 5 offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
+Stand 2026-11-16: Punkt 1 bis 3 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen,
+Layout-Box, Formulare), siehe „Umgesetzt“ am Ende; Punkt 4 und 5 offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
 Zusätzliche Inhalte, Mehrsprachigkeit, Formulare** (quartz-navigations, quartz-layout-box,
 quartz-multilanguage, quartz-forms).
 
@@ -218,5 +218,26 @@ nur im Code. Das Handbuch beschreibt den Inspektor noch ohne Schritte (Punkt 5).
 - Fehlerhafte Optionen (`brokenOptions`) stehen jetzt im Kopf des Inspektors, in jedem Schritt: Der
   Bau scheitert daran.
 - An der App: Anlegen, Weiter bis „Platz“, zweimal „Früher“, Abbrechen; `diff` gegen die
+  Konfiguration von vorher leer.
+
+### Punkt 3, 2026-11-16: Formulare
+
+- Sieben Schritte (`FormsOptions.steps`): die sechs Teile, die vorher als `Fold` untereinander
+  standen (Allgemein, Felder, Versand, Datenschutz und Verschlüsselung, Spamschutz, Einbinden), dann
+  eine Zusammenfassung (Vorlage, Zahl der Felder, Versandart, Seiten, die es einbinden, und die
+  unbekannten Schlüssel, vorher ein eigener Teil). Die Schlüssel je Schritt sind nur Zuordnung; ein Test
+  prüft, dass jeder Schlüssel von `formKeys` in genau einem Schritt steht und dass die Meldungen des
+  Plugins (`FormsOptions.part`) zum selben Schritt gehen.
+- **Anders als oben geplant:** „Vorlage“ und „Name“ bleiben im Popover von ➕, wie bisher; der
+  Inspektor beginnt bei „Allgemein“. Die Kennung steht weiter über den Schritten, weil Umbenennen
+  jederzeit geht und Seiten betrifft. Der Versand-Schritt richtet keinen fehlenden globalen Versand
+  ein: Das bleibt der Abschnitt „Versand“ der Einstellungen für alle Formulare, auf den die Meldung
+  zeigt. „Einbinden“ bietet keinen Layout-Platz über den Platz-Schritt: Das Layout-Formular ist ein
+  Schalter des Plugins (`layoutForm`), sein Platz der Abschnitt „Layout-Formular“.
+- **Probleme am Schritt**: `InspectorStep.problems`, gezählt wie vorher je Teil. An der App: Ein neues
+  „Kontakt“ mit Relay ohne Empfänger zeigt „ein Problem“ an „Versand“.
+- Umbenennen im ersten Durchlauf nimmt den Lauf und „wo war ich“ mit zur neuen Kennung.
+- `@SceneStorage("forms.parts")` (welche Teile offen standen) ist ersetzt durch `forms.step`.
+- An der App: Anlegen, alle Schritte bis zur Zusammenfassung, Abbrechen; `diff` gegen die
   Konfiguration von vorher leer.
 

@@ -7,6 +7,9 @@ struct InspectorStep: Identifiable, Equatable {
   let title: String
   /// The answers before make it do nothing: said with a word, still reachable.
   var noEffect = false
+  /// What the plugin's own check finds in this step: on the step, so a step out of sight does not
+  /// hide it.
+  var problems = 0
 }
 
 /// A setup in steps, in the inspector (docs/plan-assistenten.md). Every step writes at once, as the
@@ -88,6 +91,12 @@ struct InspectorSteps<Content: View>: View {
           .foregroundStyle(item.noEffect && !isCurrent ? .secondary : .primary)
         Spacer()
         if item.noEffect { WordBadge(text: L10n.t("pluginOptions.noEffect")) }
+        if item.problems > 0 {
+          Text(L10n.t("inspectorSteps.problems", ["count": String(item.problems)], count: item.problems))
+            .font(.caption2.weight(.semibold)).foregroundStyle(.white)
+            .padding(.horizontal, 5).padding(.vertical, 1)
+            .background(Capsule().fill(.red))
+        }
       }
       .padding(.vertical, 3)
       .contentShape(Rectangle())
@@ -107,8 +116,8 @@ struct InspectorSteps<Content: View>: View {
 
 /// An entry ➕ just created, while the inspector sets it up for the first time.
 struct SetupRun: Equatable {
-  /// The new entry's class, its key while the run lasts.
-  let className: String
+  /// What names the new entry while the run lasts: a navigation's or a box's class, a form's id.
+  let key: String
   /// `plugins:` before ➕: cancelling puts back the priorities the placement step renumbered.
   let before: [PluginEntry]
 }

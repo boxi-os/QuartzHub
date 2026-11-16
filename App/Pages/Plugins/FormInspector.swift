@@ -3,11 +3,13 @@ import QuartzHubCore
 import SwiftUI
 
 /// One form in the inspector (QuartzControl's `FormPanel`): its id, which renames it, and its
-/// settings in parts that fold. The plugin's problems with a part stand on its title, so a folded
-/// part does not hide them; all of them stand above the parts as well.
+/// settings in steps (docs/plan-assistenten.md, `InspectorSteps`), the parts that folded before.
+/// The plugin's problems with a part stand on its step, so a step out of sight does not hide
+/// them; all of them stand above the steps as well.
 ///
 /// A value the template already gives is not written: written again, it would stay when the
-/// template changes. Every write goes against the newest state of the form.
+/// template changes. Every write goes against the newest state of the form, with one snapshot per
+/// setup as in the navigations' inspector.
 struct FormInspector: View {
   let id: String
   let def: JSONObject
@@ -15,14 +17,18 @@ struct FormInspector: View {
   @Bindable var model: PluginsModel
   let state: FormsState
   @Binding var selection: String?
+  /// The form ➕ just created, while its first run lasts.
+  @Binding var setup: SetupRun?
   @Environment(\.unsavedGuard) private var unsaved
 
-  /// Which parts stand open, for every form, as `general=1;fields=0`. General and fields start open.
-  @SceneStorage("forms.parts") private var openParts = ""
+  /// "<id>:<step>": where this window was, by the form's id.
+  @SceneStorage("forms.step") private var stored = ""
   @State private var idDraft: String?
   /// A rename that was not done puts the id back in its field.
   @State private var idReset = 0
   @State private var copied: String?
+  @State private var visited: Set<String> = []
+  @State private var snapshotTaken = false
 
   private var lang: String { FormsView.lang }
   private var options: JSONObject { view.options }
@@ -31,10 +37,25 @@ struct FormInspector: View {
   private var effective: JSONObject { FormsOptions.effectiveForm(def) }
   private var languages: [String] { model.config?.siteLanguages ?? [] }
   private var formSchema: NormalizedOptionSchema? { FormsOptions.formSchema(view.schema) }
+  private var firstRun: Bool { setup?.key == id }
+
+  private var current: Binding<String> {
+    Binding(get: {
+      guard let split = stored.lastIndex(of: ":"), stored[..<split] == id else { return "general" }
+      return String(stored[stored.index(after: split)...])
+    }, set: { step in
+      stored = "\(id):\(step)"
+      visited.insert(step)
+    })
+  }
 
   var body: some View {
     let messages = view.messages { $0.form == id }
     let problem = idDraft.flatMap { FormsOptions.formIdProblem($0, existing: view.ids, own: id) }
+    let steps = FormsOptions.steps.map { step in
+      InspectorStep(id: step.id, title: Self.title(step.id),
+                    problems: messages.problems.filter { FormsOptions.step(of: FormsOptions.part($0)) == step.id }.count)
+    }
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
@@ -70,58 +91,115 @@ struct FormInspector: View {
         if let problem { FieldProblem(FormsView.idProblem(problem)) }
         FormMessages(problems: messages.problems, hints: messages.hints)
       }
-      part(.general, L10n.t("formsEditor.parts.general"), "slider.horizontal.3", messages.problems) { general }
-      part(.fields, L10n.t("formsEditor.parts.fields"), "list.bullet.rectangle", messages.problems) { fields }
-      part(.sending, L10n.t("formsEditor.parts.sending"), "paperplane", messages.problems) { sending }
-      part(.privacy, L10n.t("formsEditor.parts.privacy"), "lock", messages.problems) { privacy }
-      part(.spam, L10n.t("formsEditor.parts.spam"), "checkmark.shield", messages.problems) { spam }
-      part(.embed, L10n.t("formsEditor.parts.embed"), "chevron.left.forwardslash.chevron.right", messages.problems) { embed }
-      if hasUnknown {
-        part(.more, L10n.t("pluginOptions.moreKeys"), "wrench.and.screwdriver", messages.problems) { more }
+      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: visited, finish: finish,
+                     cancel: { Task { await cancel() } }) { step in
+        Section { Note(Self.hint(step.id)) }
+        Section {
+          VStack(alignment: .leading, spacing: 14) { stepContent(step.id, messages: messages) }
+        }
       }
     }
     .formStyle(.grouped)
     .disabled(model.busy)
-  }
-
-  // MARK: Parts
-
-  private func isOpen(_ part: FormsOptions.Part) -> Bool {
-    for item in openParts.split(separator: ";") {
-      let pair = item.split(separator: "=")
-      if pair.count == 2, pair[0] == part.rawValue { return pair[1] == "1" }
+    .onAppear {
+      if firstRun { visited = [current.wrappedValue] }
     }
-    return part == .general || part == .fields
   }
 
-  private func setOpen(_ part: FormsOptions.Part, _ open: Bool) {
-    var items = openParts.split(separator: ";").map(String.init).filter { !$0.hasPrefix("\(part.rawValue)=") }
-    items.append("\(part.rawValue)=\(open ? 1 : 0)")
-    openParts = items.joined(separator: ";")
-  }
+  // MARK: Steps
 
-  private func part<Content: View>(_ part: FormsOptions.Part, _ title: String, _ symbol: String, _ problems: [FormsOptions.PlacedMessage],
-                                   @ViewBuilder content: @escaping () -> Content) -> some View {
-    let count = problems.filter { FormsOptions.part($0) == part }.count
-    return Section {
-      Fold(isExpanded: Binding(get: { isOpen(part) }, set: { setOpen(part, $0) })) {
-        VStack(alignment: .leading, spacing: 14) { content() }
-          .padding(.top, 6)
-      } label: {
-        // The whole head folds, as QuartzControl's did: the system's label left only the chevron
-        // to click (measured 2026-11-09).
-        Button { setOpen(part, !isOpen(part)) } label: {
-          HStack {
-            Label(title, systemImage: symbol).fontWeight(.medium)
-            Spacer()
-            if count > 0 { FormsView.problemBadge(count) }
-          }
-          .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-      }
-      .accessibilityIdentifier("forms.part.\(part.rawValue)")
+  @ViewBuilder private func stepContent(_ id: String, messages: (problems: [FormsOptions.PlacedMessage], hints: [FormsOptions.PlacedMessage])) -> some View {
+    switch id {
+    case "general": general
+    case "fields": fields
+    case "sending": sending
+    case "privacy": privacy
+    case "spam": spam
+    case "embed": embed
+    default: summary(messages)
     }
+  }
+
+  /// The last step: what the plugin's check says about this form, the form at a glance, and the
+  /// keys QuartzHub does not know.
+  @ViewBuilder private func summary(_ messages: (problems: [FormsOptions.PlacedMessage], hints: [FormsOptions.PlacedMessage])) -> some View {
+    if messages.problems.isEmpty && messages.hints.isEmpty && state.check != nil {
+      Note(L10n.t("formsEditor.steps.checkOk"))
+    }
+    LabeledContent(L10n.t("formsEditor.template"), value: templateName.map(FormsView.templateName) ?? L10n.t("formsEditor.noTemplate"))
+    LabeledContent(L10n.t("formsEditor.steps.summaryFields"), value: String(FormsOptions.fields(def).count))
+    LabeledContent(L10n.t("formsEditor.parts.sending"), value: FormsView.kindLabel(FormsOptions.transportKind(def, options)))
+    if state.usages != nil {
+      let count = view.pages(self.id).count
+      LabeledContent(L10n.t("formsEditor.steps.summaryPages"),
+                     value: L10n.t("formsEditor.steps.summaryPagesCount", ["count": String(count)], count: count))
+    }
+    if hasUnknown {
+      Text(L10n.t("pluginOptions.moreKeys")).font(.callout.weight(.semibold))
+      more
+    }
+  }
+
+  static func title(_ id: String) -> String {
+    switch id {
+    case "general": L10n.t("formsEditor.parts.general")
+    case "fields": L10n.t("formsEditor.parts.fields")
+    case "sending": L10n.t("formsEditor.parts.sending")
+    case "privacy": L10n.t("formsEditor.parts.privacy")
+    case "spam": L10n.t("formsEditor.parts.spam")
+    case "embed": L10n.t("formsEditor.parts.embed")
+    case "finish": L10n.t("formsEditor.steps.finish")
+    default: id
+    }
+  }
+
+  static func hint(_ id: String) -> String {
+    switch id {
+    case "general": L10n.t("formsEditor.steps.generalHint")
+    case "fields": L10n.t("formsEditor.steps.fieldsHint")
+    case "sending": L10n.t("formsEditor.steps.sendingHint")
+    case "privacy": L10n.t("formsEditor.steps.privacyHint")
+    case "spam": L10n.t("formsEditor.steps.spamHint")
+    case "embed": L10n.t("formsEditor.steps.embedHint")
+    case "finish": L10n.t("formsEditor.steps.finishHint")
+    default: ""
+    }
+  }
+
+  /// One snapshot per setup: ➕ took it for a new form; an existing one takes it with the first
+  /// write after the inspector opened.
+  private func policy() -> PluginsModel.SnapshotPolicy {
+    if firstRun || snapshotTaken { return .none }
+    snapshotTaken = true
+    return .each
+  }
+
+  private func finish() {
+    setup = nil
+    snapshotTaken = true
+    Announce.post(L10n.t("formsEditor.steps.doneAnnounce", ["name": view.title(id, def)]))
+  }
+
+  /// Takes the new form out again, after asking; the safe answer first. The plugin's entry gets
+  /// back what it was before ➕ where nothing else changed it since.
+  private func cancel() async {
+    let (question, detail) = Confirm.split(L10n.t("formsEditor.steps.cancelQuestion"))
+    guard await Confirm.ask(question, detail: detail, confirm: L10n.t("formsEditor.steps.cancelRemove"), destructive: true,
+                            cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
+    let id = id
+    let before = setup?.before ?? []
+    setup = nil
+    selection = nil
+    let done = await model.commit(snapshot: .none) { plugins in
+      guard let entry = FormsOptions.entries(plugins).first else { return plugins }
+      var object = entry.plugin.object
+      let next = FormsOptions.remove(object["options"]?.objectValue ?? JSONObject(), id: id)
+      object["options"] = next.isEmpty ? nil : .object(next)
+      var out = plugins
+      out[entry.index] = PluginEntry(object: object)
+      return LayoutEntries.restoringPriorities(out, from: before)
+    }
+    if done { Announce.post(L10n.t("formsEditor.steps.cancelledAnnounce")) }
   }
 
   @ViewBuilder private var general: some View {
@@ -435,7 +513,7 @@ struct FormInspector: View {
   private func change(_ transform: @escaping (JSONObject) -> JSONObject) async -> Bool {
     let id = id
     let fallback = def
-    return await FormsTab.update(model) { options in
+    return await FormsTab.update(model, snapshot: policy()) { options in
       let current = FormsOptions.forms(options).first { $0.id == id }?.def ?? fallback
       return FormsOptions.withForm(options, id: id, def: transform(current))
     }
@@ -513,7 +591,7 @@ struct FormInspector: View {
 
   private func setLayoutForm(_ on: Bool) async {
     let id = id
-    if await FormsTab.update(model, { options in
+    if await FormsTab.update(model, snapshot: policy(), { options in
       var next = options
       next["layoutForm"] = .string(on ? id : "")
       return next
@@ -537,7 +615,10 @@ struct FormInspector: View {
       }
     }
     selection = "form:\(to)"
-    guard await FormsTab.update(model, { FormsOptions.rename($0, from: from, to: to) }) else { return }
+    // The first run and "where was I" follow the form to its new id.
+    if firstRun, let run = setup { setup = SetupRun(key: to, before: run.before) }
+    if let split = stored.lastIndex(of: ":"), stored[..<split] == from { stored = "\(to):\(stored[stored.index(after: split)...])" }
+    guard await FormsTab.update(model, snapshot: policy(), { FormsOptions.rename($0, from: from, to: to) }) else { return }
     Announce.post(L10n.t("formsEditor.renamedAnnounce", ["from": from, "to": to]))
     // A captcha secret of the form's own is stored under its id; it goes along once the new id is
     // in the file (nothing happens when there is none).

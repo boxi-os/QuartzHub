@@ -69,6 +69,8 @@ struct PluginsPage: View {
   @State private var navigationSetup: SetupRun?
   /// The box ➕ just created, likewise.
   @State private var boxSetup: SetupRun?
+  /// The form ➕ just created, likewise.
+  @State private var formSetup: SetupRun?
 
   init(project: ProjectContext) {
     self.project = project
@@ -110,7 +112,7 @@ struct PluginsPage: View {
             multilanguageSchema = await PluginSchemaReader.shared.optionSchema(project: project.path, source: source, runtime: environment.runtime)
           }
         case .forms:
-          FormsTab(model: model, state: forms, selection: $formSelected) {
+          FormsTab(model: model, state: forms, selection: $formSelected, setup: $formSetup) {
             if let entry = FormsOptions.entries(model.config?.plugins ?? []).first { showAllOptions(entry.plugin, index: entry.index) }
           }
           .accessibilityElement(children: .contain)
@@ -170,7 +172,7 @@ struct PluginsPage: View {
       } else if tab == .forms, let entry = FormsOptions.entries(model.config?.plugins ?? []).first, let formSelected {
         let view = FormsView(entry: entry, state: forms)
         if formSelected.hasPrefix("form:"), let form = view.forms.first(where: { "form:\($0.id)" == formSelected }) {
-          FormInspector(id: form.id, def: form.def, view: view, model: model, state: forms, selection: $formSelected)
+          FormInspector(id: form.id, def: form.def, view: view, model: model, state: forms, selection: $formSelected, setup: $formSetup)
             .id(formSelected)
         } else if formSelected.hasPrefix("section:"), let section = view.sections.first(where: { "section:\($0.id)" == formSelected }) {
           FormsSectionInspector(id: section.id, view: view, model: model, state: forms, selection: $formSelected)

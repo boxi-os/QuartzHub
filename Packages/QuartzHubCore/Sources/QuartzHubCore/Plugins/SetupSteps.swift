@@ -122,3 +122,24 @@ extension LayoutBoxes {
     return SetupSteps.hasEffect(step, in: steps, options: options, fields: fields) { silenced($0) }
   }
 }
+
+extension FormsOptions {
+  /// A form's steps: the parts its inspector had as folds, in their order, then a summary with the
+  /// plugin's check and the keys QuartzHub does not know. The keys are the form's own (`formKeys`);
+  /// the inspector draws every step itself, so they say only which step a key and the plugin's
+  /// messages about it belong to.
+  public static let steps: [SetupStep] = [
+    SetupStep(id: "general", keys: ["template", "title", "description", "submitLabel", "success", "className"]),
+    SetupStep(id: "fields", keys: ["fields"]),
+    SetupStep(id: "sending", keys: ["recipient", "subject", "transport"]),
+    SetupStep(id: "privacy", keys: ["encryption", "anonymous", "pageContext"]),
+    SetupStep(id: "spam", keys: ["spam"]),
+    SetupStep(id: "embed"),
+    SetupStep(id: "finish", part: .finish)
+  ]
+
+  /// The step that shows a part's messages: the unknown keys stand in the summary.
+  public static func step(of part: Part) -> String {
+    part == .more ? "finish" : part.rawValue
+  }
+}

@@ -191,7 +191,7 @@ struct NavigationsTab: View {
     let count = instances.count
     selection = count + 1
     // The inspector takes over in steps; this write is the setup's one snapshot.
-    setup = object["options"]?["className"]?.stringValue.map { SetupRun(className: $0, before: plugins) }
+    setup = object["options"]?["className"]?.stringValue.map { SetupRun(key: $0, before: plugins) }
     let label = L10n.t("navigationsEditor.steps.snapshotLabel", ["variant": NavigationVariants.catalog(NavigationVariants.label(variant), nil)])
     if await model.commit(snapshot: .labeled(label), { $0 + [PluginEntry(object: object)] }) {
       Announce.post(L10n.t("navigationsEditor.addedAnnounce", ["variant": NavigationVariants.catalog(NavigationVariants.label(variant), nil),
@@ -295,7 +295,7 @@ struct NavigationInspector: View {
 
   private var language: OptionFormText.Language { L10n.language == "en" ? .en : .de }
   private var entryKey: String { item.options["className"]?.stringValue ?? "#\(item.occurrence)" }
-  private var firstRun: Bool { setup != nil && setup?.className == item.options["className"]?.stringValue }
+  private var firstRun: Bool { setup != nil && setup?.key == item.options["className"]?.stringValue }
   private var fields: [OptionField] { schema?.schema?.fields ?? [] }
 
   private var current: Binding<String> {

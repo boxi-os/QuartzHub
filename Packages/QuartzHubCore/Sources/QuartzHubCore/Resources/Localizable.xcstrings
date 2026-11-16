@@ -18255,6 +18255,353 @@
         }
       }
     },
+    "formsEditor.steps.cancelQuestion" : {
+      "comment" : "FormInspector: asked by Einrichten abbrechen; question, blank line, detail",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das neue Formular entfernen?\n\nEs steht schon in der Konfiguration. Entfernen nimmt es mit allem, was du in den Schritten eingestellt hast, wieder heraus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the new form?\n\nIt is already in the configuration. Removing it takes it out again, with everything set in the steps."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.cancelRemove" : {
+      "comment" : "FormInspector: the destructive answer to cancelQuestion",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formular entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Form"
+          }
+        }
+      }
+    },
+    "formsEditor.steps.cancelledAnnounce" : {
+      "comment" : "FormInspector: VoiceOver after cancelling the setup",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neues Formular entfernt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New form removed."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.checkOk" : {
+      "comment" : "FormInspector, step Zusammenfassung: no messages for the form",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Prüfung des Plugins findet an diesem Formular nichts."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The plugin's check finds nothing wrong with this form."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.doneAnnounce" : {
+      "comment" : "FormInspector: VoiceOver after Fertig",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formular „{{name}}“ eingerichtet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Form “{{name}}” set up."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.embedHint" : {
+      "comment" : "FormInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie eine Seite das Formular zeigt, und wo es schon steht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How a page shows the form, and where it already appears."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.fieldsHint" : {
+      "comment" : "FormInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Felder, die das Formular abfragt, in ihrer Reihenfolge."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The fields the form asks for, in their order."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.finish" : {
+      "comment" : "FormInspector: the last step",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfassung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "formsEditor.steps.finishHint" : {
+      "comment" : "FormInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was die Prüfung des Plugins zu diesem Formular sagt, dazu Angaben, die QuartzHub nicht kennt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What the plugin's check says about this form, and settings QuartzHub does not know."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.generalHint" : {
+      "comment" : "FormInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage, Überschrift und was nach dem Absenden erscheint."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Template, heading, and what appears after sending."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.privacyHint" : {
+      "comment" : "FormInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschlüsselung und welche Angaben eine Nachricht mitbringt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encryption, and what a message brings along."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.sendingHint" : {
+      "comment" : "FormInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wohin eine Nachricht geht und mit welchem Betreff."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where a message goes, and with which subject."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.snapshotLabel" : {
+      "comment" : "Label of the one snapshot taken when ➕ creates a form (Snapshots page)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formular einrichten: {{id}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up form: {{id}}"
+          }
+        }
+      }
+    },
+    "formsEditor.steps.spamHint" : {
+      "comment" : "FormInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schutz vor Spam nur für dieses Formular, sonst gilt der für alle."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spam protection for this form only; otherwise the one for all forms applies."
+          }
+        }
+      }
+    },
+    "formsEditor.steps.summaryFields" : {
+      "comment" : "FormInspector, step Zusammenfassung: label before the number of fields",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Felder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fields"
+          }
+        }
+      }
+    },
+    "formsEditor.steps.summaryPages" : {
+      "comment" : "FormInspector, step Zusammenfassung: label before the number of pages",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingebunden auf"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embedded on"
+          }
+        }
+      }
+    },
+    "formsEditor.steps.summaryPagesCount" : {
+      "comment" : "FormInspector, step Zusammenfassung: value after summaryPages",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "einer Seite"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Seiten"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "one page"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} pages"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "formsEditor.subject" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -23024,6 +23371,49 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Next"
+          }
+        }
+      }
+    },
+    "inspectorSteps.problems" : {
+      "comment" : "InspectorSteps: badge on a step the plugin's check finds problems in",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "ein Problem"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Probleme"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "one problem"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} problems"
+                }
+              }
+            }
           }
         }
       }

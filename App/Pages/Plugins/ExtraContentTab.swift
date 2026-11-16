@@ -187,7 +187,7 @@ struct ExtraContentTab: View {
     object["layout"] = .object(JSONObject([("position", .string(position)), ("priority", .number((priorities.max() ?? 0) + 10))]))
     selection = boxes.count + 1
     // The inspector takes over in steps; this write is the setup's one snapshot.
-    setup = object["options"]?["className"]?.stringValue.map { SetupRun(className: $0, before: plugins) }
+    setup = object["options"]?["className"]?.stringValue.map { SetupRun(key: $0, before: plugins) }
     if await model.commit(snapshot: .labeled(L10n.t("extraContent.steps.snapshotLabel")), { $0 + [PluginEntry(object: object)] }) {
       Announce.post(L10n.t("extraContent.addedAnnounce", ["position": InstalledTab.positionTitle(position)]))
     }
@@ -271,7 +271,7 @@ struct BoxInspector: View {
 
   private var options: JSONObject { box.plugin.object["options"]?.objectValue ?? JSONObject() }
   private var entryKey: String { InstanceClass.own(box.plugin) ?? "#\(box.occurrence)" }
-  private var firstRun: Bool { setup != nil && setup?.className == InstanceClass.own(box.plugin) }
+  private var firstRun: Bool { setup != nil && setup?.key == InstanceClass.own(box.plugin) }
 
   private var current: Binding<String> {
     Binding(get: {

@@ -110,4 +110,28 @@ import Testing
                                         installed: LayoutBoxes.readAgainst), "\(id)")
     }
   }
+
+  /// Every key of a form has one step, and it is the step the plugin's messages about it go to.
+  @Test func formStepsAgreeWithTheMessages() throws {
+    var seen: [String: String] = [:]
+    for step in FormsOptions.steps {
+      for key in step.keys {
+        #expect(seen[key] == nil, "\(key) twice")
+        seen[key] = step.id
+      }
+    }
+    #expect(Set(seen.keys) == FormsOptions.formKeys)
+    for (key, step) in seen {
+      let message = FormsOptions.PlacedMessage(text: "", form: "contact", field: nil, section: nil, rest: "\(key): wrong")
+      #expect(FormsOptions.step(of: FormsOptions.part(message)) == step, "\(key)")
+    }
+    // An unknown key's message lands in the summary, a field's in the fields.
+    #expect(FormsOptions.step(of: FormsOptions.part(FormsOptions.PlacedMessage(text: "", form: "contact", field: nil, section: nil,
+                                                                               rest: "colour: wrong"))) == "finish")
+    #expect(FormsOptions.step(of: FormsOptions.part(FormsOptions.PlacedMessage(text: "", form: "contact", field: 2, section: nil,
+                                                                               rest: "x"))) == "fields")
+    for part in FormsOptions.Part.allCases {
+      #expect(FormsOptions.steps.contains { $0.id == FormsOptions.step(of: part) }, "\(part)")
+    }
+  }
 }
