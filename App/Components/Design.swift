@@ -630,3 +630,18 @@ extension Fold where Label == Text {
     self.label = { Text(title) }
   }
 }
+
+// MARK: - ProblemBadge
+
+/// How many problems the plugin's check finds, on a row or a step: filled, so it reads on a
+/// selected row too. One look for the forms' list, the fields and the steps in the inspector.
+struct ProblemBadge: View {
+  let count: Int
+
+  var body: some View {
+    Text(L10n.t("formsEditor.check.problemBadge", ["count": String(count)], count: count))
+      .font(.caption2.weight(.semibold)).foregroundStyle(.white)
+      .padding(.horizontal, 5).padding(.vertical, 1)
+      .background(Capsule().fill(.red))
+  }
+}

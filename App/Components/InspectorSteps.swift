@@ -91,12 +91,7 @@ struct InspectorSteps<Content: View>: View {
           .foregroundStyle(item.noEffect && !isCurrent ? .secondary : .primary)
         Spacer()
         if item.noEffect { WordBadge(text: L10n.t("pluginOptions.noEffect")) }
-        if item.problems > 0 {
-          Text(L10n.t("inspectorSteps.problems", ["count": String(item.problems)], count: item.problems))
-            .font(.caption2.weight(.semibold)).foregroundStyle(.white)
-            .padding(.horizontal, 5).padding(.vertical, 1)
-            .background(Capsule().fill(.red))
-        }
+        if item.problems > 0 { ProblemBadge(count: item.problems) }
       }
       .padding(.vertical, 3)
       .contentShape(Rectangle())

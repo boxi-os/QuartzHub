@@ -247,14 +247,6 @@ import SwiftUI
     case .taken: L10n.t("formsEditor.idProblem.taken")
     }
   }
-
-  /// Filled, so it reads on a selected row too.
-  static func problemBadge(_ count: Int) -> some View {
-    Text(L10n.t("formsEditor.check.problemBadge", ["count": String(count)], count: count))
-      .font(.caption2.weight(.semibold)).foregroundStyle(.white)
-      .padding(.horizontal, 5).padding(.vertical, 1)
-      .background(Capsule().fill(.red))
-  }
 }
 
 /// Formulare (QuartzControl's `routes/Plugins/Forms.tsx`). Like quartz-multilanguage the plugin is
@@ -392,7 +384,7 @@ struct FormsTab: View {
         Text(view.subtitle(id, def)).font(.callout).foregroundStyle(.secondary)
       }
       Spacer()
-      if problems > 0 { FormsView.problemBadge(problems) }
+      if problems > 0 { ProblemBadge(count: problems) }
       if view.layoutForm == id { WordBadge(text: L10n.t("formsEditor.layoutBadge"), tint: .green) }
       if FormsOptions.isAnonymous(def) { WordBadge(text: L10n.t("formsEditor.anonymousBadge")) }
       Button { Task { await duplicate(id) } } label: {
@@ -427,7 +419,7 @@ struct FormsTab: View {
         if !line.isEmpty { Text(line).font(.callout).foregroundStyle(.secondary) }
       }
       Spacer()
-      if problems > 0 { FormsView.problemBadge(problems) }
+      if problems > 0 { ProblemBadge(count: problems) }
     }
     .padding(.vertical, 2)
     .tag("section:\(id)")

@@ -23375,49 +23375,6 @@
         }
       }
     },
-    "inspectorSteps.problems" : {
-      "comment" : "InspectorSteps: badge on a step the plugin's check finds problems in",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "ein Problem"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "{{count}} Probleme"
-                }
-              }
-            }
-          }
-        },
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "one problem"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "{{count}} problems"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "inspectorSteps.stateCurrent" : {
       "comment" : "InspectorSteps: VoiceOver value of the shown step",
       "extractionState" : "manual",
@@ -40440,13 +40397,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mit der Variante „{{variant}}“ wirkt in diesem Schritt nichts. Die Optionen hier gehören zu anderen Varianten."
+            "value" : "Mit der Variante „{{variant}}“ wirkt in diesem Schritt nichts: Sie liest diese Optionen nicht oder verwendet sie nicht."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "With the “{{variant}}” variant, nothing in this step has an effect. The options here belong to other variants."
+            "value" : "With the “{{variant}}” variant, nothing in this step has an effect: it does not read these options, or does not use them."
           }
         }
       }
@@ -41121,13 +41078,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "diese"
+            "value" : "dieser Eintrag"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "this one"
+            "value" : "this entry"
           }
         }
       }

@@ -120,7 +120,7 @@ struct FormFieldsEditor: View {
         }
         .buttonStyle(.plain)
         .accessibilityValue(isOpen ? L10n.t("formsEditor.fieldExpanded") : L10n.t("formsEditor.fieldCollapsed"))
-        if !problems.isEmpty { FormsView.problemBadge(problems.count) }
+        if !problems.isEmpty { ProblemBadge(count: problems.count) }
         if let condition { WordBadge(text: L10n.t("formsEditor.conditionalBadge")).help(condition).accessibilityLabel(condition) }
         if required && !optionalByAnonymous { WordBadge(text: L10n.t("formsEditor.requiredBadge")) }
         if optionalByAnonymous { WordBadge(text: L10n.t("formsEditor.optionalByAnonymousBadge"), tint: .orange) }
