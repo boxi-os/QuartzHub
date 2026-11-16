@@ -12,7 +12,7 @@ import Testing
   }
 
   static let old = fields("schema.json")
-  static let current = fields("schema-0.5.0.json")
+  static let current = fields("schema-0.5.1.json")
 
   @Test func everyOptionHasExactlyOneStep() throws {
     for fields in [Self.old, Self.current] {
@@ -28,6 +28,8 @@ import Testing
     let assigned = SetupSteps.assign(NavigationVariants.steps, fields: Self.current)
     #expect(assigned["variant"] == "variant")
     #expect(assigned["rail"] == "look" && assigned["align"] == "look")
+    // 0.5.1: the dividers stand with the labels and icons, `rail.startPinned` inside `rail`.
+    #expect(assigned["dividers"] == "labels")
     #expect(assigned["rootPath"] == "pages" && assigned["hideDrafts"] == "hide" && assigned["sort"] == "hide")
     #expect(assigned["mobile"] == "mobile" && assigned["title"] == "labels" && assigned["className"] == "finish")
   }

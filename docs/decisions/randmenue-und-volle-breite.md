@@ -27,6 +27,9 @@ Menü und die Rail bekommt nur Styles.
 - **Mit dem Release 0.5.0** (2026-11-16) liest QuartzHub gegen 0.5.0 (`readAgainst`). Ein Projekt
   mit 0.4.x bekommt im Inspektor den Hinweis, dass QuartzHub gegen eine andere Fassung gelesen hat;
   die Regeln seiner zehn Varianten sind dieselben, die Rail-Kachel fehlt dort (Schema).
+- **0.5.1** (2026-11-16, nach dem Ausprobieren): Trennlinien (`navDivider`, `dividers`), `rail.startPinned`
+  und das Einklappen nach dem Lösen der Pinnadel. QuartzHub liest gegen 0.5.1; `dividers` steht im Schritt
+  „Beschriftung und Icons“ und wirkt bei `select` und `pager` nicht.
 
 ## Bereiche über die volle Fensterbreite
 

@@ -330,6 +330,21 @@
         }
       }
     },
+    "dividers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Paths of pages and folders with a line before them, e.g. `[\"blog\", \"about\"]`; the same as `navDivider: true` in their frontmatter.",
+      "x-quartz-group": "Labels and icons",
+      "x-quartz-order": 530,
+      "x-quartz-l10n": {
+        "de": {
+          "description": "Pfade von Seiten und Ordnern, vor denen eine Trennlinie steht, z. B. `[\"blog\", \"about\"]`; dasselbe wie `navDivider: true` in ihrem Frontmatter.",
+          "group": "Beschriftung und Symbole"
+        }
+      }
+    },
     "rootPath": {
       "type": "string",
       "description": "Folder the navigation starts at, e.g. `docs`. Defaults to the site root.",
@@ -590,6 +605,15 @@
           "x-quartz-l10n": {
             "de": {
               "description": "Symbol vor dem Titel, wenn `icons` es zeigt: kurzer Text, ein Emoji oder ein Lucide-Icon als `lucide:<name>`. Standard: `navIcon`."
+            }
+          }
+        },
+        "divider": {
+          "type": "string",
+          "description": "`true` draws a line before the page, or before the folder when set on its index page. Defaults to `navDivider`.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "`true` zeichnet eine Trennlinie vor der Seite, auf der Indexseite eines Ordners vor dem Ordner. Standard: `navDivider`."
             }
           }
         }
@@ -1055,6 +1079,15 @@
           "x-quartz-l10n": {
             "de": {
               "description": "`rail`: Zeigt im offenen Menü einen Button zum Anheften. Ein angeheftetes Menü bleibt bei Klicks daneben, Escape und Seitenwechseln offen und wird auf jeder Seite wiederhergestellt, bis es gelöst oder mit dem Menü-Button geschlossen wird (in `localStorage` gemerkt, nicht auf kleinen Bildschirmen)."
+            }
+          }
+        },
+        "startPinned": {
+          "type": "boolean",
+          "description": "Start with the menu pinned on wide screens, until a visitor unpins it (remembered in `localStorage`). Needs `pin`. Defaults to `false`.",
+          "x-quartz-l10n": {
+            "de": {
+              "description": "`rail`: Das Menü startet auf breiten Bildschirmen angeheftet, bis jemand es löst (in `localStorage` gemerkt). Braucht `pin`."
             }
           }
         }

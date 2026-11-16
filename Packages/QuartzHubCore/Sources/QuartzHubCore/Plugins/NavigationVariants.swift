@@ -8,8 +8,9 @@ import Foundation
 public enum NavigationVariants {
   /// The plugin's name as the config loader derives it from github:boxi-os/quartz-navigations.
   public static let plugin = "quartz-navigations"
-  /// The version whose render.tsx the tables below are read from: 0.5.0, the first with the rail.
-  public static let readAgainst = "0.5.0"
+  /// The version whose render.tsx the tables below are read from: 0.5.1 (0.5.0 brought the rail,
+  /// 0.5.1 the dividers, `dividers` in `hasNoEffect`).
+  public static let readAgainst = "0.5.1"
   /// Versions whose src/ is the same as that one's: none yet.
   public static let sameCode: [String] = []
   /// What QuartzControl had read its tables from (its golden cases): the rules of its ten variants
