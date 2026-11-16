@@ -27,7 +27,6 @@ struct FormInspector: View {
   /// A rename that was not done puts the id back in its field.
   @State private var idReset = 0
   @State private var copied: String?
-  @State private var visited: Set<String> = []
   @State private var snapshot = SnapshotOnce()
 
   private var lang: String { FormsView.lang }
@@ -45,7 +44,7 @@ struct FormInspector: View {
       return String(stored[stored.index(after: split)...])
     }, set: { step in
       stored = "\(id):\(step)"
-      visited.insert(step)
+      if firstRun { setup?.visited.insert(step) }
     })
   }
 
@@ -91,7 +90,7 @@ struct FormInspector: View {
         if let problem { FieldProblem(FormsView.idProblem(problem)) }
         FormMessages(problems: messages.problems, hints: messages.hints)
       }
-      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: visited, finish: finish,
+      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: setup?.visited ?? [], finish: finish,
                      cancel: { Task { await cancel() } }) { step in
         Section { Note(Self.hint(step.id)) }
         Section {
@@ -102,7 +101,7 @@ struct FormInspector: View {
     .formStyle(.grouped)
     .disabled(model.busy)
     .onAppear {
-      if firstRun { visited = [current.wrappedValue] }
+      if firstRun { setup?.visited.insert(current.wrappedValue) }
     }
   }
 

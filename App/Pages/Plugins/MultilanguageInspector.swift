@@ -17,7 +17,6 @@ struct LanguageInspector: View {
   /// "<code>:<step>": where this window was, by the language's code.
   @SceneStorage("multilanguage.step") private var stored = ""
   @State private var codeDraft: String?
-  @State private var visited: Set<String> = []
   @State private var snapshot = SnapshotOnce()
 
   /// The fields of a language, in the order of the plugin's schema.
@@ -39,7 +38,7 @@ struct LanguageInspector: View {
       return String(stored[stored.index(after: split)...])
     }, set: { step in
       stored = "\(language.code):\(step)"
-      visited.insert(step)
+      if firstRun { setup?.visited.insert(step) }
     })
   }
 
@@ -70,7 +69,7 @@ struct LanguageInspector: View {
           Note(L10n.t("plugins.savesImmediately"))
         }
       }
-      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: visited, finish: finish,
+      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: setup?.visited ?? [], finish: finish,
                      cancel: { Task { await cancel() } }) { step in
         Section { Note(Self.hint(step.id)) }
         stepContent(step.id)
@@ -79,7 +78,7 @@ struct LanguageInspector: View {
     .formStyle(.grouped)
     .disabled(model.busy)
     .onAppear {
-      if firstRun { visited = [current.wrappedValue] }
+      if firstRun { setup?.visited.insert(current.wrappedValue) }
     }
   }
 
@@ -405,6 +404,10 @@ struct SiteLanguageSetup: View {
     .formStyle(.grouped)
     .disabled(model.busy)
     .onAppear { visited.insert(step) }
+    // Left from the summary (a button under „Weitere Bereiche“, the list) the setup is done, as
+    // with „Fertig“: the next one starts with the languages, not in the summary (review
+    // 2026-11-16, nebenbei 4).
+    .onDisappear { if step == "finish" { step = "languages" } }
   }
 
   @ViewBuilder private func content(_ id: String) -> some View {

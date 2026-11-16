@@ -91,6 +91,9 @@ public struct SetupRun: Equatable, Sendable {
   /// The priorities the run's own steps wrote into other entries, by index. ➕ appends the new
   /// entry, so the others keep `before`'s indices.
   public private(set) var placed: [Int: Double] = [:]
+  /// The steps seen, for their check marks. Here and not in the inspector: a form or a language
+  /// renamed in its first run gets a new inspector (`.id`), and the marks went with the old one.
+  public var visited: Set<String> = []
 
   public init(key: String, before: [PluginEntry]) {
     self.key = key
@@ -101,6 +104,7 @@ public struct SetupRun: Equatable, Sendable {
   public func renamed(_ key: String) -> SetupRun {
     var next = SetupRun(key: key, before: before)
     next.placed = placed
+    next.visited = visited
     return next
   }
 

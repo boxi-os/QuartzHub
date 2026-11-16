@@ -266,20 +266,24 @@ struct BoxInspector: View {
   @SceneStorage("extraContent.step") private var stored = ""
   @State private var schema: PluginOptionSchemaResult?
   @State private var loaded = false
-  @State private var visited: Set<String> = []
   @State private var snapshot = SnapshotOnce()
+  /// The step of an entry without a class of its own.
+  @State private var unkeyedStep: String?
 
   private var options: JSONObject { box.plugin.object["options"]?.objectValue ?? JSONObject() }
-  private var entryKey: String { InstanceClass.own(box.plugin) ?? "#\(box.occurrence)" }
+  /// The own class; without one, the step is remembered only while the inspector stands, never
+  /// by the entry's index (docs/conventions.md, „Wo war ich“; review 2026-11-16, nebenbei 3).
+  private var entryKey: String? { InstanceClass.own(box.plugin) }
   private var firstRun: Bool { setup != nil && setup?.key == InstanceClass.own(box.plugin) }
 
   private var current: Binding<String> {
     Binding(get: {
+      guard let entryKey else { return unkeyedStep ?? "kind" }
       guard let split = stored.lastIndex(of: ":"), stored[..<split] == entryKey else { return "kind" }
       return String(stored[stored.index(after: split)...])
     }, set: { step in
-      stored = "\(entryKey):\(step)"
-      visited.insert(step)
+      if let entryKey { stored = "\(entryKey):\(step)" } else { unkeyedStep = step }
+      if firstRun { setup?.visited.insert(step) }
     })
   }
 
@@ -320,7 +324,7 @@ struct BoxInspector: View {
         }))
         .accessibilityIdentifier("extras.inspector.enabled")
       }
-      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: visited, finish: finish,
+      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: setup?.visited ?? [], finish: finish,
                      cancel: { Task { await cancel() } }) { step in
         Section { Note(Self.hint(step.id)) }
         stepContent(step.id, values: options, installed: installed)
@@ -339,7 +343,7 @@ struct BoxInspector: View {
       loaded = true
     }
     .onAppear {
-      if firstRun { visited = [current.wrappedValue] }
+      if firstRun { setup?.visited.insert(current.wrappedValue) }
     }
   }
 
@@ -435,7 +439,7 @@ struct BoxInspector: View {
     let after = PluginEntry(object: OptionSchema.setting(value, at: ["options"], in: box.plugin.object))
     if let to = InstanceClass.own(after), to != InstanceClass.own(box.plugin) {
       if firstRun, let run = setup { setup = run.renamed(to) }
-      if let split = stored.lastIndex(of: ":"), stored[..<split] == entryKey { stored = "\(to):\(stored[stored.index(after: split)...])" }
+      stored = "\(to):\(current.wrappedValue)"
     }
     await model.updateField(box.index, path: ["options"], value: value, snapshot: rule)
   }

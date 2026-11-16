@@ -93,8 +93,11 @@ import Testing
     #expect(restored[3] == entry("d", "left", 20))
     // Gegenprobe: a run that recorded nothing puts nothing back.
     #expect(SetupRun(key: "nav", before: before).restoringPriorities(Array(edited.prefix(4))) == Array(edited.prefix(4)))
-    // A renamed run keeps what it recorded.
-    #expect(run.renamed("nav-2").placed == run.placed && run.renamed("nav-2").key == "nav-2")
+    // A renamed run keeps what it recorded, and the steps seen.
+    var seen = run
+    seen.visited = ["place", "pages"]
+    #expect(seen.renamed("nav-2").placed == run.placed && seen.renamed("nav-2").key == "nav-2")
+    #expect(seen.renamed("nav-2").visited == ["place", "pages"])
   }
 
   /// A first run ends with its entry: removed some other way, the run must not live on and take
