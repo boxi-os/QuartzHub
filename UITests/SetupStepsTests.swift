@@ -130,6 +130,35 @@ final class SetupStepsTests: XCTestCase {
     XCTAssertFalse(any["steps.cancel"].firstMatch.waitForExistence(timeout: 2), "the copy took over the removed box's first run")
   }
 
+  /// M3: the class changed in the summary, the box stays in its first run and in that step.
+  /// Before the fix the inspector fell back to step 1 and „Fertig“ and „Einrichten abbrechen …“
+  /// were gone. Needs the box's schema: quartz-layout-box's package.json from the core's fixtures.
+  func testRenamingTheClassKeepsTheFirstRun() throws {
+    let (profile, project) = try project()
+    let fixture = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+      .appendingPathComponent("Packages/QuartzHubCore/Tests/QuartzHubCoreTests/Fixtures/option-schema/real/.quartz/plugins/quartz-layout-box")
+    let plugin = project.appendingPathComponent(".quartz/plugins/quartz-layout-box")
+    try FileManager.default.createDirectory(at: plugin, withIntermediateDirectories: true)
+    try FileManager.default.copyItem(at: fixture.appendingPathComponent("package.json"), to: plugin.appendingPathComponent("package.json"))
+    let (_, window) = open(profile, project, tab: "Zusätzliche Inhalte", list: "extras.list")
+    let any = window.descendants(matching: .any)
+    any["extras.add"].firstMatch.click()
+    waitFor("the new box written") { self.read(project).contains("className: layout-box-neue-box-2") }
+    any["steps.step.finish"].firstMatch.click()
+    let field = window.textFields.matching(NSPredicate(format: "value == %@", "layout-box-neue-box-2")).firstMatch
+    XCTAssertTrue(field.waitForExistence(timeout: 10), "no field with the class in the summary")
+    field.click()
+    field.typeKey("a", modifierFlags: .command)
+    field.typeText("layout-box-hallo\r")
+    waitFor("the new class written") { self.read(project).contains("className: layout-box-hallo") }
+    let heading = any["steps.heading"].firstMatch
+    XCTAssertTrue(heading.waitForExistence(timeout: 5))
+    XCTAssertTrue(heading.label.contains("6 von 6") || (heading.value as? String)?.contains("6 von 6") == true,
+                  "the inspector left the summary: \(heading.label)")
+    XCTAssertTrue(any["steps.done"].firstMatch.waitForExistence(timeout: 5), "„Fertig“ is gone")
+    XCTAssertTrue(any["steps.cancel"].firstMatch.exists, "the first run ended with the new class")
+  }
+
   /// N1: choosing another entry ends the run; coming back shows the steps of an existing entry.
   func testChoosingAnotherEntryEndsTheFirstRun() throws {
     let (profile, project) = try project()

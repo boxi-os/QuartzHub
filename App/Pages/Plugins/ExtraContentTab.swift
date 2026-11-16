@@ -389,7 +389,7 @@ struct BoxInspector: View {
       let assigned = SetupSteps.assign(LayoutBoxes.steps, fields: schema.schema?.fields ?? [])
       let last = LayoutBoxes.steps.last?.id
       OptionsForm(schema: schema.schema, values: values,
-                  onChange: { next in Task { await model.updateField(box.index, path: ["options"], value: next.map(JSONValue.object), snapshot: policy()) } },
+                  onChange: { next in Task { await writeOptions(next) } },
                   explicitEmpty: true, languages: model.config?.siteLanguages ?? [],
                   // A key no schema names (written by hand) belongs to the last step, so nothing is lost.
                   pick: { key in
@@ -424,6 +424,21 @@ struct BoxInspector: View {
   }
 
   // MARK: Writing
+
+  /// The options from the form. A new own class takes the first run and "where was I" along;
+  /// otherwise the step fell back to the first and the run ended without a word (review
+  /// 2026-11-16, M3). The policy is asked before: with the run renamed, `firstRun` would be false
+  /// until the file has the new class.
+  private func writeOptions(_ next: JSONObject?) async {
+    let snapshot = policy()
+    let value = next.map(JSONValue.object)
+    let after = PluginEntry(object: OptionSchema.setting(value, at: ["options"], in: box.plugin.object))
+    if let to = InstanceClass.own(after), to != InstanceClass.own(box.plugin) {
+      if firstRun, let run = setup { setup = run.renamed(to) }
+      if let split = stored.lastIndex(of: ":"), stored[..<split] == entryKey { stored = "\(to):\(stored[stored.index(after: split)...])" }
+    }
+    await model.updateField(box.index, path: ["options"], value: value, snapshot: snapshot)
+  }
 
   /// One snapshot per setup: ➕ took it for a new box; an existing one takes it with the first
   /// write after the inspector opened.
