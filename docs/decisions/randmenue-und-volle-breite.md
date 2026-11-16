@@ -78,3 +78,26 @@ Rail): Eine Site zieht ihn über diese zwei Variablen weiter hinaus, ohne die L�
 kennen. Das Frame-CSS kennt das Plugin nicht; das Basis-Template verbindet beides
 (`--qgframe-bleed-left: var(--quartz-nav-rail-offset-left)` an der Kopfzeile, nicht am Fuß, den das
 Panel bis zum Fensterboden überdeckt). Das README des Plugins zeigt dasselbe für Sites ohne Frame.
+
+## Das Basis-Template
+
+- `parts/frames.json`: in allen vier Frames `header` und `footer` mit `fullWidth: true`.
+- Fünf neue Tokens in `parts/cssVariables.json` (Reiter „Variablen“): `tpl-header-inline-pad`,
+  `tpl-footer-inline-pad` (Abstand des Inhalts zu den Fensterrändern), `tpl-rail-width`,
+  `tpl-rail-open-width`, `tpl-rail-bg`. Eine Inhaltsbreite für Kopf und Fuß gibt es nicht: In einem
+  Rasterbereich bezieht sich `%` auf den Bereich, der hier um zwei Spaltenlücken breiter ist als die
+  Seite, eine zentrierte Breite wäre um die Lücke verschoben.
+- Die 100vmax-Hintergründe von Kopf und Fuß bleiben: Sie decken den oberen bzw. unteren Innenabstand
+  des Frames und halten den Hintergrund randlos, wenn jemand „Volle Fensterbreite“ wieder ausschaltet.
+  Ebenso bleibt der mobile Rand `-20px` der Kopfzeile; als voller Bereich gewinnt der Rand des Frames
+  (sein `<style>` steht später im Dokument).
+- Die Marke bekommt `margin-inline-end: auto`: Mit einem Rail-Button davor hat die Kopfzeile drei
+  Teile, und `space-between` setzte Logo und Titel sonst in die Mitte (in der Aufnahme gesehen).
+- `plugin-navigations.scss` gestaltet die Rail (Tokens, Button in Zielgröße, Monogramme, Scrim);
+  das Akkordeon bleibt das Menü des Templates.
+
+**An der Website angesehen** (Kopie der Website-Vorlage mit dem Plugin aus dem Branch, WebKit, Dev-Server):
+1600 px Rail `rest: icons`, `content: push` offen: Kopfzeile 0–1600, Seite um 320 px eingerückt, Panel
+darunter; 1100 px hell mit offenem Menü über der Seite; 700 px Kopf und Fuß 0–700, kein seitliches
+Scrollen. Mein Messfenster spielt keine CSS-Übergänge ab, das offene Panel blieb dort ohne
+`transition: none` auf Leistenbreite stehen; im Browser nicht nachgeprüft.
