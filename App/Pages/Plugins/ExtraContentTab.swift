@@ -358,7 +358,9 @@ struct BoxInspector: View {
         if !ownText.isEmpty { Note(L10n.t("extraContent.langOverride", ["langs": ownText.joined(separator: ", ")])) }
       }
     case .placement:
-      PlacementStep(index: box.index, name: label, model: model) { mutate in await model.commit(snapshot: policy(), mutate) }
+      PlacementStep(index: box.index, name: label, model: model) { mutate in
+        await model.place(box.index, run: $setup, firstRun: firstRun, snapshot: policy(), mutate)
+      }
     case .options:
       options(for: id, values: values, installed: installed)
     case .finish:
@@ -442,10 +444,10 @@ struct BoxInspector: View {
     let (question, detail) = Confirm.split(L10n.t("extraContent.steps.cancelQuestion"))
     guard await Confirm.ask(question, detail: detail, confirm: L10n.t("extraContent.steps.cancelRemove"), destructive: true,
                             cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
-    let before = setup?.before ?? []
+    let run = setup
     setup = nil
     selection = nil
-    if await model.cancelSetup(index: box.index, before: before) {
+    if await model.cancelSetup(index: box.index, run: run) {
       Announce.post(L10n.t("extraContent.steps.cancelledAnnounce"))
     }
   }

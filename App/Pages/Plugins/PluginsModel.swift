@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 import QuartzHubCore
 
 /// One entry of the plugin list with what the list needs to know beside it.
@@ -259,12 +260,27 @@ final class PluginsModel {
     return true
   }
 
-  /// Cancelling a setup's first run: the new entry out, the neighbours' priorities back as they
-  /// were before ➕, without a snapshot (➕ took the setup's one).
-  func cancelSetup(index: Int, before: [PluginEntry]) async -> Bool {
+  /// Cancelling a setup's first run: the new entry out, the priorities the run renumbered back as
+  /// they were before ➕, without a snapshot (➕ took the setup's one).
+  func cancelSetup(index: Int, run: SetupRun?) async -> Bool {
     await commit(snapshot: .none) { plugins in
-      LayoutEntries.restoringPriorities(plugins.enumerated().filter { $0.offset != index }.map(\.element), from: before)
+      let rest = plugins.enumerated().filter { $0.offset != index }.map(\.element)
+      return run?.restoringPriorities(rest) ?? rest
     }
+  }
+
+  /// A write of a setup's placement: in the first run, `run` learns which other entries' priorities
+  /// it changed, so cancelling puts back those and only those (review 2026-11-16, M2).
+  func place(_ index: Int, run: Binding<SetupRun?>, firstRun: Bool, snapshot: SnapshotPolicy,
+             _ mutate: ([PluginEntry]) -> [PluginEntry]) async -> Bool {
+    var recorded = run.wrappedValue
+    let done = await commit(snapshot: snapshot) { plugins in
+      let out = mutate(plugins)
+      if firstRun { recorded = recorded?.recording(plugins, out, own: index) }
+      return out
+    }
+    if done, firstRun, run.wrappedValue?.key == recorded?.key { run.wrappedValue = recorded }
+    return done
   }
 
   func updateField(_ index: Int, path: [String], value: JSONValue?, snapshot: SnapshotPolicy = .each) async {

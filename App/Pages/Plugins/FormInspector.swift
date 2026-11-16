@@ -180,14 +180,13 @@ struct FormInspector: View {
     Announce.post(L10n.t("formsEditor.steps.doneAnnounce", ["name": view.title(id, def)]))
   }
 
-  /// Takes the new form out again, after asking; the safe answer first. The plugin's entry gets
-  /// back what it was before ➕ where nothing else changed it since.
+  /// Takes the new form out again, after asking; the safe answer first. Its steps place nothing:
+  /// the plugin's own position is the layout section's (`FormsPositionField`).
   private func cancel() async {
     let (question, detail) = Confirm.split(L10n.t("formsEditor.steps.cancelQuestion"))
     guard await Confirm.ask(question, detail: detail, confirm: L10n.t("formsEditor.steps.cancelRemove"), destructive: true,
                             cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
     let id = id
-    let before = setup?.before ?? []
     setup = nil
     selection = nil
     let done = await model.commit(snapshot: .none) { plugins in
@@ -197,7 +196,7 @@ struct FormInspector: View {
       object["options"] = next.isEmpty ? nil : .object(next)
       var out = plugins
       out[entry.index] = PluginEntry(object: object)
-      return LayoutEntries.restoringPriorities(out, from: before)
+      return out
     }
     if done { Announce.post(L10n.t("formsEditor.steps.cancelledAnnounce")) }
   }

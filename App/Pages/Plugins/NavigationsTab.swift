@@ -380,7 +380,7 @@ struct NavigationInspector: View {
     case .placement:
       PlacementStep(index: item.index, name: label,
                     suggested: (item.variant.position, NavigationVariants.catalog(NavigationVariants.label(item.variant), nil)),
-                    model: model) { mutate in await model.commit(snapshot: policy(), mutate) }
+                    model: model) { mutate in await model.place(item.index, run: $setup, firstRun: firstRun, snapshot: policy(), mutate) }
     case .options:
       options(for: id, values: values)
     case .finish:
@@ -456,7 +456,7 @@ struct NavigationInspector: View {
     next["variant"] = .string(variant.rawValue)
     let follows = firstRun && variant.position != old.position
       && LayoutEntries.layout(item.entry)?["position"] == .string(old.position)
-    let done = await model.commit(snapshot: policy()) { plugins in
+    let done = await model.place(index, run: $setup, firstRun: firstRun, snapshot: policy()) { plugins in
       var out = plugins.enumerated().map { offset, plugin in
         offset == index ? PluginEntry(object: OptionSchema.setting(.object(next), at: ["options"], in: plugin.object)) : plugin
       }
@@ -480,10 +480,10 @@ struct NavigationInspector: View {
     guard await Confirm.ask(parts[0], detail: parts.dropFirst().joined(separator: "\n\n"),
                             confirm: L10n.t("navigationsEditor.steps.cancelRemove"), destructive: true,
                             cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
-    let before = setup?.before ?? []
+    let run = setup
     setup = nil
     selection = nil
-    if await model.cancelSetup(index: item.index, before: before) {
+    if await model.cancelSetup(index: item.index, run: run) {
       Announce.post(L10n.t("navigationsEditor.steps.cancelledAnnounce"))
     }
   }

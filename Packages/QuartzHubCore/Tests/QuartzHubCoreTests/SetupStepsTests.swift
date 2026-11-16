@@ -64,28 +64,36 @@ import Testing
     }
   }
 
-  /// Cancelling puts back what the placement step renumbered, and nothing else.
-  @Test func cancellingRestoresThePriorities() throws {
+  /// Cancelling puts back the priorities the run's own steps renumbered, and nothing else: not a
+  /// title another step set, not a move someone made meanwhile (review 2026-11-16, M2).
+  @Test func cancellingRestoresWhatTheRunRenumbered() throws {
     func entry(_ name: String, _ position: String, _ priority: Double, title: String? = nil) -> PluginEntry {
       var object = JSONObject([("name", .string(name)),
                                ("layout", .object(JSONObject([("position", .string(position)), ("priority", .number(priority))])))])
       if let title { object["options"] = .object(JSONObject([("title", .string(title))])) }
       return PluginEntry(object: object)
     }
-    let before = [entry("a", "header", 15), entry("b", "header", 25), entry("c", "left", 7)]
+    let before = [entry("a", "header", 15), entry("b", "header", 25), entry("c", "left", 7), entry("d", "left", 9)]
     let added = before + [entry("nav", "header", 5)]
     // The new one moved behind "a": the header renumbered in steps of ten.
-    let placed = LayoutEntries.place(added, index: 3, position: "header", insertIndex: 1)
-    #expect(placed[0] != before[0] && placed[1] != before[1])
-    // Meanwhile "c" got a title in another step: that stays.
+    let placed = LayoutEntries.place(added, index: 4, position: "header", insertIndex: 1)
+    #expect(placed[0] != before[0] && placed[1] != before[1] && placed[2] == before[2])
+    let run = SetupRun(key: "nav", before: before).recording(added, placed, own: 4)
+    #expect(run.placed == [0: 10, 1: 30])
+    // Meanwhile "c" got a title, "b" was moved on purpose and "d" renumbered by some other move.
     var edited = placed
+    edited[1] = entry("b", "header", 5)
     edited[2] = entry("c", "left", 7, title: "kept")
-    let removed = Array(edited.prefix(3))
-    let restored = LayoutEntries.restoringPriorities(removed, from: before)
-    #expect(Array(restored.prefix(2)) == Array(before.prefix(2)))
+    edited[3] = entry("d", "left", 20)
+    let restored = run.restoringPriorities(Array(edited.prefix(4)))
+    #expect(restored[0] == before[0])
+    #expect(restored[1] == entry("b", "header", 5))
     #expect(restored[2] == entry("c", "left", 7, title: "kept"))
-    // Gegenprobe: without it the file keeps the renumbered priorities.
-    #expect(Array(removed.prefix(2)) != Array(before.prefix(2)))
+    #expect(restored[3] == entry("d", "left", 20))
+    // Gegenprobe: a run that recorded nothing puts nothing back.
+    #expect(SetupRun(key: "nav", before: before).restoringPriorities(Array(edited.prefix(4))) == Array(edited.prefix(4)))
+    // A renamed run keeps what it recorded.
+    #expect(run.renamed("nav-2").placed == run.placed && run.renamed("nav-2").key == "nav-2")
   }
 
   /// A first run ends with its entry: removed some other way, the run must not live on and take

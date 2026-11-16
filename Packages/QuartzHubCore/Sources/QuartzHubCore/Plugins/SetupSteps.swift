@@ -86,12 +86,50 @@ public struct SetupRun: Equatable, Sendable {
   /// What names the new entry while the run lasts: a navigation's or a box's own class, a form's
   /// id, a language's code.
   public let key: String
-  /// `plugins:` before ➕: cancelling puts back the priorities the placement step renumbered.
+  /// `plugins:` before ➕: cancelling puts back the priorities the run renumbered.
   public let before: [PluginEntry]
+  /// The priorities the run's own steps wrote into other entries, by index. ➕ appends the new
+  /// entry, so the others keep `before`'s indices.
+  public private(set) var placed: [Int: Double] = [:]
 
   public init(key: String, before: [PluginEntry]) {
     self.key = key
     self.before = before
+  }
+
+  /// The same run under the entry's new name.
+  public func renamed(_ key: String) -> SetupRun {
+    var next = SetupRun(key: key, before: before)
+    next.placed = placed
+    return next
+  }
+
+  /// After a write of the run's own steps (`old` → `new`): the priorities it changed in entries
+  /// other than its own (`own`, an index).
+  public func recording(_ old: [PluginEntry], _ new: [PluginEntry], own: Int) -> SetupRun {
+    guard old.count == new.count else { return self }
+    var next = self
+    for index in new.indices where index != own {
+      let was = LayoutEntries.layout(old[index])?["priority"]?.numberValue
+      if let now = LayoutEntries.layout(new[index])?["priority"]?.numberValue, now != was { next.placed[index] = now }
+    }
+    return next
+  }
+
+  /// Cancelling: `plugins`, already without the run's entry, with every priority the run wrote
+  /// back as it was before ➕, unless something else changed it since. A move someone made
+  /// meanwhile, and every other change, stays (review 2026-11-16, M2).
+  public func restoringPriorities(_ plugins: [PluginEntry]) -> [PluginEntry] {
+    var out = plugins
+    for (index, wrote) in placed {
+      guard out.indices.contains(index), before.indices.contains(index), out[index].name == before[index].name,
+            var layout = LayoutEntries.layout(out[index]), layout["priority"]?.numberValue == wrote else { continue }
+      layout["priority"] = LayoutEntries.layout(before[index])?["priority"]
+      var object = out[index].object
+      object["layout"] = .object(layout)
+      out[index] = PluginEntry(object: object)
+    }
+    return out
   }
 
   /// Whether the run still has its entry before it: `keys` are what names each entry of its kind

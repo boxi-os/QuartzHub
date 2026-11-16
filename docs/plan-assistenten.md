@@ -160,8 +160,8 @@ Je Punkt ein Commit mit Bau, `qh-check i18n`, Tests und Ansehen (Skill `run-app`
 
 - **Kern**: `SetupStep`/`SetupSteps` (`Plugins/SetupSteps.swift`): Zuordnung erst nach Schlüssel, dann
   nach Gruppe, sonst letzter Schritt; `unplaced` nennt, was nur die Ausweichregel gefangen hat.
-  `NavigationVariants.steps` und `stepHasEffect`. `LayoutEntries.restoringPriorities` für das
-  Abbrechen. Tests in `SetupStepsTests` gegen das Schema von 0.4 (QuartzControls Fixture) und 0.5.0
+  `NavigationVariants.steps` und `stepHasEffect`. Für das Abbrechen `SetupRun` mit
+  `restoringPriorities` (seit dem Review 2026-11-16 im Kern; vorher `LayoutEntries.restoringPriorities`). Tests in `SetupStepsTests` gegen das Schema von 0.4 (QuartzControls Fixture) und 0.5.0
   (`Fixtures/navigations/schema-0.5.0.json`, aus der package.json des Plugins).
 - **App**: `InspectorSteps` (App/Components), `PlacementStep` (App/Pages/Plugins),
   `NavigationInspector` in Schritten; Gehe zu ▸ Vorheriger/Nächster Schritt (⌥⌘← ⌥⌘→, nur solange
@@ -184,8 +184,12 @@ Je Punkt ein Commit mit Bau, `qh-check i18n`, Tests und Ansehen (Skill `run-app`
   `columns.max` und verwendet es nirgends.
 - **Abbrechen stellt die Datei wieder her**, nicht nur den Eintrag: Der Platz-Schritt nummeriert die
   Nachbarn neu (`LayoutEntries.place`), und ohne Rückgabe blieben ihre Prioritäten verschoben.
-  `restoringPriorities` gibt Einträgen, die sich nur in der Priorität unterscheiden, den Wert von
-  vor ➕ zurück; jede andere Änderung bleibt. An der App gemessen: Anlegen, „Später“, Abbrechen,
+  Seit dem Review 2026-11-16 (M2) merkt sich der Lauf, welche Prioritäten anderer Einträge seine
+  eigenen Schritte geschrieben haben (`SetupRun.recording`), und Abbrechen gibt nur diesen den Wert
+  von vor ➕ zurück, und nur, solange niemand sie seither anders gesetzt hat; eine bewusste
+  Umsortierung bleibt. Vorher bekam jeder Eintrag, der sich nur in der Priorität unterschied, den
+  alten Wert, gleich wer ihn verschoben hatte. Außerdem endet ein erster Durchlauf, sobald sein
+  Eintrag verschwindet oder ein anderer ausgewählt wird (M1, N1). An der App gemessen: Anlegen, „Später“, Abbrechen,
   danach `diff` gegen die Konfiguration von vorher leer.
 - **Ein Snapshot je Assistent**: ➕ nimmt ihn mit eigenem Namen („Navigation einrichten: Randmenü“),
   die Schritte danach keinen. Ein bestehender Eintrag nimmt ihn beim ersten Schreiben nach dem
