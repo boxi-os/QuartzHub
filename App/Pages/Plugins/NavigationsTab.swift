@@ -169,7 +169,7 @@ struct NavigationsTab: View {
   private func add(_ variant: NavigationVariants.Variant) async {
     guard let plugins = model.config?.plugins, let first = instances.first else { return }
     let position = variant.position
-    // Last in its position, ten after whatever is there.
+    // Last in its position, ten after whatever is there; the rail first, ten before.
     let priorities = plugins.compactMap { entry -> Double? in
       guard let layout = LayoutEntries.layout(entry), layout["position"] == .string(position) else { return nil }
       return layout["priority"]?.numberValue
@@ -184,7 +184,8 @@ struct NavigationsTab: View {
       ("className", .string(InstanceClass.suggest(prefix: InstanceClass.navigationPrefix, name: variant.rawValue, fallback: "navigation",
                                                   plugins: plugins, styled: styled)))
     ]))
-    object["layout"] = .object(JSONObject([("position", .string(position)), ("priority", .number((priorities.max() ?? 0) + 10))]))
+    let priority = variant.placedFirst ? (priorities.min() ?? 20) - 10 : (priorities.max() ?? 0) + 10
+    object["layout"] = .object(JSONObject([("position", .string(position)), ("priority", .number(priority))]))
     let count = instances.count
     selection = count + 1
     if await model.commit({ $0 + [PluginEntry(object: object)] }) {

@@ -29,6 +29,10 @@ public enum NavigationVariants {
       }
     }
 
+    /// Whether a new one goes first in its position rather than last: the rail's button opens a
+    /// panel at the left window edge, so it stands at the start of the header.
+    public var placedFirst: Bool { self == .rail }
+
     /// An SF Symbol in place of QuartzControl's lucide icon.
     public var symbol: String {
       switch self {

@@ -76,7 +76,7 @@ import Testing
   @Test func railRulesFromThePluginCode() throws {
     typealias V = NavigationVariants.Variant
     let same = JSONValue.string("same")
-    #expect(V.rail.position == "header")
+    #expect(V.rail.position == "header" && V.rail.placedFirst && !V.bar.placedFirst)
     let works = ["chevrons", "folderClick", "exclusive", "folderDefaultState", "expandActive", "persistState", "rail", "icons",
                  "nodeIcons", "showHome", "showScopeRoot", "indexEntry", "mobile"]
     let idle = ["align", "trigger", "tabs", "flyout", "pager", "columns", "select"]
