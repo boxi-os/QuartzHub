@@ -38868,6 +38868,44 @@
         }
       }
     },
+    "navigationsEditor.variants.rail.label" : {
+      "comment" : "Navigationen: tile and name of the quartz-navigations variant rail",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Randmenü"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edge menu"
+          }
+        }
+      }
+    },
+    "navigationsEditor.variants.rail.text" : {
+      "comment" : "Navigationen: what the variant rail is, under its tile",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Button öffnet ein Menü am Fensterrand, auf Wunsch mit Icon-Leiste."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A button opens a menu at the window edge, optionally with an icon strip."
+          }
+        }
+      }
+    },
     "navigationsEditor.variants.select.label" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

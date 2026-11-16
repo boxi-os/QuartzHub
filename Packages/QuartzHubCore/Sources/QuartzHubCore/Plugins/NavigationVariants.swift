@@ -1,9 +1,10 @@
 import Foundation
 
 /// What QuartzHub knows about quartz-navigations beyond its schema (QuartzControl's
-/// `routes/Plugins/navigationVariants.ts`, measured against it in NavigationsTests): the ten
+/// `routes/Plugins/navigationVariants.ts`, measured against it in NavigationsTests): the
 /// variants, where a new one goes, and which option does nothing with which variant, read from
-/// the plugin's rendering code.
+/// the plugin's rendering code. `rail` came after QuartzControl (plugin 0.5, branch
+/// `feat/rail-variant`); its rules are read from that render.tsx and options.ts and tested by hand.
 public enum NavigationVariants {
   /// The plugin's name as the config loader derives it from github:boxi-os/quartz-navigations.
   public static let plugin = "quartz-navigations"
@@ -13,13 +14,16 @@ public enum NavigationVariants {
   public static let sameCode = ["0.4.0", "0.4.1", "0.4.3"]
 
   public enum Variant: String, CaseIterable, Sendable {
-    case tree, accordion, flyout, bar, dropdown, mega, tabs, columns, select, pager
+    case tree, accordion, flyout, bar, dropdown, mega, tabs, columns, select, pager, rail
+
+    /// The variants QuartzControl knew, the ones its golden cases cover.
+    public static let quartzControl: [Variant] = [.tree, .accordion, .flyout, .bar, .dropdown, .mega, .tabs, .columns, .select, .pager]
 
     /// Where a new navigation of this kind goes: where the plugin's README says it belongs.
     public var position: String {
       switch self {
       case .tree, .accordion, .flyout, .select: "left"
-      case .bar, .dropdown, .mega, .tabs: "header"
+      case .bar, .dropdown, .mega, .tabs, .rail: "header"
       case .columns: "footer"
       case .pager: "afterBody"
       }
@@ -38,8 +42,19 @@ public enum NavigationVariants {
       case .columns: "rectangle.split.3x1.fill"
       case .select: "chevron.up.chevron.down"
       case .pager: "arrow.left.arrow.right"
+      case .rail: "sidebar.squares.left"
       }
     }
+  }
+
+  /// The variants to offer: those the installed plugin's schema names in `variant`'s enum, in
+  /// QuartzHub's order. Without a readable enum, QuartzControl's ten, which every version since
+  /// 0.4 knows; `rail` only where the plugin says it has it (before that it falls back to `tree`).
+  public static func offered(_ fields: [OptionField]?) -> [Variant] {
+    guard case .enumeration(let values)? = fields?.first(where: { $0.key == "variant" })?.node else { return Variant.quartzControl }
+    let named = Set(values.compactMap(\.jsonValue.stringValue))
+    let known = Variant.allCases.filter { named.contains($0.rawValue) }
+    return known.isEmpty ? Variant.quartzControl : known
   }
 
   /// The names before 0.4 (LEGACY_VARIANTS in the plugin's options.ts): still read.
@@ -50,7 +65,9 @@ public enum NavigationVariants {
     return legacy[value] ?? Variant(rawValue: value) ?? .tree
   }
 
-  private static let collapsible: Set<Variant> = [.accordion, .flyout, .dropdown, .mega]
+  private static let collapsible: Set<Variant> = [.accordion, .flyout, .dropdown, .mega, .rail]
+  /// Folding folders that are not popups: rendered open or closed in place.
+  private static let inPlace: Set<Variant> = [.accordion, .rail]
   private static let popup: Set<Variant> = [.dropdown, .mega, .flyout]
   private static let row: Set<Variant> = [.bar, .dropdown, .mega, .tabs]
   private static let ownRenderer: Set<Variant> = [.select, .pager]
@@ -59,18 +76,19 @@ public enum NavigationVariants {
   /// counts as having an effect.
   public static func hasNoEffect(_ key: String, _ variant: Variant, mobile: JSONValue?) -> Bool {
     let own = ownRenderer.contains(variant)
-    let mobileFolds = !own && mobile == .string("accordion")
+    // The rail turns `mobile: accordion` and `offcanvas` into `same` (options.ts).
+    let mobileFolds = !own && variant != .rail && mobile == .string("accordion")
     switch key {
-    case "mobile": return false
+    case "mobile": return variant == .rail && (mobile == .string("accordion") || mobile == .string("offcanvas"))
     case "chevrons": return !collapsible.contains(variant) && !mobileFolds
     case "folderClick": return !collapsible.contains(variant)
     case "exclusive": return !collapsible.contains(variant) && !mobileFolds
-    case "folderDefaultState": return variant != .accordion
-    case "expandActive", "persistState": return variant != .accordion && !(mobileFolds && !popup.contains(variant))
+    case "folderDefaultState": return !inPlace.contains(variant)
+    case "expandActive", "persistState": return !inPlace.contains(variant) && !(mobileFolds && !popup.contains(variant))
     case "select": return variant != .select && (own || mobile != .string("select"))
     case "align": return !row.contains(variant)
     case "trigger": return !popup.contains(variant)
-    case "tabs", "flyout", "pager": return variant.rawValue != key
+    case "tabs", "flyout", "pager", "rail": return variant.rawValue != key
     case "columns": return true
     case "icons", "nodeIcons": return variant == .select
     case "showHome": return variant == .tabs || own
@@ -82,18 +100,21 @@ public enum NavigationVariants {
   /// The options that belong to a variant rather than to every navigation: the section under the tiles.
   public static let variantKeys: Set<String> = [
     "align", "trigger", "chevrons", "folderClick", "folderDefaultState", "expandActive", "exclusive",
-    "persistState", "tabs", "flyout", "select", "columns", "pager"
+    "persistState", "tabs", "flyout", "select", "columns", "pager", "rail"
   ]
 
   /// The plugin's values of `mobile`, in the order of its schema.
   public static let mobileValues = ["same", "accordion", "offcanvas", "select", "hidden"]
 
   /// Why an option does nothing: the variants it works with (on the desktop) and the mobile
-  /// settings with which it would work for this variant. nil: it works.
-  public static func noEffectReason(_ key: String, _ variant: Variant, mobile: JSONValue?)
-    -> (variants: [Variant], mobile: [String])? {
+  /// settings with which it would work for this variant. nil: it works. `among`: the variants to
+  /// name (the tests pass QuartzControl's ten to compare with its output).
+  public static func noEffectReason(_ key: String, _ variant: Variant, mobile: JSONValue?,
+                                    among: [Variant] = Variant.allCases) -> (variants: [Variant], mobile: [String])? {
     guard hasNoEffect(key, variant, mobile: mobile) else { return nil }
-    return (Variant.allCases.filter { !hasNoEffect(key, $0, mobile: .string("same")) },
+    // `mobile` itself depends on its own value, not on a second setting.
+    if key == "mobile" { return (among.filter { !hasNoEffect(key, $0, mobile: mobile) }, []) }
+    return (among.filter { !hasNoEffect(key, $0, mobile: .string("same")) },
             mobileValues.filter { $0 != "same" && !hasNoEffect(key, variant, mobile: .string($0)) })
   }
 
@@ -101,7 +122,8 @@ public enum NavigationVariants {
   /// own options first under its name, what does nothing greyed with the variants it works with.
   /// `withVariant`: the variant leads the section (where no tiles stand above it).
   public static func root(options: JSONObject, fields: [OptionField], lang: OptionFormText.Language,
-                          translate: @escaping OptionFormText.Translate = catalog, withVariant: Bool = false) -> OptionRoot {
+                          translate: @escaping OptionFormText.Translate = catalog, withVariant: Bool = false,
+                          among: [Variant] = Variant.allCases) -> OptionRoot {
     let variant = variant(options)
     let mobile = options["mobile"]
     let mobileField = fields.first { $0.key == "mobile" }
@@ -109,9 +131,9 @@ public enum NavigationVariants {
     let quote = { (s: String) in lang == .en ? "“\(s)”" : "„\(s)“" }
     let byMobile = variantKeys.sorted().contains { hasNoEffect($0, variant, mobile: .string("same")) && !hasNoEffect($0, variant, mobile: mobile) }
     let inactive: (String) -> String? = { key in
-      guard let why = noEffectReason(key, variant, mobile: mobile) else { return nil }
+      guard let why = noEffectReason(key, variant, mobile: mobile, among: among) else { return nil }
       var parts: [String] = []
-      let without = Variant.allCases.filter { !why.variants.contains($0) }
+      let without = among.filter { !why.variants.contains($0) }
       let names = { (list: [Variant]) in list.map { quote(name($0)) }.joined(separator: ", ") }
       if !why.variants.isEmpty {
         parts.append(without.count < why.variants.count
@@ -159,6 +181,7 @@ public enum NavigationVariants {
     case "navigationsEditor.variants.columns.label": return L10n.t("navigationsEditor.variants.columns.label")
     case "navigationsEditor.variants.select.label": return L10n.t("navigationsEditor.variants.select.label")
     case "navigationsEditor.variants.pager.label": return L10n.t("navigationsEditor.variants.pager.label")
+    case "navigationsEditor.variants.rail.label": return L10n.t("navigationsEditor.variants.rail.label")
     case "navigationsEditor.variants.tree.text": return L10n.t("navigationsEditor.variants.tree.text")
     case "navigationsEditor.variants.accordion.text": return L10n.t("navigationsEditor.variants.accordion.text")
     case "navigationsEditor.variants.flyout.text": return L10n.t("navigationsEditor.variants.flyout.text")
@@ -169,6 +192,7 @@ public enum NavigationVariants {
     case "navigationsEditor.variants.columns.text": return L10n.t("navigationsEditor.variants.columns.text")
     case "navigationsEditor.variants.select.text": return L10n.t("navigationsEditor.variants.select.text")
     case "navigationsEditor.variants.pager.text": return L10n.t("navigationsEditor.variants.pager.text")
+    case "navigationsEditor.variants.rail.text": return L10n.t("navigationsEditor.variants.rail.text")
     default: return key
     }
   }
@@ -194,6 +218,7 @@ public enum NavigationVariants {
     case .columns: "navigationsEditor.variants.columns.label"
     case .select: "navigationsEditor.variants.select.label"
     case .pager: "navigationsEditor.variants.pager.label"
+    case .rail: "navigationsEditor.variants.rail.label"
     }
   }
 
@@ -209,6 +234,7 @@ public enum NavigationVariants {
     case .columns: "navigationsEditor.variants.columns.text"
     case .select: "navigationsEditor.variants.select.text"
     case .pager: "navigationsEditor.variants.pager.text"
+    case .rail: "navigationsEditor.variants.rail.text"
     }
   }
 }

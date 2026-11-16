@@ -21,8 +21,8 @@ import Testing
   @Test func variantTableAndReasons() throws {
     let golden = try #require(Self.golden)
     let positions = try #require(golden["variantPositions"]?.objectValue)
-    #expect(positions.keys == NavigationVariants.Variant.allCases.map(\.rawValue))
-    for variant in NavigationVariants.Variant.allCases { #expect(positions[variant.rawValue] == .string(variant.position)) }
+    #expect(positions.keys == NavigationVariants.Variant.quartzControl.map(\.rawValue))
+    for variant in NavigationVariants.Variant.quartzControl { #expect(positions[variant.rawValue] == .string(variant.position)) }
     #expect(golden["readAgainst"] == .string(NavigationVariants.readAgainst))
     #expect(Self.strings(golden["sameCode"]) == NavigationVariants.sameCode)
 
@@ -33,7 +33,7 @@ import Testing
       let key = item["key"]!.stringValue!
       let variant = NavigationVariants.Variant(rawValue: item["variant"]!.stringValue!)!
       let mobile = item["mobile"] == .null ? nil : item["mobile"]
-      let why = NavigationVariants.noEffectReason(key, variant, mobile: mobile)
+      let why = NavigationVariants.noEffectReason(key, variant, mobile: mobile, among: NavigationVariants.Variant.quartzControl)
       let mine: JSONValue = why.map { .object(JSONObject([("variants", .array($0.variants.map { .string($0.rawValue) })),
                                                           ("mobile", .array($0.mobile.map(JSONValue.string)))])) } ?? .null
       if NavigationVariants.hasNoEffect(key, variant, mobile: mobile) != item["none"]?.boolValue || mine != item["why"] {
@@ -54,7 +54,7 @@ import Testing
       let lang: OptionFormText.Language = item["lang"] == .string("en") ? .en : .de
       let withVariant = item["withVariant"]?.boolValue ?? false
       let root = NavigationVariants.root(options: options, fields: Self.fields, lang: lang, translate: OptionFormTextTests.echo,
-                                         withVariant: withVariant)
+                                         withVariant: withVariant, among: NavigationVariants.Variant.quartzControl)
       let label = JSJSON.compact(.object(options)) + " \(lang) \(withVariant)"
       #expect(NavigationVariants.variant(options).rawValue == item["variant"]?.stringValue, "\(label)")
       for key in keys {
@@ -68,6 +68,52 @@ import Testing
       #expect(lead.empty == item["lead"]?["empty"]?.stringValue, "\(label)")
       #expect(lead.note.map(JSONValue.string) ?? .null == item["lead"]?["note"], "\(label)")
     }
+  }
+
+  /// The rail came after QuartzControl, so its rules are written down here from the plugin's
+  /// render.tsx and options.ts (branch feat/rail-variant): collapsible in place like the accordion,
+  /// not a popup; `mobile: accordion` and `offcanvas` become `same`.
+  @Test func railRulesFromThePluginCode() throws {
+    typealias V = NavigationVariants.Variant
+    let same = JSONValue.string("same")
+    #expect(V.rail.position == "header")
+    let works = ["chevrons", "folderClick", "exclusive", "folderDefaultState", "expandActive", "persistState", "rail", "icons",
+                 "nodeIcons", "showHome", "showScopeRoot", "indexEntry", "mobile"]
+    let idle = ["align", "trigger", "tabs", "flyout", "pager", "columns", "select"]
+    for key in works { #expect(!NavigationVariants.hasNoEffect(key, .rail, mobile: same), "\(key)") }
+    for key in idle { #expect(NavigationVariants.hasNoEffect(key, .rail, mobile: same), "\(key)") }
+    // The rail ignores a folding mobile layout: nothing switches on through it.
+    for key in ["chevrons", "exclusive", "expandActive", "persistState"] {
+      #expect(NavigationVariants.hasNoEffect(key, .rail, mobile: .string("accordion")) == NavigationVariants.hasNoEffect(key, .rail, mobile: same))
+    }
+    for value in ["accordion", "offcanvas"] {
+      #expect(NavigationVariants.hasNoEffect("mobile", .rail, mobile: .string(value)))
+      let why = try #require(NavigationVariants.noEffectReason("mobile", .rail, mobile: .string(value)))
+      #expect(why.variants == V.allCases.filter { $0 != .rail } && why.mobile.isEmpty)
+    }
+    for value in ["same", "select", "hidden"] { #expect(!NavigationVariants.hasNoEffect("mobile", .rail, mobile: .string(value))) }
+    for variant in V.quartzControl { #expect(!NavigationVariants.hasNoEffect("mobile", variant, mobile: .string("offcanvas"))) }
+    // `rail` belongs to the rail alone; the folder options it reads name it beside the accordion.
+    #expect(NavigationVariants.noEffectReason("rail", .tree, mobile: same)?.variants == [.rail])
+    #expect(NavigationVariants.noEffectReason("folderDefaultState", .tree, mobile: same)?.variants == [.accordion, .rail])
+    #expect(NavigationVariants.noEffectReason("chevrons", .tree, mobile: same)?.variants == [.accordion, .flyout, .dropdown, .mega, .rail])
+
+    let root = NavigationVariants.root(options: JSONObject([("variant", .string("rail")), ("mobile", .string("offcanvas"))]),
+                                       fields: Self.fields, lang: .de, translate: OptionFormTextTests.echo)
+    let lead = try #require(root.lead)
+    #expect(lead.has("rail") && lead.note == nil)
+    #expect(root.hideUnlessSet?("rail") == true)
+    #expect(root.inactiveReason?("mobile")?.contains("navigationsEditor.notWith") == true)
+    #expect(root.inactiveReason?("rail") == nil && root.inactiveReason?("align") != nil)
+  }
+
+  /// The tiles follow the installed plugin: `rail` only where its schema names it.
+  @Test func offeredVariantsFollowTheSchema() throws {
+    #expect(NavigationVariants.offered(nil) == NavigationVariants.Variant.quartzControl)
+    #expect(NavigationVariants.offered(Self.fields) == NavigationVariants.Variant.quartzControl)
+    let schema = try JSJSON.parse(Data(#"{"type":"object","properties":{"variant":{"type":"string","enum":["tree","bar","rail","later"]}}}"#.utf8))
+    let fields = OptionSchema.normalize(jsonSchema: schema, source: .configSchema).fields
+    #expect(NavigationVariants.offered(fields) == [.tree, .bar, .rail])
   }
 
   @Test func classesAsQuartzControlGivesThem() throws {

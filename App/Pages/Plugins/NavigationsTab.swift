@@ -42,6 +42,8 @@ struct NavigationsTab: View {
   @Binding var styled: Set<String>
   @Environment(\.unsavedGuard) private var unsaved
   @State private var adding = false
+  /// The variants the installed plugin knows (`NavigationVariants.offered`), read from its schema.
+  @State private var offered = NavigationVariants.Variant.quartzControl
 
   private var instances: [NavigationInstance] { NavigationInstance.all(model.config?.plugins ?? []) }
 
@@ -71,6 +73,12 @@ struct NavigationsTab: View {
       .toolbar {
         ToolbarItem(placement: .primaryAction) { addButton }
       }
+      .task(id: instances.first?.entry.source.map(JSJSON.compact) ?? "") {
+        guard let source = PluginSource(instances.first?.entry.source) else { return }
+        let environment = await AppServices.current()
+        let schema = await PluginSchemaReader.shared.optionSchema(project: model.project.path, source: source, runtime: environment.runtime)
+        offered = NavigationVariants.offered(schema.schema?.fields)
+      }
     }
   }
 
@@ -82,7 +90,7 @@ struct NavigationsTab: View {
       .popover(isPresented: $adding, arrowEdge: .bottom) {
         VStack(alignment: .leading, spacing: Spacing.xs) {
           Text(L10n.t("navigationsEditor.addQuestion")).foregroundStyle(.secondary)
-          VariantTiles(selected: nil) { variant in
+          VariantTiles(variants: offered, selected: nil) { variant in
             adding = false
             Task { await add(variant) }
           }
@@ -225,14 +233,15 @@ struct NavigationsTab: View {
   }
 }
 
-/// The ten variants as tiles, with what each one is.
+/// The variants the plugin knows as tiles, with what each one is.
 struct VariantTiles: View {
+  let variants: [NavigationVariants.Variant]
   let selected: NavigationVariants.Variant?
   let choose: (NavigationVariants.Variant) -> Void
 
   var body: some View {
     LazyVGrid(columns: [GridItem(.flexible(), alignment: .top), GridItem(.flexible(), alignment: .top)], spacing: 6) {
-      ForEach(NavigationVariants.Variant.allCases, id: \.self) { variant in
+      ForEach(variants, id: \.self) { variant in
         let on = variant == selected
         Button { choose(variant) } label: {
           VStack(alignment: .leading, spacing: 2) {
@@ -294,7 +303,9 @@ struct NavigationInspector: View {
         .accessibilityIdentifier("navigations.inspector.enabled")
       }
       Section(L10n.t("navigationsEditor.variantHeading")) {
-        VariantTiles(selected: item.variant) { variant in
+        // The current variant stays in sight even if the plugin's schema could not be read.
+        let offered = NavigationVariants.offered(schema?.schema?.fields)
+        VariantTiles(variants: offered.contains(item.variant) ? offered : offered + [item.variant], selected: item.variant) { variant in
           var next = options
           next["variant"] = .string(variant.rawValue)
           Task { await model.updateField(item.index, path: ["options"], value: .object(next)) }
