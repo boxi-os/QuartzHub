@@ -206,9 +206,10 @@ struct PluginInspector: View {
   }
 }
 
-/// What an entry's options set, in one or two lines: a navigation's variant, how many options are
-/// changed. Where the options are not edited (Layout, Installiert for the own plugins), above the
-/// way to where they are.
+/// What an entry's options set, in one or two lines: a navigation's variant, how many options it
+/// sets. Where the options are not edited (Layout, Installiert for the own plugins), above the
+/// way to where they are. Set, not changed: a key with the plugin's default counts as well, as in
+/// the steps' „Gesetzte Optionen“ (review 2026-11-17, N2).
 struct OptionsSummary: View {
   let entry: PluginEntry
 

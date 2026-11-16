@@ -27195,13 +27195,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "1 Option geändert"
+                  "value" : "1 Option gesetzt"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} Optionen geändert"
+                  "value" : "{{count}} Optionen gesetzt"
                 }
               }
             }
@@ -27213,13 +27213,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "1 option changed"
+                  "value" : "1 option set"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} options changed"
+                  "value" : "{{count}} options set"
                 }
               }
             }
