@@ -291,10 +291,13 @@ public enum GridFrameCss {
 
   /// What a frame with full areas needs around its grid: `#quartz-body` without Quartz's own
   /// padding below the desktop width (the frame's padding is the inset now; with it the full areas
-  /// would stop short of the edges) and clipping the gap the widened grid reaches past it.
-  /// `overflow-x: clip` makes no scroll container, so a sticky header keeps working.
+  /// would stop short of the edges), and the window clipping the gap the widened grid reaches past
+  /// the page. The window, not `#quartz-body`: a full area pulled out by `--qgframe-bleed-*` lies
+  /// outside `#quartz-body` when a menu pads `<body>`. On the root, `clip` becomes the viewport's
+  /// `hidden` (Quartz' own base.scss sets that too), which leaves a sticky header working.
   static func fullWidthOverride(_ page: String) -> String {
-    ["\(page) > #quartz-body {", "  padding-inline: 0;", "  overflow-x: clip;", "}"].joined(separator: "\n")
+    ["\(page) > #quartz-body {", "  padding-inline: 0;", "}",
+     "html:has(\(page)) {", "  overflow-x: clip;", "}"].joined(separator: "\n")
   }
 
   // MARK: the frame around the grid

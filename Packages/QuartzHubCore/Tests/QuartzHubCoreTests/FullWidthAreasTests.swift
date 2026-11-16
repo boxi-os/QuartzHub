@@ -44,7 +44,7 @@ import Testing
     let mobile = try #require(css.components(separatedBy: "@media (max-width: 900px)").last)
     #expect(mobile.contains("grid-template-columns: 1fr 1fr 1fr 1fr;") && mobile.contains("padding-inline: 20px;"))
     #expect(mobile.contains(".qgframe-area-header { grid-area: header; margin-left: 0; margin-right: 0; }"))
-    #expect(css.contains("> #quartz-body {\n  padding-inline: 0;\n  overflow-x: clip;\n}"))
+    #expect(css.contains("> #quartz-body {\n  padding-inline: 0;\n}\nhtml:has(.page[data-frame=\"x\"]) {\n  overflow-x: clip;\n}"))
   }
 
   @Test func fillsRowsAndTheCheck() throws {

@@ -45,8 +45,11 @@ kleiner, ginge das nur, solange die Lücke kleiner ist als der Innenabstand; im 
 umgekehrt (Lücke 4rem/3rem, Abstand 20px), der Inhalt wäre auf dem Tablet um 28px je Seite
 eingerückt worden. Deshalb reicht das Raster um eine Lücke je Seite über die Seite hinaus
 (`width: calc(100% + 2 * gap)`, `margin-inline: calc(-1 * gap)`), der volle Bereich nimmt sie mit
-seinem Rand zurück, und `#quartz-body` schneidet den Rest mit `overflow-x: clip` ab (kein
-Scroll-Container, eine Sticky-Kopfzeile bleibt sticky). `#quartz-body` verliert dabei Quartz' eigenen
+seinem Rand zurück, und das Fenster schneidet den Rest ab (`html:has(<Frame>) { overflow-x: clip }`;
+an der Wurzel wird daraus das `hidden` des Viewports, das Quartz' `base.scss` ohnehin setzt, eine
+Sticky-Kopfzeile bleibt sticky). Zuerst stand der Clip an `#quartz-body`: Dann schnitt er die
+Kopfzeile ab, sobald eine Rail `<body>` einrückte und die Kopfzeile über `--qgframe-bleed-left`
+wieder bis an den Rand reichte (an der Website gemessen: Kopfzeile 0–1600, sichtbar erst ab 320). `#quartz-body` verliert dabei Quartz' eigenen
 Innenabstand unterhalb der Desktop-Breite, sonst endeten die vollen Bereiche 1rem vor dem Rand; der
 Innenabstand des Frames ist dann der einzige.
 
