@@ -17,12 +17,13 @@ import Testing
   @Test func everyOptionHasExactlyOneStep() throws {
     for fields in [Self.old, Self.current] {
       try #require(fields.count > 40)
-      let assigned = SetupSteps.assign(NavigationVariants.steps, fields: fields)
-      #expect(Set(assigned.keys) == Set(fields.map(\.key)))
-      let perStep = NavigationVariants.steps.map { SetupSteps.keys($0, in: NavigationVariants.steps, fields: fields) }
-      #expect(perStep.flatMap { $0 }.count == fields.count)
-      // No option lands in the last step only because no step names its group.
+      // That every key lands in exactly one step follows from `assign`; what can go wrong is the
+      // table: an option caught only by the fallback, or a step of options left without any
+      // (review 2026-11-16, N2: two expectations here could not fail).
       #expect(SetupSteps.unplaced(NavigationVariants.steps, fields: fields).isEmpty)
+      for step in NavigationVariants.steps where step.part == .options {
+        #expect(!SetupSteps.keys(step, in: NavigationVariants.steps, fields: fields).isEmpty, "\(step.id) is empty")
+      }
     }
     let assigned = SetupSteps.assign(NavigationVariants.steps, fields: Self.current)
     #expect(assigned["variant"] == "variant")
@@ -200,5 +201,10 @@ import Testing
     try #require(!itemKeys.isEmpty)
     let languageKeys = Set(MultilanguageOptions.languageSteps.flatMap(\.keys))
     #expect(Set(itemKeys).isSubset(of: languageKeys), "\(Set(itemKeys).subtracting(languageKeys))")
+    // And the other way: a key of the steps that is no field of an item is one of the plugin's
+    // options, not a name the schema no longer has (N2).
+    let beyond = languageKeys.subtracting(itemKeys)
+    #expect(beyond == ["defaultLanguage", "publishLanguages"])
+    #expect(beyond.allSatisfy { key in fields.contains { $0.key == key } })
   }
 }

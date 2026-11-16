@@ -288,3 +288,23 @@ nur im Code. Das Handbuch beschreibt den Inspektor noch ohne Schritte (Punkt 5).
 - Nicht aufgeklappt bekommen: die Schrittliste in der Aufnahme (`disclose` trifft im rechten Viertel
   auch Dreiecke der Vorschau). Die Bildunterschriften sagen nur, was zu sehen ist.
 
+
+### Nach dem Review 2026-11-16
+
+Die Befunde aus `docs/REVIEW-2026-11-16.md`, Chronik in `docs/reviews.md`:
+
+- **Der erste Durchlauf endet mit seinem Eintrag** (M1) und **wenn ein anderer gewählt wird** (N1):
+  `SetupRun` steht im Kern, die Plugins-Seite prüft `lasts(keys:selected:)` nach jeder Änderung der
+  Liste und der vier Auswahlen. Was die Schritte geschrieben haben, bleibt; wieder gewählt, ist der
+  Eintrag ein bestehender und nimmt vor seiner nächsten Änderung einen Snapshot.
+- **Abbrechen nimmt nur zurück, was der Lauf umnummeriert hat** (M2, siehe Punkt 1).
+- **Eine neue eigene Klasse nimmt Lauf und Schritt mit** (M3), bei Navigation und Box wie schon bei
+  Formular und Sprache. Leert man die Klasse, endet der Lauf.
+- **Abbrechen gibt das Layout-Formular zurück** und schreibt Standard- und veröffentlichte Sprachen nur
+  zurück, wo sie noch auf Sprachen der Website zeigen (M4; `FormsOptions.cancelSetup`,
+  `MultilanguageOptions.cancelSetup`).
+- **Ein gescheitertes Schreiben verbraucht den Snapshot nicht** (M5; `SnapshotOnce`, gezählt von
+  `PluginsModel.failures`).
+- **Der Rauchtest** ist `UITests/SetupStepsTests`, an Navigation und Box: Anlegen, alle Schritte, ein
+  Umsortieren im Platz-Schritt, Abbrechen, die Datei danach byte-gleich und ein Snapshot mehr; dazu die
+  Fälle von M1, M3 und N1. Formular und Sprache hat er nicht: Dafür bräuchte die Testkopie ihre Plugins.
