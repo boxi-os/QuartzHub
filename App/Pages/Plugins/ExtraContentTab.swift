@@ -37,6 +37,8 @@ struct ExtraContentTab: View {
   @Bindable var model: PluginsModel
   @Binding var selection: Int?
   @Binding var styled: Set<String>
+  /// The box ➕ just created: the inspector sets it up in steps.
+  @Binding var setup: SetupRun?
   @Environment(\.unsavedGuard) private var unsaved
   /// The installed version, for the one rule that changed with it: a key left empty throws before 0.4.1.
   @State private var installed: String?
@@ -184,7 +186,9 @@ struct ExtraContentTab: View {
     ]))
     object["layout"] = .object(JSONObject([("position", .string(position)), ("priority", .number((priorities.max() ?? 0) + 10))]))
     selection = boxes.count + 1
-    if await model.commit({ $0 + [PluginEntry(object: object)] }) {
+    // The inspector takes over in steps; this write is the setup's one snapshot.
+    setup = object["options"]?["className"]?.stringValue.map { SetupRun(className: $0, before: plugins) }
+    if await model.commit(snapshot: .labeled(L10n.t("extraContent.steps.snapshotLabel")), { $0 + [PluginEntry(object: object)] }) {
       Announce.post(L10n.t("extraContent.addedAnnounce", ["position": InstalledTab.positionTitle(position)]))
     }
   }
@@ -244,26 +248,50 @@ struct ExtraContentTab: View {
   }
 }
 
-/// The selected box in the inspector: on or off, its content as "Text | Datei", then the options
-/// for that answer; the other one, if it is still set, stays in sight greyed as "wirkt nicht".
+/// The selected box in the inspector, in steps (docs/plan-assistenten.md, `InspectorSteps`): the
+/// kind of content as "Text | Datei", the content, its place, then the plugin's options by the steps
+/// of `LayoutBoxes.steps`. The other kind of content, if it is still set, stays in sight greyed as
+/// "wirkt nicht". Writes go at once, with one snapshot, as in the navigations' inspector.
 struct BoxInspector: View {
   let box: LayoutBoxes.Box
   let label: String
   @Bindable var model: PluginsModel
+  /// The box ➕ just created, while its first run lasts.
+  @Binding var setup: SetupRun?
+  @Binding var selection: Int?
   let showAllOptions: () -> Void
   @Environment(\.openLayout) private var openLayout
   @Environment(\.unsavedGuard) private var unsaved
+  /// "<entry>:<step>": where this window was, by the box's class rather than its index.
+  @SceneStorage("extraContent.step") private var stored = ""
   @State private var schema: PluginOptionSchemaResult?
   @State private var loaded = false
+  @State private var visited: Set<String> = []
+  @State private var snapshotTaken = false
 
   private var options: JSONObject { box.plugin.object["options"]?.objectValue ?? JSONObject() }
+  private var entryKey: String { InstanceClass.own(box.plugin) ?? "#\(box.occurrence)" }
+  private var firstRun: Bool { setup != nil && setup?.className == InstanceClass.own(box.plugin) }
+
+  private var current: Binding<String> {
+    Binding(get: {
+      guard let split = stored.lastIndex(of: ":"), stored[..<split] == entryKey else { return "kind" }
+      return String(stored[stored.index(after: split)...])
+    }, set: { step in
+      stored = "\(entryKey):\(step)"
+      visited.insert(step)
+    })
+  }
 
   var body: some View {
     let options = options
-    let kind = LayoutBoxes.contentKind(.object(options))
     let installed = schema?.packageVersion
-    let ownText = kind == .file ? LayoutBoxes.langsWithOwnText(.object(options)) : []
     let broken = LayoutBoxes.brokenOptions(box.plugin.object["options"], installed: installed)
+    let fields = schema?.schema?.fields ?? []
+    let steps = LayoutBoxes.steps.map { step in
+      InspectorStep(id: step.id, title: Self.title(step.id),
+                    noEffect: loaded && schema != nil && !LayoutBoxes.stepHasEffect(step, options: options, fields: fields, installed: installed))
+    }
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
@@ -281,47 +309,21 @@ struct BoxInspector: View {
           if let installed, installed != LayoutBoxes.readAgainst, !LayoutBoxes.sameCode.contains(installed) {
             Callout(.warning, L10n.t("plugins.readAgainst", ["plugin": LayoutBoxes.plugin, "read": LayoutBoxes.readAgainst, "installed": installed]))
           }
+          // In every step: the build fails on it.
+          ForEach(Array(broken.enumerated()), id: \.offset) { _, b in
+            Callout(.error, b.lang == nil ? L10n.t("extraContent.broken", ["key": b.key])
+                      : L10n.t("extraContent.brokenLang", ["key": b.key, "lang": b.lang ?? ""]))
+          }
         }
         Toggle(L10n.t("extraContent.enabled"), isOn: Binding(get: { box.plugin.enabled }, set: { _ in
-          Task { await model.toggleEnabled(box.index) }
+          Task { await model.toggleEnabled(box.index, snapshot: policy()) }
         }))
         .accessibilityIdentifier("extras.inspector.enabled")
       }
-      Section(L10n.t("extraContent.contentHeading")) {
-        // Below each other: side by side, "Konfiguration" broke in the middle of the word.
-        VStack(alignment: .leading, spacing: 6) {
-          tile(.html, current: kind, title: L10n.t("extraContent.contentText"), text: L10n.t("extraContent.contentTextHint"),
-               symbol: "chevron.left.forwardslash.chevron.right")
-          tile(.file, current: kind, title: L10n.t("extraContent.contentFile"), text: L10n.t("extraContent.contentFileHint"), symbol: "doc.text")
-        }
-        if !ownText.isEmpty { Note(L10n.t("extraContent.langOverride", ["langs": ownText.joined(separator: ", ")])) }
-        ForEach(Array(broken.enumerated()), id: \.offset) { _, b in
-          Callout(.error, b.lang == nil ? L10n.t("extraContent.broken", ["key": b.key])
-                    : L10n.t("extraContent.brokenLang", ["key": b.key, "lang": b.lang ?? ""]))
-        }
-        VStack(alignment: .leading, spacing: 6) {
-          Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], box.index)) }
-          Button(L10n.t("extraContent.allOptions"), action: showAllOptions)
-            .accessibilityIdentifier("extras.allOptions")
-        }
-      }
-      if !loaded {
-        Section(L10n.t("extraContent.optionsHeading")) {
-          Text(L10n.t("layoutEditor.inspector.optionsLoading")).foregroundStyle(.secondary)
-        }
-      } else if let schema {
-        Section {} header: { Text(L10n.t("extraContent.optionsHeading")) }
-        // Text is not offered while a file is the content: the tile above switches to it. An
-        // `html:` without a value is shown, greyed, or as the error it is before 0.4.1.
-        OptionsForm(schema: schema.schema, values: options,
-                    onChange: { next in Task { await model.updateField(box.index, path: ["options"], value: next.map(JSONValue.object)) } },
-                    explicitEmpty: true, languages: model.config?.siteLanguages ?? [],
-                    pick: { !(kind == .file && $0 == "html" && options["html"] == nil) }, freeKeys: false,
-                    root: LayoutBoxes.root(options: options, installed: installed), projectPath: model.project.path)
-      } else {
-        Section(L10n.t("extraContent.optionsHeading")) {
-          Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": L10n.t("pluginsInstalled.sourceUnreadable")]))
-        }
+      InspectorSteps(steps: steps, current: current, firstRun: firstRun, visited: visited, finish: finish,
+                     cancel: { Task { await cancel() } }) { step in
+        Section { Note(Self.hint(step.id)) }
+        stepContent(step.id, values: options, installed: installed)
       }
     }
     .formStyle(.grouped)
@@ -335,6 +337,142 @@ struct BoxInspector: View {
         schema = nil
       }
       loaded = true
+    }
+    .onAppear {
+      if firstRun { visited = [current.wrappedValue] }
+    }
+  }
+
+  @ViewBuilder private func stepContent(_ id: String, values: JSONObject, installed: String?) -> some View {
+    let kind = LayoutBoxes.contentKind(.object(values))
+    switch LayoutBoxes.steps.first(where: { $0.id == id })?.part ?? .options {
+    case .kind:
+      Section(L10n.t("extraContent.contentHeading")) {
+        // Below each other: side by side, "Konfiguration" broke in the middle of the word.
+        VStack(alignment: .leading, spacing: 6) {
+          tile(.html, current: kind, title: L10n.t("extraContent.contentText"), text: L10n.t("extraContent.contentTextHint"),
+               symbol: "chevron.left.forwardslash.chevron.right")
+          tile(.file, current: kind, title: L10n.t("extraContent.contentFile"), text: L10n.t("extraContent.contentFileHint"), symbol: "doc.text")
+        }
+        let ownText = kind == .file ? LayoutBoxes.langsWithOwnText(.object(values)) : []
+        if !ownText.isEmpty { Note(L10n.t("extraContent.langOverride", ["langs": ownText.joined(separator: ", ")])) }
+      }
+    case .placement:
+      PlacementStep(index: box.index, name: label, model: model) { mutate in await model.commit(snapshot: policy(), mutate) }
+    case .options:
+      options(for: id, values: values, installed: installed)
+    case .finish:
+      Section {
+        LabeledContent(L10n.t("extraContent.contentHeading"), value: kind == .html ? L10n.t("extraContent.kindText")
+                        : L10n.t("extraContent.kindFile", ["file": LayoutBoxes.snippetRefs(.object(values)).first?.file ?? ""]))
+        LabeledContent(L10n.t("layoutEditor.inspector.position"), value: placeText)
+        LabeledContent(L10n.t("inspectorSteps.summaryChanged"), value: String(values.count))
+        VStack(alignment: .leading, spacing: 6) {
+          Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], box.index)) }
+          Button(L10n.t("extraContent.allOptions"), action: showAllOptions)
+            .accessibilityIdentifier("extras.allOptions")
+        }
+      }
+      options(for: id, values: values, installed: installed)
+    }
+  }
+
+  /// The plugin's options of one step. Text is not offered while a file is the content: the tiles
+  /// switch to it. An `html:` without a value is shown, greyed, or as the error it is before 0.4.1.
+  @ViewBuilder private func options(for id: String, values: JSONObject, installed: String?) -> some View {
+    if !loaded {
+      Section { Text(L10n.t("layoutEditor.inspector.optionsLoading")).foregroundStyle(.secondary) }
+    } else if let schema {
+      let kind = LayoutBoxes.contentKind(.object(values))
+      let assigned = SetupSteps.assign(LayoutBoxes.steps, fields: schema.schema?.fields ?? [])
+      let last = LayoutBoxes.steps.last?.id
+      OptionsForm(schema: schema.schema, values: values,
+                  onChange: { next in Task { await model.updateField(box.index, path: ["options"], value: next.map(JSONValue.object), snapshot: policy()) } },
+                  explicitEmpty: true, languages: model.config?.siteLanguages ?? [],
+                  // A key no schema names (written by hand) belongs to the last step, so nothing is lost.
+                  pick: { key in
+                    (assigned[key] == id || (assigned[key] == nil && id == last)) && !(kind == .file && key == "html" && values["html"] == nil)
+                  },
+                  freeKeys: false, root: root(for: id, values: values, installed: installed), projectPath: model.project.path,
+                  searchable: false)
+    } else {
+      Section {
+        Callout(.error, L10n.t("layoutEditor.inspector.optionsError", ["reason": L10n.t("pluginsInstalled.sourceUnreadable")]))
+      }
+    }
+  }
+
+  /// The content leads its step under "Inhalt: Text" or "Inhalt: Datei"; elsewhere the groups are
+  /// plain sections, the step being the fold.
+  private func root(for id: String, values: JSONObject, installed: String?) -> OptionRoot {
+    var root = LayoutBoxes.root(options: values, installed: installed)
+    if id != "content" {
+      root.lead = nil
+      root.flat = true
+    }
+    return root
+  }
+
+  private var placeText: String {
+    let plugins = model.config?.plugins ?? []
+    guard case .string(let position)? = LayoutEntries.layout(box.plugin)?["position"] else { return L10n.t("extraContent.notPlaced") }
+    let list = LayoutEntries.positionMap(plugins)[position] ?? []
+    guard let place = list.firstIndex(of: box.index) else { return InstalledTab.positionTitle(position) }
+    return "\(InstalledTab.positionTitle(position)), \(L10n.t("layoutEditor.inspector.orderOf", ["n": String(place + 1), "count": String(list.count)]))"
+  }
+
+  // MARK: Writing
+
+  /// One snapshot per setup: ➕ took it for a new box; an existing one takes it with the first
+  /// write after the inspector opened.
+  private func policy() -> PluginsModel.SnapshotPolicy {
+    if firstRun || snapshotTaken { return .none }
+    snapshotTaken = true
+    return .each
+  }
+
+  private func finish() {
+    setup = nil
+    snapshotTaken = true
+    Announce.post(L10n.t("extraContent.steps.doneAnnounce", ["name": label]))
+  }
+
+  /// Takes the new box out again, after asking; the safe answer first.
+  private func cancel() async {
+    let (question, detail) = Confirm.split(L10n.t("extraContent.steps.cancelQuestion"))
+    guard await Confirm.ask(question, detail: detail, confirm: L10n.t("extraContent.steps.cancelRemove"), destructive: true,
+                            cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
+    let before = setup?.before ?? []
+    setup = nil
+    selection = nil
+    if await model.cancelSetup(index: box.index, before: before) {
+      Announce.post(L10n.t("extraContent.steps.cancelledAnnounce"))
+    }
+  }
+
+  // MARK: Words
+
+  static func title(_ id: String) -> String {
+    switch id {
+    case "kind": L10n.t("extraContent.steps.kind")
+    case "content": L10n.t("extraContent.steps.content")
+    case "place": L10n.t("extraContent.steps.place")
+    case "look": L10n.t("extraContent.steps.look")
+    case "languages": L10n.t("extraContent.steps.languages")
+    case "finish": L10n.t("extraContent.steps.finish")
+    default: id
+    }
+  }
+
+  static func hint(_ id: String) -> String {
+    switch id {
+    case "kind": L10n.t("extraContent.steps.kindHint")
+    case "content": L10n.t("extraContent.steps.contentHint")
+    case "place": L10n.t("extraContent.steps.placeHint")
+    case "look": L10n.t("extraContent.steps.lookHint")
+    case "languages": L10n.t("extraContent.steps.languagesHint")
+    case "finish": L10n.t("extraContent.steps.finishHint")
+    default: ""
     }
   }
 
@@ -368,7 +506,7 @@ struct BoxInspector: View {
       }
       var rest = values
       rest["html"] = nil
-      await model.updateField(box.index, path: ["options"], value: rest.isEmpty ? nil : .object(rest))
+      await model.updateField(box.index, path: ["options"], value: rest.isEmpty ? nil : .object(rest), snapshot: policy())
       return
     }
     // Into text: an HTML file the box showed becomes the starting text, so the box looks the same
@@ -382,6 +520,6 @@ struct BoxInspector: View {
     }
     var withText = values
     withText["html"] = .string(html.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? L10n.t("extraContent.newHtml") : html)
-    await model.updateField(box.index, path: ["options"], value: .object(withText))
+    await model.updateField(box.index, path: ["options"], value: .object(withText), snapshot: policy())
   }
 }

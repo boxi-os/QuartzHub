@@ -87,4 +87,27 @@ import Testing
     // Gegenprobe: without it the file keeps the renumbered priorities.
     #expect(Array(removed.prefix(2)) != Array(before.prefix(2)))
   }
+
+  /// quartz-layout-box's schema as gui-test has it (0.4.2, `Fixtures/option-schema/real`).
+  static let boxFields: [OptionField] = {
+    let url = PluginSchemaReaderTests.fixtures.appendingPathComponent("real/.quartz/plugins/quartz-layout-box/package.json")
+    guard let data = try? Data(contentsOf: url), let package = try? JSJSON.parse(data),
+          let schema = package["quartz"]?["configSchema"] else { return [] }
+    return OptionSchema.normalize(jsonSchema: schema, source: .configSchema).fields
+  }()
+
+  @Test func boxStepsCoverTheSchema() throws {
+    let fields = Self.boxFields
+    try #require(fields.count >= 10)
+    #expect(SetupSteps.unplaced(LayoutBoxes.steps, fields: fields).isEmpty)
+    let assigned = SetupSteps.assign(LayoutBoxes.steps, fields: fields)
+    #expect(assigned["html"] == "content" && assigned["file"] == "content" && assigned["dir"] == "content" && assigned["placeholders"] == "content")
+    #expect(assigned["title"] == "look" && assigned["collapsed"] == "look")
+    #expect(assigned["byLang"] == "languages" && assigned["frontmatterKey"] == "languages" && assigned["className"] == "finish")
+    let steps = Dictionary(uniqueKeysWithValues: LayoutBoxes.steps.map { ($0.id, $0) })
+    for id in ["kind", "content", "place", "look", "languages", "finish"] {
+      #expect(LayoutBoxes.stepHasEffect(try #require(steps[id]), options: JSONObject([("html", .string("<p>x</p>"))]), fields: fields,
+                                        installed: LayoutBoxes.readAgainst), "\(id)")
+    }
+  }
 }

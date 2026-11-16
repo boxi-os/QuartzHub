@@ -9399,13 +9399,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jede Box ist ein eigener Eintrag von quartz-layout-box. Ihr Inhalt steht entweder als Text in der Konfiguration oder in einer Datei unter quartz/static. Wo sie steht, legst du auf der Layout-Bühne fest. Jede Änderung wird sofort gespeichert."
+            "value" : "Jede Box ist ein eigener Eintrag von quartz-layout-box. Ihr Inhalt steht entweder als Text in der Konfiguration oder in einer Datei unter quartz/static. Wähle eine aus: Der Inspektor zeigt ihre Einstellungen in Schritten, vom Inhalt über den Platz bis zu den Sprachen. Jede Änderung wird sofort gespeichert."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Each box is an entry of quartz-layout-box of its own. Its content is either text in the configuration or a file under quartz/static. Where it sits is set on the layout stage. Every change is saved at once."
+            "value" : "Each box is an entry of quartz-layout-box of its own. Its content is either text in the configuration or a file under quartz/static. Pick one: the inspector shows its settings in steps, from the content and its placement to the languages. Every change is saved at once."
           }
         }
       }
@@ -9826,6 +9826,329 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stands in the configuration without a value and therefore counts as not set. Reset it to remove the entry."
+          }
+        }
+      }
+    },
+    "extraContent.steps.cancelQuestion" : {
+      "comment" : "BoxInspector: asked by Einrichten abbrechen; question, blank line, detail",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die neue Box entfernen?\n\nSie steht schon in der Konfiguration. Entfernen nimmt sie mit allem, was du in den Schritten eingestellt hast, wieder heraus. Eine Datei, die du dabei angelegt hast, bleibt liegen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the new box?\n\nIt is already in the configuration. Removing it takes it out again, with everything set in the steps. A file created on the way stays."
+          }
+        }
+      }
+    },
+    "extraContent.steps.cancelRemove" : {
+      "comment" : "BoxInspector: the destructive answer to cancelQuestion",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Box"
+          }
+        }
+      }
+    },
+    "extraContent.steps.cancelledAnnounce" : {
+      "comment" : "BoxInspector: VoiceOver after cancelling the setup",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Box entfernt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New box removed."
+          }
+        }
+      }
+    },
+    "extraContent.steps.content" : {
+      "comment" : "BoxInspector: a step of setting up a box",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhalt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content"
+          }
+        }
+      }
+    },
+    "extraContent.steps.contentHint" : {
+      "comment" : "BoxInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Text der Box oder die Datei, die sie zeigt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The box's text, or the file it shows."
+          }
+        }
+      }
+    },
+    "extraContent.steps.doneAnnounce" : {
+      "comment" : "BoxInspector: VoiceOver after Fertig",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box „{{name}}“ eingerichtet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box “{{name}}” set up."
+          }
+        }
+      }
+    },
+    "extraContent.steps.finish" : {
+      "comment" : "BoxInspector: a step of setting up a box; the last one",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfassung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "extraContent.steps.finishHint" : {
+      "comment" : "BoxInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was eingestellt ist, dazu die Optionen, die zu keinem Schritt gehören."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What is set, and the options that belong to no step."
+          }
+        }
+      }
+    },
+    "extraContent.steps.kind" : {
+      "comment" : "BoxInspector: a step of setting up a box",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Art des Inhalts"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kind of content"
+          }
+        }
+      }
+    },
+    "extraContent.steps.kindHint" : {
+      "comment" : "BoxInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ob der Inhalt als Text in der Konfiguration steht oder aus einer Datei kommt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whether the content is text in the configuration or comes from a file."
+          }
+        }
+      }
+    },
+    "extraContent.steps.languages" : {
+      "comment" : "BoxInspector: a step of setting up a box; the plugin's own group name",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je Sprache und Seite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per language and page"
+          }
+        }
+      }
+    },
+    "extraContent.steps.languagesHint" : {
+      "comment" : "BoxInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigener Inhalt für einzelne Sprachen oder Seiten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content of its own for single languages or pages."
+          }
+        }
+      }
+    },
+    "extraContent.steps.look" : {
+      "comment" : "BoxInspector: a step of setting up a box",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darstellung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        }
+      }
+    },
+    "extraContent.steps.lookHint" : {
+      "comment" : "BoxInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Überschrift der Box und ob sie sich auf- und zuklappen lässt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The box's heading, and whether it folds."
+          }
+        }
+      }
+    },
+    "extraContent.steps.place" : {
+      "comment" : "BoxInspector: a step of setting up a box",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Platz"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placement"
+          }
+        }
+      }
+    },
+    "extraContent.steps.placeHint" : {
+      "comment" : "BoxInspector: what a step is for, under the step list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wo die Box auf der Seite steht und auf welchen Bildschirmen sie erscheint."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where the box sits on the page and on which screens it appears."
+          }
+        }
+      }
+    },
+    "extraContent.steps.snapshotLabel" : {
+      "comment" : "Label of the one snapshot taken when ➕ creates a box (Snapshots page)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box einrichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up box"
           }
         }
       }
@@ -22591,6 +22914,25 @@
         }
       }
     },
+    "inspectorSteps.cancelKeep" : {
+      "comment" : "Safe answer when cancelling a setup in steps (navigation, box)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter einrichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue Setup"
+          }
+        }
+      }
+    },
     "inspectorSteps.done" : {
       "comment" : "InspectorSteps: last step of a new entry's first run",
       "extractionState" : "manual",
@@ -22720,6 +23062,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "done"
+          }
+        }
+      }
+    },
+    "inspectorSteps.summaryChanged" : {
+      "comment" : "Last step of a setup in steps: label before the number of options the entry sets",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesetzte Optionen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Options set"
           }
         }
       }
@@ -38826,25 +39187,6 @@
         }
       }
     },
-    "navigationsEditor.steps.cancelKeep" : {
-      "comment" : "NavigationInspector: the safe answer to cancelQuestion",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weiter einrichten"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continue Setup"
-          }
-        }
-      }
-    },
     "navigationsEditor.steps.cancelQuestion" : {
       "comment" : "NavigationInspector: asked by Einrichten abbrechen; question, blank line, detail",
       "extractionState" : "manual",
@@ -39221,25 +39563,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set up navigation: {{variant}}"
-          }
-        }
-      }
-    },
-    "navigationsEditor.steps.summaryChanged" : {
-      "comment" : "NavigationInspector, step Zusammenfassung: label before the number of options the entry sets",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gesetzte Optionen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Options set"
           }
         }
       }

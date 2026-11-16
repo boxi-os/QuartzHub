@@ -255,6 +255,14 @@ final class PluginsModel {
     return true
   }
 
+  /// Cancelling a setup's first run: the new entry out, the neighbours' priorities back as they
+  /// were before ➕, without a snapshot (➕ took the setup's one).
+  func cancelSetup(index: Int, before: [PluginEntry]) async -> Bool {
+    await commit(snapshot: .none) { plugins in
+      LayoutEntries.restoringPriorities(plugins.enumerated().filter { $0.offset != index }.map(\.element), from: before)
+    }
+  }
+
   func updateField(_ index: Int, path: [String], value: JSONValue?, snapshot: SnapshotPolicy = .each) async {
     let done = await commit(snapshot: snapshot) { plugins in
       plugins.enumerated().map { offset, plugin in

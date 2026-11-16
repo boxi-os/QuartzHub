@@ -1,7 +1,7 @@
 # Plan: Schritte im Inspektor für die vier eigenen Plugins
 
-Stand 2026-11-16: Punkt 1 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen), siehe
-„Umgesetzt“ am Ende; Punkt 2 bis 5 offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
+Stand 2026-11-16: Punkt 1 und 2 umgesetzt (Baustein, Modell, Platz-Schritt, Navigationen,
+Layout-Box), siehe „Umgesetzt“ am Ende; Punkt 3 bis 5 offen. Betrifft die Editoren unter **Plugins ▸ Navigationen,
 Zusätzliche Inhalte, Mehrsprachigkeit, Formulare** (quartz-navigations, quartz-layout-box,
 quartz-multilanguage, quartz-forms).
 
@@ -200,4 +200,23 @@ Je Punkt ein Commit mit Bau, `qh-check i18n`, Tests und Ansehen (Skill `run-app`
 
 **Nicht geprüft**: Hell (nur Dunkel angesehen, die Bausteine nutzen nur Systemstile); VoiceOver-Ansagen
 nur im Code. Das Handbuch beschreibt den Inspektor noch ohne Schritte (Punkt 5).
+
+### Punkt 2, 2026-11-16: Layout-Box
+
+- Sechs Schritte (`LayoutBoxes.steps`): Art des Inhalts (die zwei Kacheln Text / Datei), Inhalt
+  (Gruppe „Content“, unter „Inhalt: Text“ bzw. „Inhalt: Datei“ wie bisher), Platz, Darstellung
+  (Gruppe „Box“), Je Sprache und Seite (der Name der Plugin-Gruppe), Zusammenfassung (Gruppe
+  „Technical“). Ein „Ordner“ als dritte Art, wie oben geplant, gibt es nicht: `dir` ist der Ordner der
+  Datei und steht im Schritt „Inhalt“.
+- ➕ legt die Box an wie bisher (Text, links, zuletzt); der Inspektor beginnt bei „Art des Inhalts“.
+  Den festen Platz `left` ändert jetzt der Platz-Schritt.
+- „wirkt“ je Schritt über dieselbe Regel wie bei den Navigationen (`SetupSteps.hasEffect`), mit
+  `LayoutBoxes.silenced` als Regel des Plugins. Alle sechs Schritte wirken bei einer Text-Box.
+- Gemeinsam mit Punkt 1: `SetupRun` (App/Components/InspectorSteps.swift), `PluginsModel.cancelSetup`,
+  die Texte `inspectorSteps.cancelKeep` und `inspectorSteps.summaryChanged`. Die Nachbarn im
+  Platz-Schritt heißen wie in ihren Listen (Navigation, Box), sonst nach dem Plugin.
+- Fehlerhafte Optionen (`brokenOptions`) stehen jetzt im Kopf des Inspektors, in jedem Schritt: Der
+  Bau scheitert daran.
+- An der App: Anlegen, Weiter bis „Platz“, zweimal „Früher“, Abbrechen; `diff` gegen die
+  Konfiguration von vorher leer.
 

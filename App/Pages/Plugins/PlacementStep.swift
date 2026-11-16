@@ -107,9 +107,14 @@ struct PlacementStep: View {
     return names
   }
 
-  /// What another entry is called among the neighbours: its plugin's name, "#n" where it is there twice.
+  /// What another entry is called among the neighbours: a navigation or a box as its tab lists it,
+  /// anything else by its plugin's name, "#n" where it is there twice.
   private func neighbourName(_ entry: Int, plugins: [PluginEntry]) -> String {
     if entry == index { return name }
+    let navigations = NavigationInstance.all(plugins)
+    if let item = navigations.first(where: { $0.index == entry }) { return item.label(among: navigations.count) }
+    let boxes = LayoutBoxes.boxes(plugins)
+    if let box = boxes.first(where: { $0.index == entry }) { return BoxLabels.label(box, among: boxes) }
     let plugin = plugins[entry]
     let count = plugins.filter { $0.name == plugin.name && LayoutEntries.layout($0) != nil }.count
     return count > 1 ? "\(plugin.name) #\(LayoutEntries.duplicateRanks(plugins)[entry] ?? 1)" : plugin.name

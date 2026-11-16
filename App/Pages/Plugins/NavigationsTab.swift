@@ -28,14 +28,6 @@ struct NavigationInstance: Identifiable {
   }
 }
 
-/// A navigation ➕ just created, while the inspector sets it up for the first time.
-struct NavigationSetupRun: Equatable {
-  /// The new navigation's class, its key while the run lasts.
-  let className: String
-  /// `plugins:` before ➕: cancelling puts back the priorities the placement step renumbered.
-  let before: [PluginEntry]
-}
-
 /// Navigationen (QuartzControl's `routes/Plugins/Navigations.tsx`): the navigations of
 /// quartz-navigations as a list, the selected one in the inspector (`NavigationInspector`), the
 /// real site below. It starts from the question the generic form leaves for last, which kind of
@@ -49,7 +41,7 @@ struct NavigationsTab: View {
   /// not be one a rule is written for.
   @Binding var styled: Set<String>
   /// The navigation ➕ just created: the inspector sets it up in steps.
-  @Binding var setup: NavigationSetupRun?
+  @Binding var setup: SetupRun?
   @Environment(\.unsavedGuard) private var unsaved
   @State private var adding = false
   /// The variants the installed plugin knows (`NavigationVariants.offered`), read from its schema.
@@ -199,7 +191,7 @@ struct NavigationsTab: View {
     let count = instances.count
     selection = count + 1
     // The inspector takes over in steps; this write is the setup's one snapshot.
-    setup = object["options"]?["className"]?.stringValue.map { NavigationSetupRun(className: $0, before: plugins) }
+    setup = object["options"]?["className"]?.stringValue.map { SetupRun(className: $0, before: plugins) }
     let label = L10n.t("navigationsEditor.steps.snapshotLabel", ["variant": NavigationVariants.catalog(NavigationVariants.label(variant), nil)])
     if await model.commit(snapshot: .labeled(label), { $0 + [PluginEntry(object: object)] }) {
       Announce.post(L10n.t("navigationsEditor.addedAnnounce", ["variant": NavigationVariants.catalog(NavigationVariants.label(variant), nil),
@@ -289,7 +281,7 @@ struct NavigationInspector: View {
   let label: String
   @Bindable var model: PluginsModel
   /// The navigation ➕ just created, while its first run lasts.
-  @Binding var setup: NavigationSetupRun?
+  @Binding var setup: SetupRun?
   @Binding var selection: Int?
   let showAllOptions: () -> Void
   @Environment(\.openLayout) private var openLayout
@@ -377,7 +369,7 @@ struct NavigationInspector: View {
 
   @ViewBuilder private func stepContent(_ id: String, values: JSONObject) -> some View {
     switch NavigationVariants.steps.first(where: { $0.id == id })?.part ?? .options {
-    case .variant:
+    case .kind:
       Section(L10n.t("navigationsEditor.variantHeading")) {
         // The current variant stays in sight even if the plugin's schema could not be read.
         let offered = NavigationVariants.offered(schema?.schema?.fields)
@@ -395,7 +387,7 @@ struct NavigationInspector: View {
       Section {
         LabeledContent(L10n.t("navigationsEditor.variantHeading"), value: NavigationVariants.catalog(NavigationVariants.label(item.variant), nil))
         LabeledContent(L10n.t("layoutEditor.inspector.position"), value: placeText)
-        LabeledContent(L10n.t("navigationsEditor.steps.summaryChanged"), value: String(values.keys.filter { $0 != "variant" }.count))
+        LabeledContent(L10n.t("inspectorSteps.summaryChanged"), value: String(values.keys.filter { $0 != "variant" }.count))
         VStack(alignment: .leading, spacing: 6) {
           Button(L10n.t("pluginsInstalled.showOnStage")) { openLayout(.component(model.config?.plugins ?? [], item.index)) }
           Button(L10n.t("navigationsEditor.allOptions"), action: showAllOptions)
@@ -487,15 +479,11 @@ struct NavigationInspector: View {
     let parts = L10n.t("navigationsEditor.steps.cancelQuestion").components(separatedBy: "\n\n")
     guard await Confirm.ask(parts[0], detail: parts.dropFirst().joined(separator: "\n\n"),
                             confirm: L10n.t("navigationsEditor.steps.cancelRemove"), destructive: true,
-                            cancel: L10n.t("navigationsEditor.steps.cancelKeep"), window: unsaved?.window) else { return }
-    let index = item.index
+                            cancel: L10n.t("inspectorSteps.cancelKeep"), window: unsaved?.window) else { return }
     let before = setup?.before ?? []
     setup = nil
     selection = nil
-    let done = await model.commit(snapshot: .none) { plugins in
-      LayoutEntries.restoringPriorities(plugins.enumerated().filter { $0.offset != index }.map(\.element), from: before)
-    }
-    if done {
+    if await model.cancelSetup(index: item.index, before: before) {
       Announce.post(L10n.t("navigationsEditor.steps.cancelledAnnounce"))
     }
   }

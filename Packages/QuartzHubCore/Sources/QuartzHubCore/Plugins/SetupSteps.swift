@@ -7,8 +7,8 @@ public struct SetupStep: Equatable, Sendable {
   public enum Part: String, Sendable {
     /// Only options from the plugin's schema.
     case options
-    /// quartz-navigations' tiles.
-    case variant
+    /// The tiles that decide what kind of entry it is (a navigation's variant, a box's content).
+    case kind
     /// Position, order and display of the entry's layout block.
     case placement
     /// The last step: what is set, and the options no other step takes.
@@ -57,6 +57,19 @@ public enum SetupSteps {
     return fields.map(\.key).filter { assigned[$0] == step.id }
   }
 
+  /// Whether a step does anything with these options: a part of QuartzHub's always does, a slice
+  /// of options as soon as one of them works: `noEffect` does not rule it out (the plugin's own
+  /// rules, read from its code) and its `x-quartz-when` holds.
+  public static func hasEffect(_ step: SetupStep, in steps: [SetupStep], options: JSONObject, fields: [OptionField],
+                               noEffect: (String) -> Bool = { _ in false }) -> Bool {
+    guard step.part == .options else { return true }
+    return keys(step, in: steps, fields: fields).contains { key in
+      guard !noEffect(key) else { return false }
+      let field = fields.first { $0.key == key }
+      return OptionSchema.evaluate(field?.when, values: .object(options), fields: fields)
+    }
+  }
+
   /// The keys only the fallback put into the last step: options QuartzHub has no step for yet.
   public static func unplaced(_ steps: [SetupStep], fields: [OptionField]) -> [String] {
     guard let last = steps.last else { return [] }
@@ -73,7 +86,7 @@ extension NavigationVariants {
   /// place next, so the preview shows it from the second step on. The groups are the plugin's
   /// (`x-quartz-group` in its package.json).
   public static let steps: [SetupStep] = [
-    SetupStep(id: "variant", part: .variant, keys: ["variant"]),
+    SetupStep(id: "variant", part: .kind, keys: ["variant"]),
     SetupStep(id: "place", part: .placement),
     SetupStep(id: "pages", groups: ["Page selection"]),
     SetupStep(id: "hide", groups: ["Hide", "Order"]),
@@ -83,18 +96,29 @@ extension NavigationVariants {
     SetupStep(id: "finish", part: .finish, groups: ["Technical"])
   ]
 
-  /// Whether a step does anything with these options: a part of QuartzHub's always does, a slice
-  /// of options as soon as one of them works for the variant and its `x-quartz-when` holds.
-  /// "Darstellung" of a tree does nothing: every option there belongs to other variants.
+  /// Whether a step does anything for this navigation: "Darstellung" of a tree does nothing, every
+  /// option there belongs to other variants.
   public static func stepHasEffect(_ step: SetupStep, options: JSONObject, fields: [OptionField]) -> Bool {
-    guard step.part == .options else { return true }
     let variant = variant(options)
     let mobile = options["mobile"]
-    let keys = SetupSteps.keys(step, in: steps, fields: fields)
-    return keys.contains { key in
-      guard !hasNoEffect(key, variant, mobile: mobile) else { return false }
-      let field = fields.first { $0.key == key }
-      return OptionSchema.evaluate(field?.when, values: .object(options), fields: fields)
-    }
+    return SetupSteps.hasEffect(step, in: steps, options: options, fields: fields) { hasNoEffect($0, variant, mobile: mobile) }
+  }
+}
+
+extension LayoutBoxes {
+  /// A box's steps: what its content is, the content, then its place, so the preview shows the box
+  /// where it belongs from the third step on. The groups are the plugin's.
+  public static let steps: [SetupStep] = [
+    SetupStep(id: "kind", part: .kind),
+    SetupStep(id: "content", groups: ["Content"], keys: contentKeys.sorted()),
+    SetupStep(id: "place", part: .placement),
+    SetupStep(id: "look", groups: ["Box"]),
+    SetupStep(id: "languages", groups: ["Per language and page"]),
+    SetupStep(id: "finish", part: .finish, groups: ["Technical"])
+  ]
+
+  public static func stepHasEffect(_ step: SetupStep, options: JSONObject, fields: [OptionField], installed: String?) -> Bool {
+    let silenced = silenced(options, installed: installed)
+    return SetupSteps.hasEffect(step, in: steps, options: options, fields: fields) { silenced($0) }
   }
 }

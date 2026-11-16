@@ -66,7 +66,9 @@ struct PluginsPage: View {
   @State private var multilanguageSchema: PluginOptionSchemaResult?
   @State private var styled: Set<String> = []
   /// The navigation ➕ just created, by its class, while the inspector sets it up in steps.
-  @State private var navigationSetup: NavigationSetupRun?
+  @State private var navigationSetup: SetupRun?
+  /// The box ➕ just created, likewise.
+  @State private var boxSetup: SetupRun?
 
   init(project: ProjectContext) {
     self.project = project
@@ -90,7 +92,7 @@ struct PluginsPage: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins.navigations")
         case .extras:
-          ExtraContentTab(model: model, selection: $boxSelected, styled: $styled)
+          ExtraContentTab(model: model, selection: $boxSelected, styled: $styled, setup: $boxSetup)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("page.plugins.extras")
         case .languages:
@@ -146,7 +148,7 @@ struct PluginsPage: View {
       } else if tab == .extras, let boxSelected,
                 let box = LayoutBoxes.boxes(model.config?.plugins ?? []).first(where: { $0.occurrence == boxSelected }) {
         let boxes = LayoutBoxes.boxes(model.config?.plugins ?? [])
-        BoxInspector(box: box, label: BoxLabels.label(box, among: boxes), model: model) {
+        BoxInspector(box: box, label: BoxLabels.label(box, among: boxes), model: model, setup: $boxSetup, selection: $boxSelected) {
           showAllOptions(box.plugin, index: box.index)
         }
         .id(box.occurrence)
