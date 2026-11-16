@@ -420,7 +420,8 @@ struct FormInspector: View {
       }
       Text(L10n.t("formsEditor.usedOnHint")).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
     }
-    toggle(L10n.t("formsEditor.useAsLayoutForm"), hint: L10n.t("formsEditor.useAsLayoutFormHint"), on: view.layoutForm == id) { on in
+    toggle(L10n.t("formsEditor.useAsLayoutForm"), hint: L10n.t("formsEditor.useAsLayoutFormHint"), on: view.layoutForm == id,
+           identifier: "forms.inspector.layoutForm") { on in
       Task { await setLayoutForm(on) }
     }
   }
@@ -457,9 +458,11 @@ struct FormInspector: View {
     }
   }
 
-  private func toggle(_ label: String, hint: String?, on: Bool, set: @escaping @Sendable (Bool) -> Void) -> some View {
+  private func toggle(_ label: String, hint: String?, on: Bool, identifier: String = "",
+                      set: @escaping @Sendable (Bool) -> Void) -> some View {
     VStack(alignment: .leading, spacing: 2) {
       Toggle(label, isOn: Binding(get: { on }, set: set))
+        .accessibilityIdentifier(identifier)
       if let hint { Text(hint).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true) }
     }
   }
@@ -612,11 +615,13 @@ struct FormInspector: View {
         return
       }
     }
+    // Asked first: with the run renamed, `firstRun` is false until the file has the new id.
+    let rule = policy()
     selection = "form:\(to)"
-    // The first run and "where was I" follow the form to its new id.
-    if firstRun, let run = setup { setup = SetupRun(key: to, before: run.before) }
+    // The first run, with its check marks, and "where was I" follow the form to its new id.
+    if firstRun, let run = setup { setup = run.renamed(to) }
     if let split = stored.lastIndex(of: ":"), stored[..<split] == from { stored = "\(to):\(stored[stored.index(after: split)...])" }
-    guard await FormsTab.update(model, snapshot: policy(), { FormsOptions.rename($0, from: from, to: to) }) else { return }
+    guard await FormsTab.update(model, snapshot: rule, { FormsOptions.rename($0, from: from, to: to) }) else { return }
     Announce.post(L10n.t("formsEditor.renamedAnnounce", ["from": from, "to": to]))
     // A captcha secret of the form's own is stored under its id; it goes along once the new id is
     // in the file (nothing happens when there is none).

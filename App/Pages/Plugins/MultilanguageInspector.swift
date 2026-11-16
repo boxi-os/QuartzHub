@@ -109,6 +109,7 @@ struct LanguageInspector: View {
       Section {
         Toggle(L10n.t("multilanguageEditor.isDefault"), isOn: Binding(get: { isDefault }, set: { on in if on { Task { await makeDefault() } } }))
           .disabled(isDefault)
+          .accessibilityIdentifier("multilanguage.inspector.default")
         Note(isDefault ? L10n.t("multilanguageEditor.isDefaultHintOn") : L10n.t("multilanguageEditor.isDefaultHint")).font(.caption)
         Toggle(L10n.t("multilanguageEditor.publish"), isOn: Binding(get: { published }, set: { on in Task { await publish(on) } }))
           .disabled(onlyPublished)
@@ -223,11 +224,13 @@ struct LanguageInspector: View {
 
   private func rename(_ to: String) async {
     let from = language.code
+    // Asked first: with the run renamed, `firstRun` is false until the file has the new code.
+    let rule = policy()
     selection = "lang:\(to)"
-    // The first run and "where was I" follow the language to its new code.
-    if firstRun, let run = setup { setup = SetupRun(key: to, before: run.before) }
+    // The first run, with its check marks, and "where was I" follow the language to its new code.
+    if firstRun, let run = setup { setup = run.renamed(to) }
     if let split = stored.lastIndex(of: ":"), stored[..<split] == from { stored = "\(to):\(stored[stored.index(after: split)...])" }
-    if await update({ MultilanguageOptions.rename($0, MultilanguageOptions.languages($0), from: from, to: to) }) {
+    if await MultilanguageTab.update(model, snapshot: rule, { MultilanguageOptions.rename($0, MultilanguageOptions.languages($0), from: from, to: to) }) {
       Announce.post(L10n.t("multilanguageEditor.renamedAnnounce", ["from": from, "to": to]))
     }
   }
