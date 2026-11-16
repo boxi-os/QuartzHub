@@ -101,6 +101,8 @@ public enum NavigationVariants {
     case "icons", "nodeIcons": return variant == .select
     case "showHome": return variant == .tabs || own
     case "showScopeRoot", "indexEntry": return own
+    // Since 0.5.1: a line before an entry; `select` and `pager` have no list to draw it in.
+    case "dividers": return own
     default: return false
     }
   }

@@ -97,6 +97,8 @@ import Testing
     #expect(NavigationVariants.noEffectReason("rail", .tree, mobile: same)?.variants == [.rail])
     #expect(NavigationVariants.noEffectReason("folderDefaultState", .tree, mobile: same)?.variants == [.accordion, .rail])
     #expect(NavigationVariants.noEffectReason("chevrons", .tree, mobile: same)?.variants == [.accordion, .flyout, .dropdown, .mega, .rail])
+    // `dividers` (0.5.1, render.tsx): every list variant draws them, `select` and `pager` do not.
+    #expect(V.allCases.filter { NavigationVariants.hasNoEffect("dividers", $0, mobile: same) } == [.select, .pager])
 
     let root = NavigationVariants.root(options: JSONObject([("variant", .string("rail")), ("mobile", .string("offcanvas"))]),
                                        fields: Self.fields, lang: .de, translate: OptionFormTextTests.echo)
