@@ -56,7 +56,7 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `swift run --package-path Packages/QuartzHubCore qh-check export-book <build> <ordner> [--offline] [--pdf]` — ein Build durch den
   Export (Reihenfolge, Seiten, Kapitel, Formeln und Diagramme als PNG); schreibt `content.json`, `pictures/`, `book.epub`, `book.html`,
   mit `--pdf` auch `book.pdf`. Geprüft mit QuartzControls `npm run check:export -- --files <ordner> --book <id>` (Dateien als `<id>.pdf` usw.;
-  epubcheck lokal: `PATH="$(scripts/epubcheck.sh --java-bin):$PATH"` davor, `--epubcheck-jar "$(scripts/epubcheck.sh --jar)"` dahinter)
+  epubcheck lokal: `JAVA_BIN="$(scripts/epubcheck.sh --java-bin)" && PATH="$JAVA_BIN:$PATH"` davor, `--epubcheck-jar "$(scripts/epubcheck.sh --jar)"` dahinter)
 - `swift run --package-path Packages/QuartzHubCore qh-check export-document <build> <ordner> --config <quartz.config.yaml> [--formats …] [--cancel-after <s>]` —
   der Export wie „Jetzt veröffentlichen“ (Wegwerf-Projekt, Buch über die ganze Website, Ziel „Dokument“, `Deploy.run`), ohne Netz;
   die Dateien heißen `check-export.*` und gehen an dasselbe `check:export -- --files`

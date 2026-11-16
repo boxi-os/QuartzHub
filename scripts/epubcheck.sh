@@ -7,9 +7,10 @@
 #   scripts/epubcheck.sh --jar                     # Pfad von epubcheck.jar
 #   scripts/epubcheck.sh --java-bin                # Ordner mit java, für PATH
 #
-# Für QuartzControls check:export (ruft `java` über PATH):
-#   PATH="$(scripts/epubcheck.sh --java-bin):$PATH" npm --prefix ../QuartzControl run check:export -- \
-#     --files <ordner> --book <id> --epubcheck-jar "$(scripts/epubcheck.sh --jar)"
+# Für QuartzControls check:export (ruft `java` über PATH); erst holen, dann einsetzen, sonst
+# begänne PATH nach einem gescheiterten Holen mit einem leeren Eintrag (dem aktuellen Ordner):
+#   JAVA_BIN="$(scripts/epubcheck.sh --java-bin)" && PATH="$JAVA_BIN:$PATH" npm --prefix ../QuartzControl \
+#     run check:export -- --files <ordner> --book <id> --epubcheck-jar "$(scripts/epubcheck.sh --jar)"
 #
 # Anheben: Java aus der Adoptium-API (api.adoptium.net/v3/assets/latest/21/hotspot?architecture=
 # aarch64&image_type=jre&os=mac, Felder release_name und binary.package.checksum), epubcheck aus
@@ -27,20 +28,29 @@ JAVA_BIN="$JAVA_DIR/$JAVA_RELEASE-jre/Contents/Home/bin"
 EPUBCHECK_DIR="$ROOT/.tools/epubcheck/$EPUBCHECK_VERSION"
 JAR="$EPUBCHECK_DIR/epubcheck-$EPUBCHECK_VERSION/epubcheck.jar"
 
-# fetch <name> <url> <sha256> <ziel> <auspacken>
+# Ohne Argument erst sagen, wie es geht, statt erst zu laden.
+[ -n "${1:-}" ] || { echo "Aufruf: scripts/epubcheck.sh <datei.epub> [optionen] | --jar | --java-bin" >&2; exit 2; }
+
+# fetch <name> <url> <sha256> <ziel> <auspacken> <datei im ziel>
+# Ausgepackt wird neben dem Ziel und erst vollständig umbenannt: ein abgebrochenes Auspacken lag
+# sonst im Ziel und galt beim nächsten Lauf als vorhanden (Review 2026-11-17, N4).
 fetch() {
-  TMP="$(mktemp -d)"
+  mkdir -p "$ROOT/.tools"
+  TMP="$(mktemp -d "$ROOT/.tools/.fetch.XXXXXX")"
+  trap 'rm -rf "$TMP"' EXIT
   echo "[epubcheck] lade $1" >&2
   curl -fsSL -o "$TMP/download" "$2"
   ACTUAL="$(shasum -a 256 "$TMP/download" | cut -d' ' -f1)"
   if [ "$ACTUAL" != "$3" ]; then
-    rm -rf "$TMP"
     echo "[epubcheck] Prüfsumme von $1 stimmt nicht: erwartet $3, gelesen $ACTUAL" >&2
     exit 1
   fi
+  mkdir "$TMP/out"
+  $5 "$TMP/download" "$TMP/out"
+  [ -e "$TMP/out/$6" ] || { echo "[epubcheck] $6 fehlt nach dem Auspacken von $1" >&2; exit 1; }
   rm -rf "$4"
-  mkdir -p "$4"
-  $5 "$TMP/download" "$4"
+  mkdir -p "$(dirname "$4")"
+  mv "$TMP/out" "$4"
   rm -rf "$TMP"
 }
 untar() { tar -xzf "$1" -C "$2"; }
@@ -49,19 +59,16 @@ unzipTo() { unzip -q "$1" -d "$2"; }
 if [ ! -x "$JAVA_BIN/java" ]; then
   fetch "Java $JAVA_RELEASE" \
     "https://github.com/adoptium/temurin21-binaries/releases/download/$(printf %s "$JAVA_RELEASE" | sed 's/+/%2B/')/$JAVA_FILE" \
-    "$JAVA_SHA256" "$JAVA_DIR" untar
-  [ -x "$JAVA_BIN/java" ] || { echo "[epubcheck] $JAVA_BIN/java fehlt nach dem Auspacken" >&2; exit 1; }
+    "$JAVA_SHA256" "$JAVA_DIR" untar "$JAVA_RELEASE-jre/Contents/Home/bin/java"
 fi
 if [ ! -f "$JAR" ]; then
   fetch "epubcheck $EPUBCHECK_VERSION" \
     "https://github.com/w3c/epubcheck/releases/download/v$EPUBCHECK_VERSION/epubcheck-$EPUBCHECK_VERSION.zip" \
-    "$EPUBCHECK_SHA256" "$EPUBCHECK_DIR" unzipTo
-  [ -f "$JAR" ] || { echo "[epubcheck] $JAR fehlt nach dem Auspacken" >&2; exit 1; }
+    "$EPUBCHECK_SHA256" "$EPUBCHECK_DIR" unzipTo "epubcheck-$EPUBCHECK_VERSION/epubcheck.jar"
 fi
 
 case "${1:-}" in
   --jar) echo "$JAR" ;;
   --java-bin) echo "$JAVA_BIN" ;;
-  "") echo "Aufruf: scripts/epubcheck.sh <datei.epub> [optionen] | --jar | --java-bin" >&2; exit 2 ;;
   *) exec "$JAVA_BIN/java" -jar "$JAR" "$@" ;;
 esac
