@@ -181,7 +181,7 @@ Die Nebenbei-Punkte:
 | 2 | Ein Problem-Abzeichen für Formulare und Schritte (`ProblemBadge`), ein Katalogschlüssel | `a00ccd6` |
 | 3 | Ohne eigene Klasse merkt sich der Inspektor den Schritt nicht unter einem Listenindex | `dc6308d` |
 | 4 | Aus der Zusammenfassung der Sprach-Einrichtung verlassen, beginnt die nächste bei „Sprachen“ | `dc6308d` |
-| 5 | Die Häkchen gehören dem Lauf und überstehen das Umbenennen (Umbenennen selbst nicht an der App wiederholt) | `dc6308d` |
+| 5 | Die Häkchen gehören dem Lauf und überstehen das Umbenennen; der erste Fix reichte nicht (Formular und Sprache bauten einen neuen Lauf), erst der UI-Test fand es | `dc6308d`, `ccc8118` |
 | 6 | Gemessen, nichts zu ändern: ⌥⌘↓ erreicht im Schritt „Sprachwechsler“ den Platz-Schritt | — |
 | 7 | „Wirkt nicht“ bei „Darstellung“ stimmt auch für `columns` | `a00ccd6` |
 | 8 | Nichts zu tun (kein Kürzelkonflikt) | — |
@@ -189,6 +189,9 @@ Die Nebenbei-Punkte:
 Im Handbuch nachgezogen: 4.6 und 4.8, de und en (Vault `b016fad`, nicht online). Bleibt, wie es ist:
 Ein `configChange`-Snapshot eines bestehenden Eintrags wird wie bei jedem Editor innerhalb von 15
 Minuten mit dem davor zusammengefasst (zweite Hälfte von N1; die Regel des Snapshot-Stores). Leert man
-im ersten Durchlauf die Klasse, endet der Lauf. Der UI-Test deckt Formular und Sprache nicht ab: Dafür
-bräuchte das Testprojekt deren Plugins. Gesamtlauf: `xcodebuild test` grün (17 UI-Tests, einer ohne
+im ersten Durchlauf die Klasse, endet der Lauf. Danach bekam der UI-Test ein Testprojekt mit allen vier
+Plugins (Pakete aus den Kern-Fixtures) und deckt Formular und Sprache mit ab, acht Fälle. Nebenbei
+aufgefallen: Das „Gespeichert“ oben im Inspektor verschwindet nach einem Moment, und alles darunter
+rückt eine Zeile hoch, auch die Liste der Schritte; ein Klick kann dabei den Schritt darunter treffen
+(von Hand und im Test passiert). Gesamtlauf: `xcodebuild test` grün (17 UI-Tests, einer ohne
 seine Umgebung übersprungen), `swift test` 642 Tests, `qh-check i18n` und `handbook` ohne Befund.

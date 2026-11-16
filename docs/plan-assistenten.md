@@ -305,6 +305,11 @@ Die Befunde aus `docs/REVIEW-2026-11-16.md`, Chronik in `docs/reviews.md`:
   `MultilanguageOptions.cancelSetup`).
 - **Ein gescheitertes Schreiben verbraucht den Snapshot nicht** (M5; `SnapshotOnce`, gezählt von
   `PluginsModel.failures`).
-- **Der Rauchtest** ist `UITests/SetupStepsTests`, an Navigation und Box: Anlegen, alle Schritte, ein
-  Umsortieren im Platz-Schritt, Abbrechen, die Datei danach byte-gleich und ein Snapshot mehr; dazu die
-  Fälle von M1, M3 und N1. Formular und Sprache hat er nicht: Dafür bräuchte die Testkopie ihre Plugins.
+- **Der Rauchtest** ist `UITests/SetupStepsTests`, an allen vier Editoren. Sein Testprojekt (im
+  Temp-Ordner) hat je einen Eintrag der vier Plugins und deren Pakete aus den Kern-Fixtures
+  (`Fixtures/option-schema/real/.quartz/plugins`), sodass jeder Schritt seine Optionen hat; was den Code
+  der Plugins oder `node_modules` braucht (die Prüfung von quartz-forms, die Suche nach Seiten), sagt nur,
+  dass es nicht lief. Geprüft: Anlegen, alle Schritte, Umsortieren im Platz-Schritt, Abbrechen, die Datei
+  danach byte-gleich und ein Snapshot mehr (Navigation); Layout-Formular bzw. Standardsprache im ersten
+  Durchlauf, Abbrechen, byte-gleich (Formular, Sprache); dazu die Fälle von M1, M3, N1 und nebenbei 4
+  bis 6. Er fand, dass Umbenennen die Häkchen trotz des ersten Fixes verlor (`ccc8118`).
