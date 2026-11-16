@@ -370,6 +370,7 @@ struct CommitField: View {
       committed = nil
     }
     .onDisappear(perform: finish)
+    .onLeavingWindow(focused, perform: finish)
     .onChange(of: insertion) { _, next in if let next { insert(next.text) } }
   }
 
@@ -409,6 +410,18 @@ struct CommitField: View {
       revert?()
     } else if commit(typed) {
       committed = typed
+    }
+  }
+}
+
+extension View {
+  /// Leaving the window is leaving the field: the focus stays in a field while another window or
+  /// app is in front, and a text typed there and then looked at in the browser was never written
+  /// (gui-test, 2026-11-16: `dividers` held "" while the field showed „komponenten“). Every
+  /// window's resignation arrives here; only the focused field has anything to finish.
+  func onLeavingWindow(_ focused: Bool, perform finish: @escaping () -> Void) -> some View {
+    onReceive(NotificationCenter.default.publisher(for: NSWindow.didResignKeyNotification)) { _ in
+      if focused { finish() }
     }
   }
 }

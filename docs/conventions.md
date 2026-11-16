@@ -88,6 +88,9 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
 - **Eine Seite besitzt ihr Dokument. (QC, „Eine Route ist gemountet …“)** Beim Erscheinen lesen,
   explizit speichern, `dirty` per Vergleich mit dem Gelesenen, nach jedem eigenen Schreiben neu lesen.
 - **„Wo war ich“ (QC):** `@SceneStorage` mit stabilen Kennungen (`rawValue`), nie Listenindizes.
+- **Ein Textfeld, das beim Verlassen schreibt, schreibt auch, wenn sein Fenster nicht mehr vorn ist**
+  (`onLeavingWindow`): der Fokus bleibt sonst im Feld, und ein Text, getippt und dann im Browser
+  angesehen, kam nie in die Datei (gui-test 2026-11-16, `UITests/SetupStepsTests`, ohne die Regel rot).
 - **Verlassen mit ungespeicherten Änderungen fragt (QC):** Abbrechen, Speichern, Verwerfen, an
   Seitenleiste, Link, Fenster schließen und Beenden (`UnsavedGuard`, `.unsavedChanges`);
   scheitert das Speichern, bleibt man auf der Seite.

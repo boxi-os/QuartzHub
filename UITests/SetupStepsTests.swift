@@ -225,6 +225,26 @@ final class SetupStepsTests: XCTestCase {
     XCTAssertTrue(any["steps.cancel"].firstMatch.exists, "the first run ended with the new class")
   }
 
+  /// A text typed without Return is written when its window goes behind another app: the focus
+  /// stays in the field then, and before the fix the text was never written (gui-test,
+  /// 2026-11-16: `dividers` held "" while the field showed „komponenten“).
+  func testATypedTextIsWrittenWhenTheWindowIsLeft() throws {
+    let (profile, project) = try project()
+    let (app, window) = open(profile, project, tab: "Zusätzliche Inhalte", list: "extras.list")
+    window.descendants(matching: .any)["extras.add"].firstMatch.click()
+    waitFor("the new box written") { self.read(project).contains("className: layout-box-neue-box-2") }
+    go(window, to: "finish", heading: "6 von 6")
+    let field = window.textFields.matching(NSPredicate(format: "value == %@", "layout-box-neue-box-2")).firstMatch
+    XCTAssertTrue(field.waitForExistence(timeout: 10), "no field with the class in the summary")
+    field.click()
+    field.typeKey("a", modifierFlags: .command)
+    field.typeText("layout-box-ohne-return")
+    XCTAssertFalse(read(project).contains("layout-box-ohne-return"), "written before the window was left")
+    XCUIApplication(bundleIdentifier: "com.apple.finder").activate()
+    waitFor("the typed class written") { self.read(project).contains("className: layout-box-ohne-return") }
+    app.activate()
+  }
+
   /// N1: choosing another entry ends the run; coming back shows the steps of an existing entry.
   func testChoosingAnotherEntryEndsTheFirstRun() throws {
     let (profile, project) = try project()

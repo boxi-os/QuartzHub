@@ -773,6 +773,7 @@ struct SlugField: View {
         .focused($focused)
         .onSubmit(finish)
         .onChange(of: focused) { _, now in if !now { finish() } }
+        .onLeavingWindow(focused, perform: finish)
         .onChange(of: value) { _, _ in if !focused { draft = nil } }
         .textInputSuggestions {
           ForEach(matches.prefix(40), id: \.self) { slug in
