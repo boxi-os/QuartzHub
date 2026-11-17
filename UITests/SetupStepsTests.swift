@@ -263,8 +263,10 @@ final class SetupStepsTests: XCTestCase {
     show.click()
     let edit = any["layout.inspector.editOptions"].firstMatch
     XCTAssertTrue(edit.waitForExistence(timeout: 10), "the stage did not select the navigation")
-    XCTAssertFalse(window.textFields.matching(NSPredicate(format: "value == %@", "nav-bar")).firstMatch.exists,
-                   "the options form is still on the Layout page")
+    // The form comes after its schema is read, so this waits for it; its search stands above every
+    // form with eight options or more, and testInstalledLeadsAnOwnPluginToItsTab sees it appear
+    // for the same plugin. Checked at once for a field, this could hardly fail (review 2026-11-17, N3).
+    XCTAssertFalse(any["options.search"].firstMatch.waitForExistence(timeout: 3), "the options form is still on the Layout page")
     edit.click()
     XCTAssertTrue(any["page.plugins.navigations"].firstMatch.waitForExistence(timeout: 10), "not on Plugins ▸ Navigationen")
     XCTAssertTrue(heading(window, says: "von 8"), "no navigation in the inspector")
