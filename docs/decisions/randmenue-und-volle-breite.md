@@ -121,6 +121,14 @@ mit `mobile: offcanvas`, Explorer), sonst stand er leer vor dem Rail-Button. An 
 (vorher 56); mit einem eingefügten Burger kommen die 56 px zurück. Das Template selbst ist nicht an
 einer gebauten Website angesehen, seine Regeln sind dieselben.
 
+Nachgeholt am 2026-11-17 (Review 2026-11-17, N6): Example trägt alle 13 Stylesheets der Grundvorlage
+byte-gleich. Eine Kopie mit QuartzHub gebaut (die Frames neu geschrieben, mit dem Innenabstand voller
+Bereiche aus `f17fcd2`) und in WebKit gemessen: bei 1600 px Marke, Titel, Abschnitt auf 24/62/173 px, die
+Bedienelemente enden 24 px vor dem Rand, der Innenabstand ist der der Vorlage (`--tpl-header-inline-pad`,
+24 px), die `:where()`-Regel des Frames tritt also zurück; bei 700 px Burger, Marke, Titel auf 8/56/94 px.
+Das Raster ragt um die Spaltenlücke über das Fenster (1664 bei 1600 px), das ist der Rand der vollen Breite;
+`html` hat `overflow-x: clip`, seitlich verschieben lässt sich nichts (`scrollX` bleibt 0).
+
 **An der Website angesehen** (Kopie der Website-Vorlage mit dem Plugin aus dem Branch, WebKit, Dev-Server):
 1600 px Rail `rest: icons`, `content: push` offen: Kopfzeile 0–1600, Seite um 320 px eingerückt, Panel
 darunter; 1100 px hell mit offenem Menü über der Seite; 700 px Kopf und Fuß 0–700, kein seitliches
