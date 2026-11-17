@@ -412,6 +412,24 @@ final class SetupStepsTests: XCTestCase {
     XCTAssertFalse(any["page.plugins.navigations"].firstMatch.exists, "the cancelled jump opened Navigationen")
   }
 
+  /// Review 2026-11-17, nebenbei 4 and 5: the summary says what a box shows, on Installiert and on
+  /// Layout; „Früher“ and „Später“ are found by their own names, not both as „Reihenfolge“.
+  func testTheBoxSummaryAndTheOrderButtons() throws {
+    let (profile, project) = try project()
+    let (_, window) = open(profile, project, tab: "Installiert", list: "plugins.search")
+    let any = window.descendants(matching: .any)
+    let row = any["plugins.row.quartz-layout-box"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 10), "no quartz-layout-box in the list")
+    row.click()
+    let kind = window.staticTexts["Inhalt"].firstMatch
+    XCTAssertTrue(kind.waitForExistence(timeout: 5), "the summary on Installiert does not say what the box shows")
+    window.buttons["Auf der Bühne zeigen"].firstMatch.click()
+    XCTAssertTrue(any["layout.inspector.editOptions"].firstMatch.waitForExistence(timeout: 10), "the stage did not select the box")
+    XCTAssertTrue(window.staticTexts["Inhalt"].firstMatch.exists, "the summary on Layout does not say what the box shows")
+    XCTAssertTrue(window.buttons["Früher"].firstMatch.exists, "no button named „Früher“")
+    XCTAssertTrue(window.buttons["Später"].firstMatch.exists, "no button named „Später“")
+  }
+
   /// Installiert, an own plugin: its options lead to its tab, the whole form is folded.
   func testInstalledLeadsAnOwnPluginToItsTab() throws {
     let (profile, project) = try project()

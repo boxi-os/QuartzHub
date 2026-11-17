@@ -155,6 +155,10 @@ struct PluginInspector: View {
     } else if let schema, PluginsPage.tab(for: item.entry) != .installed {
       let tab = PluginsPage.tab(for: item.entry)
       Section(L10n.t("pluginsInstalled.optionsHeading")) {
+        // Above the fold too: folded, „Alle Optionen“ hid it (review 2026-11-17, nebenbei 4).
+        if let unreadable = schema.unreadable {
+          Callout(.warning, L10n.t("pluginOptions.unreadable", ["reason": unreadable]))
+        }
         OptionsSummary(entry: item.entry)
         Note(L10n.t("pluginsInstalled.ownTabHint"))
         Button(L10n.t("layoutEditor.inspector.editOptions", ["tab": tab.title]), action: editOnTab)
@@ -178,7 +182,7 @@ struct PluginInspector: View {
 
   /// The whole form; `heading` false below the own plugins' summary, which has the heading.
   @ViewBuilder private func form(_ schema: PluginOptionSchemaResult, heading: Bool = true) -> some View {
-    if let unreadable = schema.unreadable {
+    if let unreadable = schema.unreadable, heading {
       Section(L10n.t("pluginsInstalled.optionsHeading")) {
         Callout(.warning, L10n.t("pluginOptions.unreadable", ["reason": unreadable]))
       }
@@ -215,9 +219,17 @@ struct OptionsSummary: View {
 
   var body: some View {
     let options = entry.object["options"]?.objectValue ?? JSONObject()
-    if PluginsPage.tab(for: entry) == .navigations {
+    switch PluginsPage.tab(for: entry) {
+    case .navigations:
       LabeledContent(L10n.t("navigationsEditor.variantHeading"),
                      value: NavigationVariants.catalog(NavigationVariants.label(NavigationVariants.variant(options)), nil))
+    case .extras:
+      // What the box shows, as in its last step (docs/plan-eine-stelle.md; review 2026-11-17, nebenbei 4).
+      LabeledContent(L10n.t("extraContent.contentHeading"), value: LayoutBoxes.contentKind(.object(options)) == .html
+                     ? L10n.t("extraContent.kindText")
+                     : L10n.t("extraContent.kindFile", ["file": LayoutBoxes.snippetRefs(.object(options)).first?.file ?? ""]))
+    default:
+      EmptyView()
     }
     Text(options.keys.isEmpty ? L10n.t("layoutEditor.inspector.optionsNone")
          : L10n.t("layoutEditor.inspector.optionsCount", ["count": String(options.keys.count)], count: options.keys.count))
