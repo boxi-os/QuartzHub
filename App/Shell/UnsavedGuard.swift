@@ -37,11 +37,34 @@ final class UnsavedGuard {
   private struct WeakGuard { weak var value: UnsavedGuard? }
 
   init() {
+    _ = Self.editingEnds
     Self.all.removeAll { $0.value == nil }
     Self.all.append(WeakGuard(value: self))
   }
 
   var dirty: Bool { page != nil }
+
+  /// When a text view last stopped editing, in any window.
+  private static var lastEditingEnd = Date.distantPast
+  private static let editingEnds = NotificationCenter.default.addObserver(
+    forName: NSText.didEndEditingNotification, object: nil, queue: .main) { _ in
+    MainActor.assumeIsolated { lastEditingEnd = Date() }
+  }
+
+  /// A text typed into a field that writes when it is left is not in the page's document yet: the
+  /// field hands it over once it loses its focus, and the page registers here an update later.
+  /// true while a text view has the focus or has just lost it (to a click in the sidebar). Review
+  /// 2026-11-17, M2: „In „Navigationen“ bearbeiten“ and the sidebar left Layout with a typed width
+  /// without asking, and the text was gone.
+  var mayBeTyping: Bool {
+    window?.firstResponder is NSText || Date().timeIntervalSince(Self.lastEditingEnd) < 0.5
+  }
+
+  /// Ends the typing and waits until the page has had its update; then `dirty` says it all.
+  func finishTyping() async {
+    if let window, window.firstResponder is NSText { window.makeFirstResponder(nil) }
+    try? await Task.sleep(for: .milliseconds(200))
+  }
 
   func register(_ token: UUID, save: (@MainActor () async -> Bool)?, discard: (@MainActor () -> Void)? = nil) {
     page = Page(token: token, save: save, discard: discard)
@@ -95,7 +118,9 @@ final class UnsavedGuard {
   /// At quit: every window with edits asks in turn; one "Abbrechen" keeps the app running.
   static func confirmAll() async -> Bool {
     for entry in all {
-      guard let unsaved = entry.value, unsaved.dirty else { continue }
+      guard let unsaved = entry.value else { continue }
+      if unsaved.mayBeTyping { await unsaved.finishTyping() }
+      guard unsaved.dirty else { continue }
       if await !unsaved.confirmLeave() { return false }
     }
     return true
@@ -122,6 +147,13 @@ final class CloseGuardDelegate: NSObject, NSWindowDelegate {
   }
 
   @MainActor func windowShouldClose(_ sender: NSWindow) -> Bool {
+    if let unsaved, !unsaved.dirty, unsaved.mayBeTyping {
+      Task { @MainActor in
+        await unsaved.finishTyping()
+        if await unsaved.confirmLeave() { sender.close() }
+      }
+      return false
+    }
     guard let unsaved, unsaved.dirty else { return original?.windowShouldClose?(sender) ?? true }
     Task { @MainActor in
       // `close()`, not `performClose`: the question was this one.

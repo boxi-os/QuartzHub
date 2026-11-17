@@ -313,6 +313,42 @@ final class SetupStepsTests: XCTestCase {
     XCTAssertEqual(read(project), before, "the discarded draft was written")
   }
 
+  /// Review 2026-11-17, M2: a text typed on the Layout page and not yet left is an edit like any
+  /// other. Before the fix „In „Navigationen“ bearbeiten“ and the sidebar left without asking, and
+  /// the text was gone; the field writes into the draft only when it is left. ⌘W as the third door.
+  func testATypedTextOnLayoutAsksBeforeLeaving() throws {
+    for door in ["editOptions", "sidebar", "close"] {
+      let grouped = SetupStepsTests.config.replacingOccurrences(of: "      position: header\n      priority: 10\n",
+                                                                with: "      position: header\n      priority: 10\n      group: brand\n")
+      XCTAssertTrue(grouped.contains("group: brand"), "the navigation is in no group")
+      let (profile, project) = try project(config: grouped)
+      let (app, window) = open(profile, project, tab: "Installiert", list: "plugins.search")
+      let any = window.descendants(matching: .any)
+      let row = any["plugins.row.quartz-navigations"].firstMatch
+      XCTAssertTrue(row.waitForExistence(timeout: 10), "no quartz-navigations in the list")
+      row.click()
+      let show = window.buttons["Auf der Bühne zeigen"].firstMatch
+      XCTAssertTrue(show.waitForExistence(timeout: 5), "no „Auf der Bühne zeigen“")
+      show.click()
+      let basis = window.textFields["Grundbreite"].firstMatch
+      XCTAssertTrue(basis.waitForExistence(timeout: 10), "no „Grundbreite“ for the grouped navigation")
+      basis.click()
+      basis.typeText("12rem")
+      if door == "editOptions" {
+        any["layout.inspector.editOptions"].firstMatch.click()
+      } else if door == "sidebar" {
+        any["sidebar.overview"].firstMatch.click()
+      } else {
+        basis.typeKey("w", modifierFlags: .command)
+      }
+      let save = window.sheets.buttons["Speichern"].firstMatch
+      XCTAssertTrue(save.waitForExistence(timeout: 5), "\(door): left the page with a typed text without asking")
+      save.click()
+      waitFor("\(door): the typed width saved") { self.read(project).contains("basis: 12rem") }
+      app.terminate()
+    }
+  }
+
   /// Installiert, an own plugin: its options lead to its tab, the whole form is folded.
   func testInstalledLeadsAnOwnPluginToItsTab() throws {
     let (profile, project) = try project()

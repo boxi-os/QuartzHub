@@ -36,6 +36,19 @@ struct ProjectWindow: View {
   /// `done` runs once the page has changed, not when the question was answered with Abbrechen.
   private func go(to page: ProjectPage, done: @escaping () -> Void = {}) {
     guard page.rawValue != pageID else { return }
+    // A typed text first becomes an edit of the page (review 2026-11-17, M2).
+    guard !unsaved.mayBeTyping else {
+      Task {
+        await unsaved.finishTyping()
+        leave(to: page, done: done)
+      }
+      return
+    }
+    leave(to: page, done: done)
+  }
+
+  private func leave(to page: ProjectPage, done: @escaping () -> Void) {
+    guard page.rawValue != pageID else { return }
     guard unsaved.dirty else {
       pageID = page.rawValue
       done()
