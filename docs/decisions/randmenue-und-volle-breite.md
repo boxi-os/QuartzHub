@@ -34,6 +34,8 @@ Menü und die Rail bekommt nur Styles.
   `nodeIcons` (Plan und Messung in quartz-navigations `docs/plan-svg-icons.md`). Keine Option und keine
   Regel einer Variante hat sich geändert, nur drei Beschreibungen im Schema; QuartzHub liest gegen 0.6.0,
   der Wert bleibt ein freies Textfeld.
+- **0.6.1** (2026-11-17): Lucide 1.74.0, die früheren Namen umbenannter Icons zeichnen weiter. Was QuartzHub
+  liest (`render.tsx`, `options.ts`, Schema), ist gleich: 0.6.1 steht in `sameCode`, gelesen wird weiter gegen 0.6.0.
 
 ## Bereiche über die volle Fensterbreite
 
