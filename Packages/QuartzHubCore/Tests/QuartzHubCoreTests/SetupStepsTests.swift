@@ -12,10 +12,12 @@ import Testing
   }
 
   static let old = fields("schema.json")
+  /// 0.5.0 stays beside 0.5.1: projects keep the version they installed (review 2026-11-17, nebenbei 1).
+  static let previous = fields("schema-0.5.0.json")
   static let current = fields("schema-0.5.1.json")
 
   @Test func everyOptionHasExactlyOneStep() throws {
-    for fields in [Self.old, Self.current] {
+    for fields in [Self.old, Self.previous, Self.current] {
       try #require(fields.count > 40)
       // That every key lands in exactly one step follows from `assign`; what can go wrong is the
       // table: an option caught only by the fallback, or a step of options left without any
@@ -32,6 +34,16 @@ import Testing
     #expect(assigned["dividers"] == "labels")
     #expect(assigned["rootPath"] == "pages" && assigned["hideDrafts"] == "hide" && assigned["sort"] == "hide")
     #expect(assigned["mobile"] == "mobile" && assigned["title"] == "labels" && assigned["className"] == "finish")
+  }
+
+  /// 0.5.1 only adds to 0.5.0 (`dividers`, `rail.startPinned`): every key of 0.5.0 lands in the same
+  /// step with the tables read against 0.5.1.
+  @Test func version050LandsWhere051Does() throws {
+    try #require(Self.previous.count > 40)
+    let before = SetupSteps.assign(NavigationVariants.steps, fields: Self.previous)
+    let now = SetupSteps.assign(NavigationVariants.steps, fields: Self.current)
+    #expect(before["dividers"] == nil && now["dividers"] == "labels")
+    for (key, step) in before { #expect(now[key] == step, "\(key) moved from \(step) to \(now[key] ?? "nothing")") }
   }
 
   /// Gegenprobe: a group no step names falls to the last step and is reported.
