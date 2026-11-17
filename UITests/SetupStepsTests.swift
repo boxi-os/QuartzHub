@@ -247,6 +247,38 @@ final class SetupStepsTests: XCTestCase {
     app.activate()
   }
 
+  /// Review 2026-11-17, N5: the other fields that write when they are left do so when their window
+  /// goes behind another app too (Vorschau & Build's output folder), and a text in a field that
+  /// writes at once is written when QuartzHub quits.
+  func testTypedTextsAreWrittenAtWindowChangeAndQuit() throws {
+    let (profile, project) = try project()
+    let prefs = project.appendingPathComponent(".quartz-gui/project-prefs.json")
+    let (app, window) = open(profile, project, tab: "Zusätzliche Inhalte", list: "extras.list")
+    let any = window.descendants(matching: .any)
+    any["sidebar.server"].firstMatch.click()
+    let output = any["server.outputDir"].firstMatch
+    XCTAssertTrue(output.waitForExistence(timeout: 10), "no output folder on Vorschau & Build")
+    output.click()
+    output.typeText("ausgabe-ohne-return")
+    XCTAssertFalse(((try? String(contentsOf: prefs, encoding: .utf8)) ?? "").contains("ausgabe-ohne-return"), "written before the window was left")
+    XCUIApplication(bundleIdentifier: "com.apple.finder").activate()
+    waitFor("the typed output folder written") { ((try? String(contentsOf: prefs, encoding: .utf8)) ?? "").contains("ausgabe-ohne-return") }
+    app.activate()
+
+    any["sidebar.plugins"].firstMatch.click()
+    window.descendants(matching: .any)["extras.add"].firstMatch.click()
+    waitFor("the new box written") { self.read(project).contains("className: layout-box-neue-box-2") }
+    go(window, to: "finish", heading: "6 von 6")
+    let field = window.textFields.matching(NSPredicate(format: "value == %@", "layout-box-neue-box-2")).firstMatch
+    XCTAssertTrue(field.waitForExistence(timeout: 10), "no field with the class in the summary")
+    field.click()
+    field.typeKey("a", modifierFlags: .command)
+    field.typeText("layout-box-beim-beenden")
+    app.typeKey("q", modifierFlags: .command)
+    XCTAssertTrue(app.wait(for: .notRunning, timeout: 15), "QuartzHub did not quit")
+    XCTAssertTrue(read(project).contains("className: layout-box-beim-beenden"), "the typed class was lost at quit")
+  }
+
   /// Options are edited under Plugins only (docs/plan-eine-stelle.md): from a navigation to its
   /// place on the stage and back by „In „Navigationen“ bearbeiten“, the same navigation selected.
   func testLayoutLeadsBackToTheNavigationsOptions() throws {

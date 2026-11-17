@@ -237,6 +237,7 @@ struct PublishPage: View {
           .focused($outputDirFocused)
           .onSubmit { model.commitOutputDir(model.outputDir) }
           .onChange(of: outputDirFocused) { _, focused in if !focused { model.commitOutputDir(model.outputDir) } }
+          .onLeavingWindow(outputDirFocused) { model.commitOutputDir(model.outputDir) }
           .accessibilityIdentifier("publish.outputDir")
       }
       Note(L10n.t("publish.outputDirShared"))

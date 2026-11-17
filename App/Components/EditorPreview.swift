@@ -158,6 +158,7 @@ struct EditorPreview: View {
           .focused($pageFocused)
           .onSubmit(commitPage)
           .onChange(of: pageFocused) { _, now in if !now { commitPage() } }
+          .onLeavingWindow(pageFocused, perform: commitPage)
           .accessibilityIdentifier("preview.page")
         Picker(L10n.t("buildServer.viewport.label"), selection: $modeID) {
           ForEach(PreviewWidth.Mode.allCases) { Text($0.title).tag($0.rawValue) }

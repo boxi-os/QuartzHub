@@ -432,6 +432,7 @@ struct BuildServerPage: View {
       .onChange(of: outputDirFocused) { _, focused in
         if !focused { Task { await model.commitOutputDir(model.outputDir) } }
       }
+      .onLeavingWindow(outputDirFocused) { Task { await model.commitOutputDir(model.outputDir) } }
       Text(L10n.t("buildServer.exportDirShared") + " " + L10n.t("buildServer.exportDirWipes"))
         .font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
       // `quartz build` empties its folder first; a folder holding something that is not a build

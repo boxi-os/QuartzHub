@@ -418,7 +418,9 @@ extension View {
   /// Leaving the window is leaving the field: the focus stays in a field while another window or
   /// app is in front, and a text typed there and then looked at in the browser was never written
   /// (gui-test, 2026-11-16: `dividers` held "" while the field showed „komponenten“). Every
-  /// window's resignation arrives here; only the focused field has anything to finish.
+  /// window's resignation arrives here; only the focused field has anything to finish. Every field
+  /// that writes when it is left carries it (review 2026-11-17, N5: the output folders and the
+  /// preview's page did not).
   func onLeavingWindow(_ focused: Bool, perform finish: @escaping () -> Void) -> some View {
     onReceive(NotificationCenter.default.publisher(for: NSWindow.didResignKeyNotification)) { _ in
       if focused { finish() }
