@@ -3,7 +3,8 @@ import Testing
 @testable import QuartzHubCore
 
 /// The steps of the inspector (docs/plan-assistenten.md) against the plugins' real schemas:
-/// quartz-navigations 0.4 (QuartzControl's fixture) and 0.5.0 (copied from its package.json).
+/// quartz-navigations 0.4 (QuartzControl's fixture) and 0.5.0, 0.5.1, 0.6.0 (copied from their
+/// package.json).
 @Suite struct SetupStepsTests {
   static func fields(_ name: String) -> [OptionField] {
     let url = NavigationsTests.directory.appendingPathComponent(name)
@@ -12,12 +13,14 @@ import Testing
   }
 
   static let old = fields("schema.json")
-  /// 0.5.0 stays beside 0.5.1: projects keep the version they installed (review 2026-11-17, nebenbei 1).
+  /// Earlier versions stay beside the current one: projects keep the version they installed
+  /// (review 2026-11-17, nebenbei 1).
   static let previous = fields("schema-0.5.0.json")
-  static let current = fields("schema-0.5.1.json")
+  static let previous051 = fields("schema-0.5.1.json")
+  static let current = fields("schema-0.6.0.json")
 
   @Test func everyOptionHasExactlyOneStep() throws {
-    for fields in [Self.old, Self.previous, Self.current] {
+    for fields in [Self.old, Self.previous, Self.previous051, Self.current] {
       try #require(fields.count > 40)
       // That every key lands in exactly one step follows from `assign`; what can go wrong is the
       // table: an option caught only by the fallback, or a step of options left without any
@@ -36,13 +39,16 @@ import Testing
     #expect(assigned["mobile"] == "mobile" && assigned["title"] == "labels" && assigned["className"] == "finish")
   }
 
-  /// 0.5.1 only adds to 0.5.0 (`dividers`, `rail.startPinned`): every key of 0.5.0 lands in the same
-  /// step with the tables read against 0.5.1.
-  @Test func version050LandsWhere051Does() throws {
-    try #require(Self.previous.count > 40)
-    let before = SetupSteps.assign(NavigationVariants.steps, fields: Self.previous)
+  /// 0.5.1 only adds to 0.5.0 (`dividers`, `rail.startPinned`), 0.6.0 only changes descriptions
+  /// (`svg:` icon values): every key of an earlier version lands in the same step with the tables
+  /// read against 0.6.0.
+  @Test func earlierVersionsLandWhereTheCurrentDoes() throws {
+    try #require(Self.previous.count > 40 && Self.previous051.count > 40)
     let now = SetupSteps.assign(NavigationVariants.steps, fields: Self.current)
+    let before = SetupSteps.assign(NavigationVariants.steps, fields: Self.previous)
     #expect(before["dividers"] == nil && now["dividers"] == "labels")
+    let before051 = SetupSteps.assign(NavigationVariants.steps, fields: Self.previous051)
+    #expect(before051 == now)
     for (key, step) in before { #expect(now[key] == step, "\(key) moved from \(step) to \(now[key] ?? "nothing")") }
   }
 

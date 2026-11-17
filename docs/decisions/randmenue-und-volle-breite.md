@@ -30,6 +30,10 @@ Menü und die Rail bekommt nur Styles.
 - **0.5.1** (2026-11-16, nach dem Ausprobieren): Trennlinien (`navDivider`, `dividers`), `rail.startPinned`
   und das Einklappen nach dem Lösen der Pinnadel. QuartzHub liest gegen 0.5.1; `dividers` steht im Schritt
   „Beschriftung und Icons“ und wirkt bei `select` und `pager` nicht.
+- **0.6.0** (2026-11-17): eigene SVG-Icons, `svg:<pfad>` und `svg-mono:<pfad>` als Wert von `navIcon` und
+  `nodeIcons` (Plan und Messung in quartz-navigations `docs/plan-svg-icons.md`). Keine Option und keine
+  Regel einer Variante hat sich geändert, nur drei Beschreibungen im Schema; QuartzHub liest gegen 0.6.0,
+  der Wert bleibt ein freies Textfeld.
 
 ## Bereiche über die volle Fensterbreite
 

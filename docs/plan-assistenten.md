@@ -162,7 +162,7 @@ Je Punkt ein Commit mit Bau, `qh-check i18n`, Tests und Ansehen (Skill `run-app`
   nach Gruppe, sonst letzter Schritt; `unplaced` nennt, was nur die Ausweichregel gefangen hat.
   `NavigationVariants.steps` und `stepHasEffect`. Für das Abbrechen `SetupRun` mit
   `restoringPriorities` (seit dem Review 2026-11-16 im Kern; vorher `LayoutEntries.restoringPriorities`). Tests in `SetupStepsTests` gegen das Schema von 0.4 (QuartzControls Fixture) und 0.5.0
-  (`Fixtures/navigations/schema-0.5.1.json`, aus der package.json des Plugins).
+  (`Fixtures/navigations/schema-0.5.0.json` bis `schema-0.6.0.json`, aus der package.json des Plugins).
 - **App**: `InspectorSteps` (App/Components), `PlacementStep` (App/Pages/Plugins),
   `NavigationInspector` in Schritten; Gehe zu ▸ Vorheriger/Nächster Schritt (⌥⌘← ⌥⌘→, nur solange
   ein Assistent im Inspektor steht); `PluginsModel.commit(snapshot:)` mit `.each`, `.labeled`, `.none`;
