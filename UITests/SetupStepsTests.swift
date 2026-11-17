@@ -349,6 +349,35 @@ final class SetupStepsTests: XCTestCase {
     }
   }
 
+  /// Review 2026-11-17, N1: „Abbrechen“ in the leave question leaves no hand-over behind. Before the
+  /// fix it stayed, and the next visit of Plugins opened Navigationen instead of the tab it kept.
+  func testACancelledJumpLeavesNothingForTheNextVisit() throws {
+    let (profile, project) = try project()
+    let (_, window) = open(profile, project, tab: "Installiert", list: "plugins.search")
+    let any = window.descendants(matching: .any)
+    let row = any["plugins.row.quartz-navigations"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 10), "no quartz-navigations in the list")
+    row.click()
+    let show = window.buttons["Auf der Bühne zeigen"].firstMatch
+    XCTAssertTrue(show.waitForExistence(timeout: 5), "no „Auf der Bühne zeigen“")
+    show.click()
+    let duplicate = window.buttons["Duplizieren"].firstMatch
+    XCTAssertTrue(duplicate.waitForExistence(timeout: 10), "the stage did not select the navigation")
+    duplicate.click()
+    any["layout.inspector.editOptions"].firstMatch.click()
+    let cancel = window.sheets.buttons["Abbrechen"].firstMatch
+    XCTAssertTrue(cancel.waitForExistence(timeout: 5), "leaving the edited Layout page did not ask")
+    cancel.click()
+    any["sidebar.overview"].firstMatch.click()
+    let discard = window.sheets.buttons["Änderungen verwerfen"].firstMatch
+    XCTAssertTrue(discard.waitForExistence(timeout: 5), "no question for the duplicate")
+    discard.click()
+    XCTAssertTrue(any["page.overview"].firstMatch.waitForExistence(timeout: 10), "not on Übersicht")
+    any["sidebar.plugins"].firstMatch.click()
+    XCTAssertTrue(any["plugins.search"].firstMatch.waitForExistence(timeout: 10), "Plugins did not open on Installiert, the tab it kept")
+    XCTAssertFalse(any["page.plugins.navigations"].firstMatch.exists, "the cancelled jump opened Navigationen")
+  }
+
   /// Installiert, an own plugin: its options lead to its tab, the whole form is folded.
   func testInstalledLeadsAnOwnPluginToItsTab() throws {
     let (profile, project) = try project()

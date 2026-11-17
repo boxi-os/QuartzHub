@@ -163,9 +163,12 @@ struct ProjectWindow: View {
     .environment(\.project, ProjectContext(id: row.id, name: row.name, path: row.path))
     .environment(\.openPage, OpenPageAction { follow(to: $0, tab: $1) })
     .environment(\.layoutHandOver, layoutHandOver)
+    // The hand-overs are set once the page has changed: with „Abbrechen“ in the leave question an
+    // early one stayed and took over the next visit of the page (review 2026-11-17, N1). `done`
+    // runs before the new page appears.
     .environment(\.openLayout, OpenLayoutAction { target in
-      layoutHandOver.target = target
       go(to: .layout) {
+        layoutHandOver.target = target
         let tab: LayoutModel.Tab = switch target {
         case .component: .global
         case .frame: .frames
@@ -175,8 +178,8 @@ struct ProjectWindow: View {
     })
     .environment(\.pluginsHandOver, pluginsHandOver)
     .environment(\.openPlugins, OpenPluginsAction { plugins, index in
-      pluginsHandOver.target = (plugins, index)
       go(to: .plugins) {
+        pluginsHandOver.target = (plugins, index)
         if plugins.indices.contains(index) { history.send(.plugins, tab: PluginsPage.tab(for: plugins[index]).rawValue) }
       }
     })
