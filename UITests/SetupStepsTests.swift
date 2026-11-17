@@ -347,6 +347,56 @@ final class SetupStepsTests: XCTestCase {
     XCTAssertEqual(read(project), before, "the discarded draft was written")
   }
 
+  /// Review 2026-11-17, nebenbei 6: the box selected on Zusätzliche Inhalte is the same box after
+  /// one before it was removed on the Layout page. Before the fix the selection was the n-th box:
+  /// with „Website“ removed, „Handbuch“ stood in its place, and with „Handbuch“ selected nothing did.
+  func testASelectedBoxStaysItselfWhenLayoutRemovesAnother() throws {
+    let box = SetupStepsTests.config.components(separatedBy: "  - source: github:boxi-os/quartz-layout-box\n")[1]
+      .components(separatedBy: "  - source: github:boxi-os/quartz-forms")[0]
+    let boxes = ["Mark", "Website", "Handbuch"].map { title in
+      "  - source: github:boxi-os/quartz-layout-box\n" + box.replacingOccurrences(of: "title: Info", with: "title: \(title)")
+        .replacingOccurrences(of: "className: layout-box-neue-box", with: "className: layout-box-\(title.lowercased())")
+    }.joined()
+    let config = SetupStepsTests.config.replacingOccurrences(of: "  - source: github:boxi-os/quartz-layout-box\n" + box, with: boxes)
+    XCTAssertTrue(config.contains("title: Handbuch") && config.contains("title: Mark"), "the config has not three boxes")
+    // Selected on Plugins, then „Website“ (#2) removed on the stage: what Plugins shows afterwards.
+    for (selected, expected) in [(3, "Handbuch"), (2, nil)] as [(Int, String?)] {
+      let (profile, project) = try project(config: config)
+      let (app, window) = open(profile, project, tab: "Zusätzliche Inhalte", list: "extras.list")
+      let any = window.descendants(matching: .any)
+      let row = any["extras.row.\(selected)"].firstMatch
+      XCTAssertTrue(row.waitForExistence(timeout: 10), "no box #\(selected)")
+      row.click()
+      // „Auf der Bühne zeigen“ is in the last step.
+      let show = window.buttons["Auf der Bühne zeigen"].firstMatch
+      let next = any["steps.next"].firstMatch
+      for _ in 0..<8 where !show.exists && next.waitForExistence(timeout: 3) { next.click() }
+      XCTAssertTrue(show.waitForExistence(timeout: 5), "no „Auf der Bühne zeigen“")
+      show.click()
+      let chip = any["layout.chip.quartz-layout-box #2"].firstMatch
+      XCTAssertTrue(chip.waitForExistence(timeout: 10), "no second box on the stage")
+      chip.click()
+      let remove = window.buttons["Duplikat entfernen"].firstMatch
+      XCTAssertTrue(remove.waitForExistence(timeout: 5), "the stage did not select the second box")
+      remove.click()
+      window.typeKey("s", modifierFlags: .command)
+      waitFor("box #\(selected): „Website“ removed in the file") { !self.read(project).contains("title: Website") }
+      any["sidebar.plugins"].firstMatch.click()
+      XCTAssertTrue(any["page.plugins.extras"].firstMatch.waitForExistence(timeout: 10), "not back on Zusätzliche Inhalte")
+      XCTAssertTrue(any["extras.row.2"].firstMatch.waitForExistence(timeout: 10), "the boxes were not read again")
+      let name = any["extras.inspector.name"].firstMatch
+      if let expected {
+        XCTAssertTrue(name.waitForExistence(timeout: 10), "box #\(selected): no box in the inspector")
+        let says = "\(name.label) \(name.value as? String ?? "") \(name.title)"
+        XCTAssertTrue(says.contains(expected), "box #\(selected): another box than the one selected: \(says)")
+      } else {
+        let says = name.waitForExistence(timeout: 3) ? "\(name.label) \(name.value as? String ?? "") \(name.title)" : ""
+        XCTAssertEqual(says, "", "box #\(selected): the removed box was selected, now another one is")
+      }
+      app.terminate()
+    }
+  }
+
   /// Review 2026-11-17, M2: a text typed on the Layout page and not yet left is an edit like any
   /// other. Before the fix „In „Navigationen“ bearbeiten“ and the sidebar left without asking, and
   /// the text was gone; the field writes into the draft only when it is left. ⌘W as the third door.

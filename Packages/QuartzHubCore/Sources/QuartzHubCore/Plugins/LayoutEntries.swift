@@ -158,13 +158,35 @@ public enum LayoutEntries {
   /// index was taken as the file's, and after a removed component and „Änderungen verwerfen“ the
   /// Plugins page selected the box after the one asked for).
   public static func counterpart(of index: Int, in draft: [PluginEntry], among plugins: [PluginEntry]) -> Int? {
-    guard draft.indices.contains(index) else { return nil }
-    let entry = draft[index]
-    func same(_ other: PluginEntry) -> Bool {
-      other.source == entry.source && other.object["options"] == entry.object["options"]
-    }
-    let nth = draft[...index].filter(same).count
-    let matches = plugins.indices.filter { same(plugins[$0]) }
-    return matches.count >= nth ? matches[nth - 1] : nil
+    mark(of: index, in: draft).flatMap { find($0, among: plugins) }
+  }
+
+  /// What finds entry `index` again after the list changed elsewhere: its source, its options and
+  /// which of its equals it is, as text for `@SceneStorage`. A selection kept as the n-th
+  /// navigation or box showed another entry after one before it was removed on the Layout page
+  /// (review 2026-11-17, nebenbei 6). nil for an index outside the list.
+  public static func mark(of index: Int, in plugins: [PluginEntry]) -> String? {
+    guard plugins.indices.contains(index) else { return nil }
+    let entry = plugins[index]
+    var mark = JSONObject()
+    mark["source"] = entry.source
+    mark["options"] = entry.object["options"]
+    mark["nth"] = .number(Double(plugins[...index].filter { same($0, entry) }.count))
+    return JSJSON.compact(.object(mark))
+  }
+
+  /// The entry `mark` names; nil when the list has no such entry (removed, or its options changed).
+  public static func find(_ mark: String, among plugins: [PluginEntry]) -> Int? {
+    guard let object = (try? JSJSON.parse(mark))?.objectValue, case .number(let nth)? = object["nth"], nth >= 1 else { return nil }
+    var wanted = JSONObject()
+    wanted["source"] = object["source"]
+    wanted["options"] = object["options"]
+    let entry = PluginEntry(object: wanted)
+    let matches = plugins.indices.filter { same(plugins[$0], entry) }
+    return matches.count >= Int(nth) ? matches[Int(nth) - 1] : nil
+  }
+
+  private static func same(_ a: PluginEntry, _ b: PluginEntry) -> Bool {
+    a.source == b.source && a.object["options"] == b.object["options"]
   }
 }

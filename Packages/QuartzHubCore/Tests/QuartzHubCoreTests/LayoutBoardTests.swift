@@ -338,4 +338,36 @@ import Testing
     #expect(LayoutEntries.counterpart(of: 0, in: [box("neu", priority: 10)], among: file) == nil)
     #expect(LayoutEntries.counterpart(of: 5, in: draft, among: file) == nil)
   }
+
+  /// Review 2026-11-17, nebenbei 6: a selection on the Plugins page names its entry as text and
+  /// finds it again after the list changed on another page.
+  @Test func aMarkFindsItsEntryInAChangedList() throws {
+    func box(_ title: String) -> PluginEntry {
+      var entry = Self.entry("quartz-layout-box", JSONObject([("position", .string("left")), ("priority", .number(10))]))
+      entry.object["options"] = .object(JSONObject([("title", .string(title)), ("size", .number(2))]))
+      return entry
+    }
+    let file = [box("Mark"), box("Website"), box("Handbuch")]
+    let handbuch = try #require(LayoutEntries.mark(of: 2, in: file))
+    // „Website“ removed: „Handbuch“ moves up, the removed one is nowhere.
+    let after = [file[0], file[2]]
+    #expect(LayoutEntries.find(handbuch, among: after) == 1)
+    #expect(LayoutEntries.find(try #require(LayoutEntries.mark(of: 1, in: file)), among: after) == nil)
+    // Placement does not matter, options do.
+    var moved = file
+    moved[2].object["layout"] = .object(JSONObject([("position", .string("right")), ("priority", .number(40))]))
+    #expect(LayoutEntries.find(handbuch, among: moved) == 2)
+    #expect(LayoutEntries.find(handbuch, among: [file[0], file[1], box("Handbuch 2")]) == nil)
+    // Twins: the second stays the second, and goes when one of them goes.
+    let twins = [box("A"), box("A")]
+    let second = try #require(LayoutEntries.mark(of: 1, in: twins))
+    #expect(LayoutEntries.find(second, among: twins) == 1)
+    #expect(LayoutEntries.find(second, among: [twins[0]]) == nil)
+    // An entry without options, and marks that are not ones.
+    let plain = [Self.entry("quartz-layout-box", JSONObject())]
+    #expect(LayoutEntries.find(try #require(LayoutEntries.mark(of: 0, in: plain)), among: plain) == 0)
+    #expect(LayoutEntries.mark(of: 3, in: file) == nil)
+    #expect(LayoutEntries.find("", among: file) == nil)
+    #expect(LayoutEntries.find("{\"nth\":0}", among: file) == nil)
+  }
 }

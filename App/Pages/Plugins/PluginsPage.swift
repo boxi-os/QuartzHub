@@ -57,6 +57,13 @@ struct PluginsPage: View {
   @SceneStorage("navigations.selected") private var navigationSelected: Int?
   /// The box by its #n among the boxes, as the plugin list keys a second instance.
   @SceneStorage("extraContent.selected") private var boxSelected: Int?
+  /// What the two numbers above stand for (`LayoutEntries.mark`), kept while the page shows them:
+  /// on the way back the entry is looked up, not the number, which another page may have moved
+  /// (review 2026-11-17, nebenbei 6).
+  @SceneStorage("navigations.selectedMark") private var navigationMark = ""
+  @SceneStorage("extraContent.selectedMark") private var boxMark = ""
+  /// The numbers are this read's: until then a change of the list does not write the marks.
+  @State private var restored = false
   /// `lang:<code>` or `section:<id>`.
   @SceneStorage("multilanguage.selected") private var languageSelected: String?
   /// `form:<id>` or `section:<id>`.
@@ -134,15 +141,30 @@ struct PluginsPage: View {
       // menu there, or the window was pushed wider than the screen (measured at 900 pt).
       .pageTabs(Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "plugins.tabs")
       .historyTab(page: .plugins, tab: $tabID)
-      .onChange(of: model.config?.plugins) { endSetups() }
-      .onChange(of: navigationSelected) { endSetups() }
-      .onChange(of: boxSelected) { endSetups() }
+      .onChange(of: model.config?.plugins) {
+        endSetups()
+        keepMarks()
+      }
+      .onChange(of: navigationSelected) {
+        endSetups()
+        keepMarks()
+      }
+      .onChange(of: boxSelected) {
+        endSetups()
+        keepMarks()
+      }
       .onChange(of: formSelected) { endSetups() }
       .onChange(of: languageSelected) { endSetups() }
-      .onAppear(perform: takeHandOver)
+      .onAppear {
+        restored = false
+        takeHandOver()
+      }
       .task {
         await model.load()
+        restoreSelections()
         arrive()
+        restored = true
+        keepMarks()
         let path = project.path
         styled = Set((try? await Task.detached { try SiteFonts.takenClasses(project: path, prefixes: InstanceClass.prefixes) }.value) ?? [])
         await model.checkOutdated()
@@ -289,6 +311,30 @@ struct PluginsPage: View {
     guard target.plugins.indices.contains(target.index) else { return }
     tabID = Self.tab(for: target.plugins[target.index]).rawValue
     arriving = target
+  }
+
+  /// The selected navigation and box by what they are, in the list just read; gone, nothing is
+  /// selected. A number without a mark (kept before the marks) stays as it is.
+  private func restoreSelections() {
+    guard let plugins = model.config?.plugins else { return }
+    if !navigationMark.isEmpty, navigationSelected != nil {
+      let index = LayoutEntries.find(navigationMark, among: plugins)
+      navigationSelected = NavigationInstance.all(plugins).first { $0.index == index }?.occurrence
+    }
+    if !boxMark.isEmpty, boxSelected != nil {
+      let index = LayoutEntries.find(boxMark, among: plugins)
+      boxSelected = LayoutBoxes.boxes(plugins).first { $0.index == index }?.occurrence
+    }
+  }
+
+  /// The marks follow the selection and every change of the list on this page, an option typed
+  /// in the inspector included.
+  private func keepMarks() {
+    guard restored, let plugins = model.config?.plugins else { return }
+    let navigation = NavigationInstance.all(plugins).first { $0.occurrence == navigationSelected }
+    navigationMark = navigation.flatMap { LayoutEntries.mark(of: $0.index, in: plugins) } ?? ""
+    let box = LayoutBoxes.boxes(plugins).first { $0.occurrence == boxSelected }
+    boxMark = box.flatMap { LayoutEntries.mark(of: $0.index, in: plugins) } ?? ""
   }
 
   /// The handed-over entry in the file's list; not there, the tab without a selection.
