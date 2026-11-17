@@ -223,8 +223,8 @@ Die Nebenbei-Punkte:
 | 2 | Nichts zu tun: die zwölf frei gewordenen Schlüssel kommen aus QuartzControls Import und bleiben wie die anderen übernommenen; `LayoutBoard.withOptions` ist QuartzControls Funktion mit Golden-Test | — |
 | 3 | `epubcheck.sh` ohne Argument sagt erst den Aufruf; der Aufruf für `check:export` setzt PATH erst nach erfolgreichem `--java-bin` | `a04537a` |
 | 4 | Die Zusammenfassung nennt den Inhalt einer Box; „Optionen nicht lesbar“ steht bei eigenen Plugins über „Alle Optionen“ | `89ff812` |
-| 5 | Gemessen, nichts zu ändern: XCUITest findet „Früher“, „Später“, „Duplizieren“, „Duplikat entfernen“ unter ihren Namen | `89ff812` |
-| 6 | Nichts weiter: die Auswahl als Nummer unter den Navigationen bzw. Boxen ist älter und begründet; wo sie falsch griff (M1), sucht die Übergabe jetzt in der Datei | — |
+| 5 | Gemessen, nichts zu ändern: XCUITest findet „Früher“, „Später“, „Duplizieren“, „Duplikat entfernen“ unter ihren Namen. Nachgemessen über die Bedienungshilfen-Schnittstelle: alle fünf haben ihren Namen als `AXDescription`; System Events liest nur `AXTitle` (leer, daher „Taste“), und „Früher“/„Später“ bekommen von `LabeledContent` dazu „Reihenfolge“ als `AXTitleUIElement`. VoiceOver (Bildunterschriften, VO-⌘-F5 auf jeden Button) sagt „Reihenfolge Früher, Taste“, „Reihenfolge Später, grau dargestellt, Taste“, „Duplizieren, Taste“, „Duplikat entfernen, Taste“, „In „Zusätzliche Inhalte“ bearbeiten, Taste“: richtig, nur System Events ist der falsche Leser | `89ff812` |
+| 6 | Zuerst als älter und begründet stehen gelassen, dann auf Wunsch behoben: Neben der Nummer steht eine Marke (`LayoutEntries.mark`), und auf dem Rückweg wird der Eintrag gesucht; vorher zeigte Plugins nach „Duplikat entfernen“ auf Layout eine andere Box | `7905e05` |
 | 7 | Der Fehler stand im Auftrag, nicht im Code: `-QHMigrationSource` gibt es seit 1.0.0 nicht mehr | — |
 
 Neue Regel in `conventions.md`: Ein Text, der noch getippt wird, ist ungespeichert. Gesamtlauf am Ende:
