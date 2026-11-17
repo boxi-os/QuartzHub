@@ -5,6 +5,13 @@
 > durchläuft, schreibt hier oben, wann, auf welchem Commit und was ihm dabei auffiel. Ein neuer
 > Handgriff kommt mit dem Anlass dazu, der ihn erzwungen hat.
 >
+> **Durchlaufen am 2026-11-17 für 1.0.3** (Tag auf edfe8a8). Vorlage und Plugins waren schon
+> veröffentlicht (Punkt 4, 10), das Handbuch nennt keine Fassung (Punkt 9 nur die Adressen geprüft).
+> Aufgefallen: `xcodebuild test` braucht den Automationsmodus, und den schaltet macOS erst nach Touch ID
+> ein (`automationmodetool`: „requires user authentication“); ohne jemanden am Mac scheitert der Lauf
+> mit „Timed out while enabling automation mode“. Holt ein anderes Fenster den Fokus (hier der Finder),
+> scheitern fast alle UI-Tests nach wenigen Sekunden; ein zweiter Lauf ohne Eingriff war grün.
+>
 > Aufgefallen 2026-11-14: QuartzHub-Web hatte weder `origin` noch ein Ziel „GitHub Pages“ (Punkt 9);
 > der installierte QuartzHub fragte beim ersten Zugriff auf den GitHub-Zugang nach dem Schlüsselbund
 > („Immer erlauben“); „Jetzt veröffentlichen“ wird erst nach einem Build oder Diff aktiv; das
@@ -60,8 +67,8 @@ Ein Commit nach dem Tag, der nur Tests, README oder `AGENTS.md` ändert, braucht
 er gepusht ist. Eine neue Fassung mit geändertem `src` heißt: den Editor gegen sie lesen und
 `readAgainst` heben, sonst `sameCode` ergänzen.
 
-**Stand 2026-11-14 (1.0.2):** layout-box `v0.4.2` (+4: README, LICENSE), multilanguage `v0.3.0` (+2: README),
-navigations `v0.4.3` (+1), forms `v0.6.1`; App liest 0.4.2, 0.3.0, 0.4.2 (0.4.3 gleicher Code), 0.6.0
+**Stand 2026-11-17 (1.0.3):** layout-box `v0.4.2` (+4: README, LICENSE), multilanguage `v0.3.0` (+2: README),
+navigations `v0.5.1`, forms `v0.6.1`; App liest 0.4.2, 0.3.0, 0.5.1, 0.6.0
 (0.6.1 gleicher Code: nur Kommentare und der Kopf der Relay-Datei). Die Fassung, die QuartzHub vergleicht,
 steht in `package.json` unter `quartz.version`, nicht oben.
 
