@@ -192,6 +192,9 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   Boxen, Formulare und Sprachen, ein erster Durchlauf je neuem Eintrag (`SetupRun` im Kern). Review
   `docs/REVIEW-2026-11-16.md` abgearbeitet: 5 Mittel, 2 Niedrig, 8 nebenbei, Chronik in `docs/reviews.md`;
   der Rauchtest dazu ist `UITests/SetupStepsTests`.
+- **Eine Stelle je Einstellung seit 2026-11-16** ([`plan-eine-stelle.md`](docs/plan-eine-stelle.md)): Optionen unter
+  Plugins, Platzierung unter Layout, Sprünge zwischen beiden. Review `docs/REVIEW-2026-11-17.md` abgearbeitet:
+  2 Mittel, 6 Niedrig, 7 nebenbei, Chronik in `docs/reviews.md`.
 
 ## Arbeitsweise
 

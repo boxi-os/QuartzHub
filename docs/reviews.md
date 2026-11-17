@@ -196,3 +196,37 @@ rückt eine Zeile hoch, auch die Liste der Schritte; ein Klick kann dabei den Sc
 (von Hand und im Test passiert). Behoben: „Gespeichert“ steht neben dem Titel, sein Platz bleibt frei
 (`TitleLine`); vorher rückte die Liste um 19 pt, danach nicht. Gesamtlauf: `xcodebuild test` grün (17 UI-Tests, einer ohne
 seine Umgebung übersprungen), `swift test` 642 Tests, `qh-check i18n` und `handbook` ohne Befund.
+
+## 2026-11-17: Eine Stelle je Einstellung, Felder beim Verlassen
+
+Bericht `REVIEW-2026-11-17.md` (Stand `1d7fdff`, Umfang `ad832d9..1d7fdff`, frischer Subagent ohne
+Verlauf): 0 Hoch, 2 Mittel, 6 Niedrig, 7 nebenbei. Der Nutzer ließ die ganze Liste abarbeiten. Gemessen
+an der App mit neuen UI-Tests in `UITests/SetupStepsTests` (je Befund rot ohne den Fix), an einer
+ohne Netz nachgestellten Kopie von `epubcheck.sh` und an einer gebauten Kopie von Example in WebKit.
+
+| Befund | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| M1 | Plugins sucht den Eintrag aus Layout in der Datei (gleiche Quelle und Optionen, der n-te Gleiche), nicht unter der Nummer des Entwurfs; nach „Änderungen verwerfen“ vorher „Website“ statt „Handbuch“ | `bbe0b94` |
+| M2 | Ein noch getippter Text wird vor jeder Tür übernommen, dann fragt sie; rot waren „In … bearbeiten“, die Seitenleiste und ⌘W, nicht nur der neue Button | `57f0cd3` |
+| N1 | Die Übergaben nach Plugins und Layout werden erst gesetzt, wenn die Seite gewechselt hat | `5e1cec5` |
+| N2 | „n Optionen gesetzt“ statt „geändert“, wie „Gesetzte Optionen“ in den Schritten | `19fdfe4` |
+| N3 | Die Erwartung wartet auf das Suchfeld des Formulars; die alte war mit zurückgesetztem Formular auch rot (Schema aus dem Zwischenspeicher), der Befund stimmte so nicht | `fbd7b1f` |
+| N4 | `epubcheck.sh` packt neben dem Ziel aus und benennt dann um; ein halbes Java wird neu geholt | `a04537a` |
+| N5 | Ausgabeordner (Veröffentlichen, Vorschau & Build) und die Seite der Vorschau schreiben, wenn ihr Fenster nach hinten geht; beim Beenden schreibt ein sofort schreibendes Feld (über M2) | `b9be26d` |
+| N6 | An einer gebauten Kopie von Example angesehen (gleiche 13 Stylesheets wie die Vorlage): Kopf bei 1600 und 700 px wie beschrieben, nichts zu ändern | `fec6cae` |
+
+Die Nebenbei-Punkte:
+
+| Punkt | Was jetzt stimmt | Commit |
+| --- | --- | --- |
+| 1 | Das Schema 0.5.0 ist zurück neben 0.5.1, jede Option landet im selben Schritt; die Warnung „gegen 0.5.1 gelesen“ bleibt, wie bei allen eigenen Plugins | `1928a81` |
+| 2 | Nichts zu tun: die zwölf frei gewordenen Schlüssel kommen aus QuartzControls Import und bleiben wie die anderen übernommenen; `LayoutBoard.withOptions` ist QuartzControls Funktion mit Golden-Test | — |
+| 3 | `epubcheck.sh` ohne Argument sagt erst den Aufruf; der Aufruf für `check:export` setzt PATH erst nach erfolgreichem `--java-bin` | `a04537a` |
+| 4 | Die Zusammenfassung nennt den Inhalt einer Box; „Optionen nicht lesbar“ steht bei eigenen Plugins über „Alle Optionen“ | `89ff812` |
+| 5 | Gemessen, nichts zu ändern: XCUITest findet „Früher“, „Später“, „Duplizieren“, „Duplikat entfernen“ unter ihren Namen | `89ff812` |
+| 6 | Nichts weiter: die Auswahl als Nummer unter den Navigationen bzw. Boxen ist älter und begründet; wo sie falsch griff (M1), sucht die Übergabe jetzt in der Datei | — |
+| 7 | Der Fehler stand im Auftrag, nicht im Code: `-QHMigrationSource` gibt es seit 1.0.0 nicht mehr | — |
+
+Neue Regel in `conventions.md`: Ein Text, der noch getippt wird, ist ungespeichert. Gesamtlauf am Ende:
+`xcodebuild test` grün (30 UI-Tests, einer ohne seine Umgebung übersprungen), `swift test` 644 Tests, `qh-check i18n` und `handbook` ohne Befund.
+

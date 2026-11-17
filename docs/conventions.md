@@ -89,8 +89,11 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
   explizit speichern, `dirty` per Vergleich mit dem Gelesenen, nach jedem eigenen Schreiben neu lesen.
 - **„Wo war ich“ (QC):** `@SceneStorage` mit stabilen Kennungen (`rawValue`), nie Listenindizes.
 - **Ein Textfeld, das beim Verlassen schreibt, schreibt auch, wenn sein Fenster nicht mehr vorn ist**
-  (`onLeavingWindow`): der Fokus bleibt sonst im Feld, und ein Text, getippt und dann im Browser
-  angesehen, kam nie in die Datei (gui-test 2026-11-16, `UITests/SetupStepsTests`, ohne die Regel rot).
+  (`onLeavingWindow`, an jedem solchen Feld): der Fokus bleibt sonst im Feld, und ein Text, getippt und
+  dann im Browser angesehen, kam nie in die Datei (gui-test 2026-11-16, `UITests/SetupStepsTests`, ohne
+  die Regel rot). **Und ein Text, der noch getippt wird, ist ungespeichert:** Jede Tür (Seitenwechsel,
+  Fenster schließen, Beenden) beendet erst das Tippen und entscheidet dann (`UnsavedGuard.mayBeTyping`,
+  `finishTyping`); vorher ging ein getippter Wert auf Layout ohne Frage verloren (Review 2026-11-17, M2).
 - **Verlassen mit ungespeicherten Änderungen fragt (QC):** Abbrechen, Speichern, Verwerfen, an
   Seitenleiste, Link, Fenster schließen und Beenden (`UnsavedGuard`, `.unsavedChanges`);
   scheitert das Speichern, bleibt man auf der Seite.
