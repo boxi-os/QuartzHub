@@ -52299,6 +52299,63 @@
         }
       }
     },
+    "shell.projects.sort.lastOpened" : {
+      "comment" : "Projects window, Sort By: most recently opened project first",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt geöffnet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Opened"
+          }
+        }
+      }
+    },
+    "shell.projects.sort.name" : {
+      "comment" : "Projects window, Sort By: alphabetical by project name",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "shell.projects.sortBy" : {
+      "comment" : "Projects window: toolbar menu and View menu item choosing the list's order",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sortieren nach"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort By"
+          }
+        }
+      }
+    },
     "shell.projects.title" : {
       "comment" : "Title of the window with the project list; also its entry in the Window menu",
       "extractionState" : "manual",

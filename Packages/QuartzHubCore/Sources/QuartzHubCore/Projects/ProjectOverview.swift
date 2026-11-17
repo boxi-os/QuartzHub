@@ -83,6 +83,25 @@ public enum ProjectOverviews {
     return row
   }
 
+  /// How the project list is ordered. The window offers both; the choice is the user's and stays
+  /// (a list that moved the project just opened to the top was not wanted by everyone).
+  public enum Order: String, CaseIterable, Sendable {
+    /// QuartzControl's only order, and the default.
+    case lastOpened
+    /// By name as Finder orders names: case aside, numbers by value („Projekt 9“ before „Projekt 10“).
+    case name
+  }
+
+  public static func sorted(_ rows: [ProjectOverview], by order: Order) -> [ProjectOverview] {
+    switch order {
+    case .lastOpened:
+      return sorted(rows)
+    case .name:
+      // Stable on top of the default order, so equal names keep the most recently opened first.
+      return sorted(rows).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    }
+  }
+
   /// Most recently opened first, never opened last, by name within each group:
   /// `bt - at || a.name.localeCompare(b.name)`. A stamp `Date.parse` cannot read is NaN there.
   public static func sorted(_ rows: [ProjectOverview]) -> [ProjectOverview] {

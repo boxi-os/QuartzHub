@@ -22,6 +22,17 @@ import Testing
     #expect(ProjectOverviews.sorted(Self.rows).map(\.id) == expected)
   }
 
+  @Test func orderByLastOpenedIsHome() {
+    #expect(ProjectOverviews.sorted(Self.rows, by: .lastOpened).map(\.id) == ProjectOverviews.sorted(Self.rows).map(\.id))
+  }
+
+  /// As Finder orders names: „Projekt 9“ before „Projekt 10“, case and accents after the letters.
+  @Test func orderByName() {
+    let names = ProjectOverviews.sorted(Self.rows, by: .name).map(\.name)
+    #expect(names == ["Alpha", "Älter", "apfel", "Apfel", "äpfel", "Beta", "Gärten-Ü", "Handbuch", "Kaputt", "Neu",
+                      "Projekt 9", "Projekt 10", "Zettel"])
+  }
+
   @Test func searchAsHome() {
     let sorted = ProjectOverviews.sorted(Self.rows)
     for item in Self.golden["search"]!.arrayValue! {

@@ -44,6 +44,7 @@ struct QuartzHubApp: App {
     .keyboardShortcut("0", modifiers: [.command, .shift])
     .commands {
       SidebarCommands()
+      ProjectsOrderCommand()
       InspectorCommand()
       ProjectCommands()
       SaveCommand()

@@ -20,9 +20,11 @@ struct ProjectsWindow: View {
   @State private var creating = false
   @State private var duplicating: ProjectOverview?
   @SceneStorage("inspector.presented") private var inspectorPresented = true
+  /// The user's choice, for every start: a preference of the window, not a launch switch.
+  @AppStorage("projects.order") private var order: ProjectOverviews.Order = .lastOpened
   @Environment(\.openWindow) private var openWindow
 
-  private var sorted: [ProjectOverview] { ProjectOverviews.sorted(model.rows) }
+  private var sorted: [ProjectOverview] { ProjectOverviews.sorted(model.rows, by: order) }
   private var shown: [ProjectOverview] { ProjectOverviews.filter(sorted, query: query) }
 
   var body: some View {
@@ -43,7 +45,18 @@ struct ProjectsWindow: View {
           ProjectsContext()
         }
       }
+      .focusedSceneValue(\.projectsOrder, $order)
       .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          Menu {
+            ProjectsOrderPicker(order: $order)
+          } label: {
+            Label(L10n.t("shell.projects.sortBy"), systemImage: "arrow.up.arrow.down")
+          }
+          .help(L10n.t("shell.projects.sortBy"))
+          .disabled(model.rows.isEmpty)
+          .accessibilityIdentifier("projects.sortBy")
+        }
         ToolbarItem(placement: .primaryAction) {
           Button {
             creating = true
@@ -226,6 +239,57 @@ struct ProjectsWindow: View {
   private var failurePresented: Binding<Bool> {
     Binding(get: { failure != nil }, set: { if !$0 { failure = nil } })
   }
+}
+
+/// The orders of the project list, as a choice with a check mark.
+/// Inline in the toolbar's menu; in the menu bar a submenu of its own (inline, it brought a
+/// separator above and below).
+struct ProjectsOrderPicker: View {
+  @Binding var order: ProjectOverviews.Order
+  var inline = true
+
+  var body: some View {
+    let picker = Picker(L10n.t("shell.projects.sortBy"), selection: $order) {
+      ForEach(ProjectOverviews.Order.allCases, id: \.self) { order in
+        Text(Self.title(order)).tag(order)
+      }
+    }
+    if inline {
+      picker.pickerStyle(.inline).labelsHidden()
+    } else {
+      picker.pickerStyle(.menu)
+    }
+  }
+
+  static func title(_ order: ProjectOverviews.Order) -> String {
+    switch order {
+    case .lastOpened: L10n.t("shell.projects.sort.lastOpened")
+    case .name: L10n.t("shell.projects.sort.name")
+    }
+  }
+}
+
+/// View ▸ Sort By, while the window „Projekte“ is in front (Finder has it in the same menu).
+struct ProjectsOrderCommand: Commands {
+  @FocusedBinding(\.projectsOrder) private var order
+
+  var body: some Commands {
+    let _ = AppAppearance.shared.revision
+    CommandGroup(before: .sidebar) {
+      if let binding = Binding($order) {
+        ProjectsOrderPicker(order: binding, inline: false)
+      } else {
+        Menu(L10n.t("shell.projects.sortBy")) {}
+          .disabled(true)
+      }
+      Divider()
+    }
+  }
+}
+
+extension FocusedValues {
+  /// The order of the project list, published by the window „Projekte“.
+  @Entry var projectsOrder: Binding<ProjectOverviews.Order>?
 }
 
 /// QuartzControl showed the search field from six projects on; below that it is noise.
