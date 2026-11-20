@@ -36,6 +36,11 @@ Menü und die Rail bekommt nur Styles.
   der Wert bleibt ein freies Textfeld.
 - **0.6.1** (2026-11-17): Lucide 1.74.0, die früheren Namen umbenannter Icons zeichnen weiter. Was QuartzHub
   liest (`render.tsx`, `options.ts`, Schema), ist gleich: 0.6.1 steht in `sameCode`, gelesen wird weiter gegen 0.6.0.
+- **0.6.2** (2026-11-21): Mit `rest: icons` und `content: push` rückte ein per Hover (`hoverContent: overlay`)
+  oder angeheftet (`pinContent: overlay`) übergelegtes Menü die Seite um die Breite der Leiste zurück; jetzt
+  bleibt sie neben der Leiste. Neu ist `--quartz-nav-rail-gap`, ein Abstand zwischen schiebender Rail und Seite,
+  der in `--quartz-nav-rail-offset-*` mitzählt (die volle Kopfzeile reicht damit weiter bis an den Rand).
+  Geändert sind nur die Client-Skripte und das Stylesheet: 0.6.2 steht in `sameCode`.
 
 ## Bereiche über die volle Fensterbreite
 
