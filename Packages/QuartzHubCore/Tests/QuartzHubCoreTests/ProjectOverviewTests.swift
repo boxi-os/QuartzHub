@@ -33,6 +33,22 @@ import Testing
                       "Projekt 9", "Projekt 10", "Zettel"])
   }
 
+  @Test func orderByNameReversed() {
+    let names = ProjectOverviews.sorted(Self.rows, by: .name, reversed: true).map(\.name)
+    #expect(names == ["Zettel", "Projekt 10", "Projekt 9", "Neu", "Kaputt", "Handbuch", "Gärten-Ü", "Beta", "äpfel",
+                      "Apfel", "apfel", "Älter", "Alpha"])
+  }
+
+  /// Oldest first: never opened (and an empty stamp) by name, then by date; equal stamps by name
+  /// with QuartzControl's tie-break (`localeCompare`, so „Projekt 10“ before „Projekt 9“).
+  /// „Kaputt“ has a stamp no one can read and, as in QuartzControl's expression, lands where the
+  /// comparison leaves it.
+  @Test func orderByLastOpenedReversed() {
+    let names = ProjectOverviews.sorted(Self.rows, by: .lastOpened, reversed: true).map(\.name).filter { $0 != "Kaputt" }
+    #expect(names == ["Alpha", "apfel", "Beta", "Handbuch", "Älter", "Projekt 10", "Projekt 9", "Apfel", "äpfel",
+                      "Zettel", "Neu", "Gärten-Ü"])
+  }
+
   @Test func searchAsHome() {
     let sorted = ProjectOverviews.sorted(Self.rows)
     for item in Self.golden["search"]!.arrayValue! {

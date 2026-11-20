@@ -22,9 +22,15 @@ struct ProjectsWindow: View {
   @SceneStorage("inspector.presented") private var inspectorPresented = true
   /// The user's choice, for every start: a preference of the window, not a launch switch.
   @AppStorage("projects.order") private var order: ProjectOverviews.Order = .lastOpened
+  /// Against the order's own direction (Z to A, oldest first); choosing another order resets it.
+  @AppStorage("projects.reversed") private var reversed = false
   @Environment(\.openWindow) private var openWindow
 
-  private var sorted: [ProjectOverview] { ProjectOverviews.sorted(model.rows, by: order) }
+  private var sorted: [ProjectOverview] { ProjectOverviews.sorted(model.rows, by: order, reversed: reversed) }
+  private var sort: Binding<ProjectsSort> {
+    Binding(get: { ProjectsSort(order: order, reversed: reversed) },
+            set: { order = $0.order; reversed = $0.reversed })
+  }
   private var shown: [ProjectOverview] { ProjectOverviews.filter(sorted, query: query) }
 
   var body: some View {
@@ -45,11 +51,11 @@ struct ProjectsWindow: View {
           ProjectsContext()
         }
       }
-      .focusedSceneValue(\.projectsOrder, $order)
+      .focusedSceneValue(\.projectsSort, sort)
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
           Menu {
-            ProjectsOrderPicker(order: $order)
+            ProjectsSortPicker(sort: sort)
           } label: {
             Label(L10n.t("shell.projects.sortBy"), systemImage: "arrow.up.arrow.down")
           }
@@ -241,24 +247,50 @@ struct ProjectsWindow: View {
   }
 }
 
-/// The orders of the project list, as a choice with a check mark.
+/// The order of the project list and its direction, as the window keeps them.
+struct ProjectsSort: Equatable {
+  var order: ProjectOverviews.Order
+  var reversed: Bool
+}
+
+/// The orders of the project list and below them the direction, each a choice with a check mark
+/// (as Mail's Sort By). The direction is named for the order: „A bis Z“ says more than „Aufsteigend“
+/// next to a date. Choosing another order starts in its own direction.
 /// Inline in the toolbar's menu; in the menu bar a submenu of its own (inline, it brought a
 /// separator above and below).
-struct ProjectsOrderPicker: View {
-  @Binding var order: ProjectOverviews.Order
+struct ProjectsSortPicker: View {
+  @Binding var sort: ProjectsSort
   var inline = true
 
   var body: some View {
-    let picker = Picker(L10n.t("shell.projects.sortBy"), selection: $order) {
+    if inline {
+      choices
+    } else {
+      Menu(L10n.t("shell.projects.sortBy")) { choices }
+    }
+  }
+
+  @ViewBuilder private var choices: some View {
+    Picker(L10n.t("shell.projects.sortBy"), selection: order) {
       ForEach(ProjectOverviews.Order.allCases, id: \.self) { order in
         Text(Self.title(order)).tag(order)
       }
     }
-    if inline {
-      picker.pickerStyle(.inline).labelsHidden()
-    } else {
-      picker.pickerStyle(.menu)
+    .pickerStyle(.inline)
+    .labelsHidden()
+    Divider()
+    Picker(L10n.t("shell.projects.sortDirection"), selection: $sort.reversed) {
+      Text(Self.direction(sort.order, reversed: false)).tag(false)
+      Text(Self.direction(sort.order, reversed: true)).tag(true)
     }
+    .pickerStyle(.inline)
+    .labelsHidden()
+  }
+
+  private var order: Binding<ProjectOverviews.Order> {
+    Binding(get: { sort.order }, set: { new in
+      if new != sort.order { sort = ProjectsSort(order: new, reversed: false) }
+    })
   }
 
   static func title(_ order: ProjectOverviews.Order) -> String {
@@ -267,17 +299,26 @@ struct ProjectsOrderPicker: View {
     case .name: L10n.t("shell.projects.sort.name")
     }
   }
+
+  static func direction(_ order: ProjectOverviews.Order, reversed: Bool) -> String {
+    switch (order, reversed) {
+    case (.lastOpened, false): L10n.t("shell.projects.sort.newestFirst")
+    case (.lastOpened, true): L10n.t("shell.projects.sort.oldestFirst")
+    case (.name, false): L10n.t("shell.projects.sort.aToZ")
+    case (.name, true): L10n.t("shell.projects.sort.zToA")
+    }
+  }
 }
 
 /// View ▸ Sort By, while the window „Projekte“ is in front (Finder has it in the same menu).
 struct ProjectsOrderCommand: Commands {
-  @FocusedBinding(\.projectsOrder) private var order
+  @FocusedBinding(\.projectsSort) private var sort
 
   var body: some Commands {
     let _ = AppAppearance.shared.revision
     CommandGroup(before: .sidebar) {
-      if let binding = Binding($order) {
-        ProjectsOrderPicker(order: binding, inline: false)
+      if let binding = Binding($sort) {
+        ProjectsSortPicker(sort: binding, inline: false)
       } else {
         Menu(L10n.t("shell.projects.sortBy")) {}
           .disabled(true)
@@ -289,7 +330,7 @@ struct ProjectsOrderCommand: Commands {
 
 extension FocusedValues {
   /// The order of the project list, published by the window „Projekte“.
-  @Entry var projectsOrder: Binding<ProjectOverviews.Order>?
+  @Entry var projectsSort: Binding<ProjectsSort>?
 }
 
 /// QuartzControl showed the search field from six projects on; below that it is noise.

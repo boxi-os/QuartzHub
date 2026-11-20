@@ -52299,6 +52299,25 @@
         }
       }
     },
+    "shell.projects.sort.aToZ" : {
+      "comment" : "Projects window, Sort By, direction when sorted by name",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A bis Z"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A to Z"
+          }
+        }
+      }
+    },
     "shell.projects.sort.lastOpened" : {
       "comment" : "Projects window, Sort By: most recently opened project first",
       "extractionState" : "manual",
@@ -52337,6 +52356,63 @@
         }
       }
     },
+    "shell.projects.sort.newestFirst" : {
+      "comment" : "Projects window, Sort By, direction when sorted by last opened",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neueste zuerst"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Newest First"
+          }
+        }
+      }
+    },
+    "shell.projects.sort.oldestFirst" : {
+      "comment" : "Projects window, Sort By, direction when sorted by last opened",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Älteste zuerst"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oldest First"
+          }
+        }
+      }
+    },
+    "shell.projects.sort.zToA" : {
+      "comment" : "Projects window, Sort By, direction when sorted by name",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z bis A"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z to A"
+          }
+        }
+      }
+    },
     "shell.projects.sortBy" : {
       "comment" : "Projects window: toolbar menu and View menu item choosing the list's order",
       "extractionState" : "manual",
@@ -52352,6 +52428,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sort By"
+          }
+        }
+      }
+    },
+    "shell.projects.sortDirection" : {
+      "comment" : "Projects window, Sort By: the group choosing the direction (screen readers only)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sortierrichtung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort direction"
           }
         }
       }

@@ -92,19 +92,28 @@ public enum ProjectOverviews {
     case name
   }
 
-  public static func sorted(_ rows: [ProjectOverview], by order: Order) -> [ProjectOverview] {
+  /// `reversed` turns the order's own direction around: by name Z to A, by date the oldest first
+  /// (never opened counts as the oldest, as in QuartzControl's expression). Within equal names or
+  /// stamps the tie-break keeps its direction.
+  public static func sorted(_ rows: [ProjectOverview], by order: Order, reversed: Bool = false) -> [ProjectOverview] {
     switch order {
     case .lastOpened:
-      return sorted(rows)
+      return byTime(rows, newestFirst: !reversed)
     case .name:
       // Stable on top of the default order, so equal names keep the most recently opened first.
-      return sorted(rows).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+      return sorted(rows).sorted {
+        $0.name.localizedStandardCompare($1.name) == (reversed ? .orderedDescending : .orderedAscending)
+      }
     }
   }
 
   /// Most recently opened first, never opened last, by name within each group:
   /// `bt - at || a.name.localeCompare(b.name)`. A stamp `Date.parse` cannot read is NaN there.
   public static func sorted(_ rows: [ProjectOverview]) -> [ProjectOverview] {
+    byTime(rows, newestFirst: true)
+  }
+
+  private static func byTime(_ rows: [ProjectOverview], newestFirst: Bool) -> [ProjectOverview] {
     func time(_ row: ProjectOverview) -> Double {
       // `a.lastOpenedAt ? … : 0`: an empty stamp is falsy, so 0, not NaN.
       guard let stamp = row.entry.lastOpenedAt, !stamp.isEmpty else { return 0 }
@@ -112,7 +121,7 @@ public enum ProjectOverviews {
     }
     var list = rows
     JS.sort(&list) { a, b in
-      let difference = time(b) - time(a)
+      let difference = newestFirst ? time(b) - time(a) : time(a) - time(b)
       // `NaN || x` is x: an unreadable stamp falls through to the name, like an equal one.
       return difference != 0 && !difference.isNaN ? difference : JS.localeCompare(a.name, b.name)
     }
