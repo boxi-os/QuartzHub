@@ -209,3 +209,19 @@ Alles wie vorgeschlagen: neuer Block `plugin-vars` mit dem Präfix `QuartzContro
 `quartz.cssVariables` im Manifest (eigene Datei nur, falls Quartz den Schlüssel bemängelt);
 Beschreibungen zweisprachig (`description`, `description_de`); fremde Plugins anzeigen und ändern wie
 die eigenen, ohne Beschreibung, eingeklappt; Teil D mit den vorgeschlagenen Gruppen.
+
+## Umgesetzt
+
+- **Schritt 1 (2026-11-21):** quartz-navigations 0.7.0 (64 Variablen) und quartz-forms 0.7.0 (10) mit
+  `quartz.cssVariables`; Vorgaben aus dem SCSS übernommen, nicht abgetippt; je ein Test hält die Liste
+  gegen das SCSS (mit falscher Vorgabe rot). Quartz nimmt den Schlüssel an: `plugin doctor --verbose`
+  gibt mit und ohne ihn dasselbe aus, gui-test baut. Das Format ist ein Objekt `{ groups, variables }`,
+  damit Reihenfolge und Gruppenbeschriftung (de/en) mitreisen. QuartzHub: beide in `sameCode`.
+- **Schritt 2 (2026-11-21):** `PluginVariables` im Kern. Gemessen an einer Kopie von gui-test: 64 + 10 aus
+  den Katalogen, 19 von Quartz selbst (Callouts), je 1 von canvas-page und Excalidraw, nichts ohne
+  Zuordnung, 0,29 s. Zwei Dinge, die erst die echte Kopie zeigte: Die Suche nach `--name:` im Text jedes
+  Pakets brauchte 11,4 s (jetzt einmal je Paket als Bytes gelesen), und die Callout-Variablen landeten
+  bei quartz-themes, dessen Paket die Namen auch enthält (jetzt wird Quartz' eigenes `quartz/` zuerst
+  gefragt, ohne `.quartz-cache`, das eine Kopie von allem hält). Namen mit `_` (Hilfsvariablen wie
+  `--_size`) bleiben weg. Aufrufer übergeben nur eingeschaltete Plugins. A3 braucht keinen eigenen
+  Code: `VariableResolve.resolveValueLiteral` löst `var(--tpl-icon)` schon über die `:root`-Werte auf.
