@@ -225,3 +225,12 @@ die eigenen, ohne Beschreibung, eingeklappt; Teil D mit den vorgeschlagenen Grup
   gefragt, ohne `.quartz-cache`, das eine Kopie von allem hält). Namen mit `_` (Hilfsvariablen wie
   `--_size`) bleiben weg. Aufrufer übergeben nur eingeschaltete Plugins. A3 braucht keinen eigenen
   Code: `VariableResolve.resolveValueLiteral` löst `var(--tpl-icon)` schon über die `:root`-Werte auf.
+- **Schritt 3 (2026-11-21):** Abschnitt „Plugin-Variablen“ unter Stile ▸ Variablen (`PluginVariablesSection`),
+  eine Klappgruppe je Plugin, die beschriebenen zuerst, dann die aus dem Build, Quartz und „Ohne Plugin“
+  zuletzt; bei den beschriebenen die Gruppen des Katalogs in seiner Reihenfolge und die Beschreibung in
+  der Sprache der App unter jeder Zeile; „im Projekt gesetzt“, wo eine ungelayerte Regel sie auch setzt.
+  Inspektor nur lesend: Beschreibung, Plugin, Vorgabe (aufgelöst über die `:root`-Werte), Selektor, die
+  Regeln des Projekts, weitere Selektoren, ein Schnipsel zum Kopieren. Die Suche der Seite filtert mit.
+  Angesehen an der Kopie von gui-test (95 Variablen, dunkel; hell nicht angesehen). Die Zeile zeigt die
+  Vorgabe des Plugins, nicht den Wert, der gilt: Welche Regel gewinnt, kommt mit Schritt 5 (B2).
+

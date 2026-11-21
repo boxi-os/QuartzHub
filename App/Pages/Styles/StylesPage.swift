@@ -25,6 +25,8 @@ struct StylesPage: View {
   @SceneStorage("styles.allVars.kind") private var varKind = "all"
   @SceneStorage("styles.allVars.openGroups") private var varOpenBrowseGroups = ""
   @SceneStorage("styles.vars.darkOpen") private var varDarkOpen = ""
+  @SceneStorage("styles.pluginVars.open") private var varPluginsOpen = false
+  @SceneStorage("styles.pluginVars.openPlugins") private var varOpenPlugins = ""
   @State private var varScroll: String?
   @SceneStorage("styles.css.openTabs") private var cssOpenTabs = CssTab.mainTab
   @SceneStorage("styles.css.activeTab") private var cssActiveTab = CssTab.mainTab
@@ -82,6 +84,13 @@ struct StylesPage: View {
                             CssVariableReference(model: model, insert: { cssInsertion = CodeInsertion(text: $0) }, goToVariables: { tabID = StylesModel.Tab.variables.rawValue })
                             ActiveStylesSection(model: model)
                           }))
+      } else if tab == .variables, let varSelected, model.config != nil, varSelected.hasPrefix(PluginVariableKey.prefix) {
+        if let (plugin, variable) = PluginVariableKey.find(varSelected, in: model.pluginVariables) {
+          PluginVariableInspector(plugin: plugin, variable: variable, model: model)
+            .id(varSelected)
+        } else {
+          pageContext
+        }
       } else if tab == .variables, let varSelected, model.config != nil {
         VariableInspector(key: varSelected, model: model, darkOpen: VariablesPlace.lines(varDarkOpen).contains(varSelected),
                           setDarkOpen: { open in
@@ -137,7 +146,8 @@ struct StylesPage: View {
 
   private var variablesPlace: VariablesPlace {
     VariablesPlace(selected: $varSelected, openGroups: $varOpenGroups, allOpen: $varAllOpen, query: $varQuery, onlyChanged: $varOnlyChanged,
-                   kind: $varKind, openBrowseGroups: $varOpenBrowseGroups, darkOpen: $varDarkOpen)
+                   kind: $varKind, openBrowseGroups: $varOpenBrowseGroups, darkOpen: $varDarkOpen, pluginsOpen: $varPluginsOpen,
+                   openPlugins: $varOpenPlugins)
   }
 
   /// A chip in the inspector jumps to a variable: select it, open its group, put its name in the

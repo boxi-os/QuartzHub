@@ -60,6 +60,14 @@ public enum PluginVariables {
     public var variables: [Variable]
     /// Whether a catalogue described it (groups, kinds, descriptions).
     public var described: Bool
+
+    public init(name: String, displayName: String?, groups: [Group], variables: [Variable], described: Bool) {
+      self.name = name
+      self.displayName = displayName
+      self.groups = groups
+      self.variables = variables
+      self.described = described
+    }
   }
 
   public struct Result: Equatable, Sendable {

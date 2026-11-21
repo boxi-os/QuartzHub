@@ -17,6 +17,9 @@ struct VariablesPlace: DynamicProperty {
   var kind: Binding<String>
   var openBrowseGroups: Binding<String>
   var darkOpen: Binding<String>
+  /// "Plugin-Variablen" and, as lines, the plugins open in it.
+  var pluginsOpen: Binding<Bool>
+  var openPlugins: Binding<String>
 
   static func lines(_ text: String) -> [String] { text.split(separator: "\n").map(String.init) }
 
@@ -95,6 +98,7 @@ struct VariablesTab: View {
         Form {
           mainSection
           allSection
+          PluginVariablesSection(model: model, place: place)
         }
         .formStyle(.grouped)
       }

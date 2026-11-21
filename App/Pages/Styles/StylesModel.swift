@@ -61,6 +61,8 @@ final class StylesModel {
   /// editor tab opens, updated from what a save wrote.
   private(set) var loadedFiles: [String: String] = [:]
   private(set) var graph: VariableGraph.Graph?
+  /// The variables plugins declare at their own selectors, read with the graph.
+  private(set) var pluginVariables: PluginVariables.Result?
   private(set) var graphLoading = true
   private var graphRound = 0
 
@@ -114,9 +116,13 @@ final class StylesModel {
     graphLoading = true
     let path = project.path
     let themeId = FontDelivery.activeThemeId(config)
+    // Only enabled plugins reach the build; a disabled one's package may still name a variable.
+    let sources = config.plugins.filter(FontDelivery.enabled).compactMap { PluginSource($0.source) }
     let read = try? await Task.detached { try VariableGraph.graph(project: path, themeId: themeId) }.value
+    let plugins = await Task.detached { PluginVariables.read(project: path, plugins: sources) }.value
     guard mine == graphRound else { return }
     graph = read
+    pluginVariables = plugins
     graphLoading = false
   }
 

@@ -58378,6 +58378,367 @@
         }
       }
     },
+    "styles.variables.pluginInspector.alsoAt" : {
+      "comment" : "Inspector of a plugin variable: further selectors of the plugin's own rules",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auch gesetzt an"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Also set at"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.copied" : {
+      "comment" : "Announcement after copying a plugin variable's CSS snippet",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSS kopiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSS copied"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.copy" : {
+      "comment" : "Inspector of a plugin variable: copies the CSS snippet",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.default" : {
+      "comment" : "Inspector of a plugin variable: section with the plugin's own values",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgabe des Plugins"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin default"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.plugin" : {
+      "comment" : "Inspector of a plugin variable: which plugin it belongs to",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.selector" : {
+      "comment" : "Inspector of a plugin variable: where the plugin sets it",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selektor"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selector"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.setBy" : {
+      "comment" : "Inspector of a plugin variable: section listing the project's rules that set it",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Projekt gesetzt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set in the project"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.setByNone" : {
+      "comment" : "Inspector of a plugin variable: nothing in the project sets it",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Regel des Projekts setzt sie, es gilt die Vorgabe des Plugins."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No rule of the project sets it; the plugin default applies."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.setByNote" : {
+      "comment" : "Inspector of a plugin variable: note above the project's rules",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Regeln aus der Vorlage oder deinem CSS setzen die Variable auch. Es gilt die stärkere Regel."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These rules from the template or your CSS set the variable too. The stronger rule wins."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.snippet" : {
+      "comment" : "Inspector of a plugin variable: section with a ready rule to copy",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als CSS"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As CSS"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.snippetNote" : {
+      "comment" : "Inspector of a plugin variable: note under the CSS snippet",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für Eigenes CSS. Für nur ein Vorkommen ergänze den Selektor um dessen Klasse (Option className)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For Custom CSS. For one instance only, add its class (option className) to the selector."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.unset" : {
+      "comment" : "Inspector of a plugin variable: the plugin declares no default (e.g. --quartz-nav-rail-top)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nicht gesetzt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "not set"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginOther" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: group of a described plugin's variables that name no group",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginSetByProject" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: badge on a row whose variable a rule of the project sets too",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "im Projekt gesetzt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "set in the project"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginsDescription" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: note under the heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variablen, die Plugins an ihren eigenen Elementen setzen. Eine Änderung gilt für jedes Vorkommen des Plugins."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variables plugins set on their own elements. A change applies to every instance of the plugin."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginsHeading" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin-Variablen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plugin variables"
+          }
+        }
+      }
+    },
+    "styles.variables.pluginsNoBuild" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: no build output yet",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Build stehen hier nur die Variablen, die ein Plugin selbst beschreibt. Einmal bauen, dann neu einlesen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Without a build, only the variables a plugin describes itself are listed. Build once, then read again."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginsNone" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: nothing to list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein eingeschaltetes Plugin bringt eigene Variablen mit."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No enabled plugin brings variables of its own."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginsUnattributed" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: group of variables no plugin's package declares",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Plugin"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No plugin"
+          }
+        }
+      }
+    },
     "styles.variables.reload" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
