@@ -58378,6 +58378,25 @@
         }
       }
     },
+    "styles.variables.pluginChanged" : {
+      "comment" : "Styles ▸ Variables, section Plugin-Variablen: badge on a row the page sets a value for",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "geändert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "changed"
+          }
+        }
+      }
+    },
     "styles.variables.pluginInspector.alsoAt" : {
       "comment" : "Inspector of a plugin variable: further selectors of the plugin's own rules",
       "extractionState" : "manual",
@@ -58583,6 +58602,63 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "For Custom CSS. For one instance only, add its class (option className) to the selector."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.stronger" : {
+      "comment" : "Inspector of a plugin variable: a project rule beats the value set here",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Regel des Projekts ist stärker und gilt weiter: {{rules}}. Ändere sie unter Eigenes CSS oder entferne sie dort."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This rule of the project is stronger and still applies: {{rules}}. Change it under Custom CSS or remove it there."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.strongerDark" : {
+      "comment" : "Inspector of a plugin variable: a dark project rule beats the value set for both modes",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im dunklen Modus ist diese Regel stärker: {{rules}}. Setze einen eigenen Wert für Dunkel, oder ändere die Regel unter Eigenes CSS."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In dark mode this rule is stronger: {{rules}}. Set a value of its own for dark, or change the rule under Custom CSS."
+          }
+        }
+      }
+    },
+    "styles.variables.pluginInspector.unsafe" : {
+      "comment" : "Inspector of a plugin variable: the typed value cannot be written",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Semikolon, eine geschweifte Klammer, ein Backslash oder ein Kommentar kann hier nicht stehen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A semicolon, curly brace, backslash or comment cannot stand here."
           }
         }
       }

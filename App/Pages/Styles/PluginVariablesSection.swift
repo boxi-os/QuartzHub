@@ -142,8 +142,18 @@ enum PluginVariableValue {
     mode == .dark ? (variable.dark ?? variable.light) : variable.light
   }
 
-  static func resolved(_ variable: PluginVariables.Variable, _ mode: VariableResolve.Mode, _ ctx: VariableResolve.Context) -> String? {
-    VariableResolve.resolveValueLiteral(value(variable, mode), mode, ctx)
+  /// What the page's value makes of it in a mode: its own value, else the plugin's.
+  static func current(_ variable: PluginVariables.Variable, _ override: PluginVariableOverride?, _ mode: VariableResolve.Mode) -> String? {
+    guard let o = override else { return value(variable, mode) }
+    let light = o.light.trimmingCharacters(in: .whitespaces), dark = (o.dark ?? "").trimmingCharacters(in: .whitespaces)
+    if mode == .dark { return !dark.isEmpty ? dark : (o.lightOnly || light.isEmpty ? value(variable, .dark) : light) }
+    return light.isEmpty ? value(variable, .light) : light
+  }
+
+  /// The plugin's value, or with `override` the page's, resolved.
+  static func resolved(_ variable: PluginVariables.Variable, _ mode: VariableResolve.Mode, _ ctx: VariableResolve.Context,
+                       _ override: PluginVariableOverride? = nil) -> String? {
+    VariableResolve.resolveValueLiteral(current(variable, override, mode), mode, ctx)
   }
 
   static func isColor(_ variable: PluginVariables.Variable, _ ctx: VariableResolve.Context) -> Bool {
@@ -163,18 +173,22 @@ struct PluginVariableRowView: View {
   var body: some View {
     let ctx = model.context
     let showsColor = PluginVariableValue.isColor(variable, ctx)
+    let override = model.pluginOverride(selector: variable.selector, key: variable.name)
     Button(action: select) {
       VStack(alignment: .leading, spacing: 2) {
         HStack(spacing: 8) {
           HStack(spacing: 2) {
-            VariableSwatch(value: showsColor ? PluginVariableValue.resolved(variable, .light, ctx) : nil, ground: VariableResolve.pageGround(.light, ctx))
-            VariableSwatch(value: showsColor ? PluginVariableValue.resolved(variable, .dark, ctx) : nil, ground: VariableResolve.pageGround(.dark, ctx))
+            VariableSwatch(value: showsColor ? PluginVariableValue.resolved(variable, .light, ctx, override) : nil, ground: VariableResolve.pageGround(.light, ctx))
+            VariableSwatch(value: showsColor ? PluginVariableValue.resolved(variable, .dark, ctx, override) : nil, ground: VariableResolve.pageGround(.dark, ctx))
           }
           .opacity(showsColor ? 1 : 0)
           Text("--\(variable.name)").font(.system(.body, design: .monospaced))
-          Text(variable.light ?? L10n.t("styles.variables.pluginInspector.unset")).foregroundStyle(.secondary).lineLimit(1).truncationMode(.tail)
+          Text(override.map(\.light).flatMap { $0.isEmpty ? nil : $0 } ?? variable.light ?? L10n.t("styles.variables.pluginInspector.unset"))
+            .foregroundStyle(.secondary).lineLimit(1).truncationMode(.tail)
           Spacer(minLength: 4)
-          if !variable.setBy.isEmpty {
+          if override != nil {
+            StateBadge(text: L10n.t("styles.variables.pluginChanged"), color: .green).font(.caption)
+          } else if !model.projectRules(variable).isEmpty {
             StateBadge(text: L10n.t("styles.variables.pluginSetByProject"), color: .gray).font(.caption)
           }
         }
@@ -188,7 +202,7 @@ struct PluginVariableRowView: View {
     .buttonStyle(.plain)
     .padding(.vertical, 2)
     .padding(.horizontal, 4)
-    .background(selected ? Color.accentColor.opacity(0.22) : Color.clear, in: RoundedRectangle(cornerRadius: 5))
+    .background(selected ? Color.accentColor.opacity(0.22) : (override != nil ? Color.green.opacity(0.08) : Color.clear), in: RoundedRectangle(cornerRadius: 5))
     .accessibilityIdentifier("variables.pluginRow.\(variable.name)")
   }
 }
@@ -199,9 +213,55 @@ struct PluginVariableInspector: View {
   let plugin: PluginVariables.Plugin
   let variable: PluginVariables.Variable
   let model: StylesModel
+  /// A dark field asked for before a dark value is typed.
+  @State private var splitDark = false
+
+  private var override: PluginVariableOverride? { model.pluginOverride(selector: variable.selector, key: variable.name) }
 
   var snippet: String {
-    "\(variable.selector) {\n  --\(variable.name): \(variable.light ?? "");\n}"
+    "\(variable.selector) {\n  --\(variable.name): \(PluginVariableValue.current(variable, override, .light) ?? "");\n}"
+  }
+
+  /// Writes one half; both halves empty is no override.
+  private func set(light: String? = nil, dark: String?? = .none) {
+    var next = override ?? PluginVariableOverride(selector: variable.selector, key: variable.name, light: "")
+    if let light { next.light = light }
+    if case .some(let value) = dark { next.dark = value }
+    let empty = next.light.trimmingCharacters(in: .whitespaces).isEmpty && (next.dark ?? "").trimmingCharacters(in: .whitespaces).isEmpty
+    model.setPluginOverride(selector: variable.selector, key: variable.name, empty && !splitDark ? nil : next)
+  }
+
+  private func field(_ mode: VariableResolve.Mode, label: String, ctx: VariableResolve.Context) -> some View {
+    let text = mode == .light ? (override?.light ?? "") : (override?.dark ?? "")
+    let placeholder = PluginVariableValue.value(variable, mode) ?? ""
+    let resolved = VariableResolve.resolveValueLiteral(text.isEmpty ? placeholder : text, mode, ctx)
+    let isColor = PluginVariableValue.isColor(variable, ctx)
+    let unsafe = !text.trimmingCharacters(in: .whitespaces).isEmpty && !PluginVariableOverrides.isSafeValue(text)
+    return VStack(alignment: .leading, spacing: 4) {
+      LabeledContent(label) {
+        HStack(spacing: 6) {
+          if isColor {
+            ColorPicker(selection: Binding(get: { CssColorField.color(resolved ?? placeholder) },
+                                           set: { mode == .light ? set(light: CssColorField.css($0)) : set(dark: .some(CssColorField.css($0))) }),
+                        supportsOpacity: true) { Text(label) }
+              .labelsHidden()
+          }
+          TextField(label, text: Binding(get: { text }, set: { mode == .light ? set(light: $0) : set(dark: .some($0)) }),
+                    prompt: Text(placeholder))
+            .labelsHidden().textFieldStyle(.roundedBorder)
+            .font(.system(.body, design: .monospaced))
+            .accessibilityIdentifier("variables.pluginValue.\(mode == .light ? "light" : "dark")")
+        }
+      }
+      if unsafe { FieldProblem(L10n.t("styles.variables.pluginInspector.unsafe")) }
+    }
+  }
+
+  /// The project's rules that beat the page's value, per mode.
+  private func stronger(_ mode: String) -> [PluginVariables.Setter] {
+    guard let override else { return [] }
+    let custom = model.customSelectors[variable.name] ?? []
+    return PluginVariableCascade.stronger(override, setBy: model.projectRules(variable), mode: mode) { custom.contains(PluginVariableCascade.normalized($0.rule)) }
   }
 
   var body: some View {
@@ -212,8 +272,8 @@ struct PluginVariableInspector: View {
       Section {
         HStack {
           if showsColor {
-            VariableSwatch(value: PluginVariableValue.resolved(variable, .light, ctx), ground: VariableResolve.pageGround(.light, ctx), size: 14)
-            VariableSwatch(value: PluginVariableValue.resolved(variable, .dark, ctx), ground: VariableResolve.pageGround(.dark, ctx), size: 14)
+            VariableSwatch(value: PluginVariableValue.resolved(variable, .light, ctx, override), ground: VariableResolve.pageGround(.light, ctx), size: 14)
+            VariableSwatch(value: PluginVariableValue.resolved(variable, .dark, ctx, override), ground: VariableResolve.pageGround(.dark, ctx), size: 14)
           }
           Text("--\(variable.name)").font(.system(.title3, design: .monospaced)).textSelection(.enabled)
         }
@@ -240,11 +300,12 @@ struct PluginVariableInspector: View {
         }
       }
       Section(L10n.t("styles.variables.pluginInspector.setBy")) {
-        if variable.setBy.isEmpty {
+        let rules = model.projectRules(variable)
+        if rules.isEmpty {
           Note(L10n.t("styles.variables.pluginInspector.setByNone"))
         } else {
           Note(L10n.t("styles.variables.pluginInspector.setByNote"))
-          ForEach(Array(variable.setBy.enumerated()), id: \.offset) { _, setter in
+          ForEach(Array(rules.enumerated()), id: \.offset) { _, setter in
             LabeledContent(setter.mode == "dark" ? "\(setter.selector) (\(L10n.t("styles.variables.dark")))" : setter.selector) {
               Text(setter.value).font(.system(.callout, design: .monospaced)).textSelection(.enabled)
             }
@@ -258,6 +319,34 @@ struct PluginVariableInspector: View {
             Text(selector).font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary).textSelection(.enabled)
           }
           if variable.alsoAt.count > 24 { Note(L10n.t("styles.variables.moreKeys", count: variable.alsoAt.count - 24)) }
+        }
+      }
+      Section(L10n.t("styles.variables.section.edit")) {
+        let split = splitDark || !(override?.dark ?? "").isEmpty
+        field(.light, label: split ? L10n.t("styles.variables.light") : L10n.t("styles.variables.bothModes"), ctx: ctx)
+        if split { field(.dark, label: L10n.t("styles.variables.dark"), ctx: ctx) }
+        if !split {
+          Button(L10n.t("styles.variables.splitDark")) { splitDark = true }.buttonStyle(.link)
+        } else {
+          Button(L10n.t("styles.variables.unsplitDark")) {
+            splitDark = false
+            set(dark: .some(nil))
+          }
+          .buttonStyle(.link)
+        }
+        let light = stronger("light"), dark = stronger("dark").filter { d in !light.contains(d) }
+        if !light.isEmpty {
+          Callout(.warning, L10n.t("styles.variables.pluginInspector.stronger", ["rules": light.map(\.rule).joined(separator: ", ")]))
+        }
+        if !dark.isEmpty {
+          Callout(.warning, L10n.t("styles.variables.pluginInspector.strongerDark", ["rules": dark.map(\.rule).joined(separator: ", ")]))
+        }
+        if override != nil {
+          Button(L10n.t("styles.variables.resetToOriginal")) {
+            splitDark = false
+            model.setPluginOverride(selector: variable.selector, key: variable.name, nil)
+          }
+          .accessibilityIdentifier("variables.pluginReset")
         }
       }
       Section(L10n.t("styles.variables.pluginInspector.snippet")) {

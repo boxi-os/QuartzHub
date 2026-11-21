@@ -51,6 +51,18 @@ final class StylesModel {
   private(set) var quartzStillDownloadsFonts = false
   private(set) var overrides: [(key: String, value: VariableResolve.Override)] = []
   private var savedOverrides: [(key: String, value: VariableResolve.Override)] = []
+  /// The `plugin-vars` block as the page holds it (docs/plan-plugin-variablen.md, B1).
+  private(set) var pluginOverrides: [PluginVariableOverride] = []
+  private var savedPluginOverrides: [PluginVariableOverride] = []
+
+  /// The project's rules for a plugin variable without the page's own (the saved block, as the
+  /// last build shows it).
+  func projectRules(_ variable: PluginVariables.Variable) -> [PluginVariables.Setter] {
+    let saved = savedPluginOverrides.first { $0.selector == variable.selector && $0.key == variable.name }
+    return variable.setBy.filter { !PluginVariableCascade.isOwn($0, saved: saved) }
+  }
+  /// custom.scss's own rules per variable, to tell which project rule comes after the block.
+  private(set) var customSelectors: [String: Set<String>] = [:]
   private(set) var scss: Scss?
   /// What rewrote `_quartzcontrol.scss` under its unsaved draft.
   private(set) var managedStale: Writer?
@@ -106,6 +118,9 @@ final class StylesModel {
       (o.key, VariableResolve.Override(light: o.light, dark: o.dark == o.light ? "" : (o.dark ?? ""), lightOnly: o.lightOnly))
     }
     savedOverrides = overrides
+    pluginOverrides = (try? await Task.detached { try StyleSheets.pluginVariableOverrides(project: path) }.value) ?? []
+    savedPluginOverrides = pluginOverrides
+    customSelectors = await Task.detached { PluginVariableCascade.customSelectors(project: path) }.value
   }
 
   /// The variable table: read again when the theme changes or someone asks after a build.
@@ -159,7 +174,8 @@ final class StylesModel {
   // MARK: Editing
 
   var dirty: Bool {
-    (savedConfig != nil && config != savedConfig) || !Self.same(overrides, savedOverrides) || (scss?.dirty ?? false) || !fileDrafts.isEmpty
+    (savedConfig != nil && config != savedConfig) || !Self.same(overrides, savedOverrides) || pluginOverrides != savedPluginOverrides
+      || (scss?.dirty ?? false) || !fileDrafts.isEmpty
   }
 
   var saving: Bool { status == .saving }
@@ -184,6 +200,19 @@ final class StylesModel {
     } else if let value {
       overrides.append((key, value))
     }
+  }
+
+  /// One plugin variable's value in place, a new one at the end, nil takes it out.
+  func setPluginOverride(selector: String, key: String, _ value: PluginVariableOverride?) {
+    if let index = pluginOverrides.firstIndex(where: { $0.selector == selector && $0.key == key }) {
+      if let value { pluginOverrides[index] = value } else { pluginOverrides.remove(at: index) }
+    } else if let value {
+      pluginOverrides.append(value)
+    }
+  }
+
+  func pluginOverride(selector: String, key: String) -> PluginVariableOverride? {
+    pluginOverrides.first { $0.selector == selector && $0.key == key }
   }
 
   func setScssContent(_ content: String) {
@@ -241,8 +270,16 @@ final class StylesModel {
     do {
       let configDirty = config != savedConfig || quartzStillDownloadsFonts
       let overridesDirty = !Self.same(overrides, savedOverrides)
+      let pluginOverridesDirty = pluginOverrides != savedPluginOverrides
       // Asked before the first write, so a value the file cannot hold stops the save as a whole.
       if overridesDirty, let bad = overrides.first(where: { !CssVariables.isWritable($0.value.light) || !CssVariables.isWritable($0.value.dark) }) {
+        status = .failed
+        message = L10n.t("styles.variableNotWritable", ["name": bad.key])
+        return false
+      }
+      if pluginOverridesDirty, let bad = pluginOverrides.first(where: { o in
+        [o.light, o.dark ?? ""].contains { !Self.trim($0).isEmpty && !PluginVariableOverrides.isSafeValue($0) }
+      }) {
         status = .failed
         message = L10n.t("styles.variableNotWritable", ["name": bad.key])
         return false
@@ -275,11 +312,22 @@ final class StylesModel {
         overrides = kept
         savedOverrides = kept
       }
+      if scss.dirty && !scssRefused {
+        // custom.scss's own rules decide which project rule comes after the plugin-vars block.
+        customSelectors = await Task.detached { PluginVariableCascade.customSelectors(project: path) }.value
+      }
+      if pluginOverridesDirty {
+        let kept = pluginOverrides.filter { !Self.trim($0.light).isEmpty || !Self.trim($0.dark ?? "").isEmpty }
+        try await StyleSheets.savePluginVariableOverrides(kept, project: path)
+        blocksWritten = .variables
+        pluginOverrides = kept
+        savedPluginOverrides = kept
+      }
       if scssRefused || managedRefused {
         // Re-read under the writer's name, so the refused draft keeps its banner.
-        if configDirty { await reloadScss(after: .googleFonts) } else if overridesDirty { await reloadScss(after: .variables) }
-        managedReloaded = configDirty || overridesDirty
-      } else if scss.dirty || configDirty || overridesDirty {
+        if configDirty { await reloadScss(after: .googleFonts) } else if overridesDirty || pluginOverridesDirty { await reloadScss(after: .variables) }
+        managedReloaded = configDirty || overridesDirty || pluginOverridesDirty
+      } else if scss.dirty || configDirty || overridesDirty || pluginOverridesDirty {
         await reloadScss(after: nil)
         managedReloaded = true
       }

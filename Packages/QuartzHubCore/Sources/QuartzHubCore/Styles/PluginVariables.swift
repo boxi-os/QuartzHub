@@ -31,6 +31,16 @@ public enum PluginVariables {
     /// `light` or `dark`.
     public var mode: String
     public var value: String
+    /// The rule's whole selector as the build has it, the mode prefix included: what its
+    /// specificity is counted from.
+    public var rule: String
+
+    public init(selector: String, mode: String, value: String, rule: String? = nil) {
+      self.selector = selector
+      self.mode = mode
+      self.value = value
+      self.rule = rule ?? selector
+    }
   }
 
   public struct Variable: Equatable, Sendable {
@@ -111,6 +121,7 @@ public enum PluginVariables {
     var selector: String
     var mode: String
     var value: String
+    var rule: String = ""
   }
 
   /// The mode a scoped selector is for and the selector without the mode prefix:
@@ -149,7 +160,7 @@ public enum PluginVariables {
             if context.layered {
               if seenLayered.insert("\(name)\u{0}\(base)\u{0}\(mode)").inserted { layered.append((name, Declared(selector: base, mode: mode, value: value))) }
             } else if seenUnlayered.insert("\(name)\u{0}\(base)\u{0}\(mode)\u{0}\(value)").inserted {
-              unlayered.append((name, Declared(selector: base, mode: mode, value: value)))
+              unlayered.append((name, Declared(selector: base, mode: mode, value: value, rule: JS.trim(selector))))
             }
           }
         }
@@ -201,7 +212,7 @@ public enum PluginVariables {
     var ownSelectors: [String: [String]] = [:]
     for (name, declared) in layered { ownSelectors[name, default: []].append(declared.selector) }
     var setters: [String: [Setter]] = [:]
-    for (name, declared) in unlayered { setters[name, default: []].append(Setter(selector: declared.selector, mode: declared.mode, value: declared.value)) }
+    for (name, declared) in unlayered { setters[name, default: []].append(Setter(selector: declared.selector, mode: declared.mode, value: declared.value, rule: declared.rule)) }
     func complete(_ variable: Variable) -> Variable {
       var v = variable
       v.alsoAt = orderedNames((ownSelectors[v.name] ?? []).filter { $0 != v.selector })

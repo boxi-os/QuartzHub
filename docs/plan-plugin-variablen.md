@@ -240,4 +240,18 @@ die eigenen, ohne Beschreibung, eingeklappt; Teil D mit den vorgeschlagenen Grup
   Vorlagen mitzunehmen wäre ein eigener Schritt). Nicht geschrieben wird, was keine einzelne Deklaration bliebe
   (Selektor oder Wert mit Klammer, Semikolon, Kommentar, Zeilenumbruch; Selektorlisten). Gegenproben: ohne den
   Eintrag in `movedMarkers` bzw. `managedMarkers` scheitern die Tests. `formats/projekt.md` §1 beschreibt den Block.
+- **Schritt 5 (2026-11-22):** Ändern im Inspektor (Hell und dunkel, auf Wunsch Dunkel eigens, Farbwähler bei
+  Farben, Zurücksetzen), gespeichert mit der Seite (⌘S, Frage beim Verlassen) über `StylesModel.pluginOverrides`;
+  ein Wert, der keine Deklaration bliebe, wird unter dem Feld gemeldet und hält das Speichern an
+  (`styles.variableNotWritable`, wie bei `css-vars`). **B2 gemessen** an der Kopie von gui-test, Block über den
+  Schreiber, gebaut, in Chrome: `--quartz-nav-rail-icon-size` 1.5rem in hell und dunkel, Icons 24 px (die Vorlage
+  hätte 1.1rem); `--quartz-forms-error` mit eigenem Dunkel-Wert `#a00`/`#faa` statt der Werte des Plugins. Im
+  Build steht die Regel der Seite hinter der der Vorlage (`.quartz-nav--rail`, gleiche Spezifität). Wer stärker ist,
+  sagt `PluginVariableCascade`: höhere Spezifität, oder gleiche und aus `custom.scss` (das den Block mit seiner
+  ersten Zeile lädt, seine Regeln kommen danach); ein `Callout` im Inspektor nennt die Regel, für Dunkel eigens
+  (eine Regel der Vorlage für dunkel schlägt einen Wert für beide Modi). In der App durchgespielt: Hinweis bei
+  `.quartz-nav.nav-menue` in custom.scss, Tippen, ⌘S, Datei, Zurücksetzen, unsicherer Wert. **Grenze:** Die Regeln
+  des Projekts kommen aus dem letzten Build. Die eigene Regel der Seite erkennt QuartzHub daran, dass Selektor und
+  Wert zum gespeicherten Block passen; ein älterer eigener Wert steht bis zum nächsten Build als Regel des Projekts
+  da. Eine in SCSS verschachtelte Regel von custom.scss wird nicht als „später“ erkannt.
 
