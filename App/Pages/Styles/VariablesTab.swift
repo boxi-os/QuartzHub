@@ -20,6 +20,8 @@ struct VariablesPlace: DynamicProperty {
   /// "Plugin-Variablen" and, as lines, the plugins open in it.
   var pluginsOpen: Binding<Bool>
   var openPlugins: Binding<String>
+  /// The groups open under "Template-Variablen", as lines.
+  var openTemplateGroups: Binding<String>
 
   static func lines(_ text: String) -> [String] { text.split(separator: "\n").map(String.init) }
 
@@ -73,8 +75,9 @@ struct VariablesTab: View {
     return out
   }
 
+  /// Everything neither the catalogue of Quartz's variables nor the template's catalogue lists.
   private var extraKeys: [String] {
-    let curated = Set(CssVariables.all.map(\.key))
+    let curated = Set(CssVariables.all.map(\.key)).union(model.templateVariables?.variables.map(\.name) ?? [])
     return VariableResolve.allKnownKeys(ctx).filter { !curated.contains($0) }.sorted()
   }
 
@@ -97,6 +100,7 @@ struct VariablesTab: View {
         }
         Form {
           mainSection
+          templateSection
           allSection
           PluginVariablesSection(model: model, place: place)
         }
@@ -155,6 +159,34 @@ struct VariablesTab: View {
       }
     } header: {
       Text(L10n.t("styles.variables.mainHeading"))
+    }
+  }
+
+  // MARK: The template's catalogue
+
+  /// The variables the template describes, under its groups in its order, each with its
+  /// explanation; rows and inspector are the ordinary ones, the values are `:root`'s.
+  @ViewBuilder private var templateSection: some View {
+    if let catalog = model.templateVariables {
+      Section {
+        Note(L10n.t("styles.variables.templateDescription", ["source": catalog.source]))
+        ForEach(PluginVariablesSection.sections(PluginVariables.Plugin(name: "", displayName: nil, groups: catalog.groups,
+                                                                        variables: catalog.variables, described: true), catalog.variables),
+                id: \.id) { part in
+          let keys = part.variables.map(\.name)
+          Fold(isExpanded: VariablesPlace.member(place.openTemplateGroups, part.id)) {
+            ForEach(part.variables, id: \.name) { variable in
+              row(variable.name, description: PluginVariablesSection.description(variable), fromTemplate: true)
+            }
+          } label: {
+            // No "geändert": the template writes its values into the same block as the user, so
+            // every one of them would count.
+            groupHeader(part.label ?? part.id, count: keys.count, changed: 0)
+          }
+        }
+      } header: {
+        Text(L10n.t("styles.variables.templateHeading"))
+      }
     }
   }
 
@@ -283,8 +315,8 @@ struct VariablesTab: View {
 
   // MARK: A row
 
-  private func row(_ key: String) -> some View {
-    VariableRowView(key: key, model: model, selected: place.selected.wrappedValue == key) {
+  private func row(_ key: String, description: String? = nil, fromTemplate: Bool = false) -> some View {
+    VariableRowView(key: key, model: model, selected: place.selected.wrappedValue == key, description: description, fromTemplate: fromTemplate) {
       place.selected.wrappedValue = place.selected.wrappedValue == key ? nil : key
     }
     .id("var-\(key)")
@@ -296,6 +328,11 @@ struct VariableRowView: View {
   let key: String
   let model: StylesModel
   let selected: Bool
+  /// The template's explanation, under the name.
+  var description: String? = nil
+  /// A variable of the template's catalogue: "Vorlage" instead of "eigene Variable", and no
+  /// trash button in the list (removing it from the template stays in the inspector, asked).
+  var fromTemplate: Bool = false
   let select: () -> Void
   @Environment(\.unsavedGuard) private var unsaved
 
@@ -308,21 +345,30 @@ struct VariableRowView: View {
     let overridden = ctx.overrides[key] != nil
     HStack(spacing: 8) {
       Button(action: select) {
-        HStack(spacing: 8) {
-          HStack(spacing: 2) {
-            VariableSwatch(value: showsColor ? VariableResolve.resolvedValue(key, .light, ctx) : nil, ground: VariableResolve.pageGround(.light, ctx))
-            VariableSwatch(value: showsColor ? VariableResolve.resolvedValue(key, .dark, ctx) : nil, ground: VariableResolve.pageGround(.dark, ctx))
+        VStack(alignment: .leading, spacing: 2) {
+          HStack(spacing: 8) {
+            HStack(spacing: 2) {
+              VariableSwatch(value: showsColor ? VariableResolve.resolvedValue(key, .light, ctx) : nil, ground: VariableResolve.pageGround(.light, ctx))
+              VariableSwatch(value: showsColor ? VariableResolve.resolvedValue(key, .dark, ctx) : nil, ground: VariableResolve.pageGround(.dark, ctx))
+            }
+            .opacity(showsColor ? 1 : 0)
+            Text("--\(key)").font(.system(.body, design: .monospaced))
+            Text(light ?? "—").foregroundStyle(.secondary).lineLimit(1).truncationMode(.tail)
+            Spacer(minLength: 4)
           }
-          .opacity(showsColor ? 1 : 0)
-          Text("--\(key)").font(.system(.body, design: .monospaced))
-          Text(light ?? "—").foregroundStyle(.secondary).lineLimit(1).truncationMode(.tail)
-          Spacer(minLength: 4)
+          if let description {
+            Text(description).font(.caption).foregroundStyle(.secondary).lineLimit(2).padding(.leading, 34)
+          }
         }
         .contentShape(Rectangle())
       }
       .buttonStyle(.plain)
       if dependents > 0 { Text(L10n.t("styles.variables.dependents", count: dependents)).font(.caption).foregroundStyle(.secondary) }
-      if let badge = VariableInspector.originBadge(origin) { StateBadge(text: badge, color: origin == "theme" ? .gray : .green).font(.caption) }
+      if fromTemplate && origin == "own" {
+        StateBadge(text: L10n.t("styles.variables.originTemplate"), color: .gray).font(.caption)
+      } else if let badge = VariableInspector.originBadge(origin) {
+        StateBadge(text: badge, color: origin == "theme" ? .gray : .green).font(.caption)
+      }
       if overridden && origin != "own" {
         Button {
           model.setOverride(key, nil)
@@ -331,7 +377,7 @@ struct VariableRowView: View {
         }
         .labelStyle(.iconOnly).buttonStyle(.borderless)
       }
-      if origin == "own" {
+      if origin == "own" && !fromTemplate {
         Button(role: .destructive) {
           Task { await VariableInspector.removeOwn(key, model: model, window: unsaved?.window) }
         } label: {
@@ -343,7 +389,8 @@ struct VariableRowView: View {
     .padding(.vertical, 2)
     .padding(.horizontal, 4)
     // On the row itself: listRowBackground does not reach rows inside a DisclosureGroup (seen).
-    .background(selected ? Color.accentColor.opacity(0.22) : (overridden ? Color.green.opacity(0.08) : Color.clear), in: RoundedRectangle(cornerRadius: 5))
+    .background(selected ? Color.accentColor.opacity(0.22) : (overridden && !(fromTemplate && origin == "own") ? Color.green.opacity(0.08) : Color.clear),
+                in: RoundedRectangle(cornerRadius: 5))
     .accessibilityIdentifier("variables.row.\(key)")
   }
 }
@@ -427,6 +474,10 @@ struct VariableInspector: View {
             VariableSwatch(value: darkResolved, ground: VariableResolve.pageGround(.dark, ctx), size: 14)
           }
           Text("--\(key)").font(.system(.title3, design: .monospaced)).textSelection(.enabled)
+        }
+        if let described = model.templateVariables?.variables.first(where: { $0.name == key }),
+           let description = PluginVariablesSection.description(described) {
+          Note(description)
         }
         if let badge = Self.originBadge(origin) { StateBadge(text: badge, color: origin == "theme" ? .gray : .green) }
       }

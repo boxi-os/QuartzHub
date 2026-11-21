@@ -58306,6 +58306,25 @@
         }
       }
     },
+    "styles.variables.originTemplate" : {
+      "comment" : "Styles ▸ Variables, section Template-Variablen: badge of a row whose variable the template brings",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Template"
+          }
+        }
+      }
+    },
     "styles.variables.ownHint" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -59117,6 +59136,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "{{value}} over {{ground}}, the website’s page background"
+          }
+        }
+      }
+    },
+    "styles.variables.templateDescription" : {
+      "comment" : "Styles ▸ Variables, section Template-Variablen: note under the heading; source is a stylesheet path",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variablen, die die Vorlage des Projekts mitbringt und selbst erklärt. Beschrieben in {{source}}."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variables the project's template brings and explains itself. Described in {{source}}."
+          }
+        }
+      }
+    },
+    "styles.variables.templateHeading" : {
+      "comment" : "Styles ▸ Variables: heading of the section with the variables the project's template describes",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Template-Variablen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Template variables"
           }
         }
       }

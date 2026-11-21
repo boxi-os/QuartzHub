@@ -1,0 +1,616 @@
+{
+ "groups": [
+  {
+   "id": "space",
+   "label": "Spacing",
+   "label_de": "Abstände"
+  },
+  {
+   "id": "text",
+   "label": "Text",
+   "label_de": "Text"
+  },
+  {
+   "id": "surfaces",
+   "label": "Surfaces and lines",
+   "label_de": "Flächen und Linien"
+  },
+  {
+   "id": "colors",
+   "label": "Colours",
+   "label_de": "Farben"
+  },
+  {
+   "id": "callouts",
+   "label": "Callouts",
+   "label_de": "Callouts"
+  },
+  {
+   "id": "icons",
+   "label": "Icons",
+   "label_de": "Icons"
+  },
+  {
+   "id": "columns",
+   "label": "Columns",
+   "label_de": "Spalten"
+  },
+  {
+   "id": "header",
+   "label": "Header and footer",
+   "label_de": "Kopf- und Fußzeile"
+  },
+  {
+   "id": "rail",
+   "label": "Rail and drawer",
+   "label_de": "Randmenü und Schublade"
+  },
+  {
+   "id": "motion",
+   "label": "Motion and focus",
+   "label_de": "Bewegung und Fokus"
+  }
+ ],
+ "variables": [
+  [
+   "tpl-space-3xs",
+   "space",
+   "length",
+   "Smallest step of the spacing scale: tight gaps in lists and tags.",
+   "Kleinster Schritt der Abstandsskala: enge Abstände in Listen und Tags."
+  ],
+  [
+   "tpl-space-2xs",
+   "space",
+   "length",
+   "Gaps between icon and text, indents in the explorer.",
+   "Abstände zwischen Icon und Text, Einzüge im Explorer."
+  ],
+  [
+   "tpl-space-xs",
+   "space",
+   "length",
+   "Small padding: callout titles, buttons, list rows.",
+   "Kleiner Innenabstand: Callout-Titel, Buttons, Listenzeilen."
+  ],
+  [
+   "tpl-space-sm",
+   "space",
+   "length",
+   "Gaps in the header and between controls.",
+   "Abstände in der Kopfzeile und zwischen Bedienelementen."
+  ],
+  [
+   "tpl-space-md",
+   "space",
+   "length",
+   "Medium padding: callouts, search, panels.",
+   "Mittlerer Innenabstand: Callouts, Suche, Panels."
+  ],
+  [
+   "tpl-space-lg",
+   "space",
+   "length",
+   "Room between paragraphs and blocks, and at the window edge.",
+   "Abstand zwischen Absätzen und Blöcken und am Fensterrand."
+  ],
+  [
+   "tpl-space-xl",
+   "space",
+   "length",
+   "Room above headings, rules and the footer.",
+   "Abstand über Überschriften, Trennlinien und der Fußzeile."
+  ],
+  [
+   "tpl-space-2xl",
+   "space",
+   "length",
+   "Largest step: the space above and below the text in the focus frame.",
+   "Größter Schritt: der Abstand über und unter dem Text im Frame „focus“."
+  ],
+  [
+   "tpl-indent",
+   "space",
+   "length",
+   "Indentation of nested levels in the explorer and the table of contents.",
+   "Einrückung verschachtelter Ebenen im Explorer und im Inhaltsverzeichnis."
+  ],
+  [
+   "tpl-target",
+   "space",
+   "length",
+   "Minimum size of anything to click or tap (44px for touch).",
+   "Mindestgröße von allem, was man anklickt oder antippt (44px für Touch)."
+  ],
+  [
+   "tpl-text-xs",
+   "text",
+   "length",
+   "Smallest text: search paths and deep explorer levels.",
+   "Kleinste Schrift: Suchpfade und tiefe Explorer-Ebenen."
+  ],
+  [
+   "tpl-text-sm",
+   "text",
+   "length",
+   "Small text: header, sidebars, labels.",
+   "Kleine Schrift: Kopfzeile, Seitenleisten, Beschriftungen."
+  ],
+  [
+   "tpl-text-base",
+   "text",
+   "length",
+   "Body text.",
+   "Fließtext."
+  ],
+  [
+   "tpl-text-lg",
+   "text",
+   "length",
+   "Fourth-level headings and the search field.",
+   "Überschriften der vierten Ebene und das Suchfeld."
+  ],
+  [
+   "tpl-text-xl",
+   "text",
+   "length",
+   "Third-level headings and the site name in the header.",
+   "Überschriften der dritten Ebene und der Name der Website in der Kopfzeile."
+  ],
+  [
+   "tpl-text-2xl",
+   "text",
+   "length",
+   "Second-level headings.",
+   "Überschriften der zweiten Ebene."
+  ],
+  [
+   "tpl-text-3xl",
+   "text",
+   "length",
+   "Page titles and first-level headings.",
+   "Seitentitel und Überschriften der ersten Ebene."
+  ],
+  [
+   "tpl-leading-tight",
+   "text",
+   "number",
+   "Line height of headings.",
+   "Zeilenhöhe der Überschriften."
+  ],
+  [
+   "tpl-leading-normal",
+   "text",
+   "number",
+   "Line height of body text, forms and navigations.",
+   "Zeilenhöhe von Fließtext, Formularen und Navigationen."
+  ],
+  [
+   "tpl-leading-snug",
+   "text",
+   "length",
+   "Line height of compact lists and the footer.",
+   "Zeilenhöhe kompakter Listen und der Fußzeile."
+  ],
+  [
+   "tpl-tracking-label",
+   "text",
+   "length",
+   "Letter spacing of small capital labels (sidebar headings).",
+   "Laufweite kleiner Großbuchstaben-Beschriftungen (Überschriften der Seitenleisten)."
+  ],
+  [
+   "tpl-tracking-caps",
+   "text",
+   "length",
+   "Letter spacing of fifth-level headings and code labels.",
+   "Laufweite der Überschriften fünfter Ebene und der Code-Beschriftungen."
+  ],
+  [
+   "tpl-underline-offset",
+   "text",
+   "length",
+   "Distance of link underlines from the text.",
+   "Abstand der Link-Unterstreichung vom Text."
+  ],
+  [
+   "tpl-surface",
+   "surfaces",
+   "color",
+   "Neutral ground of controls under the pointer and of selected entries.",
+   "Neutraler Hintergrund von Bedienelementen unter dem Mauszeiger und von ausgewählten Einträgen."
+  ],
+  [
+   "tpl-surface-code",
+   "surfaces",
+   "color",
+   "Ground of code blocks.",
+   "Hintergrund von Code-Blöcken."
+  ],
+  [
+   "tpl-surface-tint",
+   "surfaces",
+   "color",
+   "Tinted ground under the pointer and for highlights.",
+   "Getönter Hintergrund unter dem Mauszeiger und für Hervorhebungen."
+  ],
+  [
+   "tpl-rule",
+   "surfaces",
+   "color",
+   "Colour of borders and dividing lines.",
+   "Farbe von Rahmen und Trennlinien."
+  ],
+  [
+   "tpl-rule-strong",
+   "surfaces",
+   "color",
+   "Colour of stronger lines: table heads, separators.",
+   "Farbe kräftigerer Linien: Tabellenköpfe, Trenner."
+  ],
+  [
+   "tpl-rule-width",
+   "surfaces",
+   "length",
+   "Width of borders and dividing lines.",
+   "Stärke von Rahmen und Trennlinien."
+  ],
+  [
+   "tpl-rule-control",
+   "surfaces",
+   "color",
+   "Border of buttons and fields.",
+   "Rahmen von Buttons und Feldern."
+  ],
+  [
+   "tpl-radius-sm",
+   "surfaces",
+   "length",
+   "Small corner radius: list rows, highlights, nested callouts.",
+   "Kleiner Eckenradius: Listenzeilen, Markierungen, verschachtelte Callouts."
+  ],
+  [
+   "tpl-radius-md",
+   "surfaces",
+   "length",
+   "Medium corner radius: callouts, buttons, panels.",
+   "Mittlerer Eckenradius: Callouts, Buttons, Panels."
+  ],
+  [
+   "tpl-radius-lg",
+   "surfaces",
+   "length",
+   "Large corner radius: search window, graph, drawer.",
+   "Großer Eckenradius: Suchfenster, Graph, Schublade."
+  ],
+  [
+   "tpl-shadow",
+   "surfaces",
+   "other",
+   "Shadow of popups, search window and drawer.",
+   "Schatten von Popups, Suchfenster und Schublade."
+  ],
+  [
+   "tpl-accent-bar",
+   "surfaces",
+   "length",
+   "Width of the accent bar at callouts, quotes and the current entry.",
+   "Breite des Akzentbalkens an Callouts, Zitaten und dem aktuellen Eintrag."
+  ],
+  [
+   "tpl-backdrop",
+   "surfaces",
+   "color",
+   "Veil behind an open drawer or menu.",
+   "Schleier hinter einer offenen Schublade oder einem offenen Menü."
+  ],
+  [
+   "tpl-backdrop-blur",
+   "surfaces",
+   "length",
+   "Blur of the page behind that veil.",
+   "Unschärfe der Seite hinter diesem Schleier."
+  ],
+  [
+   "tpl-positive",
+   "colors",
+   "color",
+   "Colour for yes and success (true values, sent forms).",
+   "Farbe für Ja und Erfolg (wahre Werte, gesendete Formulare)."
+  ],
+  [
+   "tpl-callout-note",
+   "callouts",
+   "color",
+   "Colour of note callouts.",
+   "Farbe der Callouts „note“."
+  ],
+  [
+   "tpl-callout-abstract",
+   "callouts",
+   "color",
+   "Colour of abstract callouts.",
+   "Farbe der Callouts „abstract“."
+  ],
+  [
+   "tpl-callout-info",
+   "callouts",
+   "color",
+   "Colour of info callouts.",
+   "Farbe der Callouts „info“."
+  ],
+  [
+   "tpl-callout-todo",
+   "callouts",
+   "color",
+   "Colour of todo callouts.",
+   "Farbe der Callouts „todo“."
+  ],
+  [
+   "tpl-callout-tip",
+   "callouts",
+   "color",
+   "Colour of tip callouts.",
+   "Farbe der Callouts „tip“."
+  ],
+  [
+   "tpl-callout-success",
+   "callouts",
+   "color",
+   "Colour of success callouts.",
+   "Farbe der Callouts „success“."
+  ],
+  [
+   "tpl-callout-question",
+   "callouts",
+   "color",
+   "Colour of question callouts.",
+   "Farbe der Callouts „question“."
+  ],
+  [
+   "tpl-callout-warning",
+   "callouts",
+   "color",
+   "Colour of warning callouts.",
+   "Farbe der Callouts „warning“."
+  ],
+  [
+   "tpl-callout-failure",
+   "callouts",
+   "color",
+   "Colour of failure callouts.",
+   "Farbe der Callouts „failure“."
+  ],
+  [
+   "tpl-callout-danger",
+   "callouts",
+   "color",
+   "Colour of danger callouts and of form errors.",
+   "Farbe der Callouts „danger“ und der Fehler in Formularen."
+  ],
+  [
+   "tpl-callout-bug",
+   "callouts",
+   "color",
+   "Colour of bug callouts.",
+   "Farbe der Callouts „bug“."
+  ],
+  [
+   "tpl-callout-example",
+   "callouts",
+   "color",
+   "Colour of example callouts.",
+   "Farbe der Callouts „example“."
+  ],
+  [
+   "tpl-callout-quote",
+   "callouts",
+   "color",
+   "Colour of quote callouts.",
+   "Farbe der Callouts „quote“."
+  ],
+  [
+   "tpl-icon",
+   "icons",
+   "length",
+   "Size of icons in the header and in buttons.",
+   "Größe der Icons in der Kopfzeile und in Buttons."
+  ],
+  [
+   "tpl-icon-sm",
+   "icons",
+   "length",
+   "Size of small icons in the explorer and in lists.",
+   "Größe kleiner Icons im Explorer und in Listen."
+  ],
+  [
+   "tpl-col-left-position",
+   "columns",
+   "other",
+   "sticky keeps the left column in place while the text scrolls; static lets it scroll along.",
+   "sticky hält die linke Spalte fest, während der Text scrollt; static lässt sie mitscrollen."
+  ],
+  [
+   "tpl-col-left-height",
+   "columns",
+   "length",
+   "Maximum height of the left column; beyond it the column scrolls itself.",
+   "Größte Höhe der linken Spalte; darüber scrollt die Spalte selbst."
+  ],
+  [
+   "tpl-col-left-mask",
+   "columns",
+   "other",
+   "Soft edge of the left column while it scrolls (none for a hard edge).",
+   "Weicher Rand der linken Spalte beim Scrollen (none für eine harte Kante)."
+  ],
+  [
+   "tpl-col-left-bg",
+   "columns",
+   "color",
+   "Ground of the left column.",
+   "Hintergrund der linken Spalte."
+  ],
+  [
+   "tpl-col-right-position",
+   "columns",
+   "other",
+   "sticky keeps the right column in place while the text scrolls; static lets it scroll along.",
+   "sticky hält die rechte Spalte fest, während der Text scrollt; static lässt sie mitscrollen."
+  ],
+  [
+   "tpl-col-right-height",
+   "columns",
+   "length",
+   "Maximum height of the right column; beyond it the column scrolls itself.",
+   "Größte Höhe der rechten Spalte; darüber scrollt die Spalte selbst."
+  ],
+  [
+   "tpl-col-right-mask",
+   "columns",
+   "other",
+   "Soft edge of the right column while it scrolls (none for a hard edge).",
+   "Weicher Rand der rechten Spalte beim Scrollen (none für eine harte Kante)."
+  ],
+  [
+   "tpl-col-right-bg",
+   "columns",
+   "color",
+   "Ground of the right column.",
+   "Hintergrund der rechten Spalte."
+  ],
+  [
+   "tpl-header-bg",
+   "header",
+   "color",
+   "Ground of the header bar.",
+   "Hintergrund der Kopfleiste."
+  ],
+  [
+   "tpl-header-pad",
+   "header",
+   "length",
+   "Padding above and below the controls in the header bar.",
+   "Innenabstand über und unter den Bedienelementen der Kopfleiste."
+  ],
+  [
+   "tpl-header-inline-pad",
+   "header",
+   "length",
+   "Padding of the header bar at the window edges.",
+   "Innenabstand der Kopfleiste an den Fensterrändern."
+  ],
+  [
+   "tpl-header-title",
+   "header",
+   "length",
+   "Size of the site name in the header.",
+   "Größe des Namens der Website in der Kopfzeile."
+  ],
+  [
+   "tpl-header-h",
+   "header",
+   "length",
+   "Height of the header bar, computed from control size, padding and line; the columns start below it.",
+   "Höhe der Kopfleiste, berechnet aus Größe der Bedienelemente, Innenabstand und Linie; darunter beginnen die Spalten."
+  ],
+  [
+   "tpl-footer-bg",
+   "header",
+   "color",
+   "Ground of the footer.",
+   "Hintergrund der Fußzeile."
+  ],
+  [
+   "tpl-footer-inline-pad",
+   "header",
+   "length",
+   "Padding of the footer at the window edges.",
+   "Innenabstand der Fußzeile an den Fensterrändern."
+  ],
+  [
+   "tpl-rail-width",
+   "rail",
+   "length",
+   "Width of the rail's icon strip.",
+   "Breite der Icon-Leiste des Randmenüs."
+  ],
+  [
+   "tpl-rail-open-width",
+   "rail",
+   "length",
+   "Width of the open rail menu.",
+   "Breite des geöffneten Randmenüs."
+  ],
+  [
+   "tpl-rail-bg",
+   "rail",
+   "color",
+   "Ground of the rail.",
+   "Hintergrund des Randmenüs."
+  ],
+  [
+   "tpl-drawer-width",
+   "rail",
+   "length",
+   "Width of the drawer on small screens (explorer, off-canvas menu).",
+   "Breite der Schublade auf kleinen Bildschirmen (Explorer, Off-Canvas-Menü)."
+  ],
+  [
+   "tpl-motion",
+   "motion",
+   "other",
+   "Duration and easing of every transition (0s with reduced motion).",
+   "Dauer und Verlauf aller Übergänge (0s bei reduzierter Bewegung)."
+  ],
+  [
+   "tpl-fade",
+   "motion",
+   "length",
+   "Height of the soft edge of scrolling panels.",
+   "Höhe des weichen Rands scrollender Bereiche."
+  ],
+  [
+   "tpl-fade-mask",
+   "motion",
+   "other",
+   "The soft top and bottom edge itself, built from --tpl-fade.",
+   "Der weiche Rand oben und unten selbst, gebildet aus --tpl-fade."
+  ],
+  [
+   "tpl-fade-mask-end",
+   "motion",
+   "other",
+   "The soft bottom edge only, for the right column.",
+   "Nur der weiche Rand unten, für die rechte Spalte."
+  ],
+  [
+   "tpl-page-fade",
+   "motion",
+   "length",
+   "Height of the fade below the header bar.",
+   "Höhe des Verlaufs unter der Kopfleiste."
+  ],
+  [
+   "tpl-focus-color",
+   "motion",
+   "color",
+   "Colour of the focus ring.",
+   "Farbe des Fokusrings."
+  ],
+  [
+   "tpl-focus-width",
+   "motion",
+   "length",
+   "Width of the focus ring.",
+   "Stärke des Fokusrings."
+  ],
+  [
+   "tpl-focus-offset",
+   "motion",
+   "length",
+   "Gap between an element and its focus ring.",
+   "Abstand zwischen Element und Fokusring."
+  ]
+ ]
+}

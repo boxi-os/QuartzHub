@@ -27,6 +27,7 @@ struct StylesPage: View {
   @SceneStorage("styles.vars.darkOpen") private var varDarkOpen = ""
   @SceneStorage("styles.pluginVars.open") private var varPluginsOpen = false
   @SceneStorage("styles.pluginVars.openPlugins") private var varOpenPlugins = ""
+  @SceneStorage("styles.templateVars.openGroups") private var varOpenTemplateGroups = ""
   @State private var varScroll: String?
   @SceneStorage("styles.css.openTabs") private var cssOpenTabs = CssTab.mainTab
   @SceneStorage("styles.css.activeTab") private var cssActiveTab = CssTab.mainTab
@@ -147,7 +148,7 @@ struct StylesPage: View {
   private var variablesPlace: VariablesPlace {
     VariablesPlace(selected: $varSelected, openGroups: $varOpenGroups, allOpen: $varAllOpen, query: $varQuery, onlyChanged: $varOnlyChanged,
                    kind: $varKind, openBrowseGroups: $varOpenBrowseGroups, darkOpen: $varDarkOpen, pluginsOpen: $varPluginsOpen,
-                   openPlugins: $varOpenPlugins)
+                   openPlugins: $varOpenPlugins, openTemplateGroups: $varOpenTemplateGroups)
   }
 
   /// A chip in the inspector jumps to a variable: select it, open its group, put its name in the

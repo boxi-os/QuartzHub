@@ -254,4 +254,18 @@ die eigenen, ohne Beschreibung, eingeklappt; Teil D mit den vorgeschlagenen Grup
   des Projekts kommen aus dem letzten Build. Die eigene Regel der Seite erkennt QuartzHub daran, dass Selektor und
   Wert zum gespeicherten Block passen; ein älterer eigener Wert steht bis zum nächsten Build als Regel des Projekts
   da. Eine in SCSS verschachtelte Regel von custom.scss wird nicht als „später“ erkannt.
+- **Teil D (2026-11-22):** `TemplateVariables` liest Kataloge aus Kommentaren `/* quartz-variables … */` in den
+  geladenen Stylesheets (Ladereihenfolge, die erste Datei gibt Gruppe und Text; dasselbe JSON wie
+  `quartz.cssVariables`, ohne Selektor heißt `:root`). Abschnitt „Template-Variablen“ zwischen Haupt- und allen
+  Variablen, mit den Gruppen des Katalogs und der Erklärung unter jeder Zeile; Zeilen und Inspektor die gewohnten
+  (der Wert bleibt in `css-vars`), dazu die Erklärung oben im Inspektor; die Katalog-Variablen fehlen dafür unter
+  „Alle Theme- und Build-Variablen“. Weil die Vorlage ihre Werte in denselben Block schreibt wie der Nutzer, zeigt der
+  Abschnitt „Vorlage“ statt „eigene Variable“, keinen Papierkorb und kein „geändert“ (Entfernen bleibt im Inspektor,
+  mit Rückfrage). Katalog des Basis-Templates: 80 Variablen (75 aus `cssVariables`, 5 aus den Stylesheets) in den
+  zehn Gruppen des Plans, Texte aus der Verwendung im SCSS der Vorlage; geschrieben von `scripts/template-variables.mjs`
+  aus `scripts/template-variables/qc-basic.json`, `createdAt` 2026-11-22. Gemessen an der Kopie von gui-test (Katalog
+  dort ergänzt): baut, der Kommentar steht in keiner ausgelieferten CSS-Datei (Quartz minifiziert ihn weg).
+  **Offen:** die Texte vom Nutzer durchsehen; beim nächsten Release das Paket ins Vorlagen-Repo (`docs/release.md`
+  Punkt 10) und die Example-Vorlage darauf neu erzeugen; bestehende Projekte bekommen den Katalog mit dem nächsten
+  Anwenden der Vorlage oder von Hand.
 

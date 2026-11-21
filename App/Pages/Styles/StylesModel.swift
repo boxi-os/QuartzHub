@@ -75,6 +75,8 @@ final class StylesModel {
   private(set) var graph: VariableGraph.Graph?
   /// The variables plugins declare at their own selectors, read with the graph.
   private(set) var pluginVariables: PluginVariables.Result?
+  /// The template's description of its own variables, from a stylesheet comment.
+  private(set) var templateVariables: TemplateVariables.Catalog?
   private(set) var graphLoading = true
   private var graphRound = 0
 
@@ -135,9 +137,11 @@ final class StylesModel {
     let sources = config.plugins.filter(FontDelivery.enabled).compactMap { PluginSource($0.source) }
     let read = try? await Task.detached { try VariableGraph.graph(project: path, themeId: themeId) }.value
     let plugins = await Task.detached { PluginVariables.read(project: path, plugins: sources) }.value
+    let template = await Task.detached { TemplateVariables.read(project: path) }.value
     guard mine == graphRound else { return }
     graph = read
     pluginVariables = plugins
+    templateVariables = template
     graphLoading = false
   }
 

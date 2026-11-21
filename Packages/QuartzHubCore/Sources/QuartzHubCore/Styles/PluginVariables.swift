@@ -93,8 +93,9 @@ public enum PluginVariables {
   // MARK: The catalogue
 
   /// `quartz.cssVariables` (or a template's catalogue): `{ groups: [...], variables: [...] }`.
-  /// Entries without a name or selector are skipped; nil when there is no usable list.
-  public static func catalog(_ value: JSONValue?) -> (groups: [Group], variables: [Variable])? {
+  /// Entries without a name, or without a selector when no `defaultSelector` is given, are skipped;
+  /// nil when there is no usable list.
+  public static func catalog(_ value: JSONValue?, defaultSelector: String? = nil) -> (groups: [Group], variables: [Variable])? {
     guard let object = value?.objectValue, let list = object["variables"]?.arrayValue else { return nil }
     let groups: [Group] = (object["groups"]?.arrayValue ?? []).compactMap { entry in
       guard let g = entry.objectValue, let id = g["id"]?.stringValue, !id.isEmpty else { return nil }
@@ -103,7 +104,7 @@ public enum PluginVariables {
     }
     var seen = Set<String>()
     let variables: [Variable] = list.compactMap { entry in
-      guard let v = entry.objectValue, let raw = v["name"]?.stringValue, let selector = v["selector"]?.stringValue,
+      guard let v = entry.objectValue, let raw = v["name"]?.stringValue, let selector = v["selector"]?.stringValue ?? defaultSelector,
             !JS.trim(selector).isEmpty else { return nil }
       let name = JSText.replaceAll(JS.trim(raw), #"\A--"#, with: "")
       guard JSText.test(name, #"\A[A-Za-z0-9_-]+\z"#), seen.insert(name).inserted else { return nil }
