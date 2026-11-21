@@ -3,7 +3,12 @@ import SwiftUI
 
 /// Where the Variablen tab is, per window: the selected variable, what is open, the search.
 /// Lists are kept as lines, `@SceneStorage` has no arrays.
-struct VariablesPlace {
+///
+/// A `DynamicProperty`, so that SwiftUI looks into it: bindings inside a plain struct are not
+/// tracked, and the tab was not drawn again when one changed. A click on a group under "Alle
+/// Theme- und Build-Variablen" stored the group as open and showed nothing until something else
+/// redrew the tab (Neu einlesen).
+struct VariablesPlace: DynamicProperty {
   var selected: Binding<String?>
   var openGroups: Binding<String>
   var allOpen: Binding<Bool>
@@ -23,6 +28,18 @@ struct VariablesPlace {
 
   static func adding(_ text: String, _ item: String) -> String {
     lines(text).contains(item) ? text : (lines(text) + [item]).joined(separator: "\n")
+  }
+
+  /// Whether `item` is in the list, as a binding that sets the value it is given rather than
+  /// toggling whatever it is asked.
+  static func member(_ list: Binding<String>, _ item: String) -> Binding<Bool> {
+    Binding(
+      get: { lines(list.wrappedValue).contains(item) },
+      set: { open in
+        let current = lines(list.wrappedValue)
+        guard current.contains(item) != open else { return }
+        list.wrappedValue = (open ? current + [item] : current.filter { $0 != item }).joined(separator: "\n")
+      })
   }
 }
 
@@ -126,8 +143,7 @@ struct VariablesTab: View {
     Section {
       Note(L10n.t("styles.variables.mainDescription"))
       ForEach(curatedGroups, id: \.group) { entry in
-        let open = VariablesPlace.lines(place.openGroups.wrappedValue).contains(entry.group)
-        Fold(isExpanded: Binding(get: { open }, set: { _ in place.openGroups.wrappedValue = VariablesPlace.toggled(place.openGroups.wrappedValue, entry.group) })) {
+        Fold(isExpanded: VariablesPlace.member(place.openGroups, entry.group)) {
           ForEach(entry.keys, id: \.self) { key in row(key) }
         } label: {
           groupHeader(Self.groupLabel(entry.group), count: entry.keys.count, changed: entry.keys.filter { model.overrides.map(\.key).contains($0) }.count)
@@ -233,8 +249,7 @@ struct VariablesTab: View {
     if matches.isEmpty { Note(L10n.t("styles.variables.noResults")) }
     if browsing {
       ForEach(grouped, id: \.group) { entry in
-        let open = VariablesPlace.lines(place.openBrowseGroups.wrappedValue).contains(entry.group)
-        Fold(isExpanded: Binding(get: { open }, set: { _ in place.openBrowseGroups.wrappedValue = VariablesPlace.toggled(place.openBrowseGroups.wrappedValue, entry.group) })) {
+        Fold(isExpanded: VariablesPlace.member(place.openBrowseGroups, entry.group)) {
           ForEach(entry.keys, id: \.self) { key in row(key) }
         } label: {
           groupHeader(Self.groupLabel(entry.group), count: entry.keys.count, changed: 0)
