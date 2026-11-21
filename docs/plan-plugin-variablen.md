@@ -268,4 +268,10 @@ die eigenen, ohne Beschreibung, eingeklappt; Teil D mit den vorgeschlagenen Grup
   **Offen:** die Texte vom Nutzer durchsehen; beim nächsten Release das Paket ins Vorlagen-Repo (`docs/release.md`
   Punkt 10) und die Example-Vorlage darauf neu erzeugen; bestehende Projekte bekommen den Katalog mit dem nächsten
   Anwenden der Vorlage oder von Hand.
+- **Handbuch (2026-11-22):** 5.7 in beiden Sprachen um „Variablen der Vorlage“ und „Variablen der Plugins“ erweitert
+  (Vault-Commit), `qh-check handbook` und `handbook-private.swift` ohne Befund. Das Demo-Projekt bekommt
+  navigations in neuester Fassung und den Katalog der Vorlage (`handbook-demo.sh`); `handbook-shots.sh` kennt die
+  Aufnahmen `stile-variablen-vorlage` und `stile-variablen-plugins` (Klicks über die Beschriftungen, die Zeile der
+  Plugin-Variable über die Suche, weil die Liste Zeilen außerhalb des Bildes nicht anlegt). **Offen:** die vier
+  Aufnahmen machen (der Nutzer wollte später; das Skript steuert Maus und Tastatur), dann Handbuch online.
 

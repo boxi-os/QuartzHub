@@ -41,7 +41,8 @@ PAGES=(
   "plugins-mehrsprachigkeit|4|4|s" "plugins-formulare|4|5|s" "plugins-formulare-formular|4|5|s"
   "plugins-marktplatz|4|6"
   "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3"
-  "stile-basis|7|1" "stile-themes|7|2|w" "stile-variablen|7|3" "stile-css|7|4"
+  "stile-basis|7|1" "stile-themes|7|2|w" "stile-variablen|7|3"
+  "stile-variablen-vorlage|7|3" "stile-variablen-plugins|7|3" "stile-css|7|4"
   "vorlagen|8||w"
   "vorschau-und-build|10|" "git-sync|11|" "dokumente|12|" "veroeffentlichen|13|"
   "updates|15|" "snapshots|16|"
@@ -167,6 +168,35 @@ disclose() {
  end repeat"
 }
 
+# Clicks a text of the project window that reads the German or the English word, with the mouse
+# at its left edge: a Fold's label and a list row take a click, not an accessibility action. Only
+# what the list has laid out is found (rows out of view do not exist yet).
+click_text() {
+  ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXStaticText\" and ((value of e as text) is \"$1\" or (value of e as text) is \"$2\") then
+    set p to position of e
+    set s to size of e
+    click at {(item 1 of p) + 4, (item 2 of p) + (item 2 of s) / 2}
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
+# Sets the text field with the given accessibility identifier.
+set_field() {
+  ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXTextField\" and value of attribute \"AXIdentifier\" of e is \"$1\" then
+    set focused of e to true
+    set value of e to \"$2\"
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
 # The page a preview shows (the field with the identifier preview.page), then Return.
 preview_page() {
   ax "set els to entire contents of $project_window
@@ -284,6 +314,20 @@ for lang in $LANGS; do
         # A navigation chosen: the inspector shows its first step.
         if [ $name = plugins-navigationen ]; then
           list_row navigations.list 2; sleep 3
+        fi
+        # Stile ▸ Variablen as it opens (base colours unfolded), then the template's variables with
+        # one chosen, then a plugin's: found through the search, so its row is laid out.
+        if [ $name = stile-variablen-vorlage ]; then
+          click_text "Grundfarben" "Base colors"; sleep 1
+          click_text "Abstände" "Spacing"; sleep 1
+          click_text "--tpl-space-md" "--tpl-space-md"; sleep 2
+        fi
+        if [ $name = stile-variablen-plugins ]; then
+          click_text "Abstände" "Spacing"; sleep 1
+          click_text "Alle Theme- und Build-Variablen" "All theme and build variables"; sleep 2
+          set_field variables.search rail-icon; sleep 2
+          click_text "Plugin-Variablen" "Plugin variables"; sleep 2
+          click_text "--quartz-nav-rail-icon-size" "--quartz-nav-rail-icon-size"; sleep 2
         fi
         # A form chosen: the step "Felder"; the preview goes to a page that embeds it. Back to the
         # first step whatever the window remembered, then one on.

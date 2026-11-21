@@ -27,6 +27,12 @@ rsync -a --delete --exclude .git --exclude private --exclude .obsidian --exclude
 # The own frames are named by the project's path (ProjectPaths), in the config and in Quartz's
 # lock file; the copy names its own.
 sed -i '' "s#$SRC/#$P/#g" "$P/quartz.config.yaml" "$P/quartz.lock.json"
+# The plugins' and the template's variable catalogues for Stile ▸ Variablen (docs/plan-plugin-variablen.md):
+# quartz-navigations at its newest (the copy keeps the project's pinned commit otherwise), and the base
+# template's catalogue in foundation.scss (the project may predate it). Needs the net.
+(cd "$P" && PATH="${0:A:h:h}/Runtime/node/bin:$PATH" npx quartz plugin update quartz-navigations >/dev/null)
+"${0:A:h:h}/Runtime/node/bin/node" "${0:A:h}/template-variables.mjs" "$P/quartz/styles/custom/foundation.scss" \
+  "${0:A:h}/template-variables/qc-basic.json" >/dev/null
 # quartz-forms for Plugins ▸ Formulare: two forms that send nothing (transport "demo", so no relay,
 # no address and no secret), embedded on one page per language. From GitHub, not from a local
 # clone: the plugin list shows the source, and a clone's path is personal. Needs the net.

@@ -3,6 +3,7 @@
 // (an earlier catalogue there is replaced) and `createdAt` in the manifest, so the newer package
 // wins over a cached copy.
 //   node scripts/template-variables.mjs <unpacked qtpl> <catalogue.json> <createdAt>
+//   node scripts/template-variables.mjs <foundation.scss> <catalogue.json>   (a project's own copy)
 // The catalogue of the base template is scripts/template-variables/qc-basic.json: groups with
 // English and German labels, then per variable [name, group, kind, description, description_de].
 // Pack again with the same entry order: `unzip -Z1 <old> | zip -X -D -9 <new> -@` from inside the
@@ -11,8 +12,9 @@ import fs from "node:fs"
 import path from "node:path"
 
 const [dir, catalogueFile, createdAt] = process.argv.slice(2)
-if (!dir || !catalogueFile || !createdAt) {
-  console.error("usage: template-variables.mjs <unpacked qtpl> <catalogue.json> <createdAt>")
+const intoFile = dir?.endsWith(".scss")
+if (!dir || !catalogueFile || (!intoFile && !createdAt)) {
+  console.error("usage: template-variables.mjs <unpacked qtpl> <catalogue.json> <createdAt> | <file.scss> <catalogue.json>")
   process.exit(2)
 }
 const data = JSON.parse(fs.readFileSync(catalogueFile, "utf8"))
@@ -37,11 +39,15 @@ export function block(data) {
   )
 }
 
-const foundation = path.join(dir, "files/styles/custom/foundation.scss")
+const foundation = intoFile ? dir : path.join(dir, "files/styles/custom/foundation.scss")
 const text = fs.readFileSync(foundation, "utf8")
   .replace(/\n*\/\* -+ catalogue \*\/[\s\S]*?\/\* quartz-variables[\s\S]*?\*\/\n?/, "\n")
   .replace(/\n+$/, "")
 fs.writeFileSync(foundation, text + "\n\n" + block(data))
+if (intoFile) {
+  console.log(`${data.variables.length} variables in ${data.groups.length} groups`)
+  process.exit(0)
+}
 
 const manifestFile = path.join(dir, "manifest.json")
 const manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"))
