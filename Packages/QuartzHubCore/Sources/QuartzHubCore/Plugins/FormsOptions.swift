@@ -14,8 +14,9 @@ public enum FormsOptions {
   /// The version whose source the copies are read from.
   public static let readAgainst = "0.6.0"
   /// Versions whose source is the same as that one's: `git diff v0.6.0 v0.6.1 -- src` changes
-  /// comments and the header comment of the generated relay file, nothing the copies read.
-  public static let sameCode = ["0.6.1"]
+  /// comments and the header comment of the generated relay file, nothing the copies read. 0.7.0
+  /// adds `quartz.cssVariables` to the manifest; `src` is unchanged.
+  public static let sameCode = ["0.6.1", "0.7.0"]
   /// Widths, the arrangement of options, conditions and page breaks came with this version.
   public static let layoutSince = "0.4.0"
   /// `dist/cli.js texts` came with this version.

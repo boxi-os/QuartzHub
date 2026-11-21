@@ -16,8 +16,9 @@ public enum NavigationVariants {
   /// v0.6.1 -- src` adds the former Lucide names (src/build/lucide-table.ts, the lookup in
   /// icons.tsx), render.tsx and options.ts are unchanged, and the schema is identical. 0.6.2
   /// changes only the rail's client scripts and adds `--quartz-nav-rail-gap` to the stylesheet;
-  /// 0.6.3 only the client script (the push kept across page changes).
-  public static let sameCode = ["0.6.1", "0.6.2", "0.6.3"]
+  /// 0.6.3 only the client script (the push kept across page changes); 0.7.0 adds
+  /// `quartz.cssVariables` to the manifest, `src` unchanged.
+  public static let sameCode = ["0.6.1", "0.6.2", "0.6.3", "0.7.0"]
   /// What QuartzControl had read its tables from (its golden cases): the rules of its ten variants
   /// are unchanged in 0.5.0, which only adds the rail.
   static let quartzControlReadAgainst = "0.4.2"
