@@ -41,6 +41,10 @@ Menü und die Rail bekommt nur Styles.
   bleibt sie neben der Leiste. Neu ist `--quartz-nav-rail-gap`, ein Abstand zwischen schiebender Rail und Seite,
   der in `--quartz-nav-rail-offset-*` mitzählt (die volle Kopfzeile reicht damit weiter bis an den Rand).
   Geändert sind nur die Client-Skripte und das Stylesheet: 0.6.2 steht in `sameCode`.
+- **0.6.3** (2026-11-21): Mit `content: push` glitt die Seite bei jedem Seitenwechsel vom Fensterrand herein
+  (gui-test, Chrome: 88 px → 0 → 88 px in 200 ms je Klick). Das Aufräumen der Rail nahm den Abstand sofort weg,
+  Quartz liest das Layout vor dem Aufbau der nächsten Seite, die Transition startete bei 0. Jetzt gleicht das
+  Aufräumen `<html>` erst nach dem Aufbau ab. Geändert ist nur das Client-Skript: 0.6.3 steht in `sameCode`.
 
 ## Bereiche über die volle Fensterbreite
 
