@@ -739,9 +739,9 @@ public struct TemplatePackage: Sendable {
 
   // MARK: - styles
 
-  static let managedMarkers = ["imports", "css-vars", "fonts", "google-fonts", "imported-styles"]
+  static let managedMarkers = ["imports", "css-vars", "plugin-vars", "fonts", "google-fonts", "imported-styles"]
 
-  /// custom.scss without all five managed blocks and without the line that loads the managed file:
+  /// custom.scss without all managed blocks and without the line that loads the managed file:
   /// the part the user wrote, and what an older app can read.
   static func stripAllManaged(_ content: String) -> String {
     JS.trim(ManagedBlocks.stripManagedUse(managedMarkers.reduce(content) { ManagedBlocks.strip($0, $1) }))

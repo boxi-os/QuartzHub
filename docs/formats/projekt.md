@@ -55,9 +55,12 @@ Quartz lädt) und seit 1.1 `quartz/styles/_quartzcontrol.scss` (`MANAGED_SCSS_FI
 | `google-fonts` | von Google geholte `@font-face`, Dateien lokal | `fetchGoogleFontsNow` (`fontService.ts:402`), `dropGoogleFontsNow`, Vorlage `applyGoogleFontsCss` | `_quartzcontrol.scss` |
 | `css-vars` | Variablen-Überschreibungen (`:root`, dunkel, nur hell) | `saveVariableOverridesNow` (`styleService.ts:510`) | `_quartzcontrol.scss` |
 | `imported-styles` | freier Body einer Vorlage, unter `projectWins` angehängt | `projectWinsCustomScss` (`parts.ts:328`) | bleibt **immer** in `custom.scss` |
+| `plugin-vars` | **nur QuartzHub** (seit 2026-11-21): Variablen der Plugins an ihrem Selektor | `StyleSheets.savePluginVariableOverrides` (`PluginVariableOverrides`) | `_quartzcontrol.scss`, nach `css-vars` |
 
 `MOVED_MARKERS = ['imports', 'fonts', 'google-fonts', 'css-vars']` (`styleService.ts:670`) – nur diese vier
 wandern nach `_quartzcontrol.scss`.
+QuartzHub hängt `plugin-vars` als fünften an (`ManagedBlocks.movedMarkers`), damit er wie die vier umzieht und
+als letzter Block steht.
 
 **Inhalt je Block (Syntax aus dem Code, Beispiel gegengelesen in gui-test und Example):**
 
@@ -157,6 +160,33 @@ wandern nach `_quartzcontrol.scss`.
   (`src/routes/Styles/VariableRow.tsx` ~`:181`); im nicht umgezogenen wird stattdessen die dunkle
   Hälfte ausdrücklich mitgeschrieben (Form von 1.0.1). Dasselbe beim Vorlagen-Import:
   `inFormOfTarget` (`parts.ts:212`).
+
+`plugin-vars` (`PluginVariableOverrides`, **Erweiterung des 1.3-Formats durch QuartzHub**, entschieden 2026-11-21,
+`docs/plan-plugin-variablen.md`): die drei Regelarten von `css-vars`, je vor den Selektor des Plugins gesetzt:
+
+```scss
+.quartz-nav {
+  --<key>: <hell>;          /* beide Modi */
+}
+
+:root[saved-theme="dark"] .quartz-nav {
+  --<key>: <dunkel>;
+}
+
+:root:not([saved-theme="dark"]) .quartz-nav {
+  --<key>: <hell>;          /* nur hell */
+}
+```
+
+- Je Selektor in der Reihenfolge seines ersten Auftretens erst die Regel für beide Modi, dann dunkel, dann nur
+  hell; leere Werte werden nicht geschrieben, leerer Gesamtkörper entfernt den Block.
+- Nicht geschrieben wird, was keine einzelne Deklaration bliebe: Selektor mit `{ } ; ,`, Kommentar oder
+  Zeilenumbruch, Wert mit `{ } ;`, Kommentar oder Zeilenumbruch, Name außerhalb `[A-Za-z0-9_-]`.
+- Nicht im Block `css-vars`: dessen Leser nimmt jede Deklaration im Block als `:root`-Wert.
+- QuartzControl 1.3 kennt den Block nicht und lässt ihn als Text stehen (`writeManagedBlocks` nimmt nur seine vier
+  heraus und hängt sie wieder an, gelesen 2026-11-21); nach einem Schreiben von 1.3 steht er vor `css-vars`, was
+  nichts ändert (andere Selektoren).
+- Ein Vorlagen-Export nimmt ihn nicht als eigenen Text des Nutzers mit (`TemplatePackage.managedMarkers`).
 
 `imported-styles`: freier Text des Vorlagen-Bodys (ohne dessen `@use`-Zeilen, die vorne in
 `custom.scss` eingefügt werden, sofern nicht schon vorhanden).

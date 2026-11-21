@@ -233,4 +233,11 @@ die eigenen, ohne Beschreibung, eingeklappt; Teil D mit den vorgeschlagenen Grup
   Regeln des Projekts, weitere Selektoren, ein Schnipsel zum Kopieren. Die Suche der Seite filtert mit.
   Angesehen an der Kopie von gui-test (95 Variablen, dunkel; hell nicht angesehen). Die Zeile zeigt die
   Vorgabe des Plugins, nicht den Wert, der gilt: Welche Regel gewinnt, kommt mit Schritt 5 (B2).
+- **Schritt 4 (2026-11-21):** Block `plugin-vars` (`PluginVariableOverrides`, Lesen, Schreiben,
+  `StyleSheets.savePluginVariableOverrides`). Er hängt als fünfter an `ManagedBlocks.movedMarkers` und erbt damit
+  Lesen aus beiden Dateien, Umzug und Reihenfolge (zuletzt, nach `css-vars`); in einem Projekt in Form 1.0 steht er in
+  `custom.scss`. Ein Vorlagen-Export nimmt ihn nicht als eigenen Text mit (`TemplatePackage.managedMarkers`; ihn in
+  Vorlagen mitzunehmen wäre ein eigener Schritt). Nicht geschrieben wird, was keine einzelne Deklaration bliebe
+  (Selektor oder Wert mit Klammer, Semikolon, Kommentar, Zeilenumbruch; Selektorlisten). Gegenproben: ohne den
+  Eintrag in `movedMarkers` bzw. `managedMarkers` scheitern die Tests. `formats/projekt.md` §1 beschreibt den Block.
 

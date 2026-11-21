@@ -12,8 +12,10 @@ import Foundation
 /// renamed blocks; QuartzControl accepted that price (styles-and-fonts.md, `MARKER_NAMES`).
 public enum ManagedBlocks {
   static let names = ["QuartzControl", "Quartz-GUI"]
-  /// The blocks that moved to `_quartzcontrol.scss` in 1.1, in the order they are written there.
-  public static let movedMarkers = ["imports", "fonts", "google-fonts", "css-vars"]
+  /// The blocks that moved to `_quartzcontrol.scss` in 1.1, in the order they are written there,
+  /// and QuartzHub's `plugin-vars` after them (`PluginVariableOverrides`, 2026-11-21), so the
+  /// variables still come last.
+  public static let movedMarkers = ["imports", "fonts", "google-fonts", "css-vars", "plugin-vars"]
 
   public static func markers(_ id: String, name: String = "QuartzControl") -> (start: String, end: String) {
     ("/* --- \(name):managed:\(id):start --- */", "/* --- \(name):managed:\(id):end --- */")
