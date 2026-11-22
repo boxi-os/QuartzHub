@@ -3212,3 +3212,59 @@ editorial, index, focus), `auto` gegen `minmax(0, 1fr)`:
 
 `GridFrameCss` bleibt deshalb bei `auto`: kein Fall, in dem `minmax(0, 1fr)` etwas sichtbar ändert,
 und jede Änderung hieße, alle Frames neu zu bauen.
+
+### themes-core 3: Messung vor dem Bau
+
+Gemessen 2026-11-22 an einer Wegwerf-Kopie des Demo-Projekts (Quartz 5.2.0, altes Paket
+`@quartz-themes/minimal` ^1.0.1, core-Eintrag aus mit `themeFonts: false`), aktualisiert mit
+QuartzHubs eigenem Kern-Update auf 5.2.1, dann `npx quartz build` je Theme. Fassung `@quartz-themes/core`
+3.1.0, auch um 23 Uhr noch die neueste. Plan: [`plan-themes-core-3.md`](../plan-themes-core-3.md).
+
+- **Kern-Update ohne npm-Konflikt.** Die alten Theme-Pakete haben keine Peer-Abhängigkeit auf core
+  (`npm view`: 1.0.1 ohne `peerDependencies`). Nach dem Update steht `@quartz-themes/core` ^3.1.0
+  und daneben unverändert `@quartz-themes/minimal` ^1.0.1 in `package.json`; `npm install` lief
+  durch, `plugin doctor` sagt nichts dazu. Aufräumen gehört deshalb auf die Theme-Seite, nicht in den
+  Update-Lauf.
+- **Theme-Angaben** (je etwa 15 s Build, das Umwandeln 50–150 ms):
+  - Name (`Tokyo Night`, `Minimal`, `Void`), alte ID (`tokyo-night`, `minimal`), alte ID mit Variante
+    (`catppuccin.frappe`: „12 Style Settings applied“), Repo (`kepano/obsidian-minimal`), lokaler
+    Ordner (`./themes/Mein Theme` mit `theme.css`) und lokale Datei: gebaut.
+  - **`default` scheitert:** „theme "default" is not in Obsidian's community theme registry (it was
+    "Default", …)“. QuartzHubs bisherige Rückfallwahl darf nicht mehr vorkommen.
+  - **Eine Adresse, die auf `.css` endet, liest core als lokalen Pfad** („theme file not found:
+    …/demo/https:/raw.githubusercontent.com/…“): die Prüfung auf `.css` steht vor der auf `https://`.
+    Mit einer Abfrage dahinter (`…/theme.css?x=1`) baut sie. Das gehört core (kein Issue); im Plan hängt QuartzHub bei einer
+    Adresse auf `.css` selbst eine Abfrage an.
+  - Tippfehler (`Minmal`): core schlägt drei Namen vor („Did you mean: "Minimal", "Mia", "Mimir"?“).
+  - **Scheitert das Theme, scheitert der Build nicht:** Exit 0, das Plugin wird übersprungen
+    („✗ … was skipped: it failed to initialise“, am Ende „✗ 1 error — the build continued“), die
+    Website hat dann kein Theme. QuartzHub muss das aus dem Log melden.
+- **Ohne Netz** (Node 24 mit `NODE_USE_ENV_PROXY=1` und einem Proxy auf einen geschlossenen Port):
+  `Minimal` mit `cacheHours: 0` baut aus dem Cache; `Nord` ohne Cache scheitert („could not download
+  theme "Nord" from github.com/lucas-haux/Nord (offline and not cached?)“), mit Netz baut es. Der
+  Cache liegt unter `.quartz-cache/quartz-themes/` (Liste, `<owner>_<repo>@<version>.theme.css`,
+  `@HEAD.manifest.json`, `url-…`, `fonts/`); Quartz' `.gitignore` nimmt `.quartz-cache` schon aus.
+- **Ein Theme mit einem Modus** (`Void`, nur dunkel) mit `mode: light`: „only supports dark mode;
+  using it“.
+- **Wo das Theme im Build steht:** nicht in `index-<hash>.css` und nicht in der Seite, sondern in
+  `static/resource-style-<hash>.css` (Quartz zieht jede `inline`-CSS eines Plugins in eine solche Datei,
+  `componentResources.ts`, auch schon in 5.2.0), erkennbar an `@layer obsidian`. Darin auch die
+  `@font-face` des Themes (Catppuccin: 60), deren Dateien unter `static/plugins/quartz-themes/fonts/`
+  (18 Dateien). `SiteFonts` liest bisher nur `index-<hash>.css` und sieht sie nicht.
+- **Schriften** (Catppuccin, Theme-Schrift Vollkorn; Demo: `typography` Noto Sans, `fonts.fontOrigin:
+  local`), berechnet in WebKit:
+  - `themeFonts` an: Absatz und Überschriften Vollkorn, der Seitentitel bleibt Noto Sans. Was
+    Stile ▸ Basis für Text, Überschriften und Code in `theme.typography` schreibt, gilt bei einem
+    aktiven Theme nicht als ausdrücklich gesetzt (`isExplicit` in `fonts.ts` sieht nur
+    `configuration.fonts`).
+  - Gegenprobe mit `configuration.fonts.body: Noto Sans` und `h2: Noto Sans Mono`: Absatz Noto Sans,
+    h2 Noto Sans Mono.
+  - `themeFonts: false`: Absatz Noto Sans.
+  - Das `"??"` vor der Schrift ist Obsidians eigener Platzhalter aus `app.css`, kein Fehler.
+- **Style Settings** mit QuartzHubs Schlüsseln (`<block>@@<setting>`): Klassenwahl
+  (`catppuccin-theme-dark: ctp-macchiato`) wirkt (Hintergrund dunkel 30,30,46 → 36,39,58),
+  Variablenwahl (`ctp-h1`, `ctp-h2: var(--ctp-pink)`) setzt `--h2-color` am h2 auf Rosa; ein falscher
+  Schlüssel steht im Log („unknown Style Settings keys (ignored)“). **Die Farbe kommt trotzdem nicht
+  an:** Die Regeln der Vorlage qc-basic (`h2,h3,…{color:var(--dark)}`) stehen ohne Ebene und
+  schlagen `@layer obsidian`. Das ist nicht neu, core 2.0.1 legte das Theme ebenfalls in Ebenen
+  (`obsidian-theme`), und gehört zur Vorlage, nicht zu core 3.
