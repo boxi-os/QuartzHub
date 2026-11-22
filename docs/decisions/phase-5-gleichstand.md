@@ -2968,6 +2968,15 @@ Tests: `releasesAreTheVersionTagsWithTheirCommits`, `statusAndRunGoToTheNewestRe
 v5.1.0 auf Branch `v5`, obwohl danach noch ein Commit mit Vorabversion kommt) und
 `anUpstreamWithoutAReleaseIsRefused`.
 
+**An der App gemessen (2026-11-22, Demo-Projekt der Handbuch-Aufnahmen, mit Netz):** Vorher
+„Installiert: Quartz 5.1.0 (7cfb079) · Neuestes Release: Quartz 5.2.0 (5680044) · 43 Commits
+fehlen“, „Update verfügbar“. Die Frage sagt „Dabei wird das neueste Release von jackyzha0/quartz
+geholt …“. Der Lauf endet mit einem Merge-Commit, dessen zweiter Elternteil 5680044 ist (nicht das
+Tag-Objekt), Branch `v5`, „Das Kern-Update ist abgeschlossen.“, danach „Aktuell“ mit „Installiert:
+Quartz 5.2.0 (5680044) · Neuestes Release: Quartz 5.2.0 (5680044)“. Quartz' Prüfung danach meldet
+den quartz-fonts-Eintrag; „Konfiguration umstellen“ schrieb `fonts: {enabled: false}` (dazu
+„Schriften eingebaut“, „Auch wenn die Config anders kam“).
+
 ### Schriften eingebaut
 
 5.2 baut quartz-fonts als fünften Teil der Verarbeitung ein (`configuration.fonts`, Emitter mit
@@ -3029,6 +3038,12 @@ und bietet das nicht an. Damit eine Variable aus der Umgebung des Nutzers keinen
 andere Datei lenkt, gibt `ToolEnvironment` sie keinem Kindprozess weiter, ebenso
 `QUARTZ_CONFIG_QUIET`, das Quartz' Warnungen zur Config verschluckt
 (`quartzsConfigVariablesStayBehind`, Gegenprobe rot).
+
+### bases-page `propertyLabels`
+
+Die neue Option von bases-page (ob eine Spalte den Namen oder den Titel der Eigenschaft zeigt) kommt
+über das Options-Schema ohne eigene Arbeit an: `qh-check option-schema <Demo> --plugin bases-page
+--dump` liest sie als Auswahl `name`/`title`, Standard `name`, Herkunft `schema` (2026-11-22).
 
 ### Vorlage qc-basic für 5.2
 
