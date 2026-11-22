@@ -3016,3 +3016,25 @@ und bietet das nicht an. Damit eine Variable aus der Umgebung des Nutzers keinen
 andere Datei lenkt, gibt `ToolEnvironment` sie keinem Kindprozess weiter, ebenso
 `QUARTZ_CONFIG_QUIET`, das Quartz' Warnungen zur Config verschluckt
 (`quartzsConfigVariablesStayBehind`, Gegenprobe rot).
+
+### Vorlage qc-basic für 5.2
+
+`scripts/template-quartz52.mjs`, gemessen an der 5.2-Kopie von gui-test (dieselben Stylesheets wie
+die Vorlage), je Variante gebaut und in Chrome verglichen (berechnete Schrift je Elementart auf fünf
+Seiten; Kasten und Titellage eines Callouts):
+
+- **Der quartz-fonts-Eintrag (aus) geht.** Er hält den eingebauten Teil aus, und Quartz warnt bei
+  jedem Build, man solle `plugin doctor --fix` laufen lassen.
+- **Nur `fontOrigin: local` reichte nicht.** Der eingeschaltete Teil setzt `--font-interface` auf
+  Obsidians Systemstapel, die Stylesheets der Vorlage hatten `var(--bodyFont)`: Suchknopf,
+  Schlagwort-Links und einige Absätze wechselten von Noto Sans zur Systemschrift (7 Elementarten).
+  Mit `interface: Noto Sans` dazu: 0. Was bleibt, ist der Ersatz-Stapel hinter „Noto Sans“, den der
+  eingebaute Teil nicht schreibt; die Dateien liegen lokal, die Schrift fehlt also nie. Die
+  Oberflächenschrift steht damit sichtbar unter Stile ▸ Basis, statt still dem Text zu folgen.
+- **Callouts verloren 8 px Innenabstand oben und unten.** Ein 5.1-Callout war ein `blockquote` und
+  bekam ihn von `article blockquote` in `content.scss`. Die Regel nimmt `:where(div.callout)` dazu
+  (Gewicht 0, `.callout` setzt weiter Rand, Außenabstand und Hintergrund): 0 Unterschiede gegen ein
+  `blockquote`-Callout im selben Build, vorher 3. Transklusionen waren schon gleich.
+
+Projekte, die vor 5.2 aus der Vorlage entstanden sind, behalten ihre Dateien. Wer sie auf 5.2 hebt,
+bekommt Quartz' Warnung zum Eintrag und Callouts ohne diesen Abstand, bis er beides wie oben ändert.
