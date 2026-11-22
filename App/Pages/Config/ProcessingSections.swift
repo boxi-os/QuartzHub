@@ -8,7 +8,6 @@ import SwiftUI
 struct ProcessingSections: View {
   @Bindable var model: ConfigModel
   let project: ProjectContext
-  @Environment(\.openPage) private var openPage
 
   private typealias Builtin = BuiltinProcessing.Builtin
 
@@ -127,7 +126,8 @@ struct ProcessingSections: View {
 
   /// Quartz 5.2's font loading. Where the fonts come from and which they are is set on Styles ▸
   /// Basics (one place per setting, docs/plan-eine-stelle.md); here only whether Quartz loads
-  /// them and whether a community theme's fonts count.
+  /// them and whether a community theme's fonts count. The section is the page's last, so the
+  /// styles hint under it is its way there.
   private func fonts(_ planned: BuiltinProcessing.Planned) -> some View {
     SettingsSection(L10n.t("builtins.fonts.heading"), symbol: "textformat") {
       state(planned)
@@ -148,8 +148,7 @@ struct ProcessingSections: View {
         }
       }
       .disabled(!planned.enabled)
-      Button(L10n.t("configEditor.stylesHintLink")) { openPage(.styles, tab: StylesModel.Tab.basics.rawValue) }
-        .buttonStyle(.link).font(.callout)
+      // No link of its own: the page's styles hint follows right below (ConfigPage).
     }
   }
 

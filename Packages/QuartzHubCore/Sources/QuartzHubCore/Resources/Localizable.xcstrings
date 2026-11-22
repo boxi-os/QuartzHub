@@ -4525,13 +4525,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Grundeinstellungen deiner Website: der Ordner mit deinen Notizen, das Projektbild, Titel, Adresse und Sprache, was ausgeschlossen wird, die Statistik und, ab Quartz 5.1, wie Quartz Links, Entwürfe und Frontmatter verarbeitet."
+            "value" : "Grundeinstellungen deiner Website: der Ordner mit deinen Notizen, das Projektbild, Titel, Adresse und Sprache, was ausgeschlossen wird, die Statistik und, ab Quartz 5.1, wie Quartz Links, Entwürfe und Frontmatter verarbeitet, ab 5.2 auch die Schriften."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basic settings for your site: the folder with your notes, the project image, title, address and language, what is excluded, analytics and, from Quartz 5.1 on, how Quartz processes links, drafts and frontmatter."
+            "value" : "Basic settings for your site: the folder with your notes, the project image, title, address and language, what is excluded, analytics and, from Quartz 5.1 on, how Quartz processes links, drafts and frontmatter, from 5.2 on the fonts too."
           }
         }
       }
@@ -5666,13 +5666,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Liefert das Plugin „Fonts“ die Schriften aus, schlägt der Build ohne Basis-URL fehl."
+            "value" : "Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Holt Quartz die Google-Schriften beim Build selbst, schlägt der Build ohne Basis-URL fehl."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Links, the RSS feed and preview images are built from it. With the “Fonts” plugin serving the fonts, the build fails without a base URL."
+            "value" : "Links, the RSS feed and preview images are built from it. If Quartz fetches the Google fonts itself during the build, the build fails without a base URL."
           }
         }
       }
@@ -54050,13 +54050,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Adresse, unter der die Website später erreichbar ist (ohne https://). Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Liefert das Plugin „Fonts“ die Schriften aus, schlägt der Build ohne Basis-URL fehl."
+            "value" : "Die Adresse, unter der die Website später erreichbar ist (ohne https://). Links, RSS-Feed und Vorschaubilder werden daraus gebaut. Holt Quartz die Google-Schriften beim Build selbst, schlägt der Build ohne Basis-URL fehl."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The address the site will be reachable at later (without https://). Links, the RSS feed and preview images are built from it. With the “Fonts” plugin serving the fonts, the build fails without a base URL."
+            "value" : "The address the site will be reachable at later (without https://). Links, the RSS feed and preview images are built from it. If Quartz fetches the Google fonts itself during the build, the build fails without a base URL."
           }
         }
       }

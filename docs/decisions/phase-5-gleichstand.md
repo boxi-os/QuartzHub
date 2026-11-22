@@ -3040,6 +3040,15 @@ fünften Teil und hält seinen Eintrag nicht für aufgenommen.
   `theBuiltInsOwnFieldsAreFetchedWithTheTypography`, `aFamilyOfTheBuiltInsFieldsIsMissingUntilFetched`,
   `theBuiltInsFieldsAreWrittenUnderConfigurationFonts`, `theBuildDoorFetchesQuartz52sOwnFields`
   (Gegenprobe: ohne die Felder in `fetchedTypography` bzw. am Build-Tor rot).
+- **Basis-URL** (gemessen 2026-11-22 an der 5.2-Kopie von gui-test, Build mit `--config` auf eine
+  Kopie ohne `baseUrl`): Ohne Basis-URL bricht nur der Kern ab, in `componentResources.ts` („baseUrl
+  must be defined when using Google Fonts without cfg.theme.cdnCaching“), bei `theme.fontOrigin:
+  googleFonts` mit `cdnCaching: false`; dieselbe Prüfung steht seit 2025 im Kern, also auch in 5.0 und
+  5.1. Mit `cdnCaching: true` (Gegenprobe) und mit `local` baut es, der eingebaute Teil braucht sie in
+  keiner Herkunft (`selfHosted` holte die Dateien ohne Fehler). Auch quartz-fonts braucht sie seit
+  1.0.1 nicht mehr (sein CHANGELOG; 5.1 sperrt 1.0.2). Die Texte unter „Basis-URL“ und in der
+  Übersicht nannten noch das Plugin „Fonts“ als Grund, aus QuartzControl übernommen; sie nennen jetzt
+  Google-Schriften, die Quartz beim Build selbst holt.
 
 ### Callouts und Transklusionen als `<div>` im Export
 

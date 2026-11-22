@@ -122,7 +122,7 @@ struct ConfigPage: View {
         ProcessingSections(model: model, project: project)
         HStack(alignment: .firstTextBaseline) {
           Note(L10n.t("configEditor.stylesHint"))
-          Button(L10n.t("configEditor.stylesHintLink")) { openPage(.styles) }.buttonStyle(.link).font(.callout)
+          Button(L10n.t("configEditor.stylesHintLink")) { openPage(.styles, tab: StylesModel.Tab.basics.rawValue) }.buttonStyle(.link).font(.callout)
         }
         .padding(.horizontal, Spacing.page)
         .padding(.vertical, Spacing.m)
