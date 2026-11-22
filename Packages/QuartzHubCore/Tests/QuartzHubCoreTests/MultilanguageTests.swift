@@ -57,7 +57,10 @@ import Testing
   @Test func languagesAndEveryStepAsQuartzControlWritesThem() throws {
     let golden = try #require(Self.golden)
     #expect(golden["readAgainst"] == .string(MultilanguageOptions.readAgainst))
-    #expect(Self.strings(golden["sameCode"]) == MultilanguageOptions.sameCode)
+    // QuartzControl's list, then the versions released after it stopped (0.3.1).
+    let quartzControlSameCode = Self.strings(golden["sameCode"])
+    #expect(MultilanguageOptions.sameCode.starts(with: quartzControlSameCode))
+    #expect(MultilanguageOptions.sameCode.count == quartzControlSameCode.count + 1)
     #expect(Self.strings(golden["languageKeys"]) == MultilanguageOptions.languageKeys)
     let cases = try #require(golden["cases"]?.arrayValue)
     #expect(cases.count == 13)

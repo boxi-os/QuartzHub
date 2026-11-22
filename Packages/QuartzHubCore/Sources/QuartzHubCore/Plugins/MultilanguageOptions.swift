@@ -11,8 +11,9 @@ public enum MultilanguageOptions {
   public static let plugin = "quartz-multilanguage"
   /// The version whose options.ts the defaults are read from.
   public static let readAgainst = "0.3.0"
-  /// Versions whose options.ts is the same as that one's (`git diff v0.2.0 v0.3.0 -- src/options.ts`).
-  public static let sameCode = ["0.2.0"]
+  /// Versions whose options.ts is the same as that one's (`git diff v0.2.0 v0.3.0 -- src/options.ts`,
+  /// `git diff v0.3.0 v0.3.1 -- src/options.ts`).
+  public static let sameCode = ["0.2.0", "0.3.1"]
   /// The keys the language list itself edits.
   public static let languageKeys = ["languages", "defaultLanguage", "publishLanguages"]
   public static let unknownGroup = "unknown"
