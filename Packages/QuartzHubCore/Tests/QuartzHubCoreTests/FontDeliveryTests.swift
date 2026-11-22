@@ -154,6 +154,30 @@ struct FontDeliveryTests {
     #expect(!FontDelivery.coreDownloadsGoogleFonts(FontDelivery.persist(served)))
   }
 
+  /// Quartz reads `cdnCaching` by truthiness: missing, Google is downloaded at build time, not
+  /// linked (the build without a base URL threw, 2026-11-22). QuartzControl showed it as linked.
+  @Test func aMissingCdnCachingIsQuartzDownloading() {
+    let google = { (caching: JSONValue?) in
+      Self.config52(theme: [("fontOrigin", .string("googleFonts"))] + (caching.map { [("cdnCaching", $0)] } ?? []))
+    }
+    let missing = google(nil)
+    #expect(FontDelivery.loaders(missing) == [FontDelivery.Loader(via: "core", mode: "google")], "QuartzControl's answer, kept")
+    let read = FontDelivery.cdnCachingAsQuartzReadsIt(missing)
+    #expect(read.theme["cdnCaching"] == .bool(false))
+    #expect(FontDelivery.loaders(read) == [FontDelivery.Loader(via: "core", mode: "selfHosted")])
+    #expect(!FontDelivery.callsGoogle(read))
+    #expect(FontDelivery.fetchesGoogleFonts(read))
+    #expect(FontDelivery.persist(read).theme["fontOrigin"] == .string("local"))
+    // Another value by its truthiness; a Boolean and another origin stay as they are.
+    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(google(.string("yes"))).theme["cdnCaching"] == .bool(true))
+    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(google(.number(0))).theme["cdnCaching"] == .bool(false))
+    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(google(.bool(true))) == google(.bool(true)))
+    let local = Self.config52(theme: [("fontOrigin", .string("local"))])
+    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(local) == local)
+    let noOrigin = Self.config52(theme: [])
+    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(noOrigin) == noOrigin)
+  }
+
   @Test func servingLocallyTurnsTheBuiltInToLocal() {
     // The page's draft spelling of "served by QuartzHub": Google with cdnCaching false.
     let draft = Self.config52(theme: [("fontOrigin", .string("googleFonts"))])

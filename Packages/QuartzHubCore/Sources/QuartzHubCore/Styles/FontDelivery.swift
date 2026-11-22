@@ -226,6 +226,20 @@ public enum FontDelivery {
     return (origin == .string("googleFonts") || origin == nil) && config.theme["cdnCaching"] == .bool(false)
   }
 
+  /// On the way in, before `present`: a Google origin whose `cdnCaching` is no Boolean reads as
+  /// Quartz reads it, by truthiness, so a missing key is `false` and Quartz downloads the fonts at
+  /// build time (`componentResources.ts`; `Head.tsx` links Google only for a truthy value).
+  /// QuartzControl took a missing key for the link and showed "Google, linked"; measured on the 5.2
+  /// copy of gui-test (decisions/phase-5-gleichstand.md, „Schriften eingebaut“). Kept out of the
+  /// functions compared with QuartzControl, which stay as its code answers.
+  public static func cdnCachingAsQuartzReadsIt(_ config: QuartzConfig) -> QuartzConfig {
+    guard config.theme["fontOrigin"] == .string("googleFonts") else { return config }
+    if case .bool? = config.theme["cdnCaching"] { return config }
+    var next = config
+    next.theme["cdnCaching"] = .bool(JS.truthy(config.theme["cdnCaching"]))
+    return next
+  }
+
   /// Whether Quartz's core downloads the Google fonts during the build, read from the config as it
   /// is on disk: Quartz's own test in `componentResources.ts` (`fontOrigin === "googleFonts" &&
   /// !cdnCaching`, a missing `cdnCaching` included), which throws without a base URL. Not the

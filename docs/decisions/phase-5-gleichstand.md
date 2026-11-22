@@ -3057,6 +3057,17 @@ fünften Teil und hält seinen Eintrag nicht für aufgenommen.
   sie, nach „Jetzt ins Projekt holen“ ist sie weg. Test `onlyCoresOwnDownloadNeedsTheBaseUrl`
   (Gegenproben: nur `cdnCaching: false` statt „nicht wahr“, `fontOrigin` „nicht local“ statt
   „googleFonts“, beide rot).
+- **Ein fehlendes `cdnCaching`** heißt für Quartz „herunterladen“, nicht „verlinken“ (`Head.tsx`
+  verlinkt Google nur bei einem wahren Wert, `componentResources.ts` lädt bei einem falschen; der
+  Build ohne Basis-URL oben warf genau dort). QuartzControl las den fehlenden Schlüssel als Link und
+  zeigte „Google, direkt verlinkt“ in Orange; seine Goldens halten das 642-mal fest und bleiben so.
+  QuartzHub liest die Config jetzt beim Laden von Stile wie Quartz
+  (`FontDelivery.cdnCachingAsQuartzReadsIt`: bei `fontOrigin: googleFonts` ein Wert, der kein
+  Boolean ist, nach seiner Wahrheit) und zeigt den Stand wie QuartzControls Selbst-Hosten: Schalter
+  an, „Quartz lädt diese Schriften erst beim Build …“, Speichern holt sie ins Projekt. An der Kopie
+  angesehen. Test `aMissingCdnCachingIsQuartzDownloading` (Gegenprobe: fehlend als wahr gelesen, rot
+  mit 7 Befunden). Nicht angefasst: Ein fehlendes `fontOrigin` liest QuartzHub weiter als Google,
+  Quartz lädt dann gar nichts (Build ohne Basis-URL oben).
 
 ### Callouts und Transklusionen als `<div>` im Export
 

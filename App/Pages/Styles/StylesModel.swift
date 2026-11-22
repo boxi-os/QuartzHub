@@ -108,10 +108,12 @@ final class StylesModel {
       let loaded = try await ConfigFile.read(project: path, runtime: environment.runtime)
       let info = try await Task.detached { try StyleSheets.readCustom(project: path) }.value
       features = await Task.detached { QuartzFeatures.read(project: path) }.value
-      let presented = FontDelivery.present(loaded, scss: "\(info.managed?.content ?? "")\n\(info.content)")
+      // A missing `cdnCaching` is Quartz downloading at build time, as `false` (cdnCachingAsQuartzReadsIt).
+      let read = FontDelivery.cdnCachingAsQuartzReadsIt(loaded)
+      let presented = FontDelivery.present(read, scss: "\(info.managed?.content ?? "")\n\(info.content)")
       config = presented
       savedConfig = presented
-      quartzStillDownloadsFonts = FontDelivery.fetchesGoogleFonts(loaded) && presented == loaded
+      quartzStillDownloadsFonts = FontDelivery.fetchesGoogleFonts(read) && presented == read
       configOnDisk = loaded
       scss = Scss(info: info, content: info.content, original: info.content, staleBy: nil)
       loadError = nil
