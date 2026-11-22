@@ -364,8 +364,25 @@ public struct FontService: Sendable {
   /// unicode-range. QuartzControl's string, kept.
   static let browserUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
   static let gstaticUrl = "url\\([\(JSText.space)]*(https://fonts\\.gstatic\\.com/[^)\(JSText.space)'\"]+)[\(JSText.space)]*\\)"
+  /// A file address with the `format()` that follows it in the rule, if any.
+  static let gstaticSource = gstaticUrl + "(?:[\(JSText.space)]*format\\([\(JSText.space)]*['\"]?([A-Za-z0-9-]+))?"
   /// Dots inside the name (Google names a CJK slice `<hash>.<n>.woff2`), never a leading one.
   static let fontFileName = #"\A[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*\.(?:woff2|woff|ttf|otf)\z"#
+  static let extensionOfFormat = ["woff2": "woff2", "woff": "woff", "truetype": "ttf", "opentype": "otf"]
+
+  /// The name a file of Google's answer gets under quartz/static/fonts. Mostly Google's own, a
+  /// content hash; but Google also answers with a kit address (`/l/font?kit=…&skey=…&v=…`) whose
+  /// last segment is no file name (Roboto Condensed, 2026-11-22, the fetch broke off). Such a file
+  /// is named after its whole address, which carries the version, with the extension of its
+  /// `format()`; a QuartzControl reading the block finds it like any other. nil when neither works.
+  static func localFileName(url: String, format: String?) -> String? {
+    guard let last = JSText.split(url, "/").last, let name = try? JSURI.decodeComponent(last) else { return nil }
+    if JSText.test(name, fontFileName) { return name }
+    guard JSText.test(url, #"\Ahttps://fonts\.gstatic\.com/l/font\?"#),
+          let ext = format.flatMap({ extensionOfFormat[$0.lowercased()] }) else { return nil }
+    let digest = SHA256.hash(data: Data(url.utf8)).map { String(format: "%02x", $0) }.joined()
+    return "kit-\(digest.prefix(32)).\(ext)"
+  }
   /// What four CJK families cost (439 to 495 files measured), with room; the bytes are the ceiling
   /// with room to spare (all 124 files of Noto Sans JP are 5.4 MB).
   static let maxFiles = 800
@@ -507,18 +524,18 @@ public struct FontService: Sendable {
     answer += JSText.slice(css, last)
 
     var urls: [(url: String, name: String)] = []
-    for match in JSText.matches(answer, Self.gstaticUrl) {
+    for match in JSText.matches(answer, Self.gstaticSource) {
       let url = match.groups[1]!
-      let name: String
+      let given: String
       do {
-        name = try JSURI.decodeComponent(JSText.split(url, "/").last ?? "")
+        given = try JSURI.decodeComponent(JSText.split(url, "/").last ?? "")
       } catch {
         throw Failure(message: "URI malformed")
       }
       // A name this cannot use is an error: skipped, its rule kept Google's address, and the site
       // that "serves locally" loaded from Google on every build.
-      if !JSText.test(name, Self.fontFileName) {
-        throw Failure(message: L10n.t("main.googleFontsBadFileName", ["name": JSText.slice(name, 0, 80)]))
+      guard let name = Self.localFileName(url: url, format: match.groups[2]) else {
+        throw Failure(message: L10n.t("main.googleFontsBadFileName", ["name": JSText.slice(given, 0, 80)]))
       }
       if let index = urls.firstIndex(where: { $0.url == url }) { urls[index].name = name } else { urls.append((url, name)) }
     }

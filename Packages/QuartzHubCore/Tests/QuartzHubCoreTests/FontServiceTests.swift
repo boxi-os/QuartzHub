@@ -212,6 +212,51 @@ import Testing
     #expect(await run(try project("door51", quartz52: false)).first?.hasSuffix("\(failed)\n") == true)
   }
 
+  /// Google answered Roboto Condensed with a kit address (`/l/font?kit=…`), and the fetch broke off
+  /// on its name. Now the file gets a name from its address and the extension of its format, the
+  /// rule points at it, and a second run fetches nothing. A kit address without a format, and a
+  /// `/s/` file with an unusable name, still break off.
+  @Test func aKitAddressGetsANameOfItsOwn() async throws {
+    let typography = JSONObject([("header", .string("Roboto Condensed"))])
+    let request = try #require(GoogleFontRequest.css2Url(typography))
+    let kit = "https://fonts.gstatic.com/l/font?kit=ieVZ2ZhZI2eCN5jzbjEETS9weq8-19ehAyvMum7nfDB64Rg&skey=9986ecffddb755ab&v=v31"
+    let plain = "https://fonts.gstatic.com/s/robotocondensed/v31/ieVl2ZhZI2eCN5jzbjEETS9weq8-19-7DQk6YvNkeg.woff2"
+    func rule(_ url: String, _ format: String?, weight: Int) -> String {
+      "@font-face {\n  font-family: 'Roboto Condensed';\n  font-style: normal;\n  font-weight: \(weight);\n  font-display: swap;\n"
+        + "  src: url(\(url))\(format.map { " format('\($0)')" } ?? "");\n}\n"
+    }
+    func google(_ css: String) -> JSONObject {
+      JSONObject([(request, .object(JSONObject([("text", .string(css))]))),
+                  (kit, .object(JSONObject([("bytes", .object(JSONObject([("fill", .number(1)), ("size", .number(64))])))]))),
+                  (plain, .object(JSONObject([("bytes", .object(JSONObject([("fill", .number(2)), ("size", .number(32))])))])))])
+    }
+    let box = Box()
+    let project = "\(scratch.path)/kit"
+    try Posix.mkdirs("\(project)/quartz/styles")
+    let service = FontService(fetch: Self.fake(google(rule(kit, "woff2", weight: 400) + rule(plain, "woff2", weight: 700)), box),
+                              readConfig: { _ in QuartzConfig(configuration: JSONObject(), theme: JSONObject()) })
+    let first = try await service.fetchGoogleFonts(typography, project: project)
+    let name = try #require(FontService.localFileName(url: kit, format: "woff2"))
+    #expect(JSText.test(name, #"\Akit-[0-9a-f]{32}\.woff2\z"#))
+    #expect(first.changed && first.files == [name, "ieVl2ZhZI2eCN5jzbjEETS9weq8-19-7DQk6YvNkeg.woff2"])
+    #expect(FontService.usableFile("\(project)/quartz/static/fonts/\(name)"))
+    let block = try #require(StyleSheets.managedBody(try StyleSheets.readSources(project: project), "google-fonts"))
+    #expect(block.contains("url(static/fonts/\(name))") && !block.contains("gstatic"))
+    box.lock.withLock { $0.requests = [] }
+    #expect(try await service.fetchGoogleFonts(typography, project: project).changed == false)
+    #expect(box.lock.withLock { $0.requests }.isEmpty)
+
+    for (css, bad) in [(rule(kit, nil, weight: 400), "font?kit=ieVZ"), (rule("https://fonts.gstatic.com/s/x/bad%20name.woff2", "woff2", weight: 400), "bad name.woff2")] {
+      let other = "\(scratch.path)/kit-\(bad.prefix(3))"
+      try Posix.mkdirs("\(other)/quartz/styles")
+      let failing = FontService(fetch: Self.fake(google(css), Box()), readConfig: { _ in QuartzConfig(configuration: JSONObject(), theme: JSONObject()) })
+      await #expect(throws: FontService.Failure.self) { _ = try await failing.fetchGoogleFonts(typography, project: other) }
+      do { _ = try await failing.fetchGoogleFonts(typography, project: other) } catch let failure as FontService.Failure {
+        #expect(failure.message.contains(bad), "\(failure.message)")
+      }
+    }
+  }
+
   /// The golden answers with QuartzControl's texts rendered from the catalog.
   static func rendered(_ value: JSONValue) -> JSONValue {
     switch value {
