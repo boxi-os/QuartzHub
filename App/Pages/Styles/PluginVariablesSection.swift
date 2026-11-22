@@ -33,11 +33,12 @@ struct PluginVariablesSection: View {
   let place: VariablesPlace
 
   /// The unattributed ones as a plugin without a name, last.
-  static let unattributedName = ""
+  nonisolated static let unattributedName = ""
 
   /// Described plugins first (their order is the config's), then those read from the build, then
-  /// Quartz's own and the unattributed ones.
-  static func ordered(_ result: PluginVariables.Result) -> [PluginVariables.Plugin] {
+  /// Quartz's own and the unattributed ones. Not isolated: `PluginVariableKey.find` calls it from
+  /// outside the main actor, and it only sorts values.
+  nonisolated static func ordered(_ result: PluginVariables.Result) -> [PluginVariables.Plugin] {
     let described = result.plugins.filter(\.described)
     let others = result.plugins.filter { !$0.described && $0.name != "quartz" }
     let quartz = result.plugins.filter { !$0.described && $0.name == "quartz" }
