@@ -163,8 +163,9 @@ struct BasicsTab: View {
   // MARK: Quartz 5.2's own font fields
 
   /// The interface font and one per heading level, written under `configuration.fonts` (Quartz
-  /// 5.2's built-in). Quartz loads none of them from Google; QuartzHub fetches them when it holds
-  /// the fonts (`FontDelivery.fetchedTypography`).
+  /// 5.2's built-in). Quartz 5.2.0 loads none of them from Google, 5.2.1 loads them like the
+  /// others (`QuartzFeatures.fontsLoadsAll`); QuartzHub fetches them when it holds the fonts
+  /// (`FontDelivery.fetchedTypography`).
   @ViewBuilder private var builtinFields: some View {
     if FontDelivery.fontsBuiltin(config, model.features)?.enabled == true {
       fontField("interface", label: L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle("interface")]),
@@ -192,7 +193,7 @@ struct BasicsTab: View {
         }
       }
       .accessibilityIdentifier("styles.headingFonts")
-      if fontOrigin != "local" && !FontDelivery.fetchesGoogleFonts(config) {
+      if fontOrigin != "local" && !FontDelivery.fetchesGoogleFonts(config) && !model.features.fontsLoadsAll {
         Note(L10n.t("themeEditor.builtinFonts.notFromGoogle"))
       }
     } else {

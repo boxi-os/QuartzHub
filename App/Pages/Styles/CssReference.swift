@@ -363,8 +363,13 @@ struct ActiveStylesSection: View {
         }
       }
       ForEach(builtinFonts, id: \.key) { font in
-        // Quartz loads none of these, so neither "at build" nor "from Google" applies.
-        fontRow(font.key, stack: font.family, google: [], held: heldFamilies, heldByProject: heldByProject, selfHosted: false, atPageView: false)
+        // Quartz 5.2.0 loads none of these, so neither "at build" nor "from Google" applies; 5.2.1's
+        // built-in loads them with its own origin.
+        let loads = model.features.fontsLoadsAll
+        fontRow(font.key, stack: font.family, google: loads ? [font.family.lowercased()] : [],
+                held: heldFamilies, heldByProject: heldByProject,
+                selfHosted: loads && loaders.contains { $0.via == "builtin" && $0.mode == "selfHosted" },
+                atPageView: loads && loaders.contains { $0.via == "builtin" && $0.mode == "google" })
       }
       if families.contains(where: { !$0.isEmpty && !PreviewFontRegistry.isAvailable($0) }) {
         Callout(.warning, L10n.t("styleEditor.current.notInstalledExplainer"))

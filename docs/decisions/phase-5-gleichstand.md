@@ -3161,3 +3161,54 @@ Seiten; Kasten und Titellage eines Callouts):
 
 Projekte, die vor 5.2 aus der Vorlage entstanden sind, behalten ihre Dateien. Wer sie auf 5.2 hebt,
 bekommt Quartz' Warnung zum Eintrag und Callouts ohne diesen Abstand, bis er beides wie oben ändert.
+
+## Quartz 5.2.1 (2026-11-22)
+
+5.2.1 erschien am Abend nach 5.2.0 (Release `v5.2.1`, acht Dateien). Drei Teile treffen QuartzHub:
+Schriften, das Raster auf Handy und Tablet und `@quartz-themes/core` 3.1. Die Themes sind ein eigenes
+Vorhaben (Community-Themes, `ThemeMarketplace`) und hier nicht behandelt.
+
+### Schriften
+
+- **Oberflächenschrift und Schrift je Überschrift lädt Quartz jetzt selbst** (`googleFontHref` im
+  eingebauten Teil nimmt `interface` und `h1`–`h6` dazu, ebenso `selfHosted`). QuartzHub liest das
+  aus dem Projekt: `QuartzFeatures.fontsLoadsAll`, wenn `type FontRole` in
+  `quartz/plugins/builtins/fonts.ts` `"interface"` nennt (5.2.0: nicht). Damit fällt unter Stile ▸
+  Basis der Hinweis „…lädt Quartz nicht von Google…“ weg, und die Liste der geltenden Schriften
+  (Eigenes CSS, Inspektor) sagt für diese Felder, woher sie kommen, statt „keine @font-face-Regel“.
+  Angesehen an einer Kopie des Demo-Projekts mit „direkt von Google“, `interface: Inter`, `h1: Lora`:
+  mit 5.2.1s `fonts.ts` kein Hinweis, „lädt beim Seitenaufruf von Google“; mit 5.2.0s der Hinweis
+  wieder da.
+- **Eine Stärke allein wird angefragt.** Quartz' `<Head>` (`quartz/util/theme.ts`, unverändert) und
+  QuartzControl schreiben `wght@` nur für mehr als eine Stärke; `weights: [700]` holte so 400.
+  Kursiv mit einer Stärke wurde `Name:ital`, und das beantwortet Google mit HTTP 400 (curl,
+  2026-11-22: `Roboto:ital` 400, `Roboto:ital@0;1` 200 normal und kursiv, `Roboto:wght@700` 200 nur
+  700). Der eingebaute Teil von 5.2.1 schreibt es neu (`formatMerged`); QuartzHubs eigenes Holen
+  ins Projekt (`GoogleFontRequest.familyParameter`) übernimmt diese Schreibweise, unabhängig von der
+  Quartz-Fassung, weil es nur bestimmt, welche Dateien im Projekt liegen. Zwei der neun Fälle aus
+  QuartzControls Golden File weichen damit bewusst ab und stehen im Test. Ein Projekt mit einer
+  einzelnen Stärke holt beim nächsten Speichern oder Build neu, weil sich die gespeicherte Anfrage ändert.
+  Doppelte Familien (dieselbe Schrift für Überschrift und Text) nimmt Google ohne Zusammenführen an
+  (35 Regeln für `Inter:wght@400;700` und `Inter:ital,wght@…`).
+- **Ausdrücklich gesetzte Schriften gelten mit einem Obsidian-Theme** (`--font-*-override` auf
+  `html body`). QuartzHub schreibt eine Oberflächenschrift nur ohne Theme mit eigenen Schriften
+  (`withFontsOnAsBefore`), daran ändert sich nichts.
+
+### Raster auf Handy und Tablet
+
+Quartz' Inhaltsspalte ist `minmax(0, 1fr)` statt `auto`, damit ein breites Element im Kopf die
+Seite nicht verbreitert. QuartzHubs eigene Frames setzen das äußere Raster selbst auf `auto`
+(`GridFrameCss.outerGridOverride`). Gemessen in WebKit bei 390 px am Build des Demo-Projekts (Frames
+editorial, index, focus), `auto` gegen `minmax(0, 1fr)`:
+
+- langer Titel, langes Wort ohne Umbruch im Kopf, 1000 px breiter Block im Kopfbereich: Spalte in
+  beiden Fällen 358 px. Einziges Kind von `#quartz-body` ist `.qgframe-grid`, und dessen Bereiche
+  (`min-width: 0`, `fr`-Spuren) halten den Inhalt;
+- Gegenprobe, ein 1000 px breites Element direkt im äußeren Raster: `auto` 1000 px, `minmax` 358 px.
+  Die Messung sieht die Verbreiterung also;
+- ein Frame, dessen eigene Spalten breiter sind als der Bildschirm (`repeat(12, 40px)`): mit `auto`
+  wächst die Spalte auf 696 px, mit `minmax` läuft das Raster über; die Seite ist in beiden Fällen
+  712 px breit.
+
+`GridFrameCss` bleibt deshalb bei `auto`: kein Fall, in dem `minmax(0, 1fr)` etwas sichtbar ändert,
+und jede Änderung hieße, alle Frames neu zu bauen.

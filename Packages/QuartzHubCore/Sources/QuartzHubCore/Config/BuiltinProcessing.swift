@@ -19,9 +19,12 @@ public struct QuartzFeatures: Equatable, Sendable {
   /// `quartz/plugins/builtins/fonts.ts` (Quartz 5.2): font loading is built in as
   /// `configuration.fonts` and absorbs the quartz-fonts plugin.
   public var fontsBuiltin: Bool
+  /// The built-in loads the interface and per-heading fonts like the others (Quartz 5.2.1): its
+  /// `FontRole` declares `"interface"`. 5.2.0 set their variables and loaded none of them.
+  public var fontsLoadsAll: Bool
 
   public init(version: String? = nil, builtins: Bool = false, prefetch: Bool = false, publishAssets: Bool = false, sidebars: Bool = false,
-              analytics51: Bool = false, fontsBuiltin: Bool = false) {
+              analytics51: Bool = false, fontsBuiltin: Bool = false, fontsLoadsAll: Bool = false) {
     self.version = version
     self.builtins = builtins
     self.prefetch = prefetch
@@ -29,14 +32,18 @@ public struct QuartzFeatures: Equatable, Sendable {
     self.sidebars = sidebars
     self.analytics51 = analytics51
     self.fontsBuiltin = fontsBuiltin
+    self.fontsLoadsAll = fontsLoadsAll
   }
 
   /// Everything a 5.1 project has, for tests and previews.
   public static let quartz51 = QuartzFeatures(version: "5.1.0", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
                                               analytics51: true)
-  /// Everything a 5.2 project has.
+  /// Everything a 5.2.0 project has.
   public static let quartz52 = QuartzFeatures(version: "5.2.0", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
                                               analytics51: true, fontsBuiltin: true)
+  /// Everything a 5.2.1 project has.
+  public static let quartz521 = QuartzFeatures(version: "5.2.1", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
+                                               analytics51: true, fontsBuiltin: true, fontsLoadsAll: true)
 
   public static func read(project: String) -> QuartzFeatures {
     var features = QuartzFeatures()
@@ -44,7 +51,13 @@ public struct QuartzFeatures: Equatable, Sendable {
       features.version = package["version"]?.stringValue
     }
     features.builtins = Posix.exists(NodePath.join(project, "quartz", "plugins", "builtins", "index.ts"))
-    features.fontsBuiltin = Posix.exists(NodePath.join(project, "quartz", "plugins", "builtins", "fonts.ts"))
+    let fonts = NodePath.join(project, "quartz", "plugins", "builtins", "fonts.ts")
+    features.fontsBuiltin = Posix.exists(fonts)
+    // The declaration: `type FontRole = "title" | … | "interface"`.
+    if features.fontsBuiltin, let data = try? Posix.read(fonts), data.count < 1_000_000 {
+      let text = String(decoding: data, as: UTF8.self)
+      features.fontsLoadsAll = JSText.split(text, "\n").contains { $0.hasPrefix("type FontRole =") && $0.contains("\"interface\"") }
+    }
     // The declarations, not the comments around them: `prefetch?: "viewport" | …`.
     if let data = try? Posix.read(NodePath.join(project, "quartz", "cfg.ts")), data.count < 1_000_000 {
       let text = String(decoding: data, as: UTF8.self)

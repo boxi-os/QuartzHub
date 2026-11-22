@@ -183,6 +183,14 @@ import Testing
     try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts", Data())
     try Posix.write("\(project)/package.json", Data(#"{"version":"5.2.0"}"#.utf8))
     #expect(QuartzFeatures.read(project: project) == .quartz52)
+    // 5.2.0's declaration, then 5.2.1's: the built-in loads the interface and heading fonts.
+    try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts",
+                    Data(#"type FontRole = "title" | "header" | "body" | "code"\#n// "interface" in a comment"#.utf8))
+    #expect(QuartzFeatures.read(project: project) == .quartz52)
+    try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts",
+                    Data(#"type FontRole = "title" | "header" | "body" | "code" | "interface"\#n"#.utf8))
+    try Posix.write("\(project)/package.json", Data(#"{"version":"5.2.1"}"#.utf8))
+    #expect(QuartzFeatures.read(project: project) == .quartz521)
   }
 
   // MARK: Quartz 5.2's fonts
