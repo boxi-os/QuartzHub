@@ -323,11 +323,19 @@ public struct TemplatePackage: Sendable {
 
   public func importPackage(project: String, package path: String, parts selected: [String], strategy: Strategy,
                             progress: Progress? = nil) async throws -> Imported {
+    try await importPackage(project: project, package: path, choices: Dictionary(selected.map { ($0, strategy) }, uniquingKeysWith: { a, _ in a }),
+                            progress: progress)
+  }
+
+  /// The parts with a strategy each, in one run and under one snapshot: "Vorlage gewinnt" for the
+  /// styles and "Projekt gewinnt" for the plugins needed two imports before (user, 2026-11-22).
+  public func importPackage(project: String, package path: String, choices: [String: Strategy],
+                            progress: Progress? = nil) async throws -> Imported {
     guard let loaded = try load(path) else { return Imported(success: false, warnings: ["packageUnreadable"]) }
     // The most far-reaching thing the app does to a project, and what a snapshot is for.
     try await snapshot(project, "styleChange", loaded.manifest["name"]?.stringValue ?? "")
-    let run = Run(project: project, strategy: strategy, files: loaded.files)
-    let todo = Self.partIds.filter { selected.contains($0) && loaded.files[Self.partFile($0)] != nil }
+    let run = Run(project: project, strategy: .packageWins, files: loaded.files)
+    let todo = Self.partIds.filter { choices[$0] != nil && loaded.files[Self.partFile($0)] != nil }
     var done = 0
     for id in todo {
       guard let payload = payload(loaded, id) else {
@@ -335,6 +343,7 @@ public struct TemplatePackage: Sendable {
         done += 1
         continue
       }
+      run.strategy = choices[id] ?? .packageWins
       progress?(id, "", done, todo.count)
       run.progress = { [done] message in progress?(id, message, done, todo.count) }
       do {
@@ -363,7 +372,8 @@ public struct TemplatePackage: Sendable {
   /// One import's warnings and progress; the parts run one after another.
   final class Run: @unchecked Sendable {
     let project: String
-    let strategy: Strategy
+    /// The part's own, set before each part runs.
+    var strategy: Strategy
     let files: ZipArchive.Files
     var warnings: [String] = []
     var progress: (String) -> Void = { _ in }

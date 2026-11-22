@@ -300,4 +300,46 @@ struct TemplatePackageTests {
     #expect(config.layout?["sidebars"].map { JSJSON.compact($0) } == #"{"left":"static","right":"static"}"#)
     #expect(config.layout?["groups"] != nil)
   }
+
+  /// One run with a strategy per part (user, 2026-11-22) writes what two runs wrote before, one per
+  /// strategy, the parts in the same order: "own" has frames, presets, styles and variables of its
+  /// own, so both strategies change something.
+  @Test func aRunWithAStrategyPerPartWritesWhatTwoRunsWrote() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = Self.realpath(scratch.path)
+    let mask = { (text: String) in text.replacingOccurrences(of: work, with: "@W@", options: .literal) }
+    let initial = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("initial.json"))).objectValue!
+    let blobs = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("blobs.json"))).objectValue!
+    let one = "\(work)/one", two = "\(work)/two"
+    try Self.build(one, initial["own"]!.objectValue!, blobs: blobs, work: work)
+    try Self.build(two, initial["own"]!.objectValue!, blobs: blobs, work: work)
+    let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
+    let read: LayoutFrames.ReadConfig = { try await ConfigFile.read(project: $0, runtime: .repository) }
+    let stub = PluginCommands.Result(success: true, output: "")
+    let templates = TemplatePackage(
+      runtime: .repository, locales: LocaleFiles(environment: environment), frames: LayoutFrames(readConfig: read),
+      fonts: FontService(readConfig: read), npm: { _, _ in stub }, addPlugin: { _, _ in stub }, head: { _ in nil },
+      snapshot: { _, _, _ in }, app: ("QuartzHub", "0.0.0-test"))
+    // In TemplatePackage.partIds order, the first strategy's parts all before the second's.
+    let package = ["frames", "theme", "appearance"], project = ["presets", "styles", "cssVariables"]
+    var choices: [String: TemplatePackage.Strategy] = [:]
+    for id in package { choices[id] = .packageWins }
+    for id in project { choices[id] = .projectWins }
+    let mixed = try await templates.importPackage(project: one, package: Self.basic, choices: choices)
+    let first = try await templates.importPackage(project: two, package: Self.basic, parts: package, strategy: .packageWins)
+    let second = try await templates.importPackage(project: two, package: Self.basic, parts: project, strategy: .projectWins)
+    #expect(mixed.warnings == first.warnings + second.warnings)
+    let a = Self.tree(one, mask: mask), b = Self.tree(two, mask: mask)
+    #expect(a.count > 0)
+    for path in Set(a.keys).union(b.keys).sorted() where a[path] != b[path] {
+      Issue.record("\(path): \(a[path].map { JSJSON.compact($0) }?.prefix(200) ?? "fehlt") statt \(b[path].map { JSJSON.compact($0) }?.prefix(200) ?? "fehlt")")
+    }
+    // The counter-check: all of them under "Vorlage gewinnt" writes something else, so the second
+    // strategy did reach its parts.
+    let three = "\(work)/three"
+    try Self.build(three, initial["own"]!.objectValue!, blobs: blobs, work: work)
+    _ = try await templates.importPackage(project: three, package: Self.basic, parts: package + project, strategy: .packageWins)
+    let c = Self.tree(three, mask: mask)
+    #expect(a.keys.contains { a[$0] != c[$0] })
+  }
 }
