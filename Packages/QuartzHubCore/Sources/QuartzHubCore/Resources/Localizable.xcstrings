@@ -24449,6 +24449,49 @@
         }
       }
     },
+    "layoutEditor.frameBuilder.collapsedWarning" : {
+      "comment" : "Frame editor: an area whose slot holds components sits only in rows sized 0",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{areas}} liegt in einer Zeile der Höhe 0: Was darin steht, liegt über der nächsten Zeile."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{areas}} liegen in Zeilen der Höhe 0: Was darin steht, liegt über der nächsten Zeile."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{areas}} is in a row of height 0: what it holds lies over the next row."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{areas}} are in rows of height 0: what they hold lies over the next row."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "layoutEditor.frameBuilder.cols" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -24719,6 +24762,92 @@
         }
       }
     },
+    "layoutEditor.frameBuilder.emptyRowsRemoved" : {
+      "comment" : "Frame editor: announced after removing empty rows",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Eine leere Zeile entfernt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} leere Zeilen entfernt."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Removed one empty row."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Removed {{count}} empty rows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.emptyRowsWarning" : {
+      "comment" : "Frame editor: under the board, rows no area is in",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Zeile {{rows}} ist leer und hält trotzdem einen Zeilenabstand."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Die Zeilen {{rows}} sind leer und halten trotzdem je einen Zeilenabstand."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Row {{rows}} is empty and still takes a row gap."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Rows {{rows}} are empty and still take a row gap each."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "layoutEditor.frameBuilder.frameLabel" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -24891,13 +25020,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ziehe einen Bereich auf eine freie Zelle oder zurück in diese Liste; an den Rändern eines gewählten Bereichs ziehst du seine Spannen. Ein Klick zeigt seine Einstellungen im Inspektor, dort platzierst und verschiebst du ihn auch mit der Tastatur."
+            "value" : "Ziehe einen Bereich auf eine freie Zelle, zwischen zwei Zeilen (eine neue Zeile entsteht, die übrigen rücken nach) oder auf einen anderen Bereich (die beiden tauschen), oder zurück in diese Liste; an den Rändern eines gewählten Bereichs ziehst du seine Spannen. Ein Klick zeigt seine Einstellungen im Inspektor, dort platzierst und verschiebst du ihn auch mit der Tastatur."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drag an area onto an open cell or back into this list; drag the edges of a selected area to change its spans. A click shows its settings in the inspector, where you can also place and move it with the keyboard."
+            "value" : "Drag an area onto an open cell, between two rows (a new row comes in, the others move down) or onto another area (the two swap), or back into this list; drag the edges of a selected area to change its spans. A click shows its settings in the inspector, where you can also place and move it with the keyboard."
           }
         }
       }
@@ -25105,6 +25234,44 @@
         }
       }
     },
+    "layoutEditor.frameBuilder.movedToNewRow" : {
+      "comment" : "Frame editor: announced after moving an area into a new row (drag between rows, or a row up/down)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} steht jetzt in einer neuen Zeile {{row}}, die Zeilen darunter sind nachgerückt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} is now in a new row {{row}}; the rows below moved down."
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.movedToNewRowShorter" : {
+      "comment" : "Frame editor: as movedToNewRow, the area spanned several rows before",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} steht jetzt in einer neuen Zeile {{row}}, eine Zeile hoch statt {{before}}."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} is now in a new row {{row}}, one row high instead of {{before}}."
+          }
+        }
+      }
+    },
     "layoutEditor.frameBuilder.nameCollision" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -25227,6 +25394,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "New frame"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.newRowRefused" : {
+      "comment" : "Frame editor: dropping an area between two rows, refused (a spanning area fills the new row)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} bleibt, wo es war: In einer neuen Zeile an dieser Stelle ist keine Spalte frei."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} stays where it was: a new row there has no free column."
           }
         }
       }
@@ -25574,6 +25760,49 @@
         }
       }
     },
+    "layoutEditor.frameBuilder.removeEmptyRows" : {
+      "comment" : "Frame editor: button in the empty rows warning",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Leere Zeile entfernen"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Leere Zeilen entfernen"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Remove empty row"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Remove empty rows"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "layoutEditor.frameBuilder.resetTracks" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -25624,6 +25853,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "{{name}} now starts at row {{row}}, column {{col}}; row span {{rowSpan}}, column span {{colSpan}}."
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.rowDown" : {
+      "comment" : "Frame editor inspector: moves the selected area into a new row below the row below it",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Zeile tiefer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One row down"
           }
         }
       }
@@ -25714,6 +25962,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row span"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.rowUp" : {
+      "comment" : "Frame editor inspector: moves the selected area into a new row above the row above it",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Zeile höher"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One row up"
           }
         }
       }
@@ -26041,6 +26308,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row"
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.swapRefused" : {
+      "comment" : "Frame editor: dropping an area onto another one, refused",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} und {{other}} passen nicht an den Platz des anderen: Dort lägen sie über einem weiteren Bereich oder außerhalb des Rasters."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} and {{other}} do not fit in each other’s place: there they would cover another area or reach past the grid."
+          }
+        }
+      }
+    },
+    "layoutEditor.frameBuilder.swapped" : {
+      "comment" : "Frame editor: announced after dropping an area onto another one",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} und {{other}} haben die Plätze getauscht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{name}} and {{other}} swapped places."
           }
         }
       }

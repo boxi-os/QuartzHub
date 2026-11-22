@@ -65,3 +65,20 @@ Alles im Kern (`FrameEditing`), mit Tests; das Board und der Inspektor rufen es 
 - Das Basis-Template legt auf Mobile eine left-Zeile der Höhe `0` an und holt den Abstand mit
   `margin-block-start: -2rem` an before-body zurück (`custom/layout.scss`). Ohne left-Zeile rückt
   before-body damit zu dicht an den Kopf. Am Template prüfen, ob left dort auf Mobile etwas trägt.
+
+## Umgesetzt (2026-11-22)
+
+Kern in `Layout/FrameRows.swift` (`FrameRowsTests`), Oberfläche in `App/Pages/Layout/FramesTab.swift`.
+An einer Kopie von 00_test angesehen:
+
+- index, Mobile: left in die Ablage → „Zeile 2 ist leer …“ → **Leere Zeile entfernen** → before-body
+  direkt unter dem Kopf; right in die Lücke unter header gezogen (blaue Linie) → right Zeile 2,
+  before-body rückt nach; „Eine Zeile tiefer“ setzt es zurück; before-body auf left gezogen → getauscht.
+- index, Desktop: before-body zwischen page-body und custom-8 gezogen → right bleibt über die Zeilen 2–5.
+- before-body nach dem Tausch in left's Zeile der Höhe 0 → „before-body liegt in einer Zeile der Höhe 0“.
+  left selbst in dieser Zeile sagt nichts: die Warnung gilt nur Bereichen, deren Position etwas trägt
+  (die leere left-Zeile des Templates ist Absicht).
+- Abweichend vom Plan: Was eine verlassene Zeile ist, entscheidet `removingRow` („liegt kein anderer
+  Bereich allein darin“), nicht `emptyRows`: Sonst bliebe auf Desktop neben right eine leere Zeile stehen.
+- Nebenbei gefunden: Ein Ablegen im Abstand zwischen zwei Spalten traf keine Zelle und tat nichts
+  (schon vorher so; beim Tauschen über einem breiten Bereich fast immer). Jetzt zählt die nächste Zelle.

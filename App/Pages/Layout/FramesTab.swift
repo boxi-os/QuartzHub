@@ -23,6 +23,9 @@ struct FramesTab: View {
   @State private var dragging: String?
   /// Where the dragged area would land, and whether it may.
   @State private var ghost: (placement: FrameView.Placement, allowed: Bool)?
+  /// Where a new row would come in under a drag near the line between two rows: before which
+  /// row, at which height of the board, and whether the area fits there.
+  @State private var insertLine: (row: Int, y: CGFloat, allowed: Bool)?
   /// True while a dragged edge is held back by another area or the grid's end.
   @State private var resizeBlocked = false
   /// The width the board has: inside its sideways scroller nothing proposes one.
@@ -314,6 +317,17 @@ struct FramesTab: View {
             }
           }
           .coordinateSpace(.named("board"))
+          .overlay(alignment: .topLeading) {
+            if let insertLine {
+              Capsule()
+                .fill(insertLine.allowed ? Color.accentColor : .red)
+                .frame(maxWidth: .infinity)
+                .frame(height: 4)
+                .offset(y: insertLine.y - 2)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+            }
+          }
           .onDrop(of: [.utf8PlainText], delegate: BoardDrop(tab: self, draft: draft))
           .frame(width: max(min(boardWidth - 16, StageGeometry.referenceWidth[breakpoint] ?? 1456), 120))
           .padding(FrameEditing.hasBox(layout) ? 4 : 0)
@@ -472,22 +486,80 @@ struct FramesTab: View {
     return NSItemProvider(object: "area:\(id)" as NSString)
   }
 
-  /// The cell under a point of the board.
+  /// The cell under a point of the board, the nearest one in a gap between rows or columns: a
+  /// pointer over a wide area is as often over a column gap as over a cell (the swap did nothing
+  /// there, 2026-11-22).
   fileprivate func cellAt(_ point: CGPoint) -> (row: Int, col: Int)? {
-    for (key, rect) in cells where rect.contains(point) {
-      let parts = key.split(separator: ":").compactMap { Int($0) }
-      if parts.count == 2 { return (parts[0], parts[1]) }
+    let nearest = { (ranges: [(Int, CGFloat, CGFloat)], at: CGFloat) -> Int? in
+      ranges.min { a, b in
+        let da = at < a.1 ? a.1 - at : at > a.2 ? at - a.2 : 0
+        let db = at < b.1 ? b.1 - at : at > b.2 ? at - b.2 : 0
+        return da < db
+      }?.0
     }
-    return nil
+    // Cells of a larger grid stay in `cells` after a switch of breakpoint; only this one's count.
+    let layout = model.draft.map { FrameView($0).layout(breakpoint) }
+    var rows: [(Int, CGFloat, CGFloat)] = [], cols: [(Int, CGFloat, CGFloat)] = []
+    for (key, rect) in cells {
+      let parts = key.split(separator: ":").compactMap { Int($0) }
+      guard parts.count == 2, parts[0] <= max(layout?.rows ?? 1, 1), parts[1] <= max(layout?.cols ?? 1, 1) else { continue }
+      if parts[1] == 1 { rows.append((parts[0], rect.minY, rect.maxY)) }
+      if parts[0] == 1 { cols.append((parts[1], rect.minX, rect.maxX)) }
+    }
+    guard let row = nearest(rows, point.y), let col = nearest(cols, point.x) else { return nil }
+    return (row, col)
   }
 
-  /// What a drop at a cell would do, shown while the drag moves: the area's new place, or the
-  /// cells it asked for in red when another area is in the way.
-  fileprivate func hover(_ draft: JSONValue, at cell: (row: Int, col: Int)?) -> DropProposal {
-    guard let id = dragging, let cell else {
-      ghost = nil
+  fileprivate enum DropTarget {
+    case cell(row: Int, col: Int)
+    /// A new row before this one (1…rows + 1).
+    case newRow(Int)
+  }
+
+  /// Near the line between two rows (in the row gap, or within a quarter of a row, at most 10 pt,
+  /// from its edge) a drop makes a new row there; elsewhere it is about the cell under the point.
+  fileprivate func dropTarget(_ point: CGPoint, rows: Int) -> DropTarget? {
+    let bands = (1...max(rows, 1)).compactMap { r in cells["\(r):1"].map { (top: $0.minY, bottom: $0.maxY) } }
+    if bands.count == rows, let first = bands.first, let last = bands.last {
+      let edge = { (b: (top: CGFloat, bottom: CGFloat)) in min(10, (b.bottom - b.top) / 4) }
+      if point.y < first.top + edge(first) { return .newRow(1) }
+      for r in 1..<rows where point.y > bands[r - 1].bottom - edge(bands[r - 1]) && point.y < bands[r].top + edge(bands[r]) {
+        return .newRow(r + 1)
+      }
+      if point.y > last.bottom - edge(last) { return .newRow(rows + 1) }
+    }
+    return cellAt(point).map { .cell(row: $0.row, col: $0.col) }
+  }
+
+  /// The height of the line where a new row before `r` comes in: in the gap between the rows.
+  private func lineY(_ r: Int, rows: Int) -> CGFloat {
+    let top = { (row: Int) in cells["\(row):1"]?.minY ?? 0 }
+    let bottom = { (row: Int) in cells["\(row):1"]?.maxY ?? 0 }
+    if r <= 1 { return max(top(1) - 3, 2) }
+    if r > rows { return bottom(rows) + 3 }
+    return (bottom(r - 1) + top(r)) / 2
+  }
+
+  /// What a drop at a point would do, shown while the drag moves: a line where a new row comes in,
+  /// or the area's new place, or the cells it asked for in red when another area is in the way.
+  fileprivate func hover(_ draft: JSONValue, at point: CGPoint) -> DropProposal {
+    let rows = FrameView(draft).layout(breakpoint).rows
+    guard let id = dragging, let target = dropTarget(point, rows: rows) else {
+      endHover()
       return DropProposal(operation: .forbidden)
     }
+    guard case .cell(let row, let col) = target else {
+      guard case .newRow(let r) = target else { return DropProposal(operation: .forbidden) }
+      ghost = nil
+      let allowed = switch FramePlacing.newRow(draft, breakpoint, id, before: r) {
+      case .placed, .unchanged: true
+      case .refused, .unknown: false
+      }
+      insertLine = (r, lineY(r, rows: rows), allowed)
+      return DropProposal(operation: allowed ? .move : .forbidden)
+    }
+    insertLine = nil
+    let cell = (row: row, col: col)
     let view = FrameView(draft)
     let layout = view.layout(breakpoint)
     switch FramePlacing.place(draft, breakpoint, id, row: cell.row, col: cell.col) {
@@ -509,11 +581,24 @@ struct FramesTab: View {
     }
   }
 
-  fileprivate func drop(at cell: (row: Int, col: Int)?) -> Bool {
-    ghost = nil
-    defer { dragging = nil }
-    guard let id = dragging, let cell, let current = model.draft else { return false }
-    switch FramePlacing.place(current, breakpoint, id, row: cell.row, col: cell.col) {
+  fileprivate func drop(at point: CGPoint) -> Bool {
+    defer {
+      dragging = nil
+      endHover()
+    }
+    guard let id = dragging, let current = model.draft,
+          let target = dropTarget(point, rows: FrameView(current).layout(breakpoint).rows) else { return false }
+    let outcome: FramePlacing.Outcome
+    var plainDrop = false
+    switch target {
+    case .newRow(let r):
+      outcome = FramePlacing.newRow(current, breakpoint, id, before: r)
+    case .cell(let row, let col):
+      outcome = FramePlacing.place(current, breakpoint, id, row: row, col: col)
+      let before = FrameView(current).placement(breakpoint, id)
+      plainDrop = !(before?.shown ?? false) || FrameEditing.placementAt(FrameView(current), breakpoint, row: row, col: col).map { $0.id == id } ?? true
+    }
+    switch outcome {
     case .unchanged:
       return true
     case .placed(let next, let sentence):
@@ -522,7 +607,8 @@ struct FramesTab: View {
       Announce.post(sentence)
       return true
     case .refused(let sentence):
-      model.frameMessage = L10n.t("layoutEditor.frameBuilder.overlapError")
+      // A swap or a new row says why it did not happen; a plain drop keeps its old message.
+      model.frameMessage = plainDrop ? L10n.t("layoutEditor.frameBuilder.overlapError") : sentence
       Announce.post(sentence)
       return false
     case .unknown:
@@ -530,7 +616,10 @@ struct FramesTab: View {
     }
   }
 
-  fileprivate func endHover() { ghost = nil }
+  fileprivate func endHover() {
+    ghost = nil
+    insertLine = nil
+  }
 
   /// The board as one drop target: the cells under the areas are reached too, and the pointer
   /// says "not here" (`.forbidden`) where an area would overlap another (user test, 2026-11-12:
@@ -539,9 +628,9 @@ struct FramesTab: View {
     let tab: FramesTab
     let draft: JSONValue
 
-    func dropUpdated(info: DropInfo) -> DropProposal? { tab.hover(draft, at: tab.cellAt(info.location)) }
+    func dropUpdated(info: DropInfo) -> DropProposal? { tab.hover(draft, at: info.location) }
     func dropExited(info: DropInfo) { tab.endHover() }
-    func performDrop(info: DropInfo) -> Bool { tab.drop(at: tab.cellAt(info.location)) }
+    func performDrop(info: DropInfo) -> Bool { tab.drop(at: info.location) }
   }
 
   // MARK: warnings
@@ -554,6 +643,11 @@ struct FramesTab: View {
     let others = LayoutBoard.breakpoints.filter { $0 != breakpoint && FrameEditing.warningKeys(view, $0).contains { !here.contains($0) } }
     let never = view.areas.filter { a in LayoutBoard.breakpoints.allSatisfy { !view.isShown(a, on: $0) } }
     let positions = { (list: [String]) in list.map(LayoutWords.position).joined(separator: ", ") }
+    let held = heldSlots
+    let collapsed = FrameEditing.collapsedAreas(view, breakpoint).filter { id in
+      guard let slot = view.areas.first(where: { $0.id == id })?.slot else { return false }
+      return slot == "pageBody" || held.contains(slot)
+    }
     let lines: [String] = {
       var lines: [String] = []
       if !placements.overlapping.isEmpty {
@@ -568,6 +662,9 @@ struct FramesTab: View {
       }
       if !others.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.otherBreakpointsWarning", ["breakpoints": others.map(LayoutWords.breakpoint).joined(separator: ", ")])) }
       if !never.isEmpty { lines.append(L10n.t("layoutEditor.frameBuilder.neverVisibleWarning", ["areas": never.map(\.name).joined(separator: ", ")])) }
+      if !collapsed.isEmpty {
+        lines.append(L10n.t("layoutEditor.frameBuilder.collapsedWarning", ["areas": collapsed.map(name).joined(separator: ", ")], count: collapsed.count))
+      }
       return lines
     }()
     if !lines.isEmpty {
@@ -576,6 +673,25 @@ struct FramesTab: View {
       }
       .accessibilityIdentifier("layout.frames.warnings")
     }
+    let empty = FrameEditing.emptyRows(view, breakpoint)
+    if !empty.isEmpty, let draft = model.draft {
+      Callout(.warning) {
+        Text(L10n.t("layoutEditor.frameBuilder.emptyRowsWarning", ["rows": empty.map(String.init).joined(separator: ", ")], count: empty.count))
+        Button(L10n.t("layoutEditor.frameBuilder.removeEmptyRows", count: empty.count)) {
+          set(FrameEditing.removingEmptyRows(draft, breakpoint))
+          Announce.post(L10n.t("layoutEditor.frameBuilder.emptyRowsRemoved", count: empty.count))
+        }
+        .accessibilityIdentifier("layout.frames.removeEmptyRows")
+      }
+      .accessibilityIdentifier("layout.frames.emptyRows")
+    }
+  }
+
+  /// The positions that hold a component on the board, for whether an area of height 0 matters:
+  /// the template's left on phones is empty and meant to take no room.
+  private var heldSlots: Set<String> {
+    guard let plugins = model.config?.plugins else { return [] }
+    return Set(LayoutBoard.boardPositions(plugins, parked: LayoutBoard.parked(plugins)).filter { !$0.value.isEmpty }.keys)
   }
 }
 
@@ -655,6 +771,11 @@ struct BreakpointWidthsSection: View {
   static func place(_ draft: JSONValue, _ bp: String, _ id: String, row: Int, col: Int) -> Outcome {
     let before = FrameView(draft).placement(bp, id)
     if let before, !before.hidden, before.row == row, before.col == col { return .unchanged }
+    // Onto another area: the two trade places (docs/plan-frame-zeilen.md); from the tray it stays
+    // a drop that overlaps.
+    if let before, before.shown, let other = FrameEditing.placementAt(FrameView(draft), bp, row: row, col: col), other.id != id {
+      return swap(draft, bp, id, other.id)
+    }
     let name = FrameView(draft).areas.first { $0.id == id }?.name ?? id
     switch FrameEditing.dropping(draft, bp, id, row: row, col: col) {
     case .success(let next)?:
@@ -674,6 +795,31 @@ struct BreakpointWidthsSection: View {
     case nil:
       return .unknown
     }
+  }
+
+  static func swap(_ draft: JSONValue, _ bp: String, _ id: String, _ other: String) -> Outcome {
+    let view = FrameView(draft)
+    let name = { (id: String) in view.areas.first { $0.id == id }?.name ?? id }
+    let names = ["name": name(id), "other": name(other)]
+    switch FrameEditing.swapping(draft, bp, id, other) {
+    case .success(let next)?: return .placed(next, L10n.t("layoutEditor.frameBuilder.swapped", names))
+    case .failure?: return .refused(L10n.t("layoutEditor.frameBuilder.swapRefused", names))
+    case nil: return .unknown
+    }
+  }
+
+  /// The area in a new row before row `r`, the rows below sliding down, as in a list.
+  static func newRow(_ draft: JSONValue, _ bp: String, _ id: String, before r: Int) -> Outcome {
+    guard let area = FrameView(draft).areas.first(where: { $0.id == id }) else { return .unknown }
+    guard let move = FrameEditing.movingToNewRow(draft, bp, id, before: r) else {
+      return .refused(L10n.t("layoutEditor.frameBuilder.newRowRefused", ["name": area.name]))
+    }
+    if move.def == draft { return .unchanged }
+    let row = String(move.placement.row)
+    if let before = move.rowSpanBefore {
+      return .placed(move.def, L10n.t("layoutEditor.frameBuilder.movedToNewRowShorter", ["name": area.name, "row": row, "before": String(before)]))
+    }
+    return .placed(move.def, L10n.t("layoutEditor.frameBuilder.movedToNewRow", ["name": area.name, "row": row]))
   }
 
   /// Where an area from the tray is offered first: its own place on this breakpoint if it has one,
@@ -754,6 +900,18 @@ struct FrameAreaInspector: View {
               LabeledContent(L10n.t("layoutEditor.frameBuilder.colSpanLabel"), value: "\(placement.colSpan)")
             }
             Note(L10n.t("layoutEditor.frameBuilder.placementSummary", ["row": String(placement.row), "col": String(placement.col)]))
+            // Reordering by keyboard: the inspector's part of "Nach oben"/"Nach unten" on a grid
+            // (docs/conventions.md, Umsortieren; docs/plan-frame-zeilen.md).
+            if placement.shown {
+              HStack {
+                Button(L10n.t("layoutEditor.frameBuilder.rowUp")) { moveRow(draft, area, placement, up: true) }
+                  .disabled(placement.row <= 1)
+                  .accessibilityIdentifier("layout.frames.rowUp")
+                Button(L10n.t("layoutEditor.frameBuilder.rowDown")) { moveRow(draft, area, placement, up: false) }
+                  .disabled(placement.row + max(placement.rowSpan, 1) - 1 >= layout.rows)
+                  .accessibilityIdentifier("layout.frames.rowDown")
+              }
+            }
             Toggle(L10n.t("layoutEditor.frameBuilder.visibleOnBreakpoint", ["breakpoint": LayoutWords.breakpoint(breakpoint)]), isOn: Binding(
               get: { !placement.hidden },
               set: { shown in
@@ -851,6 +1009,19 @@ struct FrameAreaInspector: View {
   private func refuse(_ text: String) {
     refusal = text
     Announce.post(text)
+  }
+
+  /// Into a new row before the row above, or after the row below: the others slide, as in a list.
+  private func moveRow(_ draft: JSONValue, _ area: FrameView.Area, _ p: FrameView.Placement, up: Bool) {
+    switch FramePlacing.newRow(draft, breakpoint, area.id, before: up ? p.row - 1 : p.row + max(p.rowSpan, 1) + 1) {
+    case .placed(let next, let sentence):
+      set(next)
+      Announce.post(sentence)
+    case .refused(let sentence):
+      refuse(sentence)
+    case .unchanged, .unknown:
+      break
+    }
   }
 
   private func span(_ rows: Int?, _ cols: Int?) {

@@ -195,6 +195,9 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
 - **Eine Stelle je Einstellung seit 2026-11-16** ([`plan-eine-stelle.md`](docs/plan-eine-stelle.md)): Optionen unter
   Plugins, Platzierung unter Layout, Sprünge zwischen beiden. Review `docs/REVIEW-2026-11-17.md` abgearbeitet:
   2 Mittel, 6 Niedrig, 7 nebenbei, Chronik in `docs/reviews.md`.
+- **Zeilen im Frame-Editor seit 2026-11-22** ([`plan-frame-zeilen.md`](docs/plan-frame-zeilen.md)): zwischen zwei Zeilen
+  ablegen (neue Zeile, die übrigen rücken nach), auf einen Bereich ablegen (tauschen), „Eine Zeile höher/tiefer“ im
+  Inspektor, leere Zeilen entfernen; Zeilenhöhen und Linien-Namen gehen mit ihrer Zeile (`FrameRows` im Kern).
 
 ## Arbeitsweise
 
