@@ -110,6 +110,11 @@ public actor BuildService {
   ///    them in line with the typography of the config (`FontService.refreshGoogleFonts`): the
   ///    config reaches the typography through more doors than the Basis tab. A failed fetch is a
   ///    warning; the build goes on with the files that are there.
+  ///
+  /// 5. A Quartz 5.2 project whose fonts QuartzHub serves (`theme.fontOrigin: local`) gets the
+  ///    built-in's `configuration.fonts.fontOrigin: local` when it has none
+  ///    (`FontService.keepBuiltinFontsLocal`): after a core update or plugin doctor's move, the
+  ///    built-in linked Google though the Basis tab said "local".
   public static let preparation: [PreparationStep] = [
     { project, report in
       do {
@@ -135,6 +140,15 @@ public actor BuildService {
     },
     { project, report in
       if let result = await FontService().refreshGoogleFonts(project: project) { report(result.failed ? .warn : .stdout, result.text + "\n") }
+    },
+    { project, report in
+      do {
+        if try await FontService.keepBuiltinFontsLocal(project: project) { report(.stdout, L10n.t("main.builtinFontsKeptLocal") + "\n") }
+      } catch let failure as ConfigFile.Failure {
+        report(.warn, failure.message + "\n")
+      } catch {
+        report(.warn, String(describing: error) + "\n")
+      }
     }
   ]
 

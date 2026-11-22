@@ -31010,6 +31010,25 @@
         }
       }
     },
+    "main.builtinFontsKeptLocal" : {
+      "comment" : "Build console, before a build: configuration.fonts.fontOrigin set to local to match theme.fontOrigin (Quartz 5.2)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die eingebauten Schriften von Quartz werden jetzt lokal ausgeliefert, wie unter Stile ▸ Basis eingestellt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz’s built-in fonts are now served locally, as set under Styles ▸ Basics."
+          }
+        }
+      }
+    },
     "main.commandTimeout" : {
       "comment" : "Commands",
       "extractionState" : "manual",

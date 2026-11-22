@@ -60,7 +60,8 @@ final class ConfigModel {
     saveError = nil
     let environment = await AppServices.current()
     do {
-      try await ConfigFile.write(config, project: project.path, runtime: environment.runtime,
+      // Turning Quartz 5.2's fonts on in a project QuartzHub serves fonts for: local, not Google.
+      try await ConfigFile.write(FontDelivery.withLocalBuiltinOrigin(config, features) ?? config, project: project.path, runtime: environment.runtime,
                                  snapshot: SnapshotStore.live(environment: environment).take)
     } catch {
       status = .failed

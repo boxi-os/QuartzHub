@@ -158,6 +158,30 @@ struct FontDeliveryTests {
             == .object(JSONObject([("enabled", .bool(false)), ("fontOrigin", .string("local"))])))
   }
 
+  @Test func aLocalProjectKeepsTheBuiltInLocalWhereverItsConfigCameFrom() throws {
+    // The demo project after its core update and plugin doctor's move: fonts {enabled: false}.
+    let moved = Self.config52(theme: [("fontOrigin", .string("local"))], fonts: .object(JSONObject([("enabled", .bool(false))])))
+    let kept = try #require(FontDelivery.withLocalBuiltinOrigin(moved, .quartz52))
+    #expect(kept.configuration["fonts"] == .object(JSONObject([("enabled", .bool(false)), ("fontOrigin", .string("local"))])))
+    // Turned on, it loads nothing from Google; without the key it linked Google.
+    var on = kept
+    on.configuration["fonts"] = .object(JSONObject([("enabled", .bool(true)), ("fontOrigin", .string("local"))]))
+    #expect(!FontDelivery.callsGoogle(on, .quartz52))
+    var onWithout = moved
+    onWithout.configuration["fonts"] = .object(JSONObject([("enabled", .bool(true))]))
+    #expect(FontDelivery.callsGoogle(onWithout, .quartz52))
+    // No configuration.fonts at all (a core update without an entry).
+    let none = Self.config52(theme: [("fontOrigin", .string("local"))])
+    #expect(FontDelivery.withLocalBuiltinOrigin(none, .quartz52)?.configuration["fonts"] == .object(JSONObject([("fontOrigin", .string("local"))])))
+    // Nothing to do: on 5.1, with Google, with an origin someone wrote, with the key already there.
+    #expect(FontDelivery.withLocalBuiltinOrigin(none, .quartz51) == nil)
+    #expect(FontDelivery.withLocalBuiltinOrigin(Self.config52(theme: [("fontOrigin", .string("googleFonts"))]), .quartz52) == nil)
+    #expect(FontDelivery.withLocalBuiltinOrigin(Self.config52(theme: []), .quartz52) == nil)
+    let theirs = Self.config52(theme: [("fontOrigin", .string("local"))], fonts: .object(JSONObject([("fontOrigin", .string("selfHosted"))])))
+    #expect(FontDelivery.withLocalBuiltinOrigin(theirs, .quartz52) == nil)
+    #expect(FontDelivery.withLocalBuiltinOrigin(kept, .quartz52) == nil)
+  }
+
   @Test func theFontSourcePickerSetsTheBuiltInsToo() {
     let draft = Self.config52(theme: [("fontOrigin", .string("googleFonts"))])
     let local = FontDelivery.withCoreFontOrigin(draft, "local")

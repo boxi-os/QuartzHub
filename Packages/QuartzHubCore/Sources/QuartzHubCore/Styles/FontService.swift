@@ -122,6 +122,17 @@ public struct FontService: Sendable {
     public var description: String { message }
   }
 
+  /// The build door's other half for Quartz 5.2: a project QuartzHub serves fonts for gets the
+  /// built-in's origin written (`FontDelivery.withLocalBuiltinOrigin`). Whether it wrote. A config
+  /// that cannot be read is not this step's to say: the frames' step before it says so.
+  public static func keepBuiltinFontsLocal(project: String, runtime: RuntimeLocation = .current) async throws -> Bool {
+    let features = QuartzFeatures.read(project: project)
+    guard features.fontsBuiltin, let config = try? await ConfigFile.read(project: project, runtime: runtime),
+          let next = FontDelivery.withLocalBuiltinOrigin(config, features) else { return false }
+    try await ConfigFile.write(next, project: project, runtime: runtime)
+    return true
+  }
+
   // MARK: importing a font file
 
   static let formats = ["ttf": "truetype", "otf": "opentype", "woff": "woff", "woff2": "woff2"]

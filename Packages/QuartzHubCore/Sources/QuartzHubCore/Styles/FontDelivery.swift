@@ -123,6 +123,17 @@ public enum FontDelivery {
     return withBuiltinFontOrigin(next, local: origin == "local")
   }
 
+  /// `theme.fontOrigin: local` with the built-in's origin to match, for a config that reached Quartz
+  /// 5.2 another way than the Basis tab: a core update, plugin doctor moving a quartz-fonts entry
+  /// (it writes `fonts: {enabled: false}`, nothing more), a hand edit. Without it the built-in
+  /// linked Google once turned on (demo project, 2026-11-22). Only where the key is missing: an
+  /// origin someone wrote stays. nil when there is nothing to do.
+  public static func withLocalBuiltinOrigin(_ config: QuartzConfig, _ features: QuartzFeatures) -> QuartzConfig? {
+    guard features.fontsBuiltin, config.theme["fontOrigin"] == .string("local") else { return nil }
+    if case .object(let fonts)? = config.configuration["fonts"], fonts["fontOrigin"] != nil { return nil }
+    return withBuiltinFontOrigin(config, local: true)
+  }
+
   /// `configuration.fonts.fontOrigin: local`, or back to the built-in's default. Only `local` is
   /// QuartzHub's: another origin someone wrote stays, and so do the other options.
   static func withBuiltinFontOrigin(_ config: QuartzConfig, local: Bool) -> QuartzConfig {

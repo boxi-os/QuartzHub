@@ -2981,6 +2981,19 @@ fünften Teil und hält seinen Eintrag nicht für aufgenommen.
 - **Lokal bleibt lokal:** Wo QuartzHub „lokal“ schreibt, schreibt es auch
   `configuration.fonts.fontOrigin: local`, sonst lädt der eingebaute Teil von Google (Messung oben:
   148 Dateien). Zurück auf Google geht nur ein `local`, das QuartzHub gesetzt haben kann.
+- **Auch wenn die Config anders kam** (gefunden beim Kern-Update des Demo-Projekts in der App,
+  2026-11-22): Ein Projekt, das vor 1.1 „lokal“ gespeichert hat, kommt ohne den Schlüssel auf 5.2,
+  und `plugin doctor --fix` schreibt aus dem ausgeschalteten quartz-fonts-Eintrag nur
+  `fonts: {enabled: false}`. Schaltete man die Schriften danach unter Verarbeitung ein, verlinkte der
+  eingebaute Teil Google, während Stile „lokal“ zeigte. Regel jetzt: `theme.fontOrigin: local` auf
+  5.2 heißt auch `configuration.fonts.fontOrigin: local`, wo der Schlüssel fehlt
+  (`FontDelivery.withLocalBuiltinOrigin`). Sie gilt beim Speichern der Konfiguration und als fünfter
+  Schritt vor jedem Build (`FontService.keepBuiltinFontsLocal`, sagt es einmal in der Konsole; ohne
+  lesbare Config schweigt er, das sagt schon der Frames-Schritt). Eine Herkunft, die jemand
+  geschrieben hat, bleibt. Am Demo-Projekt: Einschalten und Speichern schrieb `enabled: true,
+  fontOrigin: local`, der Build danach verlinkt Google nirgends. Tests:
+  `aLocalProjectKeepsTheBuiltInLocalWhereverItsConfigCameFrom`, `theBuildDoorKeepsQuartz52sFontsLocal`
+  (Gegenprobe: ohne die Regel beide rot).
 - **Oberflächenschrift und Schrift je Überschrift** (Stile ▸ Basis, nur mit 5.2 und eingeschaltetem
   Teil): geschrieben unter `configuration.fonts.interface` und `.h1`–`.h6`. Quartz setzt dafür nur
   Variablen und Regeln, lädt aber keine dieser Familien: `googleFontHref` fragt Google nach Titel,

@@ -144,6 +144,34 @@ import Testing
     #expect(await run() == [])
   }
 
+  /// The demo project after its core update to 5.2 and plugin doctor's move: `fonts: {enabled:
+  /// false}`, `theme.fontOrigin: local`. The door's last step writes the built-in's origin, keeps
+  /// the comment, says so once; a 5.1 project is left alone.
+  @Test(.enabled(if: HelperRuntime.available, "Runtime/ oder Helpers/dist fehlt"))
+  func theBuildDoorKeepsQuartz52sFontsLocal() async throws {
+    let step = try #require(BuildService.preparation.last)
+    func run(_ project: String) async -> [String] {
+      let said = Mutex<[String]>([])
+      await step(project) { stream, text in said.withLock { $0.append("\(stream) \(text)") } }
+      return said.withLock { $0 }
+    }
+    let yaml = "configuration:\n  pageTitle: door\n  theme:\n    fontOrigin: local # served by QuartzHub\n  fonts:\n    enabled: false\nplugins: []\n"
+    let project = "\(scratch.path)/door-52"
+    try Posix.mkdirs("\(project)/quartz/plugins/builtins")
+    try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts", Data())
+    try Posix.write("\(project)/quartz.config.yaml", Data(yaml.utf8))
+    #expect(await run(project) == ["stdout \(L10n.t("main.builtinFontsKeptLocal"))\n"])
+    let written = try String(decoding: Posix.read("\(project)/quartz.config.yaml"), as: UTF8.self)
+    #expect(written.contains("  fonts:\n    enabled: false\n    fontOrigin: local\n"), "\(written)")
+    #expect(written.contains("fontOrigin: local # served by QuartzHub"))
+    #expect(await run(project) == [])
+    let older = "\(scratch.path)/door-51"
+    try Posix.mkdirs(older)
+    try Posix.write("\(older)/quartz.config.yaml", Data(yaml.utf8))
+    #expect(await run(older) == [])
+    #expect(try Posix.read("\(older)/quartz.config.yaml") == Data(yaml.utf8))
+  }
+
   /// Quartz 5.2's interface font reaches the build door's fetch: with only it naming a family, the
   /// door asks for it (here the project's own Inter), and a 5.1 project has nothing to ask for.
   @Test(.enabled(if: HelperRuntime.available, "Runtime/ oder Helpers/dist fehlt"))
