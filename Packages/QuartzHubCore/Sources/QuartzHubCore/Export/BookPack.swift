@@ -100,7 +100,21 @@ public enum EpubPack {
   /// The reader stylesheet, also the offline HTML's. No background that assumes a light page: a
   /// reader's dark theme changes the text colour but not every background (Calibre 9.17 set the
   /// callouts' text light grey on #f5f5f5); a translucent grey works on either.
-  public static let style = """
+  ///
+  /// Since Quartz 5.2 callouts and transclusions are `<div>`s, before `<blockquote>`s: both forms
+  /// are styled (`quartz52Selectors`, measured on gui-test at v5.2.0), a plain selector list
+  /// rather than `:is()`, which older reading systems do not know.
+  public static let style = quartz52Selectors(qcStyle)
+
+  /// QuartzControl's stylesheet with the selectors for 5.2's `<div>` markup added; the tests apply
+  /// the same to QuartzControl's golden.
+  public static func quartz52Selectors(_ css: String) -> String {
+    css.replacingOccurrences(of: "\nblockquote { margin:", with: "\nblockquote, div.callout, div.transclude { margin:")
+      .replacingOccurrences(of: "\nblockquote.callout { border-left-width", with: "\nblockquote.callout, div.callout { border-left-width")
+      .replacingOccurrences(of: "  blockquote.callout { background: #262626; }", with: "  blockquote.callout, div.callout { background: #262626; }")
+  }
+
+  static let qcStyle = """
 
 body { margin: 0 4%; line-height: 1.5; }
 h1, h2, h3, h4, h5, h6 { line-height: 1.25; page-break-after: avoid; break-after: avoid; }
@@ -275,7 +289,10 @@ nav ol { list-style: none; padding-left: 1.2em; }
 public enum HtmlPack {
   public static let maxBytes = 200 * 1024 * 1024
 
-  static let screen = """
+  /// The dark callout background for 5.2's `<div>` too (`EpubPack.quartz52Selectors`).
+  static let screen = EpubPack.quartz52Selectors(qcScreen)
+
+  static let qcScreen = """
 
 body { max-width: 46em; margin: 0 auto; padding: 1.5em 1.2em 4em; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1f1f1f; background: #fff; }
 a { color: #1a5fb4; }

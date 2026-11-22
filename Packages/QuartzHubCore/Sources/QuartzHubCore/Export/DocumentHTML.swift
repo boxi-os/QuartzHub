@@ -158,7 +158,7 @@ body.pdf h1, body.pdf h2, body.pdf h3, body.pdf h4, body.pdf .index-heading { br
 body.pdf .index-heading { font-size: 13pt; font-weight: 600; margin: 1.3em 0 0.5em; }
 body.pdf img { max-width: 100% !important; height: auto !important; break-inside: avoid; }
 \(webKitPrintRules)
-body.pdf p:has(> img), body.pdf blockquote.callout, body.pdf pre, body.pdf tr, body.pdf figure { break-inside: avoid; }
+body.pdf p:has(> img), body.pdf blockquote.callout, body.pdf div.callout, body.pdf pre, body.pdf tr, body.pdf figure { break-inside: avoid; }
 body.pdf a { text-decoration: none; }
 /* In der Website rollt der Tabellen-Container; auf Papier wird umbrochen. Der Außenabstand kommt
    aus der Vorlage und schob jede Tabelle um 16 px über den Rand. */

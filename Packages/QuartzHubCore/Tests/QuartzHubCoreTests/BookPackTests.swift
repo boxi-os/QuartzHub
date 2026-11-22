@@ -17,9 +17,10 @@ import Testing
     return formatter.date(from: iso)!
   }
 
-  /// The catalog's texts for `@@<lang>:<key>@@`, and QuartzHub's name as the generator.
+  /// The catalog's texts for `@@<lang>:<key>@@`, QuartzHub's name as the generator, and the
+  /// selectors for Quartz 5.2's `<div>` callouts and transclusions (`EpubPack.quartz52Selectors`).
   static func expected(_ text: String) -> String {
-    DocumentHTMLTests.texts(text).replacingOccurrences(of: "content=\"QuartzControl\"", with: "content=\"QuartzHub\"")
+    EpubPack.quartz52Selectors(DocumentHTMLTests.texts(text).replacingOccurrences(of: "content=\"QuartzControl\"", with: "content=\"QuartzHub\""))
   }
 
   static func content(_ value: JSONValue) -> BookContent {
@@ -49,8 +50,18 @@ import Testing
               author: value["author"]!.stringValue!, identifier: value["identifier"]!.stringValue!, modified: date(value["modified"]!.stringValue!))
   }
 
+  /// Quartz 5.2 writes callouts and transclusions as `<div>` (measured on gui-test at v5.2.0): the
+  /// book styles them as the `<blockquote>`s before. The golden comparison applies the same
+  /// change to QuartzControl's output, so it alone would not see a replacement that hits nothing.
+  @Test func calloutsAndTransclusionsAsDivsAreStyled() {
+    #expect(EpubPack.style.contains("\nblockquote, div.callout, div.transclude { margin: 1em 0;"))
+    #expect(EpubPack.style.contains("\nblockquote.callout, div.callout { border-left-width: 4px;"))
+    #expect(HtmlPack.screen.contains("  blockquote.callout, div.callout { background: #262626; }"))
+    #expect(DocumentHTML.printCss(pageSize: "A4", landscape: false, title: "t").contains("body.pdf blockquote.callout, body.pdf div.callout, body.pdf pre,"))
+  }
+
   @Test func packsAsQuartzControl() throws {
-    #expect(Self.golden["style"]!.stringValue! == EpubPack.style)
+    #expect(EpubPack.quartz52Selectors(Self.golden["style"]!.stringValue!) == EpubPack.style)
     let results = Self.golden["results"]!.arrayValue!
     #expect(results.count == 8)
     for result in results {
@@ -62,7 +73,7 @@ import Testing
       let zip = e["zip"]!
       let entries = zip["entries"]!.arrayValue!.map { entry -> ZipArchive.Entry in
         var data = Data(base64Encoded: entry["data"]!.stringValue!)!
-        if let text = String(data: data, encoding: .utf8), entry["name"]!.stringValue!.hasSuffix(".xhtml") || entry["name"]!.stringValue!.hasSuffix(".opf") {
+        if let text = String(data: data, encoding: .utf8), [".xhtml", ".opf", ".css"].contains(where: entry["name"]!.stringValue!.hasSuffix) {
           data = Data(Self.expected(text).utf8)
         }
         return ZipArchive.Entry(name: entry["name"]!.stringValue!, data: data, store: entry["store"]!.boolValue!)

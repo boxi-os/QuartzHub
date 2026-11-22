@@ -62,11 +62,13 @@ import Testing
     return facts
   }
 
-  /// QuartzControl's output with QuartzHub's one deviation: the cover's height follows the paper
-  /// (`DocumentHTML.coverHeightMM`). A4 portrait is left as QuartzControl wrote it.
+  /// QuartzControl's output with QuartzHub's deviations: the cover's height follows the paper
+  /// (`DocumentHTML.coverHeightMM`; A4 portrait is left as QuartzControl wrote it), and Quartz 5.2's
+  /// `<div>` callouts stay whole on a page like the `<blockquote>` ones.
   static func ownCover(_ qc: String, _ size: String, _ landscape: Bool) -> String {
     let img = "body.pdf img { max-width: 100% !important; height: auto !important; break-inside: avoid; }\n"
     let webKit = qc.replacingOccurrences(of: img, with: img + DocumentHTML.webKitPrintRules + "\n")
+      .replacingOccurrences(of: "body.pdf blockquote.callout, body.pdf pre,", with: "body.pdf blockquote.callout, body.pdf div.callout, body.pdf pre,")
     if size == "A4" && !landscape { return webKit }
     let own = JSJSON.numberToString(DocumentHTML.coverHeightMM(size, landscape: landscape))
     return webKit.replacingOccurrences(of: ".cover { height: 230mm;", with: ".cover { height: \(own)mm;")

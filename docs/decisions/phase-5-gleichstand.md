@@ -2993,3 +2993,17 @@ fünften Teil und hält seinen Eintrag nicht für aufgenommen.
   `theBuiltInsOwnFieldsAreFetchedWithTheTypography`, `aFamilyOfTheBuiltInsFieldsIsMissingUntilFetched`,
   `theBuiltInsFieldsAreWrittenUnderConfigurationFonts`, `theBuildDoorFetchesQuartz52sOwnFields`
   (Gegenprobe: ohne die Felder in `fetchedTypography` bzw. am Build-Tor rot).
+
+### Callouts und Transklusionen als `<div>` im Export
+
+5.2 schreibt Callouts als `<div class="callout …">` und Transklusionen als
+`<div class="transclude …">`, vorher `<blockquote>`. Das PDF nimmt die Stylesheets der Website und
+war davon nicht betroffen. ePub und Offline-HTML stylen mit eigenem CSS über `blockquote`, dort
+hätten Callouts ihren Hintergrund und Transklusionen ihre Linie verloren. Die Regeln nennen jetzt
+beide Formen als einfache Selektorliste (`EpubPack.quartz52Selectors`; kein `:is()`, das ältere
+Lesesysteme nicht kennen); im PDF bleibt ein `div.callout` wie ein `blockquote.callout` auf einer
+Seite. Der Abgleich mit QuartzControls Golden wendet dieselbe Änderung auf dessen Ausgabe an, und
+`calloutsAndTransclusionsAsDivsAreStyled` verlangt die Selektoren selbst (Gegenprobe: ohne sie rot).
+Gemessen an der 5.2-Kopie von gui-test: `qh-check export-book … --offline --pdf` und QuartzControls
+`check:export` ohne Befund außer „nicht getaggt“, epubcheck 0 Fehler, Callout und Transklusion im
+PDF wie auf der Website.
