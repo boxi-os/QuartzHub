@@ -241,6 +241,7 @@ public enum FrameEditing {
     return p.overlapping.map { "overlap:\($0.0):\($0.1)" } + p.outside.map { "outside:\($0)" }
       + w.unassigned.map { "unassigned:\($0)" } + w.homeless.map { "homeless:\($0)" } + w.doubled.map { "doubled:\($0)" }
       + w.hiddenGroups.map { "hiddenGroup:\($0)" }
+      + emptyRows(view, bp).map { "emptyRow:\($0)" }
   }
 
   // MARK: changing
