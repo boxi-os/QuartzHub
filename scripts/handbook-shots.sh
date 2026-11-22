@@ -40,7 +40,7 @@ PAGES=(
   "plugins|4|1" "plugins-navigationen|4|2|s" "plugins-zusaetzliche-inhalte|4|3|s"
   "plugins-mehrsprachigkeit|4|4|s" "plugins-formulare|4|5|s" "plugins-formulare-formular|4|5|s"
   "plugins-marktplatz|4|6"
-  "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3"
+  "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3" "layout-frames-zeilen|6|3"
   "stile-basis|7|1" "stile-themes|7|2|w" "stile-variablen|7|3"
   "stile-variablen-vorlage|7|3" "stile-variablen-plugins|7|3" "stile-css|7|4"
   "vorlagen|8||w"
@@ -213,6 +213,79 @@ preview_page() {
  key code 36"
 }
 
+# "x y w h" of the element of the project window with the given accessibility identifier.
+element_frame() {
+  osascript -e "tell application \"System Events\" to tell process \"QuartzHub\"
+ set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if value of attribute \"AXIdentifier\" of e is \"$1\" then
+    set p to position of e
+    set z to size of e
+    return ((item 1 of p) as text) & \" \" & ((item 2 of p) as text) & \" \" & ((item 1 of z) as text) & \" \" & ((item 2 of z) as text)
+   end if
+  end try
+ end repeat
+end tell"
+}
+
+# Picks an item of the pop-up button with the given identifier, by its title.
+pick() {
+  ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXPopUpButton\" and value of attribute \"AXIdentifier\" of e is \"$1\" then
+    click e
+    delay 0.5
+    click menu item \"$2\" of menu 1 of e
+    exit repeat
+   end if
+  end try
+ end repeat"
+}
+
+# Clicks the n-th radio button of the n-th radio group of the project window (1: the page's tabs).
+radio() {
+  ax "set n to 0
+ set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXRadioGroup\" then
+    set n to n + 1
+    if n is $1 then
+     click radio button $2 of e
+     exit repeat
+    end if
+   end if
+  end try
+ end repeat"
+}
+
+# A drag with the real mouse, held at its end for <hold> seconds, then moved to <x3 y3> and let go
+# there: drag_hold x1 y1 x2 y2 hold x3 y3. Runs in the background; a drag that ends where nothing
+# takes it changes nothing.
+drag_hold() {
+  swift - "$@" <<'SWIFT' &
+import CoreGraphics
+import Foundation
+let a = CommandLine.arguments.dropFirst().compactMap { Double($0) }
+func ev(_ t: CGEventType, _ x: Double, _ y: Double) {
+  CGEvent(mouseEventSource: nil, mouseType: t, mouseCursorPosition: CGPoint(x: x, y: y), mouseButton: .left)!.post(tap: .cghidEventTap)
+}
+func glide(_ x0: Double, _ y0: Double, _ x1: Double, _ y1: Double) {
+  for i in 1...30 { let t = Double(i) / 30; ev(.leftMouseDragged, x0 + (x1 - x0) * t, y0 + (y1 - y0) * t); usleep(25000) }
+}
+ev(.mouseMoved, a[0], a[1]); usleep(150000)
+ev(.leftMouseDown, a[0], a[1]); usleep(200000)
+glide(a[0], a[1], a[2], a[3])
+let until = Date().addingTimeInterval(a[4])
+while Date() < until { ev(.leftMouseDragged, a[2], a[3]); usleep(100000) }
+glide(a[2], a[3], a[5], a[6])
+usleep(200000)
+ev(.leftMouseUp, a[5], a[6])
+SWIFT
+}
+
 # The first button of the project window whose accessibility value is the German or English word.
 press_value() {
   ax "set els to entire contents of $project_window
@@ -328,6 +401,25 @@ for lang in $LANGS; do
           set_field variables.search rail-icon; sleep 2
           click_text "Plugin-Variablen" "Plugin variables"; sleep 2
           click_text "--quartz-nav-rail-icon-size" "--quartz-nav-rail-icon-size"; sleep 2
+        fi
+        # A row comes in on the frame board: index on Mobile, right dragged between header and left,
+        # taken while the line shows; let go over the sidebar, so the frame stays as it was.
+        if [ $name = layout-frames-zeilen ]; then
+          pick layout.frames.picker index; sleep 2
+          radio 2 3; sleep 2
+          set -- $(element_frame layout.frames.area.right); rx=$(( $1 + $3 / 2 )); ry=$(( $2 + $4 / 2 ))
+          set -- $(element_frame layout.frames.area.header); hy=$(( $2 + $4 ))
+          set -- $(element_frame layout.frames.area.left); ly=$2
+          set -- $(osascript -e "tell application \"System Events\" to tell process \"QuartzHub\" to get position of $project_window" | tr -d ,)
+          wx=$(( $1 + 600 )); wy=$(( $2 + 20 ))
+          set --
+          # Let go over the window's title bar, which takes no drop: not over another app.
+          drag_hold $rx $ry $rx $(( (hy + ly) / 2 )) 5 $wx $wy
+          sleep 4
+          shoot $name
+          wait
+          sleep 2
+          continue
         fi
         # A form chosen: the step "Felder"; the preview goes to a page that embeds it. Back to the
         # first step whatever the window remembered, then one on.
