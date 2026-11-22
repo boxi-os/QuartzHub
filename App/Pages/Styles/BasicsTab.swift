@@ -28,6 +28,7 @@ struct BasicsTab: View {
   @State private var importSlot = ""
   @State private var importing = false
   @State private var importMessage: String?
+  @State private var held = FontService.Held()
 
   static let slots = ["header", "body", "code"]
   static let fontVariable = ["header": "headerFont", "body": "bodyFont", "code": "codeFont"]
@@ -41,10 +42,9 @@ struct BasicsTab: View {
     SettingsForm {
       themeBanner
       fontsSection
-      deliverySection
+      themeFontsSection
+      heldSection
       fixesSection
-      importSection
-      unusedSection
       colorSections
     }
     .task(id: "\(themeId ?? "")|\(savedRound)") { await reloadFaces() }
@@ -94,18 +94,69 @@ struct BasicsTab: View {
 
   // MARK: Fonts
 
-  private var fontsSection: some View {
-    SettingsSection(L10n.t("themeEditor.fonts"), note: fontOrigin == "local" ? L10n.t("themeEditor.localHint")
-                    : L10n.t("themeEditor.googleFontsHint", ["count": String(GoogleFontList.families.count)])) {
-      Picker(L10n.t("themeEditor.fontSource"), selection: Binding(get: { fontOrigin },
-                                                                  set: { model.setConfig(FontDelivery.withCoreFontOrigin(config, $0)) })) {
-        Text(L10n.t("themeEditor.googleFonts")).tag("googleFonts")
-        Text(L10n.t("themeEditor.local")).tag("local")
-        if fontOrigin != "googleFonts" && fontOrigin != "local" { Text(verbatim: fontOrigin).tag(fontOrigin) }
+  /// One choice, three ways, over two settings underneath: Quartz's `fontOrigin` (Google or the
+  /// project's own files) and whether QuartzHub fetches Google's files into the project (the draft's
+  /// `cdnCaching: false`, with the Fonts plugin's and the built-in's origins to match). Two
+  /// controls for it read as if fetched fonts were not the project's own files (user, 2026-11-22).
+  private var fontWay: String {
+    switch fontOrigin {
+    case "local": "project"
+    case "googleFonts": theme["cdnCaching"] == .bool(false) ? "fetched" : "google"
+    default: fontOrigin
+    }
+  }
+
+  private func setFontWay(_ way: String) {
+    switch way {
+    case "fetched", "google":
+      model.setConfig(FontDelivery.withSelfHostedFonts(FontDelivery.withCoreFontOrigin(config, "googleFonts"), way == "fetched", model.features))
+    case "project":
+      model.setConfig(FontDelivery.withCoreFontOrigin(config, "local"))
+    default:
+      break
+    }
+  }
+
+  private var fontWayNote: String? {
+    let count = String(GoogleFontList.families.count)
+    switch fontWay {
+    case "fetched": return L10n.t("themeEditor.fontWay.fetchedNote", ["count": count])
+    case "google": return L10n.t("themeEditor.fontWay.googleNote", ["count": count])
+    case "project": return L10n.t("themeEditor.fontWay.projectNote")
+    default: return nil
+    }
+  }
+
+  /// What else loads fonts besides the chosen way: an old Fonts plugin or a built-in origin someone
+  /// wrote by hand. The theme has its own section.
+  private var otherLoaders: [FontDelivery.Loader] {
+    FontDelivery.loaders(config, model.features).filter { loader in
+      guard loader.via != "theme" else { return false }
+      switch fontWay {
+      case "fetched": return !(loader.via == "core" && loader.mode == "selfHosted")
+      case "google": return !((loader.via == "core" || loader.via == "builtin") && loader.mode == "google")
+      default: return true
       }
+    }
+  }
+
+  private var fontsSection: some View {
+    SettingsSection(L10n.t("themeEditor.fonts"), note: fontWayNote) {
+      Picker(L10n.t("themeEditor.fontWay.label"), selection: Binding(get: { fontWay }, set: setFontWay)) {
+        Text(L10n.t("themeEditor.fontWay.fetched")).tag("fetched")
+        Text(L10n.t("themeEditor.fontWay.google")).tag("google")
+        Text(L10n.t("themeEditor.fontWay.project")).tag("project")
+        if !["fetched", "google", "project"].contains(fontWay) { Text(verbatim: fontWay).tag(fontWay) }
+      }
+      .pickerStyle(.radioGroup)
       .accessibilityIdentifier("styles.fontSource")
+      ForEach(otherLoaders, id: \.self) { loader in
+        Text(Self.loaderText(loader)).font(.callout)
+          .foregroundStyle(loader.mode == "google" ? AnyShapeStyle(.orange) : AnyShapeStyle(.secondary))
+      }
       ForEach(Self.slots, id: \.self) { slot in fontField(slot) }
       if model.features.fontsBuiltin { builtinFields }
+      fontStateWarnings
     }
   }
 
@@ -271,26 +322,12 @@ struct BasicsTab: View {
     Callout(.warning, text)
   }
 
-  // MARK: Where the fonts come from
+  // MARK: What the chosen way still lacks
 
-  /// One question for the user, two settings underneath: Quartz's own `cdnCaching` and the Fonts
-  /// plugin's `fontOrigin`. Both are reported and both are flipped together.
-  private var deliverySection: some View {
-    let loaders = FontDelivery.loaders(config, model.features)
-    let google = FontDelivery.callsGoogle(config, model.features)
+  /// Under the fields: what the chosen way still lacks, and the base URL Quartz's own download needs.
+  @ViewBuilder private var fontStateWarnings: some View {
     let state = FontDelivery.buildState(config, faces: faces, built: built, features: model.features)
-    return SettingsSection(L10n.t("themeEditor.delivery.heading"), note: L10n.t("themeEditor.delivery.description")) {
-      VStack(alignment: .leading, spacing: 2) {
-        if loaders.isEmpty { Note(L10n.t("styleEditor.current.noLoader")) }
-        ForEach(loaders, id: \.self) { loader in
-          Text(Self.loaderText(loader)).font(.callout)
-            .foregroundStyle(loader.mode == "google" ? AnyShapeStyle(.orange) : AnyShapeStyle(.secondary))
-        }
-      }
-      Toggle(L10n.t("themeEditor.delivery.selfHost"), isOn: Binding(
-        get: { loaders.contains { $0.mode == "selfHosted" } && !google },
-        set: { model.setConfig(FontDelivery.withSelfHostedFonts(config, $0, model.features)) }))
-        .accessibilityIdentifier("styles.selfHost")
+    Group {
       if case .notBuilt? = state { warning(L10n.t("styleEditor.current.fontsNotBuilt")) }
       if case .missing(let families)? = state {
         warning(L10n.t("styleEditor.current.fontsMissingFromBuild", ["families": families.joined(separator: ", ")]))
@@ -318,18 +355,23 @@ struct BasicsTab: View {
       if case .noRule(let families)? = state {
         warning(L10n.t("styleEditor.current.fontsNoRule", ["families": families.joined(separator: ", ")]))
       }
-      // Its own control: there is no option to serve the theme's fonts locally, so the only way to
-      // stop the requests to unpkg is to drop them, which changes how the site looks.
-      if FontDelivery.themeFontsEnabled(config) || FontDelivery.hasTheme(config) {
-        let on = FontDelivery.themeFontsEnabled(config)
-        Toggle(L10n.t("themeEditor.delivery.themeFonts"), isOn: Binding(get: { on }, set: { model.setConfig(FontDelivery.withThemeFonts(config, $0)) }))
-        Note(on ? L10n.t("themeEditor.delivery.themeFontsHint") : L10n.t("themeEditor.delivery.themeFontsOff"))
-      }
       // Only Quartz's core downloading the Google fonts stops a build without a base URL (measured on
       // 5.2; quartz-fonts has not needed it since 1.0.1): as the file is now, or as saving writes it.
       if ProjectAttention.baseUrl(config).isEmpty && (model.configOnDisk.map(FontDelivery.coreDownloadsGoogleFonts) == true
                                                        || FontDelivery.coreDownloadsGoogleFonts(FontDelivery.persist(config))) {
         Callout(.error, L10n.t("themeEditor.delivery.baseUrlMissing"))
+      }
+    }
+  }
+
+  /// Its own control: there is no option to fetch the theme's fonts into the project, so the only
+  /// way to stop the requests to unpkg is to drop them, which changes how the site looks.
+  @ViewBuilder private var themeFontsSection: some View {
+    if FontDelivery.themeFontsEnabled(config) || FontDelivery.hasTheme(config) {
+      let on = FontDelivery.themeFontsEnabled(config)
+      SettingsSection(L10n.t("themeEditor.themeFonts.heading"),
+                      note: on ? L10n.t("themeEditor.delivery.themeFontsHint") : L10n.t("themeEditor.delivery.themeFontsOff")) {
+        Toggle(L10n.t("themeEditor.delivery.themeFonts"), isOn: Binding(get: { on }, set: { model.setConfig(FontDelivery.withThemeFonts(config, $0)) }))
       }
     }
   }
@@ -414,12 +456,61 @@ struct BasicsTab: View {
     }
   }
 
-  // MARK: A font file of one's own
+  // MARK: The project's font files
 
-  private var importSection: some View {
-    SettingsSection(L10n.t("themeEditor.localFontHeading"), note: L10n.t("themeEditor.localFontDescription")) {
+  /// Fetched and imported apart, because they behave apart: QuartzHub replaces what it fetched when
+  /// the choice changes, and an imported family stays until it is removed (only once nothing names
+  /// it: a family can be named in ways the search does not see, so nothing goes by itself).
+  private var heldSection: some View {
+    SettingsSection(L10n.t("themeEditor.heldFonts.heading"), note: L10n.t("themeEditor.heldFonts.description")) {
+      if held.fetched.isEmpty && held.imported.isEmpty { Note(L10n.t("themeEditor.heldFonts.none")) }
+      if !held.fetched.isEmpty {
+        heldGroup(L10n.t("themeEditor.heldFonts.fetched"), held.fetched, removable: false)
+      }
+      if !held.imported.isEmpty {
+        heldGroup(L10n.t("themeEditor.heldFonts.imported"), held.imported, removable: true)
+      }
+      if let unusedError { Callout(.error, unusedError) }
+      importControls
+      if let importMessage { Note(importMessage).textSelection(.enabled) }
+    }
+  }
+
+  private func heldGroup(_ title: String, _ families: [FontService.Unused], removable: Bool) -> some View {
+    VStack(alignment: .leading, spacing: 6) {
+      Text(title).font(.callout.weight(.semibold)).foregroundStyle(.secondary)
+        .accessibilityAddTraits(.isHeader)
+      ForEach(families, id: \.family) { font in
+        HStack(alignment: .firstTextBaseline) {
+          Text(font.family)
+          Spacer()
+          Text(L10n.t("themeEditor.heldFonts.files", ["count": String(font.files.count)], count: font.files.count))
+            .font(.callout).foregroundStyle(.secondary)
+            .help(font.files.joined(separator: ", "))
+          if removable {
+            if let unusedFont = unused.first(where: { $0.family == font.family }) {
+              Button(role: .destructive) {
+                Task { await remove(unusedFont) }
+              } label: {
+                Label(removing == font.family ? L10n.t("themeEditor.unusedFonts.removing") : L10n.t("common.removeNamed", ["name": font.family]),
+                      systemImage: "trash")
+              }
+              .labelStyle(.iconOnly)
+              .buttonStyle(.borderless)
+              .disabled(removing != nil)
+            } else {
+              Text(L10n.t("themeEditor.heldFonts.inUse")).font(.callout).foregroundStyle(.secondary)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder private var importControls: some View {
+    Group {
       if pendingFont == nil {
-        Button(L10n.t("themeEditor.localFontPick")) { pick() }
+        Button(L10n.t("themeEditor.heldFonts.import")) { pick() }
           .accessibilityIdentifier("styles.fontImport")
       } else {
         TextField(L10n.t("themeEditor.localFontFamily"), text: $importFamily)
@@ -434,7 +525,6 @@ struct BasicsTab: View {
             .disabled(importing || StylesModel.trim(importFamily).isEmpty)
         }
       }
-      if let importMessage { Note(importMessage).textSelection(.enabled) }
     }
   }
 
@@ -476,38 +566,6 @@ struct BasicsTab: View {
       importSlot = ""
     } catch {
       importMessage = StylesModel.message(error)
-    }
-  }
-
-  // MARK: Fonts nothing names any more
-
-  /// Offered one by one and never removed by itself: a family can be named in ways the search
-  /// does not see.
-  @ViewBuilder private var unusedSection: some View {
-    if !unused.isEmpty {
-      SettingsSection(L10n.t("themeEditor.unusedFonts.heading"), note: L10n.t("themeEditor.unusedFonts.description")) {
-        ForEach(unused, id: \.family) { font in
-          HStack {
-            VStack(alignment: .leading, spacing: 2) {
-              Text(font.family)
-              Text(font.files.isEmpty ? L10n.t("themeEditor.unusedFonts.noFile") : font.files.joined(separator: ", "))
-                .font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle)
-                .help(font.files.joined(separator: ", "))
-            }
-            Spacer()
-            Button(role: .destructive) {
-              Task { await remove(font) }
-            } label: {
-              Label(removing == font.family ? L10n.t("themeEditor.unusedFonts.removing") : L10n.t("common.removeNamed", ["name": font.family]),
-                    systemImage: "trash")
-            }
-            .labelStyle(.iconOnly)
-            .buttonStyle(.borderless)
-            .disabled(removing != nil)
-          }
-        }
-        if let unusedError { Callout(.error, unusedError) }
-      }
     }
   }
 
@@ -617,6 +675,7 @@ struct BasicsTab: View {
     let read = await Task.detached { (SiteFonts.faces(project: path, themeId: theme), SiteFonts.previewFonts(project: path, families: []).built) }.value
     faces = read.0
     built = read.1
+    held = (try? await Task.detached { try FontService.heldFonts(project: path) }.value) ?? FontService.Held()
   }
 
   private func reloadUnused() async {

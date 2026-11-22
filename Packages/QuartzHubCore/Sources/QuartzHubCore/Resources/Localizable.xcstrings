@@ -56280,13 +56280,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keine @font-face-Regel im Projekt nennt {{families}}, Besucher sehen die Schrift nur, wenn sie bei ihnen installiert ist. Sonst importiere die Datei unten oder wähle Google Fonts als Font-Quelle."
+            "value" : "Keine @font-face-Regel im Projekt nennt {{families}}, Besucher sehen die Schrift nur, wenn sie bei ihnen installiert ist. Importiere die Datei unter „Schriftdateien im Projekt“ oder hole die Schrift von Google."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No @font-face rule in the project names {{families}}, so visitors only see it if it is installed on their machine. Otherwise import the file below or pick Google Fonts as the font source."
+            "value" : "No @font-face rule in the project names {{families}}, so visitors only see it if it is installed on their machine. Import the file under “Font files in the project” or fetch the font from Google."
           }
         }
       }
@@ -63812,13 +63812,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oberflächenschrift und Schrift je Überschrift lädt Quartz nicht von Google. Sie wirken, wenn QuartzHub die Schriften lokal ausliefert oder die Schrift auf dem Gerät installiert ist."
+            "value" : "Oberflächenschrift und Schrift je Überschrift lädt Quartz nicht von Google. Sie wirken, wenn die Schriften ins Projekt geholt werden oder die Schrift auf dem Gerät installiert ist."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quartz does not load the interface font and the per-heading fonts from Google. They take effect when QuartzHub serves the fonts locally or the font is installed on the device."
+            "value" : "Quartz does not load the interface font and the per-heading fonts from Google. They take effect when the fonts are fetched into the project or the font is installed on the device."
           }
         }
       }
@@ -64158,13 +64158,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Theme lädt seine eigenen Schriften von unpkg.com, lokal ausliefern kann QuartzHub sie nicht. Ausgeschaltet fallen sie weg, und es gelten die Schriftarten von oben."
+            "value" : "Das Theme lädt seine eigenen Schriften von unpkg.com; ins Projekt holen kann QuartzHub sie nicht. Ausgeschaltet fallen sie weg, und es gelten die Schriften von oben."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The theme loads its own fonts from unpkg.com, and QuartzHub cannot serve them locally. Turned off, they are dropped and the fonts chosen above apply."
+            "value" : "The theme loads its own fonts from unpkg.com, and QuartzHub cannot fetch them into the project. Turned off, they are dropped and the fonts chosen above apply."
           }
         }
       }
@@ -64517,6 +64517,139 @@
         }
       }
     },
+    "themeEditor.fontWay.fetched" : {
+      "comment" : "Styles ▸ Basics, Fonts: choice, QuartzHub fetches Google's files and the site serves them",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Fonts, ins Projekt geholt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Fonts, fetched into the project"
+          }
+        }
+      }
+    },
+    "themeEditor.fontWay.fetchedNote" : {
+      "comment" : "Styles ▸ Basics, Fonts: note under the choice 'fetched into the project'",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub holt die Dateien beim Speichern von Google ins Projekt, und die Website liefert sie selbst aus, ohne Aufruf bei Google. Die Felder bieten alle {{count}} Google Fonts an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When you save, QuartzHub fetches the files from Google into the project, and the site serves them itself without calling Google. The fields offer all {{count}} Google Fonts."
+          }
+        }
+      }
+    },
+    "themeEditor.fontWay.google" : {
+      "comment" : "Styles ▸ Basics, Fonts: choice, visitors load the fonts from Google",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Fonts, direkt von Google"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Fonts, straight from Google"
+          }
+        }
+      }
+    },
+    "themeEditor.fontWay.googleNote" : {
+      "comment" : "Styles ▸ Basics, Fonts: note under the choice 'straight from Google'",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besucher laden die Schriften bei jedem Aufruf der Website von Google. Die Felder bieten alle {{count}} Google Fonts an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visitors load the fonts from Google every time they open the site. The fields offer all {{count}} Google Fonts."
+          }
+        }
+      }
+    },
+    "themeEditor.fontWay.label" : {
+      "comment" : "Styles ▸ Basics, Fonts: label of the three-way choice",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woher kommen die Schriften?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where do the fonts come from?"
+          }
+        }
+      }
+    },
+    "themeEditor.fontWay.project" : {
+      "comment" : "Styles ▸ Basics, Fonts: choice, nothing is fetched, imported files only",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur Schriftdateien des Projekts"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only the project's font files"
+          }
+        }
+      }
+    },
+    "themeEditor.fontWay.projectNote" : {
+      "comment" : "Styles ▸ Basics, Fonts: note under the choice 'only the project's font files'",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es wird nichts geholt. Die Felder bieten die Schriften an, deren Dateien im Projekt liegen; weitere importierst du unter „Schriftdateien im Projekt“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing is fetched. The fields offer the fonts whose files are in the project; you import more under “Font files in the project”."
+          }
+        }
+      }
+    },
     "themeEditor.fonts" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -64641,6 +64774,182 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "same as headings"
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.description" : {
+      "comment" : "Styles ▸ Basics, Font files in the project: section note",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von Google geholte Dateien tauscht QuartzHub aus, sobald du eine andere Schrift wählst. Selbst importierte bleiben, bis du sie entfernst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub replaces files fetched from Google as soon as you choose another font. Imported ones stay until you remove them."
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.fetched" : {
+      "comment" : "Styles ▸ Basics, Font files in the project: group heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von Google geholt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fetched from Google"
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.files" : {
+      "comment" : "Styles ▸ Basics, Font files in the project: file count of a family",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Datei"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Dateien"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} file"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} files"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.heading" : {
+      "comment" : "Styles ▸ Basics: section listing fetched and imported font files",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriftdateien im Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Font files in the project"
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.import" : {
+      "comment" : "Styles ▸ Basics, Font files in the project: button opening the file picker",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriftdatei importieren…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import a font file…"
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.imported" : {
+      "comment" : "Styles ▸ Basics, Font files in the project: group heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selbst importiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imported"
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.inUse" : {
+      "comment" : "Styles ▸ Basics, Font files in the project: an imported family something still names, so it cannot be removed",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in Verwendung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in use"
+          }
+        }
+      }
+    },
+    "themeEditor.heldFonts.none" : {
+      "comment" : "Styles ▸ Basics, Font files in the project: empty state",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Schriftdateien im Projekt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No font files in the project yet."
           }
         }
       }
@@ -65082,6 +65391,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Heading {{level}}"
+          }
+        }
+      }
+    },
+    "themeEditor.themeFonts.heading" : {
+      "comment" : "Styles ▸ Basics: section with the community theme's own fonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriften des Themes"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme fonts"
           }
         }
       }

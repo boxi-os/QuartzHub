@@ -257,6 +257,28 @@ import Testing
     }
   }
 
+  /// What Styles ▸ Basics lists as the project's font files: fetched and imported apart, a family
+  /// once with each of its files once, a rule without a local file with none.
+  @Test func heldFontsByWhereTheyCameFrom() throws {
+    let project = "\(scratch.path)/held"
+    try Posix.mkdirs("\(project)/quartz/styles")
+    #expect(try FontService.heldFonts(project: project) == FontService.Held())
+    func rule(_ family: String, _ url: String, _ weight: Int) -> String {
+      "@font-face { font-family: '\(family)'; font-weight: \(weight); src: url(\(url)) format('woff2'); }"
+    }
+    try StyleSheets.writeManagedBlocksNow([
+      "google-fonts": "/* https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap */\n"
+        + [rule("Noto Sans", "static/fonts/a.woff2", 400), rule("Noto Sans", "static/fonts/b.woff2", 700),
+           rule("Noto Sans", "static/fonts/a.woff2", 400), rule("Roboto Condensed", "static/fonts/kit-1.woff2", 400)].joined(separator: "\n"),
+      "fonts": [rule("Hausschrift", "static/fonts/Haus-Regular.woff2", 400), rule("Fern", "https://example.org/fern.woff2", 400)].joined(separator: "\n")
+    ], project: project)
+    let held = try FontService.heldFonts(project: project)
+    #expect(held.fetched == [FontService.Unused(family: "Noto Sans", files: ["a.woff2", "b.woff2"]),
+                             FontService.Unused(family: "Roboto Condensed", files: ["kit-1.woff2"])])
+    #expect(held.imported == [FontService.Unused(family: "Hausschrift", files: ["Haus-Regular.woff2"]),
+                              FontService.Unused(family: "Fern", files: [])])
+  }
+
   /// The golden answers with QuartzControl's texts rendered from the catalog.
   static func rendered(_ value: JSONValue) -> JSONValue {
     switch value {

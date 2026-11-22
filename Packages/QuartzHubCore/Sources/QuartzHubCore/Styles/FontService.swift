@@ -225,6 +225,37 @@ public struct FontService: Sendable {
     public var files: [String]
   }
 
+  /// The font files a project holds, by where they came from: `fetched` from Google (the
+  /// `google-fonts` block, which QuartzHub rewrites when the choice changes) and `imported` (the
+  /// `fonts` block, which stays until it is removed). Families in the order of their rules, each
+  /// with the file names its rules point at under quartz/static/fonts.
+  public struct Held: Equatable, Sendable {
+    public var fetched: [Unused] = []
+    public var imported: [Unused] = []
+    public init(fetched: [Unused] = [], imported: [Unused] = []) {
+      self.fetched = fetched
+      self.imported = imported
+    }
+  }
+
+  public static func heldFonts(project: String) throws -> Held {
+    let sources = try StyleSheets.readSources(project: project)
+    let dir = NodePath.normalize(FontFaces.projectFontsDirectory(project))
+    func families(_ block: String) -> [Unused] {
+      var out: [Unused] = []
+      for face in FontFaces.parse(StyleSheets.managedBody(sources, block) ?? "") {
+        let file = FontFaces.fileIn(dir, face.url).map(NodePath.basename)
+        if let index = out.firstIndex(where: { $0.family == face.family }) {
+          if let file, !out[index].files.contains(file) { out[index].files.append(file) }
+        } else {
+          out.append(Unused(family: face.family, files: file.map { [$0] } ?? []))
+        }
+      }
+      return out
+    }
+    return Held(fetched: families("google-fonts"), imported: families("fonts"))
+  }
+
   /// The families of the `fonts` block nothing names: no typography slot (`draftFamilies` are the
   /// slots as the page shows them, unsaved included), no stylesheet under quartz/styles,
   /// quartz/components/styles or quartz/static, no variable. With the files that would go with them.
