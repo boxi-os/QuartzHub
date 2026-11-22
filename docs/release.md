@@ -12,6 +12,15 @@
 > mit „Timed out while enabling automation mode“. Holt ein anderes Fenster den Fokus (hier der Finder),
 > scheitern fast alle UI-Tests nach wenigen Sekunden; ein zweiter Lauf ohne Eingriff war grün.
 >
+> **Durchlaufen am 2026-11-22 für 1.1.0** (Tag auf 5b66373). Vorher quartz-multilanguage `v0.3.1` getaggt
+> (Punkt 4, `options.ts` unverändert, also `sameCode`); `qc-basic` und `qc-example` neu im Vorlagen-Repo (Punkt 10,
+> das Example-Projekt bekam dafür `content.scss` und `foundation.scss` der Grundvorlage). Aufgefallen: Der Export des
+> Handbuchs brach ab, weil 5.7 vier Aufnahmen einband, die nie gemacht waren („Bilder, die nicht geladen haben“), gut so.
+> Die Aufnahmen scheiterten zuerst still: `click at` von System Events ließ einen `Fold` zu, ein über die Bedienungshilfen
+> gesetzter Wert erreichte das Suchfeld nicht; `handbook-shots.sh` nimmt dafür jetzt echte Maus- und Tastenereignisse.
+> `public/` von QuartzHub-Web hielt 28 Dateien eines Builds ohne `index.html` (vom Quartz-5.2-Update), QuartzHub fragte
+> vor dem Leeren.
+>
 > Aufgefallen 2026-11-14: QuartzHub-Web hatte weder `origin` noch ein Ziel „GitHub Pages“ (Punkt 9);
 > der installierte QuartzHub fragte beim ersten Zugriff auf den GitHub-Zugang nach dem Schlüsselbund
 > („Immer erlauben“); „Jetzt veröffentlichen“ wird erst nach einem Build oder Diff aktiv; das
@@ -66,6 +75,9 @@ eine andere Fassung bekommt in jeder Zeile den Hinweis, die Angaben könnten abw
 Ein Commit nach dem Tag, der nur Tests, README oder `AGENTS.md` ändert, braucht keine Fassung, solange
 er gepusht ist. Eine neue Fassung mit geändertem `src` heißt: den Editor gegen sie lesen und
 `readAgainst` heben, sonst `sameCode` ergänzen.
+
+**Stand 2026-11-22 (1.1.0):** layout-box `v0.4.2` (+4), multilanguage `v0.3.1`, navigations `v0.7.0`, forms `v0.7.0`;
+App liest 0.4.2, 0.3.0 (0.3.1 gleicher Code), 0.6.0 (bis 0.7.0 gleicher Code), 0.6.0 (0.6.1, 0.7.0 gleicher Code).
 
 **Stand 2026-11-17 (1.0.3):** layout-box `v0.4.2` (+4: README, LICENSE), multilanguage `v0.3.0` (+2: README),
 navigations `v0.5.1`, forms `v0.6.1`; App liest 0.4.2, 0.3.0, 0.5.1, 0.6.0
