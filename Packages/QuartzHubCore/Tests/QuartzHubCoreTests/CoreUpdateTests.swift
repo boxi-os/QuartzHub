@@ -343,9 +343,42 @@ import Testing
     #expect(CoreUpdate.Deadlines().lsRemote == .seconds(20))
   }
 
-  /// The two names are a format both apps read on the same disk.
-  @Test func namesAreQuartzControls() {
-    #expect(CoreUpdate.stashName == "QuartzControl: core update")
-    #expect(CoreUpdate.mergeMessage == "Merge quartz-upstream (via QuartzControl)")
+  /// QuartzHub's names since 1.1; QuartzControl's are still its own, and only `.branchHead` writes them.
+  @Test func namesAreQuartzHubsAndQuartzControlsAreKnown() {
+    let release = CoreUpdate.Release(tag: "v5.2.0", commit: "5680044", version: "5.2.0")
+    #expect(CoreUpdate.mergeMessage(release) == "Merge Quartz 5.2.0 (via QuartzHub)")
+    #expect(CoreUpdate.mergeMessage(nil) == "Merge quartz-upstream (via QuartzControl)")
+    #expect(CoreUpdate.stashName == "QuartzHub: core update")
+    #expect(CoreUpdate.isOwnMergeSubject("Merge Quartz 5.2.0 (via QuartzHub)"))
+    #expect(CoreUpdate.isOwnMergeSubject("Merge quartz-upstream (via QuartzControl)"))
+    #expect(!CoreUpdate.isOwnMergeSubject("Merge branch 'v5' of github.com:jackyzha0/quartz"))
+    #expect(!CoreUpdate.isOwnMergeSubject("Merge quartz-upstream"))
+    #expect(CoreUpdate.isOwnStash("On v5: QuartzHub: core update 5680044"))
+    #expect(CoreUpdate.isOwnStash("On v5: QuartzControl: core update 7cfb079"))
+    #expect(!CoreUpdate.isOwnStash("WIP on v5: 7cfb079 Notes"))
+  }
+
+  /// A release that does not fast-forward is merged under its own name; a stash entry QuartzControl
+  /// left behind is still found as the app's, one of the user's is not.
+  @Test func aReleaseIsMergedUnderItsNameAndBothStashNamesAreKnown() async throws {
+    let harness = try Harness()
+    let commits = try await releaseUpstream(harness)
+    let service = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in "snap" }, templateRepository: harness.path("up"))
+    let project = try await project(harness, at: commits["c50"]!, "p")
+    try SnapshotStoreTests.Harness.write("\(project)/own.txt", "own")
+    _ = await harness.git(["add", "own.txt"], project)
+    _ = await harness.git(["commit", "-qm", "own"], project)
+
+    let result = try await service.run(project: project)
+    #expect(result.success, "\(result.output)")
+    #expect(JS.trim(await harness.git(["log", "-1", "--format=%s"], project).stdout) == "Merge Quartz 5.1.0 (via QuartzHub)")
+    #expect(JS.trim(await harness.git(["log", "-1", "--format=%P"], project).stdout).contains(commits["c51"]!))
+
+    try SnapshotStoreTests.Harness.write("\(project)/own.txt", "changed")
+    _ = await harness.git(["stash", "push", "-m", "QuartzControl: core update \(commits["c51"]!)", "--", "own.txt"], project)
+    #expect(await service.stashEntry(project) == "stash@{0}")
+    try SnapshotStoreTests.Harness.write("\(project)/own.txt", "foreign")
+    _ = await harness.git(["stash", "push", "-m", "something of the user's", "--", "own.txt"], project)
+    #expect(await service.stashEntry(project) == "stash@{1}", "the user's entry is not the app's")
   }
 }

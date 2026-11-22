@@ -15,8 +15,10 @@ import Synchronization
 /// - A note in `.quartz-gui/core-update.json` holds what a run leaves outstanding between the
 ///   merge commit and the warm-up build, so a later run finishes it instead of saying "Already up
 ///   to date".
-/// - The stash name and the merge message are QuartzControl's, word for word: both apps open the
-///   same projects, and each recognises the other's leftovers by them.
+/// - The stash name and the merge message are QuartzHub's own since 1.1, the message with the
+///   release it brings ("Merge Quartz 5.2.0 (via QuartzHub)"); QuartzControl's names are still
+///   recognised, because projects carry its merge commits and may carry its stash entries
+///   (decisions/phase-5-gleichstand.md, "Merge-Betreff"). `.branchHead` writes QuartzControl's.
 /// - **Releases, not the branch** (decisions/phase-5-gleichstand.md, "Kern aus Releases"): the
 ///   update goes to Quartz's newest release of the project's major version, the tag `vX.Y.Z`, not
 ///   to the newest commit of its default branch as in QuartzControl. `.branchHead` is
@@ -89,8 +91,27 @@ public final class CoreUpdate: Sendable {
     self.deadlines = deadlines
   }
 
-  static let stashName = "QuartzControl: core update"
-  static let mergeMessage = "Merge quartz-upstream (via QuartzControl)"
+  static let stashName = "QuartzHub: core update"
+  static let quartzControlStashName = "QuartzControl: core update"
+  static let quartzControlMergeMessage = "Merge quartz-upstream (via QuartzControl)"
+
+  /// The merge commit's subject: the release it brings, or QuartzControl's for the branch.
+  static func mergeMessage(_ release: Release?) -> String {
+    release.map { "Merge Quartz \($0.version) (via QuartzHub)" } ?? quartzControlMergeMessage
+  }
+
+  /// The name this run gives its stash entry: QuartzControl's for its way, `.branchHead`.
+  var writtenStashName: String { target == .branchHead ? Self.quartzControlStashName : Self.stashName }
+
+  /// Whether a stash entry is either app's own.
+  static func isOwnStash(_ subject: String) -> Bool {
+    JSText.includes(subject, stashName) || JSText.includes(subject, quartzControlStashName)
+  }
+
+  /// Whether a commit subject is either app's merge commit.
+  static func isOwnMergeSubject(_ subject: String) -> Bool {
+    subject == quartzControlMergeMessage || (subject.hasPrefix("Merge Quartz ") && subject.hasSuffix(" (via QuartzHub)"))
+  }
   static let npmOwnedFiles = ["package.json", "package-lock.json"]
 
   // MARK: git
@@ -326,12 +347,12 @@ public final class CoreUpdate: Sendable {
     let mergeRef = release != nil && !mergeCommit.isEmpty ? mergeCommit : "FETCH_HEAD"
 
     return try await ContentFolder.withSymlinkParked(project: project) {
-      try await self.merge(project, mergeCommit: mergeCommit, mergeRef: mergeRef, snapshotId: snapshotId)
+      try await self.merge(project, mergeCommit: mergeCommit, mergeRef: mergeRef, message: Self.mergeMessage(release), snapshotId: snapshotId)
     }
   }
 
   // swiftlint:disable:next function_body_length
-  func merge(_ project: String, mergeCommit: String, mergeRef: String = "FETCH_HEAD", snapshotId: String?) async throws -> Result {
+  func merge(_ project: String, mergeCommit: String, mergeRef: String, message: String, snapshotId: String?) async throws -> Result {
     let plan = await planPackageFiles(project)
     let pending = readPendingInstall(project)
     let noteOverruled = await listTakenInHand(project, pending)
@@ -349,7 +370,7 @@ public final class CoreUpdate: Sendable {
     }
 
     let headBefore = trimmedStdout(await git(project, ["rev-parse", "HEAD"]))
-    let merge = await git(project, ["merge", mergeRef, "-m", Self.mergeMessage], env: textVariables)
+    let merge = await git(project, ["merge", mergeRef, "-m", message], env: textVariables)
     var mergeOutput = merge.output
     var ourMergeCommit = false
     if !merge.success {
@@ -440,7 +461,7 @@ public final class CoreUpdate: Sendable {
     var resuming = false
     if !ourMergeCommit && !pendingFor.isEmpty && pendingFor == headAfter {
       let subject = await headSubject(project)
-      if subject == Self.mergeMessage { resuming = !(await headIsPushed(project)) }
+      if Self.isOwnMergeSubject(subject) { resuming = !(await headIsPushed(project)) }
     }
     // Both halves: the note's account of the files before the merge, and this run's own measure.
     var amendWorth = (ourMergeCommit || resuming) && filesAtHead && npmFilesAtHead && !tracked.isEmpty

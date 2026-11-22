@@ -1480,7 +1480,8 @@ wie QuartzControl:
   84 Texte und Listen (aus dem Bündel freigelegt).
 - **Keine Abweichung im Verhalten.** Stash-Name („QuartzControl: core update“) und Merge-Betreff
   („Merge quartz-upstream (via QuartzControl)“) bleiben wörtlich: Beide Apps öffnen dieselben
-  Projekte und erkennen die Reste der anderen daran. Zwei Sätze des Katalogs sagen jetzt QuartzHub
+  Projekte und erkennen die Reste der anderen daran (bis 2026-11-22; seitdem QuartzHubs eigene Namen,
+  die alten werden erkannt: phase-5-gleichstand.md, „Merge-Betreff“). Zwei Sätze des Katalogs sagen jetzt QuartzHub
   (`updateStashFitsHead`, `updateStashFitsHeadBesides`). Klein: Maschinenantworten aus stdout wie
   in 7a/7b; der Satz einer Notiz, die sich nicht schreiben ließ, nennt den Fehler in Swifts Worten.
 - **Im Golden gesehen, nicht im Code:** Die Sätze eines abgelehnten Abbruchs teilt QuartzControl an
@@ -1527,7 +1528,7 @@ wie QuartzControl:
 
 Offen bleiben, je einzeln zu fragen (vom Nutzer auf später gelegt): der Push zu GitHub mit Token,
 ein echtes Core-Update gegen jackyzha0/quartz mit echtem npm. Stash-Name und Merge-Betreff bleiben
-QuartzControls Wortlaut (Nutzer, 2026-11-06). Danach der Durchgang zu NFD (siehe Snapshot-Speicher).
+QuartzControls Wortlaut (Nutzer, 2026-11-06; geändert 2026-11-22, phase-5-gleichstand.md, „Merge-Betreff“). Danach der Durchgang zu NFD (siehe Snapshot-Speicher).
 
 ## Durchgang zu NFD: Pfade als Text (Nutzer, 2026-11-06: Weg A)
 

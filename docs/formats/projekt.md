@@ -641,7 +641,10 @@ Langfassung vor Änderungen lesen (`docs/decisions/conventions-full.md`, Abschni
   `https://github.com/jackyzha0/quartz.git` anlegen, falls fehlt (in `.git/config`; gegengelesen
   gui-test/Example); `git fetch quartz-upstream HEAD` mit Frist; die verfolgten npm-Dateien (`git
   ls-files`) per `git stash push -m <stashMessage(mergeCommit)> -- …` beiseite; `git merge FETCH_HEAD
-  -m 'Merge quartz-upstream (via QuartzControl)'` (`:472`), Content-Symlink geparkt. Konflikte nur in den
+  -m 'Merge quartz-upstream (via QuartzControl)'` (`:472`), Content-Symlink geparkt. QuartzHub seit 1.1:
+  `fetch --no-tags … refs/tags/<tag>`, gemerged wird der Commit des Releases, Betreff „Merge Quartz <version>
+  (via QuartzHub)“, Stash „QuartzHub: core update <sha>“; QuartzControls Namen erkennt es weiter
+  (decisions/phase-5-gleichstand.md, „Kern aus Releases“, „Merge-Betreff“). Konflikte nur in den
   npm-Dateien → `git checkout --theirs`, nicht verfolgte → `git rm --cached --force`, `git add`, `git
   commit --no-edit`.
 - Danach `npm install --save-<sektion> name@range …` je Sektion (`reinstallCommands`, `:122`) für das, was

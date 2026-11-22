@@ -2887,8 +2887,8 @@ kommt es überall heraus. Drei Fragen, drei Antworten:
   sagen „eine ältere Fassung“. Die Übernahme des Nutzers war am 2026-11-11 gelaufen; sein Profil hat
   keine Zugänge mit `encryptedSecret` mehr, die Abfrage dafür fehlt also niemandem.
 - **Das Dateiformat bleibt:** die Marker `QuartzControl:managed/variables/syntax`,
-  `_quartzcontrol.scss`, `.quartz-gui/`, Stash-Name und Merge-Betreff des Kern-Updates,
-  `createdBy.app` alter Pakete und die Adresse `quartzcontrol-templates`. Sie stehen in den Projekten;
+  `_quartzcontrol.scss`, `.quartz-gui/`, Stash-Name und Merge-Betreff des Kern-Updates (die beiden
+  nur bis 2026-11-22, siehe „Merge-Betreff“ unter Quartz 5.2), `createdBy.app` alter Pakete und die Adresse `quartzcontrol-templates`. Sie stehen in den Projekten;
   umbenennen hieße alle umstellen, ohne Nutzen für den Leser.
 - **Im Netz:** QuartzControls Repo wird privat (damit sind Releases und Website weg), `latest.json`
   im Vorlagen-Repo wird gelöscht.
@@ -2954,7 +2954,8 @@ Projekte. Jetzt:
   (`ls-remote` auf den eigenen Ordner, kein zweiter Netzzugriff) und den Standard-Branch mit
   `reset --hard` darauf setzen: ein Branch, kein losgelöster HEAD, weil Git-Sync und Branch-Ziele
   ihn pushen. Ohne Release scheitert das Anlegen mit einem eigenen Satz.
-- **Was gleich bleibt:** Stash-Name, Merge-Betreff, Notiz und der ganze Ablauf nach dem Merge. Der
+- **Was gleich bleibt:** die Notiz und der ganze Ablauf nach dem Merge (Stash-Name und Merge-Betreff
+  seit dem Nachtrag unten, „Merge-Betreff“). Der
   Weg über den Branch bleibt als `CoreUpdate.Target.branchHead` und ist der des Abgleichs mit
   QuartzControls 85 Schritten (`replaysQuartzControlsSteps`, unverändert grün).
 
@@ -2976,6 +2977,30 @@ Tag-Objekt), Branch `v5`, „Das Kern-Update ist abgeschlossen.“, danach „Ak
 Quartz 5.2.0 (5680044) · Neuestes Release: Quartz 5.2.0 (5680044)“. Quartz' Prüfung danach meldet
 den quartz-fonts-Eintrag; „Konfiguration umstellen“ schrieb `fonts: {enabled: false}` (dazu
 „Schriften eingebaut“, „Auch wenn die Config anders kam“).
+
+### Merge-Betreff
+
+**Entschieden (Nutzer, 2026-11-22, nach der Messung oben):** Der Merge-Commit hieß in jedem Projekt
+„Merge quartz-upstream (via QuartzControl)“, auch nach dem Kern-Update in QuartzHub, und der
+Stash-Eintrag für die npm-Dateien „QuartzControl: core update <sha>“. Beides war ein Format beider
+Apps (Nutzer, 2026-11-06); seit QuartzControl eingestellt ist und aus allem heraus kam, liest es nur
+noch QuartzHub. Jetzt:
+
+- **Betreff mit Release:** „Merge Quartz 5.2.0 (via QuartzHub)“ (`CoreUpdate.mergeMessage(release)`).
+  Die Historie eines Projekts sagt damit, welches Release wann kam.
+- **Stash:** „QuartzHub: core update <sha>“.
+- **Das Alte wird weiter erkannt** (`isOwnMergeSubject`, `isOwnStash`): Projekte tragen die
+  Merge-Commits von 1.0 und vielleicht noch einen Stash-Eintrag eines abgebrochenen Laufs. Ein Lauf,
+  der einen offenen Lauf von 1.0 zu Ende bringt, darf dessen Merge-Commit weiter ergänzen (`--amend`),
+  und ein alter Eintrag wird beim Abbrechen zurückgelegt wie ein neuer.
+- **`.branchHead` schreibt QuartzControls Namen:** Der Weg über den Branch ist der des Abgleichs mit
+  QuartzControls 85 Schritten, und die Goldens tragen dessen Wortlaut (`replaysQuartzControlsSteps`,
+  unverändert grün).
+
+Tests: `namesAreQuartzHubsAndQuartzControlsAreKnown` und
+`aReleaseIsMergedUnderItsNameAndBothStashNamesAreKnown` (Merge ohne Fast-Forward auf 5.1.0, ein
+Stash-Eintrag von QuartzControl gilt als eigener, einer des Nutzers nicht). Gegenprobe: Betreff ohne
+Release und Erkennung nur des neuen Namens machen beide rot (sechs Befunde).
 
 ### Schriften eingebaut
 

@@ -100,7 +100,7 @@ extension CoreUpdate {
     case failed(output: String)
   }
 
-  func stashMessage(_ mergeCommit: String) -> String { "\(Self.stashName) \(mergeCommit)" }
+  func stashMessage(_ mergeCommit: String) -> String { "\(writtenStashName) \(mergeCommit)" }
 
   func stashRef(_ project: String) async -> String? {
     let ref = await git(project, ["rev-parse", "--verify", "--quiet", "refs/stash"])
@@ -125,7 +125,7 @@ extension CoreUpdate {
     let list = await git(project, ["stash", "list", "--format=%s"])
     guard list.success else { return nil }
     let lines = JSText.split(list.stdout, "\n")
-    for index in lines.indices where index >= from && JSText.includes(lines[index], Self.stashName) {
+    for index in lines.indices where index >= from && Self.isOwnStash(lines[index]) {
       return "stash@{\(index)}"
     }
     return nil
@@ -164,7 +164,7 @@ extension CoreUpdate {
     let subject = await topStashSubject(project)
     let head = trimmedStdout(await git(project, ["rev-parse", "HEAD"]))
     let base = await stashBase(project)
-    if !JSText.includes(subject, Self.stashName) || head.isEmpty || base != head {
+    if !Self.isOwnStash(subject) || head.isEmpty || base != head {
       let entry = await stashEntry(project)
       return StashPop(success: true, sentences: entry.map { [L10n.t("main.updateStashLeftover", ["entry": $0])] } ?? [], restored: nil, git: "")
     }
@@ -217,7 +217,7 @@ extension CoreUpdate {
     let leftover = L10n.t("main.updateStashLeftover", ["entry": entry])
     if mine { return leftover }
     let head = trimmedStdout(await git(project, ["rev-parse", "HEAD"]))
-    let ours = JSText.includes(await topStashSubject(project), Self.stashName)
+    let ours = Self.isOwnStash(await topStashSubject(project))
     if !ours || head.isEmpty { return leftover }
     if await stashBase(project) != head { return leftover }
     if !(await mergeInProgress(project)) { return L10n.t("main.updateStashFitsHead", ["entry": entry]) }
