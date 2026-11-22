@@ -13,6 +13,8 @@ struct BasicsTab: View {
   let save: () async -> Void
 
   @Environment(\.unsavedGuard) private var unsaved
+  @Environment(\.openPage) private var openPage
+  @State private var headingsOpen = false
   @State private var faces: [SiteFonts.Face] = []
   @State private var built: Bool?
   @State private var unused: [FontService.Unused] = []
@@ -103,14 +105,66 @@ struct BasicsTab: View {
       }
       .accessibilityIdentifier("styles.fontSource")
       ForEach(Self.slots, id: \.self) { slot in fontField(slot) }
+      if model.features.fontsBuiltin { builtinFields }
     }
+  }
+
+  // MARK: Quartz 5.2's own font fields
+
+  /// The interface font and one per heading level, written under `configuration.fonts` (Quartz
+  /// 5.2's built-in). Quartz loads none of them from Google; QuartzHub fetches them when it holds
+  /// the fonts (`FontDelivery.fetchedTypography`).
+  @ViewBuilder private var builtinFields: some View {
+    if FontDelivery.fontsBuiltin(config, model.features)?.enabled == true {
+      fontField("interface", label: L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle("interface")]),
+                variable: FontDelivery.builtinVariable("interface"), name: builtinFamily("interface"),
+                placeholder: L10n.t("themeEditor.interfaceFontDefault"), checkTheme: true) { setBuiltinFamily("interface", $0) }
+      let levels = FontDelivery.builtinSlots.filter { $0 != "interface" }
+      let named = levels.filter { !builtinFamily($0).isEmpty }
+      Fold(isExpanded: $headingsOpen) {
+        ForEach(levels, id: \.self) { level in
+          fontField(level, label: L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle(level)]),
+                    variable: FontDelivery.builtinVariable(level), name: builtinFamily(level),
+                    placeholder: L10n.t("themeEditor.headingFontsDefault"), checkTheme: false) { setBuiltinFamily(level, $0) }
+        }
+      } label: {
+        HStack {
+          Text(L10n.t("themeEditor.headingFonts"))
+          Spacer()
+          Text(named.map { "\(Self.slotTitle($0)): \(builtinFamily($0))" }.joined(separator: " · "))
+            .font(.callout).foregroundStyle(.secondary).lineLimit(1).truncationMode(.tail)
+        }
+      }
+      .accessibilityIdentifier("styles.headingFonts")
+      if fontOrigin != "local" && !FontDelivery.fetchesGoogleFonts(config) {
+        Note(L10n.t("themeEditor.builtinFonts.notFromGoogle"))
+      }
+    } else {
+      HStack(alignment: .firstTextBaseline) {
+        Note(L10n.t("themeEditor.builtinFonts.off"))
+        Spacer()
+        Button(L10n.t("themeEditor.builtinFonts.goToProcessing")) { openPage(.config, tab: ConfigPage.Tab.site.rawValue) }
+          .buttonStyle(.link)
+      }
+    }
+  }
+
+  private func builtinFamily(_ slot: String) -> String {
+    FontDelivery.familyOf(FontDelivery.builtinFont(config, model.features, slot))
+  }
+
+  private func setBuiltinFamily(_ slot: String, _ name: String) {
+    model.setConfig(FontDelivery.withBuiltinFont(config, slot, name))
   }
 
   private func family(_ slot: String) -> String {
     FontDelivery.familyOf(theme["typography"]?[slot])
   }
 
-  private var draftFamilies: [String] { Self.slots.map(family).filter { !$0.isEmpty } }
+  private var draftFamilies: [String] {
+    let builtin = model.features.fontsBuiltin ? FontDelivery.builtinSlots.map(builtinFamily) : []
+    return (Self.slots.map(family) + builtin).filter { !$0.isEmpty }
+  }
 
   /// The field edits the name and leaves the weights of an object entry alone.
   private func setFamily(_ slot: String, _ name: String) {
@@ -156,11 +210,18 @@ struct BasicsTab: View {
     }
   }
 
-  @ViewBuilder private func fontField(_ slot: String) -> some View {
-    let name = family(slot)
-    let label = L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle(slot)])
-    let overridden = overriddenByTheme(Self.fontVariable[slot]!)
-    let ownVariable = model.overrides.contains { $0.key == Self.fontVariable[slot]! }
+  private func fontField(_ slot: String) -> some View {
+    fontField(slot, label: L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle(slot)]), variable: Self.fontVariable[slot]!,
+              name: family(slot), placeholder: nil, checkTheme: true) { setFamily(slot, $0) }
+  }
+
+  /// `checkTheme`: whether a theme's value for `variable` can win. Not for a heading level: Quartz
+  /// writes a level set here as an unlayered `hN { font-family }` (`buildUnlayeredCSS`), which beats
+  /// the theme's layers; the interface font is only a variable in Quartz's layer.
+  @ViewBuilder private func fontField(_ slot: String, label: String, variable: String, name: String, placeholder: String?,
+                                      checkTheme: Bool, set: @escaping @MainActor @Sendable (String) -> Void) -> some View {
+    let overridden = checkTheme && overriddenByTheme(variable)
+    let ownVariable = model.overrides.contains { $0.key == variable }
     let trimmed = StylesModel.trim(name)
     // Google's CSS2 API is case-sensitive and leaves an unknown family out without a word; the list
     // is from a fixed date, so a name missing from it is worth a sentence, not a refusal, and not
@@ -170,7 +231,7 @@ struct BasicsTab: View {
     let spelledDifferently = unknownToGoogle ? GoogleFontList.families.first { $0.name.lowercased() == trimmed.lowercased() }?.name : nil
     VStack(alignment: .leading, spacing: 4) {
       LabeledContent(label) {
-        TextField(label, text: Binding(get: { name }, set: { setFamily(slot, $0) }))
+        TextField(label, text: Binding(get: { name }, set: set), prompt: placeholder.map { Text($0) })
           .labelsHidden()
           .textFieldStyle(.roundedBorder)
           .foregroundStyle(overridden || ownVariable ? .secondary : .primary)
@@ -194,7 +255,7 @@ struct BasicsTab: View {
       if overridden { warning(L10n.t("themeEditor.overriddenByTheme")) }
       if ownVariable {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
-          warning(L10n.t("themeEditor.overriddenByVariable", ["variable": Self.fontVariable[slot]!]))
+          warning(L10n.t("themeEditor.overriddenByVariable", ["variable": variable]))
           Button(L10n.t("themeEditor.goToVariablesTab")) { goTo(.variables) }.buttonStyle(.link).font(.caption)
         }
       }
@@ -500,6 +561,8 @@ struct BasicsTab: View {
     case "header": L10n.t("themeEditor.slots.header")
     case "body": L10n.t("themeEditor.slots.body")
     case "code": L10n.t("themeEditor.slots.code")
+    case "interface": L10n.t("themeEditor.slots.interface")
+    case "h1", "h2", "h3", "h4", "h5", "h6": L10n.t("themeEditor.slots.level", ["level": String(slot.dropFirst())])
     default: slot
     }
   }

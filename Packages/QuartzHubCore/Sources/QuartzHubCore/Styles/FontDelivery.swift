@@ -144,6 +144,55 @@ public enum FontDelivery {
     return next
   }
 
+  // MARK: Quartz 5.2's own font fields
+
+  /// The built-in's fields beyond the typography (`FontsConfig`): the interface font and one per
+  /// heading level. Quartz sets their variables (`buildLayeredCSS`) but loads none of them, so they
+  /// reach a reader only from the project's own files or the reader's device.
+  public static let builtinSlots = GoogleFontRequest.builtinRoles
+
+  /// The variable Quartz sets for a slot: Obsidian's names.
+  public static func builtinVariable(_ slot: String) -> String { slot == "interface" ? "font-interface" : "\(slot)-font" }
+
+  /// A slot's font as the build will take it, an absorbed entry's included; nil while the
+  /// built-in is off or the project's Quartz has none.
+  public static func builtinFont(_ config: QuartzConfig, _ features: QuartzFeatures, _ slot: String) -> JSONValue? {
+    guard let planned = fontsBuiltin(config, features), planned.enabled else { return nil }
+    return planned.options[slot]
+  }
+
+  /// A slot's family under `configuration.fonts`: an object entry keeps its weights, an empty name
+  /// takes the key out (Quartz's fallback: the header font, Obsidian's sans stack for the interface).
+  public static func withBuiltinFont(_ config: QuartzConfig, _ slot: String, _ family: String) -> QuartzConfig {
+    var next = config
+    var fonts: JSONObject
+    switch config.configuration["fonts"] {
+    case .object(let object)?: fonts = object
+    case .bool(let flag)?: fonts = JSONObject([("enabled", .bool(flag))])
+    default: fonts = JSONObject()
+    }
+    if JS.trim(family).isEmpty {
+      fonts[slot] = nil
+    } else if case .object(var entry)? = fonts[slot] {
+      entry["name"] = .string(family)
+      fonts[slot] = .object(entry)
+    } else {
+      fonts[slot] = .string(family)
+    }
+    next.configuration["fonts"] = fonts.keys.isEmpty ? nil : .object(fonts)
+    return next
+  }
+
+  /// What QuartzHub fetches from Google when it holds the fonts: the typography and, with the
+  /// built-in on, its own fields, which nothing else would load.
+  public static func fetchedTypography(_ config: QuartzConfig, _ features: QuartzFeatures) -> JSONObject {
+    var typography = config.theme["typography"]?.objectValue ?? JSONObject()
+    for slot in builtinSlots {
+      if let spec = builtinFont(config, features, slot), !familyOf(spec).isEmpty { typography[slot] = spec }
+    }
+    return typography
+  }
+
   // MARK: Google fonts held by the project
 
   /// Whether a stylesheet holds the block of Google fonts fetched into the project.
@@ -252,7 +301,7 @@ public enum FontDelivery {
     let loaders = loaders(config, features)
     let heldByProject = loaders.contains { $0.via == "core" && $0.mode == "selfHosted" }
     let pluginAtBuild = loaders.contains { $0.via != "core" && $0.mode == "selfHosted" }
-    let typography = config.theme["typography"]?.objectValue ?? JSONObject()
+    let typography = fetchedTypography(config, features)
     if !heldByProject && !pluginAtBuild {
       if !loaders.isEmpty { return nil }
       let unique = missing(typography, faces.filter { $0.origin != "build" })
@@ -266,11 +315,12 @@ public enum FontDelivery {
     return unique.isEmpty ? nil : .missing(unique)
   }
 
-  /// The slot families none of `faces` declares, each once.
+  /// The slot families none of `faces` declares, each once; the built-in's fields with them, which
+  /// only `fetchedTypography` carries.
   static func missing(_ typography: JSONObject, _ faces: [SiteFonts.Face]) -> [String] {
     let have = Set(faces.map { $0.family.lowercased() })
     var out: [String] = []
-    for slot in ["header", "body", "code"] {
+    for slot in ["header", "body", "code"] + builtinSlots {
       guard let family = GoogleFontRequest.request(slot, typography[slot])?.family, !family.isEmpty,
             !have.contains(family.lowercased()), !out.contains(family) else { continue }
       out.append(family)

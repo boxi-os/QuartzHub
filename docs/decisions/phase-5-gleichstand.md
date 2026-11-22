@@ -2967,3 +2967,29 @@ Tests: `releasesAreTheVersionTagsWithTheirCommits`, `statusAndRunGoToTheNewestRe
 `aForkWithoutTheTagIsNamed`; beim Anlegen `theWholeWayWithEveryAnswerGiven` (HEAD = Commit von
 v5.1.0 auf Branch `v5`, obwohl danach noch ein Commit mit Vorabversion kommt) und
 `anUpstreamWithoutAReleaseIsRefused`.
+
+### Schriften eingebaut
+
+5.2 baut quartz-fonts als fünften Teil der Verarbeitung ein (`configuration.fonts`, Emitter mit
+Order 60, nimmt die Einträge `quartz-fonts` und `fonts` auf). Ob ein Projekt ihn hat, liest
+`QuartzFeatures.fontsBuiltin` an `quartz/plugins/builtins/fonts.ts`; ein 5.1-Projekt sieht keinen
+fünften Teil und hält seinen Eintrag nicht für aufgenommen.
+
+- **Konfiguration ▸ Website ▸ Verarbeitung ▸ Schriften:** Ein/Aus und „Schriften des Themes
+  verwenden“. Die Herkunft steht dort nur zum Lesen, eingestellt wird sie weiter unter Stile ▸ Basis
+  („eine Stelle je Einstellung“; im Plan stand ein Auswahlfeld, das wäre eine zweite Stelle gewesen).
+- **Lokal bleibt lokal:** Wo QuartzHub „lokal“ schreibt, schreibt es auch
+  `configuration.fonts.fontOrigin: local`, sonst lädt der eingebaute Teil von Google (Messung oben:
+  148 Dateien). Zurück auf Google geht nur ein `local`, das QuartzHub gesetzt haben kann.
+- **Oberflächenschrift und Schrift je Überschrift** (Stile ▸ Basis, nur mit 5.2 und eingeschaltetem
+  Teil): geschrieben unter `configuration.fonts.interface` und `.h1`–`.h6`. Quartz setzt dafür nur
+  Variablen und Regeln, lädt aber keine dieser Familien: `googleFontHref` fragt Google nach Titel,
+  Überschriften, Text und Code (gelesen in `quartz/plugins/builtins/fonts.ts` von v5.2.0). Liefert
+  QuartzHub die Schriften lokal aus, holt es diese Familien mit (`FontDelivery.fetchedTypography`,
+  Gewichte wie Quartz' Prüfung: eine Überschrift wie die Überschriften, die Oberfläche wie der Text
+  ohne Kursiv); mit Google sagt ein Hinweis, dass sie nur wirken, wenn die Schrift auf dem Gerät ist.
+  Ein Theme kann die Oberflächenschrift überdecken (sie ist nur eine Variable in Quartz' Ebene),
+  eine Überschrift nicht (Quartz schreibt sie ohne Ebene). Tests:
+  `theBuiltInsOwnFieldsAreFetchedWithTheTypography`, `aFamilyOfTheBuiltInsFieldsIsMissingUntilFetched`,
+  `theBuiltInsFieldsAreWrittenUnderConfigurationFonts`, `theBuildDoorFetchesQuartz52sOwnFields`
+  (Gegenprobe: ohne die Felder in `fetchedTypography` bzw. am Build-Tor rot).

@@ -233,6 +233,10 @@ public struct FontService: Sendable {
       case .string(let text)?: typography = text.utf16.map { .string(String(decoding: [$0], as: UTF16.self)) }
       default: break
       }
+      // Quartz 5.2's own font fields name families too.
+      if case .object(let fonts)? = config.configuration["fonts"] {
+        typography += FontDelivery.builtinSlots.compactMap { fonts[$0] }
+      }
     }
     for spec in typography + draftFamilies.map({ .string($0) }) {
       if case .string(let name) = spec { texts.append(name) }
@@ -438,7 +442,7 @@ public struct FontService: Sendable {
     let own = Set(ownFaces.map { $0.family.lowercased() })
     var ownFamiliesAsked: [String] = []
     var wanted = typography
-    for role in GoogleFontRequest.roles {
+    for role in GoogleFontRequest.fetchedRoles {
       guard let family = GoogleFontRequest.request(role, typography[role]).map({ JS.trim($0.family) }), !family.isEmpty else { continue }
       if ownFaces.contains(where: { $0.family.lowercased() == family.lowercased() && $0.unicodeRange == nil }) {
         wanted[role] = nil
@@ -455,7 +459,7 @@ public struct FontService: Sendable {
       return Fetched(changed: true, removedFiles: try deleteUnreferencedFontFiles(project, previous),
                      removedFamilies: FontFaces.families(previous).filter { !own.contains($0.lowercased()) }, ownFamilies: ownFamiliesAsked)
     }
-    let askedFamilies = Set(GoogleFontRequest.roles.compactMap { GoogleFontRequest.request($0, wanted[$0]).map { JS.trim($0.family).lowercased() } }.filter { !$0.isEmpty })
+    let askedFamilies = Set(GoogleFontRequest.fetchedRoles.compactMap { GoogleFontRequest.request($0, wanted[$0]).map { JS.trim($0.family).lowercased() } }.filter { !$0.isEmpty })
     let relevantOwn = ownFaces.filter { askedFamilies.contains($0.family.lowercased()) }
     let ownPrint = Self.ownRulesPrint(relevantOwn)
     if let before, !before.isEmpty, Self.requestOf(before) == request, Self.ownPrintOf(before) == ownPrint, allFilesPresent(project, before) {
@@ -626,7 +630,7 @@ public struct FontService: Sendable {
     var delivered = Set(FontFaces.families(block).map { $0.lowercased() })
     for family in FontFaces.families(ownCss) { delivered.insert(family.lowercased()) }
     var asked: [String] = []
-    for role in GoogleFontRequest.roles {
+    for role in GoogleFontRequest.fetchedRoles {
       guard let family = GoogleFontRequest.request(role, typography[role]).map({ JS.trim($0.family) }), !family.isEmpty else { continue }
       if !asked.contains(family) { asked.append(family) }
     }
@@ -663,7 +667,8 @@ public struct FontService: Sendable {
         guard Self.hasGoogleBlock(try StyleSheets.readSources(project: project)) else { return nil }
         let config = try await readConfig(project)
         guard config.theme["fontOrigin"] == .string("local") else { return nil }
-        let result = try await fetchGoogleFontsNow(config.theme["typography"]?.objectValue ?? JSONObject(), project: project)
+        let typography = FontDelivery.fetchedTypography(config, QuartzFeatures.read(project: project))
+        let result = try await fetchGoogleFontsNow(typography, project: project)
         guard result.changed else { return nil }
         // A run that deletes says so, also when it fetched nothing.
         var own = result.ownFamilies

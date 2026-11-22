@@ -260,7 +260,17 @@ struct ActiveStylesSection: View {
 
   private var ctx: VariableResolve.Context { model.context }
   private var config: QuartzConfig { model.config ?? QuartzConfig() }
-  private var families: [String] { Self.fonts.map { FontDelivery.primaryFamily(VariableResolve.resolvedValue($0, .light, ctx)) } }
+  /// Quartz 5.2's own fields that name a family, as (variable, family): Quartz sets nothing else
+  /// the Variablen chain could resolve them from.
+  private var builtinFonts: [(key: String, family: String)] {
+    FontDelivery.builtinSlots.compactMap { slot in
+      let family = FontDelivery.familyOf(FontDelivery.builtinFont(config, model.features, slot))
+      return family.isEmpty ? nil : (FontDelivery.builtinVariable(slot), family)
+    }
+  }
+  private var families: [String] {
+    Self.fonts.map { FontDelivery.primaryFamily(VariableResolve.resolvedValue($0, .light, ctx)) } + builtinFonts.map(\.family)
+  }
 
   var body: some View {
     Section {
@@ -338,6 +348,9 @@ struct ActiveStylesSection: View {
     let typography = config.theme["typography"]?.objectValue ?? JSONObject()
     let requests = ["header", "body", "code"].compactMap { GoogleFontRequest.request($0, typography[$0]) }
     let googleFamilies = Set(requests.map { $0.family.lowercased() })
+    // QuartzHub fetches 5.2's own fields too; Quartz asks Google for none of them.
+    let fetched = FontDelivery.fetchedTypography(config, model.features)
+    let heldFamilies = Set(GoogleFontRequest.fetchedRoles.compactMap { GoogleFontRequest.request($0, fetched[$0])?.family.lowercased() })
     let heldByProject = loaders.contains { $0.via == "core" && $0.mode == "selfHosted" }
     let selfHosted = loaders.contains { $0.via != "core" && $0.mode == "selfHosted" }
     let atPageView = loaders.contains { $0.via != "theme" && $0.mode == "google" }
@@ -346,27 +359,12 @@ struct ActiveStylesSection: View {
       Text(L10n.t("styleEditor.current.fonts")).font(.caption.weight(.semibold)).textCase(.uppercase).foregroundStyle(.secondary)
       ForEach(Self.fonts, id: \.self) { key in
         if let stack = VariableResolve.resolvedValue(key, .light, ctx) {
-          let family = FontDelivery.primaryFamily(stack)
-          let summary = FontDelivery.summarizeFaces(faces, family: family)
-          let available = PreviewFontRegistry.isAvailable(family)
-          VStack(alignment: .leading, spacing: 1) {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
-              Text(key).font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary)
-              Button(family) { copy(stack, "--\(key)") }.buttonStyle(.link).font(.callout.weight(.semibold))
-                .help(L10n.t("styleEditor.cssVars.copyHint", ["value": stack]))
-              Text(summary.map { $0.weights.joined(separator: " · ") + ($0.italic ? " · \(L10n.t("styleEditor.current.italic"))" : "") }
-                   ?? (googleFamilies.contains(family.lowercased()) && heldByProject ? L10n.t("styleEditor.current.faceOnSave")
-                       : googleFamilies.contains(family.lowercased()) && selfHosted ? L10n.t("styleEditor.current.faceAtBuild")
-                       : googleFamilies.contains(family.lowercased()) && atPageView ? L10n.t("styleEditor.current.faceFromGoogle")
-                       : L10n.t("styleEditor.current.noFace")))
-                .font(.caption).foregroundStyle(.secondary)
-              if !available { Text(L10n.t("styleEditor.current.notInstalled")).font(.caption).foregroundStyle(.orange) }
-            }
-            Text(L10n.t("styleEditor.current.sample"))
-              .font(PreviewFontRegistry.font(family, size: 18) ?? .system(size: 18))
-              .foregroundStyle(available ? .primary : .secondary)
-          }
+          fontRow(key, stack: stack, google: googleFamilies, held: heldFamilies, heldByProject: heldByProject, selfHosted: selfHosted, atPageView: atPageView)
         }
+      }
+      ForEach(builtinFonts, id: \.key) { font in
+        // Quartz loads none of these, so neither "at build" nor "from Google" applies.
+        fontRow(font.key, stack: font.family, google: [], held: heldFamilies, heldByProject: heldByProject, selfHosted: false, atPageView: false)
       }
       if families.contains(where: { !$0.isEmpty && !PreviewFontRegistry.isAvailable($0) }) {
         Callout(.warning, L10n.t("styleEditor.current.notInstalledExplainer"))
@@ -387,6 +385,31 @@ struct ActiveStylesSection: View {
         Text(Self.loaderText(loader, specs: specs)).font(.caption)
           .foregroundStyle(loader.mode == "google" ? AnyShapeStyle(.orange) : AnyShapeStyle(.secondary))
       }
+    }
+  }
+
+  private func fontRow(_ key: String, stack: String, google: Set<String>, held: Set<String>, heldByProject: Bool, selfHosted: Bool,
+                       atPageView: Bool) -> some View {
+    let family = FontDelivery.primaryFamily(stack)
+    let summary = FontDelivery.summarizeFaces(faces, family: family)
+    let available = PreviewFontRegistry.isAvailable(family)
+    let lower = family.lowercased()
+    return VStack(alignment: .leading, spacing: 1) {
+      HStack(alignment: .firstTextBaseline, spacing: 6) {
+        Text(key).font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary)
+        Button(family) { copy(stack, "--\(key)") }.buttonStyle(.link).font(.callout.weight(.semibold))
+          .help(L10n.t("styleEditor.cssVars.copyHint", ["value": stack]))
+        Text(summary.map { $0.weights.joined(separator: " · ") + ($0.italic ? " · \(L10n.t("styleEditor.current.italic"))" : "") }
+             ?? (held.contains(lower) && heldByProject ? L10n.t("styleEditor.current.faceOnSave")
+                 : google.contains(lower) && selfHosted ? L10n.t("styleEditor.current.faceAtBuild")
+                 : google.contains(lower) && atPageView ? L10n.t("styleEditor.current.faceFromGoogle")
+                 : L10n.t("styleEditor.current.noFace")))
+          .font(.caption).foregroundStyle(.secondary)
+        if !available { Text(L10n.t("styleEditor.current.notInstalled")).font(.caption).foregroundStyle(.orange) }
+      }
+      Text(L10n.t("styleEditor.current.sample"))
+        .font(PreviewFontRegistry.font(family, size: 18) ?? .system(size: 18))
+        .foregroundStyle(available ? .primary : .secondary)
     }
   }
 

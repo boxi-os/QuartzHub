@@ -368,7 +368,7 @@ final class StylesModel {
     let path = project.path
     let fonts = FontService(readConfig: { try await ConfigFile.read(project: $0, runtime: environment.runtime) })
     if FontDelivery.fetchesGoogleFonts(config) {
-      let result = try await fonts.fetchGoogleFonts(config.theme["typography"]?.objectValue ?? JSONObject(), project: path)
+      let result = try await fonts.fetchGoogleFonts(FontDelivery.fetchedTypography(config, features), project: path)
       blockWritten()
       var notes: [String] = []
       if result.changed && !result.ownFamilies.isEmpty {

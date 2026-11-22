@@ -63709,6 +63709,63 @@
         }
       }
     },
+    "themeEditor.builtinFonts.goToProcessing" : {
+      "comment" : "Stile ▸ Basis: link to Konfiguration ▸ Website ▸ Verarbeitung",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zur Verarbeitung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Processing"
+          }
+        }
+      }
+    },
+    "themeEditor.builtinFonts.notFromGoogle" : {
+      "comment" : "Stile ▸ Basis: note under the Quartz 5.2 font fields while Google serves the fonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oberflächenschrift und Schrift je Überschrift lädt Quartz nicht von Google. Sie wirken, wenn QuartzHub die Schriften lokal ausliefert oder die Schrift auf dem Gerät installiert ist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz does not load the interface font and the per-heading fonts from Google. They take effect when QuartzHub serves the fonts locally or the font is installed on the device."
+          }
+        }
+      }
+    },
+    "themeEditor.builtinFonts.off" : {
+      "comment" : "Stile ▸ Basis: shown instead of the Quartz 5.2 font fields while configuration.fonts is off",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Schriften von Quartz sind unter Konfiguration ▸ Website ▸ Verarbeitung ausgeschaltet. Oberflächenschrift und Schrift je Überschrift wirken erst, wenn sie dort an sind."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz's fonts are turned off under Configuration ▸ Site ▸ Processing. The interface font and the per-heading fonts take effect once they are on there."
+          }
+        }
+      }
+    },
     "themeEditor.colors" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -64474,6 +64531,63 @@
         }
       }
     },
+    "themeEditor.headingFonts" : {
+      "comment" : "Stile ▸ Basis ▸ Schriften: fold with one font field per heading level (Quartz 5.2)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrift je Überschrift"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Font per heading"
+          }
+        }
+      }
+    },
+    "themeEditor.headingFontsDefault" : {
+      "comment" : "Stile ▸ Basis: placeholder of an empty per-heading font field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wie Überschriften"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "same as headings"
+          }
+        }
+      }
+    },
+    "themeEditor.interfaceFontDefault" : {
+      "comment" : "Stile ▸ Basis: placeholder of an empty interface font field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systemschrift"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "system font"
+          }
+        }
+      }
+    },
     "themeEditor.local" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -64854,6 +64968,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Headings"
+          }
+        }
+      }
+    },
+    "themeEditor.slots.interface" : {
+      "comment" : "Stile ▸ Basis: font slot of Quartz 5.2's interface font (configuration.fonts.interface)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oberfläche"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interface"
+          }
+        }
+      }
+    },
+    "themeEditor.slots.level" : {
+      "comment" : "Stile ▸ Basis: font slot of one heading level (configuration.fonts.h1…h6)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überschrift {{level}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heading {{level}}"
           }
         }
       }

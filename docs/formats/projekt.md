@@ -347,6 +347,8 @@ configuration:
     …                                  # weitere Theme-Schlüssel, Roundtrip
   fonts:                               # Quartz 5.2 (eingebaute Schriften); QuartzHub schreibt nur
     fontOrigin: local                  # "local" bei lokal ausgelieferten Schriften, auch in 5.1-Projekten
+    interface: Inter                   # Stile ▸ Basis, nur mit 5.2: string oder {name: …}, leer = Schlüssel weg
+    h1: Lora                           # … h1 bis h6 ebenso („Schrift je Überschrift“)
 plugins:
   - source: "@quartz-community/x" | "github:owner/repo[#ref]" | /abs/path | {repo, subdir?, ref?, name?}
     enabled: bool                     # immer geschrieben

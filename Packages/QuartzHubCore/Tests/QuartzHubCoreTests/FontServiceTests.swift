@@ -144,6 +144,46 @@ import Testing
     #expect(await run() == [])
   }
 
+  /// Quartz 5.2's interface font reaches the build door's fetch: with only it naming a family, the
+  /// door asks for it (here the project's own Inter), and a 5.1 project has nothing to ask for.
+  @Test(.enabled(if: HelperRuntime.available, "Runtime/ oder Helpers/dist fehlt"))
+  func theBuildDoorFetchesQuartz52sOwnFields() async throws {
+    let golden = try Self.json("steps/refresh-every-family-own.json")
+    func project(_ name: String, quartz52: Bool) throws -> String {
+      let project = "\(scratch.path)/\(name)"
+      let tree = golden["tree"]?.objectValue ?? JSONObject()
+      for path in tree.keys {
+        let url = "\(project)/\(path)"
+        try Posix.mkdirs(NodePath.dirname(url))
+        try Posix.write(url, Data(tree[path]!.stringValue!.utf8))
+      }
+      try Posix.mkdirs("\(project)/quartz/plugins/builtins")
+      try Posix.write("\(project)/quartz/plugins/builtins/index.ts", Data())
+      if quartz52 { try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts", Data()) }
+      try Posix.write("\(project)/quartz.config.yaml", Data("""
+        configuration:
+          pageTitle: door
+          fonts:
+            fontOrigin: local
+            interface: Inter
+          theme:
+            fontOrigin: local
+        plugins: []
+
+        """.utf8))
+      return project
+    }
+    func run(_ project: String) async -> [String] {
+      let said = Mutex<[String]>([])
+      for step in BuildService.preparation { await step(project) { stream, text in said.withLock { $0.append("\(stream) \(text)") } } }
+      return said.withLock { $0 }
+    }
+    let expected = L10n.t("main.googleFontsRefreshOwn", ["families": "Inter"]) + " " + L10n.t("main.googleFontsRefreshRemoved", ["count": "1"])
+    #expect(await run(try project("door52", quartz52: true)) == ["stdout \(expected)\n"])
+    let failed = L10n.t("main.googleFontsRefreshFailed", ["message": L10n.t("main.googleFontsNoFamily")])
+    #expect(await run(try project("door51", quartz52: false)).first?.hasSuffix("\(failed)\n") == true)
+  }
+
   /// The golden answers with QuartzControl's texts rendered from the catalog.
   static func rendered(_ value: JSONValue) -> JSONValue {
     switch value {

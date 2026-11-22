@@ -20,8 +20,18 @@ public enum GoogleFontRequest {
   }
 
   public static let roles = ["header", "body", "code", "title"]
+  /// Quartz 5.2's own font fields (`configuration.fonts`): Quartz sets their variables but asks
+  /// Google for none of them (`googleFontHref` takes title, header, body and code). QuartzHub asks
+  /// for them when it holds the fonts, with the defaults Quartz checks them against (`validate`:
+  /// a heading level as the header); the interface font as the body, without italic.
+  public static let builtinRoles = ["interface", "h1", "h2", "h3", "h4", "h5", "h6"]
+  /// What QuartzHub fetches into a project: Quartz's roles, then the built-in's.
+  public static let fetchedRoles = roles + builtinRoles
   static let defaults: [String: (weights: [Double], italic: Bool)] = [
-    "title": ([400, 600], false), "header": ([400, 700], false), "body": ([400, 600], true), "code": ([400, 600], false)
+    "title": ([400, 600], false), "header": ([400, 700], false), "body": ([400, 600], true), "code": ([400, 600], false),
+    "interface": ([400, 600], false),
+    "h1": ([400, 700], false), "h2": ([400, 700], false), "h3": ([400, 700], false),
+    "h4": ([400, 700], false), "h5": ([400, 700], false), "h6": ([400, 700], false)
   ]
 
   /// A typography entry is a bare family name or `{ name, weights?, includeItalic? }`.
@@ -64,9 +74,10 @@ public enum GoogleFontRequest {
 
   /// The CSS2 request for every role that names a family, header, body and code in Quartz's order,
   /// then the title whole (Quartz asks only for its characters; a project holding its fonts would
-  /// have to fetch again whenever the title changes). nil when no role names one.
+  /// have to fetch again whenever the title changes), then the built-in's fields when the
+  /// typography carries them (`FontDelivery.fetchedTypography`). nil when no role names one.
   public static func css2Url(_ typography: JSONObject) -> String? {
-    let families = roles.compactMap { request($0, typography[$0]) }.map(familyParameter)
+    let families = fetchedRoles.compactMap { request($0, typography[$0]) }.map(familyParameter)
     guard !families.isEmpty else { return nil }
     return "https://fonts.googleapis.com/css2?" + families.map { "family=\($0)" }.joined(separator: "&") + "&display=swap"
   }

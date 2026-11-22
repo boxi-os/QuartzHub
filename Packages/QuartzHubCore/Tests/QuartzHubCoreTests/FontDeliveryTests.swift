@@ -190,4 +190,55 @@ struct FontDeliveryTests {
     #expect(FontDelivery.activeThemeId(config([("@quartz-themes/minimal", true, nil)])) == nil)
     #expect(FontDelivery.activeThemeId(config([("other", true, .string("x"))])) == nil)
   }
+
+  // MARK: Quartz 5.2's own font fields
+
+  @Test func theBuiltInsOwnFieldsAreFetchedWithTheTypography() {
+    let typography: JSONValue = .object(JSONObject([("header", .string("Noto Sans"))]))
+    let fonts: JSONValue = .object(JSONObject([("fontOrigin", .string("local")), ("interface", .string("Inter")),
+                                               ("h1", .object(JSONObject([("name", .string("Lora")), ("weights", .array([.number(500)]))])))]))
+    let config = Self.config52(theme: [("typography", typography)], fonts: fonts)
+    let fetched = FontDelivery.fetchedTypography(config, .quartz52)
+    #expect(fetched.keys == ["header", "interface", "h1"])
+    #expect(GoogleFontRequest.css2Url(fetched)
+            == "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Inter:wght@400;600&family=Lora&display=swap")
+    // 5.1 has no such fields, and with the built-in off Quartz ignores them.
+    #expect(FontDelivery.fetchedTypography(config, .quartz51).keys == ["header"])
+    var offFonts = fonts.objectValue!
+    offFonts["enabled"] = .bool(false)
+    let off = Self.config52(theme: [("typography", typography)], fonts: .object(offFonts))
+    #expect(FontDelivery.fetchedTypography(off, .quartz52).keys == ["header"])
+    let entryOff = Self.config52(theme: [("typography", typography)], plugins: [Self.quartzFonts(false)])
+    #expect(FontDelivery.builtinFont(entryOff, .quartz52, "h1") == nil)
+    // An enabled entry's options are the built-in's.
+    var entryOn = Self.quartzFonts(true)
+    entryOn.object["options"] = .object(JSONObject([("h2", .string("Merriweather"))]))
+    #expect(FontDelivery.builtinFont(Self.config52(theme: [], plugins: [entryOn]), .quartz52, "h2") == .string("Merriweather"))
+  }
+
+  @Test func aFamilyOfTheBuiltInsFieldsIsMissingUntilFetched() {
+    // Held by the project (the draft's spelling), the h1 font has no rule yet.
+    let config = Self.config52(theme: [("fontOrigin", .string("googleFonts")), ("cdnCaching", .bool(false)),
+                                       ("typography", .object(JSONObject([("header", .string("Noto Sans"))])))],
+                               fonts: .object(JSONObject([("fontOrigin", .string("local")), ("h1", .string("Lora"))])))
+    let noto = SiteFonts.Face(family: "Noto Sans", weight: "400", style: "normal", origin: "project", source: "x")
+    #expect(FontDelivery.buildState(config, faces: [noto], built: true, features: .quartz52) == .notFetched(["Lora"]))
+    #expect(FontDelivery.buildState(config, faces: [noto], built: true, features: .quartz51) == nil)
+  }
+
+  @Test func theBuiltInsFieldsAreWrittenUnderConfigurationFonts() {
+    let none = Self.config52(theme: [])
+    let set = FontDelivery.withBuiltinFont(none, "h1", "Lora")
+    #expect(set.configuration["fonts"] == .object(JSONObject([("h1", .string("Lora"))])))
+    // An object keeps its weights; an empty name takes the key and an empty object out.
+    let object = Self.config52(theme: [], fonts: .object(JSONObject([("h2", .object(JSONObject([("name", .string("A")), ("weights", .array([.number(500)]))])))])))
+    #expect(FontDelivery.withBuiltinFont(object, "h2", "B").configuration["fonts"]?["h2"]
+            == .object(JSONObject([("name", .string("B")), ("weights", .array([.number(500)]))])))
+    #expect(FontDelivery.withBuiltinFont(set, "h1", " ").configuration["fonts"] == nil)
+    // Other options stay, and `fonts: true` keeps its meaning.
+    let local = Self.config52(theme: [], fonts: .object(JSONObject([("fontOrigin", .string("local")), ("h1", .string("Lora"))])))
+    #expect(FontDelivery.withBuiltinFont(local, "h1", "").configuration["fonts"] == .object(JSONObject([("fontOrigin", .string("local"))])))
+    #expect(FontDelivery.withBuiltinFont(Self.config52(theme: [], fonts: .bool(true)), "interface", "Inter").configuration["fonts"]
+            == .object(JSONObject([("enabled", .bool(true)), ("interface", .string("Inter"))])))
+  }
 }
