@@ -122,11 +122,16 @@ struct BasicsTab: View {
       let levels = FontDelivery.builtinSlots.filter { $0 != "interface" }
       let named = levels.filter { !builtinFamily($0).isEmpty }
       Fold(isExpanded: $headingsOpen) {
-        ForEach(levels, id: \.self) { level in
-          fontField(level, label: L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle(level)]),
-                    variable: FontDelivery.builtinVariable(level), name: builtinFamily(level),
-                    placeholder: L10n.t("themeEditor.headingFontsDefault"), checkTheme: false) { setBuiltinFamily(level, $0) }
+        // As in `OptionsForm`: rows of their own inside the disclosure group lost the first
+        // field's top border under the label (seen in dark, 2026-11-22).
+        VStack(alignment: .leading, spacing: 12) {
+          ForEach(levels, id: \.self) { level in
+            fontField(level, label: L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle(level)]),
+                      variable: FontDelivery.builtinVariable(level), name: builtinFamily(level),
+                      placeholder: L10n.t("themeEditor.headingFontsDefault"), checkTheme: false) { setBuiltinFamily(level, $0) }
+          }
         }
+        .padding(.top, 6)
       } label: {
         HStack {
           Text(L10n.t("themeEditor.headingFonts"))
