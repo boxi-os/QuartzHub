@@ -16,6 +16,11 @@ public enum SemVer {
     return Parsed(numbers: numbers, pre: pre)
   }
 
+  /// The major version, nil for what is no version.
+  public static func major(_ version: String) -> Int? {
+    parse(version).map { Int($0.numbers[0]) }
+  }
+
   /// `isNewerVersion(candidate, current)`.
   public static func isNewer(_ candidate: String, than current: String) -> Bool {
     guard let a = parse(candidate), let b = parse(current) else { return false }

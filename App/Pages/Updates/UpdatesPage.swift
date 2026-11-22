@@ -81,6 +81,12 @@ struct UpdatesPage: View {
         Callout(.info, L10n.t("updates.core.divergingUpstream", ["url": upstream]))
       }
 
+      // Updates stay within the project's major version (decisions/phase-5-gleichstand.md, "Kern
+      // aus Releases"); a later one is named, not offered.
+      if let newer = model.core?.newerMajor {
+        Callout(.info, L10n.t("updates.core.newMajor", ["version": newer]))
+      }
+
       // Read from git rather than from the last result: a half-finished merge is there after the
       // page was left, and this is the way out of it (QuartzControl's banner, as on Git-Sync).
       if let operation = model.git?.inProgress {
@@ -185,7 +191,8 @@ struct UpdatesPage: View {
 
   private func commitsLine(_ core: CoreUpdate.Status) -> String {
     var line: String
-    if let installed = model.versions?.installed, let latest = model.versions?.latest {
+    // The release's version comes with the status; package.json at its commit is the fallback.
+    if let installed = model.versions?.installed, let latest = core.release ?? model.versions?.latest {
       line = L10n.t("updates.core.versions", ["current": installed, "currentCommit": Self.short(core.currentCommit),
                                               "latest": latest, "latestCommit": Self.short(core.latestCommit)])
     } else if let installed = model.versions?.installed {

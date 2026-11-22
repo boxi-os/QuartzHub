@@ -17,7 +17,20 @@ import Synchronization
 ///   to date".
 /// - The stash name and the merge message are QuartzControl's, word for word: both apps open the
 ///   same projects, and each recognises the other's leftovers by them.
+/// - **Releases, not the branch** (decisions/phase-5-gleichstand.md, "Kern aus Releases"): the
+///   update goes to Quartz's newest release of the project's major version, the tag `vX.Y.Z`, not
+///   to the newest commit of its default branch as in QuartzControl. `.branchHead` is
+///   QuartzControl's way and stays for the replay of its steps.
 public final class CoreUpdate: Sendable {
+  /// What an update goes to.
+  public enum Target: Sendable { case latestRelease, branchHead }
+
+  /// A release of Quartz: its tag, the commit the tag names, the version.
+  public struct Release: Sendable, Equatable {
+    public var tag: String
+    public var commit: String
+    public var version: String
+  }
   public struct Result: Sendable, Equatable {
     public var success: Bool
     public var output: String
@@ -42,6 +55,10 @@ public final class CoreUpdate: Sendable {
     public var missingCommits: Int?
     /// With `pending`: the packages an earlier run still owes.
     public var pendingPackages: [String]?
+    /// The version of the release `latestCommit` is, with `.latestRelease`.
+    public var release: String?
+    /// A release of a later major version than the project's, which is not offered.
+    public var newerMajor: String?
   }
 
   public struct Deadlines: Sendable, Equatable {
@@ -54,6 +71,7 @@ public final class CoreUpdate: Sendable {
 
   let environment: ToolEnvironment
   let templateRepository: String
+  let target: Target
   let snapshot: SnapshotStore.Take
   let deadlines: Deadlines
   /// A run or an abort per project at a time; a second one is answered at once, not queued. One
@@ -62,10 +80,12 @@ public final class CoreUpdate: Sendable {
   private static let running = Mutex<Set<String>>([])
 
   public init(environment: ToolEnvironment, snapshot: @escaping SnapshotStore.Take,
-              templateRepository: String = ProjectCreator.templateRepository, deadlines: Deadlines = Deadlines()) {
+              templateRepository: String = ProjectCreator.templateRepository, deadlines: Deadlines = Deadlines(),
+              target: Target = .latestRelease) {
     self.environment = environment
     self.snapshot = snapshot
     self.templateRepository = templateRepository
+    self.target = target
     self.deadlines = deadlines
   }
 
@@ -127,20 +147,80 @@ public final class CoreUpdate: Sendable {
   public func status(project: String, resolveInstalled: Bool = false) async -> Status {
     let outstanding = await outstandingInstall(project)
     let head = await git(project, ["rev-parse", "HEAD"])
-    let latest = await lsRemoteHead(templateRepository) ?? ""
+    let aim = await aim(project)
+    let latest = aim.commit
     func pending(_ status: Status) -> Status {
-      guard !outstanding.packages.isEmpty || outstanding.unfinished else { return status }
       var copy = status
+      copy.release = aim.release?.version
+      copy.newerMajor = aim.newerMajor
+      guard !outstanding.packages.isEmpty || outstanding.unfinished else { return copy }
       copy.state = .pending
       copy.pendingPackages = outstanding.packages
       return copy
     }
     guard head.success, !latest.isEmpty else { return pending(Status(currentCommit: "", latestCommit: latest, state: .unknown)) }
+    // A project newer than the release (made from the branch) is up to date: never a step back.
     if await historyContains(project, latest) {
       return pending(Status(currentCommit: latest, latestCommit: latest, state: .upToDate, missingCommits: 0))
     }
-    let installed = await installedUpstream(project, latest, allowFetch: resolveInstalled)
+    let installed = await installedUpstream(project, latest, ref: aim.ref, allowFetch: resolveInstalled)
     return pending(Status(currentCommit: installed.commit, latestCommit: latest, state: .behind, missingCommits: installed.missing))
+  }
+
+  /// Where an update goes: the commit ("" when it cannot be asked), the ref to fetch it by, and
+  /// with `.latestRelease` the release and a newer major version that is only named.
+  struct Aim {
+    var commit: String
+    var ref: String
+    var release: Release?
+    var newerMajor: String?
+  }
+
+  func aim(_ project: String) async -> Aim {
+    switch target {
+    case .branchHead:
+      return Aim(commit: await lsRemoteHead(templateRepository) ?? "", ref: "HEAD")
+    case .latestRelease:
+      let releases = Self.releases(await lsRemote(templateRepository, "refs/tags/v*"))
+      let major = await packageVersion(project, "HEAD").flatMap(SemVer.major)
+      guard let release = Self.newest(releases, major: major) else { return Aim(commit: "", ref: "") }
+      var newer: String?
+      if let major, let newest = Self.newest(releases, major: nil), let newestMajor = SemVer.major(newest.version), newestMajor > major {
+        newer = newest.version
+      }
+      return Aim(commit: release.commit, ref: "refs/tags/\(release.tag)", release: release, newerMajor: newer)
+    }
+  }
+
+  /// The newest release in `url`, of `major` when given: the tags `vX.Y.Z` without a prerelease.
+  public func latestRelease(_ url: String, major: Int? = nil) async -> Release? {
+    Self.newest(Self.releases(await lsRemote(url, "refs/tags/v*")), major: major)
+  }
+
+  /// The releases among `ls-remote`'s tags. An annotated tag names a tag object; the commit is on
+  /// its peeled line (`refs/tags/v5.2.0^{}`), which wins. A lightweight tag names the commit.
+  static func releases(_ refs: [(commit: String, ref: String)]) -> [Release] {
+    var commits: [String: String] = [:]
+    var peeled: Set<String> = []
+    for (commit, ref) in refs where ref.hasPrefix("refs/tags/") {
+      var tag = String(ref.dropFirst("refs/tags/".count))
+      if tag.hasSuffix("^{}") {
+        tag.removeLast(3)
+        commits[tag] = commit
+        peeled.insert(tag)
+      } else if !peeled.contains(tag) {
+        commits[tag] = commit
+      }
+    }
+    return commits.compactMap { tag, commit in
+      guard tag.hasPrefix("v"), let parsed = SemVer.parse(String(tag.dropFirst())), parsed.pre.isEmpty else { return nil }
+      return Release(tag: tag, commit: commit, version: String(tag.dropFirst()))
+    }
+  }
+
+  static func newest(_ releases: [Release], major: Int?) -> Release? {
+    releases.filter { major == nil || SemVer.major($0.version) == major }
+      .max { SemVer.isNewer($1.version, than: $0.version) }
   }
 
   /// `git ls-remote -- <url> <pattern>…`: the "--" keeps a source from a lockfile from being read
@@ -162,13 +242,13 @@ public final class CoreUpdate: Sendable {
     return await git(project, ["merge-base", "--is-ancestor", commit, "HEAD"]).success
   }
 
-  /// The newest upstream commit the project contains: the merge base with upstream's HEAD, which
-  /// needs that commit as a local object. Fetched only when the caller asks (the overview reads
-  /// this status and must cost nothing to open), into FETCH_HEAD and no ref.
-  func installedUpstream(_ project: String, _ latest: String, allowFetch: Bool) async -> (commit: String, missing: Int?) {
+  /// The newest upstream commit the project contains: the merge base with the release (or
+  /// upstream's HEAD), which needs that commit as a local object. Fetched only when the caller asks
+  /// (the overview reads this status and must cost nothing to open), into FETCH_HEAD and no ref.
+  func installedUpstream(_ project: String, _ latest: String, ref: String, allowFetch: Bool) async -> (commit: String, missing: Int?) {
     var known = await git(project, ["cat-file", "-e", "\(latest)^{commit}"]).success
     if !known && allowFetch {
-      await git(project, ["fetch", "--no-tags", "--quiet", templateRepository, "HEAD"], timeout: deadlines.fetch)
+      await git(project, ["fetch", "--no-tags", "--quiet", templateRepository, ref], timeout: deadlines.fetch)
       known = await git(project, ["cat-file", "-e", "\(latest)^{commit}"]).success
     }
     guard known else { return ("", nil) }
@@ -218,24 +298,40 @@ public final class CoreUpdate: Sendable {
     if await mergeInProgress(project) {
       return Result(success: false, output: L10n.t("main.updateMergeUnfinished"), conflicts: await conflictedFiles(project))
     }
+    // The release is asked before anything is written: without it there is nothing to go to.
+    var release: Release?
+    if target == .latestRelease {
+      let major = await packageVersion(project, "HEAD").flatMap(SemVer.major)
+      release = await latestRelease(templateRepository, major: major)
+      if release == nil { return Result(success: false, output: L10n.t("updates.core.noRelease")) }
+    }
     let snapshotId = try await snapshot(project, "coreUpdate", "")
 
     if !(await git(project, ["remote", "get-url", "quartz-upstream"])).success {
       let added = await git(project, ["remote", "add", "quartz-upstream", templateRepository])
       if !added.success { return Result(success: false, output: added.output, snapshotId: snapshotId) }
     }
-    let fetch = await git(project, ["fetch", "quartz-upstream", "HEAD"], timeout: deadlines.fetch)
-    if !fetch.success { return Result(success: false, output: fetch.output, snapshotId: snapshotId) }
-    let fetched = await git(project, ["rev-parse", "FETCH_HEAD"])
+    let fetchArguments = release.map { ["fetch", "--no-tags", "quartz-upstream", "refs/tags/\($0.tag)"] } ?? ["fetch", "quartz-upstream", "HEAD"]
+    let fetch = await git(project, fetchArguments, timeout: deadlines.fetch)
+    if !fetch.success {
+      // A quartz-upstream that is a fork may not carry Quartz's tags.
+      let missing = release.map { "\n\n" + L10n.t("updates.core.releaseMissing", ["tag": $0.tag]) } ?? ""
+      return Result(success: false, output: fetch.output + missing, snapshotId: snapshotId)
+    }
+    // An annotated tag fetches its tag object into FETCH_HEAD; what is merged is its commit.
+    let fetched = await git(project, ["rev-parse", "FETCH_HEAD^{commit}"])
     let mergeCommit = fetched.success ? trimmedStdout(fetched) : ""
+    // QuartzControl's merge of FETCH_HEAD for the branch; for a release the commit itself, since
+    // git merges a tag object always with a merge commit.
+    let mergeRef = release != nil && !mergeCommit.isEmpty ? mergeCommit : "FETCH_HEAD"
 
     return try await ContentFolder.withSymlinkParked(project: project) {
-      try await self.merge(project, mergeCommit: mergeCommit, snapshotId: snapshotId)
+      try await self.merge(project, mergeCommit: mergeCommit, mergeRef: mergeRef, snapshotId: snapshotId)
     }
   }
 
   // swiftlint:disable:next function_body_length
-  func merge(_ project: String, mergeCommit: String, snapshotId: String?) async throws -> Result {
+  func merge(_ project: String, mergeCommit: String, mergeRef: String = "FETCH_HEAD", snapshotId: String?) async throws -> Result {
     let plan = await planPackageFiles(project)
     let pending = readPendingInstall(project)
     let noteOverruled = await listTakenInHand(project, pending)
@@ -253,7 +349,7 @@ public final class CoreUpdate: Sendable {
     }
 
     let headBefore = trimmedStdout(await git(project, ["rev-parse", "HEAD"]))
-    let merge = await git(project, ["merge", "FETCH_HEAD", "-m", Self.mergeMessage], env: textVariables)
+    let merge = await git(project, ["merge", mergeRef, "-m", Self.mergeMessage], env: textVariables)
     var mergeOutput = merge.output
     var ourMergeCommit = false
     if !merge.success {

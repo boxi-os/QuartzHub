@@ -14,13 +14,15 @@ import Foundation
 ///   `-b`); success is the file, not the exit code.
 /// - **The warm-up build** takes the one-time failure of templates whose plugins install a package
 ///   on first build and then cannot load it in the same process ("obsidian", measured there).
+/// - **At the newest release, not the branch** (decisions/phase-5-gleichstand.md, "Kern aus
+///   Releases"): after the clone the default branch is set to the newest tag `vX.Y.Z`, read from
+///   the clone itself. On a branch, not a detached HEAD: Git-Sync and branch targets push one.
 /// - **Deadlines, which QuartzControl did not set.** A clone over a stalled connection waited there
 ///   forever; here each step has one, generous enough for a slow line (`Deadlines`).
 public enum ProjectCreator {
   public static let templateRepository = "https://github.com/jackyzha0/quartz.git"
 
-  /// `quartz create -t`; `docs` since Quartz 5.1 (sidebars that scroll away with the page), and a
-  /// project is created from the default branch, which is 5.1.
+  /// `quartz create -t`; `docs` since Quartz 5.1 (sidebars that scroll away with the page).
   public enum Template: String, Sendable, CaseIterable { case `default`, obsidian, ttrpg, blog, docs }
   /// `-X`: what `quartz create` does with `-s`.
   public enum Strategy: String, Sendable { case new, copy, symlink }
@@ -85,6 +87,19 @@ public enum ProjectCreator {
     let (cloned, cloneOutput) = await run("git", ["clone", "--", repository, target], in: nil, deadlines.clone)
     guard cloned else {
       return Result(success: false, output: "\(L10n.t("main.createCloneFailed"))\n\(cloneOutput)")
+    }
+    // The clone carries the tags; `ls-remote` on it lists them as it would on GitHub.
+    let (listed, tags) = await run("git", ["ls-remote", "--", target, "refs/tags/v*"], in: target, deadlines.local)
+    let refs = listed ? JSText.split(tags, "\n").compactMap { line -> (commit: String, ref: String)? in
+      let parts = JSText.split(JS.trim(line), "\t")
+      return parts.count == 2 ? (JS.trim(parts[0]), JS.trim(parts[1])) : nil
+    } : []
+    guard let release = CoreUpdate.newest(CoreUpdate.releases(refs), major: nil) else {
+      return Result(success: false, output: "\(cloneOutput)\n\n\(L10n.t("main.createNoRelease"))")
+    }
+    let (reset, resetOutput) = await run("git", ["reset", "--hard", "--quiet", release.commit], in: target, deadlines.local)
+    guard reset else {
+      return Result(success: false, output: "\(cloneOutput)\n\n\(L10n.t("main.createNoRelease"))\n\(resetOutput)")
     }
     _ = await run("git", ["remote", "remove", "origin"], in: target, deadlines.local)
 

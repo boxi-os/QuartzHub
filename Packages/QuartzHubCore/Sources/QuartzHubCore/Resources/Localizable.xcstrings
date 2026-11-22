@@ -31135,6 +31135,25 @@
         }
       }
     },
+    "main.createNoRelease" : {
+      "comment" : "Neues Projekt: the clone carries no release tag vX.Y.Z to check out",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Repository von Quartz wurde kein Release gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No release was found in Quartz’s repository."
+          }
+        }
+      }
+    },
     "main.createTargetExists" : {
       "comment" : "Project creation",
       "extractionState" : "manual",
@@ -65650,13 +65669,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installiert: {{current}} · Neueste Version: {{latest}}"
+            "value" : "Installiert: {{current}} · Neuestes Release: {{latest}}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installed: {{current}} · Latest: {{latest}}"
+            "value" : "Installed: {{current}} · Latest release: {{latest}}"
           }
         }
       }
@@ -65668,13 +65687,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quartz-Kern aktualisieren?\n\nDabei werden Änderungen von jackyzha0/quartz geholt und die Abhängigkeiten neu installiert; bei Konflikten kann Handarbeit nötig sein.\n\nVorher wird automatisch ein Snapshot angelegt."
+            "value" : "Quartz-Kern aktualisieren?\n\nDabei wird das neueste Release von jackyzha0/quartz geholt und die Abhängigkeiten werden neu installiert; bei Konflikten kann Handarbeit nötig sein.\n\nVorher wird automatisch ein Snapshot angelegt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update Quartz’s core?\n\nThis fetches changes from jackyzha0/quartz and reinstalls the dependencies; conflicts may require manual work.\n\nA snapshot is taken automatically first."
+            "value" : "Update Quartz’s core?\n\nThis fetches the latest release from jackyzha0/quartz and reinstalls the dependencies; conflicts may require manual work.\n\nA snapshot is taken automatically first."
           }
         }
       }
@@ -65875,13 +65894,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installiert: Quartz {{current}} · Neueste Version: {{latest}}"
+            "value" : "Installiert: Quartz {{current}} · Neuestes Release: {{latest}}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installed: Quartz {{current}} · Latest: {{latest}}"
+            "value" : "Installed: Quartz {{current}} · Latest release: {{latest}}"
           }
         }
       }
@@ -65924,6 +65943,44 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "updates.core.newMajor" : {
+      "comment" : "Updates ▸ Quartz-Kern: a release of a later major version than the project's exists",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz {{version}} ist erschienen, eine neue Hauptversion. QuartzHub bietet sie nicht als Update an; ein Wechsel kann Plugins und Einstellungen brechen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz {{version}} is out, a new major version. QuartzHub does not offer it as an update; switching may break plugins and settings."
+          }
+        }
+      }
+    },
+    "updates.core.noRelease" : {
+      "comment" : "Updates ▸ Quartz-Kern: the run could not list Quartz's release tags (no network, or no release)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das neueste Release von Quartz konnte nicht ermittelt werden. Prüfe die Internetverbindung und versuche es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz’s latest release could not be determined. Check the internet connection and try again."
           }
         }
       }
@@ -66038,6 +66095,25 @@
         }
       }
     },
+    "updates.core.releaseMissing" : {
+      "comment" : "Updates ▸ Quartz-Kern: after git's output when fetching the release tag from quartz-upstream failed",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Release {{tag}} fehlt im Remote „quartz-upstream“ dieses Projekts. Zeigt er auf eine eigene Kopie von Quartz, muss sie die Tags von jackyzha0/quartz enthalten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The release {{tag}} is missing from this project’s remote “quartz-upstream”. If it points to your own copy of Quartz, that copy needs the tags of jackyzha0/quartz."
+          }
+        }
+      }
+    },
     "updates.core.releaseNotes" : {
       "comment" : "Updates ▸ Quartz-Kern, Quartz 5.1: folded release notes from CHANGELOG.md",
       "extractionState" : "manual",
@@ -66102,13 +66178,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installiert: Quartz {{current}} ({{currentCommit}}) · Neueste Version: Quartz {{latest}} ({{latestCommit}})"
+            "value" : "Installiert: Quartz {{current}} ({{currentCommit}}) · Neuestes Release: Quartz {{latest}} ({{latestCommit}})"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installed: Quartz {{current}} ({{currentCommit}}) · Latest: Quartz {{latest}} ({{latestCommit}})"
+            "value" : "Installed: Quartz {{current}} ({{currentCommit}}) · Latest release: Quartz {{latest}} ({{latestCommit}})"
           }
         }
       }

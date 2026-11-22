@@ -15,13 +15,17 @@ import Testing
     log = "\(scratch.path)/calls.log"
   }
 
-  /// An upstream with two commits (a shallow clone would have one) and the stand-ins. Not in
-  /// `init`, which cannot await.
-  func prepare(npm: String = "exit 0", wizard: String = "touch quartz.config.yaml", build: String = "exit 0") async throws -> ToolEnvironment {
+  /// An upstream with the releases v5.0.0 (lightweight) and v5.1.0 (annotated, two commits: a
+  /// shallow clone would have one), then a commit after it with a prerelease and a tag that is no
+  /// version; and the stand-ins. Not in `init`, which cannot await.
+  func prepare(npm: String = "exit 0", wizard: String = "touch quartz.config.yaml", build: String = "exit 0",
+               releases: Bool = true) async throws -> ToolEnvironment {
     let env = ["HOME": NSHomeDirectory(), "PATH": "/usr/bin:/bin", "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
                "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t", "GIT_CONFIG_GLOBAL": "/dev/null"]
-    for script in ["git init -q -b v5 upstream", "cd upstream && echo a > a && git add a && git commit -qm one",
-                   "cd upstream && echo b > b && git add b && git commit -qm two"] {
+    let tag = releases ? "git tag" : "true"
+    for script in ["git init -q -b v5 upstream", "cd upstream && echo a > a && git add a && git commit -qm one && \(tag) v5.0.0",
+                   "cd upstream && echo b > b && git add b && git commit -qm two && \(tag) -a v5.1.0 -m 'Quartz 5.1.0'",
+                   "cd upstream && echo c > c && git add c && git commit -qm three && \(tag) v5.2.0-beta.1 && \(tag) vnext"] {
       let result = await ProcessRunner.run(Command("/bin/sh", ["-c", script], in: scratch.path, environment: env))
       try #require(result.success, "\(result.output)")
     }
@@ -68,8 +72,11 @@ import Testing
       "npx quartz create -t obsidian -X symlink -l shortest -b localhost -s /Users/x/Vault mit Leerzeichen",
       "npx quartz build"
     ])
-    // A full clone, cut loose from the upstream.
+    // A full clone at the newest release, on the default branch, cut loose from the upstream.
     #expect(await git("rev-list", "--count", "HEAD") == "2\n")
+    #expect(await git("rev-parse", "HEAD") == (await git("rev-parse", "v5.1.0^{commit}")))
+    #expect(await git("symbolic-ref", "--short", "HEAD") == "v5\n")
+    #expect(await git("status", "--porcelain", "--untracked-files=no") == "")
     #expect(await git("remote") == "")
     #expect(!result.output.contains(L10n.t("main.warmupBuild")))
   }
@@ -98,6 +105,14 @@ import Testing
     #expect(!install.success)
     #expect(install.output.contains("\n\n\(L10n.t("main.createInstallFailed"))\nERR! network"), "\(install.output)")
     #expect(calls == ["npm install"])
+  }
+
+  @Test func anUpstreamWithoutAReleaseIsRefused() async throws {
+    let environment = try await prepare(releases: false)
+    let result = await ProjectCreator.create(.init(targetDirectory: target), environment: environment, repository: upstream)
+    #expect(!result.success)
+    #expect(result.output.hasSuffix("\n\n\(L10n.t("main.createNoRelease"))"), "\(result.output)")
+    #expect(calls.isEmpty)
   }
 
   @Test func aWizardThatWritesNoConfigIsNoSuccess() async throws {
@@ -131,9 +146,12 @@ import Testing
     #expect(result.success, "\(result.output.suffix(2000))")
     #expect(Posix.exists("\(target)/quartz.config.yaml"))
     #expect(Posix.exists("\(target)/public/index.html"), "no warm-up build")
-    #expect(await git("remote") == "")
+    // No origin; `upstream` is the wizard's own (`ensureUpstreamRemote` in Quartz's handlers.js).
+    #expect(await git("remote") == "upstream\n")
     let commits = Int(await git("rev-list", "--count", "HEAD").trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0
     #expect(commits > 100, "\(commits) commits: shallow?")
+    let release = await CoreUpdate(environment: environment, snapshot: { _, _, _ in nil }).latestRelease(ProjectCreator.templateRepository)
+    #expect(await git("rev-parse", "HEAD") == "\(release?.commit ?? "?")\n", "not at the newest release")
     #expect(!result.output.contains(L10n.t("main.warmupBuild")), "\(result.output.suffix(2000))")
   }
 

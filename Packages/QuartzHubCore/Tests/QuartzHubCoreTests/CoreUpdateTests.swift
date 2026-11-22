@@ -45,7 +45,7 @@ import Testing
       CoreUpdate(environment: environment, snapshot: { [self] _, kind, label in
         self.snapshots.withLock { $0.append([kind, label]) }
         return "snap-1"
-      }, templateRepository: path("upstream.git"))
+      }, templateRepository: path("upstream.git"), target: .branchHead)
     }
 
     func git(_ args: [String], _ dir: String) async -> CommandResult {
@@ -191,7 +191,7 @@ import Testing
       flags.started.withLock { $0 = true }
       while !flags.release.withLock({ $0 }) { try await Task.sleep(for: .milliseconds(10)) }
       return nil
-    }, templateRepository: harness.path("nowhere.git"))
+    }, templateRepository: harness.path("nowhere.git"), target: .branchHead)
     let project = URL(fileURLWithPath: harness.path("p"))
     try Posix.mkdirs(project.path)
     _ = await harness.git(["init", "-q"], project.path)
@@ -199,7 +199,8 @@ import Testing
     while !flags.started.withLock({ $0 }) { try await Task.sleep(for: .milliseconds(10)) }
     let second = try await service.run(project: project.path)
     let abort = try await service.abort(project: project.path)
-    let other = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in nil }, templateRepository: harness.path("nowhere.git"))
+    let other = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in nil }, templateRepository: harness.path("nowhere.git"),
+                           target: .branchHead)
     let fromOther = try await other.run(project: project.path)
     let abortFromOther = try await other.abort(project: project.path)
     flags.release.withLock { $0 = true }
@@ -225,6 +226,116 @@ import Testing
     #expect(await service.divergingUpstream(project: project) == nil, "the same repository written otherwise")
     _ = await harness.git(["remote", "set-url", "quartz-upstream", "https://github.com/someone/quartz-fork.git"], project)
     #expect(await service.divergingUpstream(project: project) == "https://github.com/someone/quartz-fork.git")
+  }
+
+  // MARK: Releases (decisions/phase-5-gleichstand.md, "Kern aus Releases")
+
+  @Test func releasesAreTheVersionTagsWithTheirCommits() {
+    let refs: [(commit: String, ref: String)] = [
+      ("t51", "refs/tags/v5.1.0"), ("c51", "refs/tags/v5.1.0^{}"),
+      ("c50", "refs/tags/v5.0.0"),
+      ("c52b", "refs/tags/v5.2.0-beta.1"), ("cx", "refs/tags/vnext"), ("cy", "refs/tags/5.3.0"),
+      ("t60", "refs/tags/v6.0.0"), ("c60", "refs/tags/v6.0.0^{}"),
+      ("h", "HEAD")
+    ]
+    let releases = CoreUpdate.releases(refs)
+    #expect(Set(releases.map(\.tag)) == ["v5.0.0", "v5.1.0", "v6.0.0"])
+    #expect(releases.first { $0.tag == "v5.1.0" }?.commit == "c51", "the peeled line names the commit")
+    #expect(CoreUpdate.newest(releases, major: 5) == CoreUpdate.Release(tag: "v5.1.0", commit: "c51", version: "5.1.0"))
+    #expect(CoreUpdate.newest(releases, major: nil)?.version == "6.0.0")
+    #expect(CoreUpdate.newest(releases, major: 4) == nil)
+    // The other order: the peeled line before the tag's own.
+    #expect(CoreUpdate.releases([("c", "refs/tags/v1.0.0^{}"), ("t", "refs/tags/v1.0.0")]).first?.commit == "c")
+  }
+
+  /// An upstream with v5.0.0 (lightweight), v5.1.0 (annotated), a commit with a prerelease after
+  /// it, then v6.0.0; package.json carries the version as Quartz's does.
+  func releaseUpstream(_ harness: Harness) async throws -> [String: String] {
+    let up = harness.path("up")
+    try Posix.mkdirs(up)
+    _ = await harness.git(["init", "-q", "-b", "v5"], up)
+    var commits: [String: String] = [:]
+    for (name, version, tag) in [("c50", "5.0.0", ["v5.0.0"]), ("c51", "5.1.0", ["-a", "v5.1.0", "-m", "Quartz 5.1.0"]),
+                                 ("c52", "5.2.0-beta.1", ["v5.2.0-beta.1"]), ("c60", "6.0.0", ["-a", "v6.0.0", "-m", "Quartz 6"])] {
+      try SnapshotStoreTests.Harness.write("\(up)/package.json", "{\n  \"name\": \"@jackyzha0/quartz\",\n  \"version\": \"\(version)\"\n}\n")
+      try SnapshotStoreTests.Harness.write("\(up)/\(name).txt", name)
+      _ = await harness.git(["add", "-A"], up)
+      _ = await harness.git(["commit", "-qm", name], up)
+      _ = await harness.git(["tag"] + tag, up)
+      commits[name] = JS.trim(await harness.git(["rev-parse", "HEAD"], up).stdout)
+    }
+    return commits
+  }
+
+  func project(_ harness: Harness, at commit: String, _ name: String) async throws -> String {
+    let project = harness.path(name)
+    _ = await harness.git(["clone", "-q", harness.path("up"), project], harness.path(""))
+    _ = await harness.git(["reset", "-q", "--hard", commit], project)
+    _ = await harness.git(["remote", "remove", "origin"], project)
+    _ = await harness.git(["tag", "-d"] + ["v5.0.0", "v5.1.0", "v5.2.0-beta.1", "v6.0.0"], project)
+    return project
+  }
+
+  @Test func statusAndRunGoToTheNewestReleaseOfTheMajorVersion() async throws {
+    let harness = try Harness()
+    let commits = try await releaseUpstream(harness)
+    let service = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in "snap" }, templateRepository: harness.path("up"))
+    let project = try await project(harness, at: commits["c50"]!, "p")
+
+    let before = await service.status(project: project, resolveInstalled: true)
+    #expect(before.state == .behind)
+    #expect(before.latestCommit == commits["c51"], "the release, not the branch's head and not 6.0.0")
+    #expect(before.release == "5.1.0")
+    #expect(before.newerMajor == "6.0.0")
+    #expect(before.currentCommit == commits["c50"])
+    #expect(before.missingCommits == 1)
+
+    let result = try await service.run(project: project)
+    #expect(result.success, "\(result.output)")
+    #expect(JS.trim(await harness.git(["rev-parse", "HEAD"], project).stdout) == commits["c51"], "a fast-forward onto the tag's commit")
+    #expect(JS.trim(await harness.git(["tag"], project).stdout) == "", "no tags fetched")
+    let after = await service.status(project: project)
+    #expect(after.state == .upToDate)
+    #expect(after.release == "5.1.0")
+  }
+
+  @Test func aProjectNewerThanTheReleaseIsNotTakenBack() async throws {
+    let harness = try Harness()
+    let commits = try await releaseUpstream(harness)
+    let service = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in "snap" }, templateRepository: harness.path("up"))
+    // Made from the branch, after 5.1.0; its package.json still says 5.2.0-beta.1, major 5.
+    let project = try await project(harness, at: commits["c52"]!, "p")
+    let status = await service.status(project: project)
+    #expect(status.state == .upToDate)
+    #expect(status.latestCommit == commits["c51"])
+  }
+
+  @Test func withoutAReleaseTheStateIsUnknownAndTheRunStopsFirst() async throws {
+    let harness = try Harness()
+    _ = try await releaseUpstream(harness)
+    let snapshots = Mutex(0)
+    let service = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in snapshots.withLock { $0 += 1 }; return "snap" },
+                             templateRepository: harness.path("nowhere.git"))
+    let project = try await project(harness, at: "HEAD", "p")
+    #expect(await service.status(project: project).state == .unknown)
+    let result = try await service.run(project: project)
+    #expect(result == CoreUpdate.Result(success: false, output: L10n.t("updates.core.noRelease")))
+    #expect(snapshots.withLock { $0 } == 0, "nothing written before the release is known")
+  }
+
+  @Test func aForkWithoutTheTagIsNamed() async throws {
+    let harness = try Harness()
+    let commits = try await releaseUpstream(harness)
+    let service = CoreUpdate(environment: harness.environment, snapshot: { _, _, _ in "snap" }, templateRepository: harness.path("up"))
+    let project = try await project(harness, at: commits["c50"]!, "p")
+    // quartz-upstream points to a copy without tags.
+    _ = await harness.git(["clone", "-q", "--no-tags", harness.path("up"), harness.path("fork")], harness.path(""))
+    _ = await harness.git(["tag", "-d", "v5.0.0", "v5.1.0", "v5.2.0-beta.1", "v6.0.0"], harness.path("fork"))
+    _ = await harness.git(["remote", "add", "quartz-upstream", harness.path("fork")], project)
+    let result = try await service.run(project: project)
+    #expect(!result.success)
+    #expect(result.output.hasSuffix("\n\n" + L10n.t("updates.core.releaseMissing", ["tag": "v5.1.0"])), "\(result.output)")
+    #expect(JS.trim(await harness.git(["rev-parse", "HEAD"], project).stdout) == commits["c50"])
   }
 
   @Test func deadlines() {

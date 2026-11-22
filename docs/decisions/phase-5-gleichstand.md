@@ -2540,7 +2540,8 @@ nicht gemacht (Regel: nur Scratch-Profile); den deckt der Test.
 ## Quartz 5.1 (2026-11-11)
 
 Quartz 5.1.0 ist am 2026-11-09 erschienen, und QuartzHub klont beim Anlegen den Standard-Branch:
-Jedes neue Projekt ist ein 5.1-Projekt. Gemessen an einer entschärften Kopie von gui-test, die der
+Jedes neue Projekt ist ein 5.1-Projekt. (Seit 2026-11-22 das neueste Release statt des Branch-Stands,
+„Quartz 5.2“ unten.) Gemessen an einer entschärften Kopie von gui-test, die der
 Nutzer über die Seite Updates auf 5.1 gehoben hat (5.0.0 9be7a33 → 7cfb079, 157 Commits), und an
 einem lokalen Klon davon auf 5.0.0. Entscheidung des Nutzers: alle Punkte vor dem Release, und das
 Umstellen der alten Plugin-Einträge wird angeboten, nicht automatisch gemacht (Quartz selbst warnt
@@ -2903,3 +2904,66 @@ Kopf der erzeugten `relay-config.php`), QuartzHub 1.0.2 nimmt 0.6.1 als gleichen
 der Formulare-Reiter fragt es wie die drei anderen). An einer Kopie von gui-test gemessen: 0.6.1 ohne
 Hinweis, 0.6.2 mit „Dieser Editor kennt quartz-forms 0.6.0, installiert ist 0.6.2“. Die Fassung liest
 `PluginSchemaReader` aus `quartz.version` des Pakets, nicht aus dem `version` oben.
+
+## Quartz 5.2 (2026-11-22)
+
+Quartz 5.2.0 ist am 2026-11-22 erschienen (Tag `v5.2.0`, annotiert, Commit 5680044, an dem Tag
+zugleich der Kopf von `v5`). Die Projekte stehen auf 7cfb079, einem Commit nach v5.1.0, weil
+QuartzHub bisher dem Branch folgte. Plan mit allen Punkten: Entscheidungen des Nutzers vom selben
+Tag (Kern nur aus Releases; neue Schriftfelder unter Stile ▸ Basis; quartz-multilanguage anpassen,
+quartz-betterbases bleibt eingefroren; alles in 1.1.0).
+
+Gemessen vorher an einer Kopie von gui-test (7cfb079 und lokaler Stand, v5.2.0 hineingemerged,
+`npm install`, `quartz build`):
+
+- Nach `git fetch <url> refs/tags/v5.2.0` ist `FETCH_HEAD` das Tag-Objekt (e9eae45), der Commit
+  erst `FETCH_HEAD^{commit}` (5680044).
+- quartz-fonts-Eintrag mit `enabled: false` und `theme.fontOrigin: local`: keine Datei in `public/`
+  nennt fonts.googleapis.com; Quartz warnt, `configuration.fonts` sei damit aus.
+- `plugin doctor --fix` entfernt den Eintrag und schreibt `configuration.fonts: {enabled: false}`.
+- Ohne Eintrag und ohne `configuration.fonts` (so legt 5.2 Projekte an) bei `theme.fontOrigin:
+  local`: 148 Dateien mit `<link href="https://fonts.googleapis.com/css2?family=Noto Sans…">`. Die
+  eingebaute Schrift liest `theme.fontOrigin` nicht, ihr Standard ist `googleFonts`.
+- Mit `configuration.fonts: {fontOrigin: local, h1: Lora, interface: Inter}`: keine Datei, und das
+  CSS setzt `--h1-font: Lora`, `--font-interface: Inter` und weiter `--bodyFont` usw.
+- Ein Callout ist `<div class="callout note" data-callout="note">`, sein Titel
+  `<div class="callout-title-inner">Ein Titel</div>` ohne `<p>`, eine Transklusion
+  `<div class="transclude internal-embed markdown-embed">`.
+
+### Kern aus Releases
+
+**Entschieden (Nutzer, 2026-11-22): Kern-Updates und neue Projekte gehen nur noch auf ein Release.**
+QuartzControl fragte `ls-remote HEAD` und merged den Kopf des Standard-Branches (`updateService.ts`,
+„branch naming isn't guaranteed stable“); so kam jeder einzelne Commit zwischen zwei Releases in die
+Projekte. Jetzt:
+
+- **Welches Release:** die Tags `vX.Y.Z` aus `git ls-remote -- <url> 'refs/tags/v*'`, ohne
+  Vorabversion, das höchste derselben Hauptversion wie `package.json` des Projekts
+  (`CoreUpdate.releases`, `newest`). Annotierte Tags nennen auf der `^{}`-Zeile den Commit, die
+  gewinnt. Kein Aufruf der GitHub-API: git fragt ohnehin, und die API hätte ein Ratenlimit.
+- **Eine neue Hauptversion** wird auf der Updates-Seite genannt (`Status.newerMajor`), nicht als
+  Update angeboten: Ein Wechsel auf Quartz 6 ist kein Merge, den man nebenbei macht.
+- **Status:** Ist der Release-Commit schon in der Geschichte, gilt „Aktuell“. Ein Projekt, das vom
+  Branch kam und neuer ist als das letzte Release, wird so nie zurückgestuft.
+- **Lauf:** `git fetch --no-tags quartz-upstream refs/tags/<tag>`, dann `FETCH_HEAD^{commit}`, und
+  gemerged wird diese SHA. Mit `FETCH_HEAD` legt git für ein annotiertes Tag immer einen
+  Merge-Commit an (Gegenprobe: `statusAndRunGoToTheNewestReleaseOfTheMajorVersion` wird rot, kein
+  Fast-Forward). Ohne Release (kein Netz) bricht der Lauf ab, bevor ein Snapshot entsteht. Fehlt das
+  Tag in einem abweichenden `quartz-upstream` (eigene Kopie ohne Tags), sagt die Meldung das.
+- **Anlegen:** voll klonen wie bisher, dann das höchste Release aus dem Klon selbst lesen
+  (`ls-remote` auf den eigenen Ordner, kein zweiter Netzzugriff) und den Standard-Branch mit
+  `reset --hard` darauf setzen: ein Branch, kein losgelöster HEAD, weil Git-Sync und Branch-Ziele
+  ihn pushen. Ohne Release scheitert das Anlegen mit einem eigenen Satz.
+- **Was gleich bleibt:** Stash-Name, Merge-Betreff, Notiz und der ganze Ablauf nach dem Merge. Der
+  Weg über den Branch bleibt als `CoreUpdate.Target.branchHead` und ist der des Abgleichs mit
+  QuartzControls 85 Schritten (`replaysQuartzControlsSteps`, unverändert grün).
+
+Was das nicht leistet: Auch ein Release kann QuartzHub brechen (5.2 baut die Callouts um), und
+Plugins hängen weiter an ihren eigenen Commits (`quartz.lock.json`). Der Gewinn ist, dass ein
+Kernstand erst in ein Projekt kommt, wenn Quartz ihn freigibt, und dass man vorher messen kann.
+
+Tests: `releasesAreTheVersionTagsWithTheirCommits`, `statusAndRunGoToTheNewestReleaseOfTheMajorVersion`,
+`aProjectNewerThanTheReleaseIsNotTakenBack`, `withoutAReleaseTheStateIsUnknownAndTheRunStopsFirst`,
+`aForkWithoutTheTagIsNamed`; beim Anlegen `theWholeWayWithEveryAnswerGiven` (HEAD = Commit von
+v5.1.0 auf Branch `v5`, obwohl danach noch ein Commit mit Vorabversion kommt) und
+`anUpstreamWithoutAReleaseIsRefused`.
