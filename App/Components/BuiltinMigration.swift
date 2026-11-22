@@ -59,8 +59,10 @@ struct BuiltinMigration: View {
     // doctor ends with 1 for problems it found besides the move; whether it moved is the file.
     output = result.output
     await done()
+    let path = project.path
+    let features = await Task.detached { QuartzFeatures.read(project: path) }.value
     let left = (try? await ConfigFile.read(project: project.path, runtime: environment.runtime))
-      .map { BuiltinProcessing.pendingMigrations($0.plugins) } ?? [0]
+      .map { BuiltinProcessing.pendingMigrations($0.plugins, features: features) } ?? [0]
     failed = !left.isEmpty
     Announce.post(failed ? L10n.t("builtins.migrateFailed") : L10n.t("builtins.migrateDone"))
   }

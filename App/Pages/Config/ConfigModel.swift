@@ -122,22 +122,22 @@ final class ConfigModel {
 
   var plugins: [PluginEntry] { config?.plugins ?? [] }
 
-  // MARK: Quartz 5.1's built-ins
+  // MARK: Quartz's built-ins (5.1, fonts since 5.2)
 
   /// What the build will do with the draft as it stands, old plugin entries included.
   var builtins: BuiltinProcessing.Plan? {
     guard let config, features.builtins else { return nil }
-    return BuiltinProcessing.plan(configuration: config.configuration, plugins: config.plugins) { self.provides[$0.name] }
+    return BuiltinProcessing.plan(configuration: config.configuration, plugins: config.plugins, features: features) { self.provides[$0.name] }
   }
 
   /// The entries `plugin doctor --fix` would move, by name.
   var pendingMigrations: [String] {
     let plugins = plugins
-    return BuiltinProcessing.pendingMigrations(plugins).map { plugins[$0].name }
+    return BuiltinProcessing.pendingMigrations(plugins, features: features).map { plugins[$0].name }
   }
 
   func builtinValue(_ builtin: BuiltinProcessing.Builtin, _ key: String) -> JSONValue? {
-    builtins?[builtin].options[key]
+    builtins?.planned(builtin)?.options[key]
   }
 
   /// Writes `configuration.<key>.<option>`; `<key>: false` becomes `{ enabled: false, … }`.

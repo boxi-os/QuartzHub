@@ -141,7 +141,7 @@ final class PluginsModel {
 
   /// The built-in that has taken over this entry's job, on a project whose Quartz has them.
   func builtin(_ item: IndexedPlugin) -> BuiltinProcessing.Builtin? {
-    features.builtins ? BuiltinProcessing.absorbing(item.entry) : nil
+    features.builtins ? BuiltinProcessing.absorbing(item.entry, features: features) : nil
   }
 
   /// GitHubFlavoredMarkdown after ObsidianFlavoredMarkdown, which Quartz 5.1 does not take.
@@ -164,7 +164,7 @@ final class PluginsModel {
 
   var pendingMigrations: [String] {
     guard features.builtins, let plugins = config?.plugins else { return [] }
-    return BuiltinProcessing.pendingMigrations(plugins).map { plugins[$0].name }
+    return BuiltinProcessing.pendingMigrations(plugins, features: features).map { plugins[$0].name }
   }
 
   func reloadFrames() {

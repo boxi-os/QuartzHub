@@ -2,8 +2,8 @@ import Foundation
 import Testing
 @testable import QuartzHubCore
 
-/// `BuiltinProcessing` against the `planBuiltins` cases of Quartz 5.1.0
-/// (`quartz/plugins/builtins/builtins.test.ts`), and `QuartzFeatures` against a 5.0 and a 5.1 tree.
+/// `BuiltinProcessing` against the `planBuiltins` cases of Quartz 5.1.0 and 5.2.0
+/// (`quartz/plugins/builtins/builtins.test.ts`), and `QuartzFeatures` against a 5.0, 5.1 and 5.2 tree.
 @Suite struct BuiltinProcessingTests {
   static func entry(_ source: String, enabled: Bool = true, _ extra: [(String, JSONValue)] = []) -> PluginEntry {
     var object = JSONObject([("source", .string(source)), ("enabled", .bool(enabled))])
@@ -26,7 +26,8 @@ import Testing
 
   @Test func allAreOnByDefaultWithTheirDefaults() {
     let plan = BuiltinProcessing.plan(configuration: JSONObject(), plugins: [])
-    #expect(plan.builtins.map(\.builtin) == BuiltinProcessing.Builtin.allCases)
+    #expect(plan.builtins.map(\.builtin) == [.frontmatter, .links, .drafts, .contentIndex], "5.1 has no fonts built-in")
+    #expect(plan.planned(.fonts) == nil)
     #expect(plan.builtins.allSatisfy { $0.enabled })
     #expect(plan[.links].options["markdownLinkResolution"] == .string("shortest"))
     #expect(plan[.frontmatter].order == .number(0))
@@ -178,5 +179,58 @@ import Testing
       """.utf8))
     try Posix.write("\(project)/package.json", Data(#"{"version":"5.1.0"}"#.utf8))
     #expect(QuartzFeatures.read(project: project) == .quartz51)
+    // 5.2: the fonts built-in.
+    try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts", Data())
+    try Posix.write("\(project)/package.json", Data(#"{"version":"5.2.0"}"#.utf8))
+    #expect(QuartzFeatures.read(project: project) == .quartz52)
+  }
+
+  // MARK: Quartz 5.2's fonts
+
+  @Test func fontsAreOnByDefaultIn52() {
+    let plan = BuiltinProcessing.plan(configuration: JSONObject(), plugins: [], features: .quartz52)
+    #expect(plan.builtins.map(\.builtin) == BuiltinProcessing.Builtin.allCases)
+    let fonts = plan.planned(.fonts)
+    #expect(fonts?.enabled == true)
+    #expect(fonts?.order == .number(60))
+    #expect(fonts?.options["fontOrigin"] == .string("googleFonts"))
+    #expect(fonts?.options["useThemeFonts"] == .bool(true))
+  }
+
+  /// "absorbs a @quartz-community/quartz-fonts entry with its options"
+  @Test func aQuartzFontsEntryCarriesOverIn52() {
+    let fonts = Self.entry("@quartz-community/quartz-fonts", [("options", Self.object([("h1", .string("Lora")), ("fontOrigin", .string("local"))]))])
+    let plan = BuiltinProcessing.plan(configuration: JSONObject(), plugins: [fonts], features: .quartz52)
+    #expect(plan.planned(.fonts)?.enabled == true)
+    #expect(plan.planned(.fonts)?.options["h1"] == .string("Lora"))
+    #expect(plan.planned(.fonts)?.options["fontOrigin"] == .string("local"))
+    #expect(plan.absorbedEntries == [0])
+    // The entry named "fonts" too.
+    #expect(BuiltinProcessing.absorbing(Self.entry("github:quartz-community/fonts"), features: .quartz52) == .fonts)
+  }
+
+  /// "a disabled plugin entry turns the built-in off"; measured on gui-test, 2026-11-22.
+  @Test func aDisabledQuartzFontsEntryTurnsItOffIn52() {
+    let plan = BuiltinProcessing.plan(configuration: JSONObject(), plugins: [Self.entry("@quartz-community/quartz-fonts", enabled: false)],
+                                      features: .quartz52)
+    #expect(plan.planned(.fonts)?.enabled == false)
+    #expect(plan.planned(.fonts)?.note == .disabledByEntry(plugin: "quartz-fonts"))
+  }
+
+  /// On 5.1 the quartz-fonts entry is a plugin: not absorbed, nothing for doctor to move.
+  @Test func on51QuartzFontsIsAPlugin() {
+    let entries = [Self.entry("@quartz-community/quartz-fonts"), Self.entry("@quartz-community/crawl-links")]
+    #expect(BuiltinProcessing.absorbing(entries[0]) == nil)
+    #expect(BuiltinProcessing.pendingMigrations(entries) == [1])
+    #expect(BuiltinProcessing.pendingMigrations(entries, features: .quartz52) == [0, 1])
+    #expect(BuiltinProcessing.plan(configuration: JSONObject(), plugins: entries).absorbedEntries == [1])
+  }
+
+  @Test func aMarketplaceRepositoryIsBuiltInByTheProjectsQuartz() {
+    #expect(BuiltinProcessing.absorbing(repository: "quartz-community/quartz-fonts", features: .quartz52) == .fonts)
+    #expect(BuiltinProcessing.absorbing(repository: "quartz-community/quartz-fonts", features: .quartz51) == nil)
+    #expect(BuiltinProcessing.absorbing(repository: "Quartz-Community/crawl-links", features: .quartz51) == .links)
+    #expect(BuiltinProcessing.absorbing(repository: "quartz-community/crawl-links", features: QuartzFeatures(version: "5.0.0")) == nil)
+    #expect(BuiltinProcessing.absorbing(repository: "someone/quartz-fonts", features: .quartz52) == nil)
   }
 }

@@ -141,7 +141,9 @@ final class UpdatesModel {
   private func readConfigFindings(_ environment: ToolEnvironment) async {
     guard let config = try? await ConfigFile.read(project: path, runtime: environment.runtime) else { return }
     doctorPlugins = config.plugins
-    pendingMigrations = BuiltinProcessing.pendingMigrations(config.plugins).map { config.plugins[$0].name }
+    let path = path
+    let features = await Task.detached { QuartzFeatures.read(project: path) }.value
+    pendingMigrations = BuiltinProcessing.pendingMigrations(config.plugins, features: features).map { config.plugins[$0].name }
     markdownOrderProblem = BuiltinProcessing.markdownOrderProblem(config.plugins) != nil
   }
 

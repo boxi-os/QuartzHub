@@ -16,20 +16,27 @@ public struct QuartzFeatures: Equatable, Sendable {
   public var sidebars: Bool
   /// PostHog's `apiHost`, `uiHost` and `personProfiles` and umami's `script`, declared in `quartz/cfg.ts`.
   public var analytics51: Bool
+  /// `quartz/plugins/builtins/fonts.ts` (Quartz 5.2): font loading is built in as
+  /// `configuration.fonts` and absorbs the quartz-fonts plugin.
+  public var fontsBuiltin: Bool
 
   public init(version: String? = nil, builtins: Bool = false, prefetch: Bool = false, publishAssets: Bool = false, sidebars: Bool = false,
-              analytics51: Bool = false) {
+              analytics51: Bool = false, fontsBuiltin: Bool = false) {
     self.version = version
     self.builtins = builtins
     self.prefetch = prefetch
     self.publishAssets = publishAssets
     self.sidebars = sidebars
     self.analytics51 = analytics51
+    self.fontsBuiltin = fontsBuiltin
   }
 
   /// Everything a 5.1 project has, for tests and previews.
   public static let quartz51 = QuartzFeatures(version: "5.1.0", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
                                               analytics51: true)
+  /// Everything a 5.2 project has.
+  public static let quartz52 = QuartzFeatures(version: "5.2.0", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
+                                              analytics51: true, fontsBuiltin: true)
 
   public static func read(project: String) -> QuartzFeatures {
     var features = QuartzFeatures()
@@ -37,6 +44,7 @@ public struct QuartzFeatures: Equatable, Sendable {
       features.version = package["version"]?.stringValue
     }
     features.builtins = Posix.exists(NodePath.join(project, "quartz", "plugins", "builtins", "index.ts"))
+    features.fontsBuiltin = Posix.exists(NodePath.join(project, "quartz", "plugins", "builtins", "fonts.ts"))
     // The declarations, not the comments around them: `prefetch?: "viewport" | …`.
     if let data = try? Posix.read(NodePath.join(project, "quartz", "cfg.ts")), data.count < 1_000_000 {
       let text = String(decoding: data, as: UTF8.self)
@@ -49,32 +57,40 @@ public struct QuartzFeatures: Equatable, Sendable {
   }
 }
 
-/// Quartz 5.1's built-in processing (`quartz/plugins/builtins/index.ts`, `planBuiltins`): which of
-/// the four built-ins run, with which options and order, and which plugin entries they absorb.
+/// Quartz's built-in processing (`quartz/plugins/builtins/index.ts`, `planBuiltins`): which of
+/// the built-ins run, with which options and order, and which plugin entries they absorb.
 ///
-/// | built-in      | configuration key            | formerly                        |
-/// |---------------|------------------------------|---------------------------------|
-/// | frontmatter   | `configuration.frontmatter`  | parsing half of note-properties |
-/// | links         | `configuration.links`        | crawl-links                     |
-/// | drafts        | `configuration.drafts`       | remove-draft                    |
-/// | contentIndex  | `configuration.contentIndex` | content-index                   |
+/// | built-in      | configuration key            | formerly                        | since |
+/// |---------------|------------------------------|---------------------------------|-------|
+/// | frontmatter   | `configuration.frontmatter`  | parsing half of note-properties | 5.1   |
+/// | links         | `configuration.links`        | crawl-links                     | 5.1   |
+/// | drafts        | `configuration.drafts`       | remove-draft                    | 5.1   |
+/// | contentIndex  | `configuration.contentIndex` | content-index                   | 5.1   |
+/// | fonts         | `configuration.fonts`        | quartz-fonts                    | 5.2   |
 ///
-/// Ported from 5.1.0 and tested against its `builtins.test.ts` cases (BuiltinProcessingTests).
+/// Which there are depends on the project's Quartz (`QuartzFeatures`): on a 5.1 project the
+/// quartz-fonts entry is a plugin like any other. Ported from 5.1.0 and 5.2.0 and tested against
+/// their `builtins.test.ts` cases (BuiltinProcessingTests).
 /// Deviations: a plugin's short name is the name QuartzHub derives from its source
 /// (`PluginEntry.name`), not the manifest's `name`, which Quartz prefers; the two differ only for
 /// a plugin whose package calls itself something else. The notices Quartz prints are not built:
 /// QuartzHub says the same in its own words.
 public enum BuiltinProcessing {
   public enum Builtin: String, CaseIterable, Sendable {
-    case frontmatter, links, drafts, contentIndex
+    case frontmatter, links, drafts, contentIndex, fonts
 
     public var configKey: String { rawValue }
+
+    /// The built-ins of a project's Quartz.
+    public static func available(_ features: QuartzFeatures) -> [Builtin] {
+      features.fontsBuiltin ? allCases : allCases.filter { $0 != .fonts }
+    }
 
     /// Position among plugins of the same category (the scale of a plugin's `order`).
     public var defaultOrder: Double {
       switch self {
       case .frontmatter: 0
-      case .links: 60
+      case .links, .fonts: 60
       case .drafts, .contentIndex: 50
       }
     }
@@ -86,19 +102,22 @@ public enum BuiltinProcessing {
         JSONObject([("markdownLinkResolution", .string("shortest")), ("prettyLinks", .bool(true)), ("openLinksInNewTab", .bool(false)),
                     ("lazyLoad", .bool(false)), ("externalLinkIcon", .bool(true)), ("disableBrokenWikilinks", .bool(false))])
       case .drafts: JSONObject([("publish", .bool(false))])
+      // `fontsDefaults` without the keys that are `undefined` there (title … h6).
+      case .fonts: JSONObject([("useThemeFonts", .bool(true)), ("fontOrigin", .string("googleFonts"))])
       case .contentIndex:
         JSONObject([("enableSiteMap", .bool(true)), ("enableRSS", .bool(true)), ("rssLimit", .number(10)), ("rssFullHtml", .bool(false)),
                     ("rssSlug", .string("index")), ("includeEmptyFiles", .bool(true))])
       }
     }
 
-    /// The official plugin whose entry it absorbs (short name).
-    public var absorbs: String? {
+    /// The official plugins whose entries it absorbs (short names).
+    public var absorbs: [String] {
       switch self {
-      case .frontmatter: nil
-      case .links: "crawl-links"
-      case .drafts: "remove-draft"
-      case .contentIndex: "content-index"
+      case .frontmatter: []
+      case .links: ["crawl-links"]
+      case .drafts: ["remove-draft"]
+      case .contentIndex: ["content-index"]
+      case .fonts: ["quartz-fonts", "fonts"]
       }
     }
 
@@ -115,6 +134,7 @@ public enum BuiltinProcessing {
       case .links: ["data": ["links"]]
       case .drafts: [:]
       case .contentIndex: ["files": ["static/contentIndex.json"]]
+      case .fonts: ["files": ["static/fonts/quartz-fonts.css"]]
       }
     }
   }
@@ -143,7 +163,11 @@ public enum BuiltinProcessing {
     /// Indices into `plugins` of the entries Quartz handles itself: not installed, not loaded.
     public var absorbedEntries: Set<Int>
 
+    /// A built-in every Quartz with built-ins has (not `fonts`, which is 5.2's).
     public subscript(builtin: Builtin) -> Planned { builtins.first { $0.builtin == builtin }! }
+
+    /// A built-in the project's Quartz may not have.
+    public func planned(_ builtin: Builtin) -> Planned? { builtins.first { $0.builtin == builtin } }
 
     /// Whether `draft: true` keeps a page off the site.
     public var removesDrafts: Bool {
@@ -168,19 +192,28 @@ public enum BuiltinProcessing {
   nonisolated(unsafe) private static let githubOfficial =
     #/(?:github:|git\+https:\/\/github\.com\/|https:\/\/github\.com\/)quartz-community\/([a-z0-9-]+?)(?:\.git)?(?:#.*)?/#.matchingSemantics(.unicodeScalar)
 
-  /// The built-in that absorbs this entry, if its plugin now lives in Quartz.
-  public static func absorbing(_ entry: PluginEntry) -> Builtin? {
+  /// The built-in that absorbs this entry, if its plugin now lives in the project's Quartz.
+  public static func absorbing(_ entry: PluginEntry, features: QuartzFeatures = .quartz51) -> Builtin? {
     guard let name = officialPluginName(entry.source) else { return nil }
-    return Builtin.allCases.first { $0.absorbs == name }
+    return Builtin.available(features).first { $0.absorbs.contains(name) }
+  }
+
+  /// The built-in that does the job of a marketplace repository (`quartz-community/quartz-fonts`)
+  /// in the project's Quartz; nil for anything else and for a Quartz without built-ins.
+  public static func absorbing(repository fullName: String, features: QuartzFeatures) -> Builtin? {
+    let prefix = "quartz-community/"
+    guard features.builtins, fullName.lowercased().hasPrefix(prefix) else { return nil }
+    let name = String(fullName.lowercased().dropFirst(prefix.count))
+    return Builtin.available(features).first { $0.absorbs.contains(name) }
   }
 
   /// The entries `quartz plugin doctor --fix` would change (`findBuiltinMigrations`): every entry of
   /// an absorbed plugin, on or off, and note-properties while its options name `delimiters` or
   /// `language`. Indices into `plugins`.
-  public static func pendingMigrations(_ plugins: [PluginEntry]) -> [Int] {
+  public static func pendingMigrations(_ plugins: [PluginEntry], features: QuartzFeatures = .quartz51) -> [Int] {
     plugins.indices.filter { index in
       let entry = plugins[index]
-      if absorbing(entry) != nil { return true }
+      if absorbing(entry, features: features) != nil { return true }
       guard officialPluginName(entry.source) == "note-properties", let options = entry.object["options"]?.objectValue else { return false }
       return options["delimiters"] != nil || options["language"] != nil
     }
@@ -207,13 +240,13 @@ public enum BuiltinProcessing {
 
   /// `planBuiltins`. `providesOf` gives an enabled entry's `quartz.capabilities.provides`
   /// (`providedCapabilities`); nil when it declares none.
-  public static func plan(configuration: JSONObject, plugins: [PluginEntry],
+  public static func plan(configuration: JSONObject, plugins: [PluginEntry], features: QuartzFeatures = .quartz51,
                           providesOf: (PluginEntry) -> [String: [String]]? = { _ in nil }) -> Plan {
     var absorbedEntries = Set<Int>()
     var planned: [Planned] = []
     let shortName = { (entry: PluginEntry) in officialPluginName(entry.source) ?? entry.name }
 
-    for builtin in Builtin.allCases {
+    for builtin in Builtin.available(features) {
       var configured = JSONObject()
       switch configuration[builtin.configKey] {
       case .bool(let flag)?: configured["enabled"] = .bool(flag)
@@ -232,7 +265,7 @@ public enum BuiltinProcessing {
       var absorbed: Int?
 
       // 1. The entry of the official plugin it replaces.
-      let legacy = plugins.indices.filter { absorbing(plugins[$0]) == builtin }
+      let legacy = plugins.indices.filter { absorbing(plugins[$0], features: features) == builtin }
       absorbedEntries.formUnion(legacy)
       if let index = legacy.first(where: { plugins[$0].enabled }) ?? legacy.first {
         absorbed = index

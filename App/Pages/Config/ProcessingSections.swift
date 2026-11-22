@@ -1,13 +1,14 @@
 import QuartzHubCore
 import SwiftUI
 
-/// Quartz 5.1's built-in processing on the Website tab: links, drafts, the content index and the
-/// frontmatter, one section each, under `configuration.<key>`. The fields show what the build will
+/// Quartz's built-in processing on the Website tab: links, drafts, the content index and the
+/// frontmatter (5.1) and the fonts (5.2), one section each, under `configuration.<key>`. The fields show what the build will
 /// do (`BuiltinProcessing`, old plugin entries included) and write the configuration key, which
 /// wins over an old entry. Only for a project whose Quartz has the built-ins (`QuartzFeatures`).
 struct ProcessingSections: View {
   @Bindable var model: ConfigModel
   let project: ProjectContext
+  @Environment(\.openPage) private var openPage
 
   private typealias Builtin = BuiltinProcessing.Builtin
 
@@ -22,6 +23,7 @@ struct ProcessingSections: View {
       drafts(plan)
       contentIndex(plan)
       frontmatter(plan)
+      if let fonts = plan.planned(.fonts) { self.fonts(fonts) }
     }
   }
 
@@ -120,6 +122,43 @@ struct ProcessingSections: View {
         }
       }
       .disabled(!plan[.frontmatter].enabled)
+    }
+  }
+
+  /// Quartz 5.2's font loading. Where the fonts come from and which they are is set on Styles ▸
+  /// Basics (one place per setting, docs/plan-eine-stelle.md); here only whether Quartz loads
+  /// them and whether a community theme's fonts count.
+  private func fonts(_ planned: BuiltinProcessing.Planned) -> some View {
+    SettingsSection(L10n.t("builtins.fonts.heading"), symbol: "textformat") {
+      state(planned)
+      FormField(hint: L10n.t("builtins.fonts.enabledHint")) {
+        Toggle(L10n.t("builtins.fonts.enabled"), isOn: Binding(
+          get: { planned.enabled },
+          set: { model.setBuiltin(.fonts, "enabled", .bool($0)) }))
+        .accessibilityIdentifier("config.fonts.enabled")
+      }
+      Group {
+        LabeledContent(L10n.t("builtins.fonts.origin")) {
+          Text(Self.originText(planned.options["fontOrigin"]?.stringValue ?? "googleFonts"))
+        }
+        FormField(hint: L10n.t("builtins.fonts.useThemeFontsHint")) {
+          Toggle(L10n.t("builtins.fonts.useThemeFonts"), isOn: Binding(
+            get: { planned.options["useThemeFonts"] != .bool(false) },
+            set: { model.setBuiltin(.fonts, "useThemeFonts", .bool($0)) }))
+        }
+      }
+      .disabled(!planned.enabled)
+      Button(L10n.t("configEditor.stylesHintLink")) { openPage(.styles, tab: StylesModel.Tab.basics.rawValue) }
+        .buttonStyle(.link).font(.callout)
+    }
+  }
+
+  static func originText(_ origin: String) -> String {
+    switch origin {
+    case "googleFonts": L10n.t("builtins.fonts.originGoogle")
+    case "local": L10n.t("builtins.fonts.originLocal")
+    case "selfHosted": L10n.t("builtins.fonts.originSelfHosted")
+    default: origin
     }
   }
 

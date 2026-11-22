@@ -3141,13 +3141,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Links, Entwürfe, Inhaltsindex und Frontmatter erledigt Quartz seit 5.1 selbst. Die Einstellungen stehen in der Konfiguration, nicht mehr bei Plugins."
+            "value" : "Links, Entwürfe, Inhaltsindex und Frontmatter erledigt Quartz seit 5.1 selbst, die Schriften seit 5.2. Die Einstellungen stehen in der Konfiguration, nicht mehr bei Plugins."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Since 5.1 Quartz handles links, drafts, the content index and frontmatter itself. Their settings are in the configuration, no longer with plugins."
+            "value" : "Since 5.1 Quartz handles links, drafts, the content index and frontmatter itself, and the fonts since 5.2. Their settings are in the configuration, no longer with plugins."
           }
         }
       }
@@ -3205,6 +3205,177 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pages with “draft: true” in their frontmatter are left off the site otherwise."
+          }
+        }
+      }
+    },
+    "builtins.fonts.enabled" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: configuration.fonts.enabled",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriften einbinden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load fonts"
+          }
+        }
+      }
+    },
+    "builtins.fonts.enabledHint" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: hint under the switch",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus, bindet Quartz nur Titel-, Text- und Code-Schrift ein wie vor 5.2; Oberflächenschrift und Schriften je Überschrift wirken dann nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off, Quartz loads only the title, text and code fonts, as before 5.2; the interface font and per-heading fonts then have no effect."
+          }
+        }
+      }
+    },
+    "builtins.fonts.heading" : {
+      "comment" : "Konfiguration ▸ Website ▸ Verarbeitung: section of Quartz 5.2's built-in font loading (configuration.fonts)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriften"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fonts"
+          }
+        }
+      }
+    },
+    "builtins.fonts.origin" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: label of configuration.fonts.fontOrigin, shown, set on Styles ▸ Basics",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herkunft"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source"
+          }
+        }
+      }
+    },
+    "builtins.fonts.originGoogle" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: fontOrigin googleFonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Fonts"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Fonts"
+          }
+        }
+      }
+    },
+    "builtins.fonts.originLocal" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: fontOrigin local",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokal, von QuartzHub ausgeliefert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local, served by QuartzHub"
+          }
+        }
+      }
+    },
+    "builtins.fonts.originSelfHosted" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: fontOrigin selfHosted",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von Quartz beim Build heruntergeladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloaded by Quartz when building"
+          }
+        }
+      }
+    },
+    "builtins.fonts.useThemeFonts" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: configuration.fonts.useThemeFonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriften des Community-Themes verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the community theme’s fonts"
+          }
+        }
+      }
+    },
+    "builtins.fonts.useThemeFontsHint" : {
+      "comment" : "Konfiguration ▸ Verarbeitung ▸ Schriften: hint under useThemeFonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Community-Theme bringt eigene Schriften mit. An, nutzt Quartz sie überall, wo unter Stile keine eigene gesetzt ist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A community theme brings its own fonts. On, Quartz uses them wherever Styles sets none of its own."
           }
         }
       }
@@ -43689,20 +43860,20 @@
       }
     },
     "pluginsInstalled.builtinDescription" : {
-      "comment" : "Plugins ▸ Installiert, Quartz 5.1: row text of an absorbed entry",
+      "comment" : "Plugins ▸ Installiert and Marktplatz: an entry or catalog plugin whose job a built-in of the project's Quartz does",
       "extractionState" : "manual",
       "generatesSymbol" : false,
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erledigt Quartz seit 5.1 selbst; eingestellt wird es unter Konfiguration ▸ Verarbeitung."
+            "value" : "Erledigt Quartz selbst; eingestellt wird es unter Konfiguration ▸ Verarbeitung."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quartz does this itself since 5.1; it is set up under Configuration ▸ Processing."
+            "value" : "Quartz does this itself; it is set up under Configuration ▸ Processing."
           }
         }
       }

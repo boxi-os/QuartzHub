@@ -37,6 +37,11 @@ final class MarketplaceModel {
     plugins.installedRepositories.contains(plugin.fullName.lowercased())
   }
 
+  /// A plugin whose job this project's Quartz does itself (quartz-fonts since 5.2): said, not offered.
+  func isBuiltIn(_ plugin: MarketplacePlugin) -> Bool {
+    BuiltinProcessing.absorbing(repository: plugin.fullName, features: plugins.features) != nil
+  }
+
   /// A catalog entry goes in as `github:owner/repo`; a hand-typed source as it was typed.
   @discardableResult
   func install(source: String, name: String) async -> Bool {
@@ -168,6 +173,7 @@ struct MarketplaceTab: View {
 
   private func row(_ plugin: MarketplacePlugin) -> some View {
     let installed = model.isInstalled(plugin)
+    let builtIn = model.isBuiltIn(plugin)
     return HStack(alignment: .firstTextBaseline, spacing: 8) {
       VStack(alignment: .leading, spacing: 2) {
         Text(plugin.name).fontWeight(.medium)
@@ -177,7 +183,8 @@ struct MarketplaceTab: View {
       }
       Spacer()
       if installed { WordBadge(text: L10n.t("pluginsMarketplace.installed"), tint: .green) }
-      if !installed, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived"), tint: .orange) }
+      if !installed, builtIn { WordBadge(text: L10n.t("pluginsInstalled.builtinBadge")) }
+      if !installed, !builtIn, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived"), tint: .orange) }
       Text(verbatim: "★ \(plugin.stars ?? 0)")
         .font(.caption).foregroundStyle(.secondary).monospacedDigit()
         .frame(minWidth: 40, alignment: .trailing)
@@ -194,6 +201,7 @@ struct MarketplaceInspector: View {
   let plugin: MarketplacePlugin
   @Bindable var model: MarketplaceModel
   @Environment(\.openURL) private var openURL
+  @Environment(\.openPage) private var openPage
 
   private enum Readme {
     case loading, missing, unavailable
@@ -204,6 +212,7 @@ struct MarketplaceInspector: View {
 
   var body: some View {
     let installed = model.isInstalled(plugin)
+    let builtIn = model.isBuiltIn(plugin)
     Form {
       Section {
         VStack(alignment: .leading, spacing: 6) {
@@ -212,7 +221,8 @@ struct MarketplaceInspector: View {
               .accessibilityIdentifier("marketplace.inspector.name")
             Spacer()
             if installed { WordBadge(text: L10n.t("pluginsMarketplace.installed"), tint: .green) }
-            if !installed, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived"), tint: .orange) }
+            if !installed, builtIn { WordBadge(text: L10n.t("pluginsInstalled.builtinBadge")) }
+            if !installed, !builtIn, plugin.archived == true { WordBadge(text: L10n.t("pluginsMarketplace.archived"), tint: .orange) }
           }
           // Not a file path: the repository on github.com.
           if let url = URL(string: plugin.url) {
@@ -226,15 +236,20 @@ struct MarketplaceInspector: View {
           if let description = plugin.description { Text(description).foregroundStyle(.secondary) }
           // "Meistens nicht als Plugin installierbar" was said of the list, and the button offered
           // it without a word (review 2026-11-13, nebenbei).
-          if !installed, !plugin.isMarkedPlugin {
+          if !installed, builtIn {
+            Callout(.info) {
+              Text(L10n.t("pluginsInstalled.builtinDescription"))
+              Button(L10n.t("pluginsInstalled.builtinOpenConfig")) { openPage(.config) }.buttonStyle(.link)
+            }
+          } else if !installed, !plugin.isMarkedPlugin {
             Callout(.warning, L10n.t("pluginsMarketplace.notMarkedPlugin"))
           }
         }
         HStack {
           Text(verbatim: "★ \(plugin.stars ?? 0)").font(.caption).foregroundStyle(.secondary).monospacedDigit()
           Spacer()
-          // An installed plugin says so once, in the badge at the top.
-          if !installed {
+          // An installed plugin says so once, in the badge at the top; a built-in one is not offered.
+          if !installed, !builtIn {
             Button(model.installing == plugin.fullName ? L10n.t("pluginsMarketplace.installing") : L10n.t("pluginsMarketplace.install")) {
               Task { await model.install(source: "github:\(plugin.fullName)", name: plugin.name) }
             }
