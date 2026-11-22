@@ -17,7 +17,9 @@ let package = Package(
       name: "QuartzHubCore",
       // .copy, not .process: the catalog is read as JSON by L10n (see there for why), so it must
       // arrive in the bundle as the file that is versioned, not compiled to .strings.
-      resources: [.copy("Resources/Localizable.xcstrings")],
+      // quartz-icon.png: Quartz's own icon.png (MIT, Resources/licenses/quartz-LICENSE.txt), for
+      // ProjectIcon.reset.
+      resources: [.copy("Resources/Localizable.xcstrings"), .copy("Resources/quartz-icon.png")],
       swiftSettings: [.swiftLanguageMode(.v6)],
       // libxml2 of the SDK, for InlineSvg: the XML parser Chrome's DOMParser uses, with its
       // whitespace (XMLDocument drops whitespace-only text) and attribute order (XMLParser loses it).

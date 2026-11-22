@@ -19,6 +19,7 @@ struct ProjectImageSection: View {
   @State private var installing = false
   @State private var error: String?
   @State private var confirmInstall = false
+  @State private var confirmReset = false
   /// "Wird mit Speichern übernommen" stays in view until it is: as an announcement alone only
   /// VoiceOver heard it (review 2026-11-13, nebenbei).
   @State private var installedNote = false
@@ -46,6 +47,11 @@ struct ProjectImageSection: View {
               Button(L10n.t("projectImage.remove")) {
                 run({ [path = model.project.path] in try ProjectIcon.clear(project: path) }, after: lightApplied)
               }
+            } else if icon?.unrecorded == true {
+              // A template's mark has no original to restore: Quartz's own picture goes back, and the
+              // letter shows again (user, 2026-11-22).
+              Button(L10n.t("projectImage.reset")) { confirmReset = true }
+                .accessibilityIdentifier("config.imageReset")
             }
           }
           .disabled(busy)
@@ -68,6 +74,17 @@ struct ProjectImageSection: View {
       Button(L10n.t("projectImage.header.installAction")) { Task { await install() } }
     } message: {
       Text(installParts.message)
+    }
+    .alert(resetParts.title, isPresented: $confirmReset) {
+      Button(L10n.t("common.cancel"), role: .cancel) {}
+      Button(L10n.t("projectImage.resetAction"), role: .destructive) {
+        run({ [path = model.project.path] in try ProjectIcon.reset(project: path) }) { _ in
+          Announce.post(L10n.t("projectImage.announceReset"))
+          Task { await ProjectsModel.shared.reload() }
+        }
+      }
+    } message: {
+      Text(resetParts.message)
     }
   }
 
@@ -175,8 +192,11 @@ struct ProjectImageSection: View {
     return hasLayoutBox ? L10n.t("projectImage.header.hint") : L10n.t("projectImage.header.hintInstall")
   }
 
-  private var installParts: (title: String, message: String) {
-    let text = L10n.t("projectImage.header.installConfirm")
+  private var installParts: (title: String, message: String) { Self.parts(L10n.t("projectImage.header.installConfirm")) }
+  private var resetParts: (title: String, message: String) { Self.parts(L10n.t("projectImage.resetConfirm")) }
+
+  /// A catalog question as the alert's title and message, split at the blank line.
+  private static func parts(_ text: String) -> (title: String, message: String) {
     guard let split = text.range(of: "\n\n") else { return (text, "") }
     return (String(text[..<split.lowerBound]), String(text[split.upperBound...]))
   }

@@ -182,6 +182,22 @@ import UniformTypeIdentifiers
     #expect(ProjectIcon.customThumbnail(project: project) != nil)
   }
 
+  /// A template's mark, never recorded: "Bild zurücksetzen" writes Quartz's own picture, and the
+  /// project shows its letter again (user, 2026-11-22). The dark one stays, a choice of its own.
+  @Test func resettingAnUnrecordedPictureBringsQuartzsBack() throws {
+    let mark = try image("mark.png", 64, 64, seed: 0.3)
+    try FileManager.default.createDirectory(at: icon.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try FileManager.default.copyItem(at: mark, to: icon)
+    try ProjectIcon.setDark(project: project, source: try image("dark.png", 64, 64, seed: 0.1).path)
+    #expect(ProjectIcon.info(project: project).unrecorded)
+    let info = try ProjectIcon.reset(project: project)
+    #expect(ProjectIcon.gitBlobId(try Data(contentsOf: icon)) == ProjectIcon.quartzIconBlob)
+    #expect(!info.unrecorded && !info.custom)
+    #expect(ProjectIcon.customThumbnail(project: project) == nil, "the letter shows")
+    #expect(info.darkCustom && FileManager.default.fileExists(atPath: dark.path))
+    #expect(try markerJSON() == "{\n  \"custom\": false,\n  \"hasOriginal\": false,\n  \"customDark\": true\n}")
+  }
+
   @Test func thumbnailsAreCachedUntilTheFileChanges() throws {
     let big = try image("big.png", 1000, 500)
     let thumb = try #require(ProjectIcon.thumbnail(big.path))

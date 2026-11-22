@@ -46192,6 +46192,25 @@
         }
       }
     },
+    "projectImage.announceReset" : {
+      "comment" : "Konfiguration, Projektbild: announced after the reset",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projektbild zurückgesetzt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project image reset."
+          }
+        }
+      }
+    },
     "projectImage.announceSet" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -46746,6 +46765,63 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Replace image…"
+          }
+        }
+      }
+    },
+    "projectImage.reset" : {
+      "comment" : "Konfiguration, Projektbild: button beside 'Bild ersetzen…' when the site shows a picture not chosen in QuartzHub (a template's); puts Quartz's own icon back",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild zurücksetzen…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset image…"
+          }
+        }
+      }
+    },
+    "projectImage.resetAction" : {
+      "comment" : "Konfiguration, Projektbild: confirming button of the reset question",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurücksetzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
+          }
+        }
+      }
+    },
+    "projectImage.resetConfirm" : {
+      "comment" : "Konfiguration, Projektbild: question before resetting; title and message split at the blank line",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projektbild zurücksetzen?\n\nDas Bild wird durch das von Quartz ersetzt, und QuartzHub zeigt wieder den Anfangsbuchstaben. Das Bild für den Dunkelmodus bleibt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset the project image?\n\nThe image is replaced by Quartz's own, and QuartzHub shows the initial again. The image for dark mode stays."
           }
         }
       }

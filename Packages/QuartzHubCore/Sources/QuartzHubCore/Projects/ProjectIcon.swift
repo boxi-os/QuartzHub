@@ -152,6 +152,28 @@ public enum ProjectIcon {
     return info(project: project)
   }
 
+  /// Quartz's own `icon.png` (blob `quartzIconBlob`), shipped with the core.
+  static func quartzIcon() -> Data? {
+    Bundle.module.url(forResource: "quartz-icon", withExtension: "png").flatMap { try? Data(contentsOf: $0) }
+  }
+
+  /// Quartz's own picture back in `icon.png`, for a picture nobody recorded choosing (a template's
+  /// mark): "Entfernen" has no original to restore there, and QuartzHub shows the letter again
+  /// (user, 2026-11-22). Overwrites the file, so the page asks first. `unreadable` when the core's copy is
+  /// missing (a broken bundle), which the page says as an error.
+  @discardableResult
+  public static func reset(project: String) throws -> Info {
+    guard let data = quartzIcon() else { throw Failure.unreadable }
+    let target = iconPath(project)
+    try Posix.mkdirs(NodePath.dirname(target))
+    try JSONStore.writeAtomic(data, to: target)
+    let original = originalPath(project)
+    if exists(original) { try FileManager.default.removeItem(atPath: original) }
+    let marker = readMarker(project)
+    try writeMarker(project, custom: false, hasOriginal: false, customDark: marker.customDark)
+    return info(project: project)
+  }
+
   /// The picture for the dark scheme, normalized like the light one. Only the header image uses
   /// it; Quartz ships no file of this name, so removing it is a plain delete.
   @discardableResult
