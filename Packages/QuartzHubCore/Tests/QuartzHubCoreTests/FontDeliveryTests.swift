@@ -49,16 +49,28 @@ struct FontDeliveryTests {
       check("themeFontsEnabled", .bool(FontDelivery.themeFontsEnabled(config)), entry["themeFontsEnabled"])
       check("withThemeFonts on", FontDelivery.withThemeFonts(config, true).jsonValue, entry["withThemeFontsOn"])
       check("withThemeFonts off", FontDelivery.withThemeFonts(config, false).jsonValue, entry["withThemeFontsOff"])
-      check("selfHosted on", FontDelivery.withSelfHostedFonts(config, true).jsonValue, entry["selfHostedOn"])
-      check("selfHosted off", FontDelivery.withSelfHostedFonts(config, false).jsonValue, entry["selfHostedOff"])
+      // QuartzHub's one addition to QuartzControl's answer: `configuration.fonts.fontOrigin: local`
+      // with "local" (Quartz 5.2), and nothing else; taken out here, checked on its own.
+      func ownAddition(_ got: QuartzConfig, local: Bool) -> JSONValue {
+        let added = got.configuration["fonts"]
+        if config.configuration["fonts"] == nil {
+          let expected: JSONValue? = local ? .object(JSONObject([("fontOrigin", .string("local"))])) : nil
+          if added != expected { mismatches.append("\(name): configuration.fonts \(added.map(JSJSON.stringify) ?? "nil")") }
+        }
+        var stripped = got
+        stripped.configuration["fonts"] = config.configuration["fonts"]
+        return stripped.jsonValue
+      }
+      check("selfHosted on", ownAddition(FontDelivery.withSelfHostedFonts(config, true), local: true), entry["selfHostedOn"])
+      check("selfHosted off", ownAddition(FontDelivery.withSelfHostedFonts(config, false), local: false), entry["selfHostedOff"])
       check("fetchesGoogleFonts", .bool(FontDelivery.fetchesGoogleFonts(config)), entry["fetchesGoogleFonts"])
-      check("persist", FontDelivery.persist(config).jsonValue, entry["persist"])
+      check("persist", ownAddition(FontDelivery.persist(config), local: FontDelivery.fetchesGoogleFonts(config)), entry["persist"])
       check("present", .array(blocks.map { FontDelivery.present(config, scss: $0).jsonValue }), entry["present"])
       for (key, list) in cases["faceSets"]?.objectValue.map({ object in object.keys.map { ($0, object[$0]) } }) ?? [] {
         let got = [nil, true, false].map { Self.state(FontDelivery.buildState(config, faces: Self.faces(list), built: $0)) }
         check("buildState \(key)", .array(got), entry["buildState"]?[key])
       }
-      let fixes = FontDelivery.cssFixes.map { JSONValue.object(JSONObject([("id", .string($0.id)), ("applies", .bool($0.appliesTo(config)))])) }
+      let fixes = FontDelivery.cssFixes.map { JSONValue.object(JSONObject([("id", .string($0.id)), ("applies", .bool($0.appliesTo(config, .quartz51)))])) }
       check("fixes", .array(fixes), entry["fixes"])
     }
     #expect(mismatches.isEmpty, "\(mismatches.count) mismatches:\n\(mismatches.prefix(20).joined(separator: "\n"))")
@@ -86,6 +98,81 @@ struct FontDeliveryTests {
     }
     #expect(GoogleFontList.families.count == Int(cases["googleFontsCount"]?.numberValue ?? 0))
     #expect(GoogleFontList.families.first == GoogleFontList.Family(name: "Roboto", category: .sansSerif))
+  }
+
+  // MARK: Quartz 5.2's built-in fonts (measured on gui-test, 2026-11-22, decisions/phase-5-gleichstand.md)
+
+  static func config52(theme: [(String, JSONValue)], fonts: JSONValue? = nil, plugins: [PluginEntry] = []) -> QuartzConfig {
+    var config = QuartzConfig(plugins: plugins)
+    config.theme = JSONObject(theme)
+    if let fonts { config.configuration["fonts"] = fonts }
+    return config
+  }
+
+  static func quartzFonts(_ enabled: Bool) -> PluginEntry {
+    PluginEntry(object: JSONObject([("source", .string("@quartz-community/quartz-fonts")), ("enabled", .bool(enabled))]))
+  }
+
+  @Test func theBuiltInIsALoaderOn52Only() {
+    // No entry, no configuration.fonts, Quartz's own fonts local: 5.2 links Google (148 pages).
+    let local = Self.config52(theme: [("fontOrigin", .string("local"))])
+    #expect(FontDelivery.loaders(local, .quartz52) == [FontDelivery.Loader(via: "builtin", mode: "google")])
+    #expect(FontDelivery.callsGoogle(local, .quartz52))
+    #expect(FontDelivery.loaders(local, .quartz51).isEmpty)
+    // fontOrigin local loads nothing; selfHosted downloads at build.
+    let builtinLocal = Self.config52(theme: [("fontOrigin", .string("local"))], fonts: .object(JSONObject([("fontOrigin", .string("local"))])))
+    #expect(FontDelivery.loaders(builtinLocal, .quartz52).isEmpty)
+    let selfHosted = Self.config52(theme: [("fontOrigin", .string("local"))], fonts: .object(JSONObject([("fontOrigin", .string("selfHosted"))])))
+    #expect(FontDelivery.loaders(selfHosted, .quartz52) == [FontDelivery.Loader(via: "builtin", mode: "selfHosted")])
+    // A disabled quartz-fonts entry turns it off (gui-test: no file named Google).
+    let entryOff = Self.config52(theme: [("fontOrigin", .string("local"))], plugins: [Self.quartzFonts(false)])
+    #expect(FontDelivery.loaders(entryOff, .quartz52).isEmpty)
+    // An enabled entry is the built-in's on 5.2, the plugin's on 5.1.
+    let entryOn = Self.config52(theme: [("fontOrigin", .string("local"))], plugins: [Self.quartzFonts(true)])
+    #expect(FontDelivery.loaders(entryOn, .quartz52) == [FontDelivery.Loader(via: "builtin", mode: "google")])
+    #expect(FontDelivery.loaders(entryOn, .quartz51) == [FontDelivery.Loader(via: "plugin", mode: "google")])
+  }
+
+  @Test func servingLocallyTurnsTheBuiltInToLocal() {
+    // The page's draft spelling of "served by QuartzHub": Google with cdnCaching false.
+    let draft = Self.config52(theme: [("fontOrigin", .string("googleFonts"))])
+    let on = FontDelivery.withSelfHostedFonts(draft, true, .quartz52)
+    #expect(on.configuration["fonts"] == .object(JSONObject([("fontOrigin", .string("local"))])))
+    #expect(!FontDelivery.callsGoogle(on, .quartz52))
+    #expect(FontDelivery.loaders(on, .quartz52) == [FontDelivery.Loader(via: "core", mode: "selfHosted")])
+    let persisted = FontDelivery.persist(on)
+    #expect(persisted.theme["fontOrigin"] == .string("local"))
+    #expect(persisted.configuration["fonts"]?["fontOrigin"] == .string("local"))
+    // Back: the key goes, the other options stay.
+    var withOptions = on
+    withOptions.configuration["fonts"] = .object(JSONObject([("fontOrigin", .string("local")), ("h1", .string("Lora"))]))
+    let off = FontDelivery.withSelfHostedFonts(withOptions, false, .quartz52)
+    #expect(off.configuration["fonts"] == .object(JSONObject([("h1", .string("Lora"))])))
+    #expect(FontDelivery.withSelfHostedFonts(on, false, .quartz52).configuration["fonts"] == nil)
+    // Someone else's selfHosted stays when QuartzHub turns its own off.
+    let theirs = Self.config52(theme: [], fonts: .object(JSONObject([("fontOrigin", .string("selfHosted"))])))
+    #expect(FontDelivery.withSelfHostedFonts(theirs, false, .quartz52).configuration["fonts"] == theirs.configuration["fonts"])
+    // `fonts: false` keeps its meaning.
+    let disabled = Self.config52(theme: [], fonts: .bool(false))
+    #expect(FontDelivery.withSelfHostedFonts(disabled, true, .quartz52).configuration["fonts"]
+            == .object(JSONObject([("enabled", .bool(false)), ("fontOrigin", .string("local"))])))
+  }
+
+  @Test func theFontSourcePickerSetsTheBuiltInsToo() {
+    let draft = Self.config52(theme: [("fontOrigin", .string("googleFonts"))])
+    let local = FontDelivery.withCoreFontOrigin(draft, "local")
+    #expect(local.theme["fontOrigin"] == .string("local"))
+    #expect(local.configuration["fonts"]?["fontOrigin"] == .string("local"))
+    #expect(FontDelivery.loaders(local, .quartz52).isEmpty)
+    let google = FontDelivery.withCoreFontOrigin(local, "googleFonts")
+    #expect(google.configuration["fonts"] == nil)
+  }
+
+  @Test func theHeadingFixIsForThePluginOnly() {
+    let theme = PluginEntry(object: JSONObject([("source", .string("@quartz-themes/core")), ("enabled", .bool(true))]))
+    let config = QuartzConfig(plugins: [Self.quartzFonts(true), theme])
+    #expect(FontDelivery.headingFontFix.appliesTo(config, .quartz51))
+    #expect(!FontDelivery.headingFontFix.appliesTo(config, .quartz52), "5.2 leaves a theme's headings alone")
   }
 
   /// `activeThemeIdOf` of the Styles page: the first theme plugin decides, on or off.

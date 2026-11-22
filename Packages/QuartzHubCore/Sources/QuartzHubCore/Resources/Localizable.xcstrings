@@ -56287,6 +56287,44 @@
         }
       }
     },
+    "styleEditor.current.loader.builtin.google" : {
+      "comment" : "Stile, CSS-Referenz ▸ Schriften: loader line for Quartz 5.2's configuration.fonts with fontOrigin googleFonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die eingebauten Schriften von Quartz laden bei jedem Seitenaufruf von Google Fonts."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz’s built-in fonts link Google Fonts on every page view."
+          }
+        }
+      }
+    },
+    "styleEditor.current.loader.builtin.selfHosted" : {
+      "comment" : "Stile, CSS-Referenz ▸ Schriften: loader line for configuration.fonts with fontOrigin selfHosted",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die eingebauten Schriften von Quartz laden beim Build und liefern die Dateien selbst aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz’s built-in fonts download at build time and serve the files themselves."
+          }
+        }
+      }
+    },
     "styleEditor.current.loader.core.google" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -63830,6 +63868,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Serve fonts locally (no Google request on visit)"
+          }
+        }
+      }
+    },
+    "themeEditor.delivery.state.builtin.google" : {
+      "comment" : "Stile ▸ Basis ▸ Schriften ausliefern: loader line for Quartz 5.2's configuration.fonts with fontOrigin googleFonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz-Schriften (seit 5.2 eingebaut): verlinken Google Fonts direkt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz fonts (built in since 5.2): link Google Fonts directly."
+          }
+        }
+      }
+    },
+    "themeEditor.delivery.state.builtin.selfHosted" : {
+      "comment" : "Stile ▸ Basis ▸ Schriften ausliefern: loader line for configuration.fonts with fontOrigin selfHosted",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz-Schriften (seit 5.2 eingebaut): beim Build heruntergeladen und lokal ausgeliefert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz fonts (built in since 5.2): downloaded at build time and served locally."
           }
         }
       }

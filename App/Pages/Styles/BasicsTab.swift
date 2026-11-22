@@ -95,7 +95,8 @@ struct BasicsTab: View {
   private var fontsSection: some View {
     SettingsSection(L10n.t("themeEditor.fonts"), note: fontOrigin == "local" ? L10n.t("themeEditor.localHint")
                     : L10n.t("themeEditor.googleFontsHint", ["count": String(GoogleFontList.families.count)])) {
-      Picker(L10n.t("themeEditor.fontSource"), selection: Binding(get: { fontOrigin }, set: { setTheme("fontOrigin", .string($0)) })) {
+      Picker(L10n.t("themeEditor.fontSource"), selection: Binding(get: { fontOrigin },
+                                                                  set: { model.setConfig(FontDelivery.withCoreFontOrigin(config, $0)) })) {
         Text(L10n.t("themeEditor.googleFonts")).tag("googleFonts")
         Text(L10n.t("themeEditor.local")).tag("local")
         if fontOrigin != "googleFonts" && fontOrigin != "local" { Text(verbatim: fontOrigin).tag(fontOrigin) }
@@ -209,9 +210,9 @@ struct BasicsTab: View {
   /// One question for the user, two settings underneath: Quartz's own `cdnCaching` and the Fonts
   /// plugin's `fontOrigin`. Both are reported and both are flipped together.
   private var deliverySection: some View {
-    let loaders = FontDelivery.loaders(config)
-    let google = FontDelivery.callsGoogle(config)
-    let state = FontDelivery.buildState(config, faces: faces, built: built)
+    let loaders = FontDelivery.loaders(config, model.features)
+    let google = FontDelivery.callsGoogle(config, model.features)
+    let state = FontDelivery.buildState(config, faces: faces, built: built, features: model.features)
     let baseUrl = config.configuration["baseUrl"]?.stringValue ?? ""
     return SettingsSection(L10n.t("themeEditor.delivery.heading"), note: L10n.t("themeEditor.delivery.description")) {
       VStack(alignment: .leading, spacing: 2) {
@@ -223,7 +224,7 @@ struct BasicsTab: View {
       }
       Toggle(L10n.t("themeEditor.delivery.selfHost"), isOn: Binding(
         get: { loaders.contains { $0.mode == "selfHosted" } && !google },
-        set: { model.setConfig(FontDelivery.withSelfHostedFonts(config, $0)) }))
+        set: { model.setConfig(FontDelivery.withSelfHostedFonts(config, $0, model.features)) }))
         .accessibilityIdentifier("styles.selfHost")
       if case .notBuilt? = state { warning(L10n.t("styleEditor.current.fontsNotBuilt")) }
       if case .missing(let families)? = state {
@@ -273,6 +274,8 @@ struct BasicsTab: View {
     case ("core", _): L10n.t("themeEditor.delivery.state.core.selfHosted")
     case ("plugin", "google"): L10n.t("themeEditor.delivery.state.plugin.google")
     case ("plugin", _): L10n.t("themeEditor.delivery.state.plugin.selfHosted")
+    case ("builtin", "google"): L10n.t("themeEditor.delivery.state.builtin.google")
+    case ("builtin", _): L10n.t("themeEditor.delivery.state.builtin.selfHosted")
     default: L10n.t("themeEditor.delivery.state.theme.cdn")
     }
   }
@@ -286,7 +289,7 @@ struct BasicsTab: View {
   /// The ready-made stylesheets, only for conflicts this project has. Nothing is written until the
   /// button: the fix lands as an ordinary file under quartz/styles/custom/.
   @ViewBuilder private var fixesSection: some View {
-    let applicable = FontDelivery.cssFixes.filter { $0.appliesTo(config) }
+    let applicable = FontDelivery.cssFixes.filter { $0.appliesTo(config, model.features) }
     if !applicable.isEmpty {
       SettingsSection(L10n.t("styles.fixes.heading"), note: L10n.t("styles.fixes.description")) {
         ForEach(applicable, id: \.id) { fix in

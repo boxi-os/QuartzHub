@@ -345,6 +345,8 @@ configuration:
     typography: { header, body, code, title }  # string oder {name: …}
     colors: { lightMode: {…}, darkMode: {…} }
     …                                  # weitere Theme-Schlüssel, Roundtrip
+  fonts:                               # Quartz 5.2 (eingebaute Schriften); QuartzHub schreibt nur
+    fontOrigin: local                  # "local" bei lokal ausgelieferten Schriften, auch in 5.1-Projekten
 plugins:
   - source: "@quartz-community/x" | "github:owner/repo[#ref]" | /abs/path | {repo, subdir?, ref?, name?}
     enabled: bool                     # immer geschrieben
@@ -696,7 +698,7 @@ static, cssVariables, content`. Payloads (`parts.ts`):
 | `frames` | `{ frames: GridFrameDefinition[] }` |
 | `theme` | `{ entry: PluginEntry, themeId: string\|null }` (der `@quartz-themes/*`-Eintrag) |
 | `plugins` | `{ entries: PluginEntry[] }` (ohne Frame-Einträge; eigene Plugins ohne `#ref`) |
-| `appearance` | `{ colors, typography, fontOrigin?, cdnCaching? }` |
+| `appearance` | `{ colors, typography, fontOrigin?, cdnCaching?, fonts? }` (`fonts` = `configuration.fonts`, QuartzHub seit 2026-11-22) |
 | `layout` | `{ layout: LayoutConfig\|null, breakpoints: FrameBreakpointWidths }` |
 | `presets` | `{ presets: ThemePreset[] }` |
 | `translations` | `{ scope: 'changed'\|'all', locales: [{ code, entries: LocaleEntry[] }] }` |

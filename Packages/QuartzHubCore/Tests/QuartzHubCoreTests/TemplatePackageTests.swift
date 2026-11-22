@@ -301,6 +301,43 @@ struct TemplatePackageTests {
     #expect(config.layout?["groups"] != nil)
   }
 
+  /// The basic package (quartz-fonts off, fonts "local" in theme.fontOrigin only) into a project
+  /// whose Quartz has the fonts built in (5.2): the built-in loads locally too, and the absorbed
+  /// plugin is not installed. Into the same project without fonts.ts: neither (the replay above).
+  @Test func onQuartz52TheBasicPackageKeepsTheFontsLocal() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = Self.realpath(scratch.path)
+    let initial = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("initial.json"))).objectValue!
+    let blobs = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("blobs.json"))).objectValue!
+    let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
+    let read: LayoutFrames.ReadConfig = { try await ConfigFile.read(project: $0, runtime: .repository) }
+    let stub = PluginCommands.Result(success: true, output: "")
+    let installed = Mutex<[[String]]>([])
+    let templates = TemplatePackage(
+      runtime: .repository, locales: LocaleFiles(environment: environment), frames: LayoutFrames(readConfig: read),
+      fonts: FontService(readConfig: read), npm: { arguments, _ in installed.withLock { $0.append(arguments) }; return stub },
+      addPlugin: { _, _ in stub }, head: { _ in nil }, snapshot: { _, _, _ in }, app: ("QuartzHub", "0.0.0-test"))
+    for (name, quartz52) in [("p52", true), ("p51", false)] {
+      let project = "\(work)/\(name)"
+      try Self.build(project, initial["own"]!.objectValue!, blobs: blobs, work: work)
+      try Posix.mkdirs("\(project)/quartz/plugins/builtins")
+      try Posix.write("\(project)/quartz/plugins/builtins/index.ts", Data())
+      if quartz52 { try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts", Data()) }
+      installed.withLock { $0 = [] }
+      _ = try await templates.importPackage(project: project, package: Self.basic, parts: ["appearance", "plugins"], strategy: .packageWins)
+      let config = try await ConfigFile.read(project: project, runtime: .repository)
+      #expect(config.theme["fontOrigin"] == .string("local"))
+      let calls = installed.withLock { $0 }.flatMap { $0 }
+      if quartz52 {
+        #expect(config.configuration["fonts"] == .object(JSONObject([("fontOrigin", .string("local"))])))
+        #expect(!calls.contains("@quartz-community/quartz-fonts"), "\(calls)")
+      } else {
+        #expect(config.configuration["fonts"] == nil)
+        #expect(calls.contains("@quartz-community/quartz-fonts"), "the counter-check: on 5.1 it is a plugin, \(calls)")
+      }
+    }
+  }
+
   /// One run with a strategy per part (user, 2026-11-22) writes what two runs wrote before, one per
   /// strategy, the parts in the same order: "own" has frames, presets, styles and variables of its
   /// own, so both strategies change something.

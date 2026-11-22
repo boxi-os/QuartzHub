@@ -11,6 +11,12 @@ import Foundation
 /// `@quartz-community/quartz-fonts` with its own `fontOrigin` (default Google), and a community
 /// theme's own `@font-face` rules on unpkg (off only with `themeFonts: false`).
 ///
+/// Quartz 5.2 builds the plugin in (`configuration.fonts`, `BuiltinProcessing`): a fourth loader,
+/// on by default with Google as its origin, which does not read `theme.fontOrigin` (measured on
+/// gui-test, 2026-11-22: with `theme.fontOrigin: local` and no entry, 148 pages linked Google). So
+/// wherever QuartzHub says "local", it writes `configuration.fonts.fontOrigin: local` as well, on a
+/// 5.1 project too: 5.1 does not read the key, and the project is right once its core is updated.
+///
 /// "Served locally" means since QuartzControl 1.0.1: the app fetched the Google fonts into the
 /// project, and the config says `fontOrigin: local`. On the page the draft keeps the older spelling
 /// (`googleFonts` with `cdnCaching: false`), because that is what the switch and the font fields
@@ -20,7 +26,7 @@ public enum FontDelivery {
   public static let themePluginPrefix = "@quartz-themes/"
 
   public struct Loader: Equatable, Sendable, Hashable {
-    /// `core`, `plugin` or `theme`.
+    /// `core`, `plugin`, `builtin` (Quartz 5.2's `configuration.fonts`) or `theme`.
     public var via: String
     /// `google`, `selfHosted` or `cdn`.
     public var mode: String
@@ -33,8 +39,16 @@ public enum FontDelivery {
     return false
   }
 
-  static func fontsPluginIndex(_ config: QuartzConfig) -> Int? {
-    config.plugins.firstIndex { enabled($0) && $0.source == .string(fontsPluginSource) }
+  /// The Fonts plugin's entry, while it is a plugin: on Quartz 5.2 the built-in takes it over.
+  static func fontsPluginIndex(_ config: QuartzConfig, _ features: QuartzFeatures = .quartz51) -> Int? {
+    guard !features.fontsBuiltin else { return nil }
+    return config.plugins.firstIndex { enabled($0) && $0.source == .string(fontsPluginSource) }
+  }
+
+  /// Quartz 5.2's font loading as the build will run it, its plugin entry included; nil without it.
+  public static func fontsBuiltin(_ config: QuartzConfig, _ features: QuartzFeatures) -> BuiltinProcessing.Planned? {
+    guard features.builtins, features.fontsBuiltin else { return nil }
+    return BuiltinProcessing.plan(configuration: config.configuration, plugins: config.plugins, features: features).planned(.fonts)
   }
 
   /// The theme plugin, while it emits its font rules.
@@ -43,15 +57,23 @@ public enum FontDelivery {
   }
 
   /// Everything that will fetch a webfont for this site. Empty: nothing does.
-  public static func loaders(_ config: QuartzConfig) -> [Loader] {
+  public static func loaders(_ config: QuartzConfig, _ features: QuartzFeatures = .quartz51) -> [Loader] {
     var loaders: [Loader] = []
     let coreOrigin = config.theme["fontOrigin"]?.stringValue ?? "googleFonts"
     if coreOrigin == "googleFonts" {
       loaders.append(Loader(via: "core", mode: config.theme["cdnCaching"] == .bool(false) ? "selfHosted" : "google"))
     }
-    if let index = fontsPluginIndex(config) {
+    if let index = fontsPluginIndex(config, features) {
       let origin = config.plugins[index].object["options"]?["fontOrigin"]
       loaders.append(Loader(via: "plugin", mode: origin == .string("selfHosted") ? "selfHosted" : "google"))
+    }
+    // `local` loads nothing: the variables only.
+    if let builtin = fontsBuiltin(config, features), builtin.enabled {
+      switch builtin.options["fontOrigin"]?.stringValue ?? "googleFonts" {
+      case "googleFonts": loaders.append(Loader(via: "builtin", mode: "google"))
+      case "selfHosted": loaders.append(Loader(via: "builtin", mode: "selfHosted"))
+      default: break
+      }
     }
     if themeFontsIndex(config) != nil { loaders.append(Loader(via: "theme", mode: "cdn")) }
     return loaders
@@ -73,19 +95,52 @@ public enum FontDelivery {
     return next
   }
 
-  public static func callsGoogle(_ config: QuartzConfig) -> Bool { loaders(config).contains { $0.mode == "google" } }
+  public static func callsGoogle(_ config: QuartzConfig, _ features: QuartzFeatures = .quartz51) -> Bool {
+    loaders(config, features).contains { $0.mode == "google" }
+  }
 
-  /// Every loader to its self-hosted spelling, or back: the plugin's `options.fontOrigin`, and
-  /// core's `cdnCaching` while core's own fontOrigin is Google's. The plugin is addressed by index.
-  public static func withSelfHostedFonts(_ config: QuartzConfig, _ selfHosted: Bool) -> QuartzConfig {
+  /// Every loader to its self-hosted spelling, or back: the plugin's `options.fontOrigin`, core's
+  /// `cdnCaching` while core's own fontOrigin is Google's, and the built-in's `fontOrigin`. The
+  /// plugin is addressed by index.
+  public static func withSelfHostedFonts(_ config: QuartzConfig, _ selfHosted: Bool, _ features: QuartzFeatures = .quartz51) -> QuartzConfig {
     var next = config
     let origin = config.theme["fontOrigin"]
     if origin == .string("googleFonts") || origin == nil { next.theme["cdnCaching"] = .bool(!selfHosted) }
-    if let index = fontsPluginIndex(config) {
+    if let index = fontsPluginIndex(config, features) {
       var options = next.plugins[index].object["options"]?.objectValue ?? JSONObject()
       options["fontOrigin"] = .string(selfHosted ? "selfHosted" : "googleFonts")
       next.plugins[index].object["options"] = .object(options)
     }
+    return withBuiltinFontOrigin(next, local: selfHosted)
+  }
+
+  /// Quartz's own font source (`theme.fontOrigin`, the Basis tab's picker), with the built-in's to
+  /// match: "local" there means the project's own files, which the built-in must not override with
+  /// Google's.
+  public static func withCoreFontOrigin(_ config: QuartzConfig, _ origin: String) -> QuartzConfig {
+    var next = config
+    next.theme["fontOrigin"] = .string(origin)
+    return withBuiltinFontOrigin(next, local: origin == "local")
+  }
+
+  /// `configuration.fonts.fontOrigin: local`, or back to the built-in's default. Only `local` is
+  /// QuartzHub's: another origin someone wrote stays, and so do the other options.
+  static func withBuiltinFontOrigin(_ config: QuartzConfig, local: Bool) -> QuartzConfig {
+    var next = config
+    var fonts: JSONObject
+    switch config.configuration["fonts"] {
+    case .object(let object)?: fonts = object
+    case .bool(let flag)?: fonts = JSONObject([("enabled", .bool(flag))])
+    default: fonts = JSONObject()
+    }
+    if local {
+      fonts["fontOrigin"] = .string("local")
+    } else if fonts["fontOrigin"] == .string("local") {
+      fonts["fontOrigin"] = nil
+    } else {
+      return config
+    }
+    next.configuration["fonts"] = fonts.keys.isEmpty ? nil : .object(fonts)
     return next
   }
 
@@ -111,12 +166,13 @@ public enum FontDelivery {
     return (origin == .string("googleFonts") || origin == nil) && config.theme["cdnCaching"] == .bool(false)
   }
 
-  /// On the way out: what the config file says once the fonts are in the project.
+  /// On the way out: what the config file says once the fonts are in the project, the built-in's
+  /// origin with it.
   public static func persist(_ config: QuartzConfig) -> QuartzConfig {
     guard fetchesGoogleFonts(config) else { return config }
     var next = config
     next.theme["fontOrigin"] = .string("local")
-    return next
+    return withBuiltinFontOrigin(next, local: true)
   }
 
   // MARK: The theme
@@ -191,10 +247,11 @@ public enum FontDelivery {
   /// Whether the families the site asks for have files yet: under the app's own fetch, in the
   /// project; under the Fonts plugin's `selfHosted`, in the last build; with no loader at all, a
   /// rule of the project's own.
-  public static func buildState(_ config: QuartzConfig, faces: [SiteFonts.Face], built: Bool?) -> BuildState? {
-    let loaders = loaders(config)
+  public static func buildState(_ config: QuartzConfig, faces: [SiteFonts.Face], built: Bool?,
+                                features: QuartzFeatures = .quartz51) -> BuildState? {
+    let loaders = loaders(config, features)
     let heldByProject = loaders.contains { $0.via == "core" && $0.mode == "selfHosted" }
-    let pluginAtBuild = loaders.contains { $0.via == "plugin" && $0.mode == "selfHosted" }
+    let pluginAtBuild = loaders.contains { $0.via != "core" && $0.mode == "selfHosted" }
     let typography = config.theme["typography"]?.objectValue ?? JSONObject()
     if !heldByProject && !pluginAtBuild {
       if !loaders.isEmpty { return nil }
@@ -228,7 +285,7 @@ public enum FontDelivery {
   public struct CssFix: Sendable {
     public var id: String
     public var fileName: String
-    public var appliesTo: @Sendable (QuartzConfig) -> Bool
+    public var appliesTo: @Sendable (QuartzConfig, QuartzFeatures) -> Bool
     /// `t` is the catalogue, so the comment follows the app's language.
     public var content: @Sendable (_ t: (String) -> String) -> String
   }
@@ -236,11 +293,13 @@ public enum FontDelivery {
   /// quartz-fonts emits `h1,…,h6 { font-family: … }` unlayered, which beats the theme's layers and
   /// an equally specific rule of the user's; `body hN` is one step more specific and points at the
   /// variables, so the Variablen tab is in control again (QuartzControl measured it in a build).
+  /// Quartz 5.2's built-in leaves a theme's headings alone unless a heading font is set
+  /// (`buildUnlayeredCSS`, its test "with a theme, its fonts are left alone"): no conflict there.
   public static let headingFontFix = CssFix(
     id: "heading-fonts",
     fileName: "fix-heading-fonts.scss",
-    appliesTo: { config in
-      config.plugins.contains { enabled($0) && $0.source == .string(fontsPluginSource) } && config.plugins.contains { enabled($0) && isThemePlugin($0) }
+    appliesTo: { config, features in
+      fontsPluginIndex(config, features) != nil && config.plugins.contains { enabled($0) && isThemePlugin($0) }
     },
     content: { t in
       var lines = ["// \(t("styles.fixes.heading-fonts.title"))", "//"]

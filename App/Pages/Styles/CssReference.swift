@@ -334,12 +334,12 @@ struct ActiveStylesSection: View {
   }
 
   @ViewBuilder private var fontList: some View {
-    let loaders = FontDelivery.loaders(config)
+    let loaders = FontDelivery.loaders(config, model.features)
     let typography = config.theme["typography"]?.objectValue ?? JSONObject()
     let requests = ["header", "body", "code"].compactMap { GoogleFontRequest.request($0, typography[$0]) }
     let googleFamilies = Set(requests.map { $0.family.lowercased() })
     let heldByProject = loaders.contains { $0.via == "core" && $0.mode == "selfHosted" }
-    let selfHosted = loaders.contains { $0.via == "plugin" && $0.mode == "selfHosted" }
+    let selfHosted = loaders.contains { $0.via != "core" && $0.mode == "selfHosted" }
     let atPageView = loaders.contains { $0.via != "theme" && $0.mode == "google" }
     let _ = fontsRound
     VStack(alignment: .leading, spacing: 6) {
@@ -371,7 +371,7 @@ struct ActiveStylesSection: View {
       if families.contains(where: { !$0.isEmpty && !PreviewFontRegistry.isAvailable($0) }) {
         Callout(.warning, L10n.t("styleEditor.current.notInstalledExplainer"))
       }
-      switch FontDelivery.buildState(config, faces: faces, built: built) {
+      switch FontDelivery.buildState(config, faces: faces, built: built, features: model.features) {
       case .notBuilt?: Callout(.warning, L10n.t("styleEditor.current.fontsNotBuilt"))
       case .missing(let list)?: Callout(.warning, L10n.t("styleEditor.current.fontsMissingFromBuild", ["families": list.joined(separator: ", ")]))
       case .notFetched(let list)?: Callout(.warning, L10n.t("styleEditor.current.fontsNotFetched", ["families": list.joined(separator: ", ")]))
@@ -396,6 +396,8 @@ struct ActiveStylesSection: View {
     case ("core", _): L10n.t("styleEditor.current.loader.core.selfHosted", ["specs": specs])
     case ("plugin", "google"): L10n.t("styleEditor.current.loader.plugin.google")
     case ("plugin", _): L10n.t("styleEditor.current.loader.plugin.selfHosted")
+    case ("builtin", "google"): L10n.t("styleEditor.current.loader.builtin.google")
+    case ("builtin", _): L10n.t("styleEditor.current.loader.builtin.selfHosted")
     default: L10n.t("styleEditor.current.loader.theme.cdn")
     }
   }

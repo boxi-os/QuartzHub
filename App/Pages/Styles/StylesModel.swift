@@ -45,6 +45,8 @@ final class StylesModel {
 
   private(set) var config: QuartzConfig?
   private var savedConfig: QuartzConfig?
+  /// What the project's Quartz can do: since 5.2 it loads the fonts itself (`configuration.fonts`).
+  private(set) var features = QuartzFeatures()
   /// The config on disk still has Quartz download the Google fonts at build time (`cdnCaching:
   /// false` without the app's block): the switch reads "served locally", and the next save fetches
   /// them into the project.
@@ -102,6 +104,7 @@ final class StylesModel {
     do {
       let loaded = try await ConfigFile.read(project: path, runtime: environment.runtime)
       let info = try await Task.detached { try StyleSheets.readCustom(project: path) }.value
+      features = await Task.detached { QuartzFeatures.read(project: path) }.value
       let presented = FontDelivery.present(loaded, scss: "\(info.managed?.content ?? "")\n\(info.content)")
       config = presented
       savedConfig = presented

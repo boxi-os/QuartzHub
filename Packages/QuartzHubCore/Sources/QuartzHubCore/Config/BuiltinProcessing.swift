@@ -194,7 +194,7 @@ public enum BuiltinProcessing {
 
   /// The built-in that absorbs this entry, if its plugin now lives in the project's Quartz.
   public static func absorbing(_ entry: PluginEntry, features: QuartzFeatures = .quartz51) -> Builtin? {
-    guard let name = officialPluginName(entry.source) else { return nil }
+    guard features.builtins, let name = officialPluginName(entry.source) else { return nil }
     return Builtin.available(features).first { $0.absorbs.contains(name) }
   }
 

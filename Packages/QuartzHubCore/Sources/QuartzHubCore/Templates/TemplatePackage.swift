@@ -583,6 +583,8 @@ public struct TemplatePackage: Sendable {
     var payload = JSONObject([("colors", Self.orEmptyObject(config.theme["colors"])), ("typography", Self.orEmptyObject(config.theme["typography"]))])
     if let origin = config.theme["fontOrigin"] { payload["fontOrigin"] = origin }
     if let caching = config.theme["cdnCaching"] { payload["cdnCaching"] = caching }
+    // Quartz 5.2's `configuration.fonts`: where the built-in loads from, the interface and heading fonts.
+    if let fonts = config.configuration["fonts"] { payload["fonts"] = fonts }
     // theme.colors nests one object per mode: the leaves are what counts.
     var colours = 0
     if case .object(let groups) = payload["colors"]! {
@@ -596,7 +598,8 @@ public struct TemplatePackage: Sendable {
     var plan = PartPlan(id: "appearance")
     if Self.stringified(Self.orEmptyObject(config.theme["colors"])) != Self.stringified(payload["colors"]) { plan.conflicts.append(.string("colors")) }
     if Self.stringified(Self.orEmptyObject(config.theme["typography"])) != Self.stringified(payload["typography"]) { plan.conflicts.append(.string("typography")) }
-    if config.theme["fontOrigin"] != payload["fontOrigin"] || config.theme["cdnCaching"] != payload["cdnCaching"] { plan.conflicts.append(.string("fontDelivery")) }
+    if config.theme["fontOrigin"] != payload["fontOrigin"] || config.theme["cdnCaching"] != payload["cdnCaching"]
+      || (payload["fonts"] != nil && config.configuration["fonts"] != payload["fonts"]) { plan.conflicts.append(.string("fontDelivery")) }
     return plan
   }
 
@@ -610,6 +613,13 @@ public struct TemplatePackage: Sendable {
     config.theme["typography"] = payload["typography"]
     if let origin = payload["fontOrigin"] { config.theme["fontOrigin"] = origin }
     if let caching = payload["cdnCaching"] { config.theme["cdnCaching"] = caching }
+    if let fonts = payload["fonts"] { config.configuration["fonts"] = fonts }
+    // A package from before Quartz 5.2 says "local" only in theme.fontOrigin; on a 5.2 project the
+    // built-in would load from Google regardless (FontDelivery). Only there: the replay of
+    // QuartzControl's imports (5.1 trees) stays QuartzControl's file, byte for byte.
+    if config.theme["fontOrigin"] == .string("local"), QuartzFeatures.read(project: run.project).fontsBuiltin {
+      config = FontDelivery.withBuiltinFontOrigin(config, local: true)
+    }
     try await writeConfig(config, run.project)
   }
 
@@ -1309,7 +1319,11 @@ public struct TemplatePackage: Sendable {
     let payloadKeys = try Self.instanceKeys(entries)
     var next = config.plugins.map(\.object)
 
-    let missingNpm = entries.compactMap { Self.npmPackageName($0["source"]) }.filter { !Self.hasNodeModule(project, $0) }
+    // A plugin the project's Quartz has built in (quartz-fonts since 5.2) is not installed: Quartz
+    // takes its entry over, and its package left Quartz's dependencies.
+    let features = QuartzFeatures.read(project: project)
+    let missingNpm = entries.filter { BuiltinProcessing.absorbing(PluginEntry(object: $0), features: features) == nil }
+      .compactMap { Self.npmPackageName($0["source"]) }.filter { !Self.hasNodeModule(project, $0) }
     if !missingNpm.isEmpty {
       run.progress(missingNpm.joined(separator: ", "))
       var unique: [String] = []
