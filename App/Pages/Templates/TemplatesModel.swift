@@ -44,13 +44,17 @@ final class TemplatesModel {
   static let displayOrder = ["content", "appearance", "theme", "cssVariables", "styles", "fonts", "static", "layout", "frames", "plugins",
                              "translations", "presets"]
 
-  /// The parts "Projekt gewinnt" leaves out whole (TemplatePackage's applyAppearance/applyLayout).
+  /// The parts "Projekt gewinnt" leaves out whole (TemplatePackage's applyAppearance/applyLayout):
+  /// they offer only "Aus" and "Vorlage gewinnt".
   static let skippedWhenProjectWins: Set<String> = ["appearance", "layout"]
 
-  /// What the import will apply: the ticked parts, less those the strategy skips.
+  /// What the import will apply: the chosen parts, less those their strategy skips.
   var appliedParts: [String] {
-    strategy == .projectWins ? importSelected.filter { !Self.skippedWhenProjectWins.contains($0) } : importSelected
+    importChoice.filter { $0.value == .packageWins || !Self.skippedWhenProjectWins.contains($0.key) }.map(\.key)
   }
+
+  /// The chosen parts in reading order.
+  var chosenParts: [String] { Self.sortedForDisplay(Array(importChoice.keys), id: { $0 }) }
 
   static func sortedForDisplay<T>(_ items: [T], id: (T) -> String) -> [T] {
     items.sorted { (displayOrder.firstIndex(of: id($0)) ?? displayOrder.count) < (displayOrder.firstIndex(of: id($1)) ?? displayOrder.count) }
@@ -84,8 +88,9 @@ final class TemplatesModel {
   var builtinDownloadNotNewer = false
   var plan: TemplatePackage.Plan?
   var unreadable = false
-  var importSelected: [String] = []
-  var strategy: TemplatePackage.Strategy = .packageWins
+  /// Per part what wins where both have something; a part not in here is not applied. One run for
+  /// all of them: mixing needed two before (user, 2026-11-22).
+  var importChoice: [String: TemplatePackage.Strategy] = [:]
   /// A real dry run reads the package and the project, long enough that the page says so.
   var planning = false
   var progress: Progress?
@@ -109,11 +114,17 @@ final class TemplatesModel {
 
   // MARK: Reading
 
-  /// The page opened: the project is read again (another page may have changed it), and a package
-  /// that is loaded is planned again against it.
-  func appear() async {
-    await inspect()
+  /// "Anwenden" opened: a package that is loaded is planned again against the project as it is now
+  /// (another page may have changed it).
+  func appearApply() async {
     if packagePath != nil, !running, !planning { await replan() }
+  }
+
+  /// "Erstellen" opened: only then is the project read for its parts, which takes a moment. Read on
+  /// the page's appearance, the list popped in late under the apply section's checkboxes, and they
+  /// were ticked by mistake (user, 2026-11-22).
+  func appearCreate() async {
+    await inspect()
   }
 
   func inspect() async {
@@ -213,25 +224,26 @@ final class TemplatesModel {
       plan = result
       unreadable = result == nil
       let parts = result?.parts.map(\.id) ?? []
-      importSelected = source != nil ? parts.filter { Self.designParts.contains($0) } : parts
+      let chosen = source != nil ? parts.filter { Self.designParts.contains($0) } : parts
+      importChoice = Dictionary(uniqueKeysWithValues: chosen.map { ($0, .packageWins) })
     } catch {
       failure = Self.text(error)
     }
   }
 
-  /// The same package planned against the project as it is now; the ticks stay where they were.
+  /// The same package planned against the project as it is now; the choices stay where they were.
   private func replan() async {
     guard let packagePath else { return }
     planning = true
     defer { planning = false }
     guard let result = try? await templates().plan(project: path, package: packagePath) else { return }
     plan = result
-    let ids = result.parts.map(\.id)
-    importSelected = importSelected.filter { ids.contains($0) }
+    let ids = Set(result.parts.map(\.id))
+    importChoice = importChoice.filter { ids.contains($0.key) }
   }
 
-  func toggleImport(_ id: String) {
-    if let index = importSelected.firstIndex(of: id) { importSelected.remove(at: index) } else { importSelected.append(id) }
+  func setChoice(_ id: String, _ strategy: TemplatePackage.Strategy?) {
+    importChoice[id] = strategy
   }
 
   /// The packages the selected parts would install, and the plugins `quartz plugin add` would
@@ -255,28 +267,38 @@ final class TemplatesModel {
     return seen
   }
 
+  /// The parts where the package replaces what the project has, in reading order.
+  var replacingParts: [String] { chosenParts.filter { importChoice[$0] == .packageWins } }
+
   func runImport(window: NSWindow?) async {
-    guard let packagePath, !importSelected.isEmpty, !running else { return }
-    let text = strategy == .packageWins ? L10n.t("templates.confirmOverwrite", count: importSelected.count)
-      : L10n.t("templates.confirmMerge", count: importSelected.count)
+    guard let packagePath, !importChoice.isEmpty, !running else { return }
+    let count = importChoice.count, replacing = replacingParts
+    let text = if replacing.count == count { L10n.t("templates.confirmOverwrite", count: count) }
+      else if replacing.isEmpty { L10n.t("templates.confirmMerge", count: count) }
+      // Mixed: the shorter list is named, the other is "the others".
+      else if replacing.count <= count - replacing.count {
+        L10n.t("templates.confirmMixed", ["count": String(count), "parts": replacing.map(TemplateWords.label).joined(separator: ", ")])
+      } else {
+        L10n.t("templates.confirmMixedKeep", ["count": String(count),
+                                              "parts": chosenParts.filter { importChoice[$0] == .projectWins }.map(TemplateWords.label).joined(separator: ", ")])
+      }
     // The catalog's sentence is the question and what it does, in one: the question is the alert's title.
     let question = text.firstIndex(of: "?").map { String(text[...$0]) } ?? text
     let detail = text.firstIndex(of: "?").map { String(text[text.index(after: $0)...]).trimmingCharacters(in: .whitespacesAndNewlines) }
     guard await Confirm.ask(question, detail: detail?.isEmpty == false ? detail : nil, confirm: L10n.t("templates.confirmImportAction"),
-                            destructive: strategy == .packageWins, window: window) else { return }
+                            destructive: !replacing.isEmpty, window: window) else { return }
     warnings = nil
     failure = nil
-    progress = Progress(partId: nil, message: "", done: 0, total: importSelected.count)
+    progress = Progress(partId: nil, message: "", done: 0, total: count)
     // In the order the service sent them, through one stream.
     let (events, feed) = AsyncStream.makeStream(of: Progress.self)
     let listener = Task { @MainActor [weak self] in
       for await event in events { if self?.progress != nil { self?.progress = event } }
     }
-    let selected = importSelected
-    let strategy = strategy
+    let choices = importChoice
     let project = path
     do {
-      let result = try await templates().importPackage(project: project, package: packagePath, parts: selected, strategy: strategy) { id, message, done, total in
+      let result = try await templates().importPackage(project: project, package: packagePath, choices: choices) { id, message, done, total in
         feed.yield(Progress(partId: id, message: message, done: done, total: total))
       }
       warnings = result.warnings
@@ -288,8 +310,8 @@ final class TemplatesModel {
     progress = nil
     let lines = warnings.map { $0.isEmpty ? [L10n.t("templates.importSuccessNoWarnings")] : ImportWarnings.lines($0) } ?? []
     Announce.post(failure ?? lines.first ?? "")
-    // What the project has now: the export's counts and the plan's.
-    await inspect()
+    // What the project has now: the plan's counts, and the export's once "Erstellen" has read them.
+    if available != nil { await inspect() }
     await replan()
   }
 }

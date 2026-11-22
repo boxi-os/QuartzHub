@@ -1,14 +1,31 @@
 import QuartzHubCore
 import SwiftUI
 
-/// Vorlagen: QuartzControl's `Templates.tsx` as a settings form (variant C), writing a template
-/// first and applying one after. Both halves are in the middle, under each other, as there; the inspector
-/// keeps the page's context, since nothing on the page is a selection.
+/// Vorlagen: QuartzControl's `Templates.tsx` as two tabs of a settings form (variant C), applying a
+/// template first and writing one second. Under each other on one page, as in QuartzControl, the two
+/// looked alike, and the parts of "Erstellen" came in late above "Anwenden": their checkboxes were
+/// ticked by mistake (user, 2026-11-22). The inspector keeps the page's context, since nothing on the
+/// page is a selection.
 struct TemplatesPage: View {
   let project: ProjectContext
 
+  enum Tab: String, CaseIterable {
+    case apply, create
+
+    var title: String {
+      switch self {
+      case .apply: L10n.t("templates.tabApply")
+      case .create: L10n.t("templates.tabCreate")
+      }
+    }
+  }
+
   @State private var model: TemplatesModel
+  /// The tab per window, by its stable name (docs/conventions.md, „Wo war ich“).
+  @SceneStorage("templates.tab") private var tabID = Tab.apply.rawValue
   @Environment(\.unsavedGuard) private var unsaved
+
+  private var tab: Tab { Tab(rawValue: tabID) ?? .apply }
 
   init(project: ProjectContext) {
     self.project = project
@@ -17,11 +34,18 @@ struct TemplatesPage: View {
 
   var body: some View {
     PageScaffold(page: .templates) {
-      SettingsForm {
-        exportSections
-        importSections
+      Group {
+        switch tab {
+        case .apply:
+          SettingsForm { importSections }
+            .task { await model.appearApply() }
+        case .create:
+          SettingsForm { exportSections }
+            .task { await model.appearCreate() }
+        }
       }
-      .task { await model.appear() }
+      .pageTabs(Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "templates.tabs")
+      .historyTab(page: .templates, tab: $tabID)
     } inspector: {
       InspectorPageContext(page: .templates) {
         Section {
@@ -104,7 +128,8 @@ struct TemplatesPage: View {
   // MARK: Applying a template
 
   @ViewBuilder private var importSections: some View {
-    SettingsSection(L10n.t("templates.importHeading"), symbol: "square.and.arrow.down.on.square", note: L10n.t("templates.importHint")) {
+    SettingsSection(L10n.t("templates.importHeading"), symbol: "square.and.arrow.down.on.square", note: L10n.t("templates.importHint"),
+                    identifier: "page.templates") {
       HStack(spacing: 8) {
         Button(L10n.t("templates.pickBuiltin")) { Task { await model.pickBuiltin() } }
           .accessibilityIdentifier("templates.pickBuiltin")
@@ -131,29 +156,14 @@ struct TemplatesPage: View {
     }
 
     if let plan = model.plan {
-      SettingsSection(L10n.t("templates.strategyHeading")) {
-        Picker(L10n.t("templates.strategyHeading"), selection: $model.strategy) {
-          Text(L10n.t("templates.strategyPackage")).tag(TemplatePackage.Strategy.packageWins)
-          Text(L10n.t("templates.strategyProject")).tag(TemplatePackage.Strategy.projectWins)
-        }
-        .pickerStyle(.segmented)
-        .labelsHidden()
-        .fixedSize()
-        .disabled(model.running)
-        .accessibilityIdentifier("templates.strategy")
-        Note(model.strategy == .packageWins ? L10n.t("templates.strategyPackageHint") : L10n.t("templates.strategyProjectHint"))
-      }
-
-      SettingsSection(L10n.t("templates.partsHeading")) {
+      SettingsSection(L10n.t("templates.partsHeading"), note: L10n.t("templates.choiceHint")) {
         ForEach(TemplatesModel.sortedForDisplay(plan.parts, id: \.id), id: \.id) { part in
-          PartRow(id: part.id, checked: model.importSelected.contains(part.id), disabled: model.running,
-                  summary: TemplateWords.planSummary(part, strategy: model.strategy),
-                  notes: TemplateWords.planNotes(part, strategy: model.strategy, pluginsSelected: model.importSelected.contains("plugins")),
-                  identifier: "templates.import.\(part.id)") {
-            model.toggleImport(part.id)
-          } extra: {
-            EmptyView()
-          }
+          let choice = model.importChoice[part.id]
+          ChoiceRow(id: part.id, choice: Binding(get: { model.importChoice[part.id] }, set: { model.setChoice(part.id, $0) }),
+                    projectWins: !TemplatesModel.skippedWhenProjectWins.contains(part.id), disabled: model.running,
+                    summary: TemplateWords.planSummary(part, strategy: choice ?? .packageWins),
+                    notes: choice.map { TemplateWords.planNotes(part, strategy: $0, pluginsSelected: model.importChoice["plugins"] != nil) } ?? [],
+                    identifier: "templates.import.\(part.id)")
         }
         if !model.missingPackages.isEmpty {
           Note(L10n.t("templates.willInstall", ["packages": model.missingPackages.joined(separator: ", ")]))
@@ -165,7 +175,7 @@ struct TemplatesPage: View {
           Button(model.running ? L10n.t("templates.importing") : L10n.t("templates.importButton")) {
             Task { await model.runImport(window: unsaved?.window) }
           }
-          .disabled(model.running || model.planning || model.importSelected.isEmpty)
+          .disabled(model.running || model.planning || model.importChoice.isEmpty)
           .accessibilityIdentifier("templates.apply")
           if let progress = model.progress {
             Text(progressLine(progress)).font(.callout).foregroundStyle(.secondary).lineLimit(1)
@@ -241,14 +251,63 @@ struct TemplatesPage: View {
   }
 }
 
-/// One part of a package, ticked or not: its name and counts on the checkbox, what it is under it,
-/// and the plan's sentences about it.
+/// One part of a package to apply: its name and what the plan found on the left, "Aus | Vorlage
+/// gewinnt | Projekt gewinnt" on the right (the last only where it does something), what the part is
+/// under it, and the plan's sentences about it for the chosen strategy.
+private struct ChoiceRow: View {
+  let id: String
+  @Binding var choice: TemplatePackage.Strategy?
+  let projectWins: Bool
+  let disabled: Bool
+  let summary: String
+  let notes: [String]
+  let identifier: String
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 3) {
+      HStack(alignment: .firstTextBaseline, spacing: 12) {
+        VStack(alignment: .leading, spacing: 2) {
+          Text(TemplateWords.label(id)).fontWeight(.medium)
+          Text(summary).font(.callout).foregroundStyle(.secondary)
+        }
+        Spacer(minLength: 0)
+        // Two segments take the width of three, aligned left: "Aus" and "Vorlage gewinnt" stay in the
+        // columns of the rows above and below.
+        ZStack(alignment: .leading) {
+          picker(projectWins: true).hidden().accessibilityHidden(true)
+          picker(projectWins: projectWins)
+            .disabled(disabled)
+            .accessibilityIdentifier(identifier)
+        }
+      }
+      Text(TemplateWords.description(id)).font(.callout).foregroundStyle(.secondary)
+      ForEach(notes, id: \.self) { note in
+        Callout(.warning, note)
+      }
+    }
+  }
+
+  private func picker(projectWins: Bool) -> some View {
+    Picker(TemplateWords.label(id), selection: $choice) {
+      Text(L10n.t("templates.choiceOff")).tag(TemplatePackage.Strategy?.none)
+      Text(L10n.t("templates.strategyPackage")).tag(TemplatePackage.Strategy?.some(.packageWins))
+      if projectWins {
+        Text(L10n.t("templates.strategyProject")).tag(TemplatePackage.Strategy?.some(.projectWins))
+      }
+    }
+    .pickerStyle(.segmented)
+    .labelsHidden()
+    .fixedSize()
+  }
+}
+
+/// One part of the project to write, ticked or not: its name and counts on the checkbox, what it is
+/// under it.
 private struct PartRow<Extra: View>: View {
   let id: String
   let checked: Bool
   let disabled: Bool
   let summary: String
-  var notes: [String] = []
   let identifier: String
   let toggle: () -> Void
   @ViewBuilder var extra: () -> Extra
@@ -266,9 +325,6 @@ private struct PartRow<Extra: View>: View {
       .accessibilityIdentifier(identifier)
       VStack(alignment: .leading, spacing: 3) {
         Text(TemplateWords.description(id)).font(.callout).foregroundStyle(.secondary)
-        ForEach(notes, id: \.self) { note in
-          Callout(.warning, note)
-        }
         extra()
       }
       .padding(.leading, 20)

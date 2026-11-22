@@ -43,7 +43,7 @@ PAGES=(
   "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3" "layout-frames-zeilen|6|3"
   "stile-basis|7|1" "stile-themes|7|2|w" "stile-variablen|7|3"
   "stile-variablen-vorlage|7|3" "stile-variablen-plugins|7|3" "stile-css|7|4"
-  "vorlagen|8||w"
+  "vorlagen|8|1|w" "vorlagen-erstellen|8|2|w"
   "vorschau-und-build|10|" "git-sync|11|" "dokumente|12|" "veroeffentlichen|13|"
   "updates|15|" "snapshots|16|"
 )
@@ -384,6 +384,10 @@ for lang in $LANGS; do
         # After the page is open: before it, the wait was spent on the previous page and Vorlagen
         # was taken while it still said „Lade…“ (2026-11-13).
         [ "$flag" = w ] && sleep 10
+        # Anwenden with the basic template loaded: the parts with their choice per part.
+        if [ $name = vorlagen ]; then
+          press templates.pickBuiltin; sleep 10
+        fi
         # A navigation chosen: the inspector shows its first step.
         if [ $name = plugins-navigationen ]; then
           list_row navigations.list 2; sleep 3

@@ -59764,6 +59764,44 @@
         }
       }
     },
+    "templates.choiceHint" : {
+      "comment" : "Vorlagen ▸ Anwenden: note of the parts section, explains the segments per part",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je Baustein: „Vorlage gewinnt“ ersetzt, was dieses Projekt schon hat; bei „Projekt gewinnt“ bleibt es, und nur Fehlendes kommt hinzu."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per part: “Template wins” replaces what this project already has; with “Project wins” it stays, and only what is missing is added."
+          }
+        }
+      }
+    },
+    "templates.choiceOff" : {
+      "comment" : "Vorlagen ▸ Anwenden: segment per part, the part is not applied",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        }
+      }
+    },
     "templates.confirmImportAction" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -59796,6 +59834,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apply {{count}} part(s)? What this project already has stays untouched."
+          }
+        }
+      }
+    },
+    "templates.confirmMixed" : {
+      "comment" : "Vorlagen ▸ Anwenden: question before applying when some parts are 'Vorlage gewinnt' and others 'Projekt gewinnt'; parts = names of the replacing ones",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{count}} Bausteine anwenden? Bei {{parts}} ersetzt die Vorlage, was dieses Projekt schon hat; bei den übrigen bleibt es. Vorher wird ein Snapshot angelegt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply {{count}} parts? For {{parts}} the template replaces what this project already has; for the others it stays. A snapshot is taken first."
+          }
+        }
+      }
+    },
+    "templates.confirmMixedKeep" : {
+      "comment" : "Vorlagen ▸ Anwenden: question before applying with mixed strategies when fewer parts are 'Projekt gewinnt'; parts = names of those",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{{count}} Bausteine anwenden? Bei {{parts}} bleibt, was dieses Projekt schon hat; bei den übrigen ersetzt die Vorlage es. Vorher wird ein Snapshot angelegt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply {{count}} parts? For {{parts}} what this project already has stays; for the others the template replaces it. A snapshot is taken first."
           }
         }
       }
@@ -62487,6 +62563,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Whatever this project already has stays; only what is missing is added. “Colors & fonts” and “Layout” stay entirely as they are."
+          }
+        }
+      }
+    },
+    "templates.tabApply" : {
+      "comment" : "Vorlagen: page tab for applying a template to this project (first tab)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply"
+          }
+        }
+      }
+    },
+    "templates.tabCreate" : {
+      "comment" : "Vorlagen: page tab for writing this project into a template file",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
           }
         }
       }
