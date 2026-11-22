@@ -134,6 +134,37 @@ public enum FontDelivery {
     return withBuiltinFontOrigin(config, local: true)
   }
 
+  /// Quartz 5.2's fonts are off only because an old quartz-fonts entry is off, with no `enabled` of
+  /// their own under `configuration.fonts`. plugin doctor's move turns that into `enabled: false`
+  /// and the interface and heading fonts go dark (00_test, 2026-11-22): QuartzControl's template
+  /// shipped the entry off, for the plugin's Google request, not to turn fonts off.
+  public static func fontsOffOnlyByOldEntry(_ config: QuartzConfig, _ features: QuartzFeatures) -> Bool {
+    guard let planned = fontsBuiltin(config, features), !planned.enabled, case .disabledByEntry? = planned.note else { return false }
+    return true
+  }
+
+  /// Quartz 5.2's fonts on with the site as it was: `enabled: true`, and the body font as the
+  /// interface font. Off, Quartz's base sets `--font-interface: var(--bodyFont)`; on without an
+  /// interface font, Obsidian's system sans stack (00_test copy, both built: eight places in the
+  /// template changed). Not with a theme that brings its fonts: Quartz then leaves the theme's
+  /// variables alone (built: only the four of Quartz's own, same values), and an interface font
+  /// written here would override the theme's. An interface font someone set stays.
+  public static func withFontsOnAsBefore(_ config: QuartzConfig) -> QuartzConfig {
+    var next = config
+    var fonts: JSONObject
+    switch config.configuration["fonts"] {
+    case .object(let object)?: fonts = object
+    default: fonts = JSONObject()
+    }
+    fonts["enabled"] = .bool(true)
+    let themeBringsFonts = fonts["useThemeFonts"] != .bool(false) && themeFontsIndex(config) != nil
+    if !themeBringsFonts, fonts["interface"] == nil, let body = config.theme["typography"]?["body"] {
+      fonts["interface"] = body
+    }
+    next.configuration["fonts"] = .object(fonts)
+    return next
+  }
+
   /// `configuration.fonts.fontOrigin: local`, or back to the built-in's default. Only `local` is
   /// QuartzHub's: another origin someone wrote stays, and so do the other options.
   static func withBuiltinFontOrigin(_ config: QuartzConfig, local: Bool) -> QuartzConfig {

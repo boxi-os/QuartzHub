@@ -617,8 +617,14 @@ public struct TemplatePackage: Sendable {
     // A package from before Quartz 5.2 says "local" only in theme.fontOrigin; on a 5.2 project the
     // built-in would load from Google regardless (FontDelivery). Only there: the replay of
     // QuartzControl's imports (5.1 trees) stays QuartzControl's file, byte for byte.
-    if config.theme["fontOrigin"] == .string("local"), QuartzFeatures.read(project: run.project).fontsBuiltin {
+    let features = QuartzFeatures.read(project: run.project)
+    if config.theme["fontOrigin"] == .string("local"), features.fontsBuiltin {
       config = FontDelivery.withBuiltinFontOrigin(config, local: true)
+    }
+    // A 5.2 package brings Quartz's fonts; an old quartz-fonts entry that is off in the project
+    // would keep them off, as with plugin doctor's move (FontDelivery.fontsOffOnlyByOldEntry).
+    if payload["fonts"] != nil, FontDelivery.fontsOffOnlyByOldEntry(config, features) {
+      config = FontDelivery.withFontsOnAsBefore(config)
     }
     try await writeConfig(config, run.project)
   }

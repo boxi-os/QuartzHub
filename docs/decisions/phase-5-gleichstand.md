@@ -3075,6 +3075,27 @@ fünften Teil und hält seinen Eintrag nicht für aufgenommen.
   QuartzHubs Block also als „von QuartzHub ausgeliefert“ statt „Quartz lädt erst beim Build“ (an der
   Kopie angesehen). Test `aMissingFontOriginIsLocal` (Gegenprobe: Schlüssel liegen lassen, rot mit
   3 Befunden).
+- **Umstellen schaltet die Schriften ein, wo nur der alte Eintrag sie ausschaltete** (gefunden am
+  00_test des Nutzers, 2026-11-22): QuartzControls Vorlage lieferte quartz-fonts ausgeschaltet, wegen
+  seines Google-Aufrufs, nicht um Schriften abzuschalten. `plugin doctor --fix` übernimmt das als
+  `fonts.enabled: false`, und Oberflächenschrift und Schrift je Überschrift verschwanden ohne Wort.
+  Der Nutzer: Plugin und eingebaute Schriften sind eine Einstellung, Umstellen soll beides umstellen.
+  Vorher gemessen, an einer Kopie von 00_test, je ein Build aus und an (lokal und Google, ohne Theme,
+  mit Theme ohne und mit eigenen Schriften): Eingeschaltet setzt Quartz ohne Oberflächenschrift
+  Obsidians Systemschrift statt `var(--bodyFont)` (acht Stellen der Vorlage), und h1–h6 bekommen die
+  Überschriftenschrift ohne Ebene, was Regeln der Vorlage für Überschriften mit anderer Schrift schlägt
+  (sichtbar nur, wenn Überschriften- und Textschrift verschieden sind). Mit einem Theme, das eigene
+  Schriften mitbringt, nur die vier Grundvariablen, gleiche Werte. Google: kein zusätzlicher Aufruf.
+  Regel jetzt (`FontDelivery.fontsOffOnlyByOldEntry`, `withFontsOnAsBefore`): Sind die Schriften nur
+  wegen eines ausgeschalteten alten Eintrags aus, schreibt „Konfiguration umstellen“ nach Quartz'
+  Lauf `enabled: true` und, ohne Theme mit eigenen Schriften, die Textschrift als Oberflächenschrift;
+  der Dialog und die Ausgabe sagen es, Quartz' Snapshot davor hält beides. Dasselbe beim Anwenden des
+  Teils „Aussehen“ einer 5.2-Vorlage auf ein Projekt mit dem alten Eintrag. Der Rest bei den
+  Überschriften bleibt in Kauf genommen. An der Kopie in der App: Dialog mit dem Satz, danach
+  `enabled: true, interface: Noto Sans`, Build mit `--font-interface: Noto Sans` und ohne Google.
+  Tests `fontsOffByAnOldEntryOnlyAreTurnedOnAsTheSiteWas` (Gegenprobe: ohne Theme-Bedingung und ohne
+  die Prüfung auf den alten Eintrag rot), `onQuartz52TheBasicPackageKeepsTheFontsLocal` (Gegenprobe:
+  ohne die Regel beim Anwenden rot).
 
 ### Callouts und Transklusionen als `<div>` im Export
 

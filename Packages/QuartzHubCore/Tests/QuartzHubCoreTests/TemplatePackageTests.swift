@@ -331,6 +331,15 @@ struct TemplatePackageTests {
       if quartz52 {
         #expect(config.configuration["fonts"] == .object(JSONObject([("fontOrigin", .string("local"))])))
         #expect(!calls.contains("@quartz-community/quartz-fonts"), "\(calls)")
+        // The old package left its quartz-fonts entry, off: Quartz's fonts are off by it alone.
+        #expect(FontDelivery.fontsOffOnlyByOldEntry(config, .quartz52))
+        // Today's package brings Quartz's fonts: its appearance turns them on (00_test, 2026-11-22).
+        let today = try #require(BuiltinTemplate.developmentCopy)
+        _ = try await templates.importPackage(project: project, package: today, parts: ["appearance"], strategy: .packageWins)
+        let after = try await ConfigFile.read(project: project, runtime: .repository)
+        #expect(after.configuration["fonts"] == .object(JSONObject([("fontOrigin", .string("local")), ("interface", .string("Noto Sans")),
+                                                                    ("enabled", .bool(true))])))
+        #expect(FontDelivery.fontsBuiltin(after, .quartz52)?.enabled == true)
       } else {
         #expect(config.configuration["fonts"] == nil)
         #expect(calls.contains("@quartz-community/quartz-fonts"), "the counter-check: on 5.1 it is a plugin, \(calls)")

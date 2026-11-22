@@ -220,6 +220,48 @@ struct FontDeliveryTests {
             == .object(JSONObject([("enabled", .bool(false)), ("fontOrigin", .string("local"))])))
   }
 
+  @Test func fontsOffByAnOldEntryOnlyAreTurnedOnAsTheSiteWas() {
+    let typography = JSONValue.object(JSONObject([("header", .string("Noto Sans")), ("body", .string("Noto Serif")), ("code", .string("Noto Sans Mono"))]))
+    // 00_test before plugin doctor: the template's entry off, configuration.fonts without `enabled`.
+    let before = Self.config52(theme: [("fontOrigin", .string("local")), ("typography", typography)],
+                               fonts: .object(JSONObject([("fontOrigin", .string("local"))])), plugins: [Self.quartzFonts(false)])
+    #expect(FontDelivery.fontsOffOnlyByOldEntry(before, .quartz52))
+    #expect(!FontDelivery.fontsOffOnlyByOldEntry(before, .quartz51))
+    // Off in the configuration, or on: not the entry's doing.
+    var ownOff = before
+    ownOff.configuration["fonts"] = .object(JSONObject([("fontOrigin", .string("local")), ("enabled", .bool(false))]))
+    #expect(!FontDelivery.fontsOffOnlyByOldEntry(ownOff, .quartz52))
+    #expect(!FontDelivery.fontsOffOnlyByOldEntry(Self.config52(theme: [], plugins: [Self.quartzFonts(true)]), .quartz52))
+    #expect(!FontDelivery.fontsOffOnlyByOldEntry(Self.config52(theme: []), .quartz52))
+
+    // After the move (doctor wrote `enabled: false`, the entry is gone): on, the body font as interface font.
+    let moved = Self.config52(theme: [("fontOrigin", .string("local")), ("typography", typography)],
+                              fonts: .object(JSONObject([("fontOrigin", .string("local")), ("enabled", .bool(false))])))
+    let on = FontDelivery.withFontsOnAsBefore(moved)
+    #expect(on.configuration["fonts"] == .object(JSONObject([("fontOrigin", .string("local")), ("enabled", .bool(true)),
+                                                             ("interface", .string("Noto Serif"))])))
+    #expect(FontDelivery.fontsBuiltin(on, .quartz52)?.enabled == true)
+    #expect(!FontDelivery.callsGoogle(on, .quartz52))
+    // An interface font someone set stays.
+    var own = moved
+    own.configuration["fonts"] = .object(JSONObject([("enabled", .bool(false)), ("interface", .string("Inter"))]))
+    #expect(FontDelivery.withFontsOnAsBefore(own).configuration["fonts"]?["interface"] == .string("Inter"))
+    // A theme that brings its fonts keeps them; one with its fonts off does not count.
+    let theme = { (themeFonts: Bool) in
+      PluginEntry(object: JSONObject([("source", .string("@quartz-themes/core")), ("enabled", .bool(true)),
+                                      ("options", .object(JSONObject([("theme", .string("minimal")), ("themeFonts", .bool(themeFonts))])))]))
+    }
+    var themed = moved
+    themed.plugins = [theme(true)]
+    #expect(FontDelivery.withFontsOnAsBefore(themed).configuration["fonts"]?["interface"] == nil)
+    themed.plugins = [theme(false)]
+    #expect(FontDelivery.withFontsOnAsBefore(themed).configuration["fonts"]?["interface"] == .string("Noto Serif"))
+    // With the theme's fonts turned off for Quartz, the theme does not count either.
+    themed.plugins = [theme(true)]
+    themed.configuration["fonts"] = .object(JSONObject([("enabled", .bool(false)), ("useThemeFonts", .bool(false))]))
+    #expect(FontDelivery.withFontsOnAsBefore(themed).configuration["fonts"]?["interface"] == .string("Noto Serif"))
+  }
+
   @Test func aLocalProjectKeepsTheBuiltInLocalWhereverItsConfigCameFrom() throws {
     // The demo project after its core update and plugin doctor's move: fonts {enabled: false}.
     let moved = Self.config52(theme: [("fontOrigin", .string("local"))], fonts: .object(JSONObject([("enabled", .bool(false))])))

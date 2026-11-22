@@ -3874,6 +3874,63 @@
         }
       }
     },
+    "builtins.migrateFontsOn" : {
+      "comment" : "Move settings dialog: appended to the detail when Quartz 5.2's fonts go on with the move",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Schriften von Quartz waren nur wegen des alten quartz-fonts-Eintrags aus; QuartzHub schaltet sie dabei ein, die Website behält ihre Schriften."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz's fonts were off only because of the old quartz-fonts entry; QuartzHub turns them on with it, and the site keeps its fonts."
+          }
+        }
+      }
+    },
+    "builtins.migrateFontsOnDone" : {
+      "comment" : "Move settings output: last line after the fonts went on with the move",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub hat die Schriften von Quartz danach eingeschaltet, die Website behält ihre Schriften."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub then turned Quartz's fonts on; the site keeps its fonts."
+          }
+        }
+      }
+    },
+    "builtins.migrateFontsOnFailed" : {
+      "comment" : "Move settings output: the fonts could not be turned on after the move",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Schriften konnten nicht eingeschaltet werden: {{error}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The fonts could not be turned on: {{error}}"
+          }
+        }
+      }
+    },
     "builtins.migrateRunning" : {
       "comment" : "Konfiguration ▸ Website, Abschnitt Verarbeitung (Quartz 5.1): while doctor --fix runs",
       "extractionState" : "manual",
