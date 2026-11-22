@@ -89,7 +89,11 @@ struct StageGridLayout: Layout {
   }
 
   func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-    let g = geometry(ProposedViewSize(width: bounds.width, height: bounds.height), subviews)
+    // The proposal sizeThatFits answered, not the bounds: with `minColumn` the grid can be wider
+    // than offered, and gaps and paddings scaled by that wider width made the rows taller than the
+    // height reported (frame editor, Mobile, 12 columns in 390 pt: 658 pt reported, 730 pt placed,
+    // the footer cut off, 2026-11-22).
+    let g = geometry(ProposedViewSize(width: proposal.width ?? bounds.width, height: bounds.height), subviews)
     let colX = { (col: Int) -> CGFloat in
       g.x0 + g.columns.prefix(max(col - 1, 0)).reduce(0, +) + g.colGap * CGFloat(max(col - 1, 0))
     }
