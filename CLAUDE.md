@@ -198,6 +198,11 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
 - **Zeilen im Frame-Editor seit 2026-11-22** ([`plan-frame-zeilen.md`](docs/plan-frame-zeilen.md)): zwischen zwei Zeilen
   ablegen (neue Zeile, die übrigen rücken nach), auf einen Bereich ablegen (tauschen), „Eine Zeile höher/tiefer“ im
   Inspektor, leere Zeilen entfernen; Zeilenhöhen und Linien-Namen gehen mit ihrer Zeile (`FrameRows` im Kern).
+- **Quartz 5.2 seit 2026-11-22** (decisions/phase-5-gleichstand.md, „Quartz 5.2“): Kern-Updates und neue Projekte nur
+  noch auf Releases (`vX.Y.Z` derselben Hauptversion); Schriften als fünfter Teil der Verarbeitung (`QuartzFeatures.fontsBuiltin`),
+  lokal bleibt lokal auch für den eingebauten Teil (beim Speichern und vor jedem Build); Oberflächenschrift und Schrift je
+  Überschrift unter Stile ▸ Basis; Export stylt `<div>`-Callouts; `QUARTZ_CONFIG_PATH` erben die Kindprozesse nicht; Vorlage
+  qc-basic und quartz-multilanguage 0.3.1 angepasst. Kommt mit 1.1.0.
 
 ## Arbeitsweise
 

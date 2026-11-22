@@ -3039,6 +3039,20 @@ andere Datei lenkt, gibt `ToolEnvironment` sie keinem Kindprozess weiter, ebenso
 `QUARTZ_CONFIG_QUIET`, das Quartz' Warnungen zur Config verschluckt
 (`quartzsConfigVariablesStayBehind`, Gegenprobe rot).
 
+### quartz-multilanguage 0.3.1
+
+Der Übersetzungshinweis des Plugins ist jetzt ein `<div class="callout multilanguage-notice">` statt
+eines `<blockquote>`, wie Quartz 5.2 Callouts schreibt. Gemessen an der 5.2-Kopie von gui-test in
+Chrome, beide Formen auf derselben Seite, die Stile des Plugins dort, wo Quartz sie einsetzt
+(unlayered nach `index.css`): Ohne Community-Theme kein Unterschied, mit und ohne Vorlagenstile, hell
+und dunkel; die Blockquote-Regel von Quartz verliert gegen die eigenen Regeln des Plugins (der Plan
+hatte das als Grund angenommen, es stimmte nicht). Mit Theme („minimal“, „its-theme“) und den
+Stilen der Vorlage bekam der Hinweis als `blockquote` die Zeilenhöhe des Themes für Zitate (24 px),
+die echten Callouts daneben 25,6 px; als `div` gleich. Unter 5.1 kehrt sich dieser Fall um, deshalb
+steht es im CHANGELOG; `quartzVersion` bleibt `>=5.0.0`. QuartzHubs Export entfernt den Hinweis über
+seine Klasse (`Helpers/src/export/pageScripts.ts`), egal welches Element er ist. quartz-betterbases
+bleibt eingefroren (Nutzer, 2026-11-22).
+
 ### bases-page `propertyLabels`
 
 Die neue Option von bases-page (ob eine Spalte den Namen oder den Titel der Eigenschaft zeigt) kommt
