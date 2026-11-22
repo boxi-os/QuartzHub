@@ -63810,13 +63810,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dafür muss eine Basis-URL gesetzt sein (Konfiguration ▸ Basis-URL). Die Schrift-URLs werden darauf umgeschrieben, sonst bricht der Build ab."
+            "value" : "Quartz holt die Google-Schriften beim Build selbst und braucht dafür eine Basis-URL (Konfiguration ▸ Basis-URL), sonst bricht der Build ab."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This needs a base URL (Configuration ▸ Base URL). The font URLs are rewritten to it, and the build fails without one."
+            "value" : "Quartz fetches the Google fonts itself during the build and needs a base URL for that (Configuration ▸ Base URL); without one the build fails."
           }
         }
       }

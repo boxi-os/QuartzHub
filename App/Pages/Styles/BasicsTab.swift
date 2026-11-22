@@ -279,7 +279,6 @@ struct BasicsTab: View {
     let loaders = FontDelivery.loaders(config, model.features)
     let google = FontDelivery.callsGoogle(config, model.features)
     let state = FontDelivery.buildState(config, faces: faces, built: built, features: model.features)
-    let baseUrl = config.configuration["baseUrl"]?.stringValue ?? ""
     return SettingsSection(L10n.t("themeEditor.delivery.heading"), note: L10n.t("themeEditor.delivery.description")) {
       VStack(alignment: .leading, spacing: 2) {
         if loaders.isEmpty { Note(L10n.t("styleEditor.current.noLoader")) }
@@ -326,8 +325,10 @@ struct BasicsTab: View {
         Toggle(L10n.t("themeEditor.delivery.themeFonts"), isOn: Binding(get: { on }, set: { model.setConfig(FontDelivery.withThemeFonts(config, $0)) }))
         Note(on ? L10n.t("themeEditor.delivery.themeFontsHint") : L10n.t("themeEditor.delivery.themeFontsOff"))
       }
-      // The plugin's self-hosting rewrites the font URLs to the base URL and stops the build without one.
-      if loaders.contains(where: { $0.via == "plugin" && $0.mode == "selfHosted" }) && baseUrl.isEmpty {
+      // Only Quartz's core downloading the Google fonts stops a build without a base URL (measured on
+      // 5.2; quartz-fonts has not needed it since 1.0.1): as the file is now, or as saving writes it.
+      if ProjectAttention.baseUrl(config).isEmpty && (model.configOnDisk.map(FontDelivery.coreDownloadsGoogleFonts) == true
+                                                       || FontDelivery.coreDownloadsGoogleFonts(FontDelivery.persist(config))) {
         Callout(.error, L10n.t("themeEditor.delivery.baseUrlMissing"))
       }
     }

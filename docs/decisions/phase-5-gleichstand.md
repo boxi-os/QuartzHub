@@ -3048,7 +3048,15 @@ fünften Teil und hält seinen Eintrag nicht für aufgenommen.
   keiner Herkunft (`selfHosted` holte die Dateien ohne Fehler). Auch quartz-fonts braucht sie seit
   1.0.1 nicht mehr (sein CHANGELOG; 5.1 sperrt 1.0.2). Die Texte unter „Basis-URL“ und in der
   Übersicht nannten noch das Plugin „Fonts“ als Grund, aus QuartzControl übernommen; sie nennen jetzt
-  Google-Schriften, die Quartz beim Build selbst holt.
+  Google-Schriften, die Quartz beim Build selbst holt. Fehlt `cdnCaching`, bricht es ebenso ab (Quartz liest ihn
+  als falsch), fehlt `fontOrigin`, baut es. Die rote Warnung auf Stile ▸ Basis hing am Plugin mit
+  `selfHosted` und folgt jetzt dieser Regel (`FontDelivery.coreDownloadsGoogleFonts`), gefragt an der
+  Config auf der Platte (`StylesModel.configOnDisk`) und am Entwurf, wie Speichern ihn schreibt: Der
+  Entwurf schreibt „lokal ausliefern“ als Google mit `cdnCaching: false`, `persist` macht daraus
+  `local`. An der Kopie: QuartzControls Stand (Google, `cdnCaching: false`, keine Basis-URL) zeigt
+  sie, nach „Jetzt ins Projekt holen“ ist sie weg. Test `onlyCoresOwnDownloadNeedsTheBaseUrl`
+  (Gegenproben: nur `cdnCaching: false` statt „nicht wahr“, `fontOrigin` „nicht local“ statt
+  „googleFonts“, beide rot).
 
 ### Callouts und Transklusionen als `<div>` im Export
 

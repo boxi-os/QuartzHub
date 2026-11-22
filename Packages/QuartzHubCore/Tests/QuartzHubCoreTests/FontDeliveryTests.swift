@@ -133,6 +133,27 @@ struct FontDeliveryTests {
     #expect(FontDelivery.loaders(entryOn, .quartz51) == [FontDelivery.Loader(via: "plugin", mode: "google")])
   }
 
+  /// Built without a base URL on the 5.2 copy of gui-test (2026-11-22): core throws for Google
+  /// with `cdnCaching` false or missing, builds with it true, with `local` and without a fontOrigin.
+  @Test func onlyCoresOwnDownloadNeedsTheBaseUrl() {
+    let google = { (caching: JSONValue?) in
+      Self.config52(theme: [("fontOrigin", .string("googleFonts"))] + (caching.map { [("cdnCaching", $0)] } ?? []))
+    }
+    #expect(FontDelivery.coreDownloadsGoogleFonts(google(.bool(false))))
+    #expect(FontDelivery.coreDownloadsGoogleFonts(google(nil)))
+    #expect(!FontDelivery.coreDownloadsGoogleFonts(google(.bool(true))))
+    #expect(!FontDelivery.coreDownloadsGoogleFonts(Self.config52(theme: [("fontOrigin", .string("local"))])))
+    #expect(!FontDelivery.coreDownloadsGoogleFonts(Self.config52(theme: [("cdnCaching", .bool(false))])))
+    // The plugin serving its own files is no reason any more (quartz-fonts 1.0.1).
+    var plugin = Self.quartzFonts(true)
+    plugin.object["options"] = .object(JSONObject([("fontOrigin", .string("selfHosted"))]))
+    #expect(!FontDelivery.coreDownloadsGoogleFonts(Self.config52(theme: [("fontOrigin", .string("local"))], plugins: [plugin])))
+    // QuartzHub's "served locally" is that pair only in the draft; saved, it is `local`.
+    let served = FontDelivery.withSelfHostedFonts(google(.bool(true)), true, .quartz52)
+    #expect(FontDelivery.coreDownloadsGoogleFonts(served))
+    #expect(!FontDelivery.coreDownloadsGoogleFonts(FontDelivery.persist(served)))
+  }
+
   @Test func servingLocallyTurnsTheBuiltInToLocal() {
     // The page's draft spelling of "served by QuartzHub": Google with cdnCaching false.
     let draft = Self.config52(theme: [("fontOrigin", .string("googleFonts"))])

@@ -51,6 +51,9 @@ final class StylesModel {
   /// false` without the app's block): the switch reads "served locally", and the next save fetches
   /// them into the project.
   private(set) var quartzStillDownloadsFonts = false
+  /// The config as the build reads it: what was loaded, then what each save wrote. The draft can
+  /// differ in spelling (`FontDelivery.present`), so the warning about the base URL asks this too.
+  private(set) var configOnDisk: QuartzConfig?
   private(set) var overrides: [(key: String, value: VariableResolve.Override)] = []
   private var savedOverrides: [(key: String, value: VariableResolve.Override)] = []
   /// The `plugin-vars` block as the page holds it (docs/plan-plugin-variablen.md, B1).
@@ -109,6 +112,7 @@ final class StylesModel {
       config = presented
       savedConfig = presented
       quartzStillDownloadsFonts = FontDelivery.fetchesGoogleFonts(loaded) && presented == loaded
+      configOnDisk = loaded
       scss = Scss(info: info, content: info.content, original: info.content, staleBy: nil)
       loadError = nil
     } catch {
@@ -393,8 +397,10 @@ final class StylesModel {
       blockWritten()
       if !result.removedFiles.isEmpty { fontNote = L10n.t("styles.googleFontsDropped", count: result.removedFiles.count) }
     }
-    try await ConfigFile.write(FontDelivery.persist(config), project: path, runtime: environment.runtime,
+    let written = FontDelivery.persist(config)
+    try await ConfigFile.write(written, project: path, runtime: environment.runtime,
                                snapshot: SnapshotStore.live(environment: environment).take)
+    configOnDisk = written
     quartzStillDownloadsFonts = false
   }
 

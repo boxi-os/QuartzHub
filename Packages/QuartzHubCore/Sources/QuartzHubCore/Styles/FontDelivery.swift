@@ -226,6 +226,16 @@ public enum FontDelivery {
     return (origin == .string("googleFonts") || origin == nil) && config.theme["cdnCaching"] == .bool(false)
   }
 
+  /// Whether Quartz's core downloads the Google fonts during the build, read from the config as it
+  /// is on disk: Quartz's own test in `componentResources.ts` (`fontOrigin === "googleFonts" &&
+  /// !cdnCaching`, a missing `cdnCaching` included), which throws without a base URL. Not the
+  /// page's draft, where that pair means "served by QuartzHub" until `persist` writes `local`.
+  /// Measured on 5.2 (decisions/phase-5-gleichstand.md, „Schriften eingebaut“): neither
+  /// quartz-fonts since 1.0.1 nor the built-in needs the base URL.
+  public static func coreDownloadsGoogleFonts(_ config: QuartzConfig) -> Bool {
+    config.theme["fontOrigin"] == .string("googleFonts") && !JS.truthy(config.theme["cdnCaching"])
+  }
+
   /// On the way out: what the config file says once the fonts are in the project, the built-in's
   /// origin with it.
   public static func persist(_ config: QuartzConfig) -> QuartzConfig {
