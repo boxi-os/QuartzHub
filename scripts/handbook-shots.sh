@@ -170,19 +170,84 @@ disclose() {
 
 # Clicks a text of the project window that reads the German or the English word, with the mouse
 # at its left edge: a Fold's label and a list row take a click, not an accessibility action. Only
-# what the list has laid out is found (rows out of view do not exist yet).
+# what the list has laid out is found (rows out of view do not exist yet). The click is a real
+# mouse event: System Events' `click at` reached the element but left a Fold shut (2026-11-22).
+# A third argument moves the click that many points down (a row under a heading that has no text
+# of its own for the accessibility tree).
 click_text() {
-  ax "set els to entire contents of $project_window
+  local at=$(osascript -e "tell application \"System Events\" to tell process \"QuartzHub\"
+ set frontmost to true
+ set els to entire contents of $project_window
  repeat with e in els
   try
    if role of e is \"AXStaticText\" and ((value of e as text) is \"$1\" or (value of e as text) is \"$2\") then
     set p to position of e
     set s to size of e
-    click at {(item 1 of p) + 4, (item 2 of p) + (item 2 of s) / 2}
-    exit repeat
+    return ((item 1 of p) + 4 as integer as text) & \" \" & ((item 2 of p) + (item 2 of s) / 2 + ${3:-0} as integer as text)
    end if
   end try
- end repeat"
+ end repeat
+ return \"\"
+end tell")
+  [ -n "$at" ] || { echo "nicht gefunden: $1" >&2; return 0; }
+  mouse click ${=at}
+}
+# Clicks into the text field whose placeholder starts with the German or the English text, then
+# types: SwiftUI took a value set through the accessibility tree without updating its binding.
+type_by_placeholder() {
+  local at=$(osascript -e "tell application \"System Events\" to tell process \"QuartzHub\"
+ set frontmost to true
+ set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXTextField\" then
+    set ph to value of attribute \"AXPlaceholderValue\" of e
+    if ph starts with \"$1\" or ph starts with \"$2\" then
+     set p to position of e
+     set s to size of e
+     return ((item 1 of p) + 20 as integer as text) & \" \" & ((item 2 of p) + (item 2 of s) / 2 as integer as text)
+    end if
+   end if
+  end try
+ end repeat
+ return \"\"
+end tell")
+  [ -n "$at" ] || { echo "nicht gefunden: $1" >&2; return 0; }
+  mouse click ${=at}; sleep 0.5
+  ax "keystroke \"$3\""
+}
+# Scrolls the project window's middle column down by the given points (a lot reaches the end).
+scroll_down() {
+  local at=$(osascript -e "tell application \"System Events\" to tell process \"QuartzHub\"
+ set p to position of $project_window
+ return ((item 1 of p) + 500 as integer as text) & \" \" & ((item 2 of p) + 450 as integer as text)
+end tell")
+  mouse scroll ${=at} $1
+}
+# Real mouse events: `mouse click x y`, `mouse scroll x y points`.
+mouse() {
+  swift - "$@" <<'SWIFT'
+import CoreGraphics
+import Foundation
+let a = CommandLine.arguments
+let p = CGPoint(x: Double(a[2])!, y: Double(a[3])!)
+CGEvent(mouseEventSource: nil, mouseType: .mouseMoved, mouseCursorPosition: p, mouseButton: .left)!.post(tap: .cghidEventTap)
+usleep(100_000)
+if a[1] == "click" {
+  for t in [CGEventType.leftMouseDown, .leftMouseUp] {
+    CGEvent(mouseEventSource: nil, mouseType: t, mouseCursorPosition: p, mouseButton: .left)!.post(tap: .cghidEventTap)
+    usleep(80_000)
+  }
+} else {
+  var left = Int32(a[4])!
+  while left > 0 {
+    let step = min(left, 50)
+    CGEvent(scrollWheelEvent2Source: nil, units: .pixel, wheelCount: 1, wheel1: -step, wheel2: 0, wheel3: 0)!.post(tap: .cghidEventTap)
+    left -= step
+    usleep(20_000)
+  }
+}
+SWIFT
 }
 # Sets the text field with the given accessibility identifier.
 set_field() {
@@ -394,17 +459,31 @@ for lang in $LANGS; do
         fi
         # Stile ▸ Variablen as it opens (base colours unfolded), then the template's variables with
         # one chosen, then a plugin's: found through the search, so its row is laid out.
+        # The rows are buttons (no text of their own in the tree): the template's is pressed by its
+        # identifier, the plugin's clicked under its plugin's heading. Scrolled so the section is on top.
         if [ $name = stile-variablen-vorlage ]; then
           click_text "Grundfarben" "Base colors"; sleep 1
           click_text "Abstände" "Spacing"; sleep 1
-          click_text "--tpl-space-md" "--tpl-space-md"; sleep 2
+          ax "set els to entire contents of $project_window
+ repeat with e in els
+  try
+   if role of e is \"AXButton\" and value of attribute \"AXIdentifier\" of e is \"variables.row.tpl-space-md\" then
+    click e
+    exit repeat
+   end if
+  end try
+ end repeat"; sleep 2
+          scroll_down 520; sleep 2
         fi
         if [ $name = stile-variablen-plugins ]; then
-          click_text "Abstände" "Spacing"; sleep 1
+          scroll_down 3000; sleep 1
           click_text "Alle Theme- und Build-Variablen" "All theme and build variables"; sleep 2
-          set_field variables.search rail-icon; sleep 2
+          scroll_down 3000; sleep 1
+          type_by_placeholder "Variable suchen" "Search variable" rail-icon; sleep 2
+          scroll_down 3000; sleep 1
           click_text "Plugin-Variablen" "Plugin variables"; sleep 2
-          click_text "--quartz-nav-rail-icon-size" "--quartz-nav-rail-icon-size"; sleep 2
+          scroll_down 3000; sleep 1
+          click_text "Navigations" "Navigations" 41; sleep 2
         fi
         # A row comes in on the frame board: index on Mobile, right dragged between header and left,
         # taken while the line shows; let go over the sidebar, so the frame stays as it was.
