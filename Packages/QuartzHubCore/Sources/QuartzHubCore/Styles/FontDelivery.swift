@@ -226,17 +226,27 @@ public enum FontDelivery {
     return (origin == .string("googleFonts") || origin == nil) && config.theme["cdnCaching"] == .bool(false)
   }
 
-  /// On the way in, before `present`: a Google origin whose `cdnCaching` is no Boolean reads as
-  /// Quartz reads it, by truthiness, so a missing key is `false` and Quartz downloads the fonts at
-  /// build time (`componentResources.ts`; `Head.tsx` links Google only for a truthy value).
-  /// QuartzControl took a missing key for the link and showed "Google, linked"; measured on the 5.2
-  /// copy of gui-test (decisions/phase-5-gleichstand.md, „Schriften eingebaut“). Kept out of the
-  /// functions compared with QuartzControl, which stay as its code answers.
-  public static func cdnCachingAsQuartzReadsIt(_ config: QuartzConfig) -> QuartzConfig {
-    guard config.theme["fontOrigin"] == .string("googleFonts") else { return config }
-    if case .bool? = config.theme["cdnCaching"] { return config }
+  /// On the way in, before `present`: `theme.fontOrigin` and `cdnCaching` read as Quartz reads
+  /// them, measured on the 5.2 copy of gui-test (decisions/phase-5-gleichstand.md, „Schriften
+  /// eingebaut“). Kept out of the functions compared with QuartzControl, which stay as its code
+  /// answers; QuartzControl took both missing keys for Google's link.
+  /// - A missing `fontOrigin` is `local`: `Head.tsx` links only for `"googleFonts"`, and
+  ///   `componentResources.ts` downloads only for it (no default anywhere; the build linked Google
+  ///   on no page, with `"googleFonts"` on 148).
+  /// - With `"googleFonts"`, a `cdnCaching` that is no Boolean counts by its truthiness, so a
+  ///   missing key is `false` and Quartz downloads at build time (the build without a base URL
+  ///   threw there).
+  public static func themeFontsAsQuartzReadsIt(_ config: QuartzConfig) -> QuartzConfig {
     var next = config
-    next.theme["cdnCaching"] = .bool(JS.truthy(config.theme["cdnCaching"]))
+    switch config.theme["fontOrigin"] {
+    case nil:
+      next.theme["fontOrigin"] = .string("local")
+    case .string("googleFonts")?:
+      if case .bool? = config.theme["cdnCaching"] { break }
+      next.theme["cdnCaching"] = .bool(JS.truthy(config.theme["cdnCaching"]))
+    default:
+      break
+    }
     return next
   }
 

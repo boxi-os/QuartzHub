@@ -3062,12 +3062,19 @@ fünften Teil und hält seinen Eintrag nicht für aufgenommen.
   Build ohne Basis-URL oben warf genau dort). QuartzControl las den fehlenden Schlüssel als Link und
   zeigte „Google, direkt verlinkt“ in Orange; seine Goldens halten das 642-mal fest und bleiben so.
   QuartzHub liest die Config jetzt beim Laden von Stile wie Quartz
-  (`FontDelivery.cdnCachingAsQuartzReadsIt`: bei `fontOrigin: googleFonts` ein Wert, der kein
+  (`FontDelivery.themeFontsAsQuartzReadsIt`: bei `fontOrigin: googleFonts` ein Wert, der kein
   Boolean ist, nach seiner Wahrheit) und zeigt den Stand wie QuartzControls Selbst-Hosten: Schalter
   an, „Quartz lädt diese Schriften erst beim Build …“, Speichern holt sie ins Projekt. An der Kopie
   angesehen. Test `aMissingCdnCachingIsQuartzDownloading` (Gegenprobe: fehlend als wahr gelesen, rot
-  mit 7 Befunden). Nicht angefasst: Ein fehlendes `fontOrigin` liest QuartzHub weiter als Google,
-  Quartz lädt dann gar nichts (Build ohne Basis-URL oben).
+  mit 7 Befunden).
+- **Ein fehlendes `fontOrigin`** heißt für Quartz `local`: `Head.tsx` verlinkt und
+  `componentResources.ts` lädt nur bei `"googleFonts"`, der eingebaute Teil ebenso, und keine Stelle
+  setzt einen Standard. Build der Kopie ohne den Schlüssel (`cdnCaching: true`): keine Seite und kein
+  Stylesheet nennt Google, mit `googleFonts` 148 (Gegenprobe). QuartzControl las auch diesen
+  fehlenden Schlüssel als Google; `themeFontsAsQuartzReadsIt` liest ihn jetzt als `local`, mit
+  QuartzHubs Block also als „von QuartzHub ausgeliefert“ statt „Quartz lädt erst beim Build“ (an der
+  Kopie angesehen). Test `aMissingFontOriginIsLocal` (Gegenprobe: Schlüssel liegen lassen, rot mit
+  3 Befunden).
 
 ### Callouts und Transklusionen als `<div>` im Export
 

@@ -109,6 +109,8 @@ struct FontDeliveryTests {
     return config
   }
 
+  static let googleBlock = "/* --- QuartzControl:managed:google-fonts:start --- */\n/* --- QuartzControl:managed:google-fonts:end --- */"
+
   static func quartzFonts(_ enabled: Bool) -> PluginEntry {
     PluginEntry(object: JSONObject([("source", .string("@quartz-community/quartz-fonts")), ("enabled", .bool(enabled))]))
   }
@@ -162,20 +164,35 @@ struct FontDeliveryTests {
     }
     let missing = google(nil)
     #expect(FontDelivery.loaders(missing) == [FontDelivery.Loader(via: "core", mode: "google")], "QuartzControl's answer, kept")
-    let read = FontDelivery.cdnCachingAsQuartzReadsIt(missing)
+    let read = FontDelivery.themeFontsAsQuartzReadsIt(missing)
     #expect(read.theme["cdnCaching"] == .bool(false))
     #expect(FontDelivery.loaders(read) == [FontDelivery.Loader(via: "core", mode: "selfHosted")])
     #expect(!FontDelivery.callsGoogle(read))
     #expect(FontDelivery.fetchesGoogleFonts(read))
     #expect(FontDelivery.persist(read).theme["fontOrigin"] == .string("local"))
     // Another value by its truthiness; a Boolean and another origin stay as they are.
-    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(google(.string("yes"))).theme["cdnCaching"] == .bool(true))
-    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(google(.number(0))).theme["cdnCaching"] == .bool(false))
-    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(google(.bool(true))) == google(.bool(true)))
+    #expect(FontDelivery.themeFontsAsQuartzReadsIt(google(.string("yes"))).theme["cdnCaching"] == .bool(true))
+    #expect(FontDelivery.themeFontsAsQuartzReadsIt(google(.number(0))).theme["cdnCaching"] == .bool(false))
+    #expect(FontDelivery.themeFontsAsQuartzReadsIt(google(.bool(true))) == google(.bool(true)))
     let local = Self.config52(theme: [("fontOrigin", .string("local"))])
-    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(local) == local)
-    let noOrigin = Self.config52(theme: [])
-    #expect(FontDelivery.cdnCachingAsQuartzReadsIt(noOrigin) == noOrigin)
+    #expect(FontDelivery.themeFontsAsQuartzReadsIt(local) == local)
+  }
+
+  /// A missing `fontOrigin` loads nothing from Quartz, as `local` (built on the 5.2 copy of
+  /// gui-test, 2026-11-22: no page or stylesheet named Google; with `googleFonts` 148 did).
+  @Test func aMissingFontOriginIsLocal() {
+    let noOrigin = Self.config52(theme: [("cdnCaching", .bool(true))])
+    #expect(FontDelivery.loaders(noOrigin) == [FontDelivery.Loader(via: "core", mode: "google")], "QuartzControl's answer, kept")
+    let read = FontDelivery.themeFontsAsQuartzReadsIt(noOrigin)
+    #expect(read.theme["fontOrigin"] == .string("local"))
+    #expect(read.theme["cdnCaching"] == .bool(true))
+    #expect(FontDelivery.loaders(read).isEmpty)
+    #expect(!FontDelivery.coreDownloadsGoogleFonts(read))
+    // With QuartzHub's block it is QuartzHub serving them, as `local` is.
+    #expect(FontDelivery.fetchesGoogleFonts(FontDelivery.present(read, scss: Self.googleBlock)))
+    // Another origin stays, `selfHosted` included (Quartz's core loads nothing for it either).
+    let selfHosted = Self.config52(theme: [("fontOrigin", .string("selfHosted"))])
+    #expect(FontDelivery.themeFontsAsQuartzReadsIt(selfHosted) == selfHosted)
   }
 
   @Test func servingLocallyTurnsTheBuiltInToLocal() {
