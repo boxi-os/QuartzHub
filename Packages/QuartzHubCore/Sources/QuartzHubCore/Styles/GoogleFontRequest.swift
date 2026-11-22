@@ -9,8 +9,8 @@ public enum GoogleFontRequest {
     public var family: String
     public var weights: [Double]
     public var italic: Bool
-    /// Quartz writes `wght@` only for more than one weight, so a single one is dropped and Google
-    /// serves the family's default.
+    /// Quartz's `<Head>` writes `wght@` only for more than one weight, so a single one is dropped
+    /// and Google serves the family's default. QuartzHub's own fetch keeps it (`familyParameter`).
     public var singleWeightDropped: Bool
 
     public var json: JSONValue {
@@ -20,10 +20,10 @@ public enum GoogleFontRequest {
   }
 
   public static let roles = ["header", "body", "code", "title"]
-  /// Quartz 5.2's own font fields (`configuration.fonts`): Quartz sets their variables but asks
-  /// Google for none of them (`googleFontHref` takes title, header, body and code). QuartzHub asks
-  /// for them when it holds the fonts, with the defaults Quartz checks them against (`validate`:
-  /// a heading level as the header); the interface font as the body, without italic.
+  /// Quartz 5.2's own font fields (`configuration.fonts`): 5.2.0 sets their variables but asks
+  /// Google for none of them, 5.2.1 asks for them like the others (`QuartzFeatures.fontsLoadsAll`).
+  /// QuartzHub asks for them when it holds the fonts, with the defaults Quartz checks them against
+  /// (`validate`: a heading level as the header); the interface font as the body, without italic.
   public static let builtinRoles = ["interface", "h1", "h2", "h3", "h4", "h5", "h6"]
   /// What QuartzHub fetches into a project: Quartz's roles, then the built-in's.
   public static let fetchedRoles = roles + builtinRoles
@@ -52,24 +52,23 @@ public enum GoogleFontRequest {
     }
   }
 
-  /// One `family=` value in Quartz's spelling: `ital` before `wght`, the italic pairs sorted as
-  /// strings (Quartz calls a bare `.sort()`), no `wght@` for a single weight.
+  /// One `family=` value in the spelling of Quartz 5.2.1's built-in (`formatMerged` in
+  /// `quartz/plugins/builtins/fonts.ts`): the weights sorted as numbers, a single weight named
+  /// unless it is 400, italic as `ital@0;1` or with a pair per weight. QuartzControl and Quartz's
+  /// `<Head>` (`quartz/util/theme.ts`) drop a single weight, so `weights: [700]` fetched 400, and
+  /// write a single-weight italic as `Name:ital`, which Google answers with HTTP 400 (measured
+  /// 2026-11-22, decisions/phase-5-gleichstand.md, „Quartz 5.2.1“). With no usable weight the
+  /// family's default.
   static func familyParameter(_ request: Request) -> String {
-    var features: [String] = []
-    if request.italic { features.append("ital") }
-    if request.weights.count > 1 {
-      let spec: String
-      if request.italic {
-        var pairs = request.weights.flatMap { ["0,\(JSJSON.numberToString($0))", "1,\(JSJSON.numberToString($0))"] }
-        pairs.sort { $0.utf16.lexicographicallyPrecedes($1.utf16) }
-        spec = pairs.joined(separator: ";")
-      } else {
-        spec = request.weights.map(JSJSON.numberToString).joined(separator: ";")
-      }
-      features.append("wght@\(spec)")
-    }
+    let weights = Array(Set(request.weights)).sorted()
     let name = JSURI.encodeComponent(JS.trim(request.family)).replacingOccurrences(of: "%20", with: "+")
-    return features.isEmpty ? name : "\(name):\(features.joined(separator: ","))"
+    let defaultWeight = weights.isEmpty || weights == [400]
+    if request.italic {
+      if defaultWeight { return "\(name):ital@0;1" }
+      let tuples = weights.map { "0,\(JSJSON.numberToString($0))" } + weights.map { "1,\(JSJSON.numberToString($0))" }
+      return "\(name):ital,wght@\(tuples.joined(separator: ";"))"
+    }
+    return defaultWeight ? name : "\(name):wght@\(weights.map(JSJSON.numberToString).joined(separator: ";"))"
   }
 
   /// The CSS2 request for every role that names a family, header, body and code in Quartz's order,

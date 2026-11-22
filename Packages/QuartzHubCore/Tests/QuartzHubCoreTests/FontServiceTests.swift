@@ -33,12 +33,40 @@ import Testing
       let file = FontFaces.fileIn("/D", entry["url"]?.stringValue)
       #expect(file.map { JSONValue.string($0) } ?? .null == entry["file"], "\(entry["url"]!)")
     }
+    // QuartzHub's fetch keeps a single weight (Quartz 5.2.1's spelling, `familyParameter`); the
+    // rest stays as QuartzControl asked.
+    let keepsTheWeight = [
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans:wght@400;600&family=Mono&display=swap":
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans:wght@400;600&family=Mono:wght@500&display=swap",
+      "https://fonts.googleapis.com/css2?family=W&display=swap": "https://fonts.googleapis.com/css2?family=W:wght@500&display=swap"
+    ]
+    var kept = 0
     for entry in pure["css2"]?.arrayValue ?? [] {
       let typography = entry["typography"]?.objectValue ?? JSONObject()
-      #expect(GoogleFontRequest.css2Url(typography).map { JSONValue.string($0) } ?? .null == entry["url"], "\(entry["typography"]!)")
+      let expected = entry["url"]?.stringValue.map { url in keepsTheWeight[url].map { kept += 1; return $0 } ?? url }
+      #expect(GoogleFontRequest.css2Url(typography) == expected, "\(entry["typography"]!)")
       let requests = GoogleFontRequest.roles.map { GoogleFontRequest.request($0, typography[$0])?.json ?? .null }
       #expect(JSONValue.array(requests) == entry["requests"], "\(entry["typography"]!) requests")
     }
+    #expect(kept == keepsTheWeight.count, "every exception still meets its case")
+  }
+
+  /// Quartz 5.2.1's spelling: `Roboto:ital` (a single-weight italic as QuartzControl wrote it) is
+  /// HTTP 400 at Google, `Roboto:ital@0;1` and `Roboto:wght@700` answer with what they name
+  /// (measured with curl, 2026-11-22).
+  @Test func aSingleWeightIsAskedAsWritten() {
+    func url(_ spec: JSONValue) -> String? { GoogleFontRequest.css2Url(JSONObject([("body", spec)])) }
+    func font(_ weights: [Double], italic: Bool) -> JSONValue {
+      .object(JSONObject([("name", .string("Roboto")), ("weights", .array(weights.map { .number($0) })), ("includeItalic", .bool(italic))]))
+    }
+    let g = "https://fonts.googleapis.com/css2?family="
+    #expect(url(font([400], italic: true)) == "\(g)Roboto:ital@0;1&display=swap")
+    #expect(url(font([700], italic: true)) == "\(g)Roboto:ital,wght@0,700;1,700&display=swap")
+    #expect(url(font([700], italic: false)) == "\(g)Roboto:wght@700&display=swap")
+    #expect(url(font([400], italic: false)) == "\(g)Roboto&display=swap")
+    #expect(url(font([], italic: false)) == "\(g)Roboto&display=swap")
+    // Numbers, not strings: 1000 after 100; a weight twice is asked once.
+    #expect(url(font([1000, 100, 100], italic: true)) == "\(g)Roboto:ital,wght@0,100;0,1000;1,100;1,1000&display=swap")
   }
 
   struct ConfigBroke: LocalizedError {

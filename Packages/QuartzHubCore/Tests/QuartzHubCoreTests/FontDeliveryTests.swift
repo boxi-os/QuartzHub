@@ -329,7 +329,7 @@ struct FontDeliveryTests {
     let fetched = FontDelivery.fetchedTypography(config, .quartz52)
     #expect(fetched.keys == ["header", "interface", "h1"])
     #expect(GoogleFontRequest.css2Url(fetched)
-            == "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Inter:wght@400;600&family=Lora&display=swap")
+            == "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Inter:wght@400;600&family=Lora:wght@500&display=swap")
     // 5.1 has no such fields, and with the built-in off Quartz ignores them.
     #expect(FontDelivery.fetchedTypography(config, .quartz51).keys == ["header"])
     var offFonts = fonts.objectValue!
