@@ -119,9 +119,16 @@ public struct ToolEnvironment: Sendable, Equatable {
     return entries
   }
 
+  /// Variables of the user's environment no child gets.
+  static let withheld = ["QUARTZ_CONFIG_PATH", "QUARTZ_CONFIG_QUIET"]
+
   /// The whole environment of a child.
   public var variables: [String: String] {
     var variables = base
+    // Quartz 5.2 builds another config than the project's with QUARTZ_CONFIG_PATH (`quartz build
+    // --config`) and silences its config warnings with QUARTZ_CONFIG_QUIET: QuartzHub edits and
+    // reads the project's own, so neither comes along from the user's environment.
+    for name in Self.withheld { variables[name] = nil }
     variables["PATH"] = path.joined(separator: ":")
     if let git { variables.merge(git.variables) { _, new in new } }
     // `-QHOffline`: npm answers from its cache or fails with ENOTCACHED, as without a network.

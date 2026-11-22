@@ -3007,3 +3007,12 @@ Seite. Der Abgleich mit QuartzControls Golden wendet dieselbe Änderung auf dess
 Gemessen an der 5.2-Kopie von gui-test: `qh-check export-book … --offline --pdf` und QuartzControls
 `check:export` ohne Befund außer „nicht getaggt“, epubcheck 0 Fehler, Callout und Transklusion im
 PDF wie auf der Website.
+
+### `quartz build --config`
+
+5.2 kann eine andere Config bauen (`--config`/`-C`, gesetzt als `QUARTZ_CONFIG_PATH`, gelesen in
+`config-loader.ts`, `install-plugins.ts`, `plugin-data.js`). QuartzHub kennt je Projekt eine Config
+und bietet das nicht an. Damit eine Variable aus der Umgebung des Nutzers keinen Build auf eine
+andere Datei lenkt, gibt `ToolEnvironment` sie keinem Kindprozess weiter, ebenso
+`QUARTZ_CONFIG_QUIET`, das Quartz' Warnungen zur Config verschluckt
+(`quartzsConfigVariablesStayBehind`, Gegenprobe rot).

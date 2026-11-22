@@ -36,6 +36,19 @@ import Testing
     #expect(host.variables["GIT_EXEC_PATH"] == nil)
   }
 
+  /// A `quartz build --config` of another file must not reach QuartzHub's builds.
+  @Test func quartzsConfigVariablesStayBehind() {
+    var base = Self.base
+    base["QUARTZ_CONFIG_PATH"] = "/elsewhere/quartz.config.yaml"
+    base["QUARTZ_CONFIG_QUIET"] = "1"
+    base["QUARTZ_OTHER"] = "kept"
+    let environment = ToolEnvironment(base: base, hostPath: Self.launchd, nodeMode: .embedded, runtime: Self.runtime, git: nil,
+                                      bundledGitFailure: nil)
+    #expect(environment.variables["QUARTZ_CONFIG_PATH"] == nil)
+    #expect(environment.variables["QUARTZ_CONFIG_QUIET"] == nil)
+    #expect(environment.variables["QUARTZ_OTHER"] == "kept")
+  }
+
   @Test(.enabled(if: hasRuntime, "Runtime/ fehlt: scripts/fetch-runtime.sh"))
   func embeddedNodeServesNpmWithoutAnyOtherNode() async {
     let environment = Self.environment(.embedded)
