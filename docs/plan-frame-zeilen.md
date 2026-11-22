@@ -65,6 +65,10 @@ Alles im Kern (`FrameEditing`), mit Tests; das Board und der Inspektor rufen es 
 - Das Basis-Template legt auf Mobile eine left-Zeile der Höhe `0` an und holt den Abstand mit
   `margin-block-start: -2rem` an before-body zurück (`custom/layout.scss`). Ohne left-Zeile rückt
   before-body damit zu dicht an den Kopf. Am Template prüfen, ob left dort auf Mobile etwas trägt.
+  **Entschieden (Nutzer, 2026-11-22): so lassen und im Handbuch erklären** (5.4, Vault 69b3c50). Die
+  0-Zeile ist Absicht (ein Explorer-Knopf liegt über der App-Leiste), und CSS sieht nicht, ob left im
+  Raster liegt. Verworfen: der Generator gleicht den Abstand nach einer 0-Zeile selbst aus; bestehende
+  Projekte hätten die Regel in ihrer `layout.scss` noch und würden doppelt ausgeglichen.
 
 ## Umgesetzt (2026-11-22)
 
