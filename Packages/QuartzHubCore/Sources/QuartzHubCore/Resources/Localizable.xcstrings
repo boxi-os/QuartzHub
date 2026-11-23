@@ -61025,13 +61025,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das gewählte Theme mit allen seinen Einstellungen. Das npm-Paket wird beim Import mitinstalliert."
+            "value" : "Das gewählte Theme mit allen seinen Einstellungen. Geladen wird es beim nächsten Build."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The chosen theme with all its settings. Its npm package is installed along with it."
+            "value" : "The chosen theme with all its settings. It is loaded at the next build."
           }
         }
       }
