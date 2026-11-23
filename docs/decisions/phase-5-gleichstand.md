@@ -3391,3 +3391,27 @@ ohne Netz):
 - Die Golden-Fälle aus QuartzControl mit `theme.json` (`site-fonts-golden.mjs`: das Theme minimal, eine
   kaputte und eine erfundene Datei) sind gestrichen, die übrigen unverändert neu erzeugt. Damit weicht
   QuartzHub hier bewusst von QuartzControl 1.3 ab, das core 3 nicht kennt.
+- **Variablen:** Die Tabelle eines core-3-Themes ist nicht eine `:root`-Regel wie in core 2s `theme.json`.
+  core behält die Spezifität des Obsidian-Themes und setzt die Werte auf `body`: `:where(body)` (0,0,0),
+  `body` (0,0,1), `:where(body):is([saved-theme=dark] *)` (0,1,0), mit `:not(.qt-0)` als Polster.
+  `VariableGraph` liest deshalb die Regeln in `@layer obsidian` mit einem kleinen Selektor-Abgleich
+  (`ThemeSelector`: nur `html` mit `saved-theme` und `body` als sein Kind, ohne Klassen; was er nicht
+  kennt, zählt nicht) und nimmt je Name und Modus die spezifischste, bei Gleichstand die letzte Regel.
+  Was `body` selbst bekommt, gilt auf der Seite gegen jedes `:root`, auch ungeschichtet: Vererbung, nicht
+  Kaskade. Am Catppuccin-Build: 1.124 Variablen vom Theme; jeder Wert ohne `var()` gegen WebKits Wert am
+  `body` verglichen, je Modus: 936 gleich, 63 `inherit`/`initial` (der Graph zeigt den Text, WebKit den
+  geerbten oder leeren Wert), 10 `env(…)` (WebKit löst sie auf), 2 eine Regel in `@supports`, die der
+  Graph wie bisher als Ausnahme übergeht. Keine echte Abweichung. Der Graph braucht im Debug-Bau 325 statt
+  185 ms.
+- **Eine Anweisung endet am `;`.** Der Regelleser (aus QuartzControl) hielt `@charset "UTF-8";body{…}` für
+  eine At-Regel und übersprang 473 Deklarationen des Themes. Dieselbe Lücke verlor in `custom.scss` die
+  erste Regel nach `@use "./quartzcontrol";`. Jetzt endet eine Anweisung auf oberster Ebene am `;`; im
+  Golden-Fall „edges“ steht deshalb `--tpl-own` aus `custom.scss`, den QuartzControl nicht sah.
+- Die Golden-Fälle mit `theme.json` (`variable-graph-golden.mjs`) sind gestrichen; das Skript kann mit
+  `--keep-real` neu erzeugen, ohne `real/` aus dem inzwischen geänderten gui-test neu zu kopieren. Die
+  Graphen, die `VariableResolve` und `CssColor` als Eingabe nehmen (auch die mit dem Theme minimal),
+  liegen als QuartzControls Ergebnis in `Fixtures/variable-resolve/graphs.json`.
+- **Gefunden dabei:** Weil das Theme auf `body` setzt, kommt ein Wert, den Stile ▸ Variablen auf `:root`
+  schreibt, mit core 3 nicht an (WebKit: `:root{--light:red}` gibt `html` Rot, `body` behält Catppuccins
+  Wert). Mit `:root body` im selben Block kommt er in beiden Modi an. Das ist eine Änderung am
+  verwalteten Block und eine Entscheidung des Nutzers, offen.

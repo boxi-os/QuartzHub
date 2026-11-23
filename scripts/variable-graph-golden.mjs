@@ -2,15 +2,18 @@
 // Golden files for VariableGraph and CssVariables, made by QuartzControl's own
 // variableGraphService.ts and shared/cssVariables.ts:
 //
-// - `real/`: gui-test's stylesheets, the CSS of its last build (public/, 26 files) and the
-//   theme.json of @quartz-themes/minimal, copied (read only).
+// - `real/`: gui-test's stylesheets and the CSS of its last build (public/, 26 files), copied
+//   (read only). With `--keep-real` the copy in the fixtures stays as it is: SiteFontsTests share it,
+//   and gui-test has moved on since.
 // - `graphs.json`: getVariableGraph for projects made of those and of made-up CSS (strings and
 //   comments with braces, @media and @layer, minified rules, data URLs, numeric names, a stray
-//   brace, broken theme files, an own output folder).
+//   brace, an own output folder). No theme: QuartzControl read `@quartz-themes/<id>/theme.json`,
+//   which core 3 does not have; QuartzHub reads the theme from the build
+//   (VariableGraphTests.core3ThemeFromTheBuild).
 // - `catalog.json`: the variable catalog, hexToHsl, defaultValueFor, isWritableCssValue and the
 //   callout colours.
 //
-//   Runtime/node/bin/node scripts/variable-graph-golden.mjs [../QuartzControl] [~/Documents/QuartzProjekte]
+//   Runtime/node/bin/node scripts/variable-graph-golden.mjs [--keep-real] [../QuartzControl] [~/Documents/QuartzProjekte]
 import { loadQuartzControl, commonStubs } from './lib/qc-bundle.mjs'
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
@@ -18,8 +21,10 @@ import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
-const control = resolve(process.argv[2] ?? join(here, '..', '..', 'QuartzControl'))
-const projects = resolve(process.argv[3] ?? join(homedir(), 'Documents', 'QuartzProjekte'))
+const keepReal = process.argv.includes('--keep-real')
+const args = process.argv.slice(2).filter((a) => a !== '--keep-real')
+const control = resolve(args[0] ?? join(here, '..', '..', 'QuartzControl'))
+const projects = resolve(args[1] ?? join(homedir(), 'Documents', 'QuartzProjekte'))
 const out = join(here, '..', 'Packages', 'QuartzHubCore', 'Tests', 'QuartzHubCoreTests', 'Fixtures', 'variable-graph')
 
 const graph = await loadQuartzControl(control, 'electron/main/services/variableGraphService.ts', {
@@ -28,7 +33,7 @@ const graph = await loadQuartzControl(control, 'electron/main/services/variableG
 const css = await loadQuartzControl(control, 'shared/cssVariables.ts', {})
 
 // ── the real inputs ──────────────────────────────────────────────────────────────────────────
-rmSync(out, { recursive: true, force: true })
+if (!keepReal) rmSync(out, { recursive: true, force: true })
 const gui = join(projects, 'gui-test')
 const copyTree = (from, to, keep) => {
   for (const name of readdirSync(from)) {
@@ -37,10 +42,10 @@ const copyTree = (from, to, keep) => {
     else if (keep(name)) { mkdirSync(to, { recursive: true }); cpSync(full, join(to, name)) }
   }
 }
-copyTree(join(gui, 'quartz', 'styles'), join(out, 'real', 'styles'), (n) => /\.(scss|css)$/.test(n))
-copyTree(join(gui, 'public'), join(out, 'real', 'public'), (n) => n.endsWith('.css'))
-mkdirSync(join(out, 'real', 'themes', 'minimal'), { recursive: true })
-cpSync(join(gui, 'node_modules', '@quartz-themes', 'minimal', 'theme.json'), join(out, 'real', 'themes', 'minimal', 'theme.json'))
+if (!keepReal) {
+  copyTree(join(gui, 'quartz', 'styles'), join(out, 'real', 'styles'), (n) => /\.(scss|css)$/.test(n))
+  copyTree(join(gui, 'public'), join(out, 'real', 'public'), (n) => n.endsWith('.css'))
+}
 
 // ── made-up inputs ───────────────────────────────────────────────────────────────────────────
 const M = (id) => [`/* --- QuartzControl:managed:${id}:start --- */`, `/* --- QuartzControl:managed:${id}:end --- */`]
@@ -59,11 +64,6 @@ const edgeBuild = [
   // After a stray brace nothing more is read, not even a clean rule two rules later.
   '.x { color: red } } :root { --after-stray: lost; } :root { --after-stray-2: lost; }'
 ].join('\n')
-const edgeTheme = {
-  light: { base: ':root { --tl: #fff; --shared: var(--tl); --tpl-own: theme; } .later { --scoped-theme: 1 }' },
-  dark: { base: ':root { --tl: #000; --shared: var(--tl) }', other: ':root { --ignored: 1 }' },
-  brokenVarLinks: { '--tl': ['--dangling-a', '--dangling-b'], '--shared': ['--tl'] }
-}
 const ownStyles = {
   'custom.scss': `@use "./quartzcontrol";\n// :root { --commented: 'x }\n:root { --tpl-own: from-custom; --project-only: 1; }\n:root[saved-theme="dark"] { --project-only: 2; }\n@media (x) { :root { --media-own: 1; } }\n.scoped { --not-own: 1; }\n`,
   '_quartzcontrol.scss': `${M('imports')[0]}\n@use "./custom/one";\n${M('imports')[1]}\n\n${M('css-vars')[0]}\n:root {\n  --tpl-own: from-page;\n  --page-only: 3;\n}\n${M('css-vars')[1]}\n`,
@@ -72,14 +72,9 @@ const ownStyles = {
 
 const cases = [
   { name: 'gui-test', styles: 'real', build: 'real' },
-  { name: 'gui-test with minimal', styles: 'real', build: 'real', theme: 'minimal' },
   { name: 'gui-test without a build', styles: 'real' },
-  { name: 'minimal alone', theme: 'minimal' },
-  { name: 'edges', styles: ownStyles, build: { 'index.css': edgeBuild, 'nested/deep.css': ':root { --nested: 1 }', 'node_modules/x.css': ':root { --ignored: 1 }', 'dist/y.css': ':root { --ignored2: 1 }' }, theme: { edge: edgeTheme } },
+  { name: 'edges', styles: ownStyles, build: { 'index.css': edgeBuild, 'nested/deep.css': ':root { --nested: 1 }', 'node_modules/x.css': ':root { --ignored: 1 }', 'dist/y.css': ':root { --ignored2: 1 }' } },
   { name: 'edges in an own output folder', styles: ownStyles, build: { 'index.css': edgeBuild }, outputDir: 'site-out' },
-  { name: 'broken theme files', theme: { 'not-json': '{', 'no-base': { light: { base: 5 }, dark: {} }, 'links-only': { brokenVarLinks: { '--x': ['--y'] } } }, themeId: 'not-json' },
-  { name: 'a theme without base', theme: { 'no-base': { light: { base: 5 }, dark: {} } }, themeId: 'no-base' },
-  { name: 'a theme with only links', theme: { 'links-only': { brokenVarLinks: { '--x': ['--y', 'z'] } } }, themeId: 'links-only' },
   { name: 'a theme that is not installed', themeId: 'nowhere' },
   { name: 'many build files', build: Object.fromEntries(Array.from({ length: 55 }, (_, i) => [`f${String(i).padStart(2, '0')}.css`, `:root { --f${i}: ${i}; }`])) }
 ]
@@ -94,18 +89,7 @@ for (const c of cases) {
   const buildDir = join(project, c.outputDir ?? 'public')
   if (c.build === 'real') cpSync(join(out, 'real', 'public'), buildDir, { recursive: true })
   else for (const [p, t] of Object.entries(c.build ?? {})) { mkdirSync(dirname(join(buildDir, p)), { recursive: true }); writeFileSync(join(buildDir, p), t) }
-  let themeId = c.themeId
-  if (c.theme === 'minimal') {
-    mkdirSync(join(project, 'node_modules', '@quartz-themes', 'minimal'), { recursive: true })
-    cpSync(join(out, 'real', 'themes', 'minimal', 'theme.json'), join(project, 'node_modules', '@quartz-themes', 'minimal', 'theme.json'))
-    themeId = 'minimal'
-  } else if (c.theme) {
-    for (const [id, theme] of Object.entries(c.theme)) {
-      mkdirSync(join(project, 'node_modules', '@quartz-themes', id), { recursive: true })
-      writeFileSync(join(project, 'node_modules', '@quartz-themes', id, 'theme.json'), typeof theme === 'string' ? theme : JSON.stringify(theme))
-    }
-    themeId ??= Object.keys(c.theme)[0]
-  }
+  const themeId = c.themeId
   const result = await graph.getVariableGraph(project, themeId, c.outputDir)
   results.push({ ...c, themeId: themeId ?? null, graph: JSON.parse(JSON.stringify(result)) })
 }

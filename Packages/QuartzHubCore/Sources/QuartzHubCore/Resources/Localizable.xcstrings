@@ -58897,13 +58897,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Es ist kein Community-Theme installiert."
+            "value" : "Es ist kein Community-Theme eingeschaltet."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No community theme is installed."
+            "value" : "No community theme is enabled."
           }
         }
       }

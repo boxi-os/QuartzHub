@@ -3,8 +3,11 @@
 // and swatch.ts running in Google Chrome (headless, through QuartzControl's playwright-core):
 // isColorVariable and isDisplayableColor ask the canvas, everything else is plain functions.
 //
-// The contexts are the variable graphs of Fixtures/variable-graph (gui-test, gui-test with the
-// theme minimal, minimal alone, the made-up edges) with the palettes of gui-test and Example and
+// The contexts are variable graphs as QuartzControl's variableGraphService.ts made them (gui-test,
+// gui-test with the theme minimal, minimal alone, the made-up edges), kept in
+// Fixtures/variable-resolve/graphs.json: core 3 has no `theme.json`, so Fixtures/variable-graph no
+// longer has the graphs with a theme, and VariableResolve takes a graph as data whatever made it.
+// With the palettes of gui-test and Example and
 // with overrides of every kind: a changed colour, a light-only one, one of the user's own keys, an
 // alias, a cycle, an embedded reference, an emptied pair. Per key and mode: effectiveValue,
 // baseValue, resolveChain, resolvedValue, originOf, baseOriginOf, groupOf, isColorVariable (both
@@ -38,9 +41,7 @@ const bundle = await build({
   alias: { '@shared': join(control, 'shared') }
 })
 
-const graphs = JSON.parse(readFileSync(join(fixtures, 'variable-graph', 'graphs.json'), 'utf8'))
-  .filter((g) => Object.keys(g.graph.vars).length > 0)
-  .map((g) => ({ name: g.name, graph: { vars: g.graph.vars } }))
+const graphs = JSON.parse(readFileSync(join(fixtures, 'variable-resolve', 'graphs.json'), 'utf8'))
 const palettes = ['gui-test', 'Example'].map((name) => {
   const config = yaml.parse(readFileSync(join(projects, name, 'quartz.config.yaml'), 'utf8'))
   const theme = config.configuration?.theme ?? config.theme ?? {}
@@ -151,7 +152,7 @@ try {
     }
   }, [graphs, palettes, overrideSets, values, queries, paletteValues])
   mkdirSync(out, { recursive: true })
-  // The contexts point at a graph by name; the graphs themselves are Fixtures/variable-graph's.
+  // The contexts point at a graph by name; the graphs themselves are graphs.json beside.
   writeFileSync(join(out, 'cases.json'), JSON.stringify({ palettes, overrideSets, ...result }) + '\n')
   console.log(`${result.contexts.length} contexts, ${result.contexts.reduce((n, c) => n + c.rows.length, 0)} rows`)
 } finally {

@@ -5,10 +5,14 @@ import Foundation
 /// came from, and which other variables reference it. A value like `var(--bg)` is kept verbatim:
 /// the page needs the chain, not the end of it.
 ///
-/// Two optional sources, and the answer says which one answered: an installed theme's `theme.json`
-/// (each mode's compiled CSS, whose first rule is the theme's whole variable table) and the CSS of
+/// Two optional sources, and the answer says which one answered: the active theme and the CSS of
 /// the last build. Then the project's own stylesheets: an unlayered declaration beats every layered
 /// one whatever its selector, so a stylesheet's `:root` replaces Quartz's value in both modes.
+///
+/// The theme is core 3's sheet in that build (`@layer obsidian`, `SiteFonts.themeStylesheets`); core 2's
+/// `theme.json` is gone. Its table sits on `body`, not `:root` (`ThemeSelector`), and a value body
+/// declares itself is what the page gets whatever `:root` says, unlayered or not: inheritance, not
+/// the cascade (measured in WebKit, decisions/phase-5-gleichstand.md, „Schriften und Variablen aus dem Build“).
 ///
 /// Read with a brace counter that knows strings and comments, not a CSS parser, as QuartzControl
 /// reads its own generated CSS; the cases it learnt (a selector with `{{` in a string, minified rules
@@ -30,6 +34,8 @@ public enum VariableGraph {
   struct Context {
     var layered = false
     var conditional = false
+    /// Inside `@layer obsidian`, core 3's theme.
+    var theme = false
   }
 
   /// The first rule of a compiled mode blob, the `:root` block.
@@ -106,6 +112,10 @@ public enum VariableGraph {
           start = i + 1
         }
         depth += 1
+      } else if ch == 0x3B && depth == 0 {
+        // A statement (`@layer a;`, `@charset "UTF-8";`) ends here; minified CSS puts the next
+        // selector right after it, as core 3's sheet does with `@charset "UTF-8";body{…}`.
+        start = i + 1
       } else if ch == 0x7D {
         depth -= 1
         if depth == 0 {
@@ -113,7 +123,8 @@ public enum VariableGraph {
           let body = JSText.slice(css, start, i)
           if JSText.startsWith(selector, "@") {
             let layer = JSText.test(selector, #"\A@layer(?![A-Za-z0-9_])"#)
-            eachRule(body, Context(layered: context.layered || layer, conditional: context.conditional || !layer), visit)
+            let theme = layer && JSText.test(selector, "\\A" + SiteFonts.themeLayer)
+            eachRule(body, Context(layered: context.layered || layer, conditional: context.conditional || !layer, theme: context.theme || theme), visit)
           } else {
             visit(selector, body, context)
           }
@@ -189,7 +200,8 @@ public enum VariableGraph {
       }
     }
     // theme wins over build for the same name and mode, but a build-only mode still fills a gap; an
-    // unlayered declaration wins over both (the theme's CSS is layered too).
+    // unlayered declaration wins over both (the theme's CSS is layered too), except where the theme
+    // declares on body: `strong` below.
     func note(_ name: String, _ mode: String, _ value: String, _ origin: String, unlayered: Bool = false) {
       let existing = vars[name]?.objectValue
       if !unlayered, let existing, existing["origin"] == .string("theme"), origin == "build", existing[mode] != nil { return }
@@ -200,25 +212,6 @@ public enum VariableGraph {
       for match in JSText.matches(value, #"var\(["# + JSText.space + #"]*--([A-Za-z0-9_-]+)"#) {
         let target = match.groups[1]!
         if target != name { addDependent(target, name) }
-      }
-    }
-
-    var theme: JSONValue?
-    if let themeId {
-      let path = NodePath.join(project, "node_modules/@quartz-themes", themeId, "theme.json")
-      // `JSON.parse` of the file, and only a truthy one is a theme (`null`, `0` or `""` are none).
-      if let data = FileManager.default.contents(atPath: path), let parsed = try? JSJSON.parse(data), JS.truthy(parsed) { theme = parsed }
-    }
-    if let theme {
-      for mode in ["light", "dark"] {
-        guard case .string(let base)? = theme[safe: mode]?[safe: "base"] else { continue }
-        for (name, value) in declarations(firstRuleBody(base)) { note(name, mode, value, "theme") }
-      }
-      if case .object(let links)? = theme[safe: "brokenVarLinks"] {
-        for target in links.keys {
-          let bare = JSText.replaceAll(target, #"\A--"#, with: "")
-          for dep in links[target]?.arrayValue ?? [] { addDependent(bare, JSText.replaceAll(JS.string(dep), #"\A--"#, with: "")) }
-        }
       }
     }
 
@@ -235,17 +228,53 @@ public enum VariableGraph {
         unlayered.append((name, (light ?? nil, dark ?? nil)))
       }
     }
+    // The theme's winner per name, mode and element: the most specific rule, of equals the last.
+    var themeWinners: [String: (specificity: ThemeSelector.Specificity, value: String)] = [:]
+    var themeNames: [String] = []
+    var themeFound = false
     if hasBuild {
       // A name the page sets is skipped when unlayered: that is where the page's own rule lands.
       for file in cssFiles(buildDir).prefix(50) {
         let content = (try? StyleSheets.readText(file)) ?? ""
         eachRule(content) { selector, body, context in
           // A :root inside @media is the exception to a base value, not one.
-          guard !context.conditional, let mode = rootMode(selector) else { return }
+          guard !context.conditional else { return }
+          if context.theme && themeId != nil {
+            themeFound = true
+            let pairs = declarations(body)
+            guard !pairs.isEmpty else { return }
+            let parsed = ThemeSelector.parse(selector)
+            for mode in ["light", "dark"] {
+              for element in [ThemeSelector.Element.body, .html] {
+                guard let specificity = ThemeSelector.match(parsed, element, mode: mode) else { continue }
+                for (name, value) in pairs {
+                  let key = "\(name)\u{0}\(mode)\u{0}\(element == .body ? "body" : "html")"
+                  if let current = themeWinners[key], specificity < current.specificity { continue }
+                  if themeWinners[key] == nil && !themeNames.contains(name) { themeNames.append(name) }
+                  themeWinners[key] = (specificity, value)
+                }
+              }
+            }
+            return
+          }
+          guard let mode = rootMode(selector) else { return }
           for (name, value) in declarations(body) {
             if context.layered { note(name, mode, value, "build") }
             else if !own.contains(name) { if mode == "light" { setUnlayered(name, light: .some(value)) } else { setUnlayered(name, dark: .some(value)) } }
           }
+        }
+      }
+    }
+    // The theme's values: what body declares beats every `:root`; what only html gets is a layered
+    // root value like any other.
+    var strong: Set<String> = []
+    for name in themeNames {
+      for mode in ["light", "dark"] {
+        if let winner = themeWinners["\(name)\u{0}\(mode)\u{0}body"] {
+          note(name, mode, winner.value, "theme")
+          strong.insert("\(name)\u{0}\(mode)")
+        } else if let winner = themeWinners["\(name)\u{0}\(mode)\u{0}html"] {
+          note(name, mode, winner.value, "theme")
         }
       }
     }
@@ -254,10 +283,10 @@ public enum VariableGraph {
     let declared = try projectDeclarations(project)
     for (name, declaration) in declared where own.contains(name) { setUnlayered(name, light: .some(declaration.light), dark: .some(declaration.dark), replace: true) }
     for (name, values) in unlayered {
-      if let light = values.light { note(name, "light", light, "build", unlayered: true) }
+      if let light = values.light, !strong.contains("\(name)\u{0}light") { note(name, "light", light, "build", unlayered: true) }
       // Without a dark rule of its own, dark mode gets the light one, over any layered dark value.
       let dark = values.dark ?? (vars[name]?[safe: "dark"] != nil ? values.light : nil)
-      if let dark { note(name, "dark", dark, "build", unlayered: true) }
+      if let dark, !strong.contains("\(name)\u{0}dark") { note(name, "dark", dark, "build", unlayered: true) }
     }
     for (name, declaration) in declared {
       guard var entry = vars[name]?.objectValue, entry["origin"] == .string("build") else { continue }
@@ -270,6 +299,6 @@ public enum VariableGraph {
     for (target, names) in dependents {
       dependentsObject[target] = .array(names.sorted { $0.utf16.lexicographicallyPrecedes($1.utf16) }.map { .string($0) })
     }
-    return Graph(vars: vars, dependents: dependentsObject, themeId: theme != nil ? themeId : nil, sources: (theme != nil, hasBuild))
+    return Graph(vars: vars, dependents: dependentsObject, themeId: themeFound ? themeId : nil, sources: (themeFound, hasBuild))
   }
 }

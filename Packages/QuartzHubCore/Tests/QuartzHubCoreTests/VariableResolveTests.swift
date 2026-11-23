@@ -10,7 +10,8 @@ struct VariableResolveTests {
   static func load() throws -> (cases: JSONValue, graphs: [String: JSONObject]) {
     let cases = try JSJSON.parse(Data(contentsOf: fixtures.appendingPathComponent("variable-resolve/cases.json")))
     var graphs: [String: JSONObject] = [:]
-    for entry in try JSJSON.parse(Data(contentsOf: fixtures.appendingPathComponent("variable-graph/graphs.json"))).arrayValue ?? [] {
+    // The graphs QuartzControl made, the theme minimal's included (core 2's theme.json), kept beside.
+    for entry in try JSJSON.parse(Data(contentsOf: fixtures.appendingPathComponent("variable-resolve/graphs.json"))).arrayValue ?? [] {
       if let name = entry["name"]?.stringValue, case .object(let vars)? = entry["graph"]?["vars"] { graphs[name] = vars }
     }
     return (cases, graphs)

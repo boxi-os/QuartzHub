@@ -230,7 +230,8 @@ struct VariablesTab: View {
           Note(L10n.t("common.loading"))
         } else if keys.isEmpty {
           Note(L10n.t("styles.variables.noSources"))
-          if sources?.theme == false { Note(L10n.t("styles.variables.noTheme")) }
+          // The theme's table comes from the build: an enabled theme without one is the build's note.
+          if model.config.flatMap(FontDelivery.activeThemeId) == nil { Note(L10n.t("styles.variables.noTheme")) }
           if sources?.build == false { Note(L10n.t("styles.variables.noBuild")) }
           Button(L10n.t("styles.variables.reload")) { Task { await model.reloadGraph() } }
         } else {

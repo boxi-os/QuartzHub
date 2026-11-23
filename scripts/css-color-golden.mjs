@@ -5,8 +5,9 @@
 // agree with. Per value: what canvas makes of it, `cssColorToHexAlpha`, `isDisplayableColor`, and
 // the pixel Chrome paints for it over white and over black (the swatch).
 //
-// The values are every light and dark value of the variable graphs in Fixtures/variable-graph
-// (gui-test, gui-test with the theme minimal, minimal alone, the made-up edges), each one also as
+// The values are every light and dark value of the variable graphs in Fixtures/variable-resolve
+// (gui-test, gui-test with the theme minimal, minimal alone, the made-up edges, as QuartzControl made
+// them; core 3 has no theme.json, so Fixtures/variable-graph no longer has them), each one also as
 // QuartzControl resolves it (`resolvedValue`, which substitutes var() into hsl() and calc()), the
 // palettes of gui-test and Example, and made-up edges of the colour syntax.
 //
@@ -36,7 +37,7 @@ const bundle = await build({
   alias: { '@shared': join(control, 'shared') }
 })
 
-const graphs = JSON.parse(readFileSync(join(fixtures, 'variable-graph', 'graphs.json'), 'utf8'))
+const graphs = JSON.parse(readFileSync(join(fixtures, 'variable-resolve', 'graphs.json'), 'utf8'))
 const palettes = ['gui-test', 'Example'].map((name) => {
   const config = yaml.parse(readFileSync(join(projects, name, 'quartz.config.yaml'), 'utf8'))
   return { colors: config.configuration?.theme?.colors ?? config.theme?.colors ?? {}, typography: config.configuration?.theme?.typography ?? config.theme?.typography }
