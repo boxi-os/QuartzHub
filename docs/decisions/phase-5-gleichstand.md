@@ -3268,3 +3268,21 @@ QuartzHubs eigenem Kern-Update auf 5.2.1, dann `npx quartz build` je Theme. Fass
   an:** Die Regeln der Vorlage qc-basic (`h2,h3,…{color:var(--dark)}`) stehen ohne Ebene und
   schlagen `@layer obsidian`. Das ist nicht neu, core 2.0.1 legte das Theme ebenfalls in Ebenen
   (`obsidian-theme`), und gehört zur Vorlage, nicht zu core 3.
+
+**Nachtrag 2026-11-23: core 3.1.1 und Quartz 5.2.2.** Beide erschienen am 22.11. nach der Messung
+(core 22:40, Quartz 22:48). Quartz 5.2.2 ändert nur das Lockfile auf core 3.1.1, der Pin bleibt
+`^3.1.0`. core 3.1.1 ändert zwei Stellen (`npm diff` gegen 3.1.0): `default`, `obsidian` und
+`Obsidian default` (ohne Rücksicht auf Groß- und Kleinschreibung) sind Obsidians eingebautes Theme,
+ohne Community-Theme und mit beiden Modi (Quelle `built-in`); ein `@font-face`, das schon ohne `src`
+kam, wird nicht mehr als „nicht auflösbar“ entfernt. Die Prüfung auf `.css` steht weiter vor der auf
+`https://`. Gemessen an derselben Wegwerf-Kopie:
+
+- **`npm install` in einem Projekt auf 5.2.1 bleibt bei core 3.1.0**, das Lockfile hält die Fassung.
+  Erst das Kern-Update auf 5.2.2 (Merge des Tags, dann `npm install`, von Hand in denselben Schritten
+  wie `CoreUpdate`) bringt 3.1.1.
+- **Mit 3.1.1 bauen alle drei Schreibweisen** (Exit 0, „Obsidian default: 0 rules converted“). Die
+  Website bekommt Obsidians Grund-CSS in `@layer obsidian` (`resource-style-<hash>.css`, 315 KB).
+  Gegenprobe mit ausgeschaltetem Eintrag: keine Datei mit `@layer obsidian`. `default` ist also eine
+  eigene Wahl (Obsidians Aussehen), nicht dasselbe wie „kein Theme“.
+- Damit gilt „`default` scheitert“ oben nur noch für core 3.0.0 bis 3.1.0, also Projekte auf Quartz
+  5.2.0 und 5.2.1.

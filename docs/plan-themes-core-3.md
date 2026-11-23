@@ -19,7 +19,7 @@ Entschieden (Nutzer, 2026-11-22):
 - `theme` ist ein Name aus Obsidians Liste (`community-css-themes.json` aus `obsidianmd/obsidian-releases`,
   heute 1057 Einträge, jeder mit `name`, `author`, `repo`, `screenshot`, `modes`; 15 mit `legacy`),
   ein Repo `owner/repo`, eine URL auf ein `theme.css`, ein lokaler Pfad (`./…`, `/…`, `~`, endet auf
-  `.css`) oder eine ID aus 2.x. Für die alten IDs trägt core eine Tabelle (`LEGACY_THEMES`, rund 860
+  `.css`), seit 3.1.1 `default`/`obsidian`/`Obsidian default` für Obsidians eingebautes Theme oder eine ID aus 2.x. Für die alten IDs trägt core eine Tabelle (`LEGACY_THEMES`, rund 860
   Einträge: Name, Modi, Style-Settings-Preset der Variante).
 - Geladen wird beim Build: Liste und `manifest.json` 24 h gecacht (`cacheHours`), das `theme.css` der
   Release-Version oder von `HEAD`, alles unter `.quartz-cache/quartz-themes/` im Projekt. Ohne Netz baut
@@ -59,8 +59,12 @@ Bau“. Was daraus für die Schritte folgt:
 
 - **Das Kern-Update läuft ohne npm-Konflikt.** Die alten Pakete haben keine Peer-Abhängigkeit, sie
   bleiben nur liegen. Das Aufräumen gehört also auf die Theme-Seite (Schritt 5), nicht ins Update.
-- **`default` bricht ab.** Ein Projekt mit `theme: default` bekommt den Aufräum-Kasten mit zwei
-  Wegen: ein Theme wählen oder den Eintrag ausschalten. QuartzHub schreibt `default` nie mehr.
+- **`default` ist seit core 3.1.1 (Quartz 5.2.2) Obsidians eingebautes Theme** (Nachtrag
+  2026-11-23); mit 3.0.0 bis 3.1.0 bricht es ab, und `npm install` allein holt 3.1.1 nicht, erst das
+  Kern-Update. `default` bleibt deshalb eine gültige Wahl: im Katalog als eigener Eintrag „Obsidian
+  (eingebaut)“ vor den Community-Themes, anders als der ausgeschaltete Eintrag. Ob das core eines
+  Projekts `default` kennt, liest QuartzHub nicht aus der Nummer: Vorab laden fragt core selbst
+  (Schritt 1), und scheitert es, zeigt die Seite den Sprung zu Updates.
 - **Ein gescheitertes Theme lässt den Build durchgehen** (Exit 0, das Plugin wird übersprungen).
   Vorab laden (Schritt 1) fängt das beim Wählen ab. Dazu meldet Vorschau & Build die Zeile
   „`@quartz-themes/core` … was skipped“ als Fehler mit Sprung zur Theme-Seite (in Schritt 6).
@@ -101,7 +105,7 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    `VariableGraph` lesen `static/resource-style-*.css` (Schritt 0). `theme.json`-Leser und `themes-golden.mjs` gehen.
 5. **Aufräumen und Vorlagen** (Kern):
    - `ThemeLegacy` findet alte `@quartz-themes/<id>`-Pakete in `package.json` und die übergangenen
-     Optionen am Eintrag. Es entfernt sie mit `SnapshotStore.Take` und `npm uninstall`. Dazu kommt `theme: default`.
+     Optionen am Eintrag. Es entfernt sie mit `SnapshotStore.Take` und `npm uninstall`. `theme: default` ist kein Fund mehr (Schritt 0).
    - `TemplatePackage`: Der Teil „Theme“ installiert nur noch core. In ein Projekt mit core 2.x wird
      er nicht angewandt, mit Grund in der Teile-Wahl.
 6. **Seite Community-Themes** (App).
@@ -126,7 +130,7 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    - `5-gestaltung/06-community-themes` neu schreiben.
    - Prüfen, was in `05-stile-basis`, `09-vorlagen`, `01-die-ebenen`, `3-uebersicht/01-die-uebersicht`,
      `2-projekte/05-die-einstellungen` und `4-einrichtung/01-website` über Themes steht.
-   - Die Aufnahmen für 5.6 kommen vom Demo-Projekt auf 5.2.1 (vorher `handbook-demo.sh` nachziehen).
+   - Die Aufnahmen für 5.6 kommen vom Demo-Projekt auf 5.2.2 (vorher `handbook-demo.sh` nachziehen).
    - Danach `qh-check handbook` und die Prüfung auf Persönliches.
 9. **Abschluss**: Rauchtest, App in Hell und Dunkel angesehen. Prüfen, ob die Vorlagen qc-basic und
    qc-example ein Theme mitbringen.
@@ -139,5 +143,5 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
   auch die Projekte, die die Vorlage schon haben.
 - Der erste Build mit einem neuen Theme braucht Netz. Vorab laden mildert das, nimmt es nicht weg.
 - Screenshots sind teils mehrere MB groß; ohne Verkleinern und ohne Laden erst beim Erscheinen wird die Liste träge.
-- core 3 ist einen Tag alt (3.0.0, 3.0.1, 3.1.0 an einem Tag). Vor dem Bauen nachsehen, ob es eine
-  neuere Fassung gibt; was QuartzHub von core liest, steht im Helfer an einer Stelle.
+- core 3 ist jung (3.0.0 bis 3.1.1 an einem Tag; 3.1.1 am 2026-11-23 nachgemessen). Vor jedem Schritt
+  nachsehen, ob es eine neuere Fassung gibt; was QuartzHub von core liest, steht im Helfer an einer Stelle.
