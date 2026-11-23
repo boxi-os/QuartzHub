@@ -23,7 +23,7 @@ Abschnitt in `../QuartzControl/docs/decisions/`. Die Messungen und Ränder dort 
   (Prüfungen, Nachfolger der `check:*`-Skripte) und `QuartzHubCoreTests` (Swift Testing). Der
   String Catalog liegt hier (`Resources/Localizable.xcstrings`), weil auch der Kern Texte hat.
 - `UITests/` — XCUITest-Rauchtest (Nachfolger von `npm run smoke`).
-- `Helpers/` — JS-Helfer (`yaml-edit`; `dts-schema`: `.d.ts` und Page-Type-Einstiege mit TypeScripts Parser; `sass-check`: kompiliert mit dem Sass des Projekts; `locale-edit`: Quartz' Sprachdateien mit TypeScripts Parser; `content-files`: welche Notizen Quartz baut, mit dem globby des Projekts), mit esbuild zu `.cjs` gebündelt. `sass` in `Helpers/node_modules` ist nur der Stellvertreter für die Tests (gui-tests Fassung).
+- `Helpers/` — JS-Helfer (`yaml-edit`; `dts-schema`: `.d.ts` und Page-Type-Einstiege mit TypeScripts Parser; `sass-check`: kompiliert mit dem Sass des Projekts; `locale-edit`: Quartz' Sprachdateien mit TypeScripts Parser; `content-files`: welche Notizen Quartz baut, mit dem globby des Projekts; `theme-fetch`: was ein Theme-Eintrag lädt, mit dem `@quartz-themes/core` des Projekts), mit esbuild zu `.cjs` gebündelt. `sass` in `Helpers/node_modules` ist nur der Stellvertreter für die Tests (gui-tests Fassung).
 - `Runtime/` — geholtes Node und git (nicht versioniert). `Resources/licenses/` — Lizenztexte.
 - `project.yml` — Quelle des Xcode-Projekts (XcodeGen). `QuartzHub.xcodeproj` und
   `App/Info.plist` sind erzeugt und nicht versioniert.

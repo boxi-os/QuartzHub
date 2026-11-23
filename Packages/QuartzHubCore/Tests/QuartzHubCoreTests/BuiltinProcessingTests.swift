@@ -190,6 +190,15 @@ import Testing
     try Posix.write("\(project)/quartz/plugins/builtins/fonts.ts",
                     Data(#"type FontRole = "title" | "header" | "body" | "code" | "interface"\#n"#.utf8))
     try Posix.write("\(project)/package.json", Data(#"{"version":"5.2.1"}"#.utf8))
+    var without = QuartzFeatures.quartz521
+    without.themesCore3 = false
+    #expect(QuartzFeatures.read(project: project) == without)
+    // The installed core: 2.0.1's declaration has resolveThemeId, 3.x's resolveTheme.
+    _ = try scratch.dir("node_modules/@quartz-themes/core/dist")
+    let types = "\(project)/node_modules/@quartz-themes/core/dist/index.d.ts"
+    try Posix.write(types, Data("declare function resolveThemeId(theme: string, variation?: string): string;\n".utf8))
+    #expect(QuartzFeatures.read(project: project) == without)
+    try Posix.write(types, Data("declare function resolveTheme(spec: string, opts?: SourceOptions): Promise<ResolvedTheme>;\n".utf8))
     #expect(QuartzFeatures.read(project: project) == .quartz521)
   }
 

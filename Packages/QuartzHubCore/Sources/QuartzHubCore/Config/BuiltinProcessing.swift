@@ -22,9 +22,13 @@ public struct QuartzFeatures: Equatable, Sendable {
   /// The built-in loads the interface and per-heading fonts like the others (Quartz 5.2.1): its
   /// `FontRole` declares `"interface"`. 5.2.0 set their variables and loaded none of them.
   public var fontsLoadsAll: Bool
+  /// The installed `@quartz-themes/core` declares `resolveTheme` (3.x, pinned by Quartz 5.2.1): a
+  /// theme is a name, a repo, an address or a file, loaded at build time (`ThemeFetch`). Read from
+  /// `node_modules`, so it says what the next build runs, not what package.json asks for.
+  public var themesCore3: Bool
 
   public init(version: String? = nil, builtins: Bool = false, prefetch: Bool = false, publishAssets: Bool = false, sidebars: Bool = false,
-              analytics51: Bool = false, fontsBuiltin: Bool = false, fontsLoadsAll: Bool = false) {
+              analytics51: Bool = false, fontsBuiltin: Bool = false, fontsLoadsAll: Bool = false, themesCore3: Bool = false) {
     self.version = version
     self.builtins = builtins
     self.prefetch = prefetch
@@ -33,6 +37,7 @@ public struct QuartzFeatures: Equatable, Sendable {
     self.analytics51 = analytics51
     self.fontsBuiltin = fontsBuiltin
     self.fontsLoadsAll = fontsLoadsAll
+    self.themesCore3 = themesCore3
   }
 
   /// Everything a 5.1 project has, for tests and previews.
@@ -41,9 +46,9 @@ public struct QuartzFeatures: Equatable, Sendable {
   /// Everything a 5.2.0 project has.
   public static let quartz52 = QuartzFeatures(version: "5.2.0", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
                                               analytics51: true, fontsBuiltin: true)
-  /// Everything a 5.2.1 project has.
+  /// Everything a 5.2.1 project has, its packages installed.
   public static let quartz521 = QuartzFeatures(version: "5.2.1", builtins: true, prefetch: true, publishAssets: true, sidebars: true,
-                                               analytics51: true, fontsBuiltin: true, fontsLoadsAll: true)
+                                               analytics51: true, fontsBuiltin: true, fontsLoadsAll: true, themesCore3: true)
 
   public static func read(project: String) -> QuartzFeatures {
     var features = QuartzFeatures()
@@ -57,6 +62,11 @@ public struct QuartzFeatures: Equatable, Sendable {
     if features.fontsBuiltin, let data = try? Posix.read(fonts), data.count < 1_000_000 {
       let text = String(decoding: data, as: UTF8.self)
       features.fontsLoadsAll = JSText.split(text, "\n").contains { $0.hasPrefix("type FontRole =") && $0.contains("\"interface\"") }
+    }
+    // core's own declaration file, the one its package.json names under `types` since 3.0.
+    let themesTypes = NodePath.join(project, "node_modules", "@quartz-themes", "core", "dist", "index.d.ts")
+    if let data = try? Posix.read(themesTypes), data.count < 1_000_000 {
+      features.themesCore3 = JSText.split(String(decoding: data, as: UTF8.self), "\n").contains { $0.hasPrefix("declare function resolveTheme(") }
     }
     // The declarations, not the comments around them: `prefetch?: "viewport" | …`.
     if let data = try? Posix.read(NodePath.join(project, "quartz", "cfg.ts")), data.count < 1_000_000 {

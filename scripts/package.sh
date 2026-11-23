@@ -15,7 +15,7 @@ cd "$ROOT"
 [ -x Runtime/git/bin/git ] || { echo "Runtime/git fehlt: scripts/fetch-runtime.sh" >&2; exit 1; }
 # Its file list goes to stderr; shown only when the build fails, with the reason (esbuild, npm).
 HELPERS_OUT="$(scripts/build-helpers.sh 2>&1)" || { printf '%s\n' "$HELPERS_OUT" >&2; echo "Helferbau gescheitert: scripts/build-helpers.sh" >&2; exit 1; }
-for h in yaml-edit dts-schema sass-check locale-edit ftp-session content-files; do
+for h in yaml-edit dts-schema sass-check locale-edit ftp-session content-files theme-fetch; do
   [ -f "Helpers/dist/$h.cjs" ] || { echo "Helpers/dist/$h.cjs fehlt nach dem Bau" >&2; exit 1; }
 done
 [ -f Helpers/dist/page-scripts.js ] || { echo "Helpers/dist/page-scripts.js fehlt nach dem Bau" >&2; exit 1; }

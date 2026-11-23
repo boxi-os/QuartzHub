@@ -85,7 +85,7 @@ Bau“. Was daraus für die Schritte folgt:
 
 Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
 
-1. **Erkennung und Helfer** (Kern).
+1. **Erkennung und Helfer** (Kern). *Fertig 2026-11-23.*
    - `QuartzFeatures.themesCore3`: Das installierte core deklariert `resolveTheme`
      (`node_modules/@quartz-themes/core/dist/index.d.ts`), aus dem Projekt gelesen, nicht aus der Nummer.
    - Neuer Helfer `theme-fetch`: lädt das core des Projekts und ruft `resolveTheme` mit dessen

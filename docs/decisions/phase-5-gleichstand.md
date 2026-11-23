@@ -3286,3 +3286,21 @@ kam, wird nicht mehr als „nicht auflösbar“ entfernt. Die Prüfung auf `.css
   eigene Wahl (Obsidians Aussehen), nicht dasselbe wie „kein Theme“.
 - Damit gilt „`default` scheitert“ oben nur noch für core 3.0.0 bis 3.1.0, also Projekte auf Quartz
   5.2.0 und 5.2.1.
+
+**Der Helfer `theme-fetch` (Schritt 1, 2026-11-23).** Er lädt das core des Projekts und ruft
+`resolveTheme` so, wie `QuartzTheme` in 3.1.1 es tut (`theme` mit Vorgabe „Tokyo Night“, `variation`
+angehängt, `cacheDir`, `cacheHours`, `version`), im Projektordner wie der Build. Von Hand gegen die
+Wegwerf-Kopie (core 3.1.1), je Aufruf rund 60 ms aus dem Cache:
+
+- `Minimal`, `catppuccin` mit `variation: frappe` (dazu das Preset mit 22 Style Settings),
+  `default`, ein lokaler Ordner und der leere Eintrag („Tokyo Night“) laden; `Minmal` kommt mit
+  cores drei Vorschlägen zurück; ein Ordner ohne core ist „missing“.
+- Offline (ein `fetch`, das scheitert): `Nord` aus dem Cache geladen, `Things` ohne Cache mit
+  cores Satz „offline and not cached?“.
+- **Vorab laden trägt den Build:** `Things` online geladen (0,7 s), dann mit `theme: Things` und
+  gesperrtem Netz (Proxy auf einen geschlossenen Port, wie oben) gebaut: „Things 2.2.6: 178 rules
+  converted“, Exit 0.
+- `QuartzFeatures.themesCore3` liest `declare function resolveTheme(` aus `dist/index.d.ts`; die
+  Klammer gehört dazu, denn core 2.0.1 deklariert `resolveThemeId(` (aus dem Paket gelesen).
+- Offen: Der Helfer läuft mit QuartzHubs Node und ohne die Umgebung der App. Ein Proxy über
+  `NODE_USE_ENV_PROXY` erreicht deshalb den Build, nicht den Helfer. Gemessen ist das nicht.
