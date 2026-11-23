@@ -65,6 +65,47 @@ public enum SiteFonts {
     var file: String?
   }
 
+  // MARK: The theme's sheet
+
+  /// `@quartz-themes/core` 3 hands Quartz its CSS inline, and Quartz writes every inline sheet of a
+  /// plugin to `static/resource-style-<hash>.css` (`componentResources.ts`); the theme's is the one
+  /// with `@layer obsidian` (measured on the demo with Catppuccin, decisions/phase-5-gleichstand.md,
+  /// „Schriften und Variablen aus dem Build“). Core 2's `theme.json` in `node_modules` is gone.
+  static let themeLayer = "@layer[\(JSText.space)]+obsidian(?![A-Za-z0-9_-])"
+
+  public static func themeStylesheets(build: String) -> [String] {
+    let dir = NodePath.join(build, "static")
+    guard FileManager.default.fileExists(atPath: dir) else { return [] }
+    return LayoutFrames.directoryEntriesWithKind(dir)
+      .filter { $0.kind == .file && JSText.test($0.name, #"\Aresource-style-[0-9a-f]+\.css\z"#) }
+      .map { NodePath.join(dir, $0.name) }
+      .filter { JSText.test((try? StyleSheets.readText($0)) ?? "", themeLayer) }
+      .sorted { $0.utf8.lexicographicallyPrecedes($1.utf8) }
+  }
+
+  /// Where core moves a theme's embedded fonts; the sheet names them relative to `static/`.
+  static let themeFontsDirectory = "static/plugins/quartz-themes/fonts"
+
+  static func themeFontFile(_ build: String, _ url: String?) -> String? {
+    guard let url, let match = JSText.firstMatch(url, #"\A(?:\./)?plugins/quartz-themes/fonts/([^/?#]+)(?:[?#][^\n\r]*)?\z"#),
+          let encoded = match.groups[1], let name = try? JSURI.decodeComponent(encoded),
+          name == NodePath.basename(name), !JSText.startsWith(name, "."), !JSText.includes(name, "\\") else { return nil }
+    return NodePath.join(build, themeFontsDirectory, name)
+  }
+
+  /// The theme's faces with a source: Obsidian's own `@font-face{font-family:"??"}` (a placeholder in
+  /// app.css with nothing to load) is no font of the site.
+  static func themeFaces(_ project: String) -> [LocatedFace] {
+    let build = BuildOutputGuard.buildDirectory(project: project, outputDir: nil)
+    var out: [LocatedFace] = []
+    for path in themeStylesheets(build: build) {
+      for face in FontFaces.parse((try? StyleSheets.readText(path)) ?? "") where !face.urls.isEmpty {
+        out.append(LocatedFace(face: face, origin: "theme", source: NodePath.relative(NodePath.normalize(project), path), file: themeFontFile(build, face.url)))
+      }
+    }
+    return out
+  }
+
   static func projectAndBuildFaces(_ project: String) -> [LocatedFace] {
     let styles = NodePath.normalize(StyleSheets.stylesDirectory(project))
     let fonts = NodePath.normalize(FontFaces.projectFontsDirectory(project))
@@ -85,22 +126,15 @@ public enum SiteFonts {
     return out
   }
 
-  /// Every @font-face the site will have: the active theme's font files (`meta.fontFiles` of its
-  /// theme.json), the project's own rules, and the rules a build wrote. Quartz downloads fonts only
-  /// for `fontOrigin: googleFonts`; under "local" the project's rules are all there is.
-  public static func faces(project: String, themeId: String? = nil) -> [Face] {
+  /// Every @font-face the site will have: the active theme's (from the last build), the project's
+  /// own rules, and the rules a build wrote. Quartz downloads fonts only for `fontOrigin:
+  /// googleFonts`; under "local" the project's rules are all there is. `theme`: a theme is on, so
+  /// the build's theme sheet counts as its; off, a sheet left from an earlier build does not.
+  public static func faces(project: String, theme: Bool = false) -> [Face] {
     var out: [Face] = []
-    if let themeId {
-      let path = NodePath.join(project, "node_modules/@quartz-themes", themeId, "theme.json")
-      // A malformed theme.json is the theme's problem, not a reason to show nothing.
-      if let data = FileManager.default.contents(atPath: path), let parsed = try? JSJSON.parse(data) {
-        for file in parsed[safe: "meta"]?[safe: "fontFiles"]?.arrayValue ?? [] {
-          guard let family = file[safe: "family"], JS.truthy(family) else { continue }
-          // `file.weight ?? '400'`: null and a missing key alike.
-          let given = { (key: String) in file[safe: key].flatMap { $0 == .null ? nil : JS.string($0) } }
-          out.append(Face(family: JS.string(family), weight: given("weight") ?? "400", style: given("style") ?? "normal",
-                          origin: "theme", source: "@quartz-themes/\(themeId)"))
-        }
+    if theme {
+      for located in themeFaces(project) {
+        out.append(Face(family: located.face.family, weight: located.face.weight, style: located.face.style, origin: located.origin, source: located.source))
       }
     }
     for located in projectAndBuildFaces(project) {
@@ -121,13 +155,13 @@ public enum SiteFonts {
   static let maxPreviewBytes = 32 * 1024 * 1024
 
   /// The files behind the faces of `families`, for the preview to draw the font the site will have
-  /// instead of whatever this Mac has installed. A link is no font file of the project: following
+  /// instead of whatever this Mac has installed; with `theme`, the theme's from the last build too. A link is no font file of the project: following
   /// one would hand over the bytes of whatever it points at.
-  public static func previewFonts(project: String, families: [String]) -> (faces: [PreviewFace], built: Bool) {
+  public static func previewFonts(project: String, families: [String], theme: Bool = false) -> (faces: [PreviewFace], built: Bool) {
     let wanted = Set(families.map { $0.lowercased() })
     var faces: [PreviewFace] = []
     var total = 0
-    for located in projectAndBuildFaces(project) {
+    for located in (theme ? themeFaces(project) : []) + projectAndBuildFaces(project) {
       guard let file = located.file, wanted.contains(located.face.family.lowercased()) else { continue }
       var info = stat()
       guard lstat(file, &info) == 0, (info.st_mode & S_IFMT) == S_IFREG else { continue }

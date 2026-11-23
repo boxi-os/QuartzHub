@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Golden file for SiteFonts, made by QuartzControl's own styleService.ts: collectFontFaces,
 // readPreviewFonts, projectStylesheets and takenClasses on projects made of gui-test's stylesheets,
-// font files and build CSS (read only, out of Fixtures/variable-graph and Fixtures/font-file), the
-// theme minimal's font list, and made-up edges (a linked font file, files past the ceilings, an
-// unreadable theme, plugin code).
+// font files and build CSS (read only, out of Fixtures/variable-graph and Fixtures/font-file) and
+// made-up edges (a linked font file, files past the ceilings, plugin code). A theme's fonts are not
+// asked any more: QuartzControl read them from `@quartz-themes/<id>/theme.json`, which core 3 does
+// not have; QuartzHub reads them from the build (SiteFontsTests.theThemesFacesComeFromTheBuild).
 //
 //   Runtime/node/bin/node scripts/site-fonts-golden.mjs [../QuartzControl]
 import { loadQuartzControl, commonStubs } from './lib/qc-bundle.mjs'
@@ -33,7 +34,7 @@ const fontsBlock = `/* --- QuartzControl:managed:fonts:start --- */
 @font-face { font-family: "Remote"; src: url("https://cdn.example/x.woff2"); }
 /* --- QuartzControl:managed:fonts:end --- */`
 const cases = {
-  'gui-test': { real: true, theme: 'minimal', calls: [['collectFontFaces', 'minimal'], ['collectFontFaces'], ['projectStylesheets'],
+  'gui-test': { real: true, calls: [['collectFontFaces'], ['projectStylesheets'],
     ['readPreviewFonts', ['Noto Sans', 'noto sans mono', 'Schibsted Grotesk', 'Source Sans Pro', 'IBM Plex Mono']],
     ['takenClasses', ['tpl-', 'nav-']], ['takenClasses', ['layout-box-']], ['takenClasses', []]] },
   'edges': { files: {
@@ -54,10 +55,8 @@ const cases = {
     'quartz/static/fonts/linked.woff2': { link: 'own.woff2' },
     '.quartz/plugins/layout-box/dist/index.js': 'const c = "layout-box-content layout-box-title"; x.classList.add(`layout-box-${y}`)\n',
     '.quartz/plugins/layout-box/dist/deep/style.css': '.layout-box-deep {}', '.quartz/plugins/layout-box/src/ignored.js': '"layout-box-src"',
-    '.quartz/plugins/other/dist/x.mjs': '"layout-box-from-mjs nav-thing"',
-    'node_modules/@quartz-themes/broken/theme.json': '{ nope',
-    'node_modules/@quartz-themes/fonts/theme.json': JSON.stringify({ meta: { fontFiles: [{ family: 'Theme Sans', weight: '100 1000' }, { style: 'italic' }, { family: 'Theme Mono', style: 'italic', weight: '400' }] } })
-  }, calls: [['collectFontFaces', 'fonts'], ['collectFontFaces', 'broken'], ['collectFontFaces', 'absent'], ['projectStylesheets'],
+    '.quartz/plugins/other/dist/x.mjs': '"layout-box-from-mjs nav-thing"'
+  }, calls: [['collectFontFaces'], ['projectStylesheets'],
     ['readPreviewFonts', ['noto sans', 'Linked', 'Gone', 'Big', 'Huge', 'Remote', 'Own', 'Built', 'Selfhosted']],
     ['takenClasses', ['layout-box-']], ['takenClasses', ['layout-box-', 'nav-']]] },
   'empty': { files: {}, calls: [['collectFontFaces'], ['projectStylesheets'], ['readPreviewFonts', ['x']], ['takenClasses', ['a-']]] }
@@ -76,8 +75,6 @@ for (const [name, c] of Object.entries(cases)) {
     for (const file of ['noto-sans-latin-400-700.woff2', 'noto-sans-latin-italic-400-700.woff2', 'noto-sans-mono-latin-400-700.woff2']) {
       cpSync(join(fixtures, 'font-file', 'files', file), join(project, 'quartz', 'static', 'fonts', file))
     }
-    mkdirSync(join(project, 'node_modules', '@quartz-themes', 'minimal'), { recursive: true })
-    cpSync(join(fixtures, 'variable-graph', 'real', 'themes', 'minimal', 'theme.json'), join(project, 'node_modules', '@quartz-themes', 'minimal', 'theme.json'))
   }
   for (const [path, spec] of Object.entries(c.files ?? {})) {
     const full = join(project, path)

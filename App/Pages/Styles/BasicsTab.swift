@@ -47,7 +47,7 @@ struct BasicsTab: View {
       fixesSection
       colorSections
     }
-    .task(id: "\(themeId ?? "")|\(savedRound)") { await reloadFaces() }
+    .task(id: "\(themeId ?? "")|\(FontDelivery.themeFontsEnabled(config))|\(savedRound)") { await reloadFaces() }
     .task(id: "\(draftFamilies.joined(separator: "|"))|\(faces.count)|\(savedRound)") { await reloadUnused() }
   }
 
@@ -672,8 +672,8 @@ struct BasicsTab: View {
 
   private func reloadFaces() async {
     let path = model.project.path
-    let theme = themeId
-    let read = await Task.detached { (SiteFonts.faces(project: path, themeId: theme), SiteFonts.previewFonts(project: path, families: []).built) }.value
+    let theme = FontDelivery.themeFontsEnabled(config)
+    let read = await Task.detached { (SiteFonts.faces(project: path, theme: theme), SiteFonts.previewFonts(project: path, families: []).built) }.value
     faces = read.0
     built = read.1
     held = (try? await Task.detached { try FontService.heldFonts(project: path) }.value) ?? FontService.Held()

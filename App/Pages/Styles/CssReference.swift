@@ -288,14 +288,14 @@ struct ActiveStylesSection: View {
         }
       }
     }
-    .task(id: "\(FontDelivery.activeThemeId(config) ?? "")|\(families.joined(separator: "|"))") { await load() }
+    .task(id: "\(FontDelivery.activeThemeId(config) ?? "")|\(FontDelivery.themeFontsEnabled(config))|\(families.joined(separator: "|"))") { await load() }
   }
 
   private func load() async {
     let path = model.project.path
-    let theme = FontDelivery.activeThemeId(config)
+    let theme = FontDelivery.themeFontsEnabled(config)
     let wanted = Array(Set(families.filter { !$0.isEmpty }))
-    let read = await Task.detached { (SiteFonts.faces(project: path, themeId: theme), SiteFonts.previewFonts(project: path, families: wanted)) }.value
+    let read = await Task.detached { (SiteFonts.faces(project: path, theme: theme), SiteFonts.previewFonts(project: path, families: wanted, theme: theme)) }.value
     faces = read.0
     built = read.1.built
     PreviewFontRegistry.register(read.1.faces)

@@ -3373,3 +3373,21 @@ fehlt er (Repo, Adresse, Datei), steht die Zeile ohne ihn. Lädt das Theme nicht
 nicht „bietet keine Farbeinstellungen an“. Angesehen an einer Kopie des Demo-Projekts mit core 3.1.1:
 Catppuccin mit 9 Blöcken und 36 Optionen, Autor „catppuccin“, die Werte des Eintrags gesetzt; `Minmal`
 mit cores drei Vorschlägen. Das Preset einer alten ID ist nur in den Tests gesehen, nicht in der App.
+
+**Schriften und Variablen aus dem Build (Schritt 4, 2026-11-23).** Mit core 3 gibt es kein
+`node_modules/@quartz-themes/<id>/theme.json` mehr, aus dem `SiteFonts` und `VariableGraph` die Schriften
+und die Variablentabelle des Themes lasen. Beide lesen jetzt das Blatt des Themes aus dem letzten Build:
+`static/resource-style-<hash>.css` mit `@layer obsidian` (Quartz' `componentResources.ts` schreibt jede
+`inline`-CSS eines Plugins in eine solche Datei, immer mit Hash). Gemessen an einer Kopie des
+Demo-Projekts (Quartz 5.2.2, core 3.1.1, `theme: Catppuccin`, Theme-Schriften an, Build aus dem Cache
+ohne Netz):
+
+- **Schriften:** 61 `@font-face` im Blatt, davon 60 von Vollkorn mit Datei unter
+  `static/plugins/quartz-themes/fonts/` (18 Dateien; die Adresse steht relativ zu `static/`) und Obsidians
+  Platzhalter `font-family:"??"` ohne `src`. Der Platzhalter ist keine Schrift der Website und fällt weg;
+  `SiteFonts.faces` meldet 60 Flächen mit Herkunft „theme“, die Vorschau bekommt ihre Dateien (1,6 MB,
+  40 ms). Nur ein eingeschaltetes Theme mit Schriften zählt: Ein Blatt aus einem früheren Build ist nicht
+  die Schrift der Website. Ein Name in der Adresse, der aus dem Schriftordner führt, wird nicht gelesen.
+- Die Golden-Fälle aus QuartzControl mit `theme.json` (`site-fonts-golden.mjs`: das Theme minimal, eine
+  kaputte und eine erfundene Datei) sind gestrichen, die übrigen unverändert neu erzeugt. Damit weicht
+  QuartzHub hier bewusst von QuartzControl 1.3 ab, das core 3 nicht kennt.
