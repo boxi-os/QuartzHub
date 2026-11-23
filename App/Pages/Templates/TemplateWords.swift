@@ -121,6 +121,7 @@ enum TemplateWords {
     if strategy == .projectWins, TemplatesModel.skippedWhenProjectWins.contains(plan.id) {
       return [L10n.t("templates.planSkippedProjectWins")]
     }
+    if plan.notes.contains("themeNeedsCore3") { return [L10n.t("templates.planThemeNeedsCore3")] }
     func listed(_ kind: String) -> [String] {
       plan.notes.filter { $0.hasPrefix("\(kind):") }.flatMap { $0.dropFirst(kind.count + 1).split(separator: ",", omittingEmptySubsequences: false).map(String.init) }
     }

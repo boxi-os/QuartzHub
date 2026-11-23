@@ -69,7 +69,7 @@ public enum ImportWarnings {
     case "projectIconKept": L10n.t(in: language, "templates.warnings.projectIconKept", args, count: count)
     case "staticSkipped": L10n.t(in: language, "templates.warnings.staticSkipped", args, count: count)
     case "styleFileSkipped": L10n.t(in: language, "templates.warnings.styleFileSkipped", args, count: count)
-    case "themeInstallFailed": L10n.t(in: language, "templates.warnings.themeInstallFailed", args, count: count)
+    case "themeNeedsCore3": L10n.t(in: language, "templates.warnings.themeNeedsCore3", args, count: count)
     case "themeSkipped": L10n.t(in: language, "templates.warnings.themeSkipped", args, count: count)
     case "translationFailed": L10n.t(in: language, "templates.warnings.translationFailed", args, count: count)
     default: L10n.t(in: language, "templates.warnings.unknown", args, count: count)

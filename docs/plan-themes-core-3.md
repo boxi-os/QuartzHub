@@ -113,12 +113,16 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    Selektor-Abgleich (`ThemeSelector`), weil das Theme seine Werte mit Obsidians Spezifität auf `body`
    setzt, nicht auf `:root`. `PluginSchemaReader.themeJSON` und `themes-golden.mjs` bleiben bis Schritt 6,
    denn `ThemeMarketplace` und der alte Weg der Theme-Seite hängen noch daran. Und gefunden: Werte aus
-   Stile ▸ Variablen (auf `:root`) kommen gegen ein core-3-Theme nicht an, offen als Entscheidung.
+   Stile ▸ Variablen (auf `:root`) kommen gegen ein core-3-Theme nicht an. Entschieden und umgesetzt
+   (fde704b): Der Block `css-vars` schreibt jede Regel mit `body`-Hälfte, alte Blöcke stellt die Build-Tür um.
 5. **Aufräumen und Vorlagen** (Kern):
    - `ThemeLegacy` findet alte `@quartz-themes/<id>`-Pakete in `package.json` und die übergangenen
      Optionen am Eintrag. Es entfernt sie mit `SnapshotStore.Take` und `npm uninstall`. `theme: default` ist kein Fund mehr (Schritt 0).
    - `TemplatePackage`: Der Teil „Theme“ installiert nur noch core. In ein Projekt mit core 2.x wird
      er nicht angewandt, mit Grund in der Teile-Wahl.
+   *Fertig 2026-11-23* (19d58c5 `ThemeLegacy`, dann `TemplatePackage`), mit zwei Abweichungen: `ThemeLegacy`
+   bringt auch QuartzControls dreiteilige `hsl-split`-Farben in cores Form (mit dem Schema des Themes). Und
+   der Teil „Theme“ installiert gar nichts, auch core nicht: Ohne core 3 im Projekt wird er übersprungen.
 6. **Seite Community-Themes** (App).
    - Der Katalog ist eine Liste mit Vorschaubild, Name, Autor und Modi, mit Suche. Die Bilder werden
      erst beim Erscheinen geladen, verkleinert und folgen `-QHOffline`.

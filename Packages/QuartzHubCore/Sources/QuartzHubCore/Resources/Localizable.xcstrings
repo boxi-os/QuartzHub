@@ -62051,6 +62051,25 @@
         }
       }
     },
+    "templates.planThemeNeedsCore3" : {
+      "comment" : "Template import, parts choice: the theme part is skipped in a project without @quartz-themes/core 3",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird nicht übernommen: Community-Themes brauchen in diesem Projekt erst ein Kern-Update auf Quartz 5.2.1 oder neuer."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not applied: community themes need a core update to Quartz 5.2.1 or later in this project first."
+          }
+        }
+      }
+    },
     "templates.planUnrecordedIconKept" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -63692,20 +63711,21 @@
         }
       }
     },
-    "templates.warnings.themeInstallFailed" : {
+    "templates.warnings.themeNeedsCore3" : {
+      "comment" : "Template import warning: the theme part needs @quartz-themes/core 3 in the target project",
       "extractionState" : "manual",
       "generatesSymbol" : false,
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Theme-Paket ließ sich nicht installieren: {{detail}}"
+            "value" : "Das Theme wurde nicht übernommen. Dieses Projekt braucht dafür erst ein Kern-Update auf Quartz 5.2.1 oder neuer."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The theme package could not be installed: {{detail}}"
+            "value" : "The theme was not applied. This project needs a core update to Quartz 5.2.1 or later first."
           }
         }
       }

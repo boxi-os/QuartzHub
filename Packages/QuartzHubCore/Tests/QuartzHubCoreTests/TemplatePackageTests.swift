@@ -82,6 +82,47 @@ struct TemplatePackageTests {
   /// Every string with QuartzControl's `mainT` stand-ins as the sentences they stand for.
   static func rendered(_ value: JSONValue) -> JSONValue { FontServiceTests.rendered(value) }
 
+  /// QuartzControl's answer as QuartzHub gives it since core 3 (docs/plan-themes-core-3.md, step 5):
+  /// the theme part needs and installs no `@quartz-themes/<id>`, and installs no core either (the
+  /// project's own is core 3, `core3Stub`). The manifest of a package QuartzControl made stays as
+  /// written. Every other line of the golden stays QuartzControl's.
+  static func asCore3(_ value: JSONValue) -> JSONValue {
+    func themePackage(_ name: String?) -> Bool { name?.hasPrefix("@quartz-themes/") ?? false }
+    switch value {
+    case .array(let items): return .array(items.map(asCore3))
+    case .object(let object):
+      var out = JSONObject()
+      for key in object.keys {
+        // A package QuartzControl made is read as it was written; one this run exported is QuartzHub's.
+        let foreign = key == "manifest" && object[key]?["createdBy"]?["app"] == .string("QuartzControl")
+        var item = foreign ? object[key]! : asCore3(object[key]!)
+        if key == "requires", case .array(let list) = item {
+          item = .array(list.filter { !themePackage($0["name"]?.stringValue) || $0["name"]?.stringValue == "@quartz-themes/core" })
+        }
+        if key == "missingPackages", case .array(let list) = item { item = .array(list.filter { !themePackage($0["name"]?.stringValue) }) }
+        out[key] = item
+      }
+      return .object(out)
+    default: return value
+    }
+  }
+
+  static func commandsAsCore3(_ value: JSONValue?) -> JSONValue? {
+    guard case .array(let commands)? = value else { return value }
+    return .array(commands.compactMap { command in
+      guard case .array(let parts) = command, parts.first == .string("npm"), parts.count > 1, parts[1] == .string("install") else { return command }
+      let kept = parts.filter { !($0.stringValue?.hasPrefix("@quartz-themes/") ?? false) }
+      return kept.count > 2 ? .array(kept) : nil
+    })
+  }
+
+  /// What `QuartzFeatures.themesCore3` reads: core 3 declares `resolveTheme`.
+  static func core3Stub(_ root: String) throws {
+    let dir = "\(root)/node_modules/@quartz-themes/core/dist"
+    try Posix.mkdirs(dir)
+    try Posix.write("\(dir)/index.d.ts", Data("declare function resolveTheme(spec: string): Promise<unknown>;\n".utf8))
+  }
+
   static func masked(_ value: JSONValue, _ work: String) -> JSONValue {
     switch value {
     case .string(let text): .string(text.replacingOccurrences(of: work, with: "@W@", options: .literal))
@@ -122,6 +163,7 @@ struct TemplatePackageTests {
     for name in initial.keys {
       let root = "\(work)/\(name)"
       try Self.build(root, initial[name]!.objectValue!, blobs: blobs, work: work)
+      try Self.core3Stub(root)
       roots[name] = root
     }
 
@@ -214,7 +256,7 @@ struct TemplatePackageTests {
         got = .object(JSONObject([("threw", .string(TemplatePackage.message(error)))]))
       }
       got = Self.masked(got, work)
-      let expected = Self.rendered(step["result"] ?? .null)
+      let expected = Self.asCore3(Self.rendered(step["result"] ?? .null))
       #expect(JSJSON.compact(got) == JSJSON.compact(expected), "\(label): \(firstDifference(JSJSON.compact(got), JSJSON.compact(expected)))")
 
       let after = Self.tree(root, mask: mask)
@@ -224,12 +266,17 @@ struct TemplatePackageTests {
       }
       before[on] = after
       var wanted: [String: JSONValue] = [:]
-      if case .object(let files)? = step["changed"] { for key in files.keys { wanted[key] = Self.rendered(files[key]!) } }
+      if case .object(let files)? = step["changed"] {
+        // The stub made node_modules/@quartz-themes before the first step; QuartzControl's npm made it here.
+        for key in files.keys where !["node_modules", "node_modules/@quartz-themes"].contains(key) && !key.hasPrefix("node_modules/@quartz-themes/") {
+          wanted[key] = Self.rendered(files[key]!)
+        }
+      }
       for path in Set(changed.keys).union(wanted.keys).sorted() where changed[path] != wanted[path] {
         Issue.record("\(label): \(path): \(changed[path].map { JSJSON.compact($0) }?.prefix(300) ?? "fehlt") statt \(wanted[path].map { JSJSON.compact($0) }?.prefix(300) ?? "fehlt")")
       }
       let commands = recorder.state.withLock { $0.commands }.map { $0.map(mask) }
-      #expect(JSONValue.array(commands.map { .array($0.map(JSONValue.string)) }) == step["commands"], "\(label): Befehle \(commands)")
+      #expect(JSONValue.array(commands.map { .array($0.map(JSONValue.string)) }) == Self.commandsAsCore3(step["commands"]), "\(label): Befehle \(commands)")
       let snapshots = recorder.state.withLock { $0.snapshots }
       #expect(JSONValue.array(snapshots.map(JSONValue.array)) == step["snapshots"], "\(label): Snapshots")
     }
@@ -343,6 +390,44 @@ struct TemplatePackageTests {
       } else {
         #expect(config.configuration["fonts"] == nil)
         #expect(calls.contains("@quartz-community/quartz-fonts"), "the counter-check: on 5.1 it is a plugin, \(calls)")
+      }
+    }
+  }
+
+  /// The theme part since core 3: the entry alone, nothing installed; a project without core 3 gets
+  /// neither entry nor package, and the choice and the import say why.
+  @Test func theThemePartNeedsCore3AndInstallsNothing() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = Self.realpath(scratch.path)
+    let initial = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("initial.json"))).objectValue!
+    let blobs = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("blobs.json"))).objectValue!
+    let environment = await ToolEnvironment.resolve(runtime: .repository, nodeMode: .embedded)
+    let read: LayoutFrames.ReadConfig = { try await ConfigFile.read(project: $0, runtime: .repository) }
+    let stub = PluginCommands.Result(success: true, output: "")
+    let installed = Mutex<[[String]]>([])
+    let templates = TemplatePackage(
+      runtime: .repository, locales: LocaleFiles(environment: environment), frames: LayoutFrames(readConfig: read),
+      fonts: FontService(readConfig: read), npm: { arguments, _ in installed.withLock { $0.append(arguments) }; return stub },
+      addPlugin: { _, _ in stub }, head: { _ in nil }, snapshot: { _, _, _ in }, app: ("QuartzHub", "0.0.0-test"))
+    for core3 in [true, false] {
+      let project = "\(work)/\(core3 ? "drei" : "zwei")"
+      try Self.build(project, initial["fresh"]!.objectValue!, blobs: blobs, work: work)
+      if core3 { try Self.core3Stub(project) }
+      installed.withLock { $0 = [] }
+      let plan = try #require(try await templates.plan(project: project, package: Self.basic))
+      let part = try #require(plan.parts.first { $0.id == "theme" })
+      let result = try await templates.importPackage(project: project, package: Self.basic, parts: ["theme"], strategy: .packageWins)
+      let config = try await ConfigFile.read(project: project, runtime: .repository)
+      #expect(installed.withLock { $0 }.isEmpty)
+      #expect(part.missingPackages.isEmpty)
+      if core3 {
+        #expect(part.notes.isEmpty && part.additions == [.string("minimal")])
+        #expect(result.warnings.isEmpty)
+        #expect(config.plugins.contains { $0.source == .string("@quartz-themes/core") && $0.object["options"]?["theme"] == .string("minimal") })
+      } else {
+        #expect(part.notes == ["themeNeedsCore3"] && part.additions.isEmpty && part.conflicts.isEmpty)
+        #expect(result.warnings == ["themeNeedsCore3"])
+        #expect(!config.plugins.contains(where: FontDelivery.isThemePlugin))
       }
     }
   }

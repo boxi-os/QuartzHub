@@ -708,49 +708,52 @@ public struct TemplatePackage: Sendable {
 
   // MARK: - theme
 
+  /// Since core 3 (docs/plan-themes-core-3.md, step 5) the part is the entry alone: core loads the
+  /// theme itself at the build, a package per theme exists no more. Nothing is installed; the
+  /// project's own core does the work, and a project without core 3 (core 2.x of Quartz 5.1/5.2.0,
+  /// or none) does not get the part, with its reason in the choice (`themeNeedsCore3`). An old id or
+  /// option in the entry stays as it came: core 3 knows the id, and `ThemeLegacy` clears the rest.
+  /// QuartzControl installed `@quartz-themes/core` and `@quartz-themes/<id>`: a deliberate deviation
+  /// (decisions/phase-5-gleichstand.md, „Aufräumen und Vorlagen“).
   func collectTheme(_ project: String) async throws -> Collected? {
     let config = try await readConfig(project)
     guard let index = Self.themeEntryIndex(config.plugins) else { return nil }
     let entry = config.plugins[index].object
     let themeId = entry["options"]?["theme"]?.stringValue
-    let packages = ["@quartz-themes/core"] + (themeId.map { ["@quartz-themes/\($0)"] } ?? [])
     let settings = entry["options"]?["styleSettings"]
     return Collected(payload: .object(JSONObject([("entry", .object(entry)), ("themeId", themeId.map(JSONValue.string) ?? .null)])),
                      stats: JSONObject([("styleSettings", .number(Double(JS.truthy(settings) && JS.isObject(settings) ? JS.keyCount(settings!) : 0)))]),
-                     requires: packages.map { Dependency(name: $0, version: Self.installedVersion(project, $0)) })
+                     requires: [Dependency(name: Self.themeCore, version: Self.installedVersion(project, Self.themeCore))])
   }
 
-  static func themePackages(_ payload: JSONValue) -> [String] {
-    let themeId = payload["themeId"].flatMap { JS.truthy($0) ? JS.string($0) : nil }
-    return ["@quartz-themes/core"] + (themeId.map { ["@quartz-themes/\($0)"] } ?? [])
-  }
+  static let themeCore = "@quartz-themes/core"
 
   func planTheme(_ payload: JSONValue, _ run: Run) async throws -> PartPlan {
-    let config = try await readConfig(run.project)
     var plan = PartPlan(id: "theme")
+    guard QuartzFeatures.read(project: run.project).themesCore3 else {
+      plan.notes.append("themeNeedsCore3")
+      return plan
+    }
+    let config = try await readConfig(run.project)
     if let index = Self.themeEntryIndex(config.plugins) {
       let current = config.plugins[index].object["options"]?["theme"]
-      plan.conflicts.append(current.flatMap { $0 == .null ? nil : $0 } ?? .string("@quartz-themes/core"))
+      plan.conflicts.append(current.flatMap { $0 == .null ? nil : $0 } ?? .string(Self.themeCore))
     } else {
-      plan.additions.append(payload["themeId"].flatMap { $0 == .null ? nil : $0 } ?? .string("@quartz-themes/core"))
+      plan.additions.append(payload["themeId"].flatMap { $0 == .null ? nil : $0 } ?? .string(Self.themeCore))
     }
-    for name in Self.themePackages(payload) where !Self.hasNodeModule(run.project, name) { plan.missingPackages.append(Dependency(name: name)) }
     return plan
   }
 
   func applyTheme(_ payload: JSONValue, _ run: Run) async throws {
+    guard QuartzFeatures.read(project: run.project).themesCore3 else {
+      run.warn("themeNeedsCore3")
+      return
+    }
     let config = try await readConfig(run.project)
     let index = Self.themeEntryIndex(config.plugins)
     if index != nil && run.strategy == .projectWins {
       run.warn("themeSkipped")
       return
-    }
-    // The theme's own package: the entry alone resolved nothing on a machine without it.
-    let missing = Self.themePackages(payload).filter { !Self.hasNodeModule(run.project, $0) }
-    if !missing.isEmpty {
-      run.progress(missing.joined(separator: ", "))
-      let result = await npm(["install"] + missing, run.project)
-      if !result.success { run.warn("themeInstallFailed:\(missing.joined(separator: ", ")):\(JSText.slice(result.output, -400))") }
     }
     guard var entry = payload["entry"]?.objectValue else { throw JS.TypeError("payload.entry is not an object") }
     var next = config

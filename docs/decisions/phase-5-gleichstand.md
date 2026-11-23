@@ -3454,3 +3454,26 @@ und „nur Hell“ (`:root:not([saved-theme="dark"])`). Damit weicht QuartzHub v
   Lesen ohne Liste, Build-Tür ohne den Schritt: jede rot.
 - Die Hinweise „Deine Werte hier gewinnen gegen das Theme …“ (`styles.variables.themeNote`) und „… im
   Variablen-Tab gezielt überschreiben“ (`themeEditor.overrideStillEditable`) stimmen damit wieder.
+
+**Aufräumen und Vorlagen (Schritt 5, 2026-11-23).**
+
+- **`ThemeLegacy`** findet, was core 2 hinterließ und core 3 nicht nutzt: Pakete `@quartz-themes/<id>` in
+  `package.json` (außer `core`; im Demo-Projekt auf 5.2.2 liegt `@quartz-themes/minimal`), die Optionen, die
+  core 3.1.1 übergeht (`DEPRECATED` in seinem `transformer.ts`: `aspects`, `include`, `calloutStyle`,
+  `fonts`, je mit einer Zeile im Log), und `hsl-split`-Farben in QuartzControls drei Schlüsseln. Die Farben
+  nur mit dem Schema des Themes: Ohne es ist ein Schlüssel auf `-h` nicht sicher ein Teil. Aus den drei Teilen
+  wird der eine Schlüssel mit der Farbe, wie Stile ▸ Community-Themes sie seit Schritt 3 schreibt; Teile neben
+  einer eigenen Farbe und Teile, die keine Farbe ergeben, gehen ersatzlos. Die Theme-ID bleibt, auch eine alte.
+  Entfernen nimmt einen Snapshot (`pluginChange`, „Altes Theme-Zubehör entfernt“), schreibt dann die Config
+  und ruft zuletzt `npm uninstall`: die Config braucht kein Netz und ist, was core bei jedem Build liest.
+  Die Seite bekommt den Kasten „Aufräumen“ in Schritt 6.
+- **Der Vorlagen-Teil „Theme“ installiert nichts mehr.** QuartzControl installierte `@quartz-themes/core` und
+  `@quartz-themes/<id>`; mit core 3 ist der Teil nur noch der Eintrag. In ein Projekt ohne core 3 (core 2.x
+  oder keins) wird er nicht übernommen: Die Teile-Wahl sagt „Wird nicht übernommen: Community-Themes brauchen
+  … erst ein Kern-Update“, der Import warnt (`themeNeedsCore3`). Die Warnung „Das Theme-Paket ließ sich nicht
+  installieren“ ist weg. Eine alte ID oder Option aus einer Vorlage bleibt, wie sie kam; core 3 kennt die ID,
+  den Rest räumt `ThemeLegacy` ab. Abweichung von QuartzControl: Das Golden-Replay (`templates-golden.mjs`)
+  bekommt in jedem Projekt ein core 3 als Stellvertreter (`resolveTheme` in `index.d.ts`) und streicht aus
+  QuartzControls Erwartung jedes `@quartz-themes/…` in `requires`, `missingPackages` und `npm install` (das
+  Manifest einer Vorlage, die QuartzControl schrieb, bleibt, wie es ist); alles andere vergleicht es weiter.
+  Gegenproben: Plan oder Import ohne die Prüfung auf core 3, ein `npm install` im Import: je rot.
