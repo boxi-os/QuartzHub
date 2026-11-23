@@ -102,6 +102,11 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    Fassung, die auch der Build nimmt), auch für Repo, URL und lokale Datei. Die Seite zeigt Style
    Settings, wenn das Schema Felder hat, nicht mehr nach `theme.json`. Das Preset einer alten ID
    erscheint als Vorgabe. Der Cache `theme-docs/` im Profil wird nach Quelle und Version geführt.
+   *Fertig 2026-11-23,* anders als geplant: Die Blöcke liest cores eigenes `parseStyleSettings` im
+   Helfer, mit den `snippets`. Einen Cache im Profil gibt es dafür nicht, cores Cache im Projekt hält das
+   CSS schon nach Quelle und Version, ein Aufruf dauert 50–80 ms. Dazu kam: Farben schreibt QuartzHub so,
+   wie core 3 sie liest, ein Schlüssel mit der Farbe statt QuartzControls drei für `hsl-split`. Die
+   Seite nutzt das bei core 3; lädt das Theme nicht, steht cores Satz da.
 4. **Schriften und Variablen** (Kern): `FontDelivery` (Theme-Schriften lokal), `SiteFonts`,
    `VariableGraph` lesen `static/resource-style-*.css` (Schritt 0). `theme.json`-Leser und `themes-golden.mjs` gehen.
 5. **Aufräumen und Vorlagen** (Kern):

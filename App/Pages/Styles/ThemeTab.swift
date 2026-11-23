@@ -9,7 +9,9 @@ enum ThemeServices {
     search: ThemeMarketplace.npmSearch(environment: { await AppServices.current() }),
     install: ThemeMarketplace.npmInstall(environment: { await AppServices.current() }),
     token: { (try? await AppDeploy.connections().gitToken()) ?? nil })
-  static let schema = StyleSettingsSchema(profile: AppProfile.own)
+  /// Obsidian's theme list: who made a theme core 3 loads.
+  static let catalog = ThemeCatalog(profile: AppProfile.own)
+  static let schema = StyleSettingsSchema(profile: AppProfile.own, catalog: catalog)
 }
 
 /// Community-Themes (QuartzControl's `Styles/Theme.tsx`): the active `@quartz-themes` theme with the
@@ -30,6 +32,8 @@ struct ThemeTab: View {
   /// nil: not asked yet or asking; `.null`: the theme has no documentation.
   @State private var schema: JSONValue?
   @State private var schemaLoading = false
+  /// core 3 could not load the theme: its own sentence.
+  @State private var notLoaded: String?
   @State private var refreshingSchema = false
   /// Two states, not an optional name: the text field writes its text back as it goes away, and
   /// a nil name came back as the typed one (seen: the field stayed after saving).
@@ -50,6 +54,14 @@ struct ThemeTab: View {
   private var plugin: PluginEntry? { pluginIndex.map { config.plugins[$0] } }
   private var themeId: String? { plugin?.object["options"]?["theme"]?.stringValue }
   private var activeThemeId: String? { plugin.flatMap { FontDelivery.enabled($0) ? themeId : nil } }
+  /// With core 3, what decides which CSS is loaded: every option but the values and the mode.
+  private var fetchKey: String {
+    guard model.features.themesCore3, let plugin else { return "" }
+    var opts = options(plugin)
+    opts["styleSettings"] = nil
+    opts["mode"] = nil
+    return JSJSON.compact(.object(opts))
+  }
 
   var body: some View {
     SettingsForm {
@@ -59,7 +71,7 @@ struct ThemeTab: View {
       catalogSection
     }
     .task { await reloadPresets() }
-    .task(id: "\(themeId ?? "")|\(plugin.map(FontDelivery.enabled) ?? false)") { await loadThemeInfo() }
+    .task(id: "\(themeId ?? "")|\(plugin.map(FontDelivery.enabled) ?? false)|\(fetchKey)") { await loadThemeInfo() }
     .task { if catalog == nil { await loadCatalog() } }
   }
 
@@ -102,6 +114,8 @@ struct ThemeTab: View {
           Note(L10n.t("themes.active.overrideNote", ["source": plugin.source?.stringValue ?? ""]))
           if infoLoading {
             Note(L10n.t("themes.active.checkingStyleSettings"))
+          } else if let notLoaded {
+            Callout(.warning, L10n.t("themes.active.notLoaded", ["reason": notLoaded]))
           } else if info?.styleSettingsId.isEmpty != false, let themeId {
             Note(L10n.t("themes.active.noStyleSettingsNote", ["themeId": themeId]))
           }
@@ -169,8 +183,10 @@ struct ThemeTab: View {
   private func loadThemeInfo() async {
     info = nil
     schema = nil
+    notLoaded = nil
     guard let themeId, let plugin, FontDelivery.enabled(plugin) else { return }
     infoLoading = true
+    if model.features.themesCore3 { return await loadFromCore(plugin) }
     let path = model.project.path
     let read = await Task.detached { PluginSchemaReader.themeStyleSettings(project: path, themeId: themeId) }.value
     guard themeId == self.themeId else { return }
@@ -184,9 +200,46 @@ struct ThemeTab: View {
     schemaLoading = false
   }
 
-  /// The documentation lives upstream and is kept on disk for good; this asks again.
+  /// core 3: the theme as the build loads it (`theme-fetch`), its Style Settings as core reads
+  /// them, the 2.x preset as defaults (docs/plan-themes-core-3.md, step 3).
+  private func loadFromCore(_ plugin: PluginEntry) async {
+    let key = fetchKey
+    let answer: Result<ThemeFetch.Answer, ThemeFetch.Failure>
+    do throws(ThemeFetch.Failure) {
+      answer = .success(try await ThemeFetch.fetch(project: model.project.path, options: options(plugin)))
+    } catch {
+      answer = .failure(error)
+    }
+    guard key == fetchKey else { return }
+    switch answer {
+    case .success(let fetched):
+      switch fetched.outcome {
+      case .loaded(let theme):
+        let author = await ThemeServices.catalog.list().flatMap { ThemeCatalog.find(theme.name, in: $0.themes) }?.author
+        guard key == fetchKey else { return }
+        schema = StyleSettingsSchema.schema(of: theme, author: author)
+        info = StyleSettingsSchema.info(of: schema ?? .null)
+      case .notLoaded(let sentence):
+        notLoaded = sentence
+      }
+    case .failure(let failure):
+      notLoaded = failure.description
+    }
+    infoLoading = false
+  }
+
+  /// The documentation lives upstream and is kept on disk for good; this asks again. With core 3
+  /// there is nothing kept: it loads again.
   private func refreshSchema() async {
     guard let themeId else { return }
+    if model.features.themesCore3, let plugin {
+      refreshingSchema = true
+      infoLoading = true
+      notLoaded = nil
+      await loadFromCore(plugin)
+      refreshingSchema = false
+      return
+    }
     refreshingSchema = true
     try? await ThemeServices.schema.clearCache(themeId: themeId)
     schema = (try? await ThemeServices.schema.schema(themeId: themeId)) ?? .null
@@ -457,7 +510,11 @@ struct StyleSettingsForm: View {
     let usable = StyleSettingsValues.usable(StyleSettingsValues.fields(schema), shippedClassKeys: shipped)
     let groups = StyleSettingsValues.groups(StyleSettingsValues.filter(usable, query: query))
     let count = usable.filter { $0.kind != "heading" && $0.kind != "info-text" }.count
-    Note(L10n.t("styles.styleSettings.sourceNote", ["theme": schema["themeName"]?.stringValue ?? "", "author": schema["author"]?.stringValue ?? ""], count: count))
+    if let author = schema["author"]?.stringValue {
+      Note(L10n.t("styles.styleSettings.sourceNote", ["theme": schema["themeName"]?.stringValue ?? "", "author": author], count: count))
+    } else {
+      Note(L10n.t("styles.styleSettings.sourceNoteBare", ["theme": schema["themeName"]?.stringValue ?? ""], count: count))
+    }
     TextField(L10n.t("styles.styleSettings.searchPlaceholder"), text: $query, prompt: Text(L10n.t("styles.styleSettings.searchPlaceholder")))
       .labelsHidden()
       .textFieldStyle(.roundedBorder)

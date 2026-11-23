@@ -74,4 +74,15 @@ struct StyleSettingsCoreTests {
     #expect(Self.field(schema, "accent")?["defaultDark"] == .string("#111111"))
     #expect(Self.field(schema, "x")?["default"] == nil)
   }
+
+  /// Every class core 3 can switch counts as shipped: no switch of the form is left out.
+  @Test func everyClassIsShipped() {
+    let schema = StyleSettingsSchema.schema(of: Self.theme(Self.blocks))
+    let info = StyleSettingsSchema.info(of: schema)
+    #expect(info.styleSettingsId == ["ctp", "7"])
+    #expect(info.classSettingKeys == ["ctp-mocha", "ctp-frappe", "ctp-pill", "x"])
+    let usable = StyleSettingsValues.usable(StyleSettingsValues.fields(schema), shippedClassKeys: Set(info.classSettingKeys))
+    #expect(usable.count == StyleSettingsValues.fields(schema).count)
+    #expect(StyleSettingsSchema.info(of: .null) == ThemeStyleSettingsInfo(styleSettingsId: [], classSettingKeys: []))
+  }
 }

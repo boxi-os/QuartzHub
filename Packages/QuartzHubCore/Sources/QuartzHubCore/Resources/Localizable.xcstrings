@@ -58013,6 +58013,49 @@
         }
       }
     },
+    "styles.styleSettings.sourceNoteBare" : {
+      "comment" : "Stile ▸ Community-Themes, über den Style Settings eines Themes, dessen Autor QuartzHub nicht kennt (Repo, Adresse, Datei)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Eine Option aus dem Theme „{{theme}}“."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Optionen aus dem Theme „{{theme}}“."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "One option from the theme “{{theme}}”."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} options from the theme “{{theme}}”."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "styles.styleSettings.themeDefault" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -65686,6 +65729,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No community theme active: your colors and fonts from “Styles → Basics” apply."
+          }
+        }
+      }
+    },
+    "themes.active.notLoaded" : {
+      "comment" : "Stile ▸ Community-Themes, aktives Theme: @quartz-themes/core 3 konnte es nicht laden; reason ist cores eigener Satz (Englisch)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Theme konnte nicht geladen werden: {{reason}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The theme could not be loaded: {{reason}}"
           }
         }
       }

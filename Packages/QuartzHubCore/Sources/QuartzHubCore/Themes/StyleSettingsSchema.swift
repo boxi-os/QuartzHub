@@ -209,6 +209,18 @@ public actor StyleSettingsSchema {
     return .object(schema)
   }
 
+  /// What the form needs beside a core 3 schema: its block ids, and every class key it names as
+  /// shipped, since core converts the theme's whole CSS (a ported package shipped only some).
+  public static func info(of schema: JSONValue) -> ThemeStyleSettingsInfo {
+    let fields = StyleSettingsValues.fields(schema)
+    var keys: [String] = []
+    for field in fields {
+      let named = field.kind == "class-toggle" ? [field.id] : field.kind == "class-select" ? field.options.map(\.value) : []
+      for key in named where !key.isEmpty && !keys.contains(key) { keys.append(key) }
+    }
+    return ThemeStyleSettingsInfo(styleSettingsId: (schema["ids"]?.arrayValue ?? []).compactMap(\.stringValue), classSettingKeys: keys)
+  }
+
   /// A field whose default is the preset's value where the preset has one, the way core's
   /// `resolveStyleSettings` reads `<block>@@<setting>[@@light|@@dark]`: a themed colour without a
   /// mode is the dark one.

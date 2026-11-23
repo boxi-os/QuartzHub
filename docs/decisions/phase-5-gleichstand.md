@@ -3365,3 +3365,11 @@ Sechs Ziffern ohne `#` bekommen es, denn core liest Hex nur mit. Gelesen wird zu
 Schlüssel, dann QuartzControls drei Teile; eine neu gesetzte Farbe entfernt die Teile ihres Modus,
 „Zurücksetzen“ alle. Damit weicht das Schreiben von QuartzControl ab; der Golden-Lauf prüft Schlüssel,
 Lesen und Gruppen weiter gegen QuartzControl, das Schreiben gegen die neue Regel.
+
+Die Theme-Seite nutzt das bei core 3 (`QuartzFeatures.themesCore3`): Sie fragt `theme-fetch` mit den
+Optionen des Eintrags, neu bei jeder Änderung außer an den Werten und am Modus. Jede Klasse, die das
+Schema nennt, gilt als vorhanden, denn core wandelt das ganze CSS um; der Autor kommt aus dem Katalog,
+fehlt er (Repo, Adresse, Datei), steht die Zeile ohne ihn. Lädt das Theme nicht, steht cores Satz da,
+nicht „bietet keine Farbeinstellungen an“. Angesehen an einer Kopie des Demo-Projekts mit core 3.1.1:
+Catppuccin mit 9 Blöcken und 36 Optionen, Autor „catppuccin“, die Werte des Eintrags gesetzt; `Minmal`
+mit cores drei Vorschlägen. Das Preset einer alten ID ist nur in den Tests gesehen, nicht in der App.
