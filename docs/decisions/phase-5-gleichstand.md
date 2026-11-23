@@ -3346,3 +3346,9 @@ Ein Aufruf des Helfers samt Einlesen dauert 50–80 ms, auch für Catppuccin. Ei
 lohnt dafür nicht: Das `theme.css` hält cores Cache im Projekt schon nach Quelle und Version
 (`<owner>_<repo>@<version>.theme.css`). Das weicht vom Plan ab („`theme-docs/` nach Quelle und
 Version“).
+
+`StyleSettingsSchema.schema(of:)` macht aus cores Blöcken das Schema, das die Form schon kennt (`ids`,
+`themeName`, `author`, `fields`). Es zählt Blöcke wie core: `id` wahr und `settings` nicht leer, eine Zahl
+als ID wird zum Text. Das Preset einer alten ID (`catppuccin.frappe`) legt core unter die eigenen Werte des
+Eintrags. In der Form erscheint es deshalb als Vorgabe des Felds; eine Themenfarbe ohne `@@light`/`@@dark`
+gilt dabei wie in core als dunkel.

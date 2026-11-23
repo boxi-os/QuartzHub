@@ -526,7 +526,9 @@ export interface WindowState {
     24 h ist (mtime), auch ohne Abruf; die Datei selbst bleibt dieselbe.
   - `<themeId>.json` je Community-Theme: das ermittelte `StyleSettingsSchema` **oder `null`**
     (`:278-285`, Schreiben `:283`). Dauerhaft, kein Ablauf. `themeId` passt auf
-    `^[a-z0-9][a-z0-9._-]*$`, max. 128 (`ipc/schemas.ts:88-92`).
+    `^[a-z0-9][a-z0-9._-]*$`, max. 128 (`ipc/schemas.ts:88-92`). **QuartzHub** schreibt sie nur noch für
+    Projekte mit `@quartz-themes/<id>`-Paketen; mit core 3 kommt das Schema bei jedem Laden aus dem
+    `theme.css` in cores Cache im Projekt (`StyleSettingsSchema.schema(of:)`) und wird hier nicht abgelegt.
 - **Schreibweise:** `writeFile(path, JSON.stringify(x), 'utf-8')` — **kompakt, nicht atomar, nicht über
   jsonStore**, Fehler werden verschluckt.
 - **Lesen:** `readFile` + `JSON.parse`, jeder Fehler → „nicht im Cache“ (`:262-269`). Eine **leere

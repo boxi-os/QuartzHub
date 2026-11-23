@@ -11,6 +11,9 @@ import Foundation
 /// all. (As in QuartzControl, a theme looked up while the registry is unreachable and its copy on
 /// disk gone is kept as "none" until then.) The registry is `ThemeCatalog`'s, whose copy lies in
 /// the same folder; clearing one answer or all makes it ask the network again.
+///
+/// With core 3 the schema comes from the theme core loaded (`schema(of:)`), with core's own reading
+/// of the blocks; the lookup by id above goes with the `@quartz-themes/<id>` page (plan step 6).
 public actor StyleSettingsSchema {
   /// Clear of the largest real theme.css (Ultra Lobster, 4.35 MB).
   static let maxCssBytes = 16 * 1024 * 1024
@@ -179,6 +182,53 @@ public actor StyleSettingsSchema {
     }
     schema["fields"] = .array(blocks.flatMap(\.fields))
     return .object(schema)
+  }
+
+  // MARK: core 3
+
+  /// The schema of a theme core 3 loaded (`ThemeFetch`): its blocks as core read them, theme and
+  /// snippets, in the shape `schema(themeId:)` answers, so one form shows both. Nothing is fetched
+  /// or kept: the CSS lies in core's cache in the project, and reading it takes the helper's call
+  /// (docs/plan-themes-core-3.md, step 3). A 2.x id's preset (`catppuccin.frappe`) applies under the
+  /// entry's own values, so it is what a field shows as its default. `.null` without a block.
+  public static func schema(of theme: ThemeFetch.Theme, author: String? = nil) -> JSONValue {
+    var ids: [JSONValue] = []
+    var fields: [JSONValue] = []
+    for block in theme.settingsBlocks {
+      // core's test: a truthy `id` and a non-empty `settings` list; the id is a key of an object there.
+      guard let id = asString(block[safe: "id"]), JS.truthy(block[safe: "id"] ?? .null), case .array(let settings)? = block[safe: "settings"],
+            !settings.isEmpty else { continue }
+      ids.append(.string(id))
+      fields += settings.compactMap { field($0 == .null ? .object(JSONObject()) : $0, id) }
+    }
+    guard !ids.isEmpty else { return .null }
+    if let preset = theme.preset { fields = fields.map { presetDefault($0, preset) } }
+    var schema = JSONObject([("ids", .array(ids)), ("themeName", .string(theme.name))])
+    if let author, !author.isEmpty { schema["author"] = .string(author) }
+    schema["fields"] = .array(fields)
+    return .object(schema)
+  }
+
+  /// A field whose default is the preset's value where the preset has one, the way core's
+  /// `resolveStyleSettings` reads `<block>@@<setting>[@@light|@@dark]`: a themed colour without a
+  /// mode is the dark one.
+  static func presetDefault(_ field: JSONValue, _ preset: JSONObject) -> JSONValue {
+    guard case .object(var object) = field, let blockId = object["blockId"]?.stringValue, let id = object["id"]?.stringValue else { return field }
+    let kind = object["kind"]?.stringValue
+    func value(_ key: String) -> JSONValue? {
+      switch preset[key] {
+      case .bool(let flag)?: .bool(flag)
+      case let other?: asString(other).map(JSONValue.string)
+      case nil: nil
+      }
+    }
+    if kind == "variable-themed-color" {
+      if let light = value("\(blockId)@@\(id)@@light")?.stringValue { object["defaultLight"] = .string(light) }
+      if let dark = value("\(blockId)@@\(id)@@dark")?.stringValue ?? value("\(blockId)@@\(id)")?.stringValue { object["defaultDark"] = .string(dark) }
+    } else if let preset = value("\(blockId)@@\(id)") {
+      object["default"] = preset
+    }
+    return .object(object)
   }
 
   /// Size and number of the cached answers, for the Settings page; creates nothing.
