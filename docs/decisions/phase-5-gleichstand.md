@@ -3304,3 +3304,24 @@ Wegwerf-Kopie (core 3.1.1), je Aufruf rund 60 ms aus dem Cache:
   Klammer gehört dazu, denn core 2.0.1 deklariert `resolveThemeId(` (aus dem Paket gelesen).
 - Offen: Der Helfer läuft mit QuartzHubs Node und ohne die Umgebung der App. Ein Proxy über
   `NODE_USE_ENV_PROXY` erreicht deshalb den Build, nicht den Helfer. Gemessen ist das nicht.
+
+**Der Katalog `ThemeCatalog` (Schritt 2, 2026-11-23).** Obsidians Liste statt `npm search`; heute
+1061 Einträge, 186 KB, jeder mit `name`, `author`, `repo`, `screenshot`, `modes`, 15 mit `legacy`.
+Gelesen aus der Liste selbst und aus core 3.1.1 (`getRegistry`, `resolveTheme`):
+
+- **Wo die Liste liegt:** dieselbe Datei wie bisher, `theme-docs/community-css-themes.json` im Profil.
+  Eine Kopie jünger als 24 h (nach mtime) antwortet ohne Abruf, wie core seine eigene Kopie hält.
+  QuartzControl las sie nur ohne Netz; das ist die Abweichung, sie ändert keine Datei. Ohne Netz
+  antwortet eine ältere Kopie als „nicht aktuell“, nach 15 Minuten wird wieder gefragt. „Neu laden“ und
+  „Cache leeren“ fragen zuerst das Netz. `StyleSettingsSchema` liest dieselbe Liste über den Katalog;
+  sein Golden-Lauf gegen QuartzControls Dienst bleibt unverändert grün.
+- **Suchen wie core:** `owner/repo` nach Repo, dann der Name wie geschrieben, ohne Groß/klein, über den
+  Slug (cores `slugify`, NFD, von Hand gegen dessen Zeile verglichen). `default`, Pfade und Adressen
+  nimmt core vor der Liste, also treffen sie keinen Eintrag. Die Tabelle der 2.x-IDs ist cores: Welches
+  Theme `catppuccin.frappe` meint, sagt `theme-fetch`.
+- **Screenshots:** `raw.githubusercontent.com/<repo>/HEAD/<datei>` wie in Obsidian, je Segment kodiert.
+  Zwei Einträge enden auf ein Leerzeichen (`"screenshot.png "`); die Datei liegt ohne es da (200 gegen
+  404), wie ein Browser die Adresse kürzt. Zwei Einträge nennen keinen Screenshot. Ein Name mit `..`
+  zählt als keiner.
+- Die Liste lädt QuartzHub weiter von `…/master/…`, core von `…/HEAD/…`; beide zeigen auf denselben
+  Branch. Der Golden-Lauf hält `master`.

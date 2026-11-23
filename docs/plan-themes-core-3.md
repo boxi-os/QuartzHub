@@ -94,7 +94,8 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
      Tippfehlern (core schlägt drei Namen vor). Ist QuartzHub offline, bekommt der Helfer ein `fetch`,
      das scheitert: Er antwortet dann nur aus dem Cache.
    - Tests mit einem Stellvertreter-core unter `Fixtures/`.
-2. **Katalog** (Kern, `ThemeCatalog` statt `ThemeMarketplace`): Obsidians Liste, 24 h im Profil
+2. **Katalog** (Kern, `ThemeCatalog` statt `ThemeMarketplace`). *Fertig 2026-11-23;* `ThemeMarketplace`
+   bleibt, bis die Seite in Schritt 6 umzieht. Obsidians Liste, 24 h im Profil
    gecacht. Die Liste teilt er mit `StyleSettingsSchema`, das heute schon dieselbe lädt. Je Theme Name,
    Autor, Repo, Modi und Screenshot-Adresse. Keine Installation mehr.
 3. **Style Settings** (Kern): Das Schema kommt aus dem `theme.css`, das der Helfer geholt hat (die

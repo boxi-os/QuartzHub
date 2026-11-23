@@ -522,7 +522,8 @@ export interface WindowState {
   - `community-css-themes.json`: Kopie der Obsidian-Theme-Registry
     (`https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json`),
     geschrieben bei jedem erfolgreichen Abruf (`:67-91`, Schreiben `:77`), höchstens einmal je 24 h pro
-    Sitzung (Memo im Speicher). Gelesen nur als Offline-Fallback.
+    Sitzung (Memo im Speicher). Gelesen nur als Offline-Fallback. **QuartzHub** (`ThemeCatalog`, seit 2026-11-23) liest eine Kopie, die jünger als
+    24 h ist (mtime), auch ohne Abruf; die Datei selbst bleibt dieselbe.
   - `<themeId>.json` je Community-Theme: das ermittelte `StyleSettingsSchema` **oder `null`**
     (`:278-285`, Schreiben `:283`). Dauerhaft, kein Ablauf. `themeId` passt auf
     `^[a-z0-9][a-z0-9._-]*$`, max. 128 (`ipc/schemas.ts:88-92`).

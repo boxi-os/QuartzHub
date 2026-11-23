@@ -9,10 +9,9 @@ import Foundation
 /// Answers are kept in the profile under `theme-docs/`, an answer of "none" included, for good: they
 /// describe published files that do not change. The Theme tab's reload clears one, the Settings page
 /// all. (As in QuartzControl, a theme looked up while the registry is unreachable and its copy on
-/// disk gone is kept as "none" until then.)
+/// disk gone is kept as "none" until then.) The registry is `ThemeCatalog`'s, whose copy lies in
+/// the same folder; clearing one answer or all makes it ask the network again.
 public actor StyleSettingsSchema {
-  static let registryURL = "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-css-themes.json"
-  static let registryLifetime: TimeInterval = 24 * 60 * 60
   /// Clear of the largest real theme.css (Ultra Lobster, 4.35 MB).
   static let maxCssBytes = 16 * 1024 * 1024
 
@@ -31,11 +30,12 @@ public actor StyleSettingsSchema {
   let session: URLSession
   let directory: String
   let readYaml: ReadYaml
-  let now: @Sendable () -> Date
-  private var registry: (at: Date, entries: [JSONValue])?
+  let catalog: ThemeCatalog
 
   public init(profile: ProfileDirectory = .quartzHub, configuration: URLSessionConfiguration = .ephemeral, timeout: Duration = .seconds(45),
-              readYaml: @escaping ReadYaml = StyleSettingsSchema.helperYaml(runtime: .current), now: @escaping @Sendable () -> Date = Date.init) {
+              readYaml: @escaping ReadYaml = StyleSettingsSchema.helperYaml(runtime: .current), now: @escaping @Sendable () -> Date = Date.init,
+              catalog: ThemeCatalog? = nil) {
+    self.catalog = catalog ?? ThemeCatalog(profile: profile, configuration: configuration, timeout: timeout, now: now)
     let configuration = configuration.copy() as! URLSessionConfiguration
     configuration.urlCache = nil
     configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -46,7 +46,6 @@ public actor StyleSettingsSchema {
     session = URLSession(configuration: configuration)
     directory = profile.file("theme-docs")
     self.readYaml = readYaml
-    self.now = now
   }
 
   public struct InvalidThemeId: Error, Equatable { public let id: String }
@@ -76,23 +75,6 @@ public actor StyleSettingsSchema {
     var headers: [String: String] = [:]
     for (key, value) in http.allHeaderFields { headers[String(describing: key).lowercased()] = String(describing: value) }
     return (http.statusCode, headers, data)
-  }
-
-  /// The registry, a day in memory; offline is a normal state, so the copy on disk answers then.
-  func loadRegistry() async -> [JSONValue] {
-    if let registry, now().timeIntervalSince(registry.at) < Self.registryLifetime { return registry.entries }
-    let copy = "\(cacheDirectory())/community-css-themes.json"
-    if let answer = await get(Self.registryURL), (200..<300).contains(answer.status),
-       case .array(let entries)? = try? JSJSON.parse(answer.body), !entries.isEmpty {
-      registry = (now(), entries)
-      try? JSONStore.writeAtomic(Data(JSJSON.compact(.array(entries)).utf8), to: copy)
-      return entries
-    }
-    if let data = try? Posix.read(copy), case .array(let entries)? = try? JSJSON.parse(data) {
-      registry = (now(), entries)
-      return entries
-    }
-    return []
   }
 
   /// `owner/name` and nothing else: it comes from a third party's file and goes into a URL path.
@@ -182,7 +164,7 @@ public actor StyleSettingsSchema {
   func build(_ themeId: String) async -> JSONValue {
     // A port's variation suffix ("catppuccin.frappe") names the same upstream theme.
     let wanted = JSText.split(themeId, ".")[0]
-    guard let entry = await loadRegistry().first(where: { Self.slugify(JS.string($0[safe: "name"])) == wanted }),
+    guard let entry = await catalog.entries().first(where: { Self.slugify(JS.string($0[safe: "name"])) == wanted }),
           let repo = entry[safe: "repo"]?.stringValue, let css = await fetchThemeCss(repo) else { return .null }
     var blocks: [(id: String, fields: [JSONValue])] = []
     for match in JSText.matches(css, #"/\*["# + JSText.space + #"]*@settings(?![A-Za-z0-9_])([\s\S]*?)\*/"#) {
@@ -212,8 +194,8 @@ public actor StyleSettingsSchema {
   }
 
   /// Empties the cache; the number of entries removed.
-  public func clearCache() -> Int {
-    registry = nil
+  public func clearCache() async -> Int {
+    await catalog.invalidate()
     var removed = 0
     for entry in LayoutFrames.directoryEntriesWithKind(directory) where JSText.endsWith(entry.name, ".json") {
       if (try? FileManager.default.removeItem(atPath: "\(directory)/\(entry.name)")) != nil { removed += 1 }
@@ -222,9 +204,9 @@ public actor StyleSettingsSchema {
   }
 
   /// One theme's answer forgotten: an emptied file reads as "not cached".
-  public func clearCache(themeId: String) throws {
+  public func clearCache(themeId: String) async throws {
     try Self.check(themeId)
-    registry = nil
+    await catalog.invalidate()
     try? Posix.write("\(cacheDirectory())/\(themeId).json", Data())
   }
 }
