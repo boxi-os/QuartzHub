@@ -2,7 +2,9 @@
 // Golden file for StyleSettingsValues, made by QuartzControl's own src/routes/Styles/styleSettings.ts
 // and the grouping of StyleSettingsForm.tsx (buildGroups, with React and the UI stood in for): how a
 // Style Settings value is written into quartz.config.yaml (keys, colour formats, hsl-split, modes),
-// read back for the colour picker, and how the theme's headings group the fields.
+// read back for the colour picker, and how the theme's headings group the fields. Since core 3
+// (2026-11-23) QuartzHub writes a colour as core reads it; the test takes QuartzControl's written
+// keys only as those a reset must clear.
 //
 // The schemas are Ultra Lobster's (176 fields, the cached copy in QuartzControl's profile,
 // theme-docs/ultra-lobster.json, a published upstream theme's documentation), Tokyo Night's from

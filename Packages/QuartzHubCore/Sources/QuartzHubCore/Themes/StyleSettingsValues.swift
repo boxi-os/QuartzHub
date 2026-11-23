@@ -6,8 +6,9 @@ import Foundation
 ///
 /// What QuartzControl verified against `@quartz-themes/core`: the key is `<blockId>@@<settingId>`;
 /// a boolean is a class toggle, a string naming a class key a class select, anything else is
-/// emitted as `--<settingId>`; `@@light`/`@@dark` on the setting id scopes it to one mode. On top
-/// sits Style Settings' own encoding: `hsl-split` is three variables, `rgb` wants `rgb(r, g, b)`.
+/// emitted as `--<settingId>`; `@@light`/`@@dark` on the setting id scopes it to one mode. A colour
+/// is written as the colour since core 3 (2026-11-23), which turns it into the theme's format
+/// itself; QuartzControl wrote that format (`hsl-split` as three keys), and those values still read.
 public enum StyleSettingsValues {
   public enum Mode: String, Sendable { case light, dark }
 
@@ -65,40 +66,26 @@ public enum StyleSettingsValues {
 
   // MARK: Writing a colour
 
-  /// The pairs a picked colour turns into: three for hsl-split, both modes for a themed colour with
-  /// no mode given.
+  /// The pairs a picked colour turns into: the colour itself under the field's key, both modes for
+  /// a themed colour with no mode given. core 3 reads the colour and writes the theme's format
+  /// (`hsl-split` as `-h`/`-s`/`-l`, `rgb-values`, …) itself; a key per part, as QuartzControl wrote
+  /// for core 2, is an unknown key to it and ignored (measured against core 3.1.1's
+  /// `resolveStyleSettings`, decisions/phase-5-gleichstand.md, „Style Settings aus core“).
   public static func colorEntries(_ field: Field, hex: String, mode: Mode? = nil) -> [(key: String, value: String)] {
-    var entries: [(key: String, value: String)] = []
-    func set(_ key: String, _ value: String) {
-      if let index = entries.firstIndex(where: { $0.key == key }) { entries[index].value = value } else { entries.append((key, value)) }
-    }
+    // core reads hex only with its `#`; six digits without one get it, anything else goes as given.
+    let value = hexToRgb(hex) != nil && !JS.trim(hex).hasPrefix("#") ? "#\(JS.trim(hex))" : hex
     let modes: [Mode?] = field.isThemedColor ? (mode.map { [$0] } ?? [.light, .dark]) : [nil]
-    for m in modes {
-      if field.isHslSplit {
-        let hsl = CssVariables.hexToHsl(hex)
-        set(optionKey(field, suffix: "-h", mode: m), JSJSON.numberToString(hsl.h))
-        set(optionKey(field, suffix: "-s", mode: m), "\(JSJSON.numberToString(hsl.s))%")
-        set(optionKey(field, suffix: "-l", mode: m), "\(JSJSON.numberToString(hsl.l))%")
-        continue
-      }
-      set(optionKey(field, mode: m), formatColor(hex, field.format))
-    }
-    return entries
+    return modes.map { (optionKey(field, mode: $0), value) }
   }
 
-  static func formatColor(_ hex: String, _ format: String?) -> String {
-    guard let rgb = hexToRgb(hex) else { return hex }
-    switch format {
-    case "rgb": return "rgb(\(rgb.r), \(rgb.g), \(rgb.b))"
-    case "rgb-split", "rgb-values": return "\(rgb.r), \(rgb.g), \(rgb.b)"
-    case "hsl":
-      let hsl = CssVariables.hexToHsl(hex)
-      return "hsl(\(JSJSON.numberToString(hsl.h)), \(JSJSON.numberToString(hsl.s))%, \(JSJSON.numberToString(hsl.l))%)"
-    case "hsl-values":
-      let hsl = CssVariables.hexToHsl(hex)
-      return "\(JSJSON.numberToString(hsl.h)), \(JSJSON.numberToString(hsl.s))%, \(JSJSON.numberToString(hsl.l))%"
-    default: return hex
-    }
+  /// The patch a picked colour makes: `colorEntries`, and QuartzControl's parts of the same mode
+  /// removed (`-h`/`-s`/`-l` of an hsl-split colour), which core 3 would log as unknown keys.
+  public static func colorPatch(_ field: Field, hex: String, mode: Mode? = nil) -> [(key: String, value: JSONValue?)] {
+    let entries = colorEntries(field, hex: hex, mode: mode)
+    guard field.isHslSplit else { return entries.map { ($0.key, .string($0.value)) } }
+    let modes: [Mode?] = field.isThemedColor ? (mode.map { [$0] } ?? [.light, .dark]) : [nil]
+    let parts = modes.flatMap { m in ["-h", "-s", "-l"].map { optionKey(field, suffix: $0, mode: m) } }
+    return entries.map { ($0.key, .string($0.value)) } + parts.map { ($0, nil) }
   }
 
   // MARK: Colour arithmetic
@@ -165,6 +152,10 @@ public enum StyleSettingsValues {
   /// The colour stored for this field as hex, or the theme's own default when nothing is stored, so
   /// the picker opens on the colour that applies.
   public static func readColor(_ field: Field, values: JSONObject, mode: Mode? = nil) -> (hex: String?, isSet: Bool) {
+    if let parsed = parseColorValue(values[optionKey(field, mode: mode)], field.format) {
+      return (parsed, true)
+    }
+    // Written for core 2 before 2026-11-23: three parts, read until the colour is set again or reset.
     if field.isHslSplit {
       let parts = ["-h", "-s", "-l"].map { values[optionKey(field, suffix: $0, mode: mode)] }
       if parts.allSatisfy({ $0 != nil }) {
@@ -175,8 +166,6 @@ public enum StyleSettingsValues {
         }
         if numbers.allSatisfy({ !$0.isNaN }) { return (hslToHex(numbers[0], numbers[1], numbers[2]), true) }
       }
-    } else if let parsed = parseColorValue(values[optionKey(field, mode: mode)], field.format) {
-      return (parsed, true)
     }
     let fallback = mode == .dark ? field.defaultDark : mode == .light ? field.defaultLight : nil
     let raw = fallback ?? field.defaultValue?.stringValue

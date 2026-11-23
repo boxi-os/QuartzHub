@@ -3352,3 +3352,16 @@ Version“).
 als ID wird zum Text. Das Preset einer alten ID (`catppuccin.frappe`) legt core unter die eigenen Werte des
 Eintrags. In der Form erscheint es deshalb als Vorgabe des Felds; eine Themenfarbe ohne `@@light`/`@@dark`
 gilt dabei wie in core als dunkel.
+
+**Farben schreibt QuartzHub, wie core 3 sie liest.** core 3 nimmt je Feld und Modus einen Schlüssel mit
+der Farbe (`#rrggbb`, `rgb(…)`, `hsl(…)`) und rechnet sie selbst ins Format des Themes um, `hsl-split`
+zu `-h`/`-s`/`-l`, `rgb-values` zu `r,g,b` (`resolveStyleSettings`, `colorEntries` in core 3.1.1).
+QuartzControl schrieb für core 2 das Format selbst, bei `hsl-split` drei Schlüssel; core 3 meldet die als
+„unknown Style Settings keys (ignored)“, die Farbe kam nicht an (an core gemessen: `t@@acc-h`, `-s`,
+`-l` unbekannt, `t@@acc: #ff0000` ergibt `--acc-h: 0; --acc-s: 100%; --acc-l: 50%`). Seit Schritt 3
+schreibt `StyleSettingsValues` den Hex-Wert; über alle 38 Farbfelder der Fixtures (Ultra Lobster,
+Tokyo Night, ausgedachte, alle acht Formate) nimmt core alle 42 Schlüssel an, keiner unbekannt.
+Sechs Ziffern ohne `#` bekommen es, denn core liest Hex nur mit. Gelesen wird zuerst der eine
+Schlüssel, dann QuartzControls drei Teile; eine neu gesetzte Farbe entfernt die Teile ihres Modus,
+„Zurücksetzen“ alle. Damit weicht das Schreiben von QuartzControl ab; der Golden-Lauf prüft Schlüssel,
+Lesen und Gruppen weiter gegen QuartzControl, das Schreiben gegen die neue Regel.

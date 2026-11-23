@@ -592,7 +592,7 @@ struct StyleSettingRow: View {
       ColorPicker(selection: Binding(get: { CssColorField.color(read.hex ?? "") }, set: { color in
         let css = CssColorField.css(color)
         let hex = css.hasPrefix("#") ? css : (CssColor.hexAlpha(css)?.hex ?? "#000000")
-        onChange(StyleSettingsValues.colorEntries(field, hex: hex, mode: mode).map { ($0.key, .string($0.value)) })
+        onChange(StyleSettingsValues.colorPatch(field, hex: hex, mode: mode))
       }), supportsOpacity: false) {
         Text(field.title)
       }

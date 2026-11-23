@@ -3,7 +3,8 @@ import Testing
 @testable import QuartzHubCore
 
 /// StyleSettingsValues against QuartzControl's styleSettings.ts and the grouping of
-/// StyleSettingsForm.tsx (`scripts/style-settings-golden.mjs`).
+/// StyleSettingsForm.tsx (`scripts/style-settings-golden.mjs`): keys, reading and groups. Writing a
+/// colour follows core 3 since 2026-11-23, and QuartzControl's values still read.
 struct StyleSettingsValuesTests {
   static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/style-settings")
 
@@ -28,12 +29,24 @@ struct StyleSettingsValuesTests {
       let label = "\(entry["schema"]?.stringValue ?? "")/\(field.id)"
       if StyleSettingsValues.optionKey(field) != entry["key"]?.stringValue { mismatches.append("\(label) key") }
       if StyleSettingsValues.keysOf(field) != (entry["keys"]?.arrayValue ?? []).compactMap(\.stringValue) { mismatches.append("\(label) keys") }
+      // Writing is core 3's rule, not QuartzControl's (`colorEntries`): the colour under the field's
+      // key, one per mode; QuartzControl's keys must be among those a reset clears, and what is
+      // written reads back as the same colour.
       for e in entry["entries"]?.arrayValue ?? [] {
-        let got = StyleSettingsValues.colorEntries(field, hex: e["hex"]?.stringValue ?? "", mode: Self.mode(e["mode"]))
-        let want = e["entries"]?.objectValue
-        let wantPairs = (want?.keys ?? []).map { ($0, want?[$0]?.stringValue ?? "") }
-        if got.map({ "\($0.key)=\($0.value)" }) != wantPairs.map({ "\($0.0)=\($0.1)" }) {
-          mismatches.append("\(label) entries \(e["hex"]?.stringValue ?? "") \(String(describing: e["mode"])): \(wantPairs), here \(got)")
+        let hex = e["hex"]?.stringValue ?? "", mode = Self.mode(e["mode"])
+        let got = StyleSettingsValues.colorEntries(field, hex: hex, mode: mode)
+        let modes: [StyleSettingsValues.Mode?] = field.kind == "variable-themed-color" ? (mode.map { [$0] } ?? [.light, .dark]) : [nil]
+        let value = hex == "abcdef" ? "#abcdef" : hex
+        if got.map({ "\($0.key)=\($0.value)" }) != modes.map({ "\(StyleSettingsValues.optionKey(field, mode: $0))=\(value)" }) {
+          mismatches.append("\(label) entries \(hex) \(String(describing: mode)): \(got)")
+        }
+        let old = (e["entries"]?.objectValue?.keys ?? [])
+        if !old.allSatisfy(StyleSettingsValues.keysOf(field).contains) { mismatches.append("\(label) reset misses \(old)") }
+        let written = JSONObject(got.map { ($0.key, JSONValue.string($0.value)) })
+        // What the picker hands over: six digits with `#` (`#ABC` reads back as `#AABBCC`, `nope` not at all).
+        for m in modes where JSText.test(value, #"\A#[0-9a-fA-F]{6}\z"#) {
+          let back = StyleSettingsValues.readColor(field, values: written, mode: m)
+          if back.hex?.lowercased() != value.lowercased() || !back.isSet { mismatches.append("\(label) reads \(hex) back as \(back)") }
         }
       }
       for r in entry["read"]?.arrayValue ?? [] {
@@ -96,6 +109,24 @@ struct StyleSettingsValuesTests {
       let h = entry["h"]?.numberValue ?? 0, s = entry["s"]?.numberValue ?? 0, l = entry["l"]?.numberValue ?? 0
       #expect(StyleSettingsValues.hslToHex(h, s, l) == entry["hex"]?.stringValue, "\(h) \(s) \(l)")
     }
+  }
+
+  /// A colour picked for an hsl-split field written for core 2 replaces its three parts; the other
+  /// mode's stay until that one is picked.
+  @Test func aPickedColourClearsQuartzControlsParts() {
+    let field = StyleSettingsValues.Field(JSONObject([("id", .string("acc")), ("blockId", .string("t")), ("kind", .string("variable-themed-color")),
+                                                      ("format", .string("hsl-split"))]))
+    let before = JSONObject([("t@@acc-h@@light", .string("0")), ("t@@acc-s@@light", .string("100%")), ("t@@acc-l@@light", .string("50%")),
+                             ("t@@acc-h@@dark", .string("0")), ("t@@acc-s@@dark", .string("100%")), ("t@@acc-l@@dark", .string("50%"))])
+    #expect(StyleSettingsValues.readColor(field, values: before, mode: .light) == ("#ff0000", true))
+    let after = StyleSettingsValues.apply(StyleSettingsValues.colorPatch(field, hex: "#00ff00", mode: .light), to: before)
+    #expect(Set(after.keys) == ["t@@acc@@light", "t@@acc-h@@dark", "t@@acc-s@@dark", "t@@acc-l@@dark"])
+    #expect(after["t@@acc@@light"] == .string("#00ff00"))
+    #expect(StyleSettingsValues.readColor(field, values: after, mode: .light) == ("#00ff00", true))
+    #expect(StyleSettingsValues.readColor(field, values: after, mode: .dark) == ("#ff0000", true))
+    let plain = StyleSettingsValues.Field(JSONObject([("id", .string("c")), ("blockId", .string("t")), ("kind", .string("variable-color")),
+                                                      ("format", .string("rgb-values"))]))
+    #expect(StyleSettingsValues.colorPatch(plain, hex: "#102030").map(\.key) == ["t@@c"])
   }
 
   @Test func aPatchSetsAndRemoves() {
