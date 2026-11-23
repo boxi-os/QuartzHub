@@ -101,10 +101,11 @@ public actor BuildService {
   ///    the one place that copy is read. What went wrong goes into the console as a warning.
   ///
   /// 3. A moved project gets its `@use "./quartzcontrol";` line or its `_quartzcontrol.scss` back
-  ///    when one half is missing, and the font URLs of the `fonts` block become relative
-  ///    (`StyleSheets.repairManagedUse`, `migrateFontUrls`): the repair first, because the URL
-  ///    migration reads the blocks through the line it restores. Each takes the styles lock, so a
-  ///    save still writing custom.scss is waited for. What they did goes into the console.
+  ///    when one half is missing, the font URLs of the `fonts` block become relative and the rules
+  ///    of the `css-vars` block get their `body` half (`StyleSheets.repairManagedUse`,
+  ///    `migrateFontUrls`, `migrateVariableSelectors`): the repair first, because the migrations
+  ///    read the blocks through the line it restores. Each takes the styles lock, so a save still
+  ///    writing custom.scss is waited for. What they did goes into the console.
   ///
   /// 4. A project that holds its Google fonts (`fontOrigin: local` and a `google-fonts` block) gets
   ///    them in line with the typography of the config (`FontService.refreshGoogleFonts`): the
@@ -134,6 +135,7 @@ public actor BuildService {
         case nil: break
         }
         if try await StyleSheets.migrateFontUrls(project: project) { report(.stdout, L10n.t("main.fontUrlsMigrated") + "\n") }
+        if try await StyleSheets.migrateVariableSelectors(project: project) { report(.stdout, L10n.t("main.variableSelectorsMigrated") + "\n") }
       } catch {
         report(.warn, error.localizedDescription + "\n")
       }

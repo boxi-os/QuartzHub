@@ -3413,8 +3413,8 @@ ohne Netz):
   liegen als QuartzControls Ergebnis in `Fixtures/variable-resolve/graphs.json`.
 - **Gefunden dabei:** Weil das Theme auf `body` setzt, kommt ein Wert, den Stile ▸ Variablen auf `:root`
   schreibt, mit core 3 nicht an (WebKit: `:root{--light:red}` gibt `html` Rot, `body` behält Catppuccins
-  Wert). Mit `:root body` im selben Block kommt er in beiden Modi an. Das ist eine Änderung am
-  verwalteten Block und eine Entscheidung des Nutzers, offen.
+  Wert). Mit `:root body` im selben Block kommt er in beiden Modi an. Entschieden vom Nutzer, umgesetzt im
+  nächsten Abschnitt.
 - **Wer die Schriften lädt** (`FontDelivery.loaders`): Mit core 3 ist der Lader des Themes `local`, nicht
   mehr `cdn` (unpkg); Stile ▸ Basis sagt unter „Schriften des Themes“, dass nichts von außen geladen wird.
   Ein Projekt mit core 2 behält die alten Sätze. Die drei Felder Überschriften, Fließtext und Code heißen
@@ -3425,3 +3425,32 @@ ohne Netz):
   Build mit `interface: Noto Sans Mono`: `--font-interface` am `body` beginnt mit Noto Sans Mono). Ihr Feld
   heißt mit core 3 deshalb nur „überschrieben“, solange es leer ist. Angesehen in der App an beiden Kopien
   (Theme-Schriften an, Oberflächenschrift leer und gesetzt).
+
+**Variablen gegen ein core-3-Theme (2026-11-23).** Entscheidung des Nutzers: Der Block `css-vars` bekommt
+je Regel eine `body`-Hälfte, `:root,\n:root body { … }`, ebenso für Dunkel (`:root[saved-theme="dark"]`)
+und „nur Hell“ (`:root:not([saved-theme="dark"])`). Damit weicht QuartzHub vom Format 1.3 ab; QuartzControl
+1.3 liest die neue Form als „keine Variablen“ (eingestellt seit 2026-11-11).
+
+- **Gemessen in WebKit** am Catppuccin-Build (`s4/demo`, `--light`, `--secondary` dunkel und nur hell, als
+  ungeschichtetes `<style>` wie das kompilierte `custom.scss`): ohne Block `body` Catppuccin (hell
+  `rgb(239, 241, 245)`, dunkel `rgb(36, 39, 58)`); alte Form: `html` die eigenen Werte, `body` weiter
+  Catppuccin, Hintergrund unverändert; neue Form: `body` die eigenen Werte in beiden Modi, Hintergrund rot,
+  `--secondary` hell grün, dunkel blau. Ungeschichtet schlägt die `body`-Hälfte die Regel des Themes in
+  `@layer obsidian` unabhängig von dessen Spezifität.
+- **Lesen** nimmt beide Formen (eine Regel wie bisher oder die Liste mit ihrer `body`-Hälfte); eine Regel nur
+  für `:root body` ist keine des Blocks.
+- **Vor jedem Build** (`StyleSheets.migrateVariableSelectors`, Schritt 3 der Build-Tür) bekommt ein Block in
+  alter Form seine `body`-Hälften, in beiden Dateien, und die Konsole sagt es einmal
+  (`main.variableSelectorsMigrated`). Nur die Köpfe werden ersetzt; Kommentare und Regeln, die jemand von
+  Hand in den Block geschrieben hat, bleiben. Ohne diesen Schritt verlören Werte von vor heute gegen ein Theme,
+  bis jemand Stile ▸ Variablen wieder speichert.
+- **Kollisionen** (`variableCollisions`): Gegen die neue Form erreicht ein eigenes `:root { --x }` in
+  `custom.scss` nur noch `html`; die Website zeigt darunter den Wert der Seite. Gezählt wird gegen die
+  neue Form nur eine eigene Regel mit `body`-Hälfte, gegen die alte wie bisher. Im Golden-Fall
+  „gui-test-moved“ meldet QuartzHub deshalb `[]` statt `["new-one"]`.
+- **Golden Files**: QuartzControls Ausgabe bleibt die Quelle; die Tests bringen QuartzHubs Datei vor dem
+  Vergleich in 1.3s Form (`cssVarsAsQuartzControl`, nur die Köpfe im Block) und prüfen die `body`-Hälfte
+  für sich. Gegenproben: alte Form beim Schreiben, keine Umstellung, Kollisionen immer nach alter Form,
+  Lesen ohne Liste, Build-Tür ohne den Schritt: jede rot.
+- Die Hinweise „Deine Werte hier gewinnen gegen das Theme …“ (`styles.variables.themeNote`) und „… im
+  Variablen-Tab gezielt überschreiben“ (`themeEditor.overrideStillEditable`) stimmen damit wieder.

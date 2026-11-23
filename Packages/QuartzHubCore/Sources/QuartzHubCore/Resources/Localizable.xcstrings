@@ -38144,6 +38144,25 @@
         }
       }
     },
+    "main.variableSelectorsMigrated" : {
+      "comment" : "Build console: the css-vars block was rewritten to the :root, :root body form before the build",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Werte aus Stile ▸ Variablen gelten jetzt auch gegen ein Community-Theme. QuartzHub hat ihre Regeln im Stylesheet dafür ergänzt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The values from Styles ▸ Variables now apply against a community theme too. QuartzHub has extended their rules in the stylesheet for that."
+          }
+        }
+      }
+    },
     "main.warmupBuild" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

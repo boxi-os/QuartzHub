@@ -25,15 +25,39 @@ public struct VariableOverride: Equatable, Sendable {
   }
 }
 
-/// The `css-vars` block: three kinds of rule (`:root` for both modes, `:root[saved-theme="dark"]`,
-/// `:root:not([saved-theme="dark"])` for light only), read and written as `styleService.ts` does.
+/// The `css-vars` block: three kinds of rule (both modes, dark, light only), read as
+/// `styleService.ts` does and written as QuartzHub decided on 2026-11-23:
+///
+/// ```scss
+/// :root,
+/// :root body { … }
+/// :root[saved-theme="dark"],
+/// :root[saved-theme="dark"] body { … }
+/// :root:not([saved-theme="dark"]),
+/// :root:not([saved-theme="dark"]) body { … }
+/// ```
+///
+/// QuartzControl 1.3 wrote `:root` alone. A core 3 theme declares its table on `body`, and a value
+/// body declares itself is what the page gets whatever `:root` says: the plain form reached `html`
+/// and nothing below it (measured in WebKit, decisions/phase-5-gleichstand.md, „Variablen gegen ein
+/// core-3-Theme“). The `body` half carries the value to where the theme sets it; unlayered, it beats
+/// the theme's layered rule. Both forms are read; the plain one is rewritten before every build
+/// (`upgradeSelectors`). QuartzControl 1.3 reads the new form as no override at all.
 public enum VariableOverrides {
+  static let darkSelector = #":root[saved-theme="dark"]"#
   static let lightOnlySelector = #":root:not([saved-theme="dark"])"#
-  static let rootRule = #":root["# + JSText.space + #"]*\{([^}]*)\}"#
+  static let space = "[" + JSText.space + "]"
   /// The attribute value with or without quotes: Sass drops them, and a rule copied back from the
   /// browser has none.
-  static let darkRule = #":root\[saved-theme=["']?dark["']?\]["# + JSText.space + #"]*\{([^}]*)\}"#
-  static let lightOnlyRule = #":root:not\(\[saved-theme=["']?dark["']?\]\)["# + JSText.space + #"]*\{([^}]*)\}"#
+  static let darkHead = #":root\[saved-theme=["']?dark["']?\]"#
+  static let lightOnlyHead = #":root:not\(\[saved-theme=["']?dark["']?\]\)"#
+  /// A rule of one kind: the bare selector (1.3's form) or the list with its `body` half.
+  static func rule(_ head: String) -> String {
+    head + "(?:\(space)*,\(space)*" + head + "\(space)+body)?\(space)*" + #"\{([^}]*)\}"#
+  }
+  static let rootRule = rule(":root")
+  static let darkRule = rule(darkHead)
+  static let lightOnlyRule = rule(lightOnlyHead)
 
   /// `--name: value;` pairs, with JavaScript's object order (a key like "1" first).
   static func declarations(_ block: String) -> JSONObject {
@@ -92,19 +116,37 @@ public enum VariableOverrides {
     let both = withLight.filter { !isLightOnly($0) }
     let only = withLight.filter(isLightOnly)
     let dark = overrides.filter(hasDark)
+    func head(_ selector: String) -> String { "\(selector),\n\(selector) body {" }
     var rules: [String] = []
-    if !both.isEmpty { rules.append(":root {\n\(lines(both) { $0.light })\n}") }
-    if !dark.isEmpty { rules.append(":root[saved-theme=\"dark\"] {\n\(lines(dark) { $0.dark ?? "" })\n}") }
-    if !only.isEmpty { rules.append("\(lightOnlySelector) {\n\(lines(only) { $0.light })\n}") }
+    if !both.isEmpty { rules.append("\(head(":root"))\n\(lines(both) { $0.light })\n}") }
+    if !dark.isEmpty { rules.append("\(head(darkSelector))\n\(lines(dark) { $0.dark ?? "" })\n}") }
+    if !only.isEmpty { rules.append("\(head(lightOnlySelector))\n\(lines(only) { $0.light })\n}") }
     return rules.joined(separator: "\n\n")
   }
 
-  /// The variables the page sets that custom.scss also sets in a rule of the same selector: there
-  /// the user's rule comes later at the same specificity and wins, and the page would show a value
-  /// the site does not have. Only in a moved project (in 1.0's form the variables still come last).
+  /// A rule head of 1.3's form at the start of the block, of a line or after a rule: the selector
+  /// alone before its brace. A head of the new form does not fit: its `,` or ` body` comes first.
+  static let plainHead = #"(\A|[\n}])("# + space + #"*?)([ \t]*)(:root(?:\[saved-theme=["']?dark["']?\]|:not\(\[saved-theme=["']?dark["']?\]\))?)"# + space + #"*\{"#
+
+  /// Whether a `css-vars` body still has a rule in 1.3's form.
+  static func hasPlainRules(_ body: String) -> Bool { JSText.test(body, plainHead) }
+
+  /// Every rule head of 1.3's form gets its `body` half; declarations, comments and anything else
+  /// stay as they are, so a block edited by hand loses nothing.
+  public static func upgradeSelectors(_ body: String) -> String {
+    JSText.replaceAll(body, plainHead, template: "$1$2$3$4,\n$3$4 body {")
+  }
+
+  /// The variables the page sets that custom.scss also sets in a rule that reaches the same element
+  /// at the same specificity: there the user's rule comes later and wins, and the page would show a
+  /// value the site does not have. Only in a moved project (in 1.0's form the variables still come
+  /// last). Against a block in 1.3's form that is a rule of the same selector; against the new form
+  /// one whose list holds the `body` half, since a plain `:root` of the user's then reaches `html`
+  /// only and the page's value is the one below it.
   static func collisions(_ sources: StyleSheets.Sources) -> [String] {
     guard sources.managedExists, let body = StyleSheets.managedBody(sources, "css-vars") else { return [] }
     let overrides = parse(body)
+    let plain = hasPlainRules(body)
     let inRoot = Set(overrides.filter { !JS.trim($0.light).isEmpty && !($0.lightOnly && !hasDark($0)) }.map(\.key))
     let inDark = Set(overrides.filter(hasDark).map(\.key))
     let inLightOnly = Set(overrides.filter { !JS.trim($0.light).isEmpty && $0.lightOnly && !hasDark($0) }.map(\.key))
@@ -113,17 +155,20 @@ public enum VariableOverrides {
     // Comments out, so a rule quoted in a note does not count.
     own = JSText.replaceAll(own, #"/\*[\s\S]*?\*/"#, with: "")
     own = JSText.replaceAll(own, #"(\A|[^:])//[^\n]*"#, template: "$1")
+    let kinds: [(selectors: [String], names: Set<String>)] = [
+      ([":root"], inRoot),
+      ([darkSelector, ":root[saved-theme=dark]"], inDark),
+      ([lightOnlySelector, ":root:not([saved-theme=dark])"], inLightOnly)
+    ]
     var hits: Set<String> = []
     for match in JSText.matches(own, "(\\A|[}\(JSText.space);])(:root[^{};]*)\\{([^}]*)\\}") {
       let selector = JSText.replaceAll(JSText.replaceAll(match.groups[2]!, "[\(JSText.space)]+", with: ""), "'", with: "\"")
-      let managed: Set<String>
-      switch selector {
-      case ":root": managed = inRoot
-      case #":root[saved-theme="dark"]"#, ":root[saved-theme=dark]": managed = inDark
-      case lightOnlySelector, ":root:not([saved-theme=dark])": managed = inLightOnly
-      default: continue
+      let parts = Set(JSText.split(selector, ","))
+      for kind in kinds {
+        let same = plain ? kind.selectors.contains(selector) : kind.selectors.contains { parts.contains($0 + "body") }
+        guard same else { continue }
+        for key in declarations(match.groups[3]!).keys where kind.names.contains(key) { hits.insert(key) }
       }
-      for key in declarations(match.groups[3]!).keys where managed.contains(key) { hits.insert(key) }
     }
     return hits.sorted { $0.utf16.lexicographicallyPrecedes($1.utf16) }
   }

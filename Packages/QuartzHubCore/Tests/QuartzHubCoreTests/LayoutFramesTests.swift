@@ -242,9 +242,11 @@ import Testing
     return result
   }
 
-  /// A frame's file as QuartzControl writes it: without QuartzHub's two additions for Quartz 5.1,
-  /// checked on their own (`framesHaveAnEntryModule`). Nil for the entry module, which it has not.
+  /// A file as QuartzControl writes it: a frame without QuartzHub's two additions for Quartz 5.1,
+  /// checked on their own (`framesHaveAnEntryModule`), and nil for the entry module, which it has
+  /// not; a stylesheet with its `css-vars` rules in 1.3's form (`cssVarsAsQuartzControl`).
   static func quartzControlsForm(_ path: String, _ data: Data) -> Data? {
+    if path.hasSuffix(".scss") { return Data(ManagedStylesTests.cssVarsAsQuartzControl(String(decoding: data, as: UTF8.self)).utf8) }
     let parts = path.split(separator: "/", omittingEmptySubsequences: false)
     guard let at = parts.lastIndex(of: "authored-frames") else { return data }
     let rest = parts[(at + 1)...]

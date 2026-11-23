@@ -150,6 +150,28 @@ public enum StyleSheets {
     }
   }
 
+  /// The rules of the `css-vars` block in 1.3's form (`:root` alone) get their `body` half in both
+  /// files (`VariableOverrides.upgradeSelectors`), written where that changed something: a value set
+  /// before 2026-11-23 reaches only `html` and loses against a core 3 theme until someone saves the
+  /// Variables tab again. Text only, so a block edited by hand keeps everything else.
+  public static func migrateVariableSelectors(project: String) async throws -> Bool {
+    try await ProjectLock.styles.run(project) {
+      var changed = false
+      for path in [customScss(project), managedScss(project)] {
+        let content = exists(path) ? try readText(path) : ""
+        if content.isEmpty { continue }
+        var out = content
+        for span in ManagedBlocks.findBlocks(content, "css-vars").reversed() {
+          out = JSText.slice(out, 0, span.from) + VariableOverrides.upgradeSelectors(JSText.slice(out, span.from, span.to)) + JSText.slice(out, span.to)
+        }
+        if out == content { continue }
+        try writeText(out, to: path)
+        changed = true
+      }
+      return changed
+    }
+  }
+
   /// The font URLs of the `fonts` block made relative in both files, written where that changed
   /// something. Every write does this too, but a project nobody saves in kept `/static/fonts/…`,
   /// which finds nothing on a site under a sub-path (eight of nine projects QuartzControl measured).

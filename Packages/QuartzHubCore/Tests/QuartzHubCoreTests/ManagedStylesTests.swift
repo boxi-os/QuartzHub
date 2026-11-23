@@ -66,10 +66,29 @@ import Testing
                      dark: value["dark"]?.stringValue, lightOnly: value["lightOnly"] == .bool(true))
   }
 
+  /// The `css-vars` rules in 1.3's form: QuartzHub's only change to what QuartzControl writes there
+  /// is the `body` half of each head (decided 2026-11-23, `VariableOverrides`), checked on its own
+  /// (`theBodyHalf…`). Only inside the block, only the exact heads `render` writes.
+  static func cssVarsAsQuartzControl(_ text: String) -> String {
+    var out = text
+    for span in ManagedBlocks.findBlocks(text, "css-vars").reversed() {
+      let block = JSText.replaceAll(JSText.slice(out, span.from, span.to),
+                                    #"(:root(?:\[saved-theme="dark"\]|:not\(\[saved-theme="dark"\]\))?),\n\1 body \{"#, template: "$1 {")
+      out = JSText.slice(out, 0, span.from) + block + JSText.slice(out, span.to)
+    }
+    return out
+  }
+
   @Test func renderAsQuartzControl() throws {
+    let start = ManagedBlocks.markers("css-vars").0, end = ManagedBlocks.markers("css-vars").1
     for entry in try Self.pure()["renders"]?.arrayValue ?? [] {
       let overrides = (entry["overrides"]?.arrayValue ?? []).map(Self.override)
-      #expect(VariableOverrides.render(overrides) == entry["rendered"]?.stringValue, "\(entry["overrides"]!)")
+      let rendered = VariableOverrides.render(overrides)
+      let asQuartzControl = Self.cssVarsAsQuartzControl("\(start)\n\(rendered)\n\(end)")
+      #expect(asQuartzControl == "\(start)\n\(entry["rendered"]?.stringValue ?? "")\n\(end)", "\(entry["overrides"]!)")
+      // Every rule has its body half, and reads back as it was written.
+      #expect(!VariableOverrides.hasPlainRules(rendered))
+      #expect(VariableOverrides.parse(rendered) == VariableOverrides.parse(entry["rendered"]?.stringValue ?? ""))
     }
   }
 
@@ -93,6 +112,117 @@ import Testing
     #expect(await run() == [])
   }
 
+  // MARK: the body half of css-vars (2026-11-23)
+
+  static let plainBlock = """
+    :root {
+      --a: 1px;
+    }
+
+    /* kept */
+    :root[saved-theme='dark']{
+      --a: 2px;
+    }
+    .other { color: red; }
+      :root:not([saved-theme=dark]) {
+      --l: green;
+    }
+    """
+
+  @Test func theBodyHalfIsWrittenAndRead() {
+    let rendered = VariableOverrides.render([
+      VariableOverride(key: "a", light: "1px", dark: "2px"),
+      VariableOverride(key: "l", light: "green", lightOnly: true)
+    ])
+    #expect(rendered == """
+      :root,
+      :root body {
+        --a: 1px;
+      }
+
+      :root[saved-theme="dark"],
+      :root[saved-theme="dark"] body {
+        --a: 2px;
+      }
+
+      :root:not([saved-theme="dark"]),
+      :root:not([saved-theme="dark"]) body {
+        --l: green;
+      }
+      """)
+    // Both forms read the same, a list written by hand too.
+    let expected = [VariableOverride(key: "a", light: "1px", dark: "2px"), VariableOverride(key: "l", light: "green", lightOnly: true)]
+    #expect(VariableOverrides.parse(rendered) == expected)
+    #expect(VariableOverrides.parse(Self.plainBlock) == expected)
+    #expect(VariableOverrides.parse(":root , :root  body{--a:1px;}\n:root[saved-theme=dark],:root[saved-theme=dark]\nbody{--a:2px;}") ==
+            [VariableOverride(key: "a", light: "1px", dark: "2px")])
+    // A rule for body alone is not one of the block's.
+    #expect(VariableOverrides.parse(":root body { --a: 1px; }") == [])
+  }
+
+  @Test func plainRulesGetTheirBodyHalf() {
+    let upgraded = VariableOverrides.upgradeSelectors(Self.plainBlock)
+    #expect(upgraded == """
+      :root,
+      :root body {
+        --a: 1px;
+      }
+
+      /* kept */
+      :root[saved-theme='dark'],
+      :root[saved-theme='dark'] body {
+        --a: 2px;
+      }
+      .other { color: red; }
+        :root:not([saved-theme=dark]),
+        :root:not([saved-theme=dark]) body {
+        --l: green;
+      }
+      """)
+    #expect(VariableOverrides.hasPlainRules(Self.plainBlock))
+    #expect(!VariableOverrides.hasPlainRules(upgraded))
+    #expect(VariableOverrides.upgradeSelectors(upgraded) == upgraded)
+    #expect(VariableOverrides.parse(upgraded) == VariableOverrides.parse(Self.plainBlock))
+  }
+
+  /// Before every build: a block in 1.3's form, in either file, gets its body half; said once.
+  @Test func theBuildDoorUpgradesTheVariables() async throws {
+    let project = "\(scratch.path)/vars"
+    let styles = StyleSheets.stylesDirectory(project)
+    try Posix.mkdirs(styles)
+    let (start, end) = ManagedBlocks.markers("css-vars")
+    let custom = "@use \"./quartzcontrol\";\n:root { --mine: 1; }\n"
+    try Posix.write(StyleSheets.customScss(project), Data(custom.utf8))
+    try Posix.write(StyleSheets.managedScss(project), Data("// head\n\(start)\n\(Self.plainBlock)\n\(end)\n".utf8))
+    func run() async -> [String] {
+      let said = Mutex<[String]>([])
+      for step in BuildService.preparation { await step(project) { stream, text in said.withLock { $0.append("\(stream) \(text)") } } }
+      return said.withLock { $0 }
+    }
+    #expect(await run() == ["stdout \(L10n.t("main.variableSelectorsMigrated"))\n"])
+    let managed = String(decoding: try Posix.read(StyleSheets.managedScss(project)), as: UTF8.self)
+    #expect(managed == "// head\n\(start)\n\(VariableOverrides.upgradeSelectors(Self.plainBlock))\n\(end)\n")
+    // The user's own `:root` outside the block stays as it is.
+    #expect(String(decoding: try Posix.read(StyleSheets.customScss(project)), as: UTF8.self) == custom)
+    #expect(await run() == [])
+  }
+
+  /// Against the new form a plain `:root` of the user's reaches `html` only; a rule with the body
+  /// half at the same specificity comes later and wins. Against 1.3's form, as before.
+  @Test func collisionsKnowTheBodyHalf() {
+    let body = VariableOverrides.render([
+      VariableOverride(key: "a", light: "1"), VariableOverride(key: "d", light: "1", dark: "2"), VariableOverride(key: "l", light: "1", lightOnly: true)
+    ])
+    let (start, end) = ManagedBlocks.markers("css-vars")
+    func hits(_ custom: String, block: String = body) -> [String] {
+      VariableOverrides.collisions(StyleSheets.Sources(custom: custom, managed: "\(start)\n\(block)\n\(end)\n", managedExists: true))
+    }
+    #expect(hits(":root { --a: 9; --d: 9; --l: 9; }") == [])
+    #expect(hits(":root,\n:root body { --a: 9; --l: 9; }") == ["a"])
+    #expect(hits(":root[saved-theme='dark'] body { --d: 9; }\n:root:not([saved-theme=\"dark\"]) body { --l: 9; }") == ["d", "l"])
+    #expect(hits(":root { --a: 9; }", block: ":root {\n  --a: 1;\n}") == ["a"])
+  }
+
   // MARK: steps
 
   @Test(arguments: stepCases)
@@ -107,7 +237,7 @@ import Testing
       try Posix.mkdirs(NodePath.dirname(url))
       try Posix.write(url, Data(tree[path]!.stringValue!.utf8))
     }
-    var before = Self.files(styles)
+    var before = Self.files(styles).mapValues(Self.cssVarsAsQuartzControl)
     for step in golden["steps"]?.arrayValue ?? [] {
       let call = step["call"]!.stringValue!
       let args = step["args"]?.arrayValue ?? []
@@ -117,8 +247,8 @@ import Testing
       } catch {
         result = .object(JSONObject([("threw", .string(String(describing: error)))]))
       }
-      #expect(Self.mask(result, scratch.path) == step["result"], "\(file): \(call)")
-      let after = Self.files(styles)
+      #expect(Self.mask(result, scratch.path) == Self.deviation(file, call, args) ?? step["result"], "\(file): \(call)")
+      let after = Self.files(styles).mapValues(Self.cssVarsAsQuartzControl)
       var changed: [String: String?] = [:]
       for path in Set(before.keys).union(after.keys) where before[path] != after[path] { changed[path] = .some(after[path]) }
       let expected = step["changed"]?.objectValue ?? JSONObject()
@@ -128,6 +258,13 @@ import Testing
       }
       before = after
     }
+  }
+
+  /// Where QuartzHub answers differently from QuartzControl on purpose. gui-test-moved: the user's
+  /// `:root { --new-one: green; }` reaches `html` only once the block has its `body` half, and the
+  /// page's value is what the site shows below it, so it is no collision (`VariableOverrides.collisions`).
+  static func deviation(_ file: String, _ call: String, _ args: [JSONValue]) -> JSONValue? {
+    file == "gui-test-moved" && call == "variableCollisions" ? .array([]) : nil
   }
 
   static func run(_ call: String, _ args: [JSONValue], _ project: String) async throws -> JSONValue {

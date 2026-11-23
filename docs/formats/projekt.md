@@ -160,6 +160,15 @@ als letzter Block steht.
   (`src/routes/Styles/VariableRow.tsx` ~`:181`); im nicht umgezogenen wird stattdessen die dunkle
   Hälfte ausdrücklich mitgeschrieben (Form von 1.0.1). Dasselbe beim Vorlagen-Import:
   `inFormOfTarget` (`parts.ts:212`).
+- **QuartzHub schreibt seit 2026-11-23 jede der drei Regeln mit einer `body`-Hälfte** (Abweichung von 1.3,
+  entschieden vom Nutzer; `VariableOverrides`): `:root,\n:root body { … }`, ebenso
+  `:root[saved-theme="dark"],\n:root[saved-theme="dark"] body` und `:root:not([saved-theme="dark"]),\n:root:not([saved-theme="dark"]) body`.
+  Grund: Ein core-3-Theme setzt seine Variablen auf `body`, ein Wert auf `:root` allein erreicht dann nur
+  `html` (gemessen in WebKit, decisions/phase-5-gleichstand.md, „Variablen gegen ein core-3-Theme“).
+  QuartzHub liest beide Formen; vor jedem Build bekommt ein Block in 1.3s Form die `body`-Hälften
+  (`StyleSheets.migrateVariableSelectors`, nur die Köpfe, der Rest des Blocks bleibt). QuartzControl 1.3
+  liest die neue Form als „keine Variablen“. `variableCollisions` zählt gegen die neue Form nur eine eigene
+  Regel mit `body`-Hälfte; ein eigenes `:root` erreicht dann nur noch `html`.
 
 `plugin-vars` (`PluginVariableOverrides`, **Erweiterung des 1.3-Formats durch QuartzHub**, entschieden 2026-11-21,
 `docs/plan-plugin-variablen.md`): die drei Regelarten von `css-vars`, je vor den Selektor des Plugins gesetzt:
