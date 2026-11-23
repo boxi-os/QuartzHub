@@ -56491,6 +56491,25 @@
         }
       }
     },
+    "styleEditor.current.loader.theme.local" : {
+      "comment" : "CSS reference, what loads fonts: a core 3 theme with its fonts on",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Community-Theme bringt seine eigenen Schriften als Dateien der Website mit."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The community theme brings its own fonts as files of the site."
+          }
+        }
+      }
+    },
     "styleEditor.current.noFace" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -64176,6 +64195,25 @@
         }
       }
     },
+    "themeEditor.delivery.state.theme.local" : {
+      "comment" : "Styles > Basis, what loads fonts: a core 3 theme with its fonts on",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community-Theme: bringt seine Schriften als Dateien der Website mit."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community theme: brings its fonts as files of the site."
+          }
+        }
+      }
+    },
     "themeEditor.delivery.themeFonts" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -64208,6 +64246,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The theme loads its own fonts from unpkg.com, and QuartzHub cannot fetch them into the project. Turned off, they are dropped and the fonts chosen above apply."
+          }
+        }
+      }
+    },
+    "themeEditor.delivery.themeFontsLocalHint" : {
+      "comment" : "Styles > Basis, section „Schriften des Themes“, note while the core 3 theme's fonts are on",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Theme bringt seine eigenen Schriften als Dateien der Website mit, von außen wird nichts geladen. Ausgeschaltet fallen sie weg, und es gelten die Schriften von oben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The theme brings its own fonts as files of the site; nothing is loaded from elsewhere. Turned off, they are dropped and the fonts above apply."
+          }
+        }
+      }
+    },
+    "themeEditor.delivery.themeFontsLocalOff" : {
+      "comment" : "Styles > Basis, section „Schriften des Themes“, note while the core 3 theme's fonts are off",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Schriften des Themes sind abgeschaltet. Dadurch sieht das Theme anders aus als vorgesehen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The theme's fonts are turned off, so the theme looks different from what it intends."
           }
         }
       }

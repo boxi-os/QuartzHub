@@ -262,6 +262,21 @@ struct FontDeliveryTests {
     #expect(FontDelivery.withFontsOnAsBefore(themed).configuration["fonts"]?["interface"] == .string("Noto Serif"))
   }
 
+  /// core 2 loaded a theme's fonts from unpkg; core 3 puts them into the site.
+  @Test func aCore3ThemesFontsAreTheSites() {
+    let theme = { (themeFonts: Bool) in
+      PluginEntry(object: JSONObject([("source", .string("@quartz-themes/core")), ("enabled", .bool(true)),
+                                      ("options", .object(JSONObject([("theme", .string("Catppuccin")), ("themeFonts", .bool(themeFonts))])))]))
+    }
+    let local = [("fontOrigin", JSONValue.string("local"))]
+    let fontsLocal = JSONValue.object(JSONObject([("enabled", .bool(true)), ("fontOrigin", .string("local"))]))
+    let on = Self.config52(theme: local, fonts: fontsLocal, plugins: [theme(true)])
+    #expect(FontDelivery.loaders(on, .quartz521) == [FontDelivery.Loader(via: "theme", mode: "local")])
+    #expect(FontDelivery.loaders(on, .quartz52) == [FontDelivery.Loader(via: "theme", mode: "cdn")])
+    #expect(!FontDelivery.callsGoogle(on, .quartz521))
+    #expect(FontDelivery.loaders(Self.config52(theme: local, fonts: fontsLocal, plugins: [theme(false)]), .quartz521).isEmpty)
+  }
+
   @Test func aLocalProjectKeepsTheBuiltInLocalWhereverItsConfigCameFrom() throws {
     // The demo project after its core update and plugin doctor's move: fonts {enabled: false}.
     let moved = Self.config52(theme: [("fontOrigin", .string("local"))], fonts: .object(JSONObject([("enabled", .bool(false))])))

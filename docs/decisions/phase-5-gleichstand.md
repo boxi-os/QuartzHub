@@ -3415,3 +3415,13 @@ ohne Netz):
   schreibt, mit core 3 nicht an (WebKit: `:root{--light:red}` gibt `html` Rot, `body` behält Catppuccins
   Wert). Mit `:root body` im selben Block kommt er in beiden Modi an. Das ist eine Änderung am
   verwalteten Block und eine Entscheidung des Nutzers, offen.
+- **Wer die Schriften lädt** (`FontDelivery.loaders`): Mit core 3 ist der Lader des Themes `local`, nicht
+  mehr `cdn` (unpkg); Stile ▸ Basis sagt unter „Schriften des Themes“, dass nichts von außen geladen wird.
+  Ein Projekt mit core 2 behält die alten Sätze. Die drei Felder Überschriften, Fließtext und Code heißen
+  „Wird vom aktiven Theme überschrieben“, sobald der Graph `--headerFont`, `--bodyFont`, `--codeFont` dem
+  Theme zuschreibt: Mit Theme-Schriften setzt das Blatt sie auf `:where(body)`, ohne nicht (beide Builds
+  gelesen). Die Oberflächenschrift aus `configuration.fonts` gewinnt dagegen: Quartz schreibt sie in
+  `html body { --font-interface-override }`, und das Theme baut `--font-interface` daraus (WebKit am
+  Build mit `interface: Noto Sans Mono`: `--font-interface` am `body` beginnt mit Noto Sans Mono). Ihr Feld
+  heißt mit core 3 deshalb nur „überschrieben“, solange es leer ist. Angesehen in der App an beiden Kopien
+  (Theme-Schriften an, Oberflächenschrift leer und gesetzt).

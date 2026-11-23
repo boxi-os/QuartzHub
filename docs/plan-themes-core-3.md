@@ -109,6 +109,11 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    Seite nutzt das bei core 3; lädt das Theme nicht, steht cores Satz da.
 4. **Schriften und Variablen** (Kern): `FontDelivery` (Theme-Schriften lokal), `SiteFonts`,
    `VariableGraph` lesen `static/resource-style-*.css` (Schritt 0). `theme.json`-Leser und `themes-golden.mjs` gehen.
+   *Fertig 2026-11-23,* mit drei Abweichungen: `VariableGraph` braucht für core 3 einen kleinen
+   Selektor-Abgleich (`ThemeSelector`), weil das Theme seine Werte mit Obsidians Spezifität auf `body`
+   setzt, nicht auf `:root`. `PluginSchemaReader.themeJSON` und `themes-golden.mjs` bleiben bis Schritt 6,
+   denn `ThemeMarketplace` und der alte Weg der Theme-Seite hängen noch daran. Und gefunden: Werte aus
+   Stile ▸ Variablen (auf `:root`) kommen gegen ein core-3-Theme nicht an, offen als Entscheidung.
 5. **Aufräumen und Vorlagen** (Kern):
    - `ThemeLegacy` findet alte `@quartz-themes/<id>`-Pakete in `package.json` und die übergangenen
      Optionen am Eintrag. Es entfernt sie mit `SnapshotStore.Take` und `npm uninstall`. `theme: default` ist kein Fund mehr (Schritt 0).

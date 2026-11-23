@@ -170,7 +170,11 @@ struct BasicsTab: View {
     if FontDelivery.fontsBuiltin(config, model.features)?.enabled == true {
       fontField("interface", label: L10n.t("themeEditor.fontFor", ["slot": Self.slotTitle("interface")]),
                 variable: FontDelivery.builtinVariable("interface"), name: builtinFamily("interface"),
-                placeholder: L10n.t("themeEditor.interfaceFontDefault"), checkTheme: true) { setBuiltinFamily("interface", $0) }
+                placeholder: L10n.t("themeEditor.interfaceFontDefault"),
+                // core 3 sets `--font-interface` on body as `var(--font-interface-override), …`, and Quartz
+                // fills the override from a font set here: the theme wins only while the field is empty
+                // (measured in WebKit, decisions/phase-5-gleichstand.md, „Schriften und Variablen aus dem Build“).
+                checkTheme: !model.features.themesCore3 || builtinFamily("interface").isEmpty) { setBuiltinFamily("interface", $0) }
       let levels = FontDelivery.builtinSlots.filter { $0 != "interface" }
       let named = levels.filter { !builtinFamily($0).isEmpty }
       Fold(isExpanded: $headingsOpen) {
@@ -365,13 +369,16 @@ struct BasicsTab: View {
     }
   }
 
-  /// Its own control: there is no option to fetch the theme's fonts into the project, so the only
-  /// way to stop the requests to unpkg is to drop them, which changes how the site looks.
+  /// Its own control. Under core 2 there is no option to fetch the theme's fonts into the project, so
+  /// the only way to stop the requests to unpkg is to drop them, which changes how the site looks;
+  /// core 3 puts them into the site itself.
   @ViewBuilder private var themeFontsSection: some View {
     if FontDelivery.themeFontsEnabled(config) || FontDelivery.hasTheme(config) {
       let on = FontDelivery.themeFontsEnabled(config)
+      let core3 = model.features.themesCore3
       SettingsSection(L10n.t("themeEditor.themeFonts.heading"),
-                      note: on ? L10n.t("themeEditor.delivery.themeFontsHint") : L10n.t("themeEditor.delivery.themeFontsOff")) {
+                      note: on ? (core3 ? L10n.t("themeEditor.delivery.themeFontsLocalHint") : L10n.t("themeEditor.delivery.themeFontsHint"))
+                        : (core3 ? L10n.t("themeEditor.delivery.themeFontsLocalOff") : L10n.t("themeEditor.delivery.themeFontsOff"))) {
         Toggle(L10n.t("themeEditor.delivery.themeFonts"), isOn: Binding(get: { on }, set: { model.setConfig(FontDelivery.withThemeFonts(config, $0)) }))
       }
     }
@@ -386,6 +393,7 @@ struct BasicsTab: View {
     case ("plugin", _): L10n.t("themeEditor.delivery.state.plugin.selfHosted")
     case ("builtin", "google"): L10n.t("themeEditor.delivery.state.builtin.google")
     case ("builtin", _): L10n.t("themeEditor.delivery.state.builtin.selfHosted")
+    case ("theme", "local"): L10n.t("themeEditor.delivery.state.theme.local")
     default: L10n.t("themeEditor.delivery.state.theme.cdn")
     }
   }

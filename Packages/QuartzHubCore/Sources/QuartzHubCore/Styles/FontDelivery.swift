@@ -9,7 +9,10 @@ import Foundation
 /// Three things can load a webfont, and QuartzControl's comment says which and how it was
 /// measured: Quartz's own `theme.fontOrigin`/`cdnCaching`, the plugin
 /// `@quartz-community/quartz-fonts` with its own `fontOrigin` (default Google), and a community
-/// theme's own `@font-face` rules on unpkg (off only with `themeFonts: false`).
+/// theme's own `@font-face` rules on unpkg (off only with `themeFonts: false`). core 3 moves a
+/// theme's embedded fonts into the site (`static/plugins/quartz-themes/fonts/`, measured on the demo
+/// with Catppuccin, decisions/phase-5-gleichstand.md, „Schriften und Variablen aus dem Build“): the
+/// theme's loader is `local` there, nothing is fetched from elsewhere.
 ///
 /// Quartz 5.2 builds the plugin in (`configuration.fonts`, `BuiltinProcessing`): a fourth loader,
 /// on by default with Google as its origin, which does not read `theme.fontOrigin` (measured on
@@ -28,7 +31,7 @@ public enum FontDelivery {
   public struct Loader: Equatable, Sendable, Hashable {
     /// `core`, `plugin`, `builtin` (Quartz 5.2's `configuration.fonts`) or `theme`.
     public var via: String
-    /// `google`, `selfHosted` or `cdn`.
+    /// `google`, `selfHosted`, `cdn` (a core 2 theme, unpkg) or `local` (a core 3 theme, files of the site).
     public var mode: String
   }
 
@@ -75,7 +78,7 @@ public enum FontDelivery {
       default: break
       }
     }
-    if themeFontsIndex(config) != nil { loaders.append(Loader(via: "theme", mode: "cdn")) }
+    if themeFontsIndex(config) != nil { loaders.append(Loader(via: "theme", mode: features.themesCore3 ? "local" : "cdn")) }
     return loaders
   }
 

@@ -426,6 +426,7 @@ struct ActiveStylesSection: View {
     case ("plugin", _): L10n.t("styleEditor.current.loader.plugin.selfHosted")
     case ("builtin", "google"): L10n.t("styleEditor.current.loader.builtin.google")
     case ("builtin", _): L10n.t("styleEditor.current.loader.builtin.selfHosted")
+    case ("theme", "local"): L10n.t("styleEditor.current.loader.theme.local")
     default: L10n.t("styleEditor.current.loader.theme.cdn")
     }
   }
