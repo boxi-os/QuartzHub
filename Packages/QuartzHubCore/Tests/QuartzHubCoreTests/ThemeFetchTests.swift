@@ -94,6 +94,38 @@ struct ThemeFetchTests {
     #expect(report["fetchFailed"] == .bool(true))
   }
 
+  /// Theme and snippets, joined as `convertTheme` joins them, go through core's own parser.
+  @Test func styleSettingsAreCoresOverThemeAndSnippets() async throws {
+    try installStandIn()
+    try Posix.mkdirs("\(project)/snippets")
+    try Posix.write("\(project)/snippets/eins.css", Data("p{}".utf8))
+    let (theme, _) = try call(try await fetch([("theme", .string("Minimal")), ("snippets", .array([.string("snippets/eins.css")]))]))
+    #expect(theme.settingsBlocks == [.object(JSONObject([("id", .string("seen")), ("settings", .array([.object(JSONObject([
+      ("id", .string("text")), ("type", .string("info-text")), ("title", .string("body{color:red}\np{}"))]))]))]))])
+    #expect(theme.settingsErrors.isEmpty)
+  }
+
+  @Test func blocksCoreCannotReadComeAsErrors() async throws {
+    try installStandIn()
+    try Posix.write("\(project)/broken.css", Data("/* broken */".utf8))
+    let (theme, _) = try call(try await fetch([("theme", .string("Minimal")), ("snippets", .array([.string("broken.css")]))]))
+    #expect(theme.settingsBlocks.isEmpty && theme.settingsErrors == ["bad indentation of a mapping entry (3:5)"])
+  }
+
+  /// A snippet that cannot be had skips the theme in the build; here it is core's sentence.
+  @Test func aMissingSnippetFailsTheTheme() async throws {
+    try installStandIn()
+    let answer = try await fetch([("theme", .string("Minimal")), ("snippets", .array([.string("fehlt.css")]))])
+    guard case .notLoaded(let sentence) = answer.outcome else { Issue.record("loaded"); return }
+    #expect(sentence.contains("ENOENT") && sentence.contains("fehlt.css"))
+  }
+
+  @Test func anAddressedSnippetFollowsOffline() async throws {
+    try installStandIn()
+    let answer = try await fetch([("theme", .string("Minimal")), ("snippets", .array([.string("https://example.invalid/s.css")]))], offline: true)
+    #expect(answer.outcome == .notLoaded("fetch failed (QuartzHub is offline)"))
+  }
+
   @Test func coresOwnSentenceWhenItCannotLoad() async throws {
     try installStandIn()
     let answer = try await fetch([("theme", .string("Minmal"))])

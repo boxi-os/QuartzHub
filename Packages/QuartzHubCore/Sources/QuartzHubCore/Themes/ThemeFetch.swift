@@ -22,14 +22,22 @@ public enum ThemeFetch {
     public var preset: JSONObject?
     /// The theme's own `theme.css`, unconverted ("" for the built-in theme).
     public var css: String
+    /// The Style Settings blocks core found in the theme and its snippets (`parseStyleSettings`),
+    /// each the YAML document as core read it: the ones the build applies values to.
+    public var settingsBlocks: [JSONValue]
+    /// The first line of each block core could not read.
+    public var settingsErrors: [String]
 
-    public init(name: String, modes: [String]? = nil, version: String? = nil, source: String, preset: JSONObject? = nil, css: String) {
+    public init(name: String, modes: [String]? = nil, version: String? = nil, source: String, preset: JSONObject? = nil, css: String,
+                settingsBlocks: [JSONValue] = [], settingsErrors: [String] = []) {
       self.name = name
       self.modes = modes
       self.version = version
       self.source = source
       self.preset = preset
       self.css = css
+      self.settingsBlocks = settingsBlocks
+      self.settingsErrors = settingsErrors
     }
   }
 
@@ -68,8 +76,9 @@ public enum ThemeFetch {
   }
 
   /// `options` are the entry's options as they stand in quartz.config.yaml; the helper takes from
-  /// them what the build takes (`theme`, `variation`, `version`, `cacheDir`, `cacheHours`).
-  /// Downloads at most the registry, a manifest and a stylesheet, each with core's 20 s.
+  /// them what the build takes (`theme`, `variation`, `version`, `cacheDir`, `cacheHours`,
+  /// `snippets`). Downloads at most the registry, a manifest, a stylesheet and the snippets given as
+  /// addresses, each with core's 20 s; a snippet that cannot be had fails the theme, as in the build.
   public static func fetch(project: String, options: JSONObject, offline: Bool = Offline.isOn,
                            runtime: RuntimeLocation = .current) async throws(Failure) -> Answer {
     if let unpacking = ProjectDependencies.halfUnpackedModule(project: project, "@quartz-themes/core") {
@@ -101,12 +110,15 @@ public enum ThemeFetch {
           let source = theme["source"]?.stringValue, let css = theme["css"]?.stringValue else {
       throw .helper("no theme")
     }
+    let settings = answer["settings"]?.objectValue
     return Answer(coreVersion: coreVersion, outcome: .loaded(Theme(
       name: name,
       modes: theme["modes"]?.arrayValue?.compactMap(\.stringValue),
       version: theme["version"]?.stringValue,
       source: source,
       preset: theme["styleSettings"]?.objectValue,
-      css: css)))
+      css: css,
+      settingsBlocks: settings?["sections"]?.arrayValue ?? [],
+      settingsErrors: settings?["errors"]?.arrayValue?.compactMap(\.stringValue) ?? [])))
   }
 }

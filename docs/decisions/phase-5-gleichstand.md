@@ -3325,3 +3325,24 @@ Gelesen aus der Liste selbst und aus core 3.1.1 (`getRegistry`, `resolveTheme`):
   zählt als keiner.
 - Die Liste lädt QuartzHub weiter von `…/master/…`, core von `…/HEAD/…`; beide zeigen auf denselben
   Branch. Der Golden-Lauf hält `master`.
+
+**Style Settings aus core (Schritt 3, 2026-11-23).** Welche `@settings`-Blöcke ein Theme hat, liest
+jetzt core selbst: `theme-fetch` ruft nach `resolveTheme` cores `parseStyleSettings` über denselben
+Text, den `convertTheme` beim Build liest (Theme und `snippets`, mit Zeilenumbruch verbunden). Die
+Funktion ist seit 3.0.0 exportiert und in 3.0.0, 3.1.0 und 3.1.1 wortgleich (aus den Paketen gelesen).
+Die `snippets` holt der Helfer wie `QuartzTheme` über `resolveSnippet` mit denselben Optionen; einer,
+der fehlt, lässt das Theme scheitern wie im Build. Gemessen an der Wegwerf-Kopie (core 3.1.1, aus dem
+Cache, ohne Netz), gegen QuartzControls Regel (eigener Ausdruck, `yaml`, `id` oder `name`):
+
+| Theme | core 3 | QuartzControls Regel |
+|---|---|---|
+| Minimal 9.1.4 | 3 Blöcke, 266 Einstellungen | keiner (Tabs im YAML) |
+| Tokyo Night 1.1.8 | 2 Blöcke, 184 | 1 Block, 37 (der zweite mit Tabs) |
+| Things 2.2.6 | 1 Block, 72 | keiner |
+| Catppuccin 0.4.52 (2,3 MB) | 9 Blöcke, 38 | dieselben 9 |
+| Nord, Obsidian default | keiner | keiner |
+
+Ein Aufruf des Helfers samt Einlesen dauert 50–80 ms, auch für Catppuccin. Ein eigener Cache im Profil
+lohnt dafür nicht: Das `theme.css` hält cores Cache im Projekt schon nach Quelle und Version
+(`<owner>_<repo>@<version>.theme.css`). Das weicht vom Plan ab („`theme-docs/` nach Quelle und
+Version“).

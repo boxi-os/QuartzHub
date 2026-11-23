@@ -7,8 +7,9 @@
 //       → { core: "missing" }                      no @quartz-themes/core installed
 //       → { core: "broken", error }                installed, does not load
 //       → { core: "old", coreVersion }             loads, has no resolveTheme (2.x)
-//       → { core: "3", coreVersion, theme: {…} }   resolved: name, modes, version, source,
-//                                                  styleSettings (the preset of a 2.x id), css
+//       → { core: "3", coreVersion, theme: {…},    resolved: name, modes, version, source,
+//           settings: { sections, errors } }       styleSettings (the preset of a 2.x id), css;
+//                                                  the Style Settings blocks core found itself
 //       → { core: "3", coreVersion, failed }       core's own message (a typo with its three
 //                                                  suggestions, offline and not cached, …)
 //
@@ -18,6 +19,12 @@
 // `resolveTheme`. The build runs in the project folder, so a relative `cacheDir` and a local theme
 // path resolve there; so does this helper. With `offline` (QuartzHub's `-QHOffline`) core gets a
 // fetch that fails as a closed network does, and answers from its cache alone.
+//
+// Then, as `QuartzTheme` does, the `snippets` (paths or URLs) through `resolveSnippet` with the same
+// options, all or nothing: one that cannot be had fails the theme, as it skips the plugin in the
+// build. The Style Settings blocks of theme and snippets are core's `parseStyleSettings` over the
+// same text `convertTheme` reads (`[themeCss, ...snippets].join("\n")`): which blocks count, with
+// which ids, is core's rule (a YAML parser of its own, tabs, `id` required), not QuartzHub's.
 //
 // The project's core runs in this short child process, as content-files runs the project's globby.
 import { readFileSync } from 'node:fs'
@@ -34,7 +41,11 @@ type Resolved = {
   source: string
   version?: string
 }
-type Core = { resolveTheme?: (spec: string, opts: Record<string, unknown>) => Promise<Resolved> }
+type Core = {
+  resolveTheme?: (spec: string, opts: Record<string, unknown>) => Promise<Resolved>
+  resolveSnippet?: (spec: string, opts: Record<string, unknown>) => Promise<string>
+  parseStyleSettings?: (css: string) => { sections: unknown[]; errors: string[] }
+}
 
 // The package is ESM with an `import`-only export map, which `require.resolve` does not follow;
 // its package.json is exported, and the entry is read from there.
@@ -84,6 +95,14 @@ runHelper(async (request) => {
   if (r.offline === true) sourceOpts.fetch = offlineFetch
   try {
     const theme = await core.resolveTheme(spec as string, sourceOpts)
+    const resolveSnippet = core.resolveSnippet
+    const snippets = await Promise.all(
+      ((options.snippets as string[] | undefined) ?? []).map((s) => {
+        if (typeof resolveSnippet !== 'function') throw new Error('this @quartz-themes/core has no resolveSnippet')
+        return resolveSnippet(s, sourceOpts)
+      })
+    )
+    const settings = typeof core.parseStyleSettings === 'function' ? core.parseStyleSettings([theme.css, ...snippets].join('\n')) : null
     return {
       core: '3',
       coreVersion: found.version,
@@ -94,7 +113,8 @@ runHelper(async (request) => {
         source: theme.source,
         styleSettings: theme.styleSettings ?? null,
         css: theme.css
-      }
+      },
+      settings
     }
   } catch (err) {
     return { core: '3', coreVersion: found.version, failed: err instanceof Error ? err.message : String(err) }

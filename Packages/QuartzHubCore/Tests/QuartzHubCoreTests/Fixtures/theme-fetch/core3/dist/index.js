@@ -28,3 +28,19 @@ export async function resolveTheme(spec, opts = {}) {
     version: opts.version,
   };
 }
+
+// As core: a URL through the cache with `opts.fetch`, anything else a file relative to the cwd.
+export async function resolveSnippet(spec, opts = {}) {
+  if (/^https?:\/\//.test(spec)) {
+    const response = await (opts.fetch ?? fetch)(spec);
+    return await response.text();
+  }
+  return fs.readFileSync(path.resolve(spec), "utf8");
+}
+
+// Not core's parser: one section that shows the text it was given, so the test sees what went in.
+export function parseStyleSettings(css) {
+  if (css.includes("broken"))
+    return { sections: [], errors: ["bad indentation of a mapping entry (3:5)"] };
+  return { sections: [{ id: "seen", settings: [{ id: "text", type: "info-text", title: css }] }], errors: [] };
+}
