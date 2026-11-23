@@ -65702,6 +65702,25 @@
         }
       }
     },
+    "themeLegacy.snapshotLabel" : {
+      "comment" : "Snapshot label before Community-Themes clears core 2 packages, options and colour keys",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altes Theme-Zubehör entfernt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Old theme leftovers removed"
+          }
+        }
+      }
+    },
     "themes.active.checkingStyleSettings" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
