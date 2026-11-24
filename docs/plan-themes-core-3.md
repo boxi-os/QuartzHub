@@ -154,6 +154,11 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
      `2-projekte/05-die-einstellungen` und `4-einrichtung/01-website` über Themes steht.
    - Die Aufnahmen für 5.6 kommen vom Demo-Projekt auf 5.2.2 (vorher `handbook-demo.sh` nachziehen).
    - Danach `qh-check handbook` und die Prüfung auf Persönliches.
+   *Fertig 2026-11-24* (6fb426d Skripte, Vault c8828c9). 5.6 neu mit zwei Aufnahmen (`stile-themes`, `stile-themes-katalog`).
+   Angepasst wurden 5.1 (Werte auf `body`), 5.5 (Theme-Schriften als Dateien), 5.9, 2.5, 7.4, 8.2, 8.3 und 8.5.
+   3.1 und 4.1 stimmen weiter. `handbook-demo.sh` merged jetzt v5.2.2 in die Kopie, ohne QuartzHub-Web
+   anzufassen, das selbst noch auf 5.2.0 mit core 2 steht. `qh-check handbook` und die Prüfung auf Persönliches
+   sind ohne Befund. Die beiden veralteten Ausnahmen (`tokyo-night`, `repo`) sind entfernt.
 9. **Abschluss**: Rauchtest, App in Hell und Dunkel angesehen. Prüfen, ob die Vorlagen qc-basic und
    qc-example ein Theme mitbringen.
 
