@@ -66008,13 +66008,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Eine Farbe in QuartzControls dreiteiliger Form"
+                  "value" : "Eine Farbe in der dreiteiligen Form einer älteren Fassung"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} Farben in QuartzControls dreiteiliger Form"
+                  "value" : "{{count}} Farben in der dreiteiligen Form einer älteren Fassung"
                 }
               }
             }
@@ -66026,13 +66026,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "One color in QuartzControl's three-part form"
+                  "value" : "One color in the three-part form of an older version"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "{{count}} colors in QuartzControl's three-part form"
+                  "value" : "{{count}} colors in the three-part form of an older version"
                 }
               }
             }
