@@ -161,6 +161,14 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    sind ohne Befund. Die beiden veralteten Ausnahmen (`tokyo-night`, `repo`) sind entfernt.
 9. **Abschluss**: Rauchtest, App in Hell und Dunkel angesehen. Prüfen, ob die Vorlagen qc-basic und
    qc-example ein Theme mitbringen.
+   *Fertig 2026-11-24.* Rauchtest grün (30 UI-Tests, einer ohne `TEST_RUNNER_QH_SERVER_PROJECT` übersprungen,
+   766 Kerntests). Community-Themes in Dunkel mit `handbook-shots.sh --theme dark` angesehen (Theme des Projekts
+   geladen, Catppuccin im Inspektor), Hell von den Aufnahmen aus Schritt 8. core 3.1.1 ist weiter die neueste Fassung.
+   Beide Vorlagen bringen Minimal mit, ausgeschaltet, Modus beide, ohne Theme-Schriften; mit core 3 gilt das
+   unverändert, der Teil „Theme“ schreibt nur den Eintrag. Ihre Presets tragen noch `fonts`, das beim Anwenden
+   herausfällt (`ThemeLegacy.ignoredOptions`), und ihr Manifest nennt noch core 2.0.1 und `@quartz-themes/minimal`
+   unter `requires`, was beim Anwenden niemand liest. Das richtet sich beim nächsten Neuerzeugen der Vorlagen
+   (docs/release.md, Punkt 10); geprüft am Code und an den Paketen, nicht durch echtes Anwenden.
 
 ## Offen und Risiken
 
