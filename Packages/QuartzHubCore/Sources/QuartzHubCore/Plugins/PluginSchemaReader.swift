@@ -352,52 +352,6 @@ public final class PluginSchemaReader: Sendable {
     default: return nil
     }
   }
-
-  // MARK: themes
-
-  /// The Obsidian Style Settings ids a ported theme declared, and its class keys (there is no
-  /// title or type next to them, so a form can only offer switches). Nil when the theme is not
-  /// installed or its theme.json cannot be read.
-  public static func themeStyleSettings(project: String, themeId: String) -> ThemeStyleSettingsInfo? {
-    guard let theme = themeJSON(project: project, themeId: themeId) else { return nil }
-    let ids = styleSettingsIds(theme)
-    guard !ids.isEmpty else { return ThemeStyleSettingsInfo(styleSettingsId: [], classSettingKeys: []) }
-    let keys: [String] = switch theme.objectValue?["classSettings"] {
-    case .object(let object)?: object.keys
-    case .array(let list)?: list.indices.map(String.init)
-    case .string(let text)?: Array(0..<text.utf16.count).map(String.init)
-    default: []
-    }
-    return ThemeStyleSettingsInfo(styleSettingsId: ids, classSettingKeys: keys)
-  }
-
-  /// The fuller shape for the theme catalog's detail panel; local only.
-  public static func localThemeDetail(project: String, themeId: String) -> ThemeDetail? {
-    guard let theme = themeJSON(project: project, themeId: themeId) else { return nil }
-    let meta = theme.objectValue?["meta"]?.objectValue
-    let strings = { (key: String) in meta?[key]?.arrayValue?.compactMap(\.stringValue) ?? [] }
-    return ThemeDetail(modes: strings("modes"), variations: strings("variations"), styleSettingsId: styleSettingsIds(theme), fonts: strings("fonts"))
-  }
-
-  static func styleSettingsIds(_ theme: JSONValue) -> [String] {
-    switch theme.objectValue?["meta"]?.objectValue?["styleSettingsId"] {
-    case .array(let list)?: list.compactMap(\.stringValue)
-    case .string(let id)?: [id]
-    default: []
-    }
-  }
-
-  /// `node_modules/@quartz-themes/<id>/theme.json`; nil for an id QuartzControl's channel refused
-  /// (`^[a-z0-9][a-z0-9._-]*$`, at most 128), a file that is not there or not JSON, and a JSON
-  /// value JavaScript calls falsy.
-  static func themeJSON(project: String, themeId: String) -> JSONValue? {
-    guard themeId.utf16.count <= 128, themeId.wholeMatch(of: themeIdPattern) != nil else { return nil }
-    let path = "\(project)/node_modules/@quartz-themes/\(themeId)/theme.json"
-    guard FileManager.default.fileExists(atPath: path), let value = try? JSJSON.parse(try readFile(path)), JS.truthy(value) else { return nil }
-    return value
-  }
-
-  nonisolated(unsafe) static let themeIdPattern = #/[a-z0-9][a-z0-9._-]*/#.matchingSemantics(.unicodeScalar)
 }
 
 /// What QuartzHub answers for one plugin.
@@ -434,14 +388,8 @@ public struct PluginOptionSchemaResult: Equatable, Sendable {
   }
 }
 
+/// The Style Settings ids of a theme and the class keys it ships (`StyleSettingsSchema.info`).
 public struct ThemeStyleSettingsInfo: Equatable, Sendable {
   public var styleSettingsId: [String]
   public var classSettingKeys: [String]
-}
-
-public struct ThemeDetail: Equatable, Sendable {
-  public var modes: [String]
-  public var variations: [String]
-  public var styleSettingsId: [String]
-  public var fonts: [String]
 }

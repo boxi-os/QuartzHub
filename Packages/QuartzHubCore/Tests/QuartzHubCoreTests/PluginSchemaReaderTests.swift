@@ -53,20 +53,8 @@ struct PluginSchemaReaderTests {
       let expected = frames["expected"]!.objectValue!
       #expect(found == Dictionary(uniqueKeysWithValues: expected.keys.map { ($0, expected[$0]!.stringValue!) }))
     }
-
-    for theme in spec["themes"]?.arrayValue ?? [] {
-      let id = theme["id"]!.stringValue!
-      let info = PluginSchemaReader.themeStyleSettings(project: project.path, themeId: id).map {
-        JSONValue.object(JSONObject([("styleSettingsId", .array($0.styleSettingsId.map(JSONValue.string))),
-                                     ("classSettingKeys", .array($0.classSettingKeys.map(JSONValue.string)))]))
-      } ?? .null
-      let detail = PluginSchemaReader.localThemeDetail(project: project.path, themeId: id).map {
-        JSONValue.object(JSONObject([("modes", .array($0.modes.map(JSONValue.string))), ("variations", .array($0.variations.map(JSONValue.string))),
-                                     ("styleSettingsId", .array($0.styleSettingsId.map(JSONValue.string))), ("fonts", .array($0.fonts.map(JSONValue.string)))]))
-      } ?? .null
-      #expect(info == theme["info"], "\(id)")
-      #expect(detail == theme["detail"], "\(id)")
-    }
+    // The golden's `themes` (theme.json of a core 2 package) has no reader any more: core 3 loads
+    // every theme itself (docs/plan-themes-core-3.md, step 6).
   }
 
   @Test func handMadePackagesAsQuartzControl() async throws {
