@@ -97,35 +97,38 @@ struct ThemeTab: View {
 
   private var list: some View {
     let themes = filtered
+    // Once per drawing: for a name core does not know, finding it compares every slug of the list,
+    // and asked per row that was 1064 × 1064 on the main thread (measured, the tab hung for ~10 s).
+    let active = theme.activeRow
     return List(selection: $selection) {
       // The project's theme first, whatever its source; the rest below it once.
-      if let active = theme.activeRow {
+      if let active {
         Section(L10n.t("themes.list.mineHeading")) {
           if active == ThemeModel.builtInRow {
-            builtInRow
+            builtInRow(active)
           } else if active == ThemeModel.otherRow, let spec = theme.spec {
-            otherRow(spec)
+            otherRow(spec, active)
           } else if let item = theme.catalogTheme {
-            catalogRow(item)
+            catalogRow(item, active)
           }
         }
       }
       Section(L10n.t("themes.list.catalogHeading")) {
-        if theme.activeRow != ThemeModel.builtInRow, StylesModel.trim(query).isEmpty { builtInRow }
+        if active != ThemeModel.builtInRow, StylesModel.trim(query).isEmpty { builtInRow(active) }
         if theme.listing == nil {
           Text(theme.catalogLoading ? L10n.t("themes.loading") : L10n.t("themes.catalog.noResults")).foregroundStyle(.secondary)
             .selectionDisabled()
         } else if themes.isEmpty {
           Text(L10n.t("themes.catalog.noResults")).foregroundStyle(.secondary).selectionDisabled()
         }
-        ForEach(themes.filter { $0.name != theme.activeRow }) { catalogRow($0) }
+        ForEach(themes.filter { $0.name != active }) { catalogRow($0, active) }
       }
     }
     .accessibilityIdentifier("themes.list")
   }
 
-  @ViewBuilder private func badge(_ row: String) -> some View {
-    if theme.activeRow == row {
+  @ViewBuilder private func badge(_ row: String, _ active: String?) -> some View {
+    if active == row {
       if theme.enabled {
         StateBadge(text: L10n.t("themes.catalog.active"), color: .green)
       } else {
@@ -134,28 +137,28 @@ struct ThemeTab: View {
     }
   }
 
-  private var builtInRow: some View {
+  private func builtInRow(_ active: String?) -> some View {
     ThemeRow(picture: .symbol("circle.lefthalf.filled"), name: L10n.t("themes.list.builtIn"), detail: L10n.t("themes.list.builtInDetail"),
-             modes: ["dark", "light"], legacy: false) { badge(ThemeModel.builtInRow) }
+             modes: ["dark", "light"], legacy: false) { badge(ThemeModel.builtInRow, active) }
       .tag(ThemeModel.builtInRow)
       .accessibilityIdentifier("themes.row.builtin")
   }
 
-  private func otherRow(_ spec: String) -> some View {
+  private func otherRow(_ spec: String, _ active: String?) -> some View {
     let kind = ThemeSource.kind(of: spec)
     let name: String = if case .loaded(let loaded) = theme.load { loaded.name } else { ThemeSource.display(spec) }
     return ThemeRow(picture: .symbol(ThemeTab.symbol(kind)), name: name, detail: "\(ThemeTab.title(kind)) · \(ThemeSource.display(spec))",
                     modes: { if case .loaded(let loaded) = theme.load { loaded.modes ?? [] } else { [] } }(), legacy: false) {
-      badge(ThemeModel.otherRow)
+      badge(ThemeModel.otherRow, active)
     }
     .tag(ThemeModel.otherRow)
     .accessibilityIdentifier("themes.row.other")
   }
 
-  private func catalogRow(_ item: ThemeCatalog.Theme) -> some View {
+  private func catalogRow(_ item: ThemeCatalog.Theme, _ active: String?) -> some View {
     ThemeRow(picture: item.screenshotURL.map { .screenshot($0) } ?? .none, name: item.name,
              detail: item.author.map { L10n.t("themes.list.byAuthor", ["author": $0]) }, modes: item.modes, legacy: item.legacy) {
-      badge(item.name)
+      badge(item.name, active)
     }
     .tag(item.name)
     .accessibilityIdentifier("themes.row.\(item.name)")
