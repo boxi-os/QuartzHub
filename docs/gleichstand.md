@@ -35,17 +35,18 @@ zu `gemessen` mit dem Testnamen als Beleg.
 
 Die Teile wurden aus den Quellen zusammengestellt (nur lesend), die Stände aus den
 Entscheidungs-Dokus übernommen; gemessen wurde dafür nichts Neues. Die Zahlen sind aus den Teilen
-gezählt, zuletzt am 2026-11-13 nach den vier Handbuch-Zeilen (decisions/phase-5-gleichstand.md, „Die App verweist aufs Handbuch“); davor am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Die letzte `gebaut`-Zeile, die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, ist beim echten ersten Start des Nutzers gemessen (2026-11-11); keine Zeile steht mehr auf `gebaut`. Am 2026-11-14 kamen die vier Zeilen der Übernahme aus QuartzControl und des Bands neben ihm heraus: beide Funktionen sind entfernt (decisions/phase-5-gleichstand.md, „QuartzControl verschwindet“).
+gezählt, zuletzt am 2026-11-13 nach den vier Handbuch-Zeilen (decisions/phase-5-gleichstand.md, „Die App verweist aufs Handbuch“); davor am 2026-11-11 nach den letzten gebaut-Zeilen (decisions/phase-5-gleichstand.md, „Die letzten gebaut-Zeilen“). Die letzte `gebaut`-Zeile, die abgelehnte Schlüsselbund-Abfrage bei der Übernahme, ist beim echten ersten Start des Nutzers gemessen (2026-11-11); keine Zeile steht mehr auf `gebaut`. Am 2026-11-14 kamen die vier Zeilen der Übernahme aus QuartzControl und des Bands neben ihm heraus: beide Funktionen sind entfernt (decisions/phase-5-gleichstand.md, „QuartzControl verschwindet“). Am 2026-11-24 wurden sechs Zeilen der Community-Themes zu `anders` (Obsidians Liste statt npm, **Verwenden** statt Installieren, kein Doku-Cache, Presets ohne Installation); die übrigen sieben sind an der neuen Seite nachgemessen (decisions/phase-5-gleichstand.md, „themes-core 3: Messung vor dem Bau“).
 
 | Teil | gemessen | gebaut | anders | Netz | fehlt | Zeilen |
 |---|---|---|---|---|---|---|
 | Einrichtung | 190 | 0 | 22 | 0 | 0 | 212 |
 | Plugins und Wartung | 254 | 0 | 7 | 0 | 0 | 261 |
-| Gestaltung und Veröffentlichen | 234 | 0 | 9 | 0 | 0 | 243 |
-| **Summe** | **678** | **0** | **38** | **0** | **0** | **716** |
+| Gestaltung und Veröffentlichen | 228 | 0 | 15 | 0 | 0 | 243 |
+| **Summe** | **672** | **0** | **44** | **0** | **0** | **716** |
 
-Die Kanäle: 160 mit Gegenstück in Kern und App, 19 bewusst anders (Fortschritt und Protokoll über
-Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI), einer nur im Kern (`books:read`, den
+Die Kanäle: 155 mit Gegenstück in Kern und App, 24 bewusst anders (Fortschritt und Protokoll über
+Rückrufe und Streams, Dialoge über AppKit, Menü über SwiftUI; seit 2026-11-24 fünf Theme-Kanäle, die mit core 3
+kein npm und keinen Doku-Cache mehr brauchen), einer nur im Kern (`books:read`, den
 auch QuartzControls Oberfläche nie aufruft); keiner fehlt mehr (`dialog:openHandbook` und
 `appUpdate:check`, dieser anders, kamen am 2026-11-13).
 

@@ -3,7 +3,7 @@
 Quelle der Kanäle: `QuartzControl/shared/ipc-contract.ts` (`export const IPC`, 180 Einträge), Handler in
 `QuartzControl/electron/main/ipc/handlers.ts` (Menü-Ereignisse in `electron/main/menu.ts`). QC-Dienste liegen
 unter `electron/main/services/`. QuartzHub-Kern relativ zu `Packages/QuartzHubCore/Sources/QuartzHubCore/`,
-App relativ zum Repo. Stand: Commit 5b11af1, nur gelesen, nichts gebaut oder gestartet.
+App relativ zum Repo. Stand: Commit 5b11af1, nur gelesen, nichts gebaut oder gestartet; die Theme-Kanäle nachgezogen am 2026-11-24 (core 3, decisions/phase-5-gleichstand.md, „themes-core 3: Messung vor dem Bau“).
 
 Status: `da` = Kern und App-Aufruf gefunden · `nur Kern` = Kern ohne App-Aufruf · `anders` = absichtlich
 anders gelöst · `fehlt` = nichts gefunden.
@@ -73,16 +73,16 @@ anders gelöst · `fehlt` = nichts gefunden.
 | `forms:relayExport` | `formsService.ts:relayExport` | `Publishing/Forms/FormsRelay.swift:385` `export(to:)` | `App/Pages/Plugins/FormsRelaySection.swift:581` | da |
 | `forms:relayRemove` | `formsService.ts:relayRemove` | `Publishing/Forms/FormsRelay.swift:406` `remove` | `App/Pages/Plugins/FormsRelaySection.swift:595` | da |
 | `forms:relayExcludeFromSite` | `formsService.ts:excludeFromSite` | `Publishing/Forms/FormsRelay.swift:456` `excludeFromSite` | `App/Pages/Plugins/FormsRelaySection.swift:544` | da |
-| `plugin:themeStyleSettingsInfo` | `pluginSchemaService.ts:getThemeStyleSettingsInfo` | `Plugins/PluginSchemaReader.swift:361` `themeStyleSettings` | `App/Pages/Styles/ThemeTab.swift:176` | da |
-| `themeMarketplace:list` | `themeMarketplaceService.ts:listThemes` | `Themes/ThemeMarketplace.swift:117` `list` | `App/Pages/Styles/ThemeTab.swift:350` | da |
-| `themeMarketplace:install` | `themeMarketplaceService.ts:installTheme` | `Themes/ThemeMarketplace.swift:169` `install` | `App/Pages/Styles/ThemeTab.swift:406`, `:278` | da |
-| `themeMarketplace:detail` | `themeMarketplaceService.ts:getThemeDetail` | `Themes/ThemeMarketplace.swift:144` `detail` | `App/Pages/Styles/ThemeTab.swift:396` | da |
-| `themeMarketplace:styleSettingsSchema` | `styleSettingsSchemaService.ts:getStyleSettingsSchema` | `Themes/StyleSettingsSchema.swift:172` `schema(themeId:)` | `App/Pages/Styles/ThemeTab.swift:182` | da |
-| `themeMarketplace:refreshStyleSettingsSchema` | `styleSettingsSchemaService.ts:clearStyleSettingsSchemaCache` + `getStyleSettingsSchema` | `Themes/StyleSettingsSchema.swift:224` `clearCache(themeId:)` + `schema` | `App/Pages/Styles/ThemeTab.swift:192-193` | da |
-| `themeMarketplace:refresh` | `themeMarketplaceService.ts:invalidateCache` | `Themes/ThemeMarketplace.swift:136` `invalidate` | `App/Pages/Styles/ThemeTab.swift:309` | da |
-| `themePreset:list` | `themePresetsService.ts:listPresets` | `Themes/ThemePresets.swift:7` `ThemePresets.list` | `App/Pages/Styles/ThemeTab.swift:272` | da |
-| `themePreset:save` | `themePresetsService.ts:savePreset` | `Themes/ThemePresets.swift:12` `save` | `App/Pages/Styles/ThemeTab.swift:162` | da |
-| `themePreset:delete` | `themePresetsService.ts:deletePreset` | `Themes/ThemePresets.swift:18` `delete` | `App/Pages/Styles/ThemeTab.swift:290` | da |
+| `plugin:themeStyleSettingsInfo` | `pluginSchemaService.ts:getThemeStyleSettingsInfo` | `Themes/StyleSettingsSchema.swift:214` `info(of:)` | `App/Pages/Styles/ThemeModel.swift:171` | da |
+| `themeMarketplace:list` | `themeMarketplaceService.ts:listThemes` | `Themes/ThemeCatalog.swift:86` `list` | `App/Pages/Styles/ThemeModel.swift:141` (aus `ThemeTab.swift:35`) | anders (Obsidians Liste statt `npm search`, 2026-11-24) |
+| `themeMarketplace:install` | `themeMarketplaceService.ts:installTheme` | `Themes/ThemeFetch.swift:82` `fetch` (lädt vorab) | `App/Pages/Styles/ThemeModel.swift:105` `use` | anders (kein npm: **Verwenden** schreibt `theme:`, core lädt beim Build, 2026-11-24) |
+| `themeMarketplace:detail` | `themeMarketplaceService.ts:getThemeDetail` | `Themes/ThemeCatalog.swift:86` (der Eintrag der Liste) | `App/Pages/Styles/ThemeInspector.swift:6` `ThemeInspector` | anders (kein `theme.json` mehr, 2026-11-24) |
+| `themeMarketplace:styleSettingsSchema` | `styleSettingsSchemaService.ts:getStyleSettingsSchema` | `Themes/ThemeFetch.swift:82` `fetch` + `Themes/StyleSettingsSchema.swift:194` `schema(of:)` | `App/Pages/Styles/ThemeModel.swift:158`, `:170` | anders (core liest das Schema aus dem `theme.css` des Builds, 2026-11-23) |
+| `themeMarketplace:refreshStyleSettingsSchema` | `styleSettingsSchemaService.ts:clearStyleSettingsSchemaCache` + `getStyleSettingsSchema` | `Themes/StyleSettingsSchema.swift:269` `clearCache(themeId:)` (nur noch im Golden-Replay) | – | anders (kein Doku-Cache, das Schema kommt mit dem Theme, 2026-11-23) |
+| `themeMarketplace:refresh` | `themeMarketplaceService.ts:invalidateCache` | `Themes/ThemeCatalog.swift:95` `invalidate` | `App/Pages/Styles/ThemeModel.swift:140` (aus `ThemeTab.swift:45`) | da |
+| `themePreset:list` | `themePresetsService.ts:listPresets` | `Themes/ThemePresets.swift:7` `ThemePresets.list` | `App/Pages/Styles/ThemeModel.swift:178` | da |
+| `themePreset:save` | `themePresetsService.ts:savePreset` | `Themes/ThemePresets.swift:12` `save` | `App/Pages/Styles/ThemeInspector.swift:398` | da |
+| `themePreset:delete` | `themePresetsService.ts:deletePreset` | `Themes/ThemePresets.swift:18` `delete` | `App/Pages/Styles/ThemeInspector.swift:414` | da |
 | `plugin:installFromLock` | `pluginService.ts:installFromLock` | `Plugins/PluginCommands.swift:82` `installFromLock` | `App/Pages/Plugins/PluginsModel.swift:314`, `App/Pages/Overview/OverviewModel.swift:170` | da |
 | `plugin:prune` | `pluginService.ts:prunePlugins` | `Plugins/PluginCommands.swift:61` `prune` | `App/Pages/Plugins/PluginsModel.swift:315` | da |
 
@@ -292,9 +292,9 @@ anders gelöst · `fehlt` = nichts gefunden.
 |---|---|---|---|---|
 | `settings:get` | `settingsService.ts:getSettings` | `Formats/SettingsStore.swift:10` `SettingsStore.read` | `App/Settings/SettingsWindow.swift:52`, `App/Shell/ServerLifecycle.swift:35` | da |
 | `settings:save` | `settingsService.ts:saveSettings` + `applyTheme`/`applyAppMenu`/`applyRuntimeMode` | `Formats/SettingsStore.swift:15` `SettingsStore.update` | `App/Settings/SettingsWindow.swift:57`, `App/Shell/ServerLifecycle.swift:153` | da |
-| `settings:appInfo` | `settingsService.ts:getAppInfo` (Version, Profilpfad, Cache-Größe, unlesbare Dateien) | Einzelteile: `Storage/JSONStore.swift` `quarantinedFiles`, `Themes/StyleSettingsSchema.swift:202` `cacheStats` | `App/Settings/SettingsWindow.swift:246`, `:270`, `:278`, `:285` (Bundle-Version direkt) | anders (die App liest die Teile einzeln, kein Sammelaufruf) |
+| `settings:appInfo` | `settingsService.ts:getAppInfo` (Version, Profilpfad, Cache-Größe, unlesbare Dateien) | Einzelteile: `Storage/JSONStore.swift` `quarantinedFiles`, `Themes/StyleSettingsSchema.swift:247` `cacheStats` | `App/Settings/SettingsWindow.swift:246`, `:270`, `:278`, `:285` (Bundle-Version direkt) | anders (die App liest die Teile einzeln, kein Sammelaufruf) |
 | `settings:environment` | `environmentService.ts:getEnvironmentInfo` | `Environment/EnvironmentReport.swift:37` `EnvironmentReport.probe` | `App/Settings/SettingsWindow.swift:221`, `App/Projects/ProjectsModel.swift:38` | da |
-| `settings:clearThemeDocsCache` | `styleSettingsSchemaService.ts:clearThemeDocsCache` | `Themes/StyleSettingsSchema.swift:214` `clearCache()` | `App/Settings/SettingsWindow.swift:269` | da |
+| `settings:clearThemeDocsCache` | `styleSettingsSchemaService.ts:clearThemeDocsCache` | `Themes/StyleSettingsSchema.swift:259` `clearCache()` | `App/Settings/SettingsWindow.swift:277` | da |
 
 ## dialog
 

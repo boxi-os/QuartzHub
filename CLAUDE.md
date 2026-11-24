@@ -60,7 +60,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
 - `swift run --package-path Packages/QuartzHubCore qh-check export-document <build> <ordner> --config <quartz.config.yaml> [--formats …] [--cancel-after <s>]` —
   der Export wie „Jetzt veröffentlichen“ (Wegwerf-Projekt, Buch über die ganze Website, Ziel „Dokument“, `Deploy.run`), ohne Netz;
   die Dateien heißen `check-export.*` und gehen an dasselbe `check:export -- --files`
-- `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text
+- `node scripts/strings.mjs add <schlüssel> --de "…" --en "…" [--comment "…"]` — neuer Text; `remove <schlüssel> …` nimmt
+  Texte heraus, die kein Aufruf mehr nennt (`qh-check i18n --unused` listet sie)
 - `scripts/handbook-demo.sh` — Demo-Projekt für die Handbuch-Aufnahmen unter `/Users/Shared/QuartzHub-Demo`
   (Kopie von QuartzHub-Web, Inhalt aus dem Vault kopiert, Profile für hell und dunkel, neutrale git-Identität,
   quartz-forms aus GitHub mit zwei Formularen, die nichts senden; braucht dafür Netz)
@@ -162,7 +163,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   NSTextView mit TextKit 2 ohne Paket, Umsortieren mit `onMove` und Befehlen (Messgeschirr in
   `docs/decisions/phase-4-harness/`). 4c läuft: Übersicht und Vorschau & Build fertig, Konfiguration (Website und Übersetzungen, dazu ⌘S und die Frage beim Verlassen); Plugins läuft (Installiert mit der Options-Form und Anordnen ▸ Nach oben/unten, Marktplatz, Navigationen mit der Vorschau `EditorPreview`, Zusätzliche Inhalte mit den Snippet-Feldern und dem Code-Editor `CodeEditor`, Mehrsprachigkeit, Formulare mit `FormUsages`, Feld-Editor, Schlüsseln, Texten und Relay über `AppDeploy`). Plugins ist damit fertig. Updates fertig (der Lauf gehört dem Projekt, nicht der Seite). Snapshots fertig (der offene Snapshot im Inspektor, der Unterschied im Sheet). Git-Sync fertig. Stile fertig: Basis, Community-Themes, Variablen, Eigenes CSS (dazu `CssColor`, `VariableResolve`, `VariableEditing`, `FontDelivery`, `StyleSettingsValues` im Kern). Layout fertig: Übersicht, Komponenten (die Bühne), Frames (dazu `LayoutBoard`, `PageTypeOverride`, `LayoutStage`, `StageGeometry`, `FrameEditing` im Kern). Vorlagen fertig (Erstellen und Anwenden, ein Modell je Projekt). Veröffentlichen fertig (Ziele, Diff, Lauf, GitHub Pages; dazu der Reiter „Zugänge“ in den Einstellungen). Dokumente fertig (Bücher, Seitenreihenfolge, Einstellungen im Inspektor); damit sind alle Seiten portiert.
 - **Phase 5 (Gleichstand und Release) läuft seit 2026-11-09.** Gleichstand-Liste als Rohfassung
-  (`docs/gleichstand.md`: 720 Zeilen, 682 gemessen, 38 anders, keine fehlt, keine nur gebaut); danach Lücken schließen und messen.
+  (`docs/gleichstand.md`: 716 Zeilen, 672 gemessen, 44 anders, keine fehlt, keine nur gebaut); danach Lücken schließen und messen.
   Rauchtest und Ansehen ohne Netz mit `-QHNoUpdateCheck YES` (nur Debug). Erste Review-Runde
   (`docs/REVIEW-2026-11-11.md`) abgearbeitet: alle neun Befunde und die elf Nebenbei-Punkte,
   Chronik in `docs/reviews.md`. Zweite Runde (`docs/REVIEW-2026-11-11-2.md`, die 60 Commits danach)
@@ -203,6 +204,12 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   lokal bleibt lokal auch für den eingebauten Teil (beim Speichern und vor jedem Build); Oberflächenschrift und Schrift je
   Überschrift unter Stile ▸ Basis; Export stylt `<div>`-Callouts; `QUARTZ_CONFIG_PATH` erben die Kindprozesse nicht; Vorlage
   qc-basic und quartz-multilanguage 0.3.1 angepasst. Kommt mit 1.1.0.
+- **Community-Themes mit `@quartz-themes/core` 3 seit 2026-11-24** ([`plan-themes-core-3.md`](docs/plan-themes-core-3.md)):
+  Quartz lädt jedes Theme aus Obsidians Liste selbst, kein npm-Paket je Theme mehr. QuartzHub fragt das core des Projekts
+  (Helfer `theme-fetch`), was ein Eintrag lädt, und liest daraus die Style Settings; der Reiter ist eine Liste mit Vorschaubildern
+  (`ThemeCatalog`, `ThemeScreenshots`), das Theme des Projekts mit Quelle, Version, Snippets und Modus im Inspektor
+  (`ThemeSource`); Altes räumt `ThemeLegacy` ab; ein übersprungenes Theme meldet Vorschau & Build (`ThemeBuildLog`).
+  Ohne core 3 nur der Weg zu Updates. `themes-golden.mjs` vergleicht nur noch Presets und Style Settings mit QuartzControl.
 
 ## Arbeitsweise
 

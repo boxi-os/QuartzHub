@@ -3513,3 +3513,27 @@ und „nur Hell“ (`:root:not([saved-theme="dark"])`). Damit weicht QuartzHub v
   `PluginSchemaReader`. Abweichung von QuartzControl: Das Golden-Replay der Themes überspringt die Schritte
   des Marktplatzes; Presets und Style Settings vergleicht es weiter mit QuartzControls Ausgabe. Presets
   wenden ihre Optionen ohne Installation an und lassen `calloutStyle`, `fonts`, `aspects`, `include` weg.
+
+**Abweichung von QuartzControl, Texte und Gleichstand (Schritt 7, 2026-11-24).**
+
+- **Was anders ist als in QuartzControl 1.3:** Dort war ein Community-Theme ein npm-Paket
+  `@quartz-themes/<id>` neben core 2; der Katalog kam aus `npm search`, die Details (Varianten, Farben,
+  Schriften) aus dessen `theme.json`, „Installieren & aktivieren“ rief `npm install`, die Beschreibungen der
+  Style Settings lagen als Doku-Cache im Profil. Mit core 3 lädt Quartz jedes Theme aus Obsidians Liste
+  selbst: Der Katalog ist diese Liste, **Verwenden** schreibt nur `theme:`, das Schema liest core aus dem
+  `theme.css` des Builds, Presets wenden ihre Optionen ohne Installation an. Dazu kommt, was es in
+  QuartzControl nicht gab: Quellen außerhalb der Liste, `version`, `snippets`, „Aufräumen“, die Meldung in
+  Vorschau & Build. Die Dateien bleiben in QuartzControls Form (`theme-presets.json`, der Eintrag in der
+  Config); was core 3 übergeht, räumt `ThemeLegacy` ab.
+- **Gleichstand:** Von den 13 Zeilen der Community-Themes stehen sechs jetzt auf `anders` (Katalog,
+  Details, Katalog nicht ladbar, Installieren, Doku neu laden, Preset anwenden). Die übrigen sieben sind an
+  der neuen Seite nachgemessen (Kopie des Demo-Projekts, Quartz 5.2.2, core 3.1.1, Catppuccin): Deaktivieren
+  und Wieder aktivieren ändern nach ⌘S nur `enabled`; die Suche „italic“ lässt eine Option; „Zurücksetzen“
+  nimmt genau einen Schlüssel aus `styleSettings`; Atom (kein `@settings`) zeigt „Das Theme Atom bietet keine
+  eigenen Farbeinstellungen an.“; „Als Preset speichern“ schreibt den Eintrag mit `baseThemeId: Catppuccin`;
+  Löschen fragt und nimmt nur den einen Eintrag. Bei den Kanälen sind fünf `themeMarketplace:*` jetzt
+  `anders`.
+- **Texte:** 27 Schlüssel der alten Seite sind aus dem Katalog (`strings.mjs remove`, neu; welche, sagt
+  `qh-check i18n --unused`: die, die vor Schritt 1 ein Aufruf nannte und jetzt keiner). Die Zeile zu den
+  dreiteiligen Farben im Kasten „Aufräumen“ sagt „einer älteren Fassung“ statt „QuartzControls“, wie seit
+  „QuartzControl verschwindet“ jeder Hinweis auf ein altes Format.

@@ -144,6 +144,10 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    - `decisions/phase-5-gleichstand.md` mit den Messungen und der Abweichung von QuartzControl.
    - In `gleichstand.md` werden die Zeilen zu den Themes zu „anders“.
    - In `CLAUDE.md` gehen die Golden-Liste und der Stand.
+   *Fertig 2026-11-24* (67ab0ae Texte weg, d756eb5 Farbzeile, dann die Doku). 27 alte Schlüssel entfernt, dafür
+   kann `strings.mjs` jetzt `remove`. Von den 13 Gleichstand-Zeilen stehen sechs auf „anders“, die sieben übrigen sind an
+   der neuen Seite nachgemessen; fünf Theme-Kanäle sind „anders“. Die Golden-Liste bleibt: `themes-golden.mjs` liefert
+   weiter Presets und Style Settings.
 8. **Handbuch** (de und en):
    - `5-gestaltung/06-community-themes` neu schreiben.
    - Prüfen, was in `05-stile-basis`, `09-vorlagen`, `01-die-ebenen`, `3-uebersicht/01-die-uebersicht`,
