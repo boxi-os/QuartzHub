@@ -292,7 +292,7 @@ anders gelöst · `fehlt` = nichts gefunden.
 |---|---|---|---|---|
 | `settings:get` | `settingsService.ts:getSettings` | `Formats/SettingsStore.swift:10` `SettingsStore.read` | `App/Settings/SettingsWindow.swift:52`, `App/Shell/ServerLifecycle.swift:35` | da |
 | `settings:save` | `settingsService.ts:saveSettings` + `applyTheme`/`applyAppMenu`/`applyRuntimeMode` | `Formats/SettingsStore.swift:15` `SettingsStore.update` | `App/Settings/SettingsWindow.swift:57`, `App/Shell/ServerLifecycle.swift:153` | da |
-| `settings:appInfo` | `settingsService.ts:getAppInfo` (Version, Profilpfad, Cache-Größe, unlesbare Dateien) | Einzelteile: `Storage/JSONStore.swift` `quarantinedFiles`, `Themes/StyleSettingsSchema.swift:247` `cacheStats` | `App/Settings/SettingsWindow.swift:246`, `:270`, `:278`, `:285` (Bundle-Version direkt) | anders (die App liest die Teile einzeln, kein Sammelaufruf) |
+| `settings:appInfo` | `settingsService.ts:getAppInfo` (Version, Profilpfad, Cache-Größe, unlesbare Dateien) | Einzelteile: `Storage/JSONStore.swift` `quarantinedFiles`, `Themes/StyleSettingsSchema.swift:247` `cacheStats`, `Themes/ThemeScreenshots.swift:99` `cacheStats` | `App/Settings/SettingsWindow.swift:252` (Liste und Vorschaubilder zusammen), `:261`, `:302` (Bundle-Version direkt) | anders (die App liest die Teile einzeln, kein Sammelaufruf) |
 | `settings:environment` | `environmentService.ts:getEnvironmentInfo` | `Environment/EnvironmentReport.swift:37` `EnvironmentReport.probe` | `App/Settings/SettingsWindow.swift:221`, `App/Projects/ProjectsModel.swift:38` | da |
 | `settings:clearThemeDocsCache` | `styleSettingsSchemaService.ts:clearThemeDocsCache` | `Themes/StyleSettingsSchema.swift:259` `clearCache()` | `App/Settings/SettingsWindow.swift:277` | da |
 

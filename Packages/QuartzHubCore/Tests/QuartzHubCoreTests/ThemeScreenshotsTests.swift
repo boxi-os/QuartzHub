@@ -120,6 +120,20 @@ struct ThemeScreenshotsTests {
     #expect(requests == 2)
   }
 
+  /// Settings ▸ Daten & Wartung counts the kept pictures and clears them, memory included.
+  @Test func clearingForgetsTheCopiesAndTheMemory() async throws {
+    let shots = screenshots()
+    #expect(await shots.cacheStats().entries == 0)
+    serve(Self.png(width: 100, height: 100))
+    let data = try #require(await shots.image(Self.address))
+    let stats = await shots.cacheStats()
+    #expect(stats.entries == 1 && stats.bytes == data.count)
+    #expect(await shots.clearCache() == 1)
+    #expect(await shots.cacheStats().entries == 0)
+    _ = await shots.image(Self.address)
+    #expect(requests == 2)
+  }
+
   @Test func onlyPicturesWithinTheLimit() async throws {
     #expect(ThemeScreenshots.scale(Data("<svg xmlns='http://www.w3.org/2000/svg'/>".utf8)) == nil)
     #expect(ThemeScreenshots.scale(Self.png(width: ThemeScreenshots.maxSourcePixels + 1, height: 1)) == nil)

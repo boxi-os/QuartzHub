@@ -244,7 +244,15 @@ private struct RuntimeSettings: View {
 private struct MaintenanceSettings: View {
   @State private var cache: (entries: Int, bytes: Int)?
   @State private var clearing = false
-  private let schema = StyleSettingsSchema(profile: AppProfile.own)
+  /// The Community-Themes tab's list and pictures, so clearing also reaches what those hold in memory.
+  private let schema = StyleSettingsSchema(profile: AppProfile.own, catalog: ThemeServices.catalog)
+  private let screenshots = ThemeServices.screenshots
+
+  /// The list and the old option descriptions (`theme-docs/`), and the preview pictures under it.
+  private func readCache() async -> (entries: Int, bytes: Int) {
+    let documents = await schema.cacheStats(), pictures = await screenshots.cacheStats()
+    return (documents.entries + pictures.entries, documents.bytes + pictures.bytes)
+  }
 
   var body: some View {
     Form {
@@ -275,7 +283,8 @@ private struct MaintenanceSettings: View {
           clearing = true
           Task {
             _ = await schema.clearCache()
-            cache = await schema.cacheStats()
+            _ = await screenshots.clearCache()
+            cache = await readCache()
             clearing = false
           }
         }
@@ -296,6 +305,6 @@ private struct MaintenanceSettings: View {
       }
     }
     .formStyle(.grouped)
-    .task { cache = await schema.cacheStats() }
+    .task { cache = await readCache() }
   }
 }

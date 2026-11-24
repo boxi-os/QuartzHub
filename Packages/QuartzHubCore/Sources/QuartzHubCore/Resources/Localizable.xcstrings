@@ -51603,13 +51603,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Theme-Dokumentation"
+            "value" : "Community-Themes"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Theme documentation"
+            "value" : "Community themes"
           }
         }
       }
@@ -51621,13 +51621,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beschriftungen und Beschreibungen der Optionen von Community-Themes, einmal von GitHub geholt und dauerhaft aufbewahrt. Leeren erzwingt ein erneutes Laden."
+            "value" : "Obsidians Theme-Liste und die Vorschaubilder der Themes, von GitHub geholt und aufbewahrt, damit die Liste auch ohne Netz erscheint. Leeren lässt QuartzHub beides neu holen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Labels and descriptions for community theme options, fetched from GitHub once and kept permanently. Clearing forces a fresh fetch."
+            "value" : "Obsidian's theme list and the themes' preview pictures, fetched from GitHub and kept so the list also shows without a connection. Clearing makes QuartzHub fetch both again."
           }
         }
       }

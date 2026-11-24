@@ -95,6 +95,31 @@ public actor ThemeScreenshots {
     while memoryOrder.count > Self.memoryLimit { memory[memoryOrder.removeFirst()] = nil }
   }
 
+  /// Number and size of the kept pictures, for the Settings page; creates nothing.
+  public func cacheStats() -> (entries: Int, bytes: Int) {
+    var entries = 0, bytes = 0
+    for entry in LayoutFrames.directoryEntriesWithKind(directory) where entry.kind == .file {
+      var info = stat()
+      guard stat(NodePath.join(directory, entry.name), &info) == 0, info.st_size > 0 else { continue }
+      entries += 1
+      bytes += Int(info.st_size)
+    }
+    return (entries, bytes)
+  }
+
+  /// Removes the kept pictures and forgets the ones in memory and the failed addresses, so each is
+  /// fetched again when its row appears; the number of files removed.
+  public func clearCache() -> Int {
+    memory = [:]
+    memoryOrder = []
+    failed = [:]
+    var removed = 0
+    for entry in LayoutFrames.directoryEntriesWithKind(directory) where entry.kind == .file && JSText.endsWith(entry.name, ".jpg") {
+      if unlink(NodePath.join(directory, entry.name)) == 0 { removed += 1 }
+    }
+    return removed
+  }
+
   /// The picture scaled to `maxPixels` on its long side (never up), as a JPEG; nil for anything
   /// ImageIO does not read as an image or whose header names more than `maxSourcePixels` a side.
   static func scale(_ data: Data) -> Data? {
