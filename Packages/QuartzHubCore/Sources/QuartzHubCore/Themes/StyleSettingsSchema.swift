@@ -13,7 +13,10 @@ import Foundation
 /// the same folder; clearing one answer or all makes it ask the network again.
 ///
 /// With core 3 the schema comes from the theme core loaded (`schema(of:)`), with core's own reading
-/// of the blocks; the lookup by id above goes with the `@quartz-themes/<id>` page (plan step 6).
+/// of the blocks. The lookup by id above (`schema(themeId:)`) has no caller in the app since the
+/// `@quartz-themes/<id>` page went (plan step 6); it stays, internal, because `ThemesTests` replays
+/// QuartzControl's steps through it, and that is what checks the field reader `schema(of:)` shares.
+/// The cache's size and clearing serve Settings ▸ Daten & Wartung: the list and old answers.
 public actor StyleSettingsSchema {
   /// Clear of the largest real theme.css (Ultra Lobster, 4.35 MB).
   static let maxCssBytes = 16 * 1024 * 1024
@@ -155,7 +158,8 @@ public actor StyleSettingsSchema {
   }
 
   /// The labelled schema of a theme's Style Settings, or `.null` when there is none to be had.
-  public func schema(themeId: String) async throws -> JSONValue {
+  /// Only for `ThemesTests` (see the type's comment).
+  func schema(themeId: String) async throws -> JSONValue {
     try Self.check(themeId)
     let file = "\(cacheDirectory())/\(themeId).json"
     if let data = try? Posix.read(file), let cached = try? JSJSON.parse(data) { return cached }
@@ -265,8 +269,9 @@ public actor StyleSettingsSchema {
     return removed
   }
 
-  /// One theme's answer forgotten: an emptied file reads as "not cached".
-  public func clearCache(themeId: String) async throws {
+  /// One theme's answer forgotten: an emptied file reads as "not cached". Only for the tests, as
+  /// `schema(themeId:)`.
+  func clearCache(themeId: String) async throws {
     try Self.check(themeId)
     await catalog.invalidate()
     try? Posix.write("\(cacheDirectory())/\(themeId).json", Data())
