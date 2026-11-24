@@ -386,7 +386,9 @@ struct BuildServerPage: View {
       outputRows(now: now)
       outputDirField
       if let result = model.buildResult {
-        Text(BuildServerModel.resultLine(result)).font(.callout).foregroundStyle(result.success ? .green : .red)
+        let noTheme = BuildServerModel.themeSkipped(logs)
+        Text(BuildServerModel.resultLine(result, themeSkipped: noTheme)).font(.callout)
+          .foregroundStyle(!result.success ? .red : noTheme ? .orange : .green)
       }
     } header: {
       SectionHeader(title: L10n.t("buildServer.oneOffBuild"), symbol: "hammer") { EmptyView() }

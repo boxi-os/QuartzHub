@@ -125,7 +125,7 @@ final class BuildServerModel {
     switch await BuildAction.run(projectId: project.id, project: project.path, outputDir: outputDir.isEmpty ? nil : outputDir) {
     case .finished(let result):
       BuildMonitor.shared.setBuildResult(project.id, result)
-      Announce.post(resultLine(result))
+      Announce.post(resultLine(result, themeSkipped: themeSkipped(BuildMonitor.shared.logs(project.id))))
       return result
     case .refused(let message):
       // Into the build console, where the reader is already looking (QuartzControl's choice here).
@@ -137,13 +137,20 @@ final class BuildServerModel {
     }
   }
 
-  static func resultLine(_ result: BuildService.Result) -> String {
+  /// The last build's console skipped `@quartz-themes/core` (`ThemeBuildLog`): it went through,
+  /// but the site has no theme, and the result line must not say only "Erfolgreich".
+  static func themeSkipped(_ logs: ProjectLogs) -> Bool {
+    ThemeBuildLog.skippedReason(logs.build.lines.map(\.text)) != nil
+  }
+
+  static func resultLine(_ result: BuildService.Result, themeSkipped: Bool = false) -> String {
     if let missing = result.missingDependencies {
       return L10n.t("buildServer.resultNotRun", ["names": missing.prefix(3).joined(separator: ", ") + (missing.count > 3 ? " …" : "")])
     }
     let seconds = Double(result.duration.components.seconds) + Double(result.duration.components.attoseconds) / 1e18
+    let status = !result.success ? L10n.t("buildServer.failed") : themeSkipped ? L10n.t("buildServer.successNoTheme") : L10n.t("buildServer.success")
     return L10n.t("buildServer.resultLine", [
-      "status": result.success ? L10n.t("buildServer.success") : L10n.t("buildServer.failed"),
+      "status": status,
       "seconds": seconds.formatted(.number.precision(.fractionLength(1)).locale(Locale(identifier: L10n.language)))
     ])
   }

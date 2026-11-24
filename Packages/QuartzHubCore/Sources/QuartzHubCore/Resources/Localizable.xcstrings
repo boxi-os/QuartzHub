@@ -2816,6 +2816,25 @@
         }
       }
     },
+    "buildServer.successNoTheme" : {
+      "comment" : "Vorschau & Build, inspector: status in buildServer.resultLine when the build went through but skipped the community theme",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Theme gebaut"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Built without theme"
+          }
+        }
+      }
+    },
     "buildServer.themeSkipped" : {
       "comment" : "Vorschau & Build: callout when the log says @quartz-themes/core was skipped",
       "extractionState" : "manual",
