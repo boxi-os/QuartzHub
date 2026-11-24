@@ -5,6 +5,8 @@
 //   node scripts/strings.mjs set <schlüssel> --de "…" --en "…"   (ändert einen vorhandenen Text,
 //     der Kommentar bleibt, wenn keiner angegeben ist; Muster beim Umstellen auf „QuartzHub“)
 //   node scripts/strings.mjs show <schlüssel>
+//   node scripts/strings.mjs remove <schlüssel> [<schlüssel> …]   (Texte, die kein Aufruf mehr nennt;
+//     welche das sind, listet `qh-check i18n --unused`)
 //   node scripts/strings.mjs normalize   (nur sortieren und jeden Eintrag „manual“ markieren)
 //
 // Jeder Eintrag trägt `"extractionState" : "manual"`: Die Texte kommen über `L10n.t`, das Xcodes
@@ -29,7 +31,7 @@ const fail = (message) => {
   console.error(message)
   process.exit(2)
 }
-if (!command || (!key && command !== 'normalize')) fail('Aufruf: node scripts/strings.mjs add|set|show <schlüssel> … oder normalize')
+if (!command || (!key && command !== 'normalize')) fail('Aufruf: node scripts/strings.mjs add|set|show|remove <schlüssel> … oder normalize')
 
 const catalog = JSON.parse(readFileSync(file, 'utf-8'))
 // Xcode's order of an entry's keys, alphabetical: comment, extractionState, generatesSymbol, localizations.
@@ -47,6 +49,15 @@ if (command === 'normalize') {
 }
 if (command === 'show') {
   console.log(JSON.stringify(catalog.strings[key] ?? null, null, 2))
+  process.exit(0)
+}
+if (command === 'remove') {
+  const keys = [key, ...rest]
+  const missing = keys.filter((k) => !catalog.strings[k])
+  if (missing.length) fail(`gibt es nicht: ${missing.join(', ')}`)
+  for (const k of keys) delete catalog.strings[k]
+  write()
+  console.log(`${keys.length} entfernt`)
   process.exit(0)
 }
 if (command !== 'add' && command !== 'set') fail(`unbekannter Befehl ${command}`)

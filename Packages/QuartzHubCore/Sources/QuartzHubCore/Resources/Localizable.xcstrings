@@ -57999,42 +57999,6 @@
         }
       }
     },
-    "styles.styleSettings.loading" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lade Beschreibungen zu den Optionen…"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading option descriptions…"
-          }
-        }
-      }
-    },
-    "styles.styleSettings.refresh" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doku neu laden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reload docs"
-          }
-        }
-      }
-    },
     "styles.styleSettings.reset" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -58146,24 +58110,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "— theme default —"
-          }
-        }
-      }
-    },
-    "styles.styleSettings.unavailable" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zu diesem Theme sind keine Beschreibungen auffindbar: Es hat keinen Eintrag im Obsidian-Theme-Verzeichnis oder bringt keinen @settings-Block mit. Darum hier nur die rohen Schalter."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No descriptions could be found for this theme: it has no entry in the Obsidian theme registry, or ships no @settings block. Only the raw switches are shown here."
           }
         }
       }
@@ -65779,42 +65725,6 @@
         }
       }
     },
-    "themes.active.checkingStyleSettings" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prüfe Style-Settings des Themes…"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Checking the theme’s style settings…"
-          }
-        }
-      }
-    },
-    "themes.active.disabledHeading" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Community-Theme deaktiviert ({{themeId}})"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Community theme disabled ({{themeId}})"
-          }
-        }
-      }
-    },
     "themes.active.disabledNote" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -65851,24 +65761,6 @@
         }
       }
     },
-    "themes.active.heading" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktuelles Theme: {{themeId}}"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Current theme: {{themeId}}"
-          }
-        }
-      }
-    },
     "themes.active.noStyleSettingsNote" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -65883,24 +65775,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The theme {{themeId}} doesn’t offer its own color settings."
-          }
-        }
-      }
-    },
-    "themes.active.none" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Community-Theme aktiv: Es gelten deine Farben und Schriften aus „Stile → Basis“."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No community theme active: your colors and fonts from “Styles → Basics” apply."
           }
         }
       }
@@ -65920,24 +65794,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The theme could not be loaded: {{reason}}"
-          }
-        }
-      }
-    },
-    "themes.active.overrideNote" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieses Plugin ({{source}}) überschreibt die Farben aus der Basis-Ebene. Deine Variablen werden danach geladen und gehen ihm deshalb vor."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This plugin ({{source}}) overrides the colors from the Basics layer. Your variables load after it and so take precedence."
           }
         }
       }
@@ -66014,42 +65870,6 @@
         }
       }
     },
-    "themes.active.styleSettingsHeading" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Style-Settings ({{ids}})"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Style settings ({{ids}})"
-          }
-        }
-      }
-    },
-    "themes.active.title" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktuelles Theme"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Current theme"
-          }
-        }
-      }
-    },
     "themes.allDisabled" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -66086,96 +65906,6 @@
         }
       }
     },
-    "themes.catalog.customColorsLabel" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eigene Farben anpassbar: {{value}}"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Custom colors adjustable: {{value}}"
-          }
-        }
-      }
-    },
-    "themes.catalog.description" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorgefertigte Farbschemata aus dem @quartz-themes-Ökosystem (installiert und aktiviert das Plugin @quartz-themes/core mit dem gewählten Theme)."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ready-made color schemes from the @quartz-themes ecosystem (installs and activates the @quartz-themes/core plugin with the chosen theme)."
-          }
-        }
-      }
-    },
-    "themes.catalog.detailLoading" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lade Details…"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading details…"
-          }
-        }
-      }
-    },
-    "themes.catalog.detailNone" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Details verfügbar."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No details available."
-          }
-        }
-      }
-    },
-    "themes.catalog.fonts" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schriftarten: {{fonts}}"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fonts: {{fonts}}"
-          }
-        }
-      }
-    },
     "themes.catalog.github" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -66190,132 +65920,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "GitHub: {{text}}"
-          }
-        }
-      }
-    },
-    "themes.catalog.install" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Installieren & aktivieren"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Install & activate"
-          }
-        }
-      }
-    },
-    "themes.catalog.installFailed" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Installation von „{{id}}“ fehlgeschlagen: {{output}}"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Installation of “{{id}}” failed: {{output}}"
-          }
-        }
-      }
-    },
-    "themes.catalog.installSuccess" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "„{{id}}“ installiert und aktiviert. Zum Übernehmen oben auf „Speichern“ klicken."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "“{{id}}” installed and activated. Click “Save” above to apply it."
-          }
-        }
-      }
-    },
-    "themes.catalog.installing" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Installiere…"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Installing…"
-          }
-        }
-      }
-    },
-    "themes.catalog.modes" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modi: {{modes}}"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modes: {{modes}}"
-          }
-        }
-      }
-    },
-    "themes.catalog.moreResults" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} weitere Treffer. Weiter tippen zum Filtern."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} more results. Keep typing to filter."
-          }
-        }
-      }
-    },
-    "themes.catalog.no" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nein"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No"
           }
         }
       }
@@ -66370,96 +65974,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loading…"
-          }
-        }
-      }
-    },
-    "themes.catalog.searchPlaceholder" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Theme suchen (z. B. tokyo-night, catppuccin, nord)…"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search themes (e.g. tokyo-night, catppuccin, nord)…"
-          }
-        }
-      }
-    },
-    "themes.catalog.title" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Katalog"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Catalog"
-          }
-        }
-      }
-    },
-    "themes.catalog.unavailable" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Theme-Liste konnte nicht geladen werden, unten stehen nur ein paar bekannte Themes als Platzhalter. „Neu laden“ versucht es noch einmal."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The theme list could not be loaded, so only a few well-known themes stand below as placeholders. “Reload” tries again."
-          }
-        }
-      }
-    },
-    "themes.catalog.variations" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Varianten: {{variations}}"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Variations: {{variations}}"
-          }
-        }
-      }
-    },
-    "themes.catalog.yes" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ja"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yes"
           }
         }
       }
