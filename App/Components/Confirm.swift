@@ -55,10 +55,12 @@ extension Confirm {
 /// One file from the open panel, as a path with the disk's bytes (Posix.path), or nil.
 @MainActor
 enum FilePick {
-  static func one(extensions: [String], message: String) -> String? {
+  /// `start` is the folder the panel opens in; `folders` lets a folder be the answer too.
+  static func one(extensions: [String], message: String, start: String? = nil, folders: Bool = false) -> String? {
     let panel = NSOpenPanel()
     panel.canChooseFiles = true
-    panel.canChooseDirectories = false
+    panel.canChooseDirectories = folders
+    if let start { panel.directoryURL = URL(fileURLWithPath: start, isDirectory: true) } // path boundary
     panel.allowsMultipleSelection = false
     panel.allowedContentTypes = extensions.compactMap { UTType(filenameExtension: $0) }
     panel.message = message

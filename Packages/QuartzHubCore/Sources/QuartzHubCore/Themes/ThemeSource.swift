@@ -17,10 +17,15 @@ public enum ThemeSource {
   /// (decisions/phase-5-gleichstand.md, „themes-core 3: Messung vor dem Bau“).
   static let addressQuery = "?quartzhub"
 
+  /// Obsidian's built-in theme (`default`, `obsidian`, `Obsidian default`), core's `BUILT_IN`.
+  public static func isBuiltIn(_ spec: String) -> Bool {
+    ThemeCatalog.builtIn.contains(JS.trim(spec).lowercased())
+  }
+
   /// The kind core sees in a `theme:` value. The built-in theme is the catalog's.
   public static func kind(of spec: String) -> Kind {
     let trimmed = JS.trim(spec)
-    if ThemeCatalog.builtIn.contains(trimmed.lowercased()) { return .catalog }
+    if isBuiltIn(trimmed) { return .catalog }
     if JSText.test(trimmed, pathPattern) || trimmed.hasSuffix(".css") { return .file }
     if JSText.test(trimmed, #"\Ahttps?://"#) { return .address }
     if JSText.test(trimmed, repoPattern) { return .repo }
@@ -75,6 +80,6 @@ public enum ThemeSource {
   /// the list or a repo.
   public static func takesVersion(_ spec: String) -> Bool {
     let trimmed = JS.trim(spec)
-    return kind(of: trimmed) == .repo || (kind(of: trimmed) == .catalog && !ThemeCatalog.builtIn.contains(trimmed.lowercased()))
+    return kind(of: trimmed) == .repo || (kind(of: trimmed) == .catalog && !isBuiltIn(trimmed))
   }
 }

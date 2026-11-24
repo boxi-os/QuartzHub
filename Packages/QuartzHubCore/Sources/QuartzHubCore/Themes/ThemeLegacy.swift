@@ -129,3 +129,8 @@ public enum ThemeLegacy {
     return outcome
   }
 }
+
+extension ThemeLegacy.Findings {
+  /// Nothing found.
+  public static let none = ThemeLegacy.Findings()
+}

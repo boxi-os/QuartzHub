@@ -16,7 +16,7 @@ struct StylesPage: View {
   @State private var savedRound = 0
   @SceneStorage("styles.theme.selected") private var themeSelected: String?
   @SceneStorage("styles.themeCatalog.query") private var themeQuery = ""
-  @State private var themeCatalog: ThemeMarketplace.Catalog?
+  @State private var themeModel: ThemeModel
   @SceneStorage("styles.vars.selected") private var varSelected: String?
   @SceneStorage("styles.vars.openGroups") private var varOpenGroups = "baseColors"
   @SceneStorage("styles.allVars.open") private var varAllOpen = false
@@ -41,7 +41,9 @@ struct StylesPage: View {
 
   init(project: ProjectContext) {
     self.project = project
-    _model = State(initialValue: StylesModel(project: project))
+    let model = StylesModel(project: project)
+    _model = State(initialValue: model)
+    _themeModel = State(initialValue: ThemeModel(styles: model))
   }
 
   private var tab: StylesModel.Tab { StylesModel.Tab(rawValue: tabID) ?? .basics }
@@ -53,6 +55,11 @@ struct StylesPage: View {
       // PageTabs makes them a menu there, or the window grows past its frame (seen at 1000 × 700).
       .pageTabs(StylesModel.Tab.allCases.map { PageTabs.Tab(id: $0.rawValue, title: $0.title) }, selection: $tabID, identifier: "styles.tabs")
       .historyTab(page: .styles, tab: $tabID)
+      // The project's theme picked and then changed (Verwenden, another source): the pick goes with
+      // it, so the inspector keeps the settings in front instead of the theme left behind.
+      .onChange(of: themeModel.activeRow) { old, new in
+        if themeSelected == old, let new { themeSelected = new }
+      }
       .task {
         await model.load()
       }
@@ -67,17 +74,15 @@ struct StylesPage: View {
       }
       .toolbar {
         // Speichern only with something to save, no badge beside it (as on Konfiguration). Eigenes
-        // CSS puts it after its own actions: a toolbar of an inner view comes after this one.
-        if tab != .customCss {
+        // CSS and Community-Themes put it after their own actions: a toolbar of an inner view comes
+        // after this one.
+        if tab != .customCss && tab != .theme {
           ToolbarItem(placement: .primaryAction) { saveButton }
         }
       }
     } inspector: {
-      if tab == .theme, let themeSelected, let config = model.config {
-        let active = config.plugins.first(where: FontDelivery.isThemePlugin).flatMap { FontDelivery.enabled($0) ? $0.object["options"]?["theme"]?.stringValue : nil }
-        ThemeInspector(id: themeSelected, listing: themeCatalog?.themes.first { $0.id == themeSelected }, model: model,
-                       active: active == themeSelected) { id in activateTheme(id) }
-          .id(themeSelected)
+      if tab == .theme, model.config != nil, model.features.themesCore3, let inspector = themeInspector {
+        inspector
       } else if tab == .customCss, model.config != nil {
         CssFilesInspector(model: model, activeTab: cssActiveTab, open: openCssTab, afterFileOp: afterCssFileOp, applyOrder: applyCssOrder,
                           extra: AnyView(Group {
@@ -161,18 +166,20 @@ struct StylesPage: View {
     varScroll = key
   }
 
-  /// The catalog's "install" from the inspector: the same as the tab's.
-  private func activateTheme(_ id: String) {
-    guard var config = model.config else { return }
-    let index = config.plugins.firstIndex(where: FontDelivery.isThemePlugin)
-    var base = index.map { config.plugins[$0] } ?? PluginEntry(object: JSONObject([("name", .string(id)), ("source", .string("@quartz-themes/core")),
-                                                                                   ("enabled", .bool(true)), ("options", .object(JSONObject([("mode", .string("both"))])))]))
-    var options = base.object["options"]?.objectValue ?? JSONObject()
-    options["theme"] = .string(id)
-    base.object["enabled"] = .bool(true)
-    base.object["options"] = .object(options)
-    if let index { config.plugins[index] = base } else { config.plugins.append(base) }
-    model.setConfig(config)
+  /// Community-Themes: a theme of the list that is not the project's shows its details; the
+  /// project's theme (picked, or nothing picked) its settings; nil without an entry and selection.
+  private var themeInspector: AnyView? {
+    let active = themeModel.activeRow
+    if let themeSelected, themeSelected != active {
+      if themeSelected == ThemeModel.builtInRow {
+        return AnyView(ThemeInspector(theme: themeModel, item: nil).id(themeSelected))
+      }
+      if let item = themeModel.listing?.themes.first(where: { $0.name == themeSelected }) {
+        return AnyView(ThemeInspector(theme: themeModel, item: item).id(themeSelected))
+      }
+    }
+    guard themeModel.entry != nil else { return nil }
+    return AnyView(ThemeSettingsInspector(theme: themeModel, goToVariables: { tabID = StylesModel.Tab.variables.rawValue }))
   }
 
   private var pageContext: some View {
@@ -242,8 +249,7 @@ struct StylesPage: View {
         case .basics:
           BasicsTab(model: model, goTo: { tabID = $0.rawValue }, savedRound: savedRound) { _ = await save() }
         case .theme:
-          ThemeTab(model: model, goTo: { tabID = $0.rawValue }, selection: $themeSelected, query: $themeQuery,
-                   catalog: $themeCatalog)
+          ThemeTab(theme: themeModel, selection: $themeSelected, query: $themeQuery, saveButton: saveButton, savedRound: savedRound)
         case .variables:
           VariablesTab(model: model, place: variablesPlace, scrollTarget: $varScroll)
         case .customCss:

@@ -1,660 +1,271 @@
 import QuartzHubCore
 import SwiftUI
 
-/// The services the Community-Themes tab shares across windows: the catalog is cached for fifteen
-/// minutes, the option documentation on disk.
-@MainActor
-enum ThemeServices {
-  static let marketplace = ThemeMarketplace(
-    search: ThemeMarketplace.npmSearch(environment: { await AppServices.current() }),
-    install: ThemeMarketplace.npmInstall(environment: { await AppServices.current() }),
-    token: { (try? await AppDeploy.connections().gitToken()) ?? nil })
-  /// Obsidian's theme list: who made a theme core 3 loads.
-  static let catalog = ThemeCatalog(profile: AppProfile.own)
-  static let schema = StyleSettingsSchema(profile: AppProfile.own, catalog: catalog)
-}
-
-/// Community-Themes (QuartzControl's `Styles/Theme.tsx`): the active `@quartz-themes` theme with the
-/// options it declares itself, the saved presets, and the catalog. A theme picked in the catalog
-/// shows its details in the inspector.
+/// Community-Themes with `@quartz-themes/core` 3 (docs/plan-themes-core-3.md, step 6): a list like
+/// the marketplace's. On top Obsidian's built-in theme and a theme from another source, below
+/// Obsidian's list with picture, name, author and modes. The project's theme is marked; its
+/// settings and every theme's details are the inspector's (`ThemeInspector`,
+/// `ThemeSettingsInspector`). A project with core 2 gets only the way to the core update.
 struct ThemeTab: View {
-  let model: StylesModel
-  let goTo: (StylesModel.Tab) -> Void
+  let theme: ThemeModel
   @Binding var selection: String?
   @Binding var query: String
-  /// Held by the page: the inspector shows a listing of it.
-  @Binding var catalog: ThemeMarketplace.Catalog?
+  /// The page's Speichern, after this tab's actions in the toolbar.
+  let saveButton: SaveButton
+  /// Bumped by the page after a save: the cleanup looks at the file again.
+  let savedRound: Int
 
-  @Environment(\.unsavedGuard) private var unsaved
-  @State private var presets: [JSONValue] = []
-  @State private var info: ThemeStyleSettingsInfo?
-  @State private var infoLoading = false
-  /// nil: not asked yet or asking; `.null`: the theme has no documentation.
-  @State private var schema: JSONValue?
-  @State private var schemaLoading = false
-  /// core 3 could not load the theme: its own sentence.
-  @State private var notLoaded: String?
-  @State private var refreshingSchema = false
-  /// Two states, not an optional name: the text field writes its text back as it goes away, and
-  /// a nil name came back as the typed one (seen: the field stayed after saving).
-  @State private var savingPreset = false
-  @State private var presetName = ""
-  @State private var optionQuery = ""
-  @State private var catalogLoading = false
-  /// What went wrong with a preset (saving, applying, deleting): said under the list, not only to
-  /// VoiceOver, and never swallowed (review 2026-11-13, nebenbei).
-  @State private var presetMessage: String?
+  @Environment(\.openPage) private var openPage
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-  static let visibleLimit = 30
-
-  private var config: QuartzConfig { model.config ?? QuartzConfig() }
-
-  /// Found whether it is on or not: a disabled entry is offered back rather than "no theme".
-  private var pluginIndex: Int? { config.plugins.firstIndex(where: FontDelivery.isThemePlugin) }
-  private var plugin: PluginEntry? { pluginIndex.map { config.plugins[$0] } }
-  private var themeId: String? { plugin?.object["options"]?["theme"]?.stringValue }
-  private var activeThemeId: String? { plugin.flatMap { FontDelivery.enabled($0) ? themeId : nil } }
-  /// With core 3, what decides which CSS is loaded: every option but the values and the mode.
-  private var fetchKey: String {
-    guard model.features.themesCore3, let plugin else { return "" }
-    var opts = options(plugin)
-    opts["styleSettings"] = nil
-    opts["mode"] = nil
-    return JSJSON.compact(.object(opts))
-  }
+  private var styles: StylesModel { theme.styles }
 
   var body: some View {
-    SettingsForm {
-      activeSection
-      if let plugin, FontDelivery.enabled(plugin), info?.styleSettingsId.isEmpty == false { styleSettingsSection(plugin) }
-      presetsSection
-      catalogSection
-    }
-    .task { await reloadPresets() }
-    .task(id: "\(themeId ?? "")|\(plugin.map(FontDelivery.enabled) ?? false)|\(fetchKey)") { await loadThemeInfo() }
-    .task { if catalog == nil { await loadCatalog() } }
-  }
-
-  // MARK: The theme plugin
-
-  private func updatePlugin(_ next: PluginEntry) {
-    var config = config
-    if let pluginIndex { config.plugins[pluginIndex] = next } else { config.plugins.append(next) }
-    model.setConfig(config)
-  }
-
-  private func options(_ plugin: PluginEntry) -> JSONObject { plugin.object["options"]?.objectValue ?? JSONObject() }
-
-  func activate(_ id: String) {
-    var base = plugin ?? PluginEntry(object: JSONObject([("name", .string(id)), ("source", .string("@quartz-themes/core")), ("enabled", .bool(true)),
-                                                         ("options", .object(JSONObject([("mode", .string("both"))])))]))
-    var opts = options(base)
-    opts["theme"] = .string(id)
-    base.object["enabled"] = .bool(true)
-    base.object["options"] = .object(opts)
-    updatePlugin(base)
-  }
-
-  private func setEnabled(_ on: Bool) {
-    guard var plugin else { return }
-    plugin.object["enabled"] = .bool(on)
-    updatePlugin(plugin)
-  }
-
-  // MARK: The active theme
-
-  @ViewBuilder private var activeSection: some View {
-    SettingsSection(L10n.t("themes.active.title")) {
-      if let plugin {
-        if FontDelivery.enabled(plugin) {
-          LabeledContent(L10n.t("themes.active.heading", ["themeId": themeId ?? "—"])) {
-            Button(L10n.t("themes.disableAll")) { setEnabled(false) }
-              .accessibilityIdentifier("themes.disable")
-          }
-          Note(L10n.t("themes.active.overrideNote", ["source": plugin.source?.stringValue ?? ""]))
-          if infoLoading {
-            Note(L10n.t("themes.active.checkingStyleSettings"))
-          } else if let notLoaded {
-            Callout(.warning, L10n.t("themes.active.notLoaded", ["reason": notLoaded]))
-          } else if info?.styleSettingsId.isEmpty != false, let themeId {
-            Note(L10n.t("themes.active.noStyleSettingsNote", ["themeId": themeId]))
-          }
-          savePresetRow(plugin)
-        } else {
-          // Kept with enabled: false rather than removed, so the choice and its settings survive.
-          LabeledContent(L10n.t("themes.active.disabledHeading", ["themeId": themeId ?? "—"])) {
-            Button(L10n.t("themes.active.reactivate")) { setEnabled(true) }
-              .accessibilityIdentifier("themes.reactivate")
-          }
-          Note(L10n.t("themes.active.disabledNote"))
+    Group {
+      if styles.features.themesCore3 {
+        VStack(alignment: .leading, spacing: 0) {
+          header
+          list
         }
       } else {
-        Note(L10n.t("themes.active.none"))
+        needsCore3
       }
     }
+    .toolbar { toolbar }
+    .task { if theme.listing == nil { await theme.loadCatalog() } }
+    .task { await theme.reloadPresets() }
+    .task(id: theme.fetchKey) { await theme.loadTheme() }
+    .task(id: "\(savedRound)|\(theme.info != nil)|\(theme.fetchKey)") { await theme.findLegacy() }
   }
 
-  @ViewBuilder private func savePresetRow(_ plugin: PluginEntry) -> some View {
-    if savingPreset {
-      HStack {
-        TextField(L10n.t("themes.active.presetNamePlaceholder"), text: $presetName,
-                  prompt: Text(L10n.t("themes.active.presetNamePlaceholder")))
-          .labelsHidden()
-          .textFieldStyle(.roundedBorder)
-          .accessibilityIdentifier("themes.presetName")
-        Button(L10n.t("common.cancel")) { savingPreset = false }
-        Button(L10n.t("common.save")) { savePreset(plugin) }
-          .disabled(StylesModel.trim(presetName).isEmpty)
-          .accessibilityIdentifier("themes.presetSave")
-      }
-    } else {
-      Button(L10n.t("themes.active.saveAsPreset")) {
-        presetName = ""
-        savingPreset = true
-      }
-        .accessibilityIdentifier("themes.saveAsPreset")
-    }
-  }
-
-  private func savePreset(_ plugin: PluginEntry) {
-    let name = StylesModel.trim(presetName)
-    guard !name.isEmpty else { return }
-    let opts = options(plugin)
-    var presetOptions = JSONObject([("theme", .string(themeId ?? "default")), ("mode", .string(opts["mode"]?.stringValue ?? "both"))])
-    if let variation = opts["variation"]?.stringValue { presetOptions["variation"] = .string(variation) }
-    if let callout = opts["calloutStyle"]?.stringValue { presetOptions["calloutStyle"] = .string(callout) }
-    presetOptions["styleSettings"] = .object(opts["styleSettings"]?.objectValue ?? JSONObject())
-    let now = Date()
-    let preset = JSONObject([
-      ("id", .string("preset-\(Int((now.timeIntervalSince1970 * 1000).rounded()))")), ("name", .string(name)),
-      ("createdAt", .string(Date.ISO8601FormatStyle(includingFractionalSeconds: true).format(now))),
-      ("baseThemeId", .string(themeId ?? "default")), ("options", .object(presetOptions))
-    ])
-    do {
-      try ThemePresets.save(.object(preset), project: model.project.path)
-      savingPreset = false
-      Task { await reloadPresets() }
-    } catch {
-      presetMessage = StylesModel.message(error)
-      Announce.post(presetMessage!)
-    }
-  }
-
-  private func loadThemeInfo() async {
-    info = nil
-    schema = nil
-    notLoaded = nil
-    guard let themeId, let plugin, FontDelivery.enabled(plugin) else { return }
-    infoLoading = true
-    if model.features.themesCore3 { return await loadFromCore(plugin) }
-    let path = model.project.path
-    let read = await Task.detached { PluginSchemaReader.themeStyleSettings(project: path, themeId: themeId) }.value
-    guard themeId == self.themeId else { return }
-    info = read
-    infoLoading = false
-    guard read?.styleSettingsId.isEmpty == false else { return }
-    schemaLoading = true
-    let fetched = (try? await ThemeServices.schema.schema(themeId: themeId)) ?? .null
-    guard themeId == self.themeId else { return }
-    schema = fetched
-    schemaLoading = false
-  }
-
-  /// core 3: the theme as the build loads it (`theme-fetch`), its Style Settings as core reads
-  /// them, the 2.x preset as defaults (docs/plan-themes-core-3.md, step 3).
-  private func loadFromCore(_ plugin: PluginEntry) async {
-    let key = fetchKey
-    let answer: Result<ThemeFetch.Answer, ThemeFetch.Failure>
-    do throws(ThemeFetch.Failure) {
-      answer = .success(try await ThemeFetch.fetch(project: model.project.path, options: options(plugin)))
-    } catch {
-      answer = .failure(error)
-    }
-    guard key == fetchKey else { return }
-    switch answer {
-    case .success(let fetched):
-      switch fetched.outcome {
-      case .loaded(let theme):
-        let author = await ThemeServices.catalog.list().flatMap { ThemeCatalog.find(theme.name, in: $0.themes) }?.author
-        guard key == fetchKey else { return }
-        schema = StyleSettingsSchema.schema(of: theme, author: author)
-        info = StyleSettingsSchema.info(of: schema ?? .null)
-      case .notLoaded(let sentence):
-        notLoaded = sentence
-      }
-    case .failure(let failure):
-      notLoaded = failure.description
-    }
-    infoLoading = false
-  }
-
-  /// The documentation lives upstream and is kept on disk for good; this asks again. With core 3
-  /// there is nothing kept: it loads again.
-  private func refreshSchema() async {
-    guard let themeId else { return }
-    if model.features.themesCore3, let plugin {
-      refreshingSchema = true
-      infoLoading = true
-      notLoaded = nil
-      await loadFromCore(plugin)
-      refreshingSchema = false
-      return
-    }
-    refreshingSchema = true
-    try? await ThemeServices.schema.clearCache(themeId: themeId)
-    schema = (try? await ThemeServices.schema.schema(themeId: themeId)) ?? .null
-    refreshingSchema = false
-  }
-
-  // MARK: Style Settings
-
-  private func styleSettingsSection(_ plugin: PluginEntry) -> some View {
-    let values = options(plugin)["styleSettings"]?.objectValue ?? JSONObject()
-    let ids = info?.styleSettingsId ?? []
-    return SettingsSection(L10n.t("themes.active.styleSettingsHeading", ["ids": ids.joined(separator: ", ")])) {
-      if schemaLoading || schema == nil {
-        Note(L10n.t("styles.styleSettings.loading"))
-      } else if let schema, schema != .null, let info {
-        StyleSettingsForm(schema: schema, info: info, values: values, query: $optionQuery) { patch in apply(patch) }
-      } else {
-        Note(L10n.t("styles.styleSettings.unavailable"))
-        ForEach(info?.classSettingKeys ?? [], id: \.self) { key in
-          let fullKey = "\(ids.first ?? "")@@\(key)"
-          Toggle(key, isOn: Binding(get: { values[fullKey] == .bool(true) }, set: { apply([(fullKey, $0 ? .bool(true) : nil)]) }))
-        }
-      }
-      // Only what the theme declares: writing any custom property is the Variablen tab's job.
-      HStack(alignment: .firstTextBaseline) {
-        Note(L10n.t("themes.active.ownValuesHint"))
-        Button(L10n.t("themes.active.goToVariables")) { goTo(.variables) }.buttonStyle(.link).font(.callout)
-      }
-    } accessory: {
-      Button(refreshingSchema ? L10n.t("common.loading") : L10n.t("styles.styleSettings.refresh")) { Task { await refreshSchema() } }
-        .buttonStyle(.link)
-        .disabled(refreshingSchema || schemaLoading)
-    }
-  }
-
-  /// One patch at a time on one copy: a themed hsl-split colour writes six keys.
-  private func apply(_ patch: [(key: String, value: JSONValue?)]) {
-    guard var plugin else { return }
-    var opts = options(plugin)
-    opts["styleSettings"] = .object(StyleSettingsValues.apply(patch, to: opts["styleSettings"]?.objectValue ?? JSONObject()))
-    plugin.object["options"] = .object(opts)
-    updatePlugin(plugin)
-  }
-
-  // MARK: Presets
-
-  private var presetsSection: some View {
-    SettingsSection(L10n.t("themes.presets.title"), note: L10n.t("themes.presets.description")) {
-      if presets.isEmpty { Note(L10n.t("themes.presets.none")) }
-      ForEach(Array(presets.enumerated()), id: \.offset) { _, preset in
-        let name = preset["name"]?.stringValue ?? ""
-        HStack {
-          Text(name)
-          Text(L10n.t("themes.presets.basisLabel", ["base": preset["baseThemeId"]?.stringValue ?? ""])).foregroundStyle(.secondary)
-          Spacer()
-          // Active when the theme runs with exactly the preset's options: two presets of one theme
-          // were both "Aktiv" while the ID alone was compared.
-          if let plugin, FontDelivery.enabled(plugin),
-             Self.sameValue(plugin.object["options"] ?? .object(JSONObject()), preset["options"] ?? .object(JSONObject())) {
-            StateBadge(text: L10n.t("themes.presets.active"), color: .green)
-          } else {
-            Button(L10n.t("themes.presets.apply")) { Task { await applyPreset(preset) } }
-          }
-          Button(role: .destructive) {
-            Task { await deletePreset(preset) }
-          } label: {
-            Label(L10n.t("common.deleteNamed", ["name": name]), systemImage: "trash")
-          }
-          .labelStyle(.iconOnly)
-          .buttonStyle(.borderless)
-        }
-      }
-      if let presetMessage { Callout(.error, presetMessage) }
-    }
-  }
-
-  /// Equal as data, whatever order the keys were written in (the config's YAML may reorder them).
-  static func sameValue(_ a: JSONValue, _ b: JSONValue) -> Bool {
-    switch (a, b) {
-    case (.object(let x), .object(let y)):
-      Set(x.keys) == Set(y.keys) && x.keys.allSatisfy { sameValue(x[$0]!, y[$0]!) }
-    case (.array(let x), .array(let y)):
-      x.count == y.count && zip(x, y).allSatisfy { sameValue($0, $1) }
-    default:
-      a == b
-    }
-  }
-
-  private func reloadPresets() async {
-    let path = model.project.path
-    presets = await Task.detached { ThemePresets.list(project: path) }.value
-  }
-
-  /// Installs the preset's theme first (npm), then takes over its options.
-  private func applyPreset(_ preset: JSONValue) async {
-    guard let base = preset["baseThemeId"]?.stringValue else { return }
-    presetMessage = nil
-    // A failed npm install left the options of a theme that is not there (it was ignored).
-    do {
-      let result = try await ThemeServices.marketplace.install(themeId: base, project: model.project.path)
-      guard result.success else {
-        presetMessage = L10n.t("themes.catalog.installFailed", ["id": base, "output": String(result.output.prefix(300))])
-        Announce.post(presetMessage!)
-        return
-      }
-    } catch {
-      presetMessage = StylesModel.message(error)
-      Announce.post(presetMessage!)
-      return
-    }
-    var next = plugin ?? PluginEntry(object: JSONObject([("name", .string(base)), ("source", .string("@quartz-themes/core")), ("enabled", .bool(true))]))
-    next.object["enabled"] = .bool(true)
-    next.object["options"] = .object(preset["options"]?.objectValue ?? JSONObject())
-    updatePlugin(next)
-  }
-
-  private func deletePreset(_ preset: JSONValue) async {
-    let name = preset["name"]?.stringValue ?? ""
-    let (question, detail) = Confirm.split(L10n.t("themes.presets.confirmDelete", ["name": name]))
-    guard await Confirm.ask(question, detail: detail, confirm: L10n.t("themes.presets.confirmDeleteAction"), destructive: true,
-                            window: unsaved?.window) else { return }
-    presetMessage = nil
-    do {
-      try ThemePresets.delete(id: preset["id"]?.stringValue ?? "", project: model.project.path)
-      Announce.post(L10n.t("themes.presets.deletedAnnounce", ["name": name]))
-    } catch {
-      presetMessage = StylesModel.message(error)
-      Announce.post(presetMessage!)
-    }
-    await reloadPresets()
-  }
-
-  // MARK: The catalog
-
-  private var catalogSection: some View {
-    let q = StylesModel.trim(query).lowercased()
-    let themes = catalog?.themes ?? []
-    let filtered = q.isEmpty ? themes : themes.filter { $0.id.lowercased().contains(q) }
-    return SettingsSection(L10n.t("themes.catalog.title"), note: L10n.t("themes.catalog.description")) {
-      HStack {
-        TextField(L10n.t("themes.catalog.searchPlaceholder"), text: $query, prompt: Text(L10n.t("themes.catalog.searchPlaceholder")))
-          .labelsHidden()
-          .textFieldStyle(.roundedBorder)
-          .accessibilityIdentifier("themes.search")
-        Button(catalogLoading ? L10n.t("themes.catalog.refreshing") : L10n.t("themes.catalog.refresh")) {
-          Task {
-            await ThemeServices.marketplace.invalidate()
-            await loadCatalog()
-          }
-        }
-        .disabled(catalogLoading)
-      }
-      if catalog?.unavailable == true {
-        Callout(.warning, L10n.t("themes.catalog.unavailable"))
-      }
-      if filtered.isEmpty {
-        Note(catalogLoading || catalog == nil ? L10n.t("themes.loading") : L10n.t("themes.catalog.noResults"))
-      }
-      ForEach(filtered.prefix(Self.visibleLimit), id: \.id) { listing in catalogRow(listing) }
-      if filtered.count > Self.visibleLimit {
-        Note(L10n.t("themes.catalog.moreResults", count: filtered.count - Self.visibleLimit))
-      }
-    }
-  }
-
-  private func catalogRow(_ listing: ThemeMarketplace.Listing) -> some View {
-    Button {
-      selection = selection == listing.id ? nil : listing.id
-    } label: {
-      HStack {
-        Text(listing.id).font(.system(.body, design: .monospaced))
-        if let stars = listing.stars, stars > 0 { Text("★ \(stars)").font(.caption).foregroundStyle(.secondary) }
-        Spacer()
-        ForEach(listing.topics ?? [], id: \.self) { Text($0).font(.caption).foregroundStyle(.secondary) }
-        if listing.id == activeThemeId { StateBadge(text: L10n.t("themes.catalog.active"), color: .green) }
-      }
-      .contentShape(Rectangle())
-    }
-    .buttonStyle(.plain)
-    .listRowBackground(selection == listing.id ? Color.accentColor.opacity(0.15) : nil)
-    .accessibilityIdentifier("themes.row.\(listing.id)")
-  }
-
-  private func loadCatalog() async {
-    catalogLoading = true
-    catalog = await ThemeServices.marketplace.list()
-    catalogLoading = false
-  }
-}
-
-/// A theme of the catalog, in the inspector: what it brings, and installing it.
-struct ThemeInspector: View {
-  let id: String
-  let listing: ThemeMarketplace.Listing?
-  let model: StylesModel
-  let active: Bool
-  let activate: (String) -> Void
-
-  @State private var detail: ThemeDetail??
-  @State private var installing = false
-  @State private var message: String?
-
-  var body: some View {
-    Form {
-      Section {
-        Text(id).font(.system(.title3, design: .monospaced))
-        if let text = listing?.githubDescription ?? listing?.description { Text(text).foregroundStyle(.secondary) }
-        if active {
-          StateBadge(text: L10n.t("themes.catalog.active"), color: .green)
-        } else {
-          Button(installing ? L10n.t("themes.catalog.installing") : L10n.t("themes.catalog.install")) { Task { await install() } }
-            .disabled(installing)
-            .accessibilityIdentifier("themes.install")
-        }
-        if let message { Text(message).font(.callout).textSelection(.enabled) }
-      }
-      Section {
-        switch detail {
-        case nil: Note(L10n.t("themes.catalog.detailLoading"))
-        case .some(nil): Note(L10n.t("themes.catalog.detailNone"))
-        case .some(let detail?):
-          Text(L10n.t("themes.catalog.modes", ["modes": detail.modes.isEmpty ? "—" : detail.modes.joined(separator: ", ")]))
-          Text(L10n.t("themes.catalog.variations", ["variations": detail.variations.isEmpty ? "—" : detail.variations.joined(separator: ", ")]))
-          Text(L10n.t("themes.catalog.customColorsLabel", ["value": detail.styleSettingsId.isEmpty ? L10n.t("themes.catalog.no") : L10n.t("themes.catalog.yes")]))
-          Text(L10n.t("themes.catalog.fonts", ["fonts": detail.fonts.isEmpty ? "—" : detail.fonts.joined(separator: ", ")]))
-        }
-      }
-    }
-    .formStyle(.grouped)
-    .task(id: id) {
-      detail = nil
-      let read = (try? await ThemeServices.marketplace.detail(themeId: id, project: model.project.path)) ?? nil
-      detail = .some(read)
-    }
-  }
-
-  private func install() async {
-    installing = true
-    message = nil
-    defer { installing = false }
-    do {
-      let result = try await ThemeServices.marketplace.install(themeId: id, project: model.project.path)
-      if result.success {
-        activate(id)
-        message = L10n.t("themes.catalog.installSuccess", ["id": id])
-      } else {
-        message = L10n.t("themes.catalog.installFailed", ["id": id, "output": String(result.output.prefix(300))])
-      }
-    } catch {
-      message = StylesModel.message(error)
-    }
-    if let message { Announce.post(message) }
-  }
-}
-
-/// A theme's own options, built from the upstream theme's `@settings` block, grouped by its
-/// headings (QuartzControl's `StyleSettingsForm`). Class settings the port does not ship are left
-/// out: they would be switches that do nothing.
-struct StyleSettingsForm: View {
-  let schema: JSONValue
-  let info: ThemeStyleSettingsInfo
-  let values: JSONObject
-  @Binding var query: String
-  let onChange: ([(key: String, value: JSONValue?)]) -> Void
-
-  var body: some View {
-    let shipped = Set(info.classSettingKeys)
-    let usable = StyleSettingsValues.usable(StyleSettingsValues.fields(schema), shippedClassKeys: shipped)
-    let groups = StyleSettingsValues.groups(StyleSettingsValues.filter(usable, query: query))
-    let count = usable.filter { $0.kind != "heading" && $0.kind != "info-text" }.count
-    if let author = schema["author"]?.stringValue {
-      Note(L10n.t("styles.styleSettings.sourceNote", ["theme": schema["themeName"]?.stringValue ?? "", "author": author], count: count))
-    } else {
-      Note(L10n.t("styles.styleSettings.sourceNoteBare", ["theme": schema["themeName"]?.stringValue ?? ""], count: count))
-    }
-    TextField(L10n.t("styles.styleSettings.searchPlaceholder"), text: $query, prompt: Text(L10n.t("styles.styleSettings.searchPlaceholder")))
-      .labelsHidden()
-      .textFieldStyle(.roundedBorder)
-      .accessibilityIdentifier("styleSettings.search")
-    ForEach(groups) { group in
-      StyleSettingsGroupView(group: group, values: values, shipped: shipped, forceOpen: !StylesModel.trim(query).isEmpty, onChange: onChange)
-    }
-  }
-}
-
-struct StyleSettingsGroupView: View {
-  let group: StyleSettingsValues.Group
-  let values: JSONObject
-  let shipped: Set<String>
-  let forceOpen: Bool
-  let onChange: ([(key: String, value: JSONValue?)]) -> Void
-  /// The theme author's `collapsed` decides the first state, as in Obsidian.
-  @State private var open: Bool?
-
-  var body: some View {
-    if let heading = group.heading {
-      if group.hasAnyField {
-        Fold(isExpanded: Binding(get: { forceOpen || (open ?? !heading.collapsed) }, set: { open = $0 })) {
-          if let description = heading.description { Note(description) }
-          content
+  @ToolbarContentBuilder private var toolbar: some ToolbarContent {
+    if styles.features.themesCore3 {
+      ToolbarItem(placement: .primaryAction) {
+        Button {
+          Task { await theme.loadCatalog(refresh: true) }
         } label: {
-          Text(heading.title).fontWeight(.semibold)
+          Label(theme.catalogLoading ? L10n.t("themes.catalog.refreshing") : L10n.t("themes.catalog.refresh"), systemImage: "arrow.clockwise")
+        }
+        .help(L10n.t("themes.catalog.refresh"))
+        .disabled(theme.catalogLoading)
+      }
+      ToolbarSpacer(.fixed, placement: .primaryAction)
+    }
+    ToolbarItem(placement: .primaryAction) { saveButton }
+  }
+
+  private var needsCore3: some View {
+    VStack(alignment: .leading, spacing: Spacing.s) {
+      Callout(.info) {
+        Text(L10n.t("themes.needsCore3"))
+        Button(L10n.t("themes.goToUpdates")) { openPage(.updates) }
+          .accessibilityIdentifier("themes.goToUpdates")
+      }
+    }
+    .frame(maxWidth: FormWidth.column, alignment: .leading)
+    .padding(Spacing.page)
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+  }
+
+  // MARK: The list
+
+  private var header: some View {
+    VStack(alignment: .leading, spacing: Spacing.xs) {
+      TextField(L10n.t("themes.list.searchPlaceholder"), text: $query, prompt: Text(L10n.t("themes.list.searchPlaceholder")))
+        .textFieldStyle(.roundedBorder)
+        .frame(maxWidth: 260)
+        .accessibilityIdentifier("themes.search")
+      if theme.catalogMissing {
+        Callout(.warning, L10n.t("themes.list.unavailable"))
+      } else if let listing = theme.listing, !listing.current {
+        Callout(.info, L10n.t("themes.list.notCurrent", ["date": listing.fetched.formatted(date: .abbreviated, time: .shortened)]))
+      }
+    }
+    .padding(.horizontal, Spacing.page)
+    .padding(.vertical, Spacing.s)
+    .animation(Motion.layout(reduce: reduceMotion), value: "\(theme.catalogMissing)|\(theme.listing?.current ?? true)")
+  }
+
+  /// By name as Finder sorts; searched in name, author and repo, accents and case aside. Obsidian's
+  /// file keeps the order themes were added in.
+  private var filtered: [ThemeCatalog.Theme] {
+    let themes = (theme.listing?.themes ?? []).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    let q = StylesModel.trim(query)
+    guard !q.isEmpty else { return themes }
+    return themes.filter { $0.name.localizedStandardContains(q) || ($0.author ?? "").localizedStandardContains(q) || $0.repo.localizedStandardContains(q) }
+  }
+
+  private var list: some View {
+    let themes = filtered
+    return List(selection: $selection) {
+      // The project's theme first, whatever its source; the rest below it once.
+      if let active = theme.activeRow {
+        Section(L10n.t("themes.list.mineHeading")) {
+          if active == ThemeModel.builtInRow {
+            builtInRow
+          } else if active == ThemeModel.otherRow, let spec = theme.spec {
+            otherRow(spec)
+          } else if let item = theme.catalogTheme {
+            catalogRow(item)
+          }
         }
       }
-    } else {
-      content
+      Section(L10n.t("themes.list.catalogHeading")) {
+        if theme.activeRow != ThemeModel.builtInRow, StylesModel.trim(query).isEmpty { builtInRow }
+        if theme.listing == nil {
+          Text(theme.catalogLoading ? L10n.t("themes.loading") : L10n.t("themes.catalog.noResults")).foregroundStyle(.secondary)
+            .selectionDisabled()
+        } else if themes.isEmpty {
+          Text(L10n.t("themes.catalog.noResults")).foregroundStyle(.secondary).selectionDisabled()
+        }
+        ForEach(themes.filter { $0.name != theme.activeRow }) { catalogRow($0) }
+      }
+    }
+    .accessibilityIdentifier("themes.list")
+  }
+
+  @ViewBuilder private func badge(_ row: String) -> some View {
+    if theme.activeRow == row {
+      if theme.enabled {
+        StateBadge(text: L10n.t("themes.catalog.active"), color: .green)
+      } else {
+        StateBadge(text: L10n.t("themes.list.off"), color: .secondary)
+      }
     }
   }
 
-  @ViewBuilder private var content: some View {
-    ForEach(Array(group.fields.enumerated()), id: \.offset) { _, field in
-      StyleSettingRow(field: field, values: values, shipped: shipped, onChange: onChange)
+  private var builtInRow: some View {
+    ThemeRow(picture: .symbol("circle.lefthalf.filled"), name: L10n.t("themes.list.builtIn"), detail: L10n.t("themes.list.builtInDetail"),
+             modes: ["dark", "light"], legacy: false) { badge(ThemeModel.builtInRow) }
+      .tag(ThemeModel.builtInRow)
+      .accessibilityIdentifier("themes.row.builtin")
+  }
+
+  private func otherRow(_ spec: String) -> some View {
+    let kind = ThemeSource.kind(of: spec)
+    let name: String = if case .loaded(let loaded) = theme.load { loaded.name } else { ThemeSource.display(spec) }
+    return ThemeRow(picture: .symbol(ThemeTab.symbol(kind)), name: name, detail: "\(ThemeTab.title(kind)) · \(ThemeSource.display(spec))",
+                    modes: { if case .loaded(let loaded) = theme.load { loaded.modes ?? [] } else { [] } }(), legacy: false) {
+      badge(ThemeModel.otherRow)
     }
-    ForEach(group.children) { child in
-      AnyView(StyleSettingsGroupView(group: child, values: values, shipped: shipped, forceOpen: forceOpen, onChange: onChange))
+    .tag(ThemeModel.otherRow)
+    .accessibilityIdentifier("themes.row.other")
+  }
+
+  private func catalogRow(_ item: ThemeCatalog.Theme) -> some View {
+    ThemeRow(picture: item.screenshotURL.map { .screenshot($0) } ?? .none, name: item.name,
+             detail: item.author.map { L10n.t("themes.list.byAuthor", ["author": $0]) }, modes: item.modes, legacy: item.legacy) {
+      badge(item.name)
+    }
+    .tag(item.name)
+    .accessibilityIdentifier("themes.row.\(item.name)")
+  }
+
+  static func title(_ kind: ThemeSource.Kind) -> String {
+    switch kind {
+    case .catalog: L10n.t("themes.source.catalog")
+    case .repo: L10n.t("themes.source.repo")
+    case .address: L10n.t("themes.source.address")
+    case .file: L10n.t("themes.source.file")
+    }
+  }
+
+  static func symbol(_ kind: ThemeSource.Kind) -> String {
+    switch kind {
+    case .catalog: "list.bullet"
+    case .repo: "shippingbox"
+    case .address: "link"
+    case .file: "doc"
     }
   }
 }
 
-struct StyleSettingRow: View {
-  let field: StyleSettingsValues.Field
-  let values: JSONObject
-  let shipped: Set<String>
-  let onChange: ([(key: String, value: JSONValue?)]) -> Void
+/// One row of the theme list: picture, name with author or source below, the modes, a state.
+struct ThemeRow<Badge: View>: View {
+  enum Picture: Equatable {
+    case screenshot(String)
+    case symbol(String)
+    case none
+  }
 
-  private var key: String { StyleSettingsValues.optionKey(field) }
+  let picture: Picture
+  let name: String
+  let detail: String?
+  let modes: [String]
+  let legacy: Bool
+  @ViewBuilder let badge: () -> Badge
+
+  static var thumbnail: CGSize { CGSize(width: 96, height: 60) }
 
   var body: some View {
-    if field.kind == "info-text" {
-      Note(field.description.map { "\(field.title) — \($0)" } ?? field.title)
-    } else {
-      let keys = StyleSettingsValues.keysOf(field)
-      let isSet = keys.contains { values[$0] != nil }
+    HStack(spacing: Spacing.s) {
+      Group {
+        switch picture {
+        case .screenshot(let address): ThemeScreenshot(address: address, contentMode: .fill)
+        case .symbol(let name): Image(systemName: name).font(.title2).foregroundStyle(.secondary).frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .none: Color.clear
+        }
+      }
+      .frame(width: Self.thumbnail.width, height: Self.thumbnail.height)
+      .background(.quaternary.opacity(0.5))
+      .clipShape(RoundedRectangle(cornerRadius: 6))
+      .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.separator))
+      .accessibilityHidden(true)
       VStack(alignment: .leading, spacing: 2) {
-        LabeledContent {
-          HStack {
-            control
-            if isSet {
-              Button(L10n.t("styles.styleSettings.reset")) { onChange(keys.map { ($0, nil) }) }
-                .buttonStyle(.link).font(.caption)
-            }
-          }
-        } label: {
-          Text(field.title).help(field.id)
-        }
-        if let description = field.description { Text(description).font(.caption).foregroundStyle(.secondary) }
+        Text(name).fontWeight(.medium)
+        if let detail { Text(detail).font(.callout).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle) }
+        if legacy { Text(L10n.t("themes.list.legacy")).font(.caption).foregroundStyle(.secondary) }
+      }
+      Spacer(minLength: Spacing.xs)
+      ThemeModes(modes: modes)
+      badge()
+    }
+    .padding(.vertical, 2)
+    .accessibilityElement(children: .combine)
+  }
+}
+
+/// A theme's modes as a sun and a moon, each with its name for VoiceOver.
+struct ThemeModes: View {
+  let modes: [String]
+
+  var body: some View {
+    HStack(spacing: 4) {
+      if modes.contains("light") {
+        Image(systemName: "sun.max").accessibilityLabel(L10n.t("styles.variables.light")).help(L10n.t("styles.variables.light"))
+      }
+      if modes.contains("dark") {
+        Image(systemName: "moon").accessibilityLabel(L10n.t("styles.variables.dark")).help(L10n.t("styles.variables.dark"))
       }
     }
+    .foregroundStyle(.secondary)
   }
+}
 
-  @ViewBuilder private var control: some View {
-    switch field.kind {
-    case "class-toggle":
-      Toggle(field.title, isOn: Binding(get: { values[key] == .bool(true) }, set: { onChange([(key, $0 ? .bool(true) : nil)]) }))
-        .labelsHidden()
-    case "class-select", "variable-select":
-      // A class select stores the option's class key, and core emits it only when the port ships it.
-      let options = field.kind == "class-select" ? field.options.filter { shipped.contains($0.value) } : field.options
-      if !options.isEmpty || field.kind == "variable-select" {
-        Picker(field.title, selection: Binding(get: { values[key]?.stringValue ?? "" }, set: { onChange([(key, $0.isEmpty ? nil : .string($0))]) })) {
-          Text(L10n.t("styles.styleSettings.themeDefault")).tag("")
-          ForEach(options, id: \.value) { Text($0.label).tag($0.value) }
-        }
-        .labelsHidden()
-        .frame(maxWidth: 220)
+/// A catalog screenshot, loaded when it appears (`ThemeScreenshots`: scaled, kept in the profile).
+struct ThemeScreenshot: View {
+  let address: String
+  var contentMode: ContentMode = .fit
+
+  /// nil: not asked yet or asking; `.some(nil)`: none to be had.
+  @State private var image: NSImage??
+
+  var body: some View {
+    Group {
+      switch image {
+      case .some(let image?):
+        Image(nsImage: image).resizable().aspectRatio(contentMode: contentMode)
+      case .some(nil):
+        Image(systemName: "photo").foregroundStyle(.tertiary).frame(maxWidth: .infinity, maxHeight: .infinity)
+          .help(L10n.t("themes.inspector.noScreenshot"))
+      case nil:
+        Color.clear
       }
-    case "variable-number", "variable-number-slider":
-      numberControl
-    case "variable-text":
-      TextField(field.title, text: Binding(get: { values[key]?.stringValue ?? "" }, set: { onChange([(key, $0.isEmpty ? nil : .string($0))]) }),
-                prompt: Text(field.defaultValue?.stringValue ?? ""))
-        .labelsHidden().textFieldStyle(.roundedBorder).frame(maxWidth: 220)
-    case "variable-color":
-      colorControl(mode: nil, label: nil)
-    case "variable-themed-color":
-      HStack(spacing: 12) {
-        colorControl(mode: .light, label: L10n.t("styles.variables.light"))
-        colorControl(mode: .dark, label: L10n.t("styles.variables.dark"))
-      }
-    default:
-      EmptyView()
     }
-  }
-
-  @ViewBuilder private var numberControl: some View {
-    let stored = values[key]
-    let text = stored.map { $0.stringValue ?? $0.numberValue.map(JSONValue.number).map(JSJSON.compact) ?? "" } ?? ""
-    let placeholder = field.defaultValue.map { $0.stringValue ?? JSJSON.compact($0) } ?? ""
-    HStack {
-      if field.kind == "variable-number-slider", let min = field.min, let max = field.max, min < max {
-        let current = Double(text) ?? Double(placeholder) ?? min
-        Slider(value: Binding(get: { Swift.min(Swift.max(current, min), max) }, set: { onChange([(key, .number(($0 / (field.step ?? 1)).rounded() * (field.step ?? 1)))]) }),
-               in: min...max)
-          .frame(width: 140)
-      }
-      TextField(field.title, text: Binding(get: { text }, set: { next in
-        if next.isEmpty { onChange([(key, nil)]) } else if let number = Double(next) { onChange([(key, .number(number))]) }
-      }), prompt: Text(placeholder))
-        .labelsHidden().textFieldStyle(.roundedBorder).frame(width: 70)
-    }
-  }
-
-  private func colorControl(mode: StyleSettingsValues.Mode?, label: String?) -> some View {
-    let read = StyleSettingsValues.readColor(field, values: values, mode: mode)
-    return HStack(spacing: 4) {
-      if let label { Text(label).font(.caption).foregroundStyle(.secondary) }
-      ColorPicker(selection: Binding(get: { CssColorField.color(read.hex ?? "") }, set: { color in
-        let css = CssColorField.css(color)
-        let hex = css.hasPrefix("#") ? css : (CssColor.hexAlpha(css)?.hex ?? "#000000")
-        onChange(StyleSettingsValues.colorPatch(field, hex: hex, mode: mode))
-      }), supportsOpacity: false) {
-        Text(field.title)
-      }
-      .labelsHidden()
-      .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(read.isSet ? Color.green : .clear))
+    .task(id: address) {
+      image = nil
+      let data = await ThemeServices.screenshots.image(address)
+      image = .some(data.flatMap(NSImage.init(data:)))
     }
   }
 }

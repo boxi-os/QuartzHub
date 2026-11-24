@@ -64,10 +64,7 @@ public struct TemplatePackage: Sendable {
                           snapshots: SnapshotStore, appVersion: String) -> TemplatePackage {
     TemplatePackage(
       runtime: environment.runtime, locales: locales, frames: frames, fonts: fonts,
-      npm: { arguments, project in
-        let result = await ProcessRunner.run(environment.command("npm", arguments, in: project, timeout: .seconds(20 * 60)))
-        return PluginCommands.Result(success: result.success, output: result.output)
-      },
+      npm: npm(environment: environment),
       addPlugin: { source, project in await PluginCommands.shared.add(source: source, project: project, environment: environment) },
       head: { project in
         let result = await ProcessRunner.run(environment.command("git", ["rev-parse", "--short", "HEAD"], in: project, timeout: .seconds(30)))
@@ -75,6 +72,14 @@ public struct TemplatePackage: Sendable {
       },
       snapshot: { project, kind, label in _ = try await snapshots.create(project: project, kind: kind, label: label) },
       app: ("QuartzHub", appVersion))
+  }
+
+  /// npm in the project with the tools' environment and 20 minutes; also the theme cleanup's.
+  public static func npm(environment: ToolEnvironment) -> Npm {
+    { arguments, project in
+      let result = await ProcessRunner.run(environment.command("npm", arguments, in: project, timeout: .seconds(20 * 60)))
+      return PluginCommands.Result(success: result.success, output: result.output)
+    }
   }
 
   // MARK: - Results

@@ -66426,6 +66426,220 @@
         }
       }
     },
+    "themes.cleanup.action" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: button of the cleanup section",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufräumen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clean Up"
+          }
+        }
+      }
+    },
+    "themes.cleanup.colors" : {
+      "comment" : "Styles ▸ Community-Themes, inspector, cleanup: hsl-split colours",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Eine Farbe in QuartzControls dreiteiliger Form"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} Farben in QuartzControls dreiteiliger Form"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "One color in QuartzControl's three-part form"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} colors in QuartzControl's three-part form"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "themes.cleanup.done" : {
+      "comment" : "Styles ▸ Community-Themes: announced after the cleanup",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgeräumt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cleaned up."
+          }
+        }
+      }
+    },
+    "themes.cleanup.note" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: under the cleanup heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das stammt aus der Zeit vor @quartz-themes/core 3 und wird nicht mehr gebraucht. QuartzHub legt vorher einen Snapshot an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is left from before @quartz-themes/core 3 and no longer needed. QuartzHub takes a snapshot first."
+          }
+        }
+      }
+    },
+    "themes.cleanup.npmFailed" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: npm uninstall failed after the config was written",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Config ist aufgeräumt, aber npm konnte die Pakete nicht entfernen: {{output}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The config is cleaned up, but npm could not remove the packages: {{output}}"
+          }
+        }
+      }
+    },
+    "themes.cleanup.options" : {
+      "comment" : "Styles ▸ Community-Themes, inspector, cleanup: aspects, include, calloutStyle, fonts",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optionen, die Quartz übergeht: {{list}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Options Quartz passes over: {{list}}"
+          }
+        }
+      }
+    },
+    "themes.cleanup.packages" : {
+      "comment" : "Styles ▸ Community-Themes, inspector, cleanup: npm packages @quartz-themes/<id>",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alte Theme-Pakete: {{list}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Old theme packages: {{list}}"
+          }
+        }
+      }
+    },
+    "themes.cleanup.parts" : {
+      "comment" : "Styles ▸ Community-Themes, inspector, cleanup: hsl-split parts without a colour to make",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbteile, die Quartz nicht liest"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color parts Quartz does not read"
+          }
+        }
+      }
+    },
+    "themes.cleanup.running" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: the cleanup button while it runs",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Räume auf…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cleaning up…"
+          }
+        }
+      }
+    },
+    "themes.cleanup.title" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: section heading when ThemeLegacy finds leftovers",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufräumen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clean up"
+          }
+        }
+      }
+    },
     "themes.disableAll" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -66444,6 +66658,310 @@
         }
       }
     },
+    "themes.goToUpdates" : {
+      "comment" : "Styles ▸ Community-Themes: button beside themes.needsCore3",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu Updates"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Updates"
+          }
+        }
+      }
+    },
+    "themes.inspector.modesLabel" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: label of the modes a theme has",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modi"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modes"
+          }
+        }
+      }
+    },
+    "themes.inspector.noScreenshot" : {
+      "comment" : "Styles ▸ Community-Themes: in place of a screenshot that could not be had",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Vorschaubild"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No preview"
+          }
+        }
+      }
+    },
+    "themes.inspector.repo" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: label of the GitHub repo link",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repo"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repo"
+          }
+        }
+      }
+    },
+    "themes.inspector.use" : {
+      "comment" : "Styles ▸ Community-Themes, inspector of a catalog theme: makes it the project's theme",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use"
+          }
+        }
+      }
+    },
+    "themes.inspector.useNote" : {
+      "comment" : "Styles ▸ Community-Themes, inspector of a catalog theme: under Verwenden",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ersetzt das bisherige Theme; übernommen wird es mit „Speichern“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replaces the current theme; “Save” makes it stick."
+          }
+        }
+      }
+    },
+    "themes.list.builtIn" : {
+      "comment" : "Styles ▸ Community-Themes: first row, Obsidian's own theme (theme: default)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidian (eingebaut)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidian (built-in)"
+          }
+        }
+      }
+    },
+    "themes.list.builtInDetail" : {
+      "comment" : "Styles ▸ Community-Themes: second line of the built-in row",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidians eigenes Theme, ohne Download"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidian's own theme, nothing to download"
+          }
+        }
+      }
+    },
+    "themes.list.byAuthor" : {
+      "comment" : "Styles ▸ Community-Themes: author line of a catalog row",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "von {{author}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "by {{author}}"
+          }
+        }
+      }
+    },
+    "themes.list.catalogHeading" : {
+      "comment" : "Styles ▸ Community-Themes: list section of the catalog",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidians Community-Themes"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidian's community themes"
+          }
+        }
+      }
+    },
+    "themes.list.legacy" : {
+      "comment" : "Styles ▸ Community-Themes: marks a theme Obsidian's list calls legacy",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "für Obsidian vor 1.0"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "made for Obsidian before 1.0"
+          }
+        }
+      }
+    },
+    "themes.list.mineHeading" : {
+      "comment" : "Styles ▸ Community-Themes: list section above the catalog with the built-in theme and a theme from another source",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In this project"
+          }
+        }
+      }
+    },
+    "themes.list.notCurrent" : {
+      "comment" : "Styles ▸ Community-Themes: callout when an older copy of the list answers",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Netz: Die Liste ist vom {{date}}."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline: the list is from {{date}}."
+          }
+        }
+      }
+    },
+    "themes.list.off" : {
+      "comment" : "Styles ▸ Community-Themes: badge of the theme whose entry is disabled",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgeschaltet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        }
+      }
+    },
+    "themes.list.searchPlaceholder" : {
+      "comment" : "Styles ▸ Community-Themes: search field above the catalog list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme suchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search themes"
+          }
+        }
+      }
+    },
+    "themes.list.unavailable" : {
+      "comment" : "Styles ▸ Community-Themes: callout when neither network nor copy has the list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidians Theme-Liste konnte nicht geladen werden. „Neu laden“ versucht es noch einmal."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsidian's theme list could not be loaded. “Reload” tries again."
+          }
+        }
+      }
+    },
     "themes.loading" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -66458,6 +66976,120 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loading community themes…"
+          }
+        }
+      }
+    },
+    "themes.mode.both" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: mode both",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hell und Dunkel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light and dark"
+          }
+        }
+      }
+    },
+    "themes.mode.dark" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: mode dark",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur dunkel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark only"
+          }
+        }
+      }
+    },
+    "themes.mode.fixed" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: in place of the mode picker for a theme with one mode",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Theme kennt nur „{{mode}}“, Quartz nimmt deshalb diesen Modus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The theme only has “{{mode}}”, so Quartz uses that mode."
+          }
+        }
+      }
+    },
+    "themes.mode.label" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: picker of the theme's modes",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
+          }
+        }
+      }
+    },
+    "themes.mode.light" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: mode light",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur hell"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light only"
+          }
+        }
+      }
+    },
+    "themes.needsCore3" : {
+      "comment" : "Styles ▸ Community-Themes: the whole tab in a project with @quartz-themes/core 2",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community-Themes brauchen in diesem Projekt erst ein Kern-Update auf Quartz 5.2.1 oder neuer. Danach lädt Quartz jedes Theme aus Obsidians Liste selbst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community themes need a core update to Quartz 5.2.1 or newer in this project first. Quartz then loads every theme from Obsidian's list itself."
           }
         }
       }
@@ -66621,6 +67253,462 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "My presets"
+          }
+        }
+      }
+    },
+    "themes.snippets.add" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: adds the typed snippet",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        }
+      }
+    },
+    "themes.snippets.note" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: under the snippets heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSS-Dateien im Projekt oder Adressen, nach dem Theme geladen wie in Obsidian."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSS files in the project or addresses, loaded after the theme as in Obsidian."
+          }
+        }
+      }
+    },
+    "themes.snippets.placeholder" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: placeholder of the field that adds a snippet",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "./snippets/eigen.css oder https://…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "./snippets/mine.css or https://…"
+          }
+        }
+      }
+    },
+    "themes.snippets.title" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: section heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snippets"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snippets"
+          }
+        }
+      }
+    },
+    "themes.source.address" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: source kind, a URL of a theme.css",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
+          }
+        }
+      }
+    },
+    "themes.source.addressPlaceholder" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: placeholder of the address field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://…/theme.css"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://…/theme.css"
+          }
+        }
+      }
+    },
+    "themes.source.catalog" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: source kind, a name from Obsidian's list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katalog"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog"
+          }
+        }
+      }
+    },
+    "themes.source.catalogNote" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: under the source picker when the kind is Katalog",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein anderes Theme wählst du in der Liste mit „Verwenden“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick another theme in the list with “Use”."
+          }
+        }
+      }
+    },
+    "themes.source.chooseFile" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: opens a file dialog in the project (theme file, snippet)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei wählen…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose File…"
+          }
+        }
+      }
+    },
+    "themes.source.empty" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: under an emptied source field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Feld darf nicht leer sein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The field cannot be empty."
+          }
+        }
+      }
+    },
+    "themes.source.file" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: source kind",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei im Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File in the project"
+          }
+        }
+      }
+    },
+    "themes.source.filePlaceholder" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: placeholder of the file field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "./themes/mein-theme/theme.css"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "./themes/my-theme/theme.css"
+          }
+        }
+      }
+    },
+    "themes.source.notAddress" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: under the address field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte eine Adresse mit https:// angeben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please give an address starting with https://."
+          }
+        }
+      }
+    },
+    "themes.source.notRepo" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: under the repo field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte als „owner/repo“ angeben, etwa „kepano/obsidian-minimal“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please give it as “owner/repo”, such as “kepano/obsidian-minimal”."
+          }
+        }
+      }
+    },
+    "themes.source.repo" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: source kind",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub-Repo"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub repo"
+          }
+        }
+      }
+    },
+    "themes.source.repoPlaceholder" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: placeholder of the repo field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "owner/repo"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "owner/repo"
+          }
+        }
+      }
+    },
+    "themes.source.title" : {
+      "comment" : "Styles ▸ Community-Themes, inspector of the project's theme: section heading",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source"
+          }
+        }
+      }
+    },
+    "themes.state.loaded" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: core loaded the theme of this release",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geladen, Version {{version}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loaded, version {{version}}"
+          }
+        }
+      }
+    },
+    "themes.state.loadedBare" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: core loaded the theme (no release: HEAD, address, file, built-in)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loaded"
+          }
+        }
+      }
+    },
+    "themes.state.loading" : {
+      "comment" : "Styles ▸ Community-Themes, inspector of the project's theme: while core loads it",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lade das Theme…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading the theme…"
+          }
+        }
+      }
+    },
+    "themes.styleSettings.title" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: section heading of the theme's own options",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style-Settings"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style Settings"
+          }
+        }
+      }
+    },
+    "themes.version.label" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: field for the theme's release",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        }
+      }
+    },
+    "themes.version.note" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: under the version field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leer lädt die neueste Fassung, eine Nummer wie „7.7.19“ bleibt bei diesem Release."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empty loads the latest release, a number such as “7.7.19” stays with that release."
+          }
+        }
+      }
+    },
+    "themes.version.placeholder" : {
+      "comment" : "Styles ▸ Community-Themes, inspector: placeholder of the version field",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "neueste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "latest"
           }
         }
       }
