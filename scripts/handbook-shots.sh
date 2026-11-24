@@ -41,7 +41,7 @@ PAGES=(
   "plugins-mehrsprachigkeit|4|4|s" "plugins-formulare|4|5|s" "plugins-formulare-formular|4|5|s"
   "plugins-marktplatz|4|6"
   "layout-uebersicht|6|1" "layout-komponenten|6|2" "layout-frames|6|3" "layout-frames-zeilen|6|3"
-  "stile-basis|7|1" "stile-themes|7|2|w" "stile-variablen|7|3"
+  "stile-basis|7|1" "stile-themes|7|2|w" "stile-themes-katalog|7|2" "stile-variablen|7|3"
   "stile-variablen-vorlage|7|3" "stile-variablen-plugins|7|3" "stile-css|7|4"
   "vorlagen|8|1|w" "vorlagen-erstellen|8|2|w"
   "vorschau-und-build|10|" "git-sync|11|" "dokumente|12|" "veroeffentlichen|13|"
@@ -246,6 +246,39 @@ if a[1] == "click" {
     left -= step
     usleep(20_000)
   }
+}
+SWIFT
+}
+# For a list too long for `entire contents` (Community-Themes, over a thousand rows; System Events
+# took more than ten minutes): the accessibility tree walked directly, without going into a list's
+# rows. `axdo row <list id> <n>` selects row n (section headings count), `axdo press <id>` presses,
+# `axdo center <id>` prints where to click into a field.
+axdo() {
+  swift - "$@" <<'SWIFT'
+import AppKit
+import ApplicationServices
+let a = CommandLine.arguments
+guard let pid = NSRunningApplication.runningApplications(withBundleIdentifier: "io.github.boxios.quartzhub").first?.processIdentifier else { exit(1) }
+func attr(_ e: AXUIElement, _ n: String) -> AnyObject? { var v: AnyObject?; AXUIElementCopyAttributeValue(e, n as CFString, &v); return v }
+func find(_ e: AXUIElement, _ id: String) -> AXUIElement? {
+  if attr(e, "AXIdentifier") as? String == id { return e }
+  let kids = attr(e, "AXChildren") as? [AXUIElement] ?? []
+  if kids.count > 100 { return nil }
+  for k in kids { if let f = find(k, id) { return f } }
+  return nil
+}
+let windows = attr(AXUIElementCreateApplication(pid), "AXWindows") as? [AXUIElement] ?? []
+guard let w = windows.first(where: { !["Projekte", "Projects"].contains(attr($0, "AXTitle") as? String ?? "") }),
+      let e = find(w, a[2]) else { FileHandle.standardError.write("nicht gefunden: \(a[2])\n".data(using: .utf8)!); exit(0) }
+if a[1] == "row", let rows = attr(e, "AXRows") as? [AXUIElement], let n = Int(a[3]), n <= rows.count {
+  AXUIElementSetAttributeValue(rows[n - 1], "AXSelected" as CFString, kCFBooleanTrue)
+} else if a[1] == "press" {
+  AXUIElementPerformAction(e, "AXPress" as CFString)
+} else if a[1] == "center", let p = attr(e, "AXPosition"), let z = attr(e, "AXSize") {
+  var o = CGPoint.zero, d = CGSize.zero
+  AXValueGetValue(p as! AXValue, .cgPoint, &o)
+  AXValueGetValue(z as! AXValue, .cgSize, &d)
+  print(Int(o.x + 20), Int(o.y + d.height / 2))
 }
 SWIFT
 }
@@ -502,6 +535,24 @@ for lang in $LANGS; do
           shoot $name
           wait
           sleep 2
+          continue
+        fi
+        # Community-Themes: the project's theme chosen and turned on in the draft only, so the inspector
+        # shows it loaded with its settings; then a theme of the catalog, found through the search. Turned
+        # off again afterwards, so the page is not left with a change.
+        if [ $name = stile-themes ]; then
+          axdo row themes.list 2; sleep 2
+          axdo press themes.reactivate; sleep 10
+        fi
+        if [ $name = stile-themes-katalog ]; then
+          mouse click $(axdo center themes.search); sleep 0.5
+          ax "keystroke \"Catppuccin\""; sleep 3
+          axdo row themes.list 4; sleep 6
+          shoot $name
+          mouse click $(axdo center themes.search); sleep 0.5
+          key a; ax "key code 51"; sleep 1
+          axdo row themes.list 2; sleep 2
+          axdo press themes.disable; sleep 1
           continue
         fi
         # A form chosen: the step "Felder"; the preview goes to a page that embeds it. Back to the

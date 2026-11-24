@@ -6,7 +6,8 @@
 # Die Aufnahmen zeigen Pfade, Projektnamen und Ziele. Damit nichts Persönliches ins Handbuch kommt,
 # liegt das Demo unter /Users/Shared/QuartzHub-Demo: eine Kopie des Handbuch-Projekts, der Inhalt
 # eine Kopie des Vaults (kein Link, sonst stünde dessen Pfad im Bild), ohne Snapshots, Logs und
-# Ziele, mit je einem Profil für hell und dunkel ohne Zugänge, dazu quartz-forms mit zwei Formularen
+# Ziele, auf dem Quartz-Release des Handbuchs (QH_HANDBOOK_QUARTZ, sonst v5.2.2), mit je einem Profil
+# für hell und dunkel ohne Zugänge, dazu quartz-forms mit zwei Formularen
 # (braucht dafür Netz). Quellen: QH_HANDBOOK_PROJECT und QH_HANDBOOK_VAULT, sonst die Orte aus
 # docs/plan.md.
 set -eu
@@ -27,6 +28,25 @@ rsync -a --delete --exclude .git --exclude private --exclude .obsidian --exclude
 # The own frames are named by the project's path (ProjectPaths), in the config and in Quartz's
 # lock file; the copy names its own.
 sed -i '' "s#$SRC/#$P/#g" "$P/quartz.config.yaml" "$P/quartz.lock.json"
+# Quartz at the release the handbook describes (QH_HANDBOOK_QUARTZ, docs/plan-themes-core-3.md, step 8),
+# merged as QuartzHub's core update merges, with its message. package.json and package-lock.json are
+# npm's: Quartz's own are taken and npm installs from them. Unlike the core update, a package the source
+# added stays out; that is the source's old @quartz-themes/<id>, which Community-Themes would offer to
+# clean up. Needs the net.
+REL=${QH_HANDBOOK_QUARTZ:-v5.2.2}
+git -C "$P" fetch -q upstream tag "$REL" --no-tags
+if ! git -C "$P" merge-base --is-ancestor "$REL" HEAD; then
+  git -C "$P" add -A
+  git -C "$P" diff --cached --quiet || git -C "$P" commit -qm "Handbuch-Demo: Stand der Quelle"
+  if ! git -C "$P" merge -q --no-edit -m "Merge Quartz ${REL#v} (via QuartzHub)" "$REL" >/dev/null; then
+    left=$(git -C "$P" diff --name-only --diff-filter=U | grep -v -x -e package.json -e package-lock.json || true)
+    [ -z "$left" ] || { echo "Merge von $REL: Konflikte in $left" >&2; exit 1; }
+    git -C "$P" checkout -q --theirs -- package.json package-lock.json
+    git -C "$P" add package.json package-lock.json
+    git -C "$P" commit -q --no-edit
+  fi
+  (cd "$P" && PATH="${0:A:h:h}/Runtime/node/bin:$PATH" npm install --no-audit --no-fund >/dev/null)
+fi
 # The plugins' and the template's variable catalogues for Stile ▸ Variablen (docs/plan-plugin-variablen.md):
 # quartz-navigations at its newest (the copy keeps the project's pinned commit otherwise), and the base
 # template's catalogue in foundation.scss (the project may predate it). Needs the net.
