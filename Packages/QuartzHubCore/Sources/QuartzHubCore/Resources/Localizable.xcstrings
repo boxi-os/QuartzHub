@@ -2849,7 +2849,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Go to Community Themes"
+            "value" : "Go to Community themes"
           }
         }
       }
@@ -65732,13 +65732,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Es gelten die Farben und Schriften aus „Stile → Basis“. Die Einstellungen dieses Community-Themes bleiben erhalten und lassen sich jederzeit wieder aktivieren."
+            "value" : "Es gelten die Farben und Schriften aus Stile ▸ Basis. Die Einstellungen dieses Community-Themes bleiben erhalten und lassen sich jederzeit wieder aktivieren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The colors and fonts from “Styles → Basics” apply. This community theme’s settings are kept and can be turned back on any time."
+            "value" : "The colors and fonts from Styles ▸ Basics apply. This community theme’s settings are kept and can be turned back on any time."
           }
         }
       }
@@ -65902,24 +65902,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Active"
-          }
-        }
-      }
-    },
-    "themes.catalog.github" : {
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GitHub: {{text}}"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GitHub: {{text}}"
           }
         }
       }
