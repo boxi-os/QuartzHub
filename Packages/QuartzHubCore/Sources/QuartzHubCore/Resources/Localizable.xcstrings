@@ -2816,6 +2816,44 @@
         }
       }
     },
+    "buildServer.themeSkipped" : {
+      "comment" : "Vorschau & Build: callout when the log says @quartz-themes/core was skipped",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Community-Theme wurde beim Build übersprungen, die Website hat deshalb kein Theme: {{reason}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The community theme was skipped in the build, so the site has no theme: {{reason}}"
+          }
+        }
+      }
+    },
+    "buildServer.themeSkippedLink" : {
+      "comment" : "Vorschau & Build: link under buildServer.themeSkipped",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu den Community-Themes"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Community Themes"
+          }
+        }
+      }
+    },
     "buildServer.viewport.desktop" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

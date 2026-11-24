@@ -136,13 +136,28 @@ struct BuildServerPage: View {
 
   // MARK: The middle
 
-  /// What needs saying before the site: the server's error, a missing start page.
+  /// The newest run of either console skipped `@quartz-themes/core` (`ThemeBuildLog`): the build
+  /// went through without a theme.
+  private var themeSkipped: String? {
+    ThemeBuildLog.skippedReason(logs.build.lines.map(\.text)) ?? ThemeBuildLog.skippedReason(logs.server.lines.map(\.text))
+  }
+
+  /// What needs saying before the site: the server's error, a skipped theme, a missing start page.
   @ViewBuilder private var notices: some View {
     let error = ProjectAttention.serverErrorText(status)
-    if error != nil || model.missingIndex {
+    let skipped = themeSkipped
+    if error != nil || skipped != nil || model.missingIndex {
       VStack(alignment: .leading, spacing: Spacing.xs) {
         if let error {
           Callout(.error) { Text(error).textSelection(.enabled) }
+        }
+        if let skipped {
+          Callout(.error) {
+            Text(L10n.t("buildServer.themeSkipped", ["reason": skipped])).textSelection(.enabled)
+            Button(L10n.t("buildServer.themeSkippedLink")) { openPage(.styles, tab: StylesModel.Tab.theme.rawValue) }
+              .buttonStyle(.link)
+              .accessibilityIdentifier("server.themeSkipped")
+          }
         }
         if model.missingIndex {
           Callout(.warning) {
