@@ -3477,3 +3477,39 @@ und „nur Hell“ (`:root:not([saved-theme="dark"])`). Damit weicht QuartzHub v
   QuartzControls Erwartung jedes `@quartz-themes/…` in `requires`, `missingPackages` und `npm install` (das
   Manifest einer Vorlage, die QuartzControl schrieb, bleibt, wie es ist); alles andere vergleicht es weiter.
   Gegenproben: Plan oder Import ohne die Prüfung auf core 3, ein `npm install` im Import: je rot.
+
+**Seite Community-Themes (Schritt 6, 2026-11-24).**
+
+- **Aufbau, vom Nutzer gewählt:** Der Reiter ist eine Liste wie der Marktplatz, kein Formular mehr. Oben
+  „Im Projekt“ das Theme des Projekts (aus dem Katalog, Obsidians eingebautes oder eines aus anderer Quelle),
+  darunter „Obsidian (eingebaut)“ und Obsidians Liste nach Namen sortiert (die Datei hält die Reihenfolge, in
+  der Themes dazukamen), je Zeile Bild, Name, Autor, Modi. Ein anderes Theme zeigt im Inspektor Bild, Repo,
+  Modi und **Verwenden**; das Theme des Projekts zeigt dort, ob core es lädt („Geladen, Version 0.4.52“ oder
+  cores Satz mit den drei Vorschlägen), die Quelle (Katalog, GitHub-Repo, Adresse, Datei im Projekt),
+  `version`, den Modus (bei einem Theme mit einem Modus fest, mit Satz), `snippets`, Style Settings, Presets
+  und, wenn `ThemeLegacy` etwas findet, „Aufräumen“. Wechselt das Theme des Projekts, wandert die Auswahl mit,
+  damit der Inspektor bei den Einstellungen bleibt. Ohne core 3 steht im Reiter nur der Weg zu Updates.
+- **`ThemeSource`** liest einen `theme:`-Wert in cores Reihenfolge (`resolveTheme` 3.1.1: eingebaut, Pfad,
+  Adresse, `owner/repo`, Name) und schreibt so, dass core ihn wie gemeint liest: eine Adresse auf `.css` mit
+  `?quartzhub` (sonst ein Pfad), einen Pfad im Projekt mit `./`. `version` nur für Katalog und Repo, wie core
+  es nur in `fetchCommunityTheme` liest. Ein neues Theme nimmt `version` und `variation` des alten nicht mit;
+  Style Settings und Snippets bleiben.
+- **Vorschaubilder** (`ThemeScreenshots`): gemessen an 250 der 1064 Themes (Kopf-Anfragen, 2026-11-24): Median
+  0,13 MB, das größte 44,9 MB, dann 3,6 MB; 981 PNG, 72 JPEG, 6 WebP, ein GIF, ein SVG. Geladen erst beim
+  Erscheinen der Zeile, auf 800 px verkleinert und als JPEG im Profil (`theme-docs/screenshots/`) eine Woche
+  gehalten; Obergrenzen 64 MB und 16 384 px je Seite aus dem Kopf der Datei. Ohne Netz antwortet die Kopie.
+- **Aufräumen mit echtem npm** an einer Kopie des Demo-Projekts: Snapshot „Altes Theme-Zubehör entfernt“,
+  `@quartz-themes/minimal` aus `package.json` und `node_modules`, der Kasten verschwindet.
+- **Ein übersprungenes Theme meldet Vorschau & Build** (`ThemeBuildLog`): Quartz 5.2.2 mit `theme: Minmal`
+  schreibt „✗ @quartz-themes/core@3.1.1 was skipped: it failed to initialise: theme "Minmal" is not in …“ und
+  endet mit Exit 0. Gelesen wird der neueste Lauf einer Konsole (ab Quartz' Kopfzeile), aus den Stücken, wie
+  der Prozess sie schrieb (eine Zeile kann zwischen zwei Stücken liegen; die erste Fassung las Stücke als
+  Zeilen und fand in der App nichts). Der Hinweis nennt cores Satz und führt zu Community-Themes.
+- **Gemessen und behoben:** Mit einem Namen, den core nicht kennt, hing der Reiter rund zehn Sekunden
+  (`sample` der App: der Hauptthread in `ThemeCatalog.find`). Die Liste fragte je Zeile nach dem Theme des
+  Projekts, und für einen unbekannten Namen vergleicht `find` jeden Slug: 1064 × 1064 Regex-Läufe. Jetzt
+  einmal je Aufbau.
+- **Weg:** `ThemeMarketplace` (npm-Suche, Sterne, `theme.json`, `npm install`) und die `theme.json`-Leser in
+  `PluginSchemaReader`. Abweichung von QuartzControl: Das Golden-Replay der Themes überspringt die Schritte
+  des Marktplatzes; Presets und Style Settings vergleicht es weiter mit QuartzControls Ausgabe. Presets
+  wenden ihre Optionen ohne Installation an und lassen `calloutStyle`, `fonts`, `aspects`, `include` weg.

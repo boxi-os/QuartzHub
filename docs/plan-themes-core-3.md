@@ -136,6 +136,9 @@ Ein Schritt je Commit, jeweils mit Bau, `qh-check i18n` und Tests.
    - Der Kasten „Aufräumen“ erscheint, wenn Schritt 5 etwas findet.
    - Ein Projekt mit core 2.x bekommt nur den Hinweis mit Sprung zu Updates.
    - Der alte Code fällt weg: Installieren, Varianten, `calloutStyle` und die Sterne.
+   *Fertig 2026-11-24* (8d2db5c `ThemeSource`, ab8d377 `ThemeScreenshots`, 881fee8 Seite, 4721573 alter Code weg,
+   870e90b Meldung in Vorschau & Build). Anders als geplant: Der Reiter ist ganz Liste (Entscheidung des Nutzers),
+   die Einstellungen des aktiven Themes stehen im Inspektor. Dazu kam die Meldung „was skipped“ aus Schritt 0.
 7. **Texte, Doku**:
    - Neue Texte de/en über `strings.mjs`, alte Schlüssel weg, `qh-check i18n`.
    - `decisions/phase-5-gleichstand.md` mit den Messungen und der Abweichung von QuartzControl.
