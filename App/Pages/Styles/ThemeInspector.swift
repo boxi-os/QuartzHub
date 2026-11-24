@@ -33,7 +33,7 @@ struct ThemeInspector: View {
           }
         }
         LabeledContent(L10n.t("themes.inspector.modesLabel")) {
-          Text(ThemeSettingsInspector.modesText(item?.modes ?? ["dark", "light"]))
+          Text(ThemeSettingsInspector.modesText(item?.modes ?? ["light", "dark"]))
         }
       }
       Section {
@@ -201,8 +201,11 @@ struct ThemeSettingsInspector: View {
     }
   }
 
+  /// Light before dark, as the list's sun and moon; Obsidian's file has them in either order.
   static func modesText(_ modes: [String]) -> String {
-    modes.isEmpty ? "—" : modes.map(modeName).joined(separator: ", ")
+    let order = ["light", "dark"]
+    let sorted = modes.sorted { (order.firstIndex(of: $0) ?? order.count) < (order.firstIndex(of: $1) ?? order.count) }
+    return sorted.isEmpty ? "—" : sorted.map(modeName).joined(separator: ", ")
   }
 
   /// The modes core knows for the theme: from its answer, else from the list.

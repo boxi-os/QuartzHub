@@ -139,7 +139,7 @@ struct ThemeTab: View {
 
   private func builtInRow(_ active: String?) -> some View {
     ThemeRow(picture: .symbol("circle.lefthalf.filled"), name: L10n.t("themes.list.builtIn"), detail: L10n.t("themes.list.builtInDetail"),
-             modes: ["dark", "light"], legacy: false) { badge(ThemeModel.builtInRow, active) }
+             modes: ["light", "dark"], legacy: false) { badge(ThemeModel.builtInRow, active) }
       .tag(ThemeModel.builtInRow)
       .accessibilityIdentifier("themes.row.builtin")
   }
