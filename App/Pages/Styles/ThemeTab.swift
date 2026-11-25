@@ -80,10 +80,36 @@ struct ThemeTab: View {
       } else if let listing = theme.listing, !listing.current {
         Callout(.info, L10n.t("themes.list.notCurrent", ["date": listing.fetched.formatted(date: .abbreviated, time: .shortened)]))
       }
+      cleanupNotice
     }
     .padding(.horizontal, Spacing.page)
     .padding(.vertical, Spacing.s)
-    .animation(Motion.layout(reduce: reduceMotion), value: "\(theme.catalogMissing)|\(theme.listing?.current ?? true)")
+    .animation(Motion.layout(reduce: reduceMotion),
+               value: "\(theme.catalogMissing)|\(theme.listing?.current ?? true)|\(theme.legacy.isEmpty)|\(theme.cleanupMessage != nil)")
+  }
+
+  /// What `ThemeLegacy` finds, on the page and not only at the bottom of the theme's inspector:
+  /// there it was missed (gui-test 2026-11-25, another theme was picked), and "packages" read as
+  /// themes of the list. The inspector keeps the details; without a theme entry it is the only way.
+  @ViewBuilder private var cleanupNotice: some View {
+    let found = theme.legacy
+    if !found.isEmpty {
+      Callout(.info) {
+        if found.packages.isEmpty {
+          Text(L10n.t("themes.cleanup.bannerSettings"))
+        } else {
+          Text(L10n.t("themes.cleanup.banner", ["count": String(found.packages.count)], count: found.packages.count))
+        }
+        HStack(alignment: .firstTextBaseline) {
+          Button(theme.cleaning ? L10n.t("themes.cleanup.running") : L10n.t("themes.cleanup.action")) { Task { await theme.clean() } }
+            .disabled(theme.cleaning || styles.dirty)
+            .accessibilityIdentifier("themes.cleanupNotice")
+          Text(styles.dirty ? L10n.t("styles.migrate.saveFirst") : L10n.t("themes.cleanup.bannerSnapshot")).foregroundStyle(.secondary)
+        }
+      }
+      .frame(maxWidth: FormWidth.column, alignment: .leading)
+    }
+    if let message = theme.cleanupMessage { Callout(.warning, message).frame(maxWidth: FormWidth.column, alignment: .leading) }
   }
 
   /// By name as Finder sorts; searched in name, author and repo, accents and case aside. Obsidian's

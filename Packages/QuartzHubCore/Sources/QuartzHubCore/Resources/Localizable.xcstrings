@@ -65998,6 +65998,87 @@
         }
       }
     },
+    "themes.cleanup.banner" : {
+      "comment" : "Styles ▸ Community themes, notice above the list when old @quartz-themes/<id> packages are in package.json",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Im Projekt liegt noch ein altes Theme-Paket, ein Download aus der Zeit vor @quartz-themes/core 3. Quartz lädt Themes jetzt selbst und braucht es nicht mehr; das Theme des Projekts bleibt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Im Projekt liegen noch {{count}} alte Theme-Pakete, Downloads aus der Zeit vor @quartz-themes/core 3. Quartz lädt Themes jetzt selbst und braucht sie nicht mehr; das Theme des Projekts bleibt."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This project still has an old theme package, a download from before @quartz-themes/core 3. Quartz now loads themes itself and no longer needs it; the project's theme stays."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This project still has {{count}} old theme packages, downloads from before @quartz-themes/core 3. Quartz now loads themes itself and no longer needs them; the project's theme stays."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "themes.cleanup.bannerSettings" : {
+      "comment" : "Styles ▸ Community themes, notice above the list when only old options or color parts are left",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Einstellungen des Themes enthalten noch Angaben aus der Zeit vor @quartz-themes/core 3, die Quartz nicht mehr liest."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The theme's settings still hold entries from before @quartz-themes/core 3 that Quartz no longer reads."
+          }
+        }
+      }
+    },
+    "themes.cleanup.bannerSnapshot" : {
+      "comment" : "Styles ▸ Community themes, beside the Clean Up button of the notice above the list",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub legt vorher einen Snapshot an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QuartzHub takes a snapshot first."
+          }
+        }
+      }
+    },
     "themes.cleanup.colors" : {
       "comment" : "Styles ▸ Community-Themes, inspector, cleanup: hsl-split colours",
       "extractionState" : "manual",
