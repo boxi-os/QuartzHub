@@ -21,6 +21,13 @@
 > `public/` von QuartzHub-Web hielt 28 Dateien eines Builds ohne `index.html` (vom Quartz-5.2-Update), QuartzHub fragte
 > vor dem Leeren.
 >
+> **Durchlaufen am 2026-11-25 für 1.2.0** (Tag auf 113889b). Plugins und Grundvorlage unverändert seit 1.1.0 (Punkt 4, 10).
+> Das Handbuch stand schon vor der Release-Seite mit den Inhalten von 1.2 online (Punkt 9 andersherum, auf Wunsch des
+> Nutzers); der Download-Kasten nennt keine Fassung, also kein zweiter Deploy. Aufgefallen: Der erste Build mit der neuen App
+> stellte den css-vars-Block der Website auf `:root body` um (fde704b), dadurch neuer CSS-Hash und 148 geänderte Dateien im
+> Deploy. Beim Durchklicken der Bücher drückte ein Skript „Jetzt exportieren“, solange der Build noch lief: Der Knopf ist dann
+> gesperrt, der Klick verpufft ohne Meldung; erst nach dem Build drücken.
+>
 > Aufgefallen 2026-11-14: QuartzHub-Web hatte weder `origin` noch ein Ziel „GitHub Pages“ (Punkt 9);
 > der installierte QuartzHub fragte beim ersten Zugriff auf den GitHub-Zugang nach dem Schlüsselbund
 > („Immer erlauben“); „Jetzt veröffentlichen“ wird erst nach einem Build oder Diff aktiv; das
