@@ -209,7 +209,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   (Helfer `theme-fetch`), was ein Eintrag lädt, und liest daraus die Style Settings; der Reiter ist eine Liste mit Vorschaubildern
   (`ThemeCatalog`, `ThemeScreenshots`), das Theme des Projekts mit Quelle, Version, Snippets und Modus im Inspektor
   (`ThemeSource`); Altes räumt `ThemeLegacy` ab; ein übersprungenes Theme meldet Vorschau & Build (`ThemeBuildLog`).
-  Ohne core 3 nur der Weg zu Updates. `themes-golden.mjs` vergleicht nur noch Presets und Style Settings mit QuartzControl.
+  Ohne core 3 nur der Weg zu Updates. `themes-golden.mjs` vergleicht nur noch Presets und Style Settings mit QuartzControl. Erschienen mit 1.2.0 am 2026-11-25.
 
 ## Arbeitsweise
 
