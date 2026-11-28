@@ -60080,6 +60080,25 @@
         }
       }
     },
+    "styles.variables.templateHint" : {
+      "comment" : "Stile ▸ Variablen, inspector, section Herkunft: a variable the project's template brings (shown as „Vorlage“ in its row).",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Vorlage des Projekts setzt diese Variable, beschrieben in {{source}}. Weder Theme noch Quartz kennen sie, darum gibt es keinen Originalwert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The project's template sets this variable, described in {{source}}. Neither the theme nor Quartz knows it, so there is no original value."
+          }
+        }
+      }
+    },
     "styles.variables.themeNote" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

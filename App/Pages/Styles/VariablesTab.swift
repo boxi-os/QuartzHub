@@ -467,6 +467,10 @@ struct VariableInspector: View {
     let uses = Array(NSOrderedSet(array: VariableResolve.referencedVariables(light ?? "") + VariableResolve.referencedVariables(dark ?? ""))) as? [String] ?? []
     let dependents = (model.graph?.dependents[key]?.arrayValue ?? []).compactMap(\.stringValue)
     let file = model.graph?.vars[key]?["source"]?.stringValue
+    // A variable the template brings is "own" to the resolver, but its row says „Vorlage“.
+    let templateSource = origin == "own" ? model.templateVariables.flatMap { catalog in
+      catalog.variables.contains { $0.name == key } ? catalog.source : nil
+    } : nil
     Form {
       Section {
         HStack {
@@ -480,7 +484,11 @@ struct VariableInspector: View {
            let description = PluginVariablesSection.description(described) {
           Note(description)
         }
-        if let badge = Self.originBadge(origin) { StateBadge(text: badge, color: origin == "theme" ? .gray : .green) }
+        if templateSource != nil {
+          StateBadge(text: L10n.t("styles.variables.originTemplate"), color: .gray)
+        } else if let badge = Self.originBadge(origin) {
+          StateBadge(text: badge, color: origin == "theme" ? .gray : .green)
+        }
       }
       Section(L10n.t("styles.variables.section.current")) {
         let modes: [VariableResolve.Mode] = (isColor || lightResolved != darkResolved) ? [.light, .dark] : [.light]
@@ -499,9 +507,10 @@ struct VariableInspector: View {
         }
       }
       Section(L10n.t("styles.variables.section.origin")) {
-        Note(origin == "own" ? L10n.t("styles.variables.ownHint")
+        Note(templateSource.map { L10n.t("styles.variables.templateHint", ["source": $0]) }
+             ?? (origin == "own" ? L10n.t("styles.variables.ownHint")
              : origin == "user" ? L10n.t("styles.variables.changedOver", ["base": Self.originText(VariableResolve.baseOriginOf(key, ctx), file: file)])
-             : Self.originText(origin, file: file))
+             : Self.originText(origin, file: file)))
         chain(.light, ctx: ctx, label: L10n.t("styles.variables.light"))
         if dark != light || darkResolved != lightResolved { chain(.dark, ctx: ctx, label: L10n.t("styles.variables.dark")) }
       }
