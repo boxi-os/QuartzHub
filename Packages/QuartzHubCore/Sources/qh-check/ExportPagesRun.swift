@@ -4,8 +4,8 @@ import QuartzHubCore
 
 /// `qh-check export-pages <build> <chrome.json> [--out <webkit.json>]`: the export's page scripts in
 /// WebKit on the build `scripts/export-pages-golden.mjs` ran them on in Chrome, with the same
-/// arguments, compared step by step - the start page's navigation, each page's settlePage and
-/// extractArticle, then epubChapters over the collected pages. Nothing goes to the network (both
+/// arguments, compared step by step - the start page's navigation, each page's settlePage,
+/// QuartzHub's own markHiddenBySite and extractArticle, then epubChapters over the collected pages. Nothing goes to the network (both
 /// sides refuse everything from outside; for Mermaid and KaTeX see `scripts/cdn-build.mjs`). The
 /// engine is what differs; the report says where. A Mermaid diagram is compared by structure
 /// (`DiagramCompare`).
@@ -61,6 +61,8 @@ func runExportPagesCheck(root: String, build: String, golden: String, out: Strin
       let slug = page["slug"]!.stringValue!
       _ = try await window.load("\(server.origin)/\(slug)")
       let settled = await outcome { try await window.run("settlePage", [.object(JSONObject([("navigation", .bool(false)), ("timeoutMs", .number(15000))]))]) }
+      // QuartzHub's own step before it, as ExportCollect runs it (the golden runs it in Chrome too).
+      _ = try? await window.run("markHiddenBySite", [])
       let extracted = await outcome { try await window.run("extractArticle", [page["args"]!], helpers: ["slugFromPathname", "anchorFor", "outsideUrl"]) }
       pages.append(.object(JSONObject([("slug", .string(slug)), ("settled", settled), ("extracted", extracted)])))
       let expected = mine(page["extracted"]!)

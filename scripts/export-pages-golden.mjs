@@ -3,7 +3,8 @@
 // QuartzControl's own siteServer serves a copy of the build, Chrome renders it at the print width of
 // A4 (658 px) in light (prefers-color-scheme and Quartz's localStorage theme), and the page scripts
 // of export/pageScripts.ts run with the three exportModel helpers handed in as source, exactly as
-// exportWindow.ts's `run` hands them. Recorded per page: settlePage, readNavigation on the start
+// exportWindow.ts's `run` hands them, with QuartzHub's own step before extractArticle
+// (Helpers/src/export/hiddenBySite.ts). Recorded per page: settlePage, readNavigation on the start
 // page, extractArticle; then epubChapters over every collected page. `qh-check export-pages` runs
 // the same scripts in WebKit on the same build and compares.
 //
@@ -36,6 +37,8 @@ const { chromium } = createRequire(join(control, 'package.json'))('playwright-co
 const scripts = await loadQuartzControl(control, 'electron/main/services/export/pageScripts.ts', {})
 const model = await loadQuartzControl(control, 'shared/exportModel.ts', {})
 const siteServer = await loadQuartzControl(control, 'electron/main/services/export/siteServer.ts', {})
+// QuartzHub's own step before extractArticle, as ExportCollect runs it.
+const own = await loadQuartzControl(join(here, '..'), 'Helpers/src/export/hiddenBySite.ts', {})
 
 const server = await siteServer.serveSiteCopy(resolve(build))
 const browser = await chromium.launch({ channel: 'chrome', headless: true })
@@ -71,6 +74,7 @@ for (const slug of inBook) {
   const settled = await run(scripts.settlePage, [{ navigation: false, timeoutMs: 15000 }])
   const level = slug === 'index' ? 1 : Math.min(6, Math.max(1, model.pageDepth(slug, '')))
   const args = { slug, level, signpost: level === 1 && (slug === 'index' || slug.endsWith('/index')), inBook, outsideLinks: 'site', baseUrl: 'quartzmac.example', texts }
+  await run(own.markHiddenBySite, [])
   const extracted = await run(scripts.extractArticle, [args], [model.slugFromPathname, model.anchorFor, model.outsideUrl])
   pages.push({ slug, args, settled, extracted })
   process.stderr.write('.')

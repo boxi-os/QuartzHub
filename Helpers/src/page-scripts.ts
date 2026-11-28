@@ -5,11 +5,13 @@
 //
 // src/export/ holds both files as QuartzControl 1.3.0 has them, unchanged: the same code runs in
 // WebKit that ran in Chromium, and what differs is the engine. PageScriptsTests checks the copies
-// against the sha256 recorded by scripts/page-scripts-golden.mjs.
+// against the sha256 recorded by scripts/page-scripts-golden.mjs. `markHiddenBySite` is QuartzHub's
+// own, a step before extractArticle (export/hiddenBySite.ts).
 import { epubChapters, extractArticle, fillPageNumbers, findDocumentProblems, imagesSettled, readNavigation, settlePage } from './export/pageScripts'
 import { anchorFor, outsideUrl, slugFromPathname } from './export/exportModel'
+import { markHiddenBySite } from './export/hiddenBySite'
 
 ;(globalThis as Record<string, unknown>).__quartzHubExport = {
-  settlePage, readNavigation, extractArticle, findDocumentProblems, imagesSettled, fillPageNumbers, epubChapters,
+  settlePage, readNavigation, extractArticle, findDocumentProblems, imagesSettled, fillPageNumbers, epubChapters, markHiddenBySite,
   slugFromPathname, anchorFor, outsideUrl
 }

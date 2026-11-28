@@ -69,6 +69,9 @@ public enum ExportCollect {
       // undefined in QuartzControl when the config has none: JSON leaves it out.
       if let base = options.baseUrl { args["baseUrl"] = .string(base) }
       args["texts"] = texts
+      // QuartzHub's own step: what the site's CSS hides is `hidden`, which extractArticle drops
+      // (Helpers/src/export/hiddenBySite.ts; Quartz 5.3's fold arrows stood in the ePub).
+      _ = try await window.run("markHiddenBySite", [])
       let extracted: JSONValue
       do {
         extracted = try await window.run("extractArticle", [.object(args)], helpers: ["slugFromPathname", "anchorFor", "outsideUrl"])
