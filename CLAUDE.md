@@ -23,7 +23,7 @@ Abschnitt in `../QuartzControl/docs/decisions/`. Die Messungen und Ränder dort 
   (Prüfungen, Nachfolger der `check:*`-Skripte) und `QuartzHubCoreTests` (Swift Testing). Der
   String Catalog liegt hier (`Resources/Localizable.xcstrings`), weil auch der Kern Texte hat.
 - `UITests/` — XCUITest-Rauchtest (Nachfolger von `npm run smoke`).
-- `Helpers/` — JS-Helfer (`yaml-edit`; `dts-schema`: `.d.ts` und Page-Type-Einstiege mit TypeScripts Parser; `sass-check`: kompiliert mit dem Sass des Projekts; `locale-edit`: Quartz' Sprachdateien mit TypeScripts Parser; `content-files`: welche Notizen Quartz baut, mit dem globby des Projekts; `theme-fetch`: was ein Theme-Eintrag lädt, mit dem `@quartz-themes/core` des Projekts), mit esbuild zu `.cjs` gebündelt. `sass` in `Helpers/node_modules` ist nur der Stellvertreter für die Tests (gui-tests Fassung).
+- `Helpers/` — JS-Helfer (`yaml-edit`; `dts-schema`: `.d.ts` und Page-Type-Einstiege mit TypeScripts Parser; `sass-check`: kompiliert mit dem Sass des Projekts; `locale-edit`: Quartz' Sprachdateien mit TypeScripts Parser; `content-files`: welche Notizen Quartz baut, mit dem globby des Projekts; `theme-fetch`: was ein Theme-Eintrag lädt, mit dem `@quartz-themes/core` des Projekts; `quartz-facts`: Standardwerte der eingebauten Verarbeitung und Layout-Bedingungen aus dem Quartz des Projekts, mit TypeScripts Parser), mit esbuild zu `.cjs` gebündelt. `sass` in `Helpers/node_modules` ist nur der Stellvertreter für die Tests (gui-tests Fassung).
 - `Runtime/` — geholtes Node und git (nicht versioniert). `Resources/licenses/` — Lizenztexte.
 - `project.yml` — Quelle des Xcode-Projekts (XcodeGen). `QuartzHub.xcodeproj` und
   `App/Info.plist` sind erzeugt und nicht versioniert.
@@ -48,6 +48,8 @@ Je Befehl eine Zeile; was ein Skript genau tut, steht in seinem Kopf.
   (**A ▸ B**) des Handbuchs gegen den Katalog, je Sprache, dazu fette Namen, die einem Text fast gleichen;
   Ausnahmen mit Grund in `<vault>/private/zitat-ausnahmen.txt`, eine veraltete Ausnahme ist ein Befund; dazu,
   dass jede Seite, auf die die App verweist (`Handbook.pages`), im Vault steht
+- `swift run --package-path Packages/QuartzHubCore qh-check quartz-facts <projekt>` — was QuartzHub aus dem Quartz des
+  Projekts liest (Standardwerte der eingebauten Verarbeitung, Layout-Bedingungen); Exit 3, wenn etwas nicht lesbar war
 - `swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]` — der SVG-Bereiniger gegen
   WebKit, mit einem Projekt mit quartz-layout-box auch durch dessen Markdown-Kette (Exit 3 ohne)
 - `Runtime/node/bin/node scripts/cdn-build.mjs <build> <kopie>`, dann `… scripts/export-pages-golden.mjs <kopie> <chrome.json>`

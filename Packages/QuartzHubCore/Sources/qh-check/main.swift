@@ -5,6 +5,7 @@
 //   swift run --package-path Packages/QuartzHubCore qh-check handbook [vault] [--root <repo>]
 //   swift run --package-path Packages/QuartzHubCore qh-check option-schema <projekt> [--plugin <name>] [--dump]
 //   swift run --package-path Packages/QuartzHubCore qh-check inline-svg [projekt]
+//   swift run --package-path Packages/QuartzHubCore qh-check quartz-facts <projekt>
 //   swift run --package-path Packages/QuartzHubCore qh-check export-window
 //   swift run --package-path Packages/QuartzHubCore qh-check export-pages <build> <chrome.json>
 //   swift run --package-path Packages/QuartzHubCore qh-check export-book <build> <ordner>
@@ -42,6 +43,9 @@ func usage() -> Never {
                 [--cancel-after <s>]
                                       der Export wie „Jetzt veröffentlichen“: Wegwerf-Projekt,
                                       Buch über die ganze Website, Ziel „Dokument“, Deploy.run
+    quartz-facts <projekt>            was QuartzHub aus dem Quartz des Projekts liest: Standardwerte
+                                      der eingebauten Verarbeitung, Layout-Bedingungen; Exit 3,
+                                      wenn etwas davon nicht lesbar war (dann gelten QuartzHubs eigene)
     inline-svg [projekt]              der SVG-Bereiniger gegen WebKit: jedes Ergebnis als HTML
                                       und, mit einem Projekt mit quartz-layout-box, durch dessen
                                       Markdown-Kette; Exit 3, wenn Lagen ausgelassen wurden
@@ -178,6 +182,20 @@ case "option-schema":
       print(String(describing: error))
       return 2
     }
+  }
+case "quartz-facts":
+  let positional = arguments.filter { !$0.hasPrefix("--") }
+  guard positional.count == 1 else { usage() }
+  runAndExit {
+    let facts: QuartzFacts
+    do {
+      facts = try await QuartzFacts.read(project: positional[0])
+    } catch {
+      print(String(describing: error))
+      return 2
+    }
+    print(QuartzFactsReport.text(facts), terminator: "")
+    return facts.problems.isEmpty ? 0 : 3
   }
 case "export-window":
   // WebKit wants the main run loop turning (see runAndExit).
