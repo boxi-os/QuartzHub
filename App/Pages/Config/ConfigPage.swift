@@ -120,6 +120,7 @@ struct ConfigPage: View {
         ProjectImageSection(model: model)
         SiteSettingsSections(model: model)
         ProcessingSections(model: model, project: project)
+        MoreSettingsSection(model: model)
         HStack(alignment: .firstTextBaseline) {
           Note(L10n.t("configEditor.stylesHint"))
           Button(L10n.t("configEditor.stylesHintLink")) { openPage(.styles, tab: StylesModel.Tab.basics.rawValue) }.buttonStyle(.link).font(.callout)

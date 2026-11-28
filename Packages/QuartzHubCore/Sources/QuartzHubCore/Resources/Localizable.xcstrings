@@ -4686,6 +4686,44 @@
         }
       }
     },
+    "configEditor.more.heading" : {
+      "comment" : "Konfiguration ▸ Website: Abschnitt mit Einstellungen aus Quartz' eigenem Schema, die QuartzHub nicht eigens zeigt",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More settings"
+          }
+        }
+      }
+    },
+    "configEditor.more.note" : {
+      "comment" : "Konfiguration ▸ Website: Erklärung unter „Weitere Einstellungen“",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was der Quartz dieses Projekts sonst noch kennt. Die Beschreibungen stammen von Quartz."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What else this project's Quartz knows. The descriptions are Quartz's own."
+          }
+        }
+      }
+    },
     "configEditor.stylesHint" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

@@ -22,6 +22,9 @@ final class ConfigModel {
   /// `quartz.capabilities.provides` per plugin entry name, read once per load: a plugin that
   /// provides what a built-in does replaces it.
   private var provides: [String: [String: [String]]] = [:]
+  /// What Quartz's own schema describes under `configuration` that no field here edits
+  /// (`QuartzConfigSchema`); nil without the schema file.
+  private(set) var moreSettings: NormalizedOptionSchema?
 
   init(project: ProjectContext) {
     self.project = project
@@ -52,6 +55,7 @@ final class ConfigModel {
     // The defaults the toggles show when the file says nothing: the project's Quartz's (5.3 marks
     // broken links unless told not to).
     features.facts = await QuartzFacts.readOrFallback(project: path, runtime: environment.runtime)
+    moreSettings = await Task.detached { QuartzConfigSchema.moreSettings(project: path) }.value
     locales = await Task.detached { (try? LocaleFiles(environment: environment).list(project: path)) ?? [] }.value
   }
 
@@ -125,6 +129,14 @@ final class ConfigModel {
   }
 
   var plugins: [PluginEntry] { config?.plugins ?? [] }
+
+  /// The keys „Weitere Einstellungen“ edits, Quartz's and any nobody describes.
+  var moreValues: JSONObject { QuartzConfigSchema.values(config?.configuration ?? JSONObject()) }
+
+  func setMore(_ next: JSONObject?) {
+    guard let configuration = config?.configuration else { return }
+    config?.configuration = QuartzConfigSchema.applying(next, to: configuration)
+  }
 
   // MARK: Quartz's built-ins (5.1, fonts since 5.2)
 

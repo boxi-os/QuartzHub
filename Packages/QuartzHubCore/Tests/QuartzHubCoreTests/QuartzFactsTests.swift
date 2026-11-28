@@ -138,3 +138,45 @@ struct ConditionChoiceTests {
     }
   }
 }
+
+/// „Weitere Einstellungen“ from Quartz's own schema files of v5.2.2 and v5.3.1 (in the same fixtures).
+struct QuartzConfigSchemaTests {
+  static let fixtures = QuartzFactsTests.fixtures
+
+  /// 5.2.2 describes nothing QuartzHub lacks a field for; 5.3.1 adds `slugs`, as an object with one
+  /// boolean that defaults to false and carries Quartz's description.
+  @Test func onlyWhatQuartzHubHasNoFieldFor() throws {
+    let old = try #require(QuartzConfigSchema.moreSettings(project: "\(Self.fixtures)/5.2.2"))
+    #expect(old.fields.isEmpty && old.notes.isEmpty)
+    let new = try #require(QuartzConfigSchema.moreSettings(project: "\(Self.fixtures)/5.3.1"))
+    #expect(new.fields.map(\.key) == ["slugs"])
+    #expect(new.notes.isEmpty)
+    guard case .object(let fields, _) = new.fields[0].node else { Issue.record("\(new.fields[0].node)"); return }
+    #expect(fields.map(\.key) == ["stripDiacritics"])
+    #expect(fields[0].node == .boolean && fields[0].defaultValue == .bool(false))
+    #expect(fields[0].description?.hasPrefix("Strip accents") == true)
+    // Gegenprobe: without the filter, every top-level key of Quartz's schema.
+    #expect(QuartzConfigSchema.ownKeys.isSubset(of: Set(["fonts"] + OptionSchema.normalize(
+      jsonSchema: try JSJSON.parse(try Posix.read(QuartzConfigSchema.path(project: "\(Self.fixtures)/5.3.1")))["properties"]!["configuration"]!,
+      source: .configSchema).fields.map(\.key))))
+  }
+
+  @Test func noSchemaNoSection() {
+    #expect(QuartzConfigSchema.moreSettings(project: "/nowhere-Ü") == nil)
+  }
+
+  /// The section edits only its keys, in place; QuartzHub's own stay as they are.
+  @Test func applyingKeepsOrderAndOwnKeys() {
+    let configuration = JSONObject([("pageTitle", .string("T")), ("slugs", .object(JSONObject([("stripDiacritics", .bool(true))]))),
+                                    ("custom", .number(1)), ("baseUrl", .string("x"))])
+    #expect(QuartzConfigSchema.values(configuration).keys == ["slugs", "custom"])
+    let off = QuartzConfigSchema.applying(JSONObject([("slugs", .object(JSONObject([("stripDiacritics", .bool(false))]))), ("custom", .number(1))]),
+                                          to: configuration)
+    #expect(off.keys == ["pageTitle", "slugs", "custom", "baseUrl"])
+    #expect(off["slugs"]?.objectValue?["stripDiacritics"] == .bool(false))
+    let cleared = QuartzConfigSchema.applying(nil, to: configuration)
+    #expect(cleared.keys == ["pageTitle", "baseUrl"])
+    // A key of QuartzHub's own in `next` is not the section's to write.
+    #expect(QuartzConfigSchema.applying(JSONObject([("pageTitle", .string("other"))]), to: configuration)["pageTitle"] == .string("T"))
+  }
+}
