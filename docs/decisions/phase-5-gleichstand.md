@@ -3537,3 +3537,72 @@ und „nur Hell“ (`:root:not([saved-theme="dark"])`). Damit weicht QuartzHub v
   `qh-check i18n --unused`: die, die vor Schritt 1 ein Aufruf nannte und jetzt keiner). Die Zeile zu den
   dreiteiligen Farben im Kasten „Aufräumen“ sagt „einer älteren Fassung“ statt „QuartzControls“, wie seit
   „QuartzControl verschwindet“ jeder Hinweis auf ein altes Format.
+
+## Quartz 5.3 (2026-11-28)
+
+Quartz 5.3.0 und 5.3.1 erschienen am 2026-11-27 (Tags `v5.3.0` 92fa358, `v5.3.1` 5a740b3; seit 5.3
+leichte Tags, die das Kern-Update schon kannte: ohne `^{}`-Zeile gilt die Zeile des Tags selbst). Damit
+kam Quartz in vier Wochen fünfmal heraus (5.1.0, 5.2.0–5.2.2, 5.3.0–5.3.1). Entscheidung des Nutzers vom
+selben Tag: nicht mehr jedes Release nachziehen, sondern lesen, was das Projekt über sich sagt, den Export
+gegen neues Markup unempfindlich machen und auf der Seite Updates sagen, was nicht geprüft ist (Plan „Quartz-Updates ohne
+ständiges Nachziehen“).
+
+**Gemessen** an einer Wegwerf-Kopie von gui-test, von 5.2.2 auf 5.3.1 gemergt wie das Kern-Update
+(`package.json` und `package-lock.json` von Quartz, eigene Pakete wieder eingetragen, `npm install`):
+Build Exit 0 (480 → 586 Dateien, 18 `component-*.css` → eine, `index-*.css` bleibt, also bleibt
+`SiteFonts`); `plugin doctor` meldet mehrere layout-box- und navigations-Einträge als „configured twice“,
+das tat schon 5.2.2. Was 5.3 an QuartzHub brach:
+
+- **Kaputte Links:** `links.disableBrokenWikilinks` ist jetzt standardmäßig an; Konfiguration zeigte ohne
+  Eintrag „aus“ (`BuiltinProcessing.defaults`).
+- **Layout-Bedingungen:** neu `is-index`, `is-folder-index` und `not-<jede>`; QuartzHub bot vier feste an.
+- **Export:** rehype-obsidian setzt Obsidians Faltpfeile (`span.heading-collapse-indicator` mit SVG) vor
+  jede Überschrift. Die Website blendet sie per `base.scss` aus, das ePub (eigenes Stylesheet) zeigte sie:
+  14 auf den zehn Seiten des Buchs von gui-test, in Chrome gerendert gesehen.
+- **Neu, ohne Feld in QuartzHub:** `slugs.stripDiacritics`.
+
+**Aus dem Projekt lesen.** Der Helfer `quartz-facts` liest mit TypeScripts Parser `BUILTINS` aus
+`quartz/plugins/builtins/index.ts` (je Eintrag `configKey`, `order`, `absorbs`, die Standardwerte, durch
+den Import bis zum Objekt-Literal verfolgt) und `builtinConditions` aus `loader/conditions.ts`, dazu, ob
+`getCondition` `not-` abschneidet. Nichts wird ausgeführt. `QuartzFacts` fragt einmal je Stand dieser
+Dateien (Name, Größe, Änderungszeit) und fällt für eine fehlende Datei, einen Wert, der kein Literal ist,
+oder einen Helfer, der nicht antwortet, auf QuartzHubs Konstanten zurück; was nicht gelesen wurde, steht
+in `problems`, `qh-check quartz-facts` endet dann mit 3. Gegenprobe an Quartz' eigenen Dateien
+(`Fixtures/quartz-facts/`): auf 5.2.2 sagt Quartz genau die Konstanten, auf 5.3.1 die Änderungen. Der
+Helfer kostet rund 10 MB in der App (er bündelt TypeScript wie `dts-schema` und `locale-edit`), im DMG
+1,2 bis 1,7 MB (xz, gzip).
+
+- **Konfiguration** nimmt Standardwerte, Reihenfolge und die Werte eines übernommenen Plugin-Eintrags aus
+  `QuartzFacts`: An einer 5.3.1-Kopie stand „Links auf fehlende Notizen markieren“ ohne Eintrag auf an.
+  `FormUsages` und `FontDelivery` behalten vorerst die Konstanten (Entwürfe und Schriften änderte 5.3 nicht).
+- **Layout** bietet die Bedingungen des Projekts an und, wo Quartz `not-` kennt, den Schalter
+  „Umkehren“ statt einer doppelt so langen Liste; `not-index` bleibt eine eigene Bedingung. Eine umgekehrte
+  heißt in Übersicht, Bühne und für VoiceOver „Umgekehrt: …“. Grenze: Ein von Hand geschriebenes
+  `not-has-tags` auf einem Quartz vor 5.3 heißt dort auch so, obwohl Quartz es nicht kennt.
+- **Weitere Einstellungen** unter Konfiguration ▸ Website: was Quartz' eigenes Schema
+  (`quartz/plugins/quartz-plugins.schema.json`) unter `configuration` beschreibt und keine Sektion darüber
+  bearbeitet, mit der Options-Form der Plugins und Quartz' englischen Beschreibungen
+  (`QuartzConfigSchema`). Auf 5.3.1 ist das `slugs.stripDiacritics`; Speichern schrieb genau diesen Schlüssel.
+  Auf 5.2.2 erscheint die Sektion nicht. Was neue Unteroptionen der eingebauten Verarbeitung angeht
+  (`links.*` usw.), hilft das noch nicht: die Sektionen dort sind von Hand gebaut.
+
+**Export: was die Website ausblendet, bleibt draußen.** Ein eigener Schritt vor `extractArticle`
+(`markHiddenBySite`, `Helpers/src/export/hiddenBySite.ts`) setzt `hidden` an jedes Element des Artikels mit
+berechnetem `display: none`, nie in einem SVG (Mermaids `<style>` ist `display: none` und zeichnet das
+Diagramm); `extractArticle` entfernt `[hidden]` schon, die Abschrift aus QuartzControl bleibt wortgleich
+(`PageScriptsTests`). Vorher gemessen in Chrome bei 658 px auf jeder Seite von gui-test (5.2.2, 5.3.1) und
+Example (5.2.0): Außer den Faltpfeilen trugen nur Dinge Text, die `extractArticle` ohnehin entfernt
+(inaktive Bases-Ansichten, Sprachhinweis, Formulare, Skripte); eingeklappte Callouts sind nicht
+`display: none`. Danach: Example (137 Seiten, 15 Diagramme, 10 Formeln) und gui-test 5.2.2 ergeben
+byte-gleiche ePubs und Bilder wie vorher, auf 5.3.1 sind die Faltpfeile weg bei gleichem Text;
+`export-pages-golden.mjs` macht denselben Schritt in Chrome, WebKit gleich Chrome auf beiden Builds.
+
+**Hinweis statt Sperre.** `CoreUpdate.testedQuartz` nennt das neueste Release, an dem QuartzHub gemessen
+ist (jetzt 5.2.2). Ist das neueste Release neuer, sagt die Seite Updates „noch nicht mit QuartzHub geprüft“,
+die Frage vor dem Update nennt es zuerst, das Update bleibt möglich. Heben steht in `docs/release.md`.
+
+**Offen aus 5.3:** `extends` (experimentell; eine Config damit enthält nur die Abweichungen, QuartzHub
+sähe unvollständige Plugin-Listen), `before:`/`after:` an Plugin-Einträgen (ein Widerspruch zu `order`
+stoppt den Build; Umsortieren in QuartzHub kann ihn erzeugen), der neue Kopf einer Transklusion
+(`div.markdown-embed-title` statt `h1`, im ePub ohne eigene Form). Die Sprache fällt seit 5.3.1 zurück,
+statt den Build abstürzen zu lassen: nichts zu tun.

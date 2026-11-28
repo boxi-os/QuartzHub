@@ -212,6 +212,11 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   (`ThemeCatalog`, `ThemeScreenshots`), das Theme des Projekts mit Quelle, Version, Snippets und Modus im Inspektor
   (`ThemeSource`); Altes räumt `ThemeLegacy` ab; ein übersprungenes Theme meldet Vorschau & Build (`ThemeBuildLog`).
   Ohne core 3 nur der Weg zu Updates. `themes-golden.mjs` vergleicht nur noch Presets und Style Settings mit QuartzControl. Erschienen mit 1.2.0 am 2026-11-25.
+- **Quartz-Updates ohne ständiges Nachziehen seit 2026-11-28** (decisions/phase-5-gleichstand.md, „Quartz 5.3“): Standardwerte der
+  eingebauten Verarbeitung und Layout-Bedingungen liest QuartzHub aus dem Quartz des Projekts (Helfer `quartz-facts`, `QuartzFacts`,
+  `qh-check quartz-facts`), „Weitere Einstellungen“ aus dessen Schema (`QuartzConfigSchema`), der Export lässt weg, was die Website per
+  CSS ausblendet (`markHiddenBySite`), und Updates sagt, wenn ein Release neuer ist als `CoreUpdate.testedQuartz` (jetzt 5.2.2).
+  Offen aus 5.3: `extends`, `before`/`after`, Kopf einer Transklusion im Export.
 
 ## Arbeitsweise
 

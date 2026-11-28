@@ -67,6 +67,10 @@ Eine neue Regel kommt mit dem Experiment, das sie erzwungen hat: in den Code als
 - **Was der Quartz eines Projekts kann, liest QuartzHub aus dem Projekt** (`QuartzFeatures`: die
   Datei, die Deklaration), nicht aus der Versionsnummer; was Quartz selbst prüft (`plugin doctor`,
   `quartz info`), fragt QuartzHub Quartz (decisions/phase-5-gleichstand.md, Quartz 5.1).
+  **Auch was Quartz festlegt, steht nicht als Konstante in QuartzHub:** Standardwerte, Bedingungen und
+  Einstellungen kommen aus dem Projekt (`QuartzFacts`, `QuartzConfigSchema`), die eigenen Werte sind nur
+  der Rückfall, und was nicht lesbar war, meldet `qh-check quartz-facts`. Der Export lässt weg, was die
+  Website per CSS ausblendet, statt einzelne Klassen zu kennen (decisions/phase-5-gleichstand.md, Quartz 5.3).
 - **Jede Dekompression bekommt eine Obergrenze, und die Datei selbst liefert sie nicht. (QC)**
 - **Ja/Nein-Fragen sind native Dialoge, die sichere Antwort zuerst, der bestätigende Button nach
   der Aktion benannt. (QC)** In SwiftUI `confirmationDialog`/`alert` mit `role: .cancel`.
