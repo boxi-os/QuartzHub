@@ -25,6 +25,8 @@ struct StageFacts {
   let groupNames: [String]
   let frameChoice: (name: String, from: PageTypeOverride.FrameOrigin)
   let frame: LayoutStage.Frame
+  /// What the project's Quartz says (conditions).
+  let quartz: QuartzFacts
 
   @MainActor init(model: LayoutModel, config: QuartzConfig, storedPageType: String) {
     self.config = config
@@ -41,6 +43,7 @@ struct StageFacts {
     // "All pages" has no frame of its own and is drawn in the content pages' one.
     frameChoice = PageTypeOverride.resolvedFrame(config, pageType ?? "content", pluginFrames: model.pluginFrames ?? [:])
     frame = LayoutStage.frame(named: frameChoice.name, frames: model.frames, pluginFrames: model.pluginFrames ?? [:])
+    quartz = model.quartzFacts
   }
 
   func label(_ index: Int) -> String {

@@ -35,13 +35,25 @@ enum LayoutWords {
     }
   }
 
+  /// A condition in words; `not-<name>` of a named one as its inversion (Quartz 5.3), anything
+  /// else as written.
   static func condition(_ condition: String) -> String {
+    if let word = conditionWord(condition) { return word }
+    if condition.hasPrefix("not-"), let word = conditionWord(String(condition.dropFirst(4))) {
+      return L10n.t("layoutEditor.inspector.conditionNegated", ["condition": word])
+    }
+    return condition
+  }
+
+  private static func conditionWord(_ condition: String) -> String? {
     switch condition {
+    case "is-index": L10n.t("layoutEditor.inspector.conditionIsIndex")
     case "not-index": L10n.t("layoutEditor.inspector.conditionNotIndex")
+    case "is-folder-index": L10n.t("layoutEditor.inspector.conditionIsFolderIndex")
     case "has-tags": L10n.t("layoutEditor.inspector.conditionHasTags")
     case "has-backlinks": L10n.t("layoutEditor.inspector.conditionHasBacklinks")
     case "has-toc": L10n.t("layoutEditor.inspector.conditionHasToc")
-    default: condition
+    default: nil
     }
   }
 

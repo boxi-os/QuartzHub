@@ -151,9 +151,38 @@ public enum LayoutBoard {
     withLayout(plugins, index) { $0["display"] = display.flatMap { $0.isEmpty || $0 == "all" ? nil : .string($0) } }
   }
 
-  /// Quartz's four built-in conditions (`quartz/plugins/loader/conditions.ts`); a plugin can add
-  /// more, and an unknown name shows the component always.
+  /// Quartz 5.1's and 5.2's four built-in conditions (`quartz/plugins/loader/conditions.ts`), the
+  /// fallback when the project's own cannot be read (`QuartzFacts.conditionNames`); a plugin can
+  /// add more, and an unknown name shows the component always.
   public static let builtinConditions = ["not-index", "has-tags", "has-backlinks", "has-toc"]
+
+  /// A `condition` as the inspector offers it: none, one the project's Quartz knows (and, since
+  /// Quartz 5.3, `not-<name>` for its negation), or a name QuartzHub does not know (a plugin's).
+  public enum ConditionChoice: Equatable, Sendable {
+    case always
+    case known(String, negated: Bool)
+    case custom(String)
+  }
+
+  /// A name Quartz has wins over reading it as a negation: `not-index` is its own condition.
+  public static func conditionChoice(_ condition: String, facts: QuartzFacts) -> ConditionChoice {
+    let names = facts.conditionNames
+    if condition.isEmpty { return .always }
+    if names.contains(condition) { return .known(condition, negated: false) }
+    if facts.negatesAnyCondition, condition.hasPrefix("not-"), names.contains(String(condition.dropFirst(4))) {
+      return .known(String(condition.dropFirst(4)), negated: true)
+    }
+    return .custom(condition)
+  }
+
+  /// The value written for a choice.
+  public static func condition(_ choice: ConditionChoice) -> String {
+    switch choice {
+    case .always: ""
+    case .known(let name, let negated): negated ? "not-" + name : name
+    case .custom(let name): name
+    }
+  }
 
   /// `withCondition`: trimmed, and an empty one writes no key.
   public static func withCondition(_ plugins: [PluginEntry], _ index: Int, _ condition: String) -> [PluginEntry] {

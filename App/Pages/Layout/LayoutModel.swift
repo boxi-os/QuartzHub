@@ -37,6 +37,8 @@ final class LayoutModel {
   private(set) var widths: LayoutFrames.Widths = FrameBreakpointWidths.defaults
   /// What the project's Quartz can do (5.1: `layout.sidebars`).
   private(set) var features = QuartzFeatures()
+  /// The conditions the project's Quartz knows (`QuartzFacts`), for the inspector.
+  private(set) var quartzFacts = QuartzFacts()
   /// Quartz's own frame as this project's Sass measures it; nil until read.
   private(set) var measures: ScssCheck.MeasuresResult?
   /// Instance classes the stylesheets already name, for the class of a copy.
@@ -87,6 +89,7 @@ final class LayoutModel {
     reloadFrames()
     widths = await Task.detached { LayoutFrames.widths(project: path) }.value
     features = await Task.detached { QuartzFeatures.read(project: path) }.value
+    quartzFacts = await QuartzFacts.readOrFallback(project: path, runtime: environment.runtime)
     styled = Set((try? await Task.detached { try SiteFonts.takenClasses(project: path, prefixes: InstanceClass.prefixes) }.value) ?? [])
     await readPluginFrames()
     measures = await ScssCheck.frameMeasures(project: path, runtime: environment.runtime)

@@ -27485,6 +27485,101 @@
         }
       }
     },
+    "layoutEditor.inspector.conditionIsFolderIndex" : {
+      "comment" : "Layout ▸ Komponenten, Inspektor, Bedingung: Quartz-Bedingung is-folder-index (seit 5.3)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur auf Ordnerseiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only on folder pages"
+          }
+        }
+      }
+    },
+    "layoutEditor.inspector.conditionIsIndex" : {
+      "comment" : "Layout ▸ Komponenten, Inspektor, Bedingung: Quartz-Bedingung is-index (seit 5.3)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur auf der Startseite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only on the home page"
+          }
+        }
+      }
+    },
+    "layoutEditor.inspector.conditionNegate" : {
+      "comment" : "Layout ▸ Komponenten, Inspektor, Bedingung: Schalter, schreibt not-<name> (Quartz 5.3)",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umkehren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invert"
+          }
+        }
+      }
+    },
+    "layoutEditor.inspector.conditionNegateHint" : {
+      "comment" : "Layout ▸ Komponenten, Inspektor, Bedingung: Erklärung unter dem Schalter Umkehren",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Komponente erscheint dort, wo die Bedingung nicht gilt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The component appears where the condition does not hold."
+          }
+        }
+      }
+    },
+    "layoutEditor.inspector.conditionNegated" : {
+      "comment" : "Layout: eine umgekehrte Bedingung (not-<name>) in Übersicht, Bühne und Bedienungshilfen; condition ist der Text der Bedingung",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umgekehrt: {{condition}}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inverted: {{condition}}"
+          }
+        }
+      }
+    },
     "layoutEditor.inspector.conditionNotIndex" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,

@@ -170,26 +170,40 @@ struct ComponentInspector: View {
 
   // MARK: condition and group
 
+  /// The conditions are the project's Quartz's (`QuartzFacts`), with „Umkehren“ where it negates
+  /// any of them (`not-<name>`, Quartz 5.3); a name it does not know is „Eigene…“.
   @ViewBuilder private var conditionFields: some View {
     let condition = layout["condition"]?.stringValue ?? ""
-    let builtin = LayoutBoard.builtinConditions.contains(condition)
-    let custom = customCondition ?? (!condition.isEmpty && !builtin)
-    Picker(L10n.t("layoutEditor.inspector.condition"), selection: Binding(get: { custom ? "__custom" : condition }, set: { value in
+    let choice = LayoutBoard.conditionChoice(condition, facts: facts.quartz)
+    let (base, negated, isCustom): (String, Bool, Bool) = switch choice {
+    case .always: ("", false, false)
+    case .known(let name, let negated): (name, negated, false)
+    case .custom: ("", false, true)
+    }
+    let custom = customCondition ?? isCustom
+    Picker(L10n.t("layoutEditor.inspector.condition"), selection: Binding(get: { custom ? "__custom" : base }, set: { value in
       if value == "__custom" {
         customCondition = true
         return
       }
       customCondition = false
-      apply(LayoutBoard.withCondition(plugins, index, value))
+      apply(LayoutBoard.withCondition(plugins, index, value.isEmpty ? "" : LayoutBoard.condition(.known(value, negated: negated))))
     })) {
       Text(L10n.t("layoutEditor.inspector.conditionAlways")).tag("")
-      ForEach(LayoutBoard.builtinConditions, id: \.self) { Text(LayoutWords.condition($0)).tag($0) }
+      ForEach(facts.quartz.conditionNames, id: \.self) { Text(LayoutWords.condition($0)).tag($0) }
       Text(L10n.t("layoutEditor.inspector.conditionCustom")).tag("__custom")
+    }
+    // A name that is itself a negation (`not-index`) is not offered inverted.
+    if !custom, !base.isEmpty, !base.hasPrefix("not-"), facts.quartz.negatesAnyCondition {
+      Toggle(L10n.t("layoutEditor.inspector.conditionNegate"), isOn: Binding(get: { negated }, set: { on in
+        apply(LayoutBoard.withCondition(plugins, index, LayoutBoard.condition(.known(base, negated: on))))
+      }))
+      Note(L10n.t("layoutEditor.inspector.conditionNegateHint"))
     }
     if custom {
       VStack(alignment: .leading, spacing: 4) {
         Text(L10n.t("layoutEditor.inspector.conditionCustomLabel"))
-        CommitField(name: L10n.t("layoutEditor.inspector.conditionCustomLabel"), text: builtin ? "" : condition) { raw in
+        CommitField(name: L10n.t("layoutEditor.inspector.conditionCustomLabel"), text: isCustom ? condition : "") { raw in
           apply(LayoutBoard.withCondition(plugins, index, raw))
           return true
         }

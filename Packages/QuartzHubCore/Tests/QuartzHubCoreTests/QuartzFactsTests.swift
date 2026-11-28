@@ -111,3 +111,30 @@ struct QuartzFactsTests {
     #expect(try await Self.facts(project).conditionNames.count == 6)
   }
 }
+
+/// How the inspector reads a `condition`, without the helper: the facts as 5.2.2 and 5.3.1 give them.
+struct ConditionChoiceTests {
+  static let quartz522 = QuartzFacts(builtins: .missing, conditions: .read(.init(names: LayoutBoard.builtinConditions, negation: false)))
+  static let quartz531 = QuartzFacts(builtins: .missing, conditions: .read(.init(
+    names: ["is-index", "not-index", "is-folder-index", "has-tags", "has-backlinks", "has-toc"], negation: true)))
+
+  @Test func namesNegationsAndTheRest() {
+    typealias C = LayoutBoard.ConditionChoice
+    #expect(LayoutBoard.conditionChoice("", facts: Self.quartz531) == C.always)
+    #expect(LayoutBoard.conditionChoice("has-tags", facts: Self.quartz531) == C.known("has-tags", negated: false))
+    #expect(LayoutBoard.conditionChoice("not-has-tags", facts: Self.quartz531) == C.known("has-tags", negated: true))
+    // Its own built-in, not the negation of a condition "index".
+    #expect(LayoutBoard.conditionChoice("not-index", facts: Self.quartz531) == C.known("not-index", negated: false))
+    #expect(LayoutBoard.conditionChoice("not-is-folder-index", facts: Self.quartz531) == C.known("is-folder-index", negated: true))
+    #expect(LayoutBoard.conditionChoice("is-draft", facts: Self.quartz531) == C.custom("is-draft"))
+    #expect(LayoutBoard.conditionChoice("not-is-draft", facts: Self.quartz531) == C.custom("not-is-draft"))
+    // 5.2 knows no negation and no is-index: both are names QuartzHub cannot place.
+    #expect(LayoutBoard.conditionChoice("not-has-tags", facts: Self.quartz522) == C.custom("not-has-tags"))
+    #expect(LayoutBoard.conditionChoice("is-index", facts: Self.quartz522) == C.custom("is-index"))
+    // Without any facts, the constants.
+    #expect(LayoutBoard.conditionChoice("has-toc", facts: QuartzFacts()) == C.known("has-toc", negated: false))
+    for choice in [C.always, .known("has-tags", negated: true), .known("not-index", negated: false), .custom("x")] {
+      #expect(LayoutBoard.conditionChoice(LayoutBoard.condition(choice), facts: Self.quartz531) == (choice == .custom("x") ? .custom("x") : choice))
+    }
+  }
+}
