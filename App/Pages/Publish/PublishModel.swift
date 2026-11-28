@@ -53,7 +53,9 @@ final class PublishModel {
   private(set) var building = false
   private(set) var buildError: String?
   /// How the last "Jetzt bauen" ended, in Vorschau & Build's words.
-  private(set) var buildLine: (success: Bool, text: String)?
+  /// The last "Jetzt bauen" in words, as Vorschau & Build says it: `noTheme` when the build went
+  /// through but skipped the community theme (`ThemeBuildLog`).
+  private(set) var buildLine: (success: Bool, noTheme: Bool, text: String)?
   private(set) var forgetting = false
   private(set) var run: Run?
   /// Whether a deploy runs, apart from its progress: the file rows read this one, so a progress
@@ -176,11 +178,8 @@ final class PublishModel {
     defer { building = false }
     switch await BuildAction.run(projectId: project.id, project: path, outputDir: outputDirArgument) {
     case .finished(let result):
-      let seconds = Double(result.duration.components.seconds) + Double(result.duration.components.attoseconds) / 1e18
-      buildLine = (result.success, L10n.t("buildServer.resultLine", [
-        "status": result.success ? L10n.t("buildServer.success") : L10n.t("buildServer.failed"),
-        "seconds": seconds.formatted(.number.precision(.fractionLength(1)).locale(Locale(identifier: L10n.language))),
-      ]))
+      let noTheme = result.success && BuildServerModel.themeSkipped(BuildMonitor.shared.logs(project.id))
+      buildLine = (result.success, noTheme, BuildServerModel.resultLine(result, themeSkipped: noTheme))
       Announce.post(buildLine!.text)
     case .refused(let message):
       buildError = message

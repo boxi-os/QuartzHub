@@ -200,7 +200,7 @@ struct PublishPage: View {
       }
       outputDirRow
       if let line = model.buildLine {
-        Text(line.text).font(.callout).foregroundStyle(line.success ? .green : .red)
+        Text(line.text).font(.callout).foregroundStyle(!line.success ? .red : line.noTheme ? .orange : .green)
       }
       if let error = model.diffError ?? model.buildError {
         Callout(.error) { Text(error).accessibilityIdentifier("publish.diffError") }
