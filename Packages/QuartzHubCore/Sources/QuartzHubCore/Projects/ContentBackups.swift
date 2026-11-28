@@ -40,11 +40,13 @@ public enum ContentBackups {
     return "\(g[1]):\(g[2]):\(g[3]).\(g[4])Z"
   }
 
-  /// `snapshotContent`: the current content folder aside. Nothing there (a dangling link counts as
-  /// nothing, `existsSync` follows it), nothing to do.
+  /// `snapshotContent`: the current content folder aside. Nothing there, nothing to do. Asked with
+  /// `lstat`, not as QuartzControl did with `existsSync`, which follows the link: a vault moved
+  /// elsewhere left a dangling link that counted as nothing, stayed, and the new link failed with
+  /// EEXIST (user, 2026-11-28). Such a link goes aside like any other, with its target.
   @discardableResult
   public static func moveAside(project: String, content: String, now: Date) throws -> Entry? {
-    guard Posix.exists(content) else { return nil }
+    guard Posix.kind(content) != nil else { return nil }
     let id = JSONStore.quarantineStamp(now)
     let base = try QuartzGuiDirectory(project: project).create("content-backups")
     let dir = "\(base)/\(id)"
@@ -111,7 +113,7 @@ public enum ContentBackups {
   /// moved: a rename emptied the entry, and its second restore failed.
   public static func restore(project: String, content: String, id: String, now: Date) throws {
     let dir = "\(root(project))/\(id)"
-    if Posix.exists(content) { try moveAside(project: project, content: content, now: now) }
+    try moveAside(project: project, content: content, now: now)
     let marker = "\(dir)/symlink.json"
     if Posix.exists(marker) {
       let record: JSONValue

@@ -1361,9 +1361,16 @@ In drei Teilen in einem Zug (Nutzer, 2026-11-06): 7a der Snapshot-Speicher und w
   verlangten Snapshots und jede Datei des Arbeitsordners. Gleich in allen.
 - **Wie in QuartzControl, auch wo es seltsam ist:** Ein relativer Link in der Kopie zeigt danach
   absolut in die Quelle (Nodes `cp` ohne `verbatimSymlinks`); der Fortschritt zählt jeden Eintrag,
-  versteckte und Ordner mit, die Summe nur, was Quartz liest (10 von 4); ein hängender Link als
-  Content-Ordner wird nicht beiseitegelegt (`existsSync` folgt ihm), und der neue Link scheitert
-  dann mit EEXIST; eine Quelle mit Schrägstrich am Ende steht so im Link.
+  versteckte und Ordner mit, die Summe nur, was Quartz liest (10 von 4); eine Quelle mit
+  Schrägstrich am Ende steht so im Link.
+- **Ein hängender Link als Content-Ordner wird beiseitegelegt (seit 2026-11-28, Abweichung).**
+  QuartzControl prüfte mit `existsSync`, das dem Link folgt: Der Link galt als „nichts da“, blieb
+  stehen, und der neue Link scheiterte mit EEXIST, ebenso eine Kopie und das Zurückspielen eines
+  Eintrags. Das passiert genau dann, wenn man den Vault verschoben hat und die Quelle neu setzen
+  will; der Nutzer musste den Link im Finder löschen. `moveAside` fragt jetzt mit `lstat` und legt
+  den Link mit seinem Ziel beiseite wie jeden anderen. Das Golden-Replay prüft diesen Schritt mit der
+  neuen Antwort und nimmt den neuen Eintrag danach wieder heraus; `aDanglingLinkIsMovedAsideToo`
+  prüft Link, Kopie und Zurückspielen, vor dem Fix rot mit EEXIST.
 - **Pfade als Zeichenketten, Namen über POSIX** (`Posix`, siehe Nebenbefund beim Snapshot-Speicher):
   Ein beiseitegelegter und zurückkopierter Ordner behält die Bytes seiner Namen. `TreeCopy` legt
   Links jetzt mit `symlink(2)` an statt mit `createSymbolicLink`, das den Namen zerlegt hatte (auch

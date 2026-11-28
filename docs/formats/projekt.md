@@ -523,7 +523,8 @@ Nutzers). Lesen legt den Ordner nie an. Löschen: `rm` nach `writableTarget`.
 
 - **Wechsel** `changeContentSource` (`contentService.ts:367`): Quelle darf weder in `content/` liegen
   noch es enthalten (`relative()`-Test). Snapshot `contentChange`, dann das bisherige `content/` nach
-  `.quartz-gui/content-backups/` **verschieben** (`snapshotContent`, anderer Bereich). Danach
+  `.quartz-gui/content-backups/` **verschieben** (`snapshotContent`, anderer Bereich; ein hängender
+  Link übersprang das in QuartzControl, QuartzHub legt auch ihn beiseite). Danach
   `symlink(sourcePath, content, 'dir')` mit **absolutem** Ziel (Dialog liefert absolut) oder rekursives
   `cp`.
 - **Lesen** `getContentStatus` (`:56`): `lstat` (nicht `existsSync`); bei Symlink `readlink`, ein

@@ -51,6 +51,37 @@ import Testing
     #expect(ContentFolder.sourcePath("/abs/v/", project: "/w/projekt") == "/abs/v/")
   }
 
+  /// A vault moved elsewhere leaves `content/` a link to nothing. Changing the source, either way,
+  /// and restoring an entry still work: the dangling link is moved aside like any other, recorded
+  /// with its target. The check followed the link, found nothing and left it there, so the new
+  /// link failed with EEXIST (user, 2026-11-28).
+  @Test func aDanglingLinkIsMovedAsideToo() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    let work = TemplatePackageTests.realpath(scratch.path)
+    let project = "\(work)/p", content = "\(work)/p/content"
+    try Posix.mkdirs(project)
+    try SnapshotStoreTests.Harness.write("\(work)/Gärten-neu/index.md", "neu")
+    let now = SnapshotStore.date("2026-11-28T10:00:00Z")!
+
+    for (step, strategy) in [ContentFolder.SourceStrategy.symlink, .copy].enumerated() {
+      try? FileManager.default.removeItem(atPath: content)
+      try Posix.symlink("\(work)/Gärten-alt", content)
+      let at = now.addingTimeInterval(Double(step))
+      try await ContentFolder.changeSource(project: project, source: "\(work)/Gärten-neu", strategy: strategy,
+                                           snapshot: { _, _, _ in }, now: at)
+      #expect(try Posix.read("\(content)/index.md") == Data("neu".utf8), "\(strategy)")
+      let entry = try #require(ContentBackups.list(project: project).first)
+      #expect(entry.kind == .link && entry.target.map { Array($0.utf8) } == Array("\(work)/Gärten-alt".utf8), "\(strategy)")
+    }
+
+    // And back: the restore puts the link back where content/ now dangles.
+    try? FileManager.default.removeItem(atPath: content)
+    try Posix.symlink("\(work)/anderswo", content)
+    let linked = try #require(ContentBackups.list(project: project).first { $0.kind == .link })
+    try ContentBackups.restore(project: project, content: content, id: linked.id, now: now.addingTimeInterval(10))
+    #expect(Array(try Posix.readlink(content).utf8) == Array("\(work)/Gärten-alt".utf8))
+  }
+
   @Test func replaysQuartzControlsSteps() async throws {
     let golden = try JSJSON.parse(Data(contentsOf: Self.fixtures.appendingPathComponent("steps.json")))
     let steps = golden["steps"]!.arrayValue!
@@ -99,6 +130,17 @@ import Testing
         failure = error
       }
 
+      if name.hasPrefix("a dangling link as content folder") {
+        // A deliberate deviation (user, 2026-11-28, `aDanglingLinkIsMovedAsideToo`): QuartzControl
+        // left the dangling link there and failed with EEXIST. QuartzHub moves it aside and links;
+        // the entry it made goes again, so the steps after this one see QuartzControl's folder.
+        #expect(failure == nil, "\(name): \(String(describing: failure))")
+        #expect(Array(try Posix.readlink(content).utf8) == Array(arg(0).utf8), "\(name)")
+        let entry = try #require(ContentBackups.list(project: project).first, "\(name)")
+        #expect(entry.kind == .link && entry.target == "\(work)/weg" && entry.id == JSONStore.quarantineStamp(now), "\(name)")
+        try ContentBackups.delete(project: project, id: entry.id)
+        continue
+      }
       if let expected = step["error"] {
         // Node's own errors by their code; the app's by their sentence; a JSON error only as one.
         if case .string(let code) = expected["code"] {
