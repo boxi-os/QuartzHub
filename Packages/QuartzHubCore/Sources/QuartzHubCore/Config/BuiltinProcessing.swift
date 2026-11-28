@@ -26,6 +26,10 @@ public struct QuartzFeatures: Equatable, Sendable {
   /// theme is a name, a repo, an address or a file, loaded at build time (`ThemeFetch`). Read from
   /// `node_modules`, so it says what the next build runs, not what package.json asks for.
   public var themesCore3: Bool
+  /// What the project's Quartz says about its built-ins and conditions (helper `quartz-facts`),
+  /// asked by the pages that show them; nil: QuartzHub's constants. Not part of `read`, which
+  /// stays synchronous and without a process.
+  public var facts: QuartzFacts?
 
   public init(version: String? = nil, builtins: Bool = false, prefetch: Bool = false, publishAssets: Bool = false, sidebars: Bool = false,
               analytics51: Bool = false, fontsBuiltin: Bool = false, fontsLoadsAll: Bool = false, themesCore3: Bool = false) {
@@ -281,8 +285,10 @@ public enum BuiltinProcessing {
       configured["enabled"] = nil
       configured["order"] = nil
 
-      var options = builtin.defaults
-      var order = JSONValue.number(builtin.defaultOrder)
+      // Quartz's own defaults and order where the project says them (QuartzFacts), else QuartzHub's.
+      let facts = features.facts ?? QuartzFacts()
+      var options = facts.defaults(builtin)
+      var order = JSONValue.number(facts.order(builtin))
       var enabled = explicitEnabled != .bool(false)
       var note: Note? = explicitEnabled == .bool(false) ? .disabledInConfiguration : nil
       var absorbed: Int?
@@ -294,7 +300,7 @@ public enum BuiltinProcessing {
         absorbed = index
         let entry = plugins[index]
         if entry.enabled {
-          merge(&options, builtin.absorbedDefaults)
+          merge(&options, facts.absorbedDefaults(builtin))
           if let own = entry.object["options"]?.objectValue { merge(&options, own) }
           // `legacyEntry.order !== undefined`: a written `order: null` counts, as in Quartz
           // (Review 2026-11-11 (2), nebenbei 6).

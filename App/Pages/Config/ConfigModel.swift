@@ -49,6 +49,9 @@ final class ConfigModel {
       }
       return (QuartzFeatures.read(project: path), provides)
     }.value
+    // The defaults the toggles show when the file says nothing: the project's Quartz's (5.3 marks
+    // broken links unless told not to).
+    features.facts = await QuartzFacts.readOrFallback(project: path, runtime: environment.runtime)
     locales = await Task.detached { (try? LocaleFiles(environment: environment).list(project: path)) ?? [] }.value
   }
 

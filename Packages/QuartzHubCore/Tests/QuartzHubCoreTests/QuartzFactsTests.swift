@@ -48,6 +48,24 @@ struct QuartzFactsTests {
     #expect(facts.negatesAnyCondition)
   }
 
+  /// What Konfiguration ▸ Verarbeitung shows comes from the plan: with 5.3.1's facts a file that
+  /// says nothing marks broken links, one that says `false` does not, and an old crawl-links entry
+  /// still brings its own defaults. Without facts, the constants (5.2's answer).
+  @Test func thePlanTakesTheProjectsDefaults() async throws {
+    let scratch = try HostPathTests.Scratch(umlaut: true)
+    var features = QuartzFeatures.quartz521
+    features.facts = try await Self.facts(try Self.project("5.3.1", in: scratch))
+    let silent = BuiltinProcessing.plan(configuration: JSONObject(), plugins: [], features: features)
+    #expect(silent[.links].options["disableBrokenWikilinks"] == .bool(true))
+    #expect(BuiltinProcessing.plan(configuration: JSONObject(), plugins: [], features: .quartz521)[.links].options["disableBrokenWikilinks"] == .bool(false))
+    let off = JSONObject([("links", .object(JSONObject([("disableBrokenWikilinks", .bool(false))])))])
+    #expect(BuiltinProcessing.plan(configuration: off, plugins: [], features: features)[.links].options["disableBrokenWikilinks"] == .bool(false))
+    let crawl = PluginEntry(object: JSONObject([("source", .string("github:quartz-community/crawl-links")), ("enabled", .bool(true))]))
+    let legacy = BuiltinProcessing.plan(configuration: JSONObject(), plugins: [crawl], features: features)[.links]
+    #expect(legacy.options["markdownLinkResolution"] == .string("absolute"))
+    #expect(legacy.order == .number(60))
+  }
+
   /// A Quartz without the files (5.0, or no Quartz): nothing to report, the constants.
   @Test func missingFilesAreTheConstants() async throws {
     let scratch = try HostPathTests.Scratch(umlaut: true)
