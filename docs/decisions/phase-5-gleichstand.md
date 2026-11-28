@@ -3598,8 +3598,12 @@ byte-gleiche ePubs und Bilder wie vorher, auf 5.3.1 sind die Faltpfeile weg bei 
 `export-pages-golden.mjs` macht denselben Schritt in Chrome, WebKit gleich Chrome auf beiden Builds.
 
 **Hinweis statt Sperre.** `CoreUpdate.testedQuartz` nennt das neueste Release, an dem QuartzHub gemessen
-ist (jetzt 5.2.2). Ist das neueste Release neuer, sagt die Seite Updates „noch nicht mit QuartzHub geprüft“,
+ist. Ist das neueste Release neuer, sagt die Seite Updates „noch nicht mit QuartzHub geprüft“,
 die Frage vor dem Update nennt es zuerst, das Update bleibt möglich. Heben steht in `docs/release.md`.
+Gehoben von 5.2.2 auf 5.3.1 am 2026-11-28: Kern-Update des Handbuch-Demos über die Seite Updates (Merge
+ohne Konflikt, Build danach sauber, Quartz' Prüfung meldet nur `hard-line-breaks` als veraltet und die
+gewollten Doppeleinträge), `qh-check quartz-facts` dort ohne Befund (Exit 0), `export-book` und
+`export-pages` an der 5.3.1-Kopie von gui-test wie oben, Rauchtest grün.
 
 **Offen aus 5.3:** `extends` (experimentell; eine Config damit enthält nur die Abweichungen, QuartzHub
 sähe unvollständige Plugin-Listen), `before:`/`after:` an Plugin-Einträgen (ein Widerspruch zu `order`

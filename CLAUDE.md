@@ -215,7 +215,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
 - **Quartz-Updates ohne ständiges Nachziehen seit 2026-11-28** (decisions/phase-5-gleichstand.md, „Quartz 5.3“): Standardwerte der
   eingebauten Verarbeitung und Layout-Bedingungen liest QuartzHub aus dem Quartz des Projekts (Helfer `quartz-facts`, `QuartzFacts`,
   `qh-check quartz-facts`), „Weitere Einstellungen“ aus dessen Schema (`QuartzConfigSchema`), der Export lässt weg, was die Website per
-  CSS ausblendet (`markHiddenBySite`), und Updates sagt, wenn ein Release neuer ist als `CoreUpdate.testedQuartz` (jetzt 5.2.2).
+  CSS ausblendet (`markHiddenBySite`), und Updates sagt, wenn ein Release neuer ist als `CoreUpdate.testedQuartz` (jetzt 5.3.1).
   Offen aus 5.3: `extends`, `before`/`after`, Kopf einer Transklusion im Export.
 
 ## Arbeitsweise

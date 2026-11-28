@@ -31,7 +31,7 @@ public final class CoreUpdate: Sendable {
   /// release that was measured on a newer one (docs/release.md). A newer release is still offered,
   /// with a word that it is not checked yet: Quartz releases about weekly, and QuartzHub reads what
   /// it can from the project itself (decision of the user, 2026-11-28: a hint, no lock).
-  public static let testedQuartz = "5.2.2"
+  public static let testedQuartz = "5.3.1"
 
   /// `release` when it is newer than `testedQuartz`, else nil.
   public static func untested(_ release: String?) -> String? {
