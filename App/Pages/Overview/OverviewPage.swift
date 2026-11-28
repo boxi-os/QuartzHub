@@ -283,13 +283,13 @@ struct OverviewPage: View {
   }
 
   /// The active theme is no field of its own: it is the enabled `@quartz-themes/*` plugin's
-  /// `theme` option (the convention of quartz-themes/core, as Stile ▸ Theme reads it).
+  /// `theme` option, named as Stile ▸ Community-Themes names it: the list's entry core finds for
+  /// it, Obsidian's own theme by its word, anything else (a path, a URL) as written.
   private var activeTheme: String? {
-    let plugin = model.attention.config?.plugins.first { plugin in
-      guard plugin.enabled, case .string(let source)? = plugin.source else { return false }
-      return source.hasPrefix("@quartz-themes/")
-    }
-    return plugin?.object["options"]?["theme"]?.stringValue
+    let plugin = model.attention.config?.plugins.first { $0.enabled && FontDelivery.isThemePlugin($0) }
+    guard let spec = plugin?.object["options"]?["theme"]?.stringValue else { return nil }
+    if ThemeSource.isBuiltIn(spec) { return L10n.t("themes.list.builtIn") }
+    return model.themeList.flatMap { ThemeCatalog.find(spec, in: $0) }?.name ?? spec
   }
 
   private var designSection: some View {

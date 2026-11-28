@@ -14,6 +14,8 @@ final class OverviewModel {
   var frameCount: Int?
   var stylesheetCount: Int?
   var targets: [PublishTarget]?
+  /// Obsidian's theme list, for the theme's name as Stile ▸ Community-Themes shows it; nil until read.
+  var themeList: [ThemeCatalog.Theme]?
   /// nil while reading; a failure is the folder that could not be listed.
   var build: Result<BuildOutput.Info, BuildOutput.Unreadable>?
   var core: CoreUpdate.Status?
@@ -67,6 +69,10 @@ final class OverviewModel {
       group.addTask { await self.loadSnapshots() }
       group.addTask { await self.loadBuild() }
       group.addTask { await self.loadDependencies() }
+      group.addTask {
+        let themes = await ThemeServices.catalog.list()?.themes
+        await MainActor.run { self.themeList = themes }
+      }
       group.addTask {
         let frames = LayoutFrames.listFrames(project: path).count
         let sheets = (try? StyleFiles.list(project: path))?.files.count
