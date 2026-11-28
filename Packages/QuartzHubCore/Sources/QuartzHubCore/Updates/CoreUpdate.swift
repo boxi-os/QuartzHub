@@ -27,6 +27,18 @@ public final class CoreUpdate: Sendable {
   /// What an update goes to.
   public enum Target: Sendable { case latestRelease, branchHead }
 
+  /// The newest Quartz release QuartzHub has been checked against, raised with each QuartzHub
+  /// release that was measured on a newer one (docs/release.md). A newer release is still offered,
+  /// with a word that it is not checked yet: Quartz releases about weekly, and QuartzHub reads what
+  /// it can from the project itself (decision of the user, 2026-11-28: a hint, no lock).
+  public static let testedQuartz = "5.2.2"
+
+  /// `release` when it is newer than `testedQuartz`, else nil.
+  public static func untested(_ release: String?) -> String? {
+    guard let release, SemVer.isNewer(release, than: testedQuartz) else { return nil }
+    return release
+  }
+
   /// A release of Quartz: its tag, the commit the tag names, the version.
   public struct Release: Sendable, Equatable {
     public var tag: String

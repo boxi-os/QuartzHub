@@ -91,6 +91,13 @@ navigations `v0.5.1`, forms `v0.6.1`; App liest 0.4.2, 0.3.0, 0.5.1, 0.6.0
 (0.6.1 gleicher Code: nur Kommentare und der Kopf der Relay-Datei). Die Fassung, die QuartzHub vergleicht,
 steht in `package.json` unter `quartz.version`, nicht oben.
 
+### Die geprüfte Quartz-Fassung
+
+`CoreUpdate.testedQuartz` nennt das neueste Quartz-Release, an dem QuartzHub gemessen ist; für ein neueres
+sagt die Seite Updates „noch nicht mit QuartzHub geprüft“ (Entscheidung 2026-11-28: Hinweis, keine Sperre).
+Heben, wenn dieses Release an einem neueren gemessen ist: Kern-Update einer Kopie von gui-test über die Seite
+Updates, Build, `qh-check quartz-facts`, `qh-check export-book`, Rauchtest.
+
 ## 5. Die Liste der Google-Schriften ist nicht zu alt
 
 `GoogleFontList.fetched` (heute `2026-11-05`) erscheint im Satz „Diesen Namen führt Google nicht

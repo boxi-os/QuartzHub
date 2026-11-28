@@ -87,6 +87,11 @@ struct UpdatesPage: View {
         Callout(.info, L10n.t("updates.core.newMajor", ["version": newer]))
       }
 
+      // A release QuartzHub has not been checked against: said, still offered (CoreUpdate.testedQuartz).
+      if let untested = CoreUpdate.untested(model.core?.release) {
+        Callout(.info, L10n.t("updates.core.untested", ["version": untested, "tested": CoreUpdate.testedQuartz]))
+      }
+
       // Read from git rather than from the last result: a half-finished merge is there after the
       // page was left, and this is the way out of it (QuartzControl's banner, as on Git-Sync).
       if let operation = model.git?.inProgress {

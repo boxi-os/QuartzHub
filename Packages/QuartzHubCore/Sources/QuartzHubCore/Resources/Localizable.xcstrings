@@ -67552,6 +67552,25 @@
         }
       }
     },
+    "updates.core.confirmUntested" : {
+      "comment" : "Updates: erster Absatz der Rückfrage vor dem Kern-Update, wenn das Release neuer ist als CoreUpdate.testedQuartz",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz {{version}} ist noch nicht mit QuartzHub geprüft."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz {{version}} has not been checked with QuartzHub yet."
+          }
+        }
+      }
+    },
     "updates.core.conflictHeading" : {
       "extractionState" : "manual",
       "generatesSymbol" : false,
@@ -68020,6 +68039,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Updating…"
+          }
+        }
+      }
+    },
+    "updates.core.untested" : {
+      "comment" : "Updates, Abschnitt Quartz-Kern: Hinweis, wenn das neueste Release neuer ist als CoreUpdate.testedQuartz",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz {{version}} ist noch nicht mit QuartzHub geprüft, zuletzt geprüft ist {{tested}}. Einzelne Anzeigen oder der Export können damit abweichen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartz {{version}} has not been checked with QuartzHub yet; the last checked release is {{tested}}. Some views or the export may differ with it."
           }
         }
       }

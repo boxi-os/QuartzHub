@@ -180,3 +180,14 @@ struct QuartzConfigSchemaTests {
     #expect(QuartzConfigSchema.applying(JSONObject([("pageTitle", .string("other"))]), to: configuration)["pageTitle"] == .string("T"))
   }
 }
+
+/// The hint on Updates: a release newer than the checked one, nothing for it or an older one.
+struct TestedQuartzTests {
+  @Test func onlyNewerReleasesAreUntested() {
+    #expect(CoreUpdate.untested(nil) == nil)
+    #expect(CoreUpdate.untested(CoreUpdate.testedQuartz) == nil)
+    #expect(CoreUpdate.untested("5.1.0") == nil)
+    #expect(CoreUpdate.untested("99.0.0") == "99.0.0")
+    #expect(CoreUpdate.untested("not a version") == nil)
+  }
+}

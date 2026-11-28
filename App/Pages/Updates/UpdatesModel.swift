@@ -159,7 +159,10 @@ final class UpdatesModel {
   /// Every action resets its busy flag on every way out: these are the longest-running actions in
   /// the app, and QuartzControl once left the button disabled after a rejected call.
   func runCore(window: NSWindow?) async {
-    let (question, detail) = Confirm.split(L10n.t("updates.core.confirm"))
+    var (question, detail) = Confirm.split(L10n.t("updates.core.confirm"))
+    if let untested = CoreUpdate.untested(core?.release) {
+      detail = [L10n.t("updates.core.confirmUntested", ["version": untested]), detail].compactMap { $0 }.joined(separator: "\n\n")
+    }
     guard await Confirm.ask(question, detail: detail, confirm: L10n.t("updates.core.runUpdate"), window: window) else { return }
     coreBusy = true
     coreResult = nil
