@@ -1,0 +1,58 @@
+<style>
+  /* Die Box steht nur auf der Startseite und nur in der Web-Fassung, deshalb ihr Aussehen
+     hier statt in einem Stylesheet der Vorlage: So übersteht sie einen Neu-Import von doku.qtpl,
+     der custom.scss vollständig ersetzt. Dasselbe Muster wie die style-Instanz des Example.
+     Alle Farben und Maße kommen aus den Variablen der Vorlage — es entsteht kein Farbpaar,
+     das nicht schon gemessen wurde. */
+  /* Der beforeBody-Bereich ist ein Flex-Container mit gap 0 - ohne diesen Rand klebt die Box
+     am Titel. Bis zum 2026-09-24 stand dazwischen ein Versionsband, das die Luft vor dem Titel
+     setzte; die Fassung steht seither in der Box „Über dieses Handbuch“ (sidebar-note.md). */
+  .layout-box-download { margin-block-end: var(--tpl-space-xl); }
+  .layout-box-download .dl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--tpl-space-md);
+    padding: var(--tpl-space-lg);
+    border: var(--tpl-rule-width) solid var(--tpl-rule);
+    border-radius: var(--tpl-radius-lg);
+    background: var(--tpl-surface);
+  }
+  .layout-box-download .dl-text { flex: 1 1 16rem; }
+  .layout-box-download .dl-lead {
+    margin: 0;
+    font-size: var(--tpl-text-lg);
+    font-weight: 600;
+    line-height: var(--tpl-leading-snug);
+  }
+  .layout-box-download .dl-note {
+    margin: var(--tpl-space-2xs) 0 0;
+    font-size: var(--tpl-text-sm);
+    color: var(--gray);
+    line-height: var(--tpl-leading-normal);
+  }
+  .layout-box-download .dl-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tpl-target);
+    padding: 0 var(--tpl-space-lg);
+    border: var(--tpl-rule-width) solid var(--tpl-rule-strong);
+    border-radius: var(--tpl-radius-md);
+    background: var(--tpl-surface-tint);
+    color: var(--secondary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .layout-box-download .dl-button:hover { background: var(--lightgray); }
+</style>
+<div class="dl">
+  <div class="dl-text">
+    <p class="dl-lead">QuartzHub für den Mac</p>
+    <p class="dl-note">
+      Ab macOS 26 auf einem Mac mit Apple-Chip, als DMG. Was QuartzHub sonst braucht, bringt es
+      mit; mehr unter <a href="{{root}}/1-einstieg/02-installieren-und-erster-start">Installieren und erster Start</a>.
+    </p>
+  </div>
+  <a class="dl-button" href="https://github.com/boxi-os/QuartzHub/releases">Herunterladen</a>
+</div>
