@@ -216,7 +216,7 @@ Review) stehen dort in `../QuartzControl/docs/decisions/conventions-full.md` unt
   eingebauten Verarbeitung und Layout-Bedingungen liest QuartzHub aus dem Quartz des Projekts (Helfer `quartz-facts`, `QuartzFacts`,
   `qh-check quartz-facts`), „Weitere Einstellungen“ aus dessen Schema (`QuartzConfigSchema`), der Export lässt weg, was die Website per
   CSS ausblendet (`markHiddenBySite`), und Updates sagt, wenn ein Release neuer ist als `CoreUpdate.testedQuartz` (jetzt 5.3.1).
-  Offen aus 5.3: `extends`, `before`/`after`, Kopf einer Transklusion im Export.
+  Kommt mit 1.2.1 (2026-11-28). Offen aus 5.3: `extends`, `before`/`after`, Kopf einer Transklusion im Export.
 
 ## Arbeitsweise
 

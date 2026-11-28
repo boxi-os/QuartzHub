@@ -28,6 +28,10 @@
 > Deploy. Beim Durchklicken der Bücher drückte ein Skript „Jetzt exportieren“, solange der Build noch lief: Der Knopf ist dann
 > gesperrt, der Klick verpufft ohne Meldung; erst nach dem Build drücken.
 >
+> **Durchlaufen am 2026-11-28 für 1.2.1** (Tag auf df1e5fd). Plugins und Grundvorlage unverändert seit 1.1.0 (Punkt 4, 10);
+> `CoreUpdate.testedQuartz` vorher auf 5.3.1 gehoben (Kern-Update des Handbuch-Demos über die Seite Updates). Aufgefallen: Das
+> Handbuch-Vault liegt jetzt unter `~/Documents/Obsidian/QuartzHub-Handbuch`; die Skripte suchten es am alten Ort (8ce56e8).
+>
 > Aufgefallen 2026-11-14: QuartzHub-Web hatte weder `origin` noch ein Ziel „GitHub Pages“ (Punkt 9);
 > der installierte QuartzHub fragte beim ersten Zugriff auf den GitHub-Zugang nach dem Schlüsselbund
 > („Immer erlauben“); „Jetzt veröffentlichen“ wird erst nach einem Build oder Diff aktiv; das
