@@ -340,7 +340,7 @@ struct OverviewPage: View {
       if let targets = model.targets, !targets.isEmpty {
         Metric(String(targets.count), note: L10n.t("dashboard.publish.targets", count: targets.count))
         ForEach(targets.prefix(3), id: \.id) { target in
-          Note("\(target.name) · \(target.destination["type"]?.stringValue ?? "")").lineLimit(1)
+          Note("\(target.name) · \(PublishWords.type(target.destination["type"]?.stringValue ?? ""))").lineLimit(1)
         }
       } else if model.targets == nil {
         ProgressView().controlSize(.small)
