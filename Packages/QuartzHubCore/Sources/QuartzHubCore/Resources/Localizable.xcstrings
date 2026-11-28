@@ -32181,13 +32181,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieses Projekt ist eine Kopie und hat noch keinen Inhalt. Unter „Konfiguration → Website“, Gruppe „Content-Ordner“, kannst du einen Ordner oder einen Obsidian-Vault verknüpfen."
+            "value" : "Dieses Projekt ist eine Kopie und hat noch keinen Inhalt. Unter Konfiguration ▸ Website, Gruppe „Content-Ordner“, kannst du einen Ordner oder einen Obsidian-Vault verknüpfen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This project is a copy and has no content yet. Under “Configuration → Site”, group “Content folder”, you can link a folder or an Obsidian vault."
+            "value" : "This project is a copy and has no content yet. Under Configuration ▸ Site, group “Content folder”, you can link a folder or an Obsidian vault."
           }
         }
       }
@@ -36891,13 +36891,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die gespeicherten Zugangsdaten lassen sich mit dem Schlüssel dieses Rechners nicht entschlüsseln, etwa weil sie von einem anderen Rechner stammen. Gib sie unter Einstellungen → Zugänge neu ein."
+            "value" : "Die gespeicherten Zugangsdaten lassen sich mit dem Schlüssel dieses Rechners nicht entschlüsseln, etwa weil sie von einem anderen Rechner stammen. Gib sie unter Einstellungen ▸ Zugänge neu ein."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The stored credentials cannot be decrypted with this computer’s key, for example because they come from another computer. Enter them again under Settings → Connections."
+            "value" : "The stored credentials cannot be decrypted with this computer’s key, for example because they come from another computer. Enter them again under Settings ▸ Connections."
           }
         }
       }
@@ -38005,13 +38005,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Content-Ordner ist ein Symlink, durch den git nicht schreiben kann. Wechsle unter Konfiguration → Website, Gruppe „Content-Ordner“, vorübergehend auf einen echten Ordner und versuche es erneut.\n\n"
+            "value" : "Der Content-Ordner ist ein Symlink, durch den git nicht schreiben kann. Wechsle unter Konfiguration ▸ Website, Gruppe „Content-Ordner“, vorübergehend auf einen echten Ordner und versuche es erneut."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The content folder is a symlink, and git cannot write through it. Switch to a real folder under Configuration → Site, group “Content folder”, for now and try again.\n\n"
+            "value" : "The content folder is a symlink, and git cannot write through it. Switch to a real folder under Configuration ▸ Site, group “Content folder”, for now and try again."
           }
         }
       }
@@ -61773,13 +61773,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dieses Projekt lädt noch {{count}} Stylesheets aus der Aufteilung bis 1.0, und dabei bleibt es: Die zwölf der Vorlage kommen in den Ordner, geladen werden sie nicht. Die eigenen führt „Zusammenlegen“ unter Stile → Eigenes CSS zusammen."
+            "value" : "Dieses Projekt lädt noch {{count}} Stylesheets aus der Aufteilung bis 1.0, und dabei bleibt es: Die zwölf der Vorlage kommen in den Ordner, geladen werden sie nicht. Die eigenen führt „Zusammenlegen“ unter Stile ▸ Eigenes CSS zusammen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This project still loads {{count}} stylesheets of the split up to 1.0, and it stays that way: the template’s twelve go into the folder but are not loaded. “Merge” under Styles → Custom CSS puts the project’s own together."
+            "value" : "This project still loads {{count}} stylesheets of the split up to 1.0, and it stays that way: the template’s twelve go into the folder but are not loaded. “Merge” under Styles ▸ Custom CSS puts the project’s own together."
           }
         }
       }
