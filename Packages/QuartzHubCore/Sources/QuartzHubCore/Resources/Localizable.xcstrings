@@ -58601,15 +58601,39 @@
       "generatesSymbol" : false,
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} abhängig"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} abhängig"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} abhängig"
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "{{count}} depend on it"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} depends on it"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "{{count}} depend on it"
+                }
+              }
+            }
           }
         }
       }
