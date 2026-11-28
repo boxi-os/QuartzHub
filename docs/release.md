@@ -156,7 +156,7 @@ Hinweis; ansehen lässt er sich ohne zweites Release mit `-QHAppUpdateLatest <fa
 ## 9. Das Handbuch ist online, wenn die Release-Seite steht
 
 Das Projekt `~/Documents/QuartzProjekte/QuartzHub-Web` baut aus dem Vault
-`~/Obsidian/QuartzProjekte/QuartzHub-Handbuch` (Entscheidung 2026-11-13: GitHub Pages im Repo
+`~/Documents/Obsidian/QuartzHub-Handbuch` (Entscheidung 2026-11-13: GitHub Pages im Repo
 `boxi-os/QuartzHub` selbst, Branch `gh-pages`, nie `main`; Adresse `https://boxi-os.github.io/QuartzHub/`
 = `Handbook.base`). Das Projekt hat dafür `origin` = `https://github.com/boxi-os/QuartzHub.git` und das
 Ziel „GitHub Pages“ (Branch `gh-pages`, seit 2026-11-14); **Git-Sync dort nie benutzen**, es schöbe den

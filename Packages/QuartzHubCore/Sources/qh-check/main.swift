@@ -24,7 +24,7 @@ func usage() -> Never {
     handbook [vault] [--root <repo>]  Zitate („…“, “…”) und Menüpfade (**A ▸ B**) des Handbuchs
                                       gegen den Katalog, je Sprache; fette Namen, die einem Text
                                       fast gleichen; Ausnahmen in <vault>/private/zitat-ausnahmen.txt
-                                      (ohne Angabe ~/Obsidian/QuartzProjekte/QuartzHub-Handbuch)
+                                      (ohne Angabe ~/Documents/Obsidian/QuartzHub-Handbuch)
     option-schema <projekt> [--plugin <name>] [--dump]
                                       wie viele Optionen je Plugin QuartzHub darstellen kann
                                       (Feld, nur Text, unsichtbar); --dump das Schema als JSON
@@ -135,7 +135,7 @@ case "i18n":
 case "handbook":
   let root = repositoryRoot()
   let given = arguments.first { !$0.hasPrefix("--") && $0 != option("--root") }
-  let vault = given ?? NSHomeDirectory() + "/Obsidian/QuartzProjekte/QuartzHub-Handbuch"
+  let vault = given ?? NSHomeDirectory() + "/Documents/Obsidian/QuartzHub-Handbuch"
   guard FileManager.default.fileExists(atPath: vault) else {
     print("Handbuch-Vault nicht gefunden: \(vault)")
     exit(3)

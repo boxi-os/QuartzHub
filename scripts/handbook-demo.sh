@@ -12,7 +12,7 @@
 # docs/plan.md.
 set -eu
 SRC=${QH_HANDBOOK_PROJECT:-$HOME/Documents/QuartzProjekte/QuartzHub-Web}
-VAULT=${QH_HANDBOOK_VAULT:-$HOME/Obsidian/QuartzProjekte/QuartzHub-Handbuch}
+VAULT=${QH_HANDBOOK_VAULT:-$HOME/Documents/Obsidian/QuartzHub-Handbuch}
 DEMO=/Users/Shared/QuartzHub-Demo
 P=$DEMO/QuartzProjekte/QuartzHub-Docs
 

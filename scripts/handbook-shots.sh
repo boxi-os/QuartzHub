@@ -14,7 +14,7 @@
 set -eu
 ROOT=${0:A:h:h}
 APP=${QH_APP:-$ROOT/build/DerivedData/Build/Products/Debug/QuartzHub.app}
-VAULT=${QH_HANDBOOK_VAULT:-$HOME/Obsidian/QuartzProjekte/QuartzHub-Handbuch}
+VAULT=${QH_HANDBOOK_VAULT:-$HOME/Documents/Obsidian/QuartzHub-Handbuch}
 DEMO=/Users/Shared/QuartzHub-Demo
 PROJECT=$DEMO/QuartzProjekte/QuartzHub-Docs
 OUT=$VAULT/assets/screenshots
